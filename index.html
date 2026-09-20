@@ -9,6 +9,10 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <script>try { document.documentElement.dataset.mode = localStorage.getItem('axioma-mode') === 'dark' ? 'dark' : 'light'; } catch {}</script>
   <link rel="stylesheet" href="css/frontpage.css">
+  <script src="shared/vendor/supabase.js" defer></script>
+  <script src="shared/supabase-config.js" defer></script>
+  <script src="shared/axioma-auth.js" defer></script>
+  <script src="js/account-ui.js" defer></script>
   <script src="js/catalog.js" defer></script>
   <script src="js/frontpage.js" defer></script>
 </head>
@@ -26,9 +30,9 @@
           <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 13.4A8.7 8.7 0 0 1 10.6 3.4a8.7 8.7 0 1 0 10 10Z"/></svg>
           <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
         </button>
-        <a class="account-link" href="games/rechten/trainer/" title="Open je account in de Rechtentrainer">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg>Mijn trainer
-        </a>
+        <button id="accountBtn" class="account-link" type="button" title="Axioma-account">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg><span id="accountBtnLabel">Inloggen</span>
+        </button>
       </div>
     </div>
   </header>
@@ -80,10 +84,25 @@
     </section>
     <aside class="account-note">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6l-8-3Z"/><path d="m8 12 3 3 5-6"/></svg>
-      <p><strong>Een kleine stap, steeds wat verder.</strong> Bewaar je voortgang met een account in de Rechtentrainer.</p>
-      <a href="games/rechten/trainer/">Naar mijn trainer <span aria-hidden="true">↗</span></a>
+      <p><strong>Een kleine stap, steeds wat verder.</strong> Met één Axioma-account kan je voortgang over meerdere onderdelen meegroeien.</p>
+      <button id="accountNoteBtn" class="account-note-button" type="button">Mijn Axioma-account <span aria-hidden="true">↗</span></button>
     </aside>
   </main>
+
+  <div id="authOverlay" class="auth-overlay" hidden>
+    <button id="authBackdrop" class="auth-backdrop" type="button" aria-label="Sluiten"></button>
+    <section class="auth-sheet" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <div class="auth-sheet-head">
+        <div>
+          <p class="eyebrow">Axioma-account</p>
+          <h2 id="authTitle">Neem je leerroute mee.</h2>
+        </div>
+        <button id="authClose" class="auth-close" type="button" aria-label="Sluiten">×</button>
+      </div>
+      <div id="authContent"></div>
+    </section>
+  </div>
+
   <footer class="footer container"><a href="./" class="footer-brand">axioma.</a><p>Ruimte om te proberen. Tijd om te begrijpen.</p><a href="#">Terug naar boven <span aria-hidden="true">↑</span></a></footer>
 </body>
 </html>

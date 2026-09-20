@@ -30,3 +30,67 @@ h1{margin:0;font-size:clamp(35px,4vw,51px);line-height:1.13;letter-spacing:-2px;
 @media(max-width:700px){.container{width:calc(100% - 36px)}.topline{height:70px;gap:12px}.brand{font-size:26px;gap:8px}.brand-mark{width:31px;height:31px}.brand-caption{display:none}.header-actions{gap:5px}.account-link{padding:0 11px;font-size:12px;gap:7px}.account-link svg{width:16px}.intro{padding:35px 0 29px}.intro-art{display:none}.eyebrow{font-size:9px;letter-spacing:1.3px;margin-bottom:14px}h1{font-size:clamp(31px,6.8vw,43px);letter-spacing:-1.4px}.intro-description{font-size:13px;line-height:1.75;margin-top:16px;max-width:400px}.desktop-break{display:none}.intro-link{margin-top:12px;font-size:11px}.library{padding-top:23px}.library-heading{align-items:stretch;flex-direction:column;gap:16px}.library-heading .eyebrow{font-size:8px}h2{font-size:25px}.search-wrap{width:100%}.browse-bar{margin:17px 0 18px;gap:10px}.filters{gap:4px}.filter{min-height:44px;padding:8px 12px;font-size:11px}.filter-count{display:none}.result-count{font-size:10px}.grid{gap:18px}.visual{height:148px}.info{padding:15px}.card h3{font-size:18px}.description{font-size:11px;margin-bottom:15px}.card-detail{font-size:9px}.card-action{font-size:10px}.account-note{margin:26px 0 19px;flex-wrap:wrap;gap:9px;padding:17px 0}.account-note p{flex:1;font-size:11px}.account-note a{margin-left:31px;font-size:11px;min-height:35px}.footer{gap:13px;flex-wrap:wrap;padding-bottom:18px}.footer p{font-size:9px}.footer>a:last-child{font-size:9px}}
 @media(max-width:480px){.grid{grid-template-columns:1fr}.visual{height:172px}.info{padding:16px 18px}.card h3{font-size:21px}.description{font-size:12px;margin-bottom:15px}.card-detail{font-size:10px}.card-action{font-size:11px}.footer>a:last-child{flex-basis:100%;margin-top:-8px;min-height:32px;margin-left:0}.result-count{max-width:62px;text-align:right;white-space:normal}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+
+
+/* v0.5 — central Axioma account */
+button.account-link{color:inherit;cursor:pointer;background:transparent}
+button.account-link.signed-in{background:var(--soft);border-color:color-mix(in srgb,var(--accent) 30%,var(--line))}
+button.account-link.teacher{color:var(--accent)}
+.account-note-button{
+  display:flex;align-items:center;gap:13px;min-height:44px;margin-left:auto;flex-shrink:0;
+  border:0;background:transparent;color:var(--ink);font:600 11px inherit;cursor:pointer;padding:0
+}
+.account-note-button:hover{text-decoration:underline;text-underline-offset:4px}
+body.auth-open{overflow:hidden}
+.auth-overlay{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:18px}
+.auth-overlay[hidden]{display:none}
+.auth-backdrop{position:absolute;inset:0;border:0;background:rgba(15,28,31,.38);backdrop-filter:blur(4px);cursor:default}
+.auth-sheet{
+  position:relative;width:min(720px,100%);max-height:min(720px,calc(100dvh - 36px));overflow:auto;
+  background:var(--bg);border:1px solid var(--line);border-radius:18px;box-shadow:0 28px 80px rgba(13,25,28,.18);
+  padding:26px
+}
+.auth-sheet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.auth-sheet-head .eyebrow{margin:0 0 8px}
+.auth-sheet-head h2{margin:0;font-size:31px;letter-spacing:-1.2px}
+.auth-close{
+  flex:0 0 42px;width:42px;height:42px;border:1px solid var(--line);border-radius:50%;background:transparent;
+  color:var(--muted);font-size:26px;line-height:1;cursor:pointer
+}
+.auth-close:hover{background:var(--soft);color:var(--ink)}
+#authContent{padding-top:20px}
+.auth-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:20px;overflow-x:auto}
+.auth-tabs button{
+  min-height:44px;border:0;border-bottom:2px solid transparent;background:transparent;padding:0 13px;
+  color:var(--muted);font-weight:650;white-space:nowrap;cursor:pointer
+}
+.auth-tabs button.active{color:var(--ink);border-bottom-color:var(--accent)}
+.central-auth-form{display:grid;grid-template-columns:1fr 1fr;gap:15px 18px}
+.central-auth-form label{display:grid;gap:7px;font-size:12px;font-weight:650;color:var(--ink)}
+.central-auth-form input,.central-auth-form select{
+  width:100%;min-height:47px;border:1px solid var(--line);border-radius:9px;background:var(--surface);
+  color:var(--ink);padding:10px 12px;font:inherit
+}
+.central-auth-form input:focus,.central-auth-form select:focus{outline:2px solid var(--accent);outline-offset:2px}
+.auth-message{grid-column:1/-1;min-height:20px;margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+.auth-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.auth-primary,.auth-secondary{
+  min-height:48px;border-radius:9px;padding:0 17px;display:inline-flex;align-items:center;justify-content:space-between;gap:24px;
+  text-decoration:none;font-weight:700;font-size:13px;cursor:pointer
+}
+.auth-primary{border:1px solid var(--accent);background:var(--accent);color:var(--bg)}
+.auth-secondary{border:1px solid var(--line);background:transparent;color:var(--ink)}
+.auth-submit{grid-column:1/-1;width:100%}
+.auth-primary:disabled{opacity:.55;cursor:wait}
+.account-summary{padding:10px 0 2px}
+.account-summary .account-role{display:block;color:var(--accent);font-size:10px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:8px}
+.account-summary strong{display:block;font-size:32px;letter-spacing:-1px}
+.account-summary p{max-width:520px;color:var(--muted);font-size:13px;line-height:1.65;margin:11px 0 0}
+@media(max-width:700px){
+  .auth-overlay{align-items:end;padding:0}
+  .auth-sheet{width:100%;max-height:88dvh;border-radius:18px 18px 0 0;border-inline:0;border-bottom:0;padding:20px 18px calc(20px + env(safe-area-inset-bottom))}
+  .auth-sheet-head h2{font-size:26px}
+  .central-auth-form{grid-template-columns:1fr}
+  .auth-message,.auth-submit{grid-column:1}
+  .account-note-button{margin-left:31px;font-size:11px;min-height:35px}
+}
