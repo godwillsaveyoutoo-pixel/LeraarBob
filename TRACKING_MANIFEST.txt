@@ -1,16 +1,21 @@
-Game ID             eenvoudige tracking
------------------------------------------------------
-pythagoras           10 levels voltooid
-stelsels             14 unieke oefeningen voltooid (methode/modus maakt niet uit)
-algebra-smederij      bestaande opgeloste challenges
-taartenwinkel         7 diensten voltooid
-kubusbouw             22 levels voltooid
-verfwinkel            16 levels voltooid
-data-check            22 dossiers voltooid
-signal-lab            12 proeven voltooid
-gravity-maze          9 kamers voltooid
+Game ID              eenvoudige tracking / cloud-unit
+---------------------------------------------------------------
+pythagoras            10 levels
+stelsels              14 unieke oefeningen (methode/modus maakt niet uit)
+algebra-smederij      opgeloste challenges
+taartenwinkel         7 diensten
+kubusbouw             22 levels
+verfwinkel            16 levels
+data-check            22 dossiers
+signal-lab            12 proeven
+gravity-maze          9 kamers
 
-Alle spellen schrijven:
-axioma:game:<id>:progress
-met completed, total, current, complete en updatedAt.
-Bij volledige afronding wordt ook axioma:game:<id>:complete = 1 gezet.
+Lokale samenvatting:
+  axioma:game:<id>:progress
+  axioma:game:<id>:complete
+
+Cloud bij aangemelde leerling:
+  public.axioma_game_progress
+  via shared/axioma-progress.js -> AxiomaProgress.completeUnit(...)
+
+Het leraarscherm leest deze cloudvoortgang als progress_type = levels.

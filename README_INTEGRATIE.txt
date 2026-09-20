@@ -1,8 +1,8 @@
-AXIOMA — extra spellen met eenvoudige tracking
+AXIOMA / LeraarBob — geïntegreerde spellen
 
-Deze map bevat 9 spellen:
+Deze website bevat nu de bestaande onderdelen én 9 geïntegreerde spellen:
 - Pythagoras
-- Stelsels
+- Stelsels (nieuwe versie)
 - Algebra Smederij
 - Taartenwinkel
 - Kubusbouw
@@ -11,16 +11,15 @@ Deze map bevat 9 spellen:
 - Signal Lab
 - Gravity Maze
 
-Per spel toegevoegd:
-1. AXIOMA-link naar de startpagina.
-2. Eenvoudige voortgang: completed / total + volledig afgerond.
-3. Opslag onder:
-   axioma:game:<game-id>:progress
-   axioma:game:<game-id>:complete
-4. Een 'axioma:game-progress' bericht voor de platform-shell.
+Wat is geïntegreerd:
+1. De spellen staan rechtstreeks in games.json en js/catalog.js en verschijnen dus op de startpagina.
+2. De oude Stelsels-link naar games/stelsels/ is vervangen door games/stelsels.html.
+3. Elk nieuw spel heeft een AXIOMA-link terug naar de platformstartpagina.
+4. Elk spel bewaart eenvoudige lokale voortgang (completed / total).
+5. Wanneer een leerling met een Axioma-account is aangemeld, worden voltooide units via AxiomaProgress.completeUnit naar axioma_game_progress in Supabase gesynchroniseerd.
+6. Het leraarscherm kan deze spellen daardoor als gewone 'levels'-voortgang tonen.
+7. De nieuwe cataloguslinks bevatten een versieparameter om oude HTML-cache te omzeilen.
 
-Plaats de map games/ naast de Axioma index.html.
-Laad games-registry-additions.js NA de bestaande game-registry als het platform window.GAMES gebruikt.
-Laad axioma-platform-game-bridge.js eenmaal in de platform-shell om voortgangsberichten en Home-verzoeken op te vangen.
+De Supabase-tabel axioma_games is op 20-09-2026 live bijgewerkt met de 9 game-ID's. Het bestand supabase_game_registry.sql zit ook in deze ZIP als reproduceerbare registratie.
 
-De tracking blijft bewust simpel: geen foutenlog, timing, streaks of gedetailleerd leerlingprofiel.
+Tracking blijft bewust eenvoudig: geen foutlog, timing, streaks of gedetailleerd leerlingprofiel.

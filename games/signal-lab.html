@@ -1813,6 +1813,10 @@ button{font:inherit;color:inherit;touch-action:manipulation}
 .axioma-platform-inline{cursor:pointer;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;letter-spacing:.08em;font-weight:900}
 .axioma-platform-inline:focus-visible{outline:2px solid currentColor;outline-offset:3px}
 </style>
+<script src="../shared/vendor/supabase.js"></script>
+<script src="../shared/supabase-config.js"></script>
+<script src="../shared/axioma-auth.js"></script>
+<script src="../shared/axioma-progress.js"></script>
 <script id="axioma-simple-integration">
 (()=>{
 'use strict';
@@ -1828,6 +1832,27 @@ function emit(completed,total,current=null){
   try{if(parent&&parent!==window)parent.postMessage(payload,'*')}catch(_){}
   return payload;
 }
+
+let cloudBusy=false,cloudAccount='',cloudKnown=new Set();
+async function cloudSync(units,total){
+  if(!window.AxiomaProgress||!window.AxiomaAuth||cloudBusy)return;
+  const normalized=[...new Set((Array.isArray(units)?units:[]).map(String).filter(Boolean))];
+  cloudBusy=true;
+  try{
+    const account=await window.AxiomaAuth.getAccount();
+    if(account?.role!=='student')return;
+    const uid=String(account.id||'');
+    if(uid!==cloudAccount){
+      cloudAccount=uid;cloudKnown.clear();
+      try{const remote=await window.AxiomaProgress.load(GAME_ID);for(const u of (remote?.state?.completed||[]))cloudKnown.add(String(u))}catch(_){}
+    }
+    for(const unit of normalized){
+      if(cloudKnown.has(unit))continue;
+      const result=await window.AxiomaProgress.completeUnit(GAME_ID,unit,total);
+      if(result?.status!=='conflict')cloudKnown.add(unit);
+    }
+  }catch(_){}finally{cloudBusy=false}
+}
 function homeUrl(){
   const q=new URLSearchParams(location.search).get('axiomaHome'); if(q){try{return new URL(q,location.href).href}catch(_){}}
   const u=new URL(location.href); const p=u.pathname; const i=p.indexOf('/games/');
@@ -1835,10 +1860,10 @@ function homeUrl(){
 }
 function goHome(e){if(e){e.preventDefault();e.stopPropagation();} const url=homeUrl(); try{if(parent&&parent!==window)parent.postMessage({type:'axioma:navigate-home',gameId:GAME_ID,url},'*')}catch(_){} try{if(top&&top!==window){top.location.href=url;return}}catch(_){} location.href=url;}
 function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar Axioma';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
-window.AxiomaSimple={gameId:GAME_ID,report:emit,home:goHome};
+window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
 const strong=document.querySelector('.topbar .brandtext strong');if(strong&&!strong.querySelector('.axioma-platform-inline')){const old=strong.textContent.trim();strong.innerHTML='<span class="axioma-platform-inline">AXIOMA</span> · '+old;wire(strong.querySelector('.axioma-platform-inline'))}
 
-function sync(){let d={};try{d=JSON.parse(localStorage.getItem('signalLab.v0.4.1.progress')||'{}')}catch(_){}const c=[...new Set(Array.isArray(d.completed)?d.completed:[])].length;const total=Number(document.getElementById('app')?.dataset.levelCount)||12;emit(c,total,(Number.isInteger(d.lastLevel)?d.lastLevel:0)+1)}sync();setInterval(sync,900);
+function sync(){let d={};try{d=JSON.parse(localStorage.getItem('signalLab.v0.4.1.progress')||'{}')}catch(_){}const units=[...new Set(Array.isArray(d.completed)?d.completed:[])];const total=Number(document.getElementById('app')?.dataset.levelCount)||12;emit(units.length,total,(Number.isInteger(d.lastLevel)?d.lastLevel:0)+1);cloudSync(units,total)}sync();setInterval(sync,900);
 
 })();
 </script>
