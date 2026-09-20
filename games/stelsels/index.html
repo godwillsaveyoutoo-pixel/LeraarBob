@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Axioma · Stelsels — hardened/refactor v4</title>
+<style>
+:root{
+  --paper:#f6f2e8; --ink:#3f4e51; --muted:#7a8584; --line:#d8d4c8;
+  --panel:rgba(255,255,255,.30); --green:#5f8f69; --green-soft:#dff1c8;
+  --blue:#4f91aa; --blue-soft:#cfeef7; --yellow:#f3e88e; --orange:#ffd5a5;
+  --phase-soft:#d8f3a5; --shadow:0 10px 24px rgba(64,69,61,.08);
+  --sans:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --hand:"Comic Sans MS","Segoe Print","Bradley Hand",cursive;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--paper);color:var(--ink);font-family:var(--sans)}
+button,select{font:inherit;color:inherit}
+button{cursor:pointer}
+#app{width:100%;height:100dvh;display:grid;grid-template-rows:48px minmax(0,1fr);background:
+ linear-gradient(rgba(88,98,89,.035) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(88,98,89,.035) 1px,transparent 1px);
+ background-size:28px 28px}
+header{display:flex;align-items:center;gap:12px;padding:0 12px;border-bottom:1px solid rgba(70,80,79,.12);background:rgba(247,244,236,.92);z-index:5}
+.brand{font-weight:900;letter-spacing:.12em;font-size:11px;color:#556568}
+.title-row{display:flex;align-items:center;gap:12px;min-width:0}
+.title{font-weight:850;font-size:15px;white-space:nowrap}
+.exercise-picker{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:800;color:var(--muted)}
+.exercise-picker select{height:28px;min-width:48px;border:1px solid rgba(63,76,79,.16);border-radius:7px;background:rgba(255,255,255,.45);padding:0 6px;font-weight:850}
+.method-tabs{display:flex;align-items:center;gap:3px;margin-left:auto}
+.method-tab{border:0;background:transparent;border-radius:8px;padding:7px 9px;font-size:11px;font-weight:800;color:#7d8786}
+.method-tab.active{background:rgba(79,145,170,.10);color:#42585d}
+.icon-btn{border:0;background:transparent;border-radius:8px;width:34px;height:32px;font-size:18px;color:#6c7776}
+.icon-btn:disabled{opacity:.25}
+
+.study-mode{display:flex;align-items:center;gap:2px;padding:2px;border:1px solid rgba(63,76,79,.10);border-radius:10px;background:rgba(255,255,255,.34)}
+.study-mode-btn{border:0;background:transparent;border-radius:8px;padding:6px 8px;font-size:10px;font-weight:850;color:#788481}
+.study-mode-btn.active{background:rgba(216,243,165,.68);color:#43544f}
+
+.expert-workspace{
+  width:min(1080px,99%);height:100%;min-height:0;
+  display:grid;grid-template-columns:minmax(0,1fr) 224px;gap:14px;align-items:center
+}
+.expert-main{min-width:0;min-height:0;display:grid;align-content:center;gap:8px}
+.expert-original{display:grid;justify-items:center;gap:3px}
+.expert-label{font-size:8px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#7a8784}
+.expert-original .system{max-width:94%}
+.expert-original .brace{font-size:clamp(86px,10vw,130px)}
+.expert-original .eq-row{font-size:clamp(25px,3vw,38px);min-height:43px}
+.expert-task{
+  display:grid;justify-items:center;gap:8px;padding:8px 10px 7px;
+  border-top:1px solid rgba(70,80,79,.08)
+}
+.expert-task-title{font-size:11px;font-weight:850;color:#596a68;text-align:center}
+.expert-equation{
+  display:grid;grid-template-columns:minmax(90px,auto) 27px minmax(120px,auto);
+  gap:4px;align-items:center;font-size:clamp(24px,3vw,36px);font-weight:720;
+  font-family:var(--sans);white-space:nowrap
+}
+.expert-equation .left{text-align:right}.expert-equation .eq{text-align:center;color:#72807e}.expert-equation .right{text-align:left}
+.expert-two-rows{display:grid;gap:7px}
+.expert-factor-system{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;font-family:var(--hand)}
+.expert-factor-brace{font-family:Georgia,serif;font-size:92px;line-height:.68;transform:scaleY(1.08);color:#506064}
+.expert-factor-rows{display:grid;gap:8px}
+.expert-factor-row{display:grid;grid-template-columns:minmax(115px,auto) 24px minmax(64px,auto) auto;gap:6px;align-items:center;font-size:clamp(24px,3vw,34px)}
+.expert-factor-row .lhs{text-align:right}.expert-factor-row .eq{text-align:center;font-family:var(--sans);font-size:.72em}
+.expert-factor-tail{display:flex;align-items:center;gap:4px;font:800 13px var(--sans);color:#657572}
+
+.math-field{
+  min-width:92px;max-width:270px;min-height:38px;
+  display:inline-flex;align-items:center;gap:1px;padding:2px 4px 4px;
+  border:0;border-bottom:2px solid rgba(79,145,170,.28);
+  background:transparent;border-radius:0;
+  font:760 26px/1 var(--sans);color:#34494d;cursor:text
+}
+.math-field.active{border-bottom-color:rgba(79,145,170,.88);background:linear-gradient(transparent 73%,rgba(207,238,247,.40) 73% 100%)}
+.math-field.bad{border-bottom-color:#b85e57;background:linear-gradient(transparent 73%,rgba(255,218,218,.48) 73% 100%)}
+.math-empty{font-size:11px;font-weight:700;color:#9aa5a2}
+.math-caret{display:inline-block;width:2px;height:1em;background:#4e6468;margin-left:2px;animation:expertBlink 1s steps(1) infinite}
+@keyframes expertBlink{50%{opacity:0}}
+
+.math-frac{
+  display:inline-grid;grid-template-rows:auto 2px auto;align-items:center;justify-items:stretch;
+  min-width:1.25em;margin:0 .08em;vertical-align:middle;font-size:.78em;line-height:1
+}
+.math-frac-line{height:1.5px;background:currentColor;width:100%}
+.math-frac-part{min-width:1.25em;min-height:.88em;padding:1px 3px;border-radius:3px;display:grid;place-items:center}
+.math-frac-part.active{background:rgba(207,238,247,.95);box-shadow:inset 0 -2px 0 rgba(79,145,170,.62)}
+.math-frac-empty{display:inline-block;width:.65em;height:.62em;border:1.5px dashed rgba(76,94,96,.40);border-radius:2px}
+
+.expert-keypad{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:9px;
+  border:1px solid rgba(63,76,79,.12);border-radius:14px;background:rgba(255,255,255,.34);
+  box-shadow:0 8px 22px rgba(64,69,61,.05)
+}
+.expert-key{min-height:40px;border:1px solid rgba(63,76,79,.13);border-radius:10px;background:rgba(255,255,255,.68);font:800 18px var(--sans);color:#435558;display:grid;place-items:center}
+.expert-key.var{font-family:Georgia,serif;font-style:italic;font-size:22px}
+.expert-key.op{font-size:21px}
+.expert-key.small{font-size:12px}
+.expert-check{grid-column:1/-1;min-height:39px;border:1px solid rgba(95,143,105,.24);border-radius:10px;background:rgba(223,241,200,.62);font:850 10px var(--sans);color:#46594e}
+.expert-frac-icon{display:grid;grid-template-rows:8px 1.5px 8px;width:18px;align-items:center;justify-items:center}
+.expert-frac-icon .box{width:9px;height:6px;border:1.4px solid currentColor;border-radius:1px}.expert-frac-icon .line{width:18px;height:1.5px;background:currentColor}
+.expert-feedback{min-height:26px;text-align:center;font-size:10px;font-weight:760;line-height:1.25;color:#71807d}
+.expert-feedback.bad{color:#9a5752}
+.expert-choice{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
+.expert-choice button{border:1px solid rgba(63,76,79,.14);border-radius:999px;background:rgba(255,255,255,.48);padding:7px 11px;font-size:11px;font-weight:850}
+.expert-final{font-family:var(--hand);font-size:clamp(28px,4vw,48px);font-weight:850;background:linear-gradient(transparent 50%,rgba(216,243,165,.68) 50% 100%);padding:0 .2em}
+.expert-row-source{font-family:var(--hand);font-size:clamp(22px,2.8vw,34px)}
+
+
+main{min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 228px}
+.workzone{min-width:0;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:8px;padding:10px 12px 10px}
+.instruction-panel{display:grid;gap:2px;min-height:42px;align-content:center}
+.stage-kicker{font-size:10px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#80908c}
+.instruction{display:flex;align-items:center;gap:8px;min-height:27px}
+.instruction .tag{font-size:9px;font-weight:900;letter-spacing:.12em;color:#667774;background:linear-gradient(transparent 35%,var(--phase-soft) 35% 95%,transparent 95%);padding:0 2px}
+.instruction span:last-child{font-size:14px;font-weight:780;line-height:1.18}
+
+#systemWrap{min-width:0;min-height:0;display:grid;place-items:center;overflow:hidden}
+#auxArea{min-height:0;display:flex;justify-content:center;align-items:center}
+#auxArea:empty{display:none}
+
+.steps{min-width:0;overflow:auto;border-left:1px solid rgba(70,80,79,.10);padding:12px 11px;background:rgba(255,255,255,.16)}
+.steps h2{margin:0 0 10px;font-size:12px;letter-spacing:.13em;color:#6d7b79}
+.step{position:relative;min-height:66px;padding:8px 0 9px;border-bottom:1px solid rgba(70,80,79,.08)}
+.step:last-child{border-bottom:0}
+.step-head{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:center}
+.step-num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(66,80,79,.16);font-size:10px;font-weight:900;color:#76817f;background:rgba(255,255,255,.4)}
+.step strong{font-size:12px}
+.step.active .step-num{background:var(--phase-soft);color:#43514e}
+.step.done .step-num{background:#e9f0df}
+.snapshot{margin:6px 0 0 36px;font-family:var(--hand);font-size:12px;color:#6d7776;line-height:1.15}
+.mini-system{display:grid;grid-template-columns:18px 1fr;align-items:center}
+.mini-brace{font-family:Georgia,serif;font-size:38px;line-height:.72}
+.mini-eqs{display:grid;gap:2px}
+.mini-row{display:grid;grid-template-columns:1fr 12px 1fr;gap:2px;align-items:center;font-size:10px}
+.mini-row .lhs{text-align:right}.mini-row .eq{text-align:center}.mini-row .rhs{text-align:left}
+
+.system{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;max-width:min(920px,95%);font-family:var(--hand)}
+.brace{font-family:Georgia,"Times New Roman",serif;font-size:clamp(112px,15vw,184px);line-height:.66;transform:scaleY(1.08);color:#46565a;user-select:none}
+.eqs{display:grid;gap:10px;min-width:0}
+.eq-row{position:relative;display:grid;grid-template-columns:minmax(160px,auto) 34px minmax(180px,auto);align-items:center;min-height:58px;padding:4px 12px;border-radius:12px;font-size:clamp(31px,4vw,50px);line-height:1;white-space:nowrap}
+.eq-row .lhs{text-align:right}.eq-row .eq{text-align:center;font-family:var(--sans);font-size:.7em;color:#6e7978}.eq-row .rhs{text-align:left}
+.eq-row.focus{background:linear-gradient(transparent 10%,rgba(216,243,165,.68) 10% 90%,transparent 90%)}
+.eq-row.locked{opacity:.45}
+
+.drag-source{
+  display:inline-block;position:relative;z-index:2;border-radius:7px;padding:1px 5px;
+  touch-action:none;cursor:grab;
+  background:linear-gradient(transparent 46%,rgba(207,238,247,.92) 46% 100%);
+  box-shadow:inset 0 -2px 0 rgba(79,145,170,.58);
+}
+.drag-source:hover{background:linear-gradient(transparent 38%,rgba(207,238,247,1) 38% 100%)}
+.drag-source:active{cursor:grabbing}
+.drag-source.selected,.factor-chip.selected,.choice-source.selected{box-shadow:0 0 0 3px rgba(79,145,170,.28),inset 0 -2px 0 rgba(79,145,170,.76);background:linear-gradient(transparent 30%,rgba(207,238,247,1) 30% 100%)}
+.drop-target{
+  display:inline-block;min-width:34px;border-radius:7px;padding:1px 5px;
+  outline:2px dashed rgba(95,143,105,.38);outline-offset:2px;
+  background:rgba(223,241,200,.18)
+}
+.soft-target{outline-color:rgba(95,143,105,.42)}
+.drop-target.hot,.drop-target.ready{background:rgba(216,243,165,.82);outline-color:#6f9767}
+.pair-slot.ready,.choice-drop.ready,.factor-slot.ready{background:rgba(216,243,165,.72);outline:2px dashed #6f9767;outline-offset:2px}
+.eq-row.locked .drag-source,.eq-row.locked .drop-target{
+  background:transparent;box-shadow:none;outline-color:transparent;cursor:default
+}
+.ghost{position:fixed;z-index:99;pointer-events:none;transform:translate(-50%,-50%);font-family:var(--hand);font-size:34px;background:#fffdf7;border:1px solid rgba(70,80,79,.12);border-radius:10px;padding:5px 9px;box-shadow:var(--shadow)}
+body.is-dragging{user-select:none}
+
+.frac{display:inline-grid;grid-template-rows:auto 2px auto;vertical-align:middle;align-items:center;justify-items:center;min-width:1.15em;font-size:.82em;line-height:.9}
+.frac .num,.frac .den{padding:0 .06em}.frac .bar{width:100%;height:1.5px;background:currentColor}
+.mul-dot{font-family:var(--sans);font-size:.62em;vertical-align:.08em;padding:0 .08em}
+
+.factor-layout{display:grid;gap:12px;justify-items:center}
+.factor-system{display:grid;grid-template-columns:auto 1fr;align-items:center;font-family:var(--hand)}
+.factor-eqs{display:grid;gap:10px}
+.factor-row{display:grid;grid-template-columns:minmax(140px,auto) 28px minmax(90px,auto) auto;gap:8px;align-items:center;font-size:clamp(29px,3.6vw,46px)}
+.factor-row .lhs{text-align:right}.factor-row .eq{text-align:center;font-family:var(--sans);font-size:.7em}
+.factor-box{display:flex;align-items:center;gap:5px;font:800 14px var(--sans);color:#667571}
+.factor-slot{width:48px;height:38px;display:grid;place-items:center;font-family:var(--hand);font-size:22px}
+.factor-rail{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
+.factor-feedback{max-width:680px;min-height:18px;margin-top:5px;text-align:center;font-size:12px;font-weight:780;color:#7d5a31}
+.factor-chip{min-width:42px;height:36px;display:grid;place-items:center;border:1px solid rgba(70,80,79,.14);border-radius:9px;background:rgba(255,255,255,.42);font-family:var(--hand);font-size:20px;touch-action:none;cursor:grab}
+
+.addition-board{display:grid;gap:4px;font-family:var(--hand);font-size:clamp(25px,3.3vw,42px);min-width:min(720px,90%)}
+.addition-row{display:grid;grid-template-columns:1fr 1fr 38px 1fr;gap:7px;align-items:center;text-align:center}
+.addition-line{height:2px;background:#657174;opacity:.65}
+.addition-row.result{font-weight:800}.add-result-zero{opacity:.45}
+.pending{color:#9aa4a2}
+.comb-add-stage{
+  width:min(900px,96%);height:100%;min-height:0;
+  display:grid;grid-template-rows:auto minmax(0,1fr);gap:10px;align-items:center
+}
+.comb-original-ref{
+  justify-self:center;display:grid;grid-template-columns:32px auto;align-items:center;
+  font-family:var(--hand);opacity:.78
+}
+.comb-original-ref .ref-brace{font-family:Georgia,serif;font-size:70px;line-height:.68;transform:scaleY(1.08)}
+.comb-original-ref .ref-eqs{display:grid;gap:2px}
+.comb-original-ref .ref-row{
+  display:grid;grid-template-columns:minmax(86px,auto) 20px minmax(52px,auto);
+  align-items:center;font-size:20px;white-space:nowrap
+}
+.comb-original-ref .lhs{text-align:right}.comb-original-ref .eq{text-align:center;font-family:var(--sans);font-size:.72em}.comb-original-ref .rhs{text-align:left}
+
+.original-choice{
+  display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  gap:18px;align-items:center;width:min(980px,97%);min-height:0
+}
+.choice-system{
+  display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;
+  font-family:var(--hand);min-width:0
+}
+.choice-brace{
+  font-family:Georgia,serif;font-size:112px;line-height:.68;transform:scaleY(1.08);
+  color:#46565a;user-select:none
+}
+.choice-eqs{display:grid;gap:8px;min-width:0}
+.choice-row{
+  display:grid;grid-template-columns:minmax(90px,auto) 24px minmax(60px,auto);
+  align-items:center;min-height:43px;font-size:clamp(24px,3vw,36px);white-space:nowrap
+}
+.choice-row .lhs{text-align:right}.choice-row .eq{text-align:center;font-family:var(--sans);font-size:.7em}.choice-row .rhs{text-align:left}
+.choice-source{
+  padding:2px 7px;border-radius:9px;cursor:grab;touch-action:none;
+  background:linear-gradient(transparent 48%,rgba(207,238,247,.88) 48% 100%);
+  box-shadow:inset 0 -2px 0 rgba(79,145,170,.54)
+}
+.choice-drop{
+  min-width:220px;min-height:48px;display:grid;place-items:center;
+  border:2px dashed rgba(95,143,105,.38);border-radius:10px;
+  background:rgba(223,241,200,.16);font:800 11px var(--sans);color:#7c8986
+}
+.choice-arrow{font-size:24px;color:#87918f}
+.choice-fixed{background:linear-gradient(transparent 48%,rgba(216,243,165,.52) 48% 100%);border-radius:8px;padding:1px 5px}
+
+.pair-line{display:flex;align-items:center;justify-content:center;gap:5px;font-family:var(--hand);font-size:clamp(27px,3.5vw,42px)}
+.pair-slot{width:54px;height:43px;display:grid;place-items:center;border:1px dashed rgba(72,89,85,.28);border-radius:9px;font-family:var(--hand);font-size:24px}
+.pair-slot.filled{background:rgba(216,243,165,.45)}
+.special-choice{display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap}
+.special-choice button,.continue-btn{border:1px solid rgba(63,76,79,.18);border-radius:999px;background:rgba(255,255,255,.45);padding:8px 12px;font-size:12px;font-weight:850}
+.special-result{display:inline-block;font-weight:900;font-size:clamp(20px,3vw,34px);background:linear-gradient(transparent 42%,var(--phase-soft) 42% 100%);padding:0 .25em}
+
+.graph-stage{width:100%;height:100%;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr) 56px;gap:6px}
+.graph-ref{justify-self:center;display:grid;grid-template-columns:44px auto;align-items:center;font-family:var(--hand);max-width:700px;width:min(700px,96%);min-height:78px}
+.graph-ref-brace{font-family:Georgia,serif;font-size:94px;line-height:.68;transform:scaleY(1.1);color:#445459}
+.graph-ref-eqs{display:grid;gap:3px}
+.graph-ref-row{position:relative;display:grid;grid-template-columns:minmax(58px,auto) 28px minmax(145px,1fr);align-items:center;min-height:36px;padding:2px 10px;border-radius:10px;font-size:clamp(25px,2.3vw,32px);line-height:1;white-space:nowrap}
+.graph-ref-row .lhs{text-align:right}.graph-ref-row .eq{text-align:center;font-family:var(--sans);font-size:.74em;color:#687575}.graph-ref-row .rhs{text-align:left}
+.graph-ref-row.active-0{background:linear-gradient(transparent 13%,var(--blue-soft) 13% 89%,transparent 89%);box-shadow:inset 4px 0 0 var(--blue);color:#245f75;font-weight:820}
+.graph-ref-row.active-1{background:linear-gradient(transparent 13%,var(--green-soft) 13% 89%,transparent 89%);box-shadow:inset 4px 0 0 var(--green);color:#3e6f38;font-weight:820}
+.graph-plot-area{min-width:0;min-height:0;width:100%;height:100%;padding:2px;display:grid;place-items:center;overflow:hidden;--graph-size:1px}
+.graph-board{display:block;width:var(--graph-size);height:var(--graph-size);max-width:none;max-height:none;touch-action:manipulation}
+.graph-grid{stroke:#e3e1da;stroke-width:1}.graph-axis{stroke:#526367;stroke-width:2}.graph-label{font:11px var(--sans);fill:#7c8584}.graph-axis-label{font:700 14px var(--sans);fill:#4d5e62}
+.graph-line1{stroke:var(--blue);stroke-width:4;stroke-linecap:round}.graph-line2{stroke:var(--green);stroke-width:4;stroke-linecap:round}
+.graph-point1{fill:var(--blue);stroke:#fffdf7;stroke-width:3}.graph-point2{fill:var(--green);stroke:#fffdf7;stroke-width:3}
+.graph-point-label1,.graph-point-label2{font:700 12px var(--sans);paint-order:stroke;stroke:#fffdf7;stroke-width:4px;stroke-linejoin:round}.graph-point-label1{fill:var(--blue)}.graph-point-label2{fill:var(--green)}
+.graph-intersection{fill:#fffdf7;stroke:#9b7529;stroke-width:3}.graph-intersection.found{fill:#f5dfa1}.graph-intersection-core{fill:#9b7529;pointer-events:none}.graph-hit-plane{fill:transparent;cursor:crosshair;touch-action:manipulation}
+.graph-stage-footer{min-height:0;display:flex;align-items:center;justify-content:center}.graph-stage-footer.spacer{visibility:hidden;pointer-events:none}
+.graph-solution-strip{width:100%;min-height:50px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:7px 11px;padding:2px 7px 4px;font-weight:800;font-size:15px}
+.graph-solution-strip .coord-src{font-family:var(--hand);font-size:26px}.therefore{font-size:12px;font-weight:900;background:linear-gradient(transparent 40%,var(--phase-soft) 40% 100%);padding:0 .3em}
+
+.toast{position:fixed;max-width:min(560px,90vw);text-align:center;left:50%;bottom:12px;transform:translateX(-50%);z-index:100;background:#fffdf7;border:1px solid rgba(70,80,79,.14);border-radius:9px;padding:7px 10px;font-size:12px;font-weight:800;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.16s}.toast.show{opacity:1}.toast.bad{color:#9b4e48}
+.rotate{display:none;position:fixed;inset:0;z-index:200;background:var(--paper);place-items:center;text-align:center;padding:24px;font-weight:800}
+
+@media(max-width:900px){
+  main{grid-template-columns:minmax(0,1fr) 196px}
+  header{padding:0 8px;gap:7px}.brand{font-size:9px}.title{font-size:12px}.title-row{gap:6px}.exercise-picker{font-size:8px;gap:3px}.exercise-picker select{height:24px;min-width:38px;font-size:9px;padding:0 3px}
+  .method-tab{padding:6px 6px;font-size:9px}.icon-btn{width:29px}
+  .workzone{padding:6px 8px 6px;gap:5px}.instruction-panel{min-height:34px}.instruction span:last-child{font-size:12px}.stage-kicker{font-size:8px}
+  .steps{padding:8px 7px}.steps h2{font-size:10px;margin-bottom:5px}.step{min-height:49px;padding:5px 0}.step-head{grid-template-columns:23px 1fr;gap:6px}.step-num{width:23px;height:23px;font-size:8px}.step strong{font-size:10px}.snapshot{margin-left:29px;margin-top:3px;font-size:10px}
+  .brace{font-size:clamp(84px,16vw,126px)}.eqs{gap:6px}.eq-row{grid-template-columns:minmax(110px,auto) 26px minmax(120px,auto);min-height:42px;padding:2px 7px;font-size:clamp(23px,4.5vw,36px)}
+  .ghost{font-size:26px}
+}
+@media(max-height:520px) and (orientation:landscape){
+
+  .study-mode-btn{padding:5px 6px;font-size:8px}
+  .expert-workspace{grid-template-columns:minmax(0,1fr) 148px;gap:6px;width:99%}
+  .expert-main{gap:3px}
+  .expert-original{gap:1px}.expert-label{font-size:6px}
+  .expert-original .brace{font-size:70px}
+  .expert-original .eq-row{font-size:20px;min-height:29px}
+  .expert-task{gap:4px;padding:4px 5px 3px}
+  .expert-task-title{font-size:8px}
+  .expert-equation{grid-template-columns:minmax(62px,auto) 16px minmax(76px,auto);font-size:18px}
+  .expert-two-rows{gap:4px}
+  .math-field{min-width:72px;max-width:150px;min-height:26px;font-size:17px;padding:1px 3px 3px}
+  .expert-keypad{gap:4px;padding:5px;border-radius:9px}
+  .expert-key{min-height:27px;font-size:13px;border-radius:7px}
+  .expert-key.var{font-size:16px}.expert-key.op{font-size:16px}.expert-key.small{font-size:9px}
+  .expert-check{min-height:28px;font-size:8px;border-radius:7px}
+  .expert-feedback{min-height:18px;font-size:7.5px}
+  .expert-factor-brace{font-size:62px}
+  .expert-factor-rows{gap:4px}
+  .expert-factor-row{grid-template-columns:minmax(73px,auto) 16px minmax(45px,auto) auto;gap:4px;font-size:18px}
+  .expert-factor-tail{font-size:9px}
+  .expert-choice button{padding:5px 8px;font-size:8px}
+
+  #app{grid-template-rows:42px minmax(0,1fr)} header{height:42px}
+  main{grid-template-columns:minmax(0,1fr) 188px}
+  .workzone{padding:4px 7px;gap:3px}.instruction-panel{min-height:30px}.instruction{min-height:22px}.instruction span:last-child{font-size:11px}.stage-kicker{font-size:8px}
+  .steps{padding:6px}.step{min-height:44px}.snapshot{display:none}
+  .eq-row{font-size:clamp(22px,4vw,32px);min-height:38px}.brace{font-size:100px}
+  .factor-row{font-size:26px}.factor-chip{height:30px;min-width:36px;font-size:17px}.factor-slot{height:31px;width:42px}
+  .addition-board{font-size:24px}
+  .comb-add-stage{grid-template-columns:205px minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:8px;width:98%}
+  .comb-original-ref{justify-self:start;grid-template-columns:24px auto}
+  .comb-original-ref .ref-brace{font-size:54px}
+  .comb-original-ref .ref-row{grid-template-columns:minmax(62px,auto) 16px minmax(40px,auto);font-size:15px}
+  .original-choice{gap:8px;width:99%}
+  .choice-brace{font-size:78px}
+  .choice-eqs{gap:5px}
+  .choice-row{grid-template-columns:minmax(66px,auto) 18px minmax(44px,auto);min-height:31px;font-size:20px}
+  .choice-drop{min-width:155px;min-height:35px;font-size:9px}
+  .choice-arrow{font-size:18px}
+
+  .graph-stage{grid-template-columns:minmax(145px,27%) minmax(0,1fr);grid-template-rows:minmax(0,1fr) 40px;column-gap:8px;row-gap:3px}
+  .graph-ref{grid-column:1;grid-row:1;align-self:start;justify-self:stretch;width:100%;max-width:none;min-height:0;grid-template-columns:24px minmax(0,1fr);margin-top:2px}
+  .graph-ref-brace{font-size:58px}.graph-ref-row{grid-template-columns:minmax(32px,auto) 18px minmax(78px,1fr);min-height:22px;padding:0 4px;font-size:clamp(15px,2.65vw,19px)}
+  .graph-plot-area{grid-column:2;grid-row:1}.graph-stage-footer{grid-column:1/-1;grid-row:2}
+  .graph-solution-strip{min-height:37px;gap:3px 6px;padding:1px 3px;font-size:11px}.graph-solution-strip .coord-src{font-size:19px}.therefore{font-size:10px}.pair-line{font-size:20px}.pair-slot{width:32px;height:27px;font-size:16px}
+}
+
+/* v10 — Expert work trail + true large-screen scaling */
+.expert-trail{
+  display:grid;
+  gap:5px;
+  width:min(940px,96%);
+  justify-self:center;
+}
+.expert-trail-label{
+  font:900 8px var(--sans);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#81908c;
+}
+.expert-trail-items{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.expert-trail-item{
+  min-width:118px;
+  max-width:310px;
+  padding:6px 9px 7px;
+  border-left:3px solid rgba(95,143,105,.44);
+  background:rgba(255,255,255,.24);
+  border-radius:0 8px 8px 0;
+}
+.expert-trail-item .trail-step{
+  display:block;
+  font:900 7.5px var(--sans);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#7b8986;
+  margin-bottom:2px;
+}
+.expert-trail-item .trail-math{
+  font:760 15px/1.18 var(--sans);
+  color:#45575a;
+}
+.expert-trail-empty{display:none}
+
+/* Small landscape: keep the trail, but compress it instead of hiding it. */
+@media(max-height:520px) and (orientation:landscape){
+  .expert-trail{gap:2px;width:98%}
+  .expert-trail-label{font-size:6px}
+  .expert-trail-items{gap:3px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:1px}
+  .expert-trail-item{min-width:96px;max-width:190px;padding:3px 5px 4px;border-left-width:2px}
+  .expert-trail-item .trail-step{font-size:5.8px;margin-bottom:1px}
+  .expert-trail-item .trail-math{font-size:10px}
+}
+
+/* Desktop / smartboard scaling. The expert workspace should use the room it gets. */
+@media(min-width:1400px) and (min-height:700px){
+  #app{grid-template-rows:54px minmax(0,1fr)}
+  header{padding:0 18px;gap:15px}
+  .brand{font-size:13px}
+  .title{font-size:18px}
+  .exercise-picker{font-size:11px}
+  .exercise-picker select{height:32px;font-size:12px}
+  .method-tab{font-size:12px;padding:8px 11px}
+  .study-mode-btn{font-size:11px;padding:7px 10px}
+  main{grid-template-columns:minmax(0,1fr) 270px}
+  .workzone{padding:14px 18px 14px;gap:10px}
+  .instruction-panel{min-height:50px}
+  .stage-kicker{font-size:11px}
+  .instruction span:last-child{font-size:17px}
+  .steps{padding:15px 14px}
+  .steps h2{font-size:13px}
+  .step{min-height:72px}
+  .step strong{font-size:13px}
+  .step-num{width:31px;height:31px;font-size:11px}
+  .snapshot{font-size:12px}
+
+  .expert-workspace{
+    width:min(1460px,98%);
+    grid-template-columns:minmax(0,1fr) 282px;
+    gap:24px;
+  }
+  .expert-main{gap:11px}
+  .expert-original .system{max-width:98%}
+  .expert-original .brace{font-size:150px}
+  .expert-original .eq-row{
+    grid-template-columns:minmax(210px,auto) 42px minmax(225px,auto);
+    min-height:66px;
+    font-size:44px;
+  }
+  .expert-label{font-size:10px}
+  .expert-task{gap:10px;padding:12px 15px 10px}
+  .expert-task-title{font-size:14px}
+  .expert-equation{
+    grid-template-columns:minmax(120px,auto) 34px minmax(165px,auto);
+    font-size:36px;
+  }
+  .math-field{min-width:125px;max-width:360px;min-height:48px;font-size:32px}
+  .expert-keypad{gap:9px;padding:12px}
+  .expert-key{min-height:49px;font-size:21px}
+  .expert-key.var{font-size:25px}
+  .expert-key.op{font-size:24px}
+  .expert-check{min-height:46px;font-size:12px}
+  .expert-feedback{font-size:12px;min-height:31px}
+  .expert-factor-brace{font-size:118px}
+  .expert-factor-row{font-size:34px}
+  .expert-factor-tail{font-size:15px}
+  .expert-choice button{font-size:12px;padding:8px 13px}
+  .expert-final{font-size:50px}
+
+  .expert-trail{width:min(1080px,98%)}
+  .expert-trail-label{font-size:9px}
+  .expert-trail-items{gap:8px}
+  .expert-trail-item{min-width:145px;max-width:360px;padding:8px 11px 9px}
+  .expert-trail-item .trail-step{font-size:8.5px}
+  .expert-trail-item .trail-math{font-size:18px}
+}
+
+@media(min-width:2000px) and (min-height:1000px){
+  #app{grid-template-rows:64px minmax(0,1fr)}
+  header{padding:0 24px;gap:20px}
+  .brand{font-size:15px}
+  .title{font-size:21px}
+  .exercise-picker{font-size:13px}
+  .exercise-picker select{height:38px;font-size:14px}
+  .method-tab{font-size:14px;padding:10px 14px}
+  .study-mode-btn{font-size:13px;padding:9px 12px}
+  .icon-btn{width:42px;height:38px;font-size:22px}
+  main{grid-template-columns:minmax(0,1fr) 330px}
+  .workzone{padding:20px 26px 18px;gap:14px}
+  .instruction-panel{min-height:60px}
+  .stage-kicker{font-size:13px}
+  .instruction span:last-child{font-size:20px}
+  .steps{padding:19px 17px}
+  .steps h2{font-size:15px}
+  .step{min-height:84px}
+  .step strong{font-size:15px}
+  .step-num{width:36px;height:36px;font-size:12px}
+  .snapshot{font-size:14px}
+
+  .expert-workspace{
+    width:min(1780px,98%);
+    grid-template-columns:minmax(0,1fr) 340px;
+    gap:32px;
+  }
+  .expert-main{gap:15px}
+  .expert-original .brace{font-size:184px}
+  .expert-original .eq-row{
+    grid-template-columns:minmax(265px,auto) 50px minmax(280px,auto);
+    min-height:78px;
+    font-size:54px;
+  }
+  .expert-label{font-size:12px}
+  .expert-task{gap:14px;padding:16px 20px 14px}
+  .expert-task-title{font-size:17px}
+  .expert-equation{
+    grid-template-columns:minmax(150px,auto) 42px minmax(205px,auto);
+    font-size:44px;
+  }
+  .math-field{min-width:155px;max-width:430px;min-height:57px;font-size:39px}
+  .expert-keypad{gap:11px;padding:15px}
+  .expert-key{min-height:58px;font-size:25px}
+  .expert-key.var{font-size:29px}
+  .expert-key.op{font-size:28px}
+  .expert-check{min-height:54px;font-size:14px}
+  .expert-feedback{font-size:14px;min-height:36px}
+  .expert-factor-brace{font-size:148px}
+  .expert-factor-row{font-size:42px}
+  .expert-factor-tail{font-size:18px}
+  .expert-choice button{font-size:14px;padding:10px 16px}
+  .expert-final{font-size:62px}
+
+  .expert-trail{width:min(1320px,98%)}
+  .expert-trail-label{font-size:11px}
+  .expert-trail-items{gap:10px}
+  .expert-trail-item{min-width:175px;max-width:430px;padding:10px 14px 11px}
+  .expert-trail-item .trail-step{font-size:10px}
+  .expert-trail-item .trail-math{font-size:22px}
+}
+
+
+/* v11 — substitution is first shown as a real substitution, and the
+   combination work trail becomes the dominant object after factor choice. */
+.expert-substitution-stage{
+  display:grid;
+  gap:9px;
+  justify-items:center;
+  width:min(900px,98%);
+}
+.expert-sub-source-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-size:13px;
+  color:#657572;
+}
+.expert-sub-source{
+  font:800 clamp(24px,3vw,36px)/1 var(--sans);
+  padding:3px 7px 5px;
+  border-radius:7px;
+  background:linear-gradient(transparent 47%,rgba(207,238,247,.92) 47% 100%);
+  box-shadow:inset 0 -2px 0 rgba(79,145,170,.58);
+  cursor:grab;
+  touch-action:none;
+}
+.expert-sub-equation{
+  display:grid;
+  grid-template-columns:minmax(150px,auto) 34px minmax(100px,auto);
+  align-items:center;
+  font:760 clamp(29px,3.5vw,44px)/1 var(--sans);
+  white-space:nowrap;
+}
+.expert-sub-equation .lhs{text-align:right}
+.expert-sub-equation .eq{text-align:center;color:#74827f}
+.expert-sub-equation .rhs{text-align:left}
+.expert-sub-slot{
+  display:inline-block;
+  min-width:1.05em;
+  padding:1px 5px;
+  border-radius:7px;
+  outline:2px dashed rgba(95,143,105,.42);
+  outline-offset:2px;
+  background:rgba(223,241,200,.22);
+}
+.expert-sub-inserted{
+  display:inline-block;
+  padding:2px 5px;
+  border-radius:6px;
+  background:rgba(216,243,165,.36);
+}
+.expert-sub-arrow{
+  font-size:18px;
+  color:#83908d;
+}
+.expert-sub-next{
+  display:grid;
+  justify-items:center;
+  gap:7px;
+  padding-top:5px;
+  border-top:1px solid rgba(70,80,79,.08);
+  width:min(760px,96%);
+}
+
+/* De-emphasize the original system once combination is underway. */
+.expert-original.secondary{
+  justify-items:start;
+  opacity:.58;
+  gap:1px;
+  width:100%;
+}
+.expert-original.secondary .expert-label{
+  font-size:6.5px;
+  letter-spacing:.11em;
+}
+.expert-original.secondary .system{
+  max-width:560px;
+  justify-self:start;
+}
+.expert-original.secondary .brace{
+  font-size:72px;
+}
+.expert-original.secondary .eq-row{
+  grid-template-columns:minmax(105px,auto) 23px minmax(90px,auto);
+  min-height:29px;
+  font-size:21px;
+  padding:1px 5px;
+}
+
+/* Make the work trail the main object during combination. */
+.expert-trail.emphasis{
+  width:min(1180px,100%);
+  padding:9px 11px 10px;
+  border-top:1px solid rgba(95,143,105,.16);
+  border-bottom:1px solid rgba(95,143,105,.16);
+  background:rgba(255,255,255,.19);
+}
+.expert-trail.emphasis .expert-trail-label{
+  font-size:9px;
+  color:#61736e;
+}
+.expert-trail.emphasis .expert-trail-items{
+  gap:8px;
+}
+.expert-trail.emphasis .expert-trail-item{
+  flex:1 1 180px;
+  min-width:150px;
+  max-width:none;
+  padding:8px 10px 9px;
+  border-left-width:4px;
+  background:rgba(255,255,255,.38);
+}
+.expert-trail.emphasis .trail-step{
+  font-size:8px;
+}
+.expert-trail.emphasis .trail-math{
+  font-size:17px;
+  line-height:1.22;
+}
+
+@media(max-height:520px) and (orientation:landscape){
+  .expert-substitution-stage{gap:4px}
+  .expert-sub-source-row{font-size:8px;gap:4px}
+  .expert-sub-source{font-size:18px;padding:2px 4px 3px}
+  .expert-sub-equation{grid-template-columns:minmax(84px,auto) 17px minmax(55px,auto);font-size:19px}
+  .expert-sub-next{gap:3px;padding-top:2px}
+  .expert-original.secondary .brace{font-size:46px}
+  .expert-original.secondary .eq-row{
+    grid-template-columns:minmax(65px,auto) 15px minmax(52px,auto);
+    min-height:21px;font-size:14px
+  }
+  .expert-trail.emphasis{padding:4px 5px 5px}
+  .expert-trail.emphasis .expert-trail-items{flex-wrap:nowrap;overflow-x:auto;gap:4px}
+  .expert-trail.emphasis .expert-trail-item{flex:0 0 120px;min-width:120px;padding:4px 5px}
+  .expert-trail.emphasis .trail-step{font-size:5.8px}
+  .expert-trail.emphasis .trail-math{font-size:10px}
+}
+
+@media(min-width:1400px) and (min-height:700px){
+  .expert-sub-source-row{font-size:15px}
+  .expert-sub-source{font-size:38px}
+  .expert-sub-equation{
+    grid-template-columns:minmax(205px,auto) 42px minmax(135px,auto);
+    font-size:46px;
+  }
+  .expert-original.secondary .brace{font-size:88px}
+  .expert-original.secondary .eq-row{
+    grid-template-columns:minmax(135px,auto) 28px minmax(112px,auto);
+    min-height:37px;font-size:27px
+  }
+  .expert-trail.emphasis .trail-math{font-size:20px}
+}
+@media(min-width:2000px) and (min-height:1000px){
+  .expert-sub-source-row{font-size:18px}
+  .expert-sub-source{font-size:48px}
+  .expert-sub-equation{
+    grid-template-columns:minmax(260px,auto) 50px minmax(165px,auto);
+    font-size:58px;
+  }
+  .expert-original.secondary .brace{font-size:105px}
+  .expert-original.secondary .eq-row{
+    grid-template-columns:minmax(165px,auto) 34px minmax(140px,auto);
+    min-height:44px;font-size:32px
+  }
+  .expert-trail.emphasis{padding:12px 15px 13px}
+  .expert-trail.emphasis .trail-math{font-size:24px}
+}
+
+@media(orientation:portrait){.rotate{display:grid}#app{visibility:hidden}}
+</style>
+</head>
+<body>
+<div class="rotate">Draai je scherm naar landschap.</div>
+<div id="app" data-method="graphic">
+<header>
+  <div class="brand">AXIOMA</div>
+  <div class="title-row">
+    <div class="title">Stelsels</div>
+    <label class="exercise-picker"><span>Oefening</span><select id="exerciseSelect"></select></label>
+  </div>
+  <div class="method-tabs" role="tablist" aria-label="Oplossingsmethode">
+    <button class="method-tab active" role="tab" aria-selected="true" data-method="graphic">grafisch</button>
+    <button class="method-tab" role="tab" aria-selected="false" data-method="substitution">substitutie</button>
+    <button class="method-tab" role="tab" aria-selected="false" data-method="combination">combinatie</button>
+  </div>
+  <div class="study-mode" role="group" aria-label="Niveau">
+    <button class="study-mode-btn active" data-study-mode="beginner">beginner</button>
+    <button class="study-mode-btn" data-study-mode="expert">expert</button>
+  </div>
+  <button class="icon-btn" id="undoBtn" title="Ongedaan maken" aria-label="Ongedaan maken">↶</button>
+  <button class="icon-btn" id="resetBtn" title="Herstart" aria-label="Herstart oefening">↻</button>
+</header>
+<main>
+  <section class="workzone">
+    <div class="instruction-panel">
+      <div class="stage-kicker" id="stageKicker"></div>
+      <div class="instruction"><span class="tag">DOE</span><span id="instructionText" aria-live="polite"></span></div>
+    </div>
+    <div id="systemWrap"></div>
+    <div id="auxArea"></div>
+  </section>
+  <aside class="steps">
+    <h2>STAPPEN</h2>
+    <div id="stepsList"></div>
+  </aside>
+</main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(()=>{
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const app=$('#app'),systemWrap=$('#systemWrap'),auxArea=$('#auxArea'),stageKicker=$('#stageKicker'),instructionText=$('#instructionText'),stepsList=$('#stepsList'),toast=$('#toast'),exerciseSelect=$('#exerciseSelect'),undoBtn=$('#undoBtn');
+
+/* ---------- exact arithmetic + exercise analysis ---------- */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a||1}
+class Q{
+  constructor(n,d=1){
+    if(!Number.isFinite(n)||!Number.isFinite(d)||!Number.isInteger(n)||!Number.isInteger(d))throw new Error('Ongeldig rationaal getal');
+    if(d===0)throw new Error('Delen door nul');
+    if(d<0){n=-n;d=-d}
+    const g=gcd(n,d);this.n=n/g;this.d=d/g
+  }
+  add(o){o=Q.from(o);return new Q(this.n*o.d+o.n*this.d,this.d*o.d)}
+  sub(o){o=Q.from(o);return new Q(this.n*o.d-o.n*this.d,this.d*o.d)}
+  mul(o){o=Q.from(o);return new Q(this.n*o.n,this.d*o.d)}
+  div(o){o=Q.from(o);if(o.zero())throw new Error('Delen door nul');return new Q(this.n*o.d,this.d*o.n)}
+  neg(){return new Q(-this.n,this.d)}
+  abs(){return new Q(Math.abs(this.n),this.d)}
+  eq(o){o=Q.from(o);return this.n===o.n&&this.d===o.d}
+  zero(){return this.n===0}
+  one(){return this.n===this.d}
+  mone(){return this.n===-this.d}
+  num(){return this.n/this.d}
+  static from(v){
+    if(v instanceof Q)return v;
+    if(typeof v==='number'){
+      if(!Number.isFinite(v)||!Number.isInteger(v))throw new Error('Gebruik een breuk voor niet-gehele getallen');
+      return new Q(v,1)
+    }
+    if(typeof v==='string'){
+      const s=v.trim();
+      if(!/^-?\d+(?:\/-?\d+)?$/.test(s))throw new Error(`Ongeldig rationaal getal: ${v}`);
+      if(s.includes('/')){const [a,b]=s.split('/').map(Number);return new Q(a,b)}
+      return new Q(Number(s),1)
+    }
+    if(v&&Number.isInteger(v.n)&&Number.isInteger(v.d))return new Q(v.n,v.d);
+    throw new Error('Ongeldig rationaal getal')
+  }
+}
+const q=v=>Q.from(v);
+
+const RAW_EXERCISES=[
+ // BASIS
+ {id:1,eq:[['2','1','5'],['1','2','4']]},
+ {id:2,eq:[['-2','1','4'],['1','3','5']]},
+ {id:3,eq:[['2','1','5'],['1','-2','5']]},
+ {id:4,eq:[['-3','1','-5'],['1','4','6']]},
+ {id:5,eq:[['1/2','1','2'],['1','-1','1']]},
+
+ // METHODEBEWUSTE VARIATIE
+ // combinatie: y valt onmiddellijk weg
+ {id:6,eq:[['3','2','7'],['3','-2','-1']]},
+ // substitutie: x staat meteen met coefficient 1
+ {id:7,eq:[['1','-3','-5'],['2','1','4']]},
+ // negatieve x-coefficient
+ {id:8,eq:[['-1','1','4'],['2','1','1']]},
+ // beide oplossingscoordinaten negatief
+ {id:9,eq:[['1','1','-3'],['2','-1','-3']]},
+ // combinatie vraagt twee verschillende factoren
+ {id:10,eq:[['2','3','7'],['3','-2','4']]},
+
+ // UITDAGING
+ // breuken als oplossing
+ {id:11,eq:[['2','1','2'],['1','-1','0']]},
+ // breuk als coefficient
+ {id:12,eq:[['2/3','-1','-1'],['1','1','6']]},
+
+ // SPECIALE GEVALLEN — minder onmiddellijk herkenbaar
+ // tweede vergelijking = -2 maal de eerste
+ {id:13,eq:[['2','-1','3'],['-4','2','-6']]},
+ // zelfde linkerlidverhouding, ander rechterlid: evenwijdig
+ {id:14,eq:[['2','-1','3'],['-4','2','-8']]}
+];
+function analyzeSystem(eq){
+  if(eq.length!==2)throw new Error('Een stelsel bevat exact twee vergelijkingen');
+  eq.forEach((e,i)=>{if(e.x.zero()&&e.y.zero())throw new Error(`Vergelijking ${i+1} bevat geen variabele`)});
+  const [a,b]=eq,D=a.x.mul(b.y).sub(b.x.mul(a.y));
+  if(!D.zero()){
+    const Dx=a.c.mul(b.y).sub(b.c.mul(a.y)),Dy=a.x.mul(b.c).sub(b.x.mul(a.c));
+    return {kind:'point',solution:{x:Dx.div(D),y:Dy.div(D)},solutionText:null}
+  }
+  const consistent=a.x.mul(b.c).eq(b.x.mul(a.c))&&a.y.mul(b.c).eq(b.y.mul(a.c));
+  return consistent?{kind:'coincident',solution:null,solutionText:'oneindig veel oplossingen'}:{kind:'parallel',solution:null,solutionText:'geen oplossing'}
+}
+const EXERCISES=RAW_EXERCISES.map(raw=>{
+  const eq=raw.eq.map(([x,y,c])=>({x:q(x),y:q(y),c:q(c)}));
+  return {id:raw.id,eq,info:analyzeSystem(eq)}
+});
+let exerciseIndex=0,method='graphic',studyMode='beginner',state=null,history=[],graphObserver=null,tapMove=null;
+const ex=()=>EXERCISES[exerciseIndex],equations=()=>ex().eq,info=()=>ex().info,sol=()=>info().solution;
+
+/* ---------- formatting ---------- */
+function qHTML(v){v=q(v);const sign=v.n<0?'−':'',a=Math.abs(v.n);return v.d===1?sign+a:`${sign}<span class="frac"><span class="num">${a}</span><span class="bar"></span><span class="den">${v.d}</span></span>`}
+function qPlain(v){v=q(v);return v.d===1?String(v.n):`${v.n}/${v.d}`}
+function termBody(c,v){c=q(c).abs();return c.one()?v:`${qHTML(c)}${v}`}
+function signedTerm(c,v,first=false){c=q(c);if(c.zero())return '';const body=termBody(c,v);return first?`${c.n<0?'−':''}${body}`:`${c.n<0?'−':'+'} ${body}`}
+function linearHTML(e){const parts=[];if(!e.x.zero())parts.push(signedTerm(e.x,'x',true));if(!e.y.zero())parts.push(signedTerm(e.y,'y',parts.length===0));return parts.join(' ')||'0'}
+function originalRows(){return equations().map(e=>({lhs:linearHTML(e),rhs:qHTML(e.c)}))}
+function affineConstFirst(beta,alpha,v){beta=q(beta);alpha=q(alpha);if(alpha.zero())return qHTML(beta);if(beta.zero())return signedTerm(alpha,v,true);return `${qHTML(beta)} ${signedTerm(alpha,v,false)}`}
+function affineSlopeFirst(alpha,v,beta){alpha=q(alpha);beta=q(beta);if(alpha.zero())return qHTML(beta);if(beta.zero())return signedTerm(alpha,v,true);return `${signedTerm(alpha,v,true)} ${beta.n<0?'−':'+'} ${qHTML(beta.abs())}`}
+function mathText(html){
+  const box=document.createElement('div');box.innerHTML=html;
+  const read=node=>{
+    if(node.nodeType===Node.TEXT_NODE)return node.nodeValue||'';
+    if(node.nodeType!==Node.ELEMENT_NODE)return '';
+    if(node.classList.contains('frac')){
+      const num=node.querySelector(':scope > .num'),den=node.querySelector(':scope > .den');
+      return `${num?Array.from(num.childNodes).map(read).join(''):''}/${den?Array.from(den.childNodes).map(read).join(''):''}`
+    }
+    return Array.from(node.childNodes).map(read).join('')
+  };
+  return Array.from(box.childNodes).map(read).join('').replace(/\s+/g,' ').replace(/\s*([+−=,()])\s*/g,' $1 ').replace(/\s+/g,' ').trim()
+}
+function setInstruction(kicker,text){stageKicker.textContent=kicker;instructionText.textContent=text}
+function showToast(msg,bad=false){toast.textContent=msg;toast.className='toast show'+(bad?' bad':'');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.className='toast',bad?3200:2200)}
+
+/* ---------- reusable UI ---------- */
+function systemHTML(rows,{focus=null,locked=null}={}){return `<div class="system"><div class="brace">{</div><div class="eqs">${rows.map((r,i)=>`<div class="eq-row ${focus===i?'focus':''} ${locked===i?'locked':''}"><span class="lhs">${r.lhs}</span><span class="eq">=</span><span class="rhs">${r.rhs}</span></div>`).join('')}</div></div>`}
+function miniRows(rows){return `<div class="mini-system"><div class="mini-brace">{</div><div class="mini-eqs">${rows.map(r=>`<div class="mini-row"><span class="lhs">${mathText(r.lhs)}</span><span class="eq">=</span><span class="rhs">${mathText(r.rhs)}</span></div>`).join('')}</div></div>`}
+function snapshotHTML(s){if(!s)return '';return s.type==='rows'?miniRows(s.rows):`<div>${s.text||''}</div>`}
+function stepNames(){
+  if(studyMode==='expert'){
+    if(method==='graphic')return info().kind==='point'?['Zet om','Kies punten','Snijpunt','Oplossing']:['Zet om','Kies punten','Vergelijk rechten','Oplossing'];
+    if(method==='substitution')return info().kind==='point'?['Maak vrij','Substitueer','Los op','Andere onbekende','Oplossing']:['Maak vrij','Substitueer','Conclusie','Oplossing'];
+    return info().kind==='point'?['Kies factoren','Schrijf producten','Tel op','Los op','Andere onbekende','Oplossing']:['Kies factoren','Schrijf producten','Tel op','Conclusie','Oplossing']
+  }
+  if(method==='graphic')return info().kind==='point'?['Maak vrij','Kies punten','Snijpunt','Oplossing']:['Maak vrij','Kies punten','Vergelijk rechten','Oplossing'];
+  if(method==='substitution')return info().kind==='point'?['Maak vrij','Substitueer','Vervang waarde','Oplossing']:['Maak vrij','Substitueer','Conclusie','Oplossing'];
+  return info().kind==='point'?['Kies factoren','Tel op','Vervang waarde','Oplossing']:['Kies factoren','Tel op','Conclusie','Oplossing']
+}
+function renderSteps(){const names=stepNames();stepsList.innerHTML=names.map((n,i)=>{const p=i+1,active=state.phase===p,done=state.phase>p||state.solved;return `<div class="step ${active?'active':''} ${done?'done':''}"><div class="step-head"><div class="step-num">${p}</div><strong>${n}</strong></div><div class="snapshot">${snapshotHTML(state.snapshots[p])}</div></div>`}).join('')}
+function updateTabs(){$$('.method-tab').forEach(b=>{const on=b.dataset.method===method;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on))});$$('.study-mode-btn').forEach(b=>b.classList.toggle('active',b.dataset.studyMode===studyMode));app.dataset.method=method;app.dataset.studyMode=studyMode}
+
+/* ---------- move interaction: drag OR tap-source/tap-target ---------- */
+function clearTapMove(){if(!tapMove)return;tapMove.source?.classList.remove('selected');tapMove.targets?.forEach(t=>t.classList.remove('ready'));tapMove=null}
+function moveControl(el,labelHTML,targetSelectors,onDrop){
+  if(!el)return;const targets=()=>targetSelectors.flatMap(s=>Array.from(document.querySelectorAll(s))),label=mathText(labelHTML||el.innerHTML)||'wiskundig object';
+  el.setAttribute('role','button');el.tabIndex=0;el.setAttribute('aria-label',`Verplaats ${label}`);
+  targets().forEach(t=>{t.setAttribute('role','button');t.tabIndex=0;if(!t.getAttribute('aria-label'))t.setAttribute('aria-label',`Doel ${mathText(t.innerHTML)}`)});
+  let down=false,dragging=false,pid=null,ghost=null,startX=0,startY=0,current=null,suppressClick=false;
+  const select=()=>{clearTapMove();const ts=targets();el.classList.add('selected');ts.forEach(t=>t.classList.add('ready'));tapMove={source:el,targets:ts,drop:t=>{clearTapMove();onDrop(t)}}};
+  el.addEventListener('click',e=>{if(suppressClick){suppressClick=false;return}e.preventDefault();select()});
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select()}});
+  targets().forEach(t=>{
+    const perform=e=>{if(tapMove&&tapMove.source===el){e.preventDefault();tapMove.drop(t)}};
+    t.addEventListener('click',perform);t.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&tapMove&&tapMove.source===el)perform(e)})
+  });
+  el.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;down=true;dragging=false;pid=e.pointerId;startX=e.clientX;startY=e.clientY;try{el.setPointerCapture(pid)}catch{}});
+  el.addEventListener('pointermove',e=>{
+    if(!down||e.pointerId!==pid)return;
+    if(!dragging&&Math.hypot(e.clientX-startX,e.clientY-startY)>7){clearTapMove();dragging=true;document.body.classList.add('is-dragging');ghost=document.createElement('div');ghost.className='ghost';ghost.innerHTML=labelHTML;document.body.appendChild(ghost)}
+    if(!dragging)return;if(ghost){ghost.style.left=e.clientX+'px';ghost.style.top=e.clientY+'px'};current=null;targets().forEach(t=>{const hot=hitTarget(t,e);t.classList.toggle('hot',hot);if(hot&&!current)current=t});e.preventDefault()
+  });
+  el.addEventListener('pointerup',e=>{
+    if(!down||e.pointerId!==pid)return;down=false;if(!dragging)return;suppressClick=true;current=null;targets().forEach(t=>{if(hitTarget(t,e)&&!current)current=t});document.body.classList.remove('is-dragging');ghost?.remove();ghost=null;$$('.hot').forEach(x=>x.classList.remove('hot'));if(current)onDrop(current);else showToast('Niet op het groene doel losgelaten.',true)
+  });
+  el.addEventListener('pointercancel',()=>{down=false;dragging=false;document.body.classList.remove('is-dragging');ghost?.remove();ghost=null;$$('.hot').forEach(x=>x.classList.remove('hot'))})
+}
+function hitTarget(t,e){const r=t.getBoundingClientRect(),pad=20;return e.clientX>=r.left-pad&&e.clientX<=r.right+pad&&e.clientY>=r.top-pad&&e.clientY<=r.bottom+pad}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')clearTapMove()});
+
+/* ---------- state/history ---------- */
+function cloneValue(v){if(v instanceof Q)return new Q(v.n,v.d);if(Array.isArray(v))return v.map(cloneValue);if(v&&typeof v==='object'){const o={};for(const [k,val] of Object.entries(v))o[k]=cloneValue(val);return o}return v}
+function checkpoint(){history.push(cloneValue(state));if(history.length>80)history.shift()}
+function transition(fn){checkpoint();fn();render()}
+function undo(){if(!history.length)return;clearTapMove();state=history.pop();render()}
+function reset(){
+  clearTapMove();history=[];if(graphObserver){graphObserver.disconnect();graphObserver=null}
+  if(studyMode==='expert'){
+    state={
+      phase:1,snapshots:{},solved:false,feedback:'',feedbackBad:false,
+      editors:{},activeEditor:null,fracFocus:null,
+      points:[[],[]],activeLine:0,pair:{x:null,y:null},
+      isoVar:'y',isoRow:null,isoRhs:null,subVector:null,subPlaced:false,foundVar:null,foundValue:null,
+      factors:[null,null],scaled:null,sumVector:null
+    };
+    if(method==='graphic'){state.activeEditor='g0'}
+    else if(method==='substitution'){state.activeEditor='isoRhs'}
+    else{state.activeEditor='f0'}
+  }else if(method==='graphic')state={phase:1,freeEq:0,freeStage:0,points:[[],[]],activeLine:0,snapshots:{},pair:{x:null,y:null},solved:false};
+  else if(method==='substitution')state={phase:1,route:null,isoStage:0,subStage:0,backStage:0,snapshots:{},pair:{x:null,y:null},solved:false};
+  else state={phase:1,factors:[null,null],factorMessage:'',sumDone:{x:false,y:false,c:false},elim:null,chosenEq:null,backStage:0,snapshots:{},pair:{x:null,y:null},solved:false};
+  render()
+}
+function render(){
+  clearTapMove();updateTabs();exerciseSelect.value=String(exerciseIndex);auxArea.innerHTML='';renderSteps();
+  try{
+    if(studyMode==='expert')renderExpert();
+    else if(method==='graphic')renderGraphic();
+    else if(method==='substitution')renderSubstitution();
+    else renderCombination()
+  }catch(err){
+    console.error(err);
+    systemWrap.innerHTML='<div class="special-result">Deze oefening kan hier niet worden weergegeven.</div>';
+    showToast(err.message||'Onverwachte fout',true)
+  }
+  undoBtn.disabled=!history.length
+}
+
+
+/* ---------- EXPERT MODE: shared manual formula engine ---------- */
+function eTokens(id){return state.editors[id]||(state.editors[id]=[])}
+function eFocus(id){state.activeEditor=id;state.fracFocus=null;state.feedback='';state.feedbackBad=false;render()}
+function eFracToken(){
+  const f=state.fracFocus;
+  if(!f||f.editor!==state.activeEditor)return null;
+  const t=eTokens(f.editor)[f.index];
+  return t&&t.t==='frac'?t:null
+}
+function eFracHTML(t,id,index){
+  const f=state.fracFocus;
+  const nOn=f&&f.editor===id&&f.index===index&&f.zone==='n';
+  const dOn=f&&f.editor===id&&f.index===index&&f.zone==='d';
+  const pretty=s=>(s||'').replace(/-/g,'−');
+  return `<span class="math-frac">
+    <span class="math-frac-part ${nOn?'active':''}" data-frac-editor="${id}" data-frac-index="${index}" data-frac-zone="n">${t.n?pretty(t.n):'<span class="math-frac-empty"></span>'}</span>
+    <span class="math-frac-line"></span>
+    <span class="math-frac-part ${dOn?'active':''}" data-frac-editor="${id}" data-frac-index="${index}" data-frac-zone="d">${t.d?pretty(t.d):'<span class="math-frac-empty"></span>'}</span>
+  </span>`
+}
+function eFieldHTML(id,placeholder='…'){
+  const ts=eTokens(id),active=state.activeEditor===id,bad=state.badEditor===id;
+  const inside=ts.length?ts.map((t,i)=>t.t==='frac'?eFracHTML(t,id,i):`<span>${t.v==='-'?'−':t.v}</span>`).join(''):`<span class="math-empty">${placeholder}</span>`;
+  return `<span class="math-field ${active?'active':''} ${bad?'bad':''}" id="ef_${id}" data-editor="${id}" tabindex="0">${inside}${active&&!state.fracFocus?'<span class="math-caret"></span>':''}</span>`
+}
+function eStaticHTML(id){
+  const ts=eTokens(id);
+  if(!ts.length)return '—';
+  return ts.map(t=>{
+    if(t.t==='frac'){
+      const n=(t.n||'?').replace(/-/g,'−'),d=(t.d||'?').replace(/-/g,'−');
+      return `<span class="frac"><span class="num">${n}</span><span class="bar"></span><span class="den">${d}</span></span>`
+    }
+    return `<span>${t.v==='-'?'−':t.v}</span>`
+  }).join('')
+}
+function ePretty(id){
+  return eTokens(id).map(t=>t.t==='frac'?`${t.n||'?'}⁄${t.d||'?'}`:(t.v==='-'?'−':t.v)).join('')
+}
+function eParseFraction(t){
+  const n=(t.n||'').trim(),d=(t.d||'').trim();
+  const m=/^([+-]?)(\d*)([xy]?)$/i.exec(n);
+  if(!m||(!m[2]&&!m[3])||!/^[+-]?\d+$/.test(d))return null;
+  const dn=Number(d);if(!Number.isInteger(dn)||dn===0)return null;
+  const sign=m[1]==='-'?-1:1,mag=m[2]?Number(m[2]):1,variable=(m[3]||'').toLowerCase()||null;
+  return {coef:new Q(sign*mag,dn),variable}
+}
+function eParseLinearTokens(tokens){
+  let x=q(0),y=q(0),c=q(0),i=0,termSign=1,needTerm=true;
+  const add=(coef,v)=>{coef=termSign===-1?coef.neg():coef;if(v==='x')x=x.add(coef);else if(v==='y')y=y.add(coef);else c=c.add(coef)};
+  while(i<tokens.length){
+    const t=tokens[i];
+    if(t.t==='char'&&(t.v==='+'||t.v==='-')){
+      if(!needTerm)return null;
+      termSign=t.v==='-'?-1:1;i++;if(i>=tokens.length)return null
+    }
+    let coef=q(1),variable=null,used=false;needTerm=false;
+    while(i<tokens.length){
+      const k=tokens[i];
+      if(k.t==='char'&&(k.v==='+'||k.v==='-'))break;
+      if(k.t==='frac'){
+        const f=eParseFraction(k);if(!f)return null;
+        coef=coef.mul(f.coef);if(f.variable){if(variable)return null;variable=f.variable}
+        used=true;i++;continue
+      }
+      if(k.t!=='char')return null;
+      if(/^\d$/.test(k.v)){
+        let digits='';
+        while(i<tokens.length&&tokens[i].t==='char'&&/^\d$/.test(tokens[i].v)){digits+=tokens[i].v;i++}
+        coef=coef.mul(q(digits));used=true;continue
+      }
+      if(k.v==='x'||k.v==='y'){
+        if(variable)return null;variable=k.v;used=true;i++;continue
+      }
+      return null
+    }
+    if(!used)return null;
+    add(coef,variable);termSign=1;needTerm=true
+  }
+  return {x,y,c}
+}
+function eParse(id){return eParseLinearTokens(eTokens(id))}
+function eParseConstant(id){const r=eParse(id);return r&&r.x.zero()&&r.y.zero()?r.c:null}
+function eVecFromEditors(l,r){
+  const L=eParse(l),R=eParse(r);if(!L||!R)return null;
+  return {x:L.x.sub(R.x),y:L.y.sub(R.y),c:L.c.sub(R.c)}
+}
+function eVecFromEquation(e){return {x:e.x,y:e.y,c:e.c.neg()}}
+function eVecZero(v){return v.x.zero()&&v.y.zero()&&v.c.zero()}
+function eVecEq(a,b){return a&&b&&a.x.eq(b.x)&&a.y.eq(b.y)&&a.c.eq(b.c)}
+function eVecNegEq(a,b){return a&&b&&a.x.eq(b.x.neg())&&a.y.eq(b.y.neg())&&a.c.eq(b.c.neg())}
+function eVecEquivalent(a,b){
+  if(!a||!b||eVecZero(a)||eVecZero(b))return false;
+  const A=[a.x,a.y,a.c],B=[b.x,b.y,b.c];
+  let ratio=null;
+  for(let i=0;i<3;i++){
+    if(!B[i].zero()){ratio=A[i].div(B[i]);break}
+    if(!A[i].zero())return false
+  }
+  if(!ratio||ratio.zero())return false;
+  return A.every((v,i)=>v.eq(B[i].mul(ratio)))
+}
+function eLinearHTML(r){
+  if(!r)return '—';
+  const parts=[];
+  if(!r.x.zero())parts.push(signedTerm(r.x,'x',true));
+  if(!r.y.zero())parts.push(signedTerm(r.y,'y',parts.length===0));
+  if(!r.c.zero()){
+    const s=r.c.n<0?'−':'+';const val=qHTML(r.c.abs());
+    parts.push(parts.length?(s+' '+val):(r.c.n<0?'−'+val:val))
+  }
+  return parts.join(' ')||'0'
+}
+function eInputKey(key){
+  const id=state.activeEditor;if(!id)return;
+  const ts=eTokens(id),frac=eFracToken();
+  state.badEditor=null;state.feedback='';state.feedbackBad=false;
+  if(key==='C'){state.editors[id]=[];state.fracFocus=null;return}
+  if(key==='⌫'){
+    if(frac){
+      const z=state.fracFocus.zone;
+      if(frac[z])frac[z]=frac[z].slice(0,-1);else{ts.splice(state.fracFocus.index,1);state.fracFocus=null}
+    }else ts.pop();
+    return
+  }
+  if(key==='FRAC'){
+    if(frac){state.feedback='Ga eerst met → uit de huidige breuk.';return}
+    ts.push({t:'frac',n:'',d:''});state.fracFocus={editor:id,index:ts.length-1,zone:'n'};return
+  }
+  if(key==='→'){
+    if(frac){if(state.fracFocus.zone==='n')state.fracFocus.zone='d';else state.fracFocus=null}return
+  }
+  if(key==='←'){
+    if(frac){if(state.fracFocus.zone==='d')state.fracFocus.zone='n';else state.fracFocus=null}return
+  }
+  if(frac){
+    const z=state.fracFocus.zone;
+    if(z==='n'){
+      if(/^\d$/.test(key)||key==='x'||key==='y'){frac.n+=key;return}
+      if(key==='-'&&frac.n===''){frac.n='-';return}
+      state.feedback='In de teller kan een getal, x, y of − staan.';return
+    }
+    if(z==='d'){
+      if(/^\d$/.test(key)){frac.d+=key;return}
+      if(key==='-'&&frac.d===''){frac.d='-';return}
+      state.feedback='De noemer moet een getal zijn.';return
+    }
+  }
+  if(/^\d$/.test(key)||key==='x'||key==='y'||key==='+'||key==='-')ts.push({t:'char',v:key})
+}
+function eKeypadHTML(checkLabel='controleer'){
+  const frac=`<span class="expert-frac-icon"><span class="box"></span><span class="line"></span><span class="box"></span></span>`;
+  const keys=[['7',''],['8',''],['9',''],['⌫','small'],['4',''],['5',''],['6',''],['FRAC',''],['1',''],['2',''],['3',''],['x','var'],['0',''],['+','op'],['-','op'],['y','var'],['←','small'],['→','small'],['C','small']];
+  return `<div class="expert-keypad">${keys.map(([k,cl])=>`<button class="expert-key ${cl}" data-ekey="${k}">${k==='FRAC'?frac:k==='-'?'−':k}</button>`).join('')}<button class="expert-check" id="expertCheck">${checkLabel}</button></div>`
+}
+function eWireEditors(){
+  $$('[data-editor]').forEach(el=>{
+    const id=el.dataset.editor;
+    el.addEventListener('click',()=>eFocus(id));
+    el.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();eFocus(id)}})
+  });
+  $$('[data-frac-editor]').forEach(el=>el.addEventListener('click',ev=>{
+    ev.stopPropagation();
+    state.activeEditor=el.dataset.fracEditor;
+    state.fracFocus={editor:el.dataset.fracEditor,index:Number(el.dataset.fracIndex),zone:el.dataset.fracZone};
+    state.badEditor=null;render()
+  }));
+  $$('[data-ekey]').forEach(b=>b.addEventListener('click',()=>transition(()=>eInputKey(b.dataset.ekey))))
+}
+function eOriginalHTML(compact=false){
+  return `<div class="expert-original ${compact?'secondary':''}"><div class="expert-label">oorspronkelijk stelsel</div>${systemHTML(originalRows())}</div>`
+}
+function eTrailHTML(emphasis=false){
+  const names=stepNames();
+  const done=Object.keys(state.snapshots||{})
+    .map(Number)
+    .filter(n=>Number.isFinite(n)&&n<state.phase&&state.snapshots[n])
+    .sort((a,b)=>a-b);
+  if(!done.length)return '<div class="expert-trail-empty"></div>';
+  return `<div class="expert-trail ${emphasis?'emphasis':''}">
+    <div class="expert-trail-label">werkspoor</div>
+    <div class="expert-trail-items">${done.map(n=>{
+      const snap=state.snapshots[n];
+      const body=snap.type==='rows'?snapshotHTML(snap):(snap.text||'');
+      return `<div class="expert-trail-item"><span class="trail-step">${n}. ${names[n-1]||'stap'}</span><div class="trail-math">${body}</div></div>`
+    }).join('')}</div>
+  </div>`
+}
+function eWorkspace(taskHTML,checkLabel='controleer',showKeypad=true){
+  const combinationFocus=method==='combination'&&state.phase>=2;
+  return `<div class="expert-workspace">
+    <div class="expert-main">
+      ${eOriginalHTML(combinationFocus)}
+      ${eTrailHTML(combinationFocus)}
+      <div class="expert-task">${taskHTML}<div class="expert-feedback ${state.feedbackBad?'bad':''}">${state.feedback||''}</div></div>
+    </div>
+    <div>${showKeypad?eKeypadHTML(checkLabel):''}</div>
+  </div>`
+}
+function eSetError(msg,id=null){state.feedback=msg;state.feedbackBad=true;state.badEditor=id;if(id)state.activeEditor=id;state.fracFocus=null}
+function eClearFeedback(){state.feedback='';state.feedbackBad=false;state.badEditor=null}
+function eSnapshot(p,text){state.snapshots[p]={type:'text',text}}
+
+function renderExpert(){
+  if(method==='graphic')return renderExpertGraphic();
+  if(method==='substitution')return renderExpertSubstitution();
+  return renderExpertCombination()
+}
+
+/* ----- expert: GRAPHIC ----- */
+function renderExpertGraphic(){
+  if(state.phase>1){
+    if(state.phase===2)return renderGraphPoints();
+    if(state.phase===3)return renderGraphIntersection();
+    return renderGraphSolution()
+  }
+  setInstruction('1 · expert','Zet beide vergelijkingen zelf om naar y = ax + b.');
+  if(!state.activeEditor)state.activeEditor='g0';
+  const task=`<div class="expert-task-title">Schrijf de twee rechten in de vorm y = ax + b.</div>
+    <div class="expert-two-rows">
+      <div class="expert-equation"><span class="left">y</span><span class="eq">=</span><span class="right">${eFieldHTML('g0','rechterlid')}</span></div>
+      <div class="expert-equation"><span class="left">y</span><span class="eq">=</span><span class="right">${eFieldHTML('g1','rechterlid')}</span></div>
+    </div>`;
+  systemWrap.innerHTML=eWorkspace(task,'controleer omzetting');eWireEditors();
+  $('#expertCheck').addEventListener('click',()=>{
+    for(let i=0;i<2;i++){
+      const f=graphForm(equations()[i]);
+      if(f.vertical){transition(()=>eSetError('Deze expertmodus verwacht voorlopig een vorm y = ax + b.','g'+i));return}
+      const r=eParse('g'+i);
+      if(!r||!r.y.zero()||!r.x.eq(f.m)||!r.c.eq(f.b)){transition(()=>eSetError(`Vergelijking ${i+1} klopt nog niet.`,'g'+i));return}
+    }
+    transition(()=>{eClearFeedback();eSnapshot(1,'beide rechten omgezet');state.phase=2;state.activeLine=0})
+  })
+}
+
+/* ----- expert: SUBSTITUTION ----- */
+function eSubExpected(){
+  if(state.isoRow===null||!state.isoRhs)return null;
+  const target=equations()[1-state.isoRow],r=state.isoRhs,v=state.isoVar;
+  if(v==='x'){
+    return {x:q(0),y:target.x.mul(r.y).add(target.y),c:target.x.mul(r.c).sub(target.c)}
+  }
+  return {x:target.y.mul(r.x).add(target.x),y:q(0),c:target.y.mul(r.c).sub(target.c)}
+}
+function eFindIsolatedRoute(){
+  const rhs=eParse('isoRhs');if(!rhs)return null;
+  const v=state.isoVar,other=v==='x'?'y':'x';
+  if(!rhs[v].zero())return null;
+  const left={x:v==='x'?q(1):q(0),y:v==='y'?q(1):q(0),c:q(0)};
+  const vec={x:left.x.sub(rhs.x),y:left.y.sub(rhs.y),c:left.c.sub(rhs.c)};
+  for(let row=0;row<2;row++)if(eVecEquivalent(vec,eVecFromEquation(equations()[row])))return {row,rhs,vec,other};
+  return null
+}
+function eSubTermHTML(coef,varName,contentHTML=null,first=false,target=false){
+  coef=q(coef);
+  if(coef.zero())return '';
+  const neg=coef.n<0,abs=coef.abs();
+  let body='';
+  if(contentHTML!==null){
+    const core=target?`<span class="expert-sub-slot" id="expertSubTarget">${varName}</span>`:`<span class="expert-sub-inserted">(${contentHTML})</span>`;
+    body=abs.one()?core:`${qHTML(abs)}${core}`
+  }else{
+    body=termBody(abs,varName)
+  }
+  if(first)return `${neg?'−':''}${body}`;
+  return `${neg?'−':'+'} ${body}`
+}
+function eSubVisualRow(placed){
+  const target=equations()[1-state.isoRow],v=state.isoVar,expr=eStaticHTML('isoRhs');
+  const terms=[];
+  for(const name of ['x','y']){
+    const coef=target[name];
+    if(coef.zero())continue;
+    if(name===v)terms.push(eSubTermHTML(coef,name,placed?expr:null,terms.length===0,!placed));
+    else terms.push(eSubTermHTML(coef,name,null,terms.length===0,false))
+  }
+  return {lhs:terms.join(' '),rhs:qHTML(target.c)}
+}
+function renderExpertSubstitution(){
+  if(state.phase===1){
+    setInstruction('1 · expert','Maak x of y vrij in één vergelijking.');
+    if(!state.activeEditor)state.activeEditor='isoRhs';
+    const task=`<div class="expert-task-title">Kies de onbekende links en schrijf het rechterlid zelf.</div>
+      <div class="expert-choice"><button data-isovar="x" ${state.isoVar==='x'?'class="active"':''}>x vrijmaken</button><button data-isovar="y" ${state.isoVar==='y'?'class="active"':''}>y vrijmaken</button></div>
+      <div class="expert-equation"><span class="left">${state.isoVar}</span><span class="eq">=</span><span class="right">${eFieldHTML('isoRhs','uitdrukking')}</span></div>`;
+    systemWrap.innerHTML=eWorkspace(task,'controleer vrije vorm');eWireEditors();
+    $$('[data-isovar]').forEach(b=>b.addEventListener('click',()=>{state.isoVar=b.dataset.isovar;eClearFeedback();render()}));
+    $('#expertCheck').addEventListener('click',()=>{
+      const route=eFindIsolatedRoute();
+      if(!route){transition(()=>eSetError('Deze vrije vorm volgt niet uit één van de twee oorspronkelijke vergelijkingen.','isoRhs'));return}
+      transition(()=>{state.isoRow=route.row;state.isoRhs=route.rhs;state.subVector=eSubExpected();state.subPlaced=false;eClearFeedback();eSnapshot(1,`${state.isoVar} = ${ePretty('isoRhs')}`);state.phase=2;state.activeEditor=null})
+    });return
+  }
+
+  if(state.phase===2){
+    const v=state.isoVar,other=v==='x'?'y':'x';
+
+    if(!state.subPlaced){
+      setInstruction('2 · expert','Substitueer je gevonden uitdrukking in de andere vergelijking.');
+      const row=eSubVisualRow(false);
+      const task=`<div class="expert-substitution-stage">
+        <div class="expert-task-title">Vervang ${v} in de andere vergelijking door je gevonden uitdrukking.</div>
+        <div class="expert-sub-source-row"><span>${v} =</span><span class="expert-sub-source" id="expertSubSource">${eStaticHTML('isoRhs')}</span></div>
+        <div class="expert-sub-arrow">↓</div>
+        <div class="expert-sub-equation"><span class="lhs">${row.lhs}</span><span class="eq">=</span><span class="rhs">${row.rhs}</span></div>
+      </div>`;
+      systemWrap.innerHTML=eWorkspace(task,'',false);
+      moveControl($('#expertSubSource'),$('#expertSubSource').innerHTML,['#expertSubTarget'],()=>transition(()=>{
+        state.subPlaced=true;
+        eClearFeedback();
+        state.activeEditor='subL'
+      }));
+      return
+    }
+
+    setInstruction('2 · expert','Werk de haakjes uit en vereenvoudig.');
+    const row=eSubVisualRow(true);
+    const task=`<div class="expert-substitution-stage">
+      <div class="expert-task-title">Je substitutie staat nu klaar. Werk de haakjes uit en vereenvoudig tot één vergelijking met ${other}.</div>
+      <div class="expert-sub-equation"><span class="lhs">${row.lhs}</span><span class="eq">=</span><span class="rhs">${row.rhs}</span></div>
+      <div class="expert-sub-next">
+        <div class="expert-equation"><span class="left">${eFieldHTML('subL','linkerlid')}</span><span class="eq">=</span><span class="right">${eFieldHTML('subR','rechterlid')}</span></div>
+      </div>
+    </div>`;
+    systemWrap.innerHTML=eWorkspace(task,'controleer vereenvoudiging');eWireEditors();
+    $('#expertCheck').addEventListener('click',()=>{
+      const user=eVecFromEditors('subL','subR'),expected=state.subVector;
+      if(!user||!eVecEquivalent(user,expected)){transition(()=>eSetError('Deze vergelijking is nog niet equivalent met de substitutiestap.',!eParse('subL')?'subL':'subR'));return}
+      if(expected.x.zero()&&expected.y.zero()){
+        transition(()=>{eClearFeedback();eSnapshot(2,`${ePretty('subL')} = ${ePretty('subR')}`);state.phase=3;state.activeEditor=null});return
+      }
+      const fv=expected.x.zero()?'y':'x',coef=expected[fv],value=expected.c.neg().div(coef);
+      transition(()=>{state.foundVar=fv;state.foundValue=value;eClearFeedback();eSnapshot(2,`${ePretty('subL')} = ${ePretty('subR')}`);state.phase=3;state.activeEditor='solveVal'})
+    });
+    return
+  }
+
+  if(state.phase===3){
+    const expected=state.subVector;
+    if(expected.x.zero()&&expected.y.zero()){
+      setInstruction('3 · expert','Trek de conclusie uit de vergelijking.');
+      const identity=expected.c.zero();
+      const task=`<div class="expert-task-title">${identity?'Je kreeg een identiteit.':'Je kreeg een tegenspraak.'}</div>
+        <div class="expert-final">${identity?'0 = 0':'0 = '+qHTML(expected.c.neg())}</div>
+        <div class="expert-choice"><button data-class="coincident">oneindig veel oplossingen</button><button data-class="parallel">geen oplossing</button></div>`;
+      systemWrap.innerHTML=eWorkspace(task,'');eWireEditors();$('#expertCheck').style.display='none';
+      $$('[data-class]').forEach(b=>b.addEventListener('click',()=>{
+        const want=identity?'coincident':'parallel';
+        if(b.dataset.class!==want){showToast('Kijk nog eens naar de gelijkheid.',true);return}
+        transition(()=>{eSnapshot(3,identity?'oneindig veel oplossingen':'geen oplossing');state.phase=4;state.solved=true})
+      }));return
+    }
+    setInstruction('3 · expert','Los de vergelijking op.');
+    const task=`<div class="expert-task-title">Geef de gevonden waarde.</div>
+      <div class="expert-equation"><span class="left">${state.foundVar}</span><span class="eq">=</span><span class="right">${eFieldHTML('solveVal','waarde')}</span></div>`;
+    systemWrap.innerHTML=eWorkspace(task,'controleer waarde');eWireEditors();
+    $('#expertCheck').addEventListener('click',()=>{
+      const val=eParseConstant('solveVal');
+      if(!val||!val.eq(state.foundValue)){transition(()=>eSetError('Die waarde klopt nog niet.','solveVal'));return}
+      transition(()=>{eClearFeedback();eSnapshot(3,`${state.foundVar} = ${qPlain(val)}`);state.phase=4;state.activeEditor='otherVal'})
+    });return
+  }
+
+  if(state.phase===4){
+    if(info().kind!=='point'){
+      setInstruction('4 · oplossing','');
+      systemWrap.innerHTML=`<div class="expert-final">${info().solutionText}</div>`;state.solved=true;return
+    }
+    setInstruction('4 · expert','Bereken de andere onbekende.');
+    const other=state.foundVar==='x'?'y':'x',expected=sol()[other];
+    const task=`<div class="expert-task-title">Gebruik je gevonden waarde in één oorspronkelijke vergelijking.</div>
+      <div class="expert-equation"><span class="left">${other}</span><span class="eq">=</span><span class="right">${eFieldHTML('otherVal','waarde')}</span></div>`;
+    systemWrap.innerHTML=eWorkspace(task,'controleer waarde');eWireEditors();
+    $('#expertCheck').addEventListener('click',()=>{
+      const val=eParseConstant('otherVal');
+      if(!val||!val.eq(expected)){transition(()=>eSetError('Die tweede waarde klopt nog niet.','otherVal'));return}
+      transition(()=>{eClearFeedback();eSnapshot(4,`${other} = ${qPlain(val)}`);state.phase=5;state.activeEditor=null})
+    });return
+  }
+
+  setInstruction('5 · oplossing','');
+  const s=sol();systemWrap.innerHTML=`<div class="expert-final">(x,y) = (${qHTML(s.x)}, ${qHTML(s.y)})</div>`;
+  state.snapshots[5]={type:'text',text:`(x,y)=(${qPlain(s.x)},${qPlain(s.y)})`};state.solved=true;renderSteps()
+}
+
+/* ----- expert: COMBINATION ----- */
+function eScaledVector(row,f){const v=eVecFromEquation(equations()[row]);return {x:v.x.mul(f),y:v.y.mul(f),c:v.c.mul(f)}}
+function eSumVec(a,b){return {x:a.x.add(b.x),y:a.y.add(b.y),c:a.c.add(b.c)}}
+function renderExpertCombination(){
+  if(state.phase===1){
+    setInstruction('1 · expert','Kies zelf twee factoren die een onbekende elimineren.');
+    if(!state.activeEditor)state.activeEditor='f0';
+    const rows=originalRows();
+    const task=`<div class="expert-task-title">Vul naast elke vergelijking een factor in.</div>
+      <div class="expert-factor-system"><div class="expert-factor-brace">{</div><div class="expert-factor-rows">
+      ${rows.map((r,i)=>`<div class="expert-factor-row"><span class="lhs">${r.lhs}</span><span class="eq">=</span><span>${r.rhs}</span><span class="expert-factor-tail">× ${eFieldHTML('f'+i,'factor')}</span></div>`).join('')}
+      </div></div>`;
+    systemWrap.innerHTML=eWorkspace(task,'controleer factoren');eWireEditors();
+    $('#expertCheck').addEventListener('click',()=>{
+      const f0=eParseConstant('f0'),f1=eParseConstant('f1');
+      if(!f0||!f1||f0.zero()||f1.zero()){transition(()=>eSetError('Vul twee niet-nulle factoren in.',!f0?'f0':'f1'));return}
+      const a=eScaledVector(0,f0),b=eScaledVector(1,f1),sum=eSumVec(a,b);
+      if(!sum.x.zero()&&!sum.y.zero()){transition(()=>eSetError('Met deze factoren valt nog geen onbekende weg.'));return}
+      transition(()=>{state.factors=[f0,f1];state.scaled=[a,b];state.sumVector=sum;eClearFeedback();eSnapshot(1,`× ${qPlain(f0)} &nbsp;&nbsp; en &nbsp;&nbsp; × ${qPlain(f1)}`);state.phase=2;state.activeEditor='p0L'})
+    });return
+  }
+
+  if(state.phase===2){
+    setInstruction('2 · expert','Schrijf de twee vermenigvuldigde vergelijkingen zelf.');
+    const task=`<div class="expert-task-title">Werk × ${qPlain(state.factors[0])} en × ${qPlain(state.factors[1])} volledig uit.</div>
+      <div class="expert-two-rows">
+        <div class="expert-equation"><span class="left">${eFieldHTML('p0L','linkerlid')}</span><span class="eq">=</span><span class="right">${eFieldHTML('p0R','rechterlid')}</span></div>
+        <div class="expert-equation"><span class="left">${eFieldHTML('p1L','linkerlid')}</span><span class="eq">=</span><span class="right">${eFieldHTML('p1R','rechterlid')}</span></div>
+      </div>`;
+    systemWrap.innerHTML=eWorkspace(task,'controleer producten');eWireEditors();
+    $('#expertCheck').addEventListener('click',()=>{
+      const u0=eVecFromEditors('p0L','p0R'),u1=eVecFromEditors('p1L','p1R');
+      if(!u0||!(eVecEq(u0,state.scaled[0])||eVecNegEq(u0,state.scaled[0]))){transition(()=>eSetError('De eerste vermenigvuldigde vergelijking klopt nog niet.',!eParse('p0L')?'p0L':'p0R'));return}
+      if(!u1||!(eVecEq(u1,state.scaled[1])||eVecNegEq(u1,state.scaled[1]))){transition(()=>eSetError('De tweede vermenigvuldigde vergelijking klopt nog niet.',!eParse('p1L')?'p1L':'p1R'));return}
+      transition(()=>{eClearFeedback();eSnapshot(2,`${ePretty('p0L')} = ${ePretty('p0R')}<br>${ePretty('p1L')} = ${ePretty('p1R')}`);state.phase=3;state.activeEditor='sumL'})
+    });return
+  }
+
+  if(state.phase===3){
+    setInstruction('3 · expert','Tel de twee vergelijkingen op.');
+    const task=`<div class="expert-task-title">Schrijf zelf de vergelijking na optellen.</div>
+      <div class="expert-equation"><span class="left">${eFieldHTML('sumL','linkerlid')}</span><span class="eq">=</span><span class="right">${eFieldHTML('sumR','rechterlid')}</span></div>`;
+    systemWrap.innerHTML=eWorkspace(task,'controleer som');eWireEditors();
+    $('#expertCheck').addEventListener('click',()=>{
+      const u=eVecFromEditors('sumL','sumR');
+      if(!u||!eVecEquivalent(u,state.sumVector)){transition(()=>eSetError('De somvergelijking klopt nog niet.',!eParse('sumL')?'sumL':'sumR'));return}
+      if(state.sumVector.x.zero()&&state.sumVector.y.zero()){
+        transition(()=>{eClearFeedback();eSnapshot(3,`${ePretty('sumL')} = ${ePretty('sumR')}`);state.phase=4;state.activeEditor=null});return
+      }
+      const fv=state.sumVector.x.zero()?'y':'x',coef=state.sumVector[fv],value=state.sumVector.c.neg().div(coef);
+      transition(()=>{state.foundVar=fv;state.foundValue=value;eClearFeedback();eSnapshot(3,`${ePretty('sumL')} = ${ePretty('sumR')}`);state.phase=4;state.activeEditor='combSolve'})
+    });return
+  }
+
+  if(state.phase===4){
+    if(state.sumVector.x.zero()&&state.sumVector.y.zero()){
+      setInstruction('4 · expert','Trek de conclusie.');
+      const identity=state.sumVector.c.zero();
+      const task=`<div class="expert-task-title">${identity?'Na optellen ontstaat een identiteit.':'Na optellen ontstaat een tegenspraak.'}</div>
+        <div class="expert-final">${identity?'0 = 0':'0 = '+qHTML(state.sumVector.c.neg())}</div>
+        <div class="expert-choice"><button data-class="coincident">oneindig veel oplossingen</button><button data-class="parallel">geen oplossing</button></div>`;
+      systemWrap.innerHTML=eWorkspace(task,'');eWireEditors();$('#expertCheck').style.display='none';
+      $$('[data-class]').forEach(b=>b.addEventListener('click',()=>{
+        const want=identity?'coincident':'parallel';
+        if(b.dataset.class!==want){showToast('Kijk nog eens naar de gelijkheid.',true);return}
+        transition(()=>{eSnapshot(4,identity?'oneindig veel oplossingen':'geen oplossing');state.phase=5;state.solved=true})
+      }));return
+    }
+
+    setInstruction('4 · expert','Los de overblijvende vergelijking op.');
+    const task=`<div class="expert-task-title">Geef de gevonden waarde.</div>
+      <div class="expert-equation"><span class="left">${state.foundVar}</span><span class="eq">=</span><span class="right">${eFieldHTML('combSolve','waarde')}</span></div>`;
+    systemWrap.innerHTML=eWorkspace(task,'controleer waarde');eWireEditors();
+    $('#expertCheck').addEventListener('click',()=>{
+      const v=eParseConstant('combSolve');
+      if(!v||!v.eq(state.foundValue)){transition(()=>eSetError('Die waarde klopt nog niet.','combSolve'));return}
+      transition(()=>{eClearFeedback();eSnapshot(4,`${state.foundVar} = ${qPlain(v)}`);state.phase=5;state.activeEditor='combOther'})
+    });return
+  }
+
+  if(state.phase===5){
+    if(info().kind!=='point'){
+      setInstruction('5 · oplossing','');systemWrap.innerHTML=`<div class="expert-final">${info().solutionText}</div>`;state.solved=true;return
+    }
+    setInstruction('5 · expert','Bereken de andere onbekende.');
+    const other=state.foundVar==='x'?'y':'x',expected=sol()[other];
+    const task=`<div class="expert-task-title">Gebruik de gevonden waarde in één oorspronkelijke vergelijking.</div>
+      <div class="expert-equation"><span class="left">${other}</span><span class="eq">=</span><span class="right">${eFieldHTML('combOther','waarde')}</span></div>`;
+    systemWrap.innerHTML=eWorkspace(task,'controleer waarde');eWireEditors();
+    $('#expertCheck').addEventListener('click',()=>{
+      const v=eParseConstant('combOther');
+      if(!v||!v.eq(expected)){transition(()=>eSetError('Die tweede waarde klopt nog niet.','combOther'));return}
+      transition(()=>{eClearFeedback();eSnapshot(5,`${other} = ${qPlain(v)}`);state.phase=6;state.activeEditor=null})
+    });return
+  }
+
+  setInstruction('6 · oplossing','');
+  const s=sol();systemWrap.innerHTML=`<div class="expert-final">(x,y) = (${qHTML(s.x)}, ${qHTML(s.y)})</div>`;
+  state.snapshots[6]={type:'text',text:`(x,y)=(${qPlain(s.x)},${qPlain(s.y)})`};state.solved=true;renderSteps()
+}
+
+/* ---------- GRAPHIC ---------- */
+function graphForm(e){if(e.y.zero()){if(e.x.zero())throw new Error('Geen geldige rechte');return {vertical:true,x:e.c.div(e.x)}}return {vertical:false,m:e.x.neg().div(e.y),b:e.c.div(e.y)}}
+function graphRows(){return equations().map(e=>{const f=graphForm(e);return f.vertical?{lhs:'x',rhs:qHTML(f.x)}:{lhs:'y',rhs:affineSlopeFirst(f.m,'x',f.b)}})}
+function graphStage(board,activeLine=null,footer=''){const rows=graphRows();return `<div class="graph-stage"><div class="graph-ref"><div class="graph-ref-brace">{</div><div class="graph-ref-eqs">${rows.map((r,i)=>`<div class="graph-ref-row ${activeLine===i?'active-'+i:''}"><span class="lhs">${r.lhs}</span><span class="eq">=</span><span class="rhs">${r.rhs}</span></div>`).join('')}</div></div><div class="graph-plot-area">${board}</div><div class="graph-stage-footer ${footer?'':'spacer'}">${footer}</div></div>`}
+function fitGraph(){if(graphObserver){graphObserver.disconnect();graphObserver=null}const area=$('.graph-plot-area');if(!area)return;const apply=()=>{const r=area.getBoundingClientRect(),size=Math.floor(Math.min(r.width-4,r.height-4));if(size>0)area.style.setProperty('--graph-size',size+'px')};requestAnimationFrame(apply);if('ResizeObserver'in window){graphObserver=new ResizeObserver(()=>requestAnimationFrame(apply));graphObserver.observe(area)}}
+function graphY(line,x){const f=graphForm(equations()[line]);return f.vertical?null:f.m.mul(q(x)).add(f.b)}
+function validGraphPoint(line,x,y){const f=graphForm(equations()[line]);return f.vertical?f.x.eq(q(x)):graphY(line,x).eq(q(y))}
+function graphBounds(){const vals=[q(0)];for(const e of equations()){const f=graphForm(e);if(f.vertical)vals.push(f.x.abs());else{vals.push(f.b.abs());if(!f.m.zero())vals.push(f.b.neg().div(f.m).abs())}}if(sol())vals.push(sol().x.abs(),sol().y.abs());const max=Math.max(...vals.map(v=>Math.abs(v.num())),3),M=Math.min(12,Math.max(4,Math.ceil(max)+2));return {xmin:-M,xmax:M,ymin:-M,ymax:M}}
+function graphBoard(opts={}){
+  const W=600,H=600,left=52,right=28,top=28,bottom=52,{xmin,xmax,ymin,ymax}=graphBounds();
+  const X=x=>left+(x-xmin)/(xmax-xmin)*(W-left-right),Y=y=>H-bottom-(y-ymin)/(ymax-ymin)*(H-top-bottom);
+  let grid='',lines='',marks='';
+  for(let x=xmin;x<=xmax;x++){grid+=`<line class="graph-grid" x1="${X(x)}" y1="${Y(ymin)}" x2="${X(x)}" y2="${Y(ymax)}"></line>`;if(x!==0)grid+=`<text class="graph-label" x="${X(x)}" y="${Y(0)+20}" text-anchor="middle">${x}</text>`}
+  for(let y=ymin;y<=ymax;y++){grid+=`<line class="graph-grid" x1="${X(xmin)}" y1="${Y(y)}" x2="${X(xmax)}" y2="${Y(y)}"></line>`;if(y!==0)grid+=`<text class="graph-label" x="${X(0)-9}" y="${Y(y)+4}" text-anchor="end">${y}</text>`}
+  grid+=`<line class="graph-axis" x1="${X(xmin)}" y1="${Y(0)}" x2="${X(xmax)}" y2="${Y(0)}"></line><line class="graph-axis" x1="${X(0)}" y1="${Y(ymin)}" x2="${X(0)}" y2="${Y(ymax)}"></line><text class="graph-axis-label" x="${W-14}" y="${Y(0)-9}">x</text><text class="graph-axis-label" x="${X(0)+8}" y="16">y</text>`;
+  for(let i=0;i<2;i++)if(opts['showLine'+(i+1)]){const f=graphForm(equations()[i]),dash=info().kind==='coincident'&&i===1?'stroke-dasharray="10 8"':'';if(f.vertical)lines+=`<line class="graph-line${i+1}" x1="${X(f.x.num())}" y1="${Y(ymin)}" x2="${X(f.x.num())}" y2="${Y(ymax)}" ${dash}></line>`;else lines+=`<line class="graph-line${i+1}" x1="${X(xmin)}" y1="${Y(graphY(i,xmin).num())}" x2="${X(xmax)}" y2="${Y(graphY(i,xmax).num())}" ${dash}></line>`}
+  (opts.points1||[]).forEach(p=>marks+=`<circle class="graph-point1" cx="${X(p.x)}" cy="${Y(p.y)}" r="7"></circle><text class="graph-point-label1" x="${Math.min(W-65,X(p.x)+9)}" y="${Math.max(18,Y(p.y)-9)}">(${p.x},${p.y})</text>`);
+  (opts.points2||[]).forEach(p=>marks+=`<circle class="graph-point2" cx="${X(p.x)}" cy="${Y(p.y)}" r="7"></circle><text class="graph-point-label2" x="${Math.min(W-65,X(p.x)+9)}" y="${Math.max(18,Y(p.y)-9)}">(${p.x},${p.y})</text>`);
+  if(opts.intersection&&sol()){const sx=sol().x.num(),sy=sol().y.num();marks+=`<circle id="intersection" class="graph-intersection ${opts.found?'found':''}" cx="${X(sx)}" cy="${Y(sy)}" r="12"></circle><circle class="graph-intersection-core" cx="${X(sx)}" cy="${Y(sy)}" r="3"></circle>`}
+  const hit=opts.selectable?`<rect id="graphHitPlane" class="graph-hit-plane" x="${left}" y="${top}" width="${W-left-right}" height="${H-top-bottom}"></rect>`:'';
+  return `<svg class="graph-board" viewBox="0 0 ${W} ${H}" data-left="${left}" data-top="${top}" data-right="${right}" data-bottom="${bottom}" data-xmin="${xmin}" data-xmax="${xmax}" data-ymin="${ymin}" data-ymax="${ymax}" aria-label="assenstelsel"><defs><clipPath id="plotClip"><rect x="${left}" y="${top}" width="${W-left-right}" height="${H-top-bottom}"></rect></clipPath></defs>${grid}<g clip-path="url(#plotClip)">${lines}</g>${marks}${hit}</svg>`
+}
+function graphPointFromEvent(e){const svg=$('.graph-board');if(!svg)return null;const r=svg.getBoundingClientRect(),W=600,H=600,left=+svg.dataset.left,top=+svg.dataset.top,right=+svg.dataset.right,bottom=+svg.dataset.bottom,xmin=+svg.dataset.xmin,xmax=+svg.dataset.xmax,ymin=+svg.dataset.ymin,ymax=+svg.dataset.ymax,sx=(e.clientX-r.left)*W/r.width,sy=(e.clientY-r.top)*H/r.height,x=Math.max(xmin,Math.min(xmax,Math.round(xmin+(sx-left)/(W-left-right)*(xmax-xmin)))),y=Math.max(ymin,Math.min(ymax,Math.round(ymax-(sy-top)/(H-top-bottom)*(ymax-ymin))));return {x,y}}
+function advanceGraphFree(){state.freeEq++;state.freeStage=0;if(state.freeEq>=2){state.snapshots[1]={type:'rows',rows:graphRows()};state.phase=2}}
+function renderGraphic(){if(state.phase===1)return renderGraphFree();if(state.phase===2)return renderGraphPoints();if(state.phase===3)return renderGraphIntersection();renderGraphSolution()}
+function renderGraphFree(){
+  const i=state.freeEq,e=equations()[i],rows=originalRows(),finished=graphRows(),f=graphForm(e);for(let j=0;j<i;j++)rows[j]=finished[j];
+  if(f.vertical){
+    setInstruction('1 · maak vrij',e.x.one()?'Deze vergelijking staat al als x = …':'Maak x vrij.');
+    if(e.x.one()){rows[i]=finished[i];systemWrap.innerHTML=systemHTML(rows,{focus:i,locked:1-i});auxArea.innerHTML='<button class="continue-btn" id="continueGraph">VERDER</button>';$('#continueGraph').addEventListener('click',()=>transition(advanceGraphFree));return}
+    rows[i]={lhs:`<span class="drag-source" id="gsrc">${qHTML(e.x)}</span>x`,rhs:`<span class="drop-target soft-target" id="gtgt">${qHTML(e.c)}</span>`};systemWrap.innerHTML=systemHTML(rows,{focus:i,locked:1-i});moveControl($('#gsrc'),qHTML(e.x),['#gtgt'],()=>transition(advanceGraphFree));return
+  }
+  const stage=state.freeStage;setInstruction('1 · maak vrij',stage===0?`Maak vergelijking ${i+1} vrij naar y.`:stage===1?`Deel door ${qPlain(e.y)}.`:'Zet in y = ax + b-vorm.');
+  if(stage===0){rows[i]={lhs:`<span class="drag-source" id="gsrc">${signedTerm(e.x,'x',true)}</span> ${signedTerm(e.y,'y',false)}`,rhs:`<span class="drop-target soft-target" id="gtgt">${qHTML(e.c)}</span>`};systemWrap.innerHTML=systemHTML(rows,{focus:i,locked:1-i});moveControl($('#gsrc'),$('#gsrc').innerHTML,['#gtgt'],()=>transition(()=>{state.freeStage=e.y.one()?2:1}));return}
+  if(stage===1){rows[i]={lhs:`<span class="drag-source" id="gsrc">${qHTML(e.y)}</span>y`,rhs:`<span class="drop-target soft-target" id="gtgt">${affineConstFirst(e.c,e.x.neg(),'x')}</span>`};systemWrap.innerHTML=systemHTML(rows,{focus:i,locked:1-i});moveControl($('#gsrc'),qHTML(e.y),['#gtgt'],()=>transition(()=>{state.freeStage=2}));return}
+  rows[i]={lhs:'y',rhs:`<span class="drop-target soft-target" id="gtgt">${qHTML(f.b)}</span> <span class="drag-source" id="gsrc">${signedTerm(f.m,'x',false)}</span>`};systemWrap.innerHTML=systemHTML(rows,{focus:i,locked:1-i});moveControl($('#gsrc'),$('#gsrc').innerHTML,['#gtgt'],()=>transition(advanceGraphFree))
+}
+function renderGraphPoints(){
+  const line=state.activeLine,gr=graphRows();setInstruction('2 · kies punten',`Kies twee roosterpunten op ${mathText(gr[line].lhs)} = ${mathText(gr[line].rhs)}.`);
+  systemWrap.innerHTML=graphStage(graphBoard({points1:state.points[0],points2:state.points[1],showLine1:state.points[0].length>=2,showLine2:state.points[1].length>=2,selectable:true}),line);requestAnimationFrame(()=>requestAnimationFrame(fitGraph));
+  $('#graphHitPlane')?.addEventListener('click',e=>{const p=graphPointFromEvent(e);if(!p)return;if(!validGraphPoint(line,p.x,p.y)){showToast(`(${p.x},${p.y}) ligt niet op deze rechte.`,true);return}if(state.points[line].some(k=>k.x===p.x&&k.y===p.y)){showToast('Kies een ander punt.',true);return}transition(()=>{state.points[line].push(p);if(state.points[line].length===2){if(line===0)state.activeLine=1;else{state.snapshots[2]={type:'text',text:'beide rechten getekend'};state.phase=3}}})})
+}
+function renderGraphIntersection(){
+  const special=info().kind!=='point';setInstruction(special?'3 · vergelijk rechten':'3 · snijpunt',special?'Wat merk je aan de twee rechten?':'Duid het snijpunt aan.');
+  const board=graphBoard({points1:state.points[0],points2:state.points[1],showLine1:true,showLine2:true,intersection:!special});
+  if(!special){systemWrap.innerHTML=graphStage(board);requestAnimationFrame(()=>requestAnimationFrame(fitGraph));$('#intersection').addEventListener('click',()=>transition(()=>{state.snapshots[3]={type:'text',text:`snijpunt (${qPlain(sol().x)},${qPlain(sol().y)})`};state.phase=4}));return}
+  const footer='<div class="special-choice"><button data-c="parallel">geen snijpunt</button><button data-c="coincident">samenvallende rechten</button></div>';systemWrap.innerHTML=graphStage(board,null,footer);requestAnimationFrame(()=>requestAnimationFrame(fitGraph));$$('[data-c]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.c!==info().kind){showToast('Kijk nog eens naar de twee rechten.',true);return}transition(()=>{state.snapshots[3]={type:'text',text:info().solutionText};state.snapshots[4]={type:'text',text:info().solutionText};state.solved=true;state.phase=4})}))
+}
+function renderGraphSolution(){
+  const special=info().kind!=='point';setInstruction('4 · oplossing',special?'':'Zet het snijpunt om naar de oplossing van het stelsel.');const board=graphBoard({points1:state.points[0],points2:state.points[1],showLine1:true,showLine2:true,intersection:!special,found:true});
+  if(special){systemWrap.innerHTML=graphStage(board,null,`<div class="special-result">${info().solutionText}</div>`);requestAnimationFrame(()=>requestAnimationFrame(fitGraph));return}
+  const s=sol(),xFilled=state.pair.x!==null,yFilled=state.pair.y!==null,footer=`<div class="graph-solution-strip"><span>snijpunt = <span class="coord-src">(<span class="drag-source" id="gx">${qHTML(s.x)}</span>, <span class="drag-source" id="gy">${qHTML(s.y)}</span>)</span></span><span class="therefore">dus</span><span class="pair-line"><span>(x,y) = (</span><span class="pair-slot ${xFilled?'filled':''}" id="px">${xFilled?qHTML(state.pair.x):'·'}</span><span>,</span><span class="pair-slot ${yFilled?'filled':''}" id="py">${yFilled?qHTML(state.pair.y):'·'}</span><span>)</span></span></div>`;
+  systemWrap.innerHTML=graphStage(board,null,footer);requestAnimationFrame(()=>requestAnimationFrame(fitGraph));
+  const drop=(value,target)=>transition(()=>{if(target.id==='px')state.pair.x=value;else state.pair.y=value;if(state.pair.x!==null&&state.pair.y!==null&&state.pair.x.eq(s.x)&&state.pair.y.eq(s.y)){state.snapshots[4]={type:'text',text:`(x,y)=(${qPlain(s.x)},${qPlain(s.y)})`};state.solved=true}});
+  moveControl($('#gx'),qHTML(s.x),['#px','#py'],t=>drop(s.x,t));moveControl($('#gy'),qHTML(s.y),['#px','#py'],t=>drop(s.y,t))
+}
+
+/* ---------- SUBSTITUTION ---------- */
+function routeFrom(row,iso){const S=equations()[row],T=equations()[1-row],other=iso==='x'?'y':'x',cv=S[iso];if(cv.zero())throw new Error(`${iso} komt niet voor in deze vergelijking`);const co=S[other],beta=S.c.div(cv),alpha=co.neg().div(cv),tv=T[iso],tw=T[other],prodConst=tv.mul(beta),prodVar=tv.mul(alpha),k=prodVar.add(tw),rhs=T.c.sub(prodConst);return {row,target:1-row,iso,other,cv,co,beta,alpha,tv,tw,prodConst,prodVar,k,rhs}}
+function isolatedRows(r){const rows=originalRows();rows[r.row]={lhs:r.iso,rhs:affineConstFirst(r.beta,r.alpha,r.other)};return rows}
+function finishSubSolve(r){if(r.k.zero()){state.snapshots[2]={type:'text',text:`0 = ${qPlain(r.rhs)}`};state.phase=3;state.backStage=0}else if(r.k.one()){state.snapshots[2]={type:'text',text:`${r.other} = ${qPlain(r.rhs)}`};state.phase=3;state.backStage=0}else state.subStage=4}
+function renderSubstitution(){if(info().kind!=='point'&&state.phase>=3)return renderSubSpecialConclusion();if(state.phase===1)return renderSubIsolate();if(state.phase===2)return renderSubstitute();if(state.phase===3)return renderSubBack();renderSubPair()}
+function renderSubIsolate(){
+  setInstruction('1 · maak vrij','Maak x of y vrij in één vergelijking.');
+  if(!state.route){const rows=equations().map((e,i)=>({lhs:`<span class="drag-source" id="r${i}y" data-route="${i}:y">${signedTerm(e.x,'x',true)}</span> <span class="drag-source" id="r${i}x" data-route="${i}:x">${signedTerm(e.y,'y',false)}</span>`,rhs:`<span class="drop-target soft-target" id="rd${i}">${qHTML(e.c)}</span>`}));systemWrap.innerHTML=systemHTML(rows);$$('[data-route]').forEach(el=>{if(!mathText(el.innerHTML))return;moveControl(el,el.innerHTML,['#rd'+el.dataset.route[0]],()=>{const [row,iso]=el.dataset.route.split(':');const r=routeFrom(Number(row),iso);transition(()=>{state.route={row:Number(row),iso};if(r.cv.one()){state.snapshots[1]={type:'rows',rows:isolatedRows(r)};state.phase=2}else state.isoStage=1})})});return}
+  const r=routeFrom(state.route.row,state.route.iso),rows=originalRows();rows[r.row]={lhs:`<span class="drag-source" id="coef">${qHTML(r.cv)}</span>${r.iso}`,rhs:`<span class="drop-target soft-target" id="rhsIso">${affineConstFirst(equations()[r.row].c,r.co.neg(),r.other)}</span>`};systemWrap.innerHTML=systemHTML(rows,{focus:r.row,locked:r.target});moveControl($('#coef'),qHTML(r.cv),['#rhsIso'],()=>transition(()=>{state.snapshots[1]={type:'rows',rows:isolatedRows(r)};state.phase=2}))
+}
+function renderSubstitute(){
+  const r=routeFrom(state.route.row,state.route.iso),rows=isolatedRows(r);setInstruction('2 · substitueer',`Substitueer ${r.iso} in de andere vergelijking.`);
+  if(state.subStage===0){rows[r.row]={lhs:r.iso,rhs:`<span class="drag-source" id="expr">${affineConstFirst(r.beta,r.alpha,r.other)}</span>`};const T=equations()[r.target],parts=[];for(const v of ['x','y']){const c=T[v];if(c.zero())continue;if(v===r.iso){const target=`<span class="drop-target soft-target" id="subTarget">${v}</span>`,body=c.abs().one()?target:`${qHTML(c.abs())}${target}`;parts.push(`${parts.length===0?(c.n<0?'−':''):(c.n<0?'− ':'+ ')}${body}`)}else parts.push(signedTerm(c,v,parts.length===0))}rows[r.target]={lhs:parts.join(' '),rhs:qHTML(T.c)};systemWrap.innerHTML=systemHTML(rows,{focus:r.target});moveControl($('#expr'),$('#expr').innerHTML,['#subTarget'],()=>transition(()=>{state.subStage=r.tv.one()?2:1}));return}
+  if(state.subStage===1){rows[r.target]={lhs:`${signedTerm(r.tw,r.other,true)} ${r.tv.n<0?'−':'+'} <span class="drag-source" id="dist">${qHTML(r.tv.abs())}</span><span class="drop-target" id="paren">(${affineConstFirst(r.beta,r.alpha,r.other)})</span>`,rhs:qHTML(equations()[r.target].c)};systemWrap.innerHTML=systemHTML(rows,{focus:r.target});moveControl($('#dist'),qHTML(r.tv.abs()),['#paren'],()=>transition(()=>{state.subStage=2}));return}
+  if(state.subStage===2){rows[r.target]={lhs:`<span class="drop-target" id="likeA">${signedTerm(r.tw,r.other,true)}</span> <span class="drag-source" id="likeB">${signedTerm(r.prodVar,r.other,false)}</span> ${r.prodConst.zero()?'':`${r.prodConst.n<0?'−':'+'} ${qHTML(r.prodConst.abs())}`}`,rhs:qHTML(equations()[r.target].c)};systemWrap.innerHTML=systemHTML(rows,{focus:r.target});moveControl($('#likeB'),$('#likeB').innerHTML,['#likeA'],()=>transition(()=>{if(r.prodConst.zero())finishSubSolve(r);else state.subStage=3}));return}
+  if(state.subStage===3){rows[r.target]={lhs:`${signedTerm(r.k,r.other,true)} <span class="drag-source" id="const">${r.prodConst.n<0?'− ': '+ '}${qHTML(r.prodConst.abs())}</span>`,rhs:`<span class="drop-target" id="rhs">${qHTML(equations()[r.target].c)}</span>`};systemWrap.innerHTML=systemHTML(rows,{focus:r.target});moveControl($('#const'),$('#const').innerHTML,['#rhs'],()=>transition(()=>finishSubSolve(r)));return}
+  rows[r.target]={lhs:`<span class="drag-source" id="kcoef">${qHTML(r.k)}</span>${r.other}`,rhs:`<span class="drop-target" id="krhs">${qHTML(r.rhs)}</span>`};systemWrap.innerHTML=systemHTML(rows,{focus:r.target});moveControl($('#kcoef'),qHTML(r.k),['#krhs'],()=>transition(()=>{const found=r.rhs.div(r.k);state.snapshots[2]={type:'text',text:`${r.other} = ${qPlain(found)}`};state.phase=3;state.backStage=0}))
+}
+function renderSubSpecialConclusion(){
+  const r=routeFrom(state.route.row,state.route.iso);
+  if(state.phase===3){setInstruction('3 · conclusie',`Wat betekent 0 = ${qPlain(r.rhs)}?`);systemWrap.innerHTML=`<div class="special-result">0 = ${qHTML(r.rhs)}</div>`;auxArea.innerHTML='<div class="special-choice"><button data-a="infinite">oneindig veel oplossingen</button><button data-a="none">geen oplossing</button></div>';$$('[data-a]').forEach(b=>b.addEventListener('click',()=>{const ok=(r.rhs.zero()&&b.dataset.a==='infinite')||(!r.rhs.zero()&&b.dataset.a==='none');if(!ok){showToast('Kijk naar de gelijkheid.',true);return}transition(()=>{const result=r.rhs.zero()?'oneindig veel oplossingen':'geen oplossing';state.snapshots[3]={type:'text',text:result};state.snapshots[4]={type:'text',text:result};state.solved=true;state.phase=4})}));return}
+  setInstruction('4 · oplossing','');systemWrap.innerHTML=`<div class="special-result">${info().solutionText}</div>`
+}
+function renderSubBack(){
+  const r=routeFrom(state.route.row,state.route.iso),found=r.rhs.div(r.k),isoValue=r.beta.add(r.alpha.mul(found)),rows=isolatedRows(r);setInstruction('3 · vervang waarde','Vervang de gevonden waarde in de andere vergelijking.');
+  if(state.backStage===0){rows[r.row]={lhs:r.iso,rhs:`${qHTML(r.beta)} ${r.alpha.n<0?'−':'+'} ${termBody(r.alpha,`<span class="drop-target soft-target" id="backTarget">${r.other}</span>`)}`};rows[r.target]={lhs:r.other,rhs:`<span class="drag-source" id="backValue">${qHTML(found)}</span>`};systemWrap.innerHTML=systemHTML(rows,{focus:r.row});moveControl($('#backValue'),qHTML(found),['#backTarget'],()=>transition(()=>{if(r.alpha.zero()){state.snapshots[3]={type:'rows',rows:[{lhs:r.iso,rhs:qHTML(r.beta)},{lhs:r.other,rhs:qHTML(found)}]};state.phase=4}else state.backStage=r.alpha.abs().one()?2:1}));return}
+  const product=r.alpha.mul(found);
+  if(state.backStage===1){rows[r.row]={lhs:r.iso,rhs:`${qHTML(r.beta)} ${r.alpha.n<0?'−':'+'} <span class="drag-source" id="mult">${qHTML(r.alpha.abs())}</span><span class="mul-dot">.</span><span class="drop-target" id="val">${qHTML(found)}</span>`};rows[r.target]={lhs:r.other,rhs:qHTML(found)};systemWrap.innerHTML=systemHTML(rows,{focus:r.row});moveControl($('#mult'),qHTML(r.alpha.abs()),['#val'],()=>transition(()=>{state.backStage=2}));return}
+  rows[r.row]={lhs:r.iso,rhs:`<span class="drop-target" id="beta">${qHTML(r.beta)}</span> <span class="drag-source" id="prod">${product.n<0?'− ': '+ '}${qHTML(product.abs())}</span>`};rows[r.target]={lhs:r.other,rhs:qHTML(found)};systemWrap.innerHTML=systemHTML(rows,{focus:r.row});moveControl($('#prod'),$('#prod').innerHTML,['#beta'],()=>transition(()=>{state.snapshots[3]={type:'rows',rows:[{lhs:r.iso,rhs:qHTML(isoValue)},{lhs:r.other,rhs:qHTML(found)}]};state.phase=4}))
+}
+function renderSubPair(){
+  const s=sol();setInstruction('4 · oplossing','Sleep de gevonden waarden naar het geordende paar.');systemWrap.innerHTML=systemHTML([{lhs:'x',rhs:`<span class="drag-source" id="sx">${qHTML(s.x)}</span>`},{lhs:'y',rhs:`<span class="drag-source" id="sy">${qHTML(s.y)}</span>`}]);auxArea.innerHTML=`<div class="pair-line"><span>(x,y) = (</span><span class="pair-slot ${state.pair.x!==null?'filled':''}" id="px">${state.pair.x!==null?qHTML(state.pair.x):'·'}</span><span>,</span><span class="pair-slot ${state.pair.y!==null?'filled':''}" id="py">${state.pair.y!==null?qHTML(state.pair.y):'·'}</span><span>)</span></div>`;
+  const drop=(value,target)=>transition(()=>{if(target.id==='px')state.pair.x=value;else state.pair.y=value;if(state.pair.x!==null&&state.pair.y!==null&&state.pair.x.eq(s.x)&&state.pair.y.eq(s.y)){state.snapshots[4]={type:'text',text:`(x,y)=(${qPlain(s.x)},${qPlain(s.y)})`};state.solved=true}});moveControl($('#sx'),qHTML(s.x),['#px','#py'],t=>drop(s.x,t));moveControl($('#sy'),qHTML(s.y),['#px','#py'],t=>drop(s.y,t))
+}
+
+/* ---------- COMBINATION ---------- */
+function scaledEq(i,f){const e=equations()[i],F=q(f);return {x:e.x.mul(F),y:e.y.mul(F),c:e.c.mul(F)}}
+function scaledRows(){return [scaledEq(0,state.factors[0]??1),scaledEq(1,state.factors[1]??1)]}
+function factorReady(){if(state.factors.some(v=>v===null))return null;const [a,b]=scaledRows(),sx=a.x.add(b.x),sy=a.y.add(b.y),sc=a.c.add(b.c);if(sx.zero()&&sy.zero())return {special:true,rhs:sc};if(sx.zero())return {special:false,elim:'x',found:'y',coef:sy,rhs:sc,val:sc.div(sy)};if(sy.zero())return {special:false,elim:'y',found:'x',coef:sx,rhs:sc,val:sc.div(sx)};return null}
+function combinationReferenceHTML(){const rows=originalRows();return `<div class="comb-original-ref"><div class="ref-brace">{</div><div class="ref-eqs">${rows.map(r=>`<div class="ref-row"><span class="lhs">${r.lhs}</span><span class="eq">=</span><span class="rhs">${r.rhs}</span></div>`).join('')}</div></div>`}
+function renderCombination(){if(state.phase===1)return renderFactors();if(state.phase===2)return renderAdd();if(state.phase===3)return renderCombBackOrConclusion();renderCombPair()}
+function renderFactors(){
+  setInstruction('1 · kies factoren','Sleep of tik factoren zodat één variabele wegvalt.');const rows=originalRows();systemWrap.innerHTML=`<div class="factor-layout"><div class="factor-system"><div class="brace">{</div><div class="factor-eqs">${rows.map((r,i)=>`<div class="factor-row"><span class="lhs">${r.lhs}</span><span class="eq">=</span><span>${r.rhs}</span><span class="factor-box">× <span class="drop-target factor-slot ${state.factors[i]!==null?'filled':''}" id="fs${i}" data-row="${i}">${state.factors[i]===null?'·':state.factors[i]}</span></span></div>`).join('')}</div></div></div>`;auxArea.innerHTML=`<div><div class="factor-rail">${[-4,-3,-2,-1,1,2,3,4].map(v=>`<div class="factor-chip" data-f="${v}">${v<0?'−'+Math.abs(v):v}</div>`).join('')}</div><div class="factor-feedback">${state.factorMessage}</div></div>`;
+  $$('.factor-chip').forEach(ch=>moveControl(ch,ch.innerHTML,['#fs0','#fs1'],t=>transition(()=>{state.factors[Number(t.dataset.row)]=Number(ch.dataset.f);state.factorMessage='';const r=factorReady();if(r){state.elim=r;state.snapshots[1]={type:'rows',rows:scaledRows().map(e=>({lhs:linearHTML(e),rhs:qHTML(e.c)}))};state.phase=2}else if(state.factors.every(v=>v!==null)){const [a,b]=scaledRows(),sum={x:a.x.add(b.x),y:a.y.add(b.y),c:a.c.add(b.c)};state.factorMessage=`Na optellen: ${mathText(linearHTML(sum))} = ${qPlain(sum.c)}. Nog geen variabele valt weg.`}})))
+}
+function additionHTML(){
+  const [a,b]=scaledRows(),s={x:a.x.add(b.x),y:a.y.add(b.y),c:a.c.add(b.c)};
+  const cell=(key,v)=>{const done=state.sumDone[key],top=key==='c'?qHTML(a.c):signedTerm(a[key],v,true),bot=key==='c'?qHTML(b.c):signedTerm(b[key],v,true),sum=key==='c'?qHTML(s.c):(signedTerm(s[key],v,true)||'0');return {top:done?top:`<span class="drag-source" id="as_${key}">${top}</span>`,bot:done?bot:`<span class="drop-target" id="at_${key}">${bot}</span>`,sum:done?sum:'<span class="pending">·</span>'}};
+  const x=cell('x','x'),y=cell('y','y'),c=cell('c',''),all=state.sumDone.x&&state.sumDone.y&&state.sumDone.c;let rx=x.sum,ry=y.sum,rc=c.sum;if(all&&!state.elim.special){if(state.elim.found==='x')rx=`<span class="drag-source" id="elimCoef">${qHTML(state.elim.coef)}</span>x`;else ry=`<span class="drag-source" id="elimCoef">${qHTML(state.elim.coef)}</span>y`;rc=`<span class="drop-target" id="elimRhs">${qHTML(state.elim.rhs)}</span>`}
+  return `<div class="addition-board"><div class="addition-row"><div>${x.top}</div><div>${y.top}</div><div>=</div><div>${c.top}</div></div><div class="addition-row"><div>${x.bot}</div><div>${y.bot}</div><div>=</div><div>${c.bot}</div></div><div class="addition-line"></div><div class="addition-row result"><div>${rx}</div><div>${ry}</div><div>=</div><div>${rc}</div></div></div>`
+}
+function afterAddTerm(){const all=state.sumDone.x&&state.sumDone.y&&state.sumDone.c;if(!all)return;if(state.elim.special){state.snapshots[2]={type:'text',text:`0 = ${qPlain(state.elim.rhs)}`};state.phase=3}else if(state.elim.coef.one()){state.snapshots[2]={type:'text',text:`${state.elim.found} = ${qPlain(state.elim.val)}`};state.phase=3}}
+function renderAdd(){
+  setInstruction('2 · tel op','Breng de termen verticaal samen.');systemWrap.innerHTML=`<div class="comb-add-stage">${combinationReferenceHTML()}${additionHTML()}</div>`;for(const k of ['x','y','c'])if(!state.sumDone[k])moveControl($('#as_'+k),$('#as_'+k).innerHTML,['#at_'+k],()=>transition(()=>{state.sumDone[k]=true;afterAddTerm()}));const all=state.sumDone.x&&state.sumDone.y&&state.sumDone.c;if(!all||state.phase!==2)return;setInstruction('2 · tel op',`Werk verder tot ${state.elim.found} alleen staat.`);moveControl($('#elimCoef'),qHTML(state.elim.coef),['#elimRhs'],()=>transition(()=>{state.snapshots[2]={type:'text',text:`${state.elim.found} = ${qPlain(state.elim.val)}`};state.phase=3}))
+}
+function completeCombBack(foundVar,foundVal,other,otherVal){state.snapshots[3]={type:'rows',rows:[{lhs:other,rhs:qHTML(otherVal)},{lhs:foundVar,rhs:qHTML(foundVal)}]};state.phase=4}
+function renderCombBackOrConclusion(){
+  if(state.elim.special){setInstruction('3 · conclusie',`Wat betekent 0 = ${qPlain(state.elim.rhs)}?`);systemWrap.innerHTML=`<div class="special-result">0 = ${qHTML(state.elim.rhs)}</div>`;auxArea.innerHTML='<div class="special-choice"><button data-a="infinite">oneindig veel oplossingen</button><button data-a="none">geen oplossing</button></div>';$$('[data-a]').forEach(b=>b.addEventListener('click',()=>{const ok=(state.elim.rhs.zero()&&b.dataset.a==='infinite')||(!state.elim.rhs.zero()&&b.dataset.a==='none');if(!ok){showToast('Kijk naar de gelijkheid.',true);return}transition(()=>{const result=state.elim.rhs.zero()?'oneindig veel oplossingen':'geen oplossing';state.snapshots[3]={type:'text',text:result};state.snapshots[4]={type:'text',text:result};state.solved=true;state.phase=4})}));return}
+  const foundVar=state.elim.found,foundVal=state.elim.val,other=foundVar==='x'?'y':'x';setInstruction('3 · vervang waarde',state.chosenEq===null?'Kies één oorspronkelijke vergelijking.':'Vervang de gevonden waarde.');
+  if(state.chosenEq===null){const rows=originalRows(),source=`<div class="choice-system"><div class="choice-brace">{</div><div class="choice-eqs">${rows.map((r,i)=>`<div class="choice-row choice-source" id="ce${i}" data-i="${i}"><span class="lhs">${r.lhs}</span><span class="eq">=</span><span class="rhs">${r.rhs}</span></div>`).join('')}</div></div>`,target=`<div class="choice-system"><div class="choice-brace">{</div><div class="choice-eqs"><div class="choice-drop drop-target" id="choiceDrop">sleep of tik een vergelijking hier</div><div class="choice-row choice-fixed"><span class="lhs">${foundVar}</span><span class="eq">=</span><span class="rhs">${qHTML(foundVal)}</span></div></div></div>`;systemWrap.innerHTML=`<div class="original-choice">${source}<div class="choice-arrow">→</div>${target}</div>`;[0,1].forEach(i=>moveControl($('#ce'+i),$('#ce'+i).innerHTML,['#choiceDrop'],()=>{const e=equations()[i];if(e[other].zero()){showToast('Kies de andere vergelijking: deze bevat de overblijvende variabele niet.',true);return}transition(()=>{state.chosenEq=i;state.backStage=e[foundVar].zero()?2:0})}));return}
+  const e=equations()[state.chosenEq],cf=e[foundVar],co=e[other],prod=cf.mul(foundVal),remaining=e.c.sub(prod),otherVal=remaining.div(co);
+  if(state.backStage===0){const target=`<span class="drop-target soft-target" id="cv">${foundVar}</span>`,lhs=`${signedTerm(co,other,true)} ${cf.n<0?'−':'+'} ${cf.abs().one()?target:`${qHTML(cf.abs())}${target}`}`;systemWrap.innerHTML=systemHTML([{lhs,rhs:qHTML(e.c)},{lhs:foundVar,rhs:`<span class="drag-source" id="fv">${qHTML(foundVal)}</span>`}],{focus:0});moveControl($('#fv'),qHTML(foundVal),['#cv'],()=>transition(()=>{state.backStage=cf.abs().one()?2:1}));return}
+  if(state.backStage===1){systemWrap.innerHTML=systemHTML([{lhs:`${signedTerm(co,other,true)} ${cf.n<0?'−':'+'} <span class="drag-source" id="cm">${qHTML(cf.abs())}</span><span class="mul-dot">.</span><span class="drop-target" id="fm">${qHTML(foundVal)}</span>`,rhs:qHTML(e.c)},{lhs:foundVar,rhs:qHTML(foundVal)}],{focus:0});moveControl($('#cm'),qHTML(cf.abs()),['#fm'],()=>transition(()=>{state.backStage=2}));return}
+  if(state.backStage===2){if(prod.zero()){systemWrap.innerHTML=systemHTML([{lhs:signedTerm(co,other,true),rhs:qHTML(e.c)},{lhs:foundVar,rhs:qHTML(foundVal)}],{focus:0});auxArea.innerHTML='<button class="continue-btn" id="skipProd">VERDER</button>';$('#skipProd').addEventListener('click',()=>transition(()=>{if(co.one())completeCombBack(foundVar,foundVal,other,otherVal);else state.backStage=3}));return}systemWrap.innerHTML=systemHTML([{lhs:`${signedTerm(co,other,true)} <span class="drag-source" id="prod">${prod.n<0?'− ': '+ '}${qHTML(prod.abs())}</span>`,rhs:`<span class="drop-target" id="crhs">${qHTML(e.c)}</span>`},{lhs:foundVar,rhs:qHTML(foundVal)}],{focus:0});moveControl($('#prod'),$('#prod').innerHTML,['#crhs'],()=>transition(()=>{if(co.one())completeCombBack(foundVar,foundVal,other,otherVal);else state.backStage=3}));return}
+  systemWrap.innerHTML=systemHTML([{lhs:`<span class="drag-source" id="oc">${qHTML(co)}</span>${other}`,rhs:`<span class="drop-target" id="orhs">${qHTML(remaining)}</span>`},{lhs:foundVar,rhs:qHTML(foundVal)}],{focus:0});moveControl($('#oc'),qHTML(co),['#orhs'],()=>transition(()=>completeCombBack(foundVar,foundVal,other,otherVal)))
+}
+function renderCombPair(){
+  if(state.elim.special){setInstruction('4 · oplossing','');systemWrap.innerHTML=`<div class="special-result">${info().solutionText}</div>`;return}
+  const s=sol();setInstruction('4 · oplossing','Sleep de gevonden waarden naar het geordende paar.');systemWrap.innerHTML=systemHTML([{lhs:'x',rhs:`<span class="drag-source" id="cx">${qHTML(s.x)}</span>`},{lhs:'y',rhs:`<span class="drag-source" id="cy">${qHTML(s.y)}</span>`}]);auxArea.innerHTML=`<div class="pair-line"><span>(x,y) = (</span><span class="pair-slot ${state.pair.x!==null?'filled':''}" id="px">${state.pair.x!==null?qHTML(state.pair.x):'·'}</span><span>,</span><span class="pair-slot ${state.pair.y!==null?'filled':''}" id="py">${state.pair.y!==null?qHTML(state.pair.y):'·'}</span><span>)</span></div>`;const drop=(value,target)=>transition(()=>{if(target.id==='px')state.pair.x=value;else state.pair.y=value;if(state.pair.x!==null&&state.pair.y!==null&&state.pair.x.eq(s.x)&&state.pair.y.eq(s.y)){state.snapshots[4]={type:'text',text:`(x,y)=(${qPlain(s.x)},${qPlain(s.y)})`};state.solved=true}});moveControl($('#cx'),qHTML(s.x),['#px','#py'],t=>drop(s.x,t));moveControl($('#cy'),qHTML(s.y),['#px','#py'],t=>drop(s.y,t))
+}
+
+/* ---------- events ---------- */
+exerciseSelect.innerHTML=EXERCISES.map((e,i)=>`<option value="${i}">${e.id}</option>`).join('');
+exerciseSelect.addEventListener('change',()=>{exerciseIndex=Number(exerciseSelect.value);reset()});
+$$('.method-tab').forEach(b=>b.addEventListener('click',()=>{if(method===b.dataset.method)return;method=b.dataset.method;reset()}));
+$$('.study-mode-btn').forEach(b=>b.addEventListener('click',()=>{if(studyMode===b.dataset.studyMode)return;studyMode=b.dataset.studyMode;reset()}));
+undoBtn.addEventListener('click',undo);$('#resetBtn').addEventListener('click',reset);reset();
+})();
+</script>
+</body>
+</html>

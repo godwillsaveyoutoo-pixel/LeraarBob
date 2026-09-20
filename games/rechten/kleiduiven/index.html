@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0c222a">
+<title>Axioma · Kleiduifschieten · standalone v12</title>
+<style>
+:root{
+  --ink:#e6eee7;--muted:#96adb1;--accent:#f3c47e;--good:#88d6b6;--bad:#d29679;
+  --field:#0c222a;--panel:#102b33;--top:64px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--field);color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+button,input{font:inherit}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+#app{height:100dvh;display:grid;grid-template-rows:var(--top) minmax(0,1fr);background:#0c222a}
+.topbar{
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;
+  padding:8px 22px;border-bottom:1px solid #6d909335;background:#0c222a;z-index:20
+}
+.brand{font-size:26px;font-weight:800;letter-spacing:-.04em;white-space:nowrap}
+.brand small{font-size:.44em;letter-spacing:.12em;color:#92aeb1;margin-left:10px;font-weight:650;text-transform:uppercase}
+.progress{display:flex;align-items:center;justify-content:center;gap:8px}
+.dot{width:24px;height:5px;border-radius:4px;background:#36535b;transition:.2s}
+.dot.current{background:#f3c47e;box-shadow:0 0 12px #f3c47e40}
+.dot.hit{background:#88d6b6}
+.dot.retry{background:#bc7b64}
+.hud{display:flex;align-items:center;gap:12px}
+.total{font-variant-numeric:tabular-nums;font-size:26px;font-weight:500;letter-spacing:-.035em;min-width:104px;text-align:right}
+.icon{height:38px;min-width:42px;border:1px solid #69878377;background:#ffffff03;color:#c6d8d2;border-radius:7px;cursor:pointer}
+.game{min-height:0;padding:18px 28px 20px;display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:26px}
+.arena{position:relative;display:grid;grid-template-rows:28px minmax(0,1fr) 34px;min-width:0;min-height:0}
+.fieldLabel{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.09em;color:#9cb5b8;padding:0 12px}
+.fieldLabel span:last-child{font-size:20px;letter-spacing:0;color:#c5d9d2;font-family:Georgia,serif}
+#field{width:100%;height:100%;display:block;overflow:hidden;touch-action:none}
+.caption{display:flex;align-items:center;gap:8px;font-size:12px;color:#b8cccd;min-width:0;padding-inline:12px}
+.liveDot{width:6px;height:6px;border-radius:50%;background:#a3d0ba;flex-shrink:0}
+.caption #reserve{font-size:11px;color:#769398;margin-left:auto;white-space:nowrap}
+.console{min-height:0;border-left:1px solid #5f82873b;padding:20px 0 0 26px;display:flex;flex-direction:column}
+.eyebrow{font-size:11px;letter-spacing:.13em;font-weight:650;color:#92aeb1;line-height:1.5}
+.question{font-size:42px;letter-spacing:-.04em;line-height:1.15;margin-top:14px}
+.question i{font-family:Georgia,serif;font-style:normal;color:#f3c47e;font-size:1.3em}
+.consoleTop p{font-size:14px;line-height:1.6;color:#a5bfc1;margin:10px 0 20px}
+.deadline{padding:12px 0 16px;border-top:1px solid #5f82873b}
+.deadline>span{font-size:10px;letter-spacing:.09em;color:#9ab1b6}
+#timer{display:block;text-align:left;font-size:29px;margin:7px 0 10px;font-variant-numeric:tabular-nums;color:#e4eae1}
+#timer.urgent{color:#f0ad85}
+.timeTrack{height:3px;border-radius:5px;overflow:hidden;background:#35515c}
+.timeTrack i{display:block;width:100%;height:100%;background:#c5d9b6;transform-origin:left;will-change:transform}
+#choices{display:flex;flex-direction:column;gap:10px;width:100%;flex:1;min-height:0;max-height:290px}
+.choice{
+  display:flex;justify-content:space-between;align-items:center;flex:1;min-height:54px;
+  border:1px solid #66858470;border-radius:9px;background:#ffffff05;color:#e4ece2;
+  font-size:35px;width:100%;padding:8px 20px;box-shadow:0 2px 0 #0002;
+  transition:background .15s,border-color .15s,transform .15s;cursor:pointer
+}
+.choice:hover:not(:disabled){background:#d2e5c212;border-color:#b2c8b5}
+.choice:active:not(:disabled){transform:scale(.98)}
+.choice:disabled{cursor:default;opacity:.42}
+.choice.correct{background:#43775b40;border-color:#97d3b2;color:#b8edc7;opacity:1}
+.choice.wrong{background:#9d5b4230;border-color:#d29679;color:#f1b89e;opacity:1}
+.choice.selected{border-color:#f3c47e;background:#f3c47e18;opacity:1}
+.choiceKey{font-size:11px;border:1px solid #96b7b333;border-radius:4px;color:#a2baba;width:24px;height:24px;display:grid;place-items:center}
+.consoleFoot{display:flex;justify-content:space-between;font-size:12px;color:#96b2b7;margin-top:auto;padding-top:18px;gap:12px}
+#teamLabel{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:145px}
+#attempts{white-space:nowrap}
+
+/* field */
+.outer{fill:none;stroke:#718e8945;stroke-width:2}
+.rim{fill:none;stroke:#82a09555;stroke-dasharray:2 12;stroke-width:3}
+.range{fill:none;stroke:#839f9229;stroke-width:1;stroke-dasharray:3 7}
+.axes{fill:none;stroke:#a5c1b080;stroke-width:1.4}
+.axisName{fill:#bcd4c4;font-size:22px;font-family:Georgia,serif}
+.corners{fill:none;stroke:#a6b99488;stroke-width:2}
+.tickLabel{fill:#b1c9c3;font-size:17px;text-anchor:middle;font-family:Georgia,serif}
+#wake{stroke:#efc684;stroke-width:3;stroke-linecap:round;opacity:.23;stroke-dasharray:2 6}
+#shotTrail{stroke:#ffe8b6;stroke-width:3;stroke-linecap:round;opacity:0;filter:drop-shadow(0 0 5px #f5bd72)}
+#projectile{fill:#fff3cc;opacity:0;filter:drop-shadow(0 0 5px #ffcf8b)}
+#target{opacity:1;transform-box:view-box;filter:none}
+.targetRing{fill:none;stroke:#f3c47e;stroke-width:1;stroke-dasharray:4 7;opacity:.65}
+#impact{fill:none;stroke:#fde4a1;stroke-width:3;opacity:0}
+#particles{pointer-events:none}
+#turretBarrel{transform-origin:500px 310px}
+#discSpin{transform-origin:center}
+#countdown{
+  position:absolute;inset:28px 0 34px 0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;
+  background:#0e2833b0;backdrop-filter:blur(5px);border-radius:18px;color:#f2dbad;z-index:4
+}
+#countdown[hidden]{display:none}
+#countdown>span{font-size:12px;letter-spacing:.2em}
+#countdown strong{font-size:120px;font-weight:400;line-height:1}
+#countdown small{font-size:16px;color:#c9d9cc}
+
+/* lobby/results */
+.overlay{position:absolute;inset:var(--top) 0 0;z-index:50;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 12% 48%,#254444 0%,#102b33 43%,#0c222a 75%);padding:42px 5%;overflow:auto}
+.overlay[hidden]{display:none}
+.lobby{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.8fr);gap:8%;max-width:1300px;width:100%;align-items:center}
+.hero{max-width:650px}
+.hero h1{font-size:clamp(42px,4.7vw,76px);font-weight:500;line-height:1.06;letter-spacing:-.055em;margin:22px 0 20px;color:#e4ede3}
+.hero p{font-size:18px;line-height:1.65;color:#a8c3c5;margin:0;max-width:500px}
+.rolePair{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:32px 0 24px;padding-top:22px;border-top:1px solid #64868155}
+.rolePair span{font-size:14px;line-height:1.7;color:#bfd0cd}
+.rolePair b{display:block;color:#f0cca1;font-size:10px;letter-spacing:.1em;font-weight:600;margin-bottom:8px}
+.lobbyControls{display:flex;flex-direction:column;gap:14px;border-left:1px solid #64868155;padding-left:32px}
+.lobbyControls>label{font-size:10px;letter-spacing:.12em;color:#b1c8c5}
+#teamName{min-height:54px;font-size:23px;font-weight:500;color:#e9efe6;background:#ffffff05;border:1px solid #75908a77;border-radius:6px;padding:10px 14px;width:100%;outline-offset:3px;margin-bottom:14px}
+.tempo{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.tempo button{min-height:76px;border:1px solid #69878377;background:#ffffff03;border-radius:7px;font-size:25px;color:#c6d8d2;padding:10px 5px;cursor:pointer}
+.tempo button span{display:block;font-size:11px;margin-top:7px;color:#9eb7b7}
+.tempo button[aria-pressed=true]{border-color:#ecc58a;background:#f0c77b10;color:#f3d096}
+.fair{font-size:12px;color:#9bb4b6;line-height:1.75;margin:4px 0 8px}
+.primary{display:flex;justify-content:space-between;align-items:center;background:#edc78f;color:#173339;border:1px solid #ffdfaa;border-radius:7px;min-height:58px;font-size:18px;font-weight:600;padding:14px 18px;cursor:pointer;width:100%}
+.utilities{display:flex;justify-content:space-between;gap:12px}
+.utilityBtn{border:1px solid #69878377;background:#ffffff03;color:#c6d8d2;border-radius:7px;min-height:42px;padding:8px 12px;cursor:pointer}
+.results{width:min(930px,94vw);display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.resultHero h2{font-size:clamp(40px,5vw,70px);letter-spacing:-.055em;line-height:1.02;margin:.25em 0}
+.finalTime{display:block;font-size:clamp(52px,7vw,104px);font-variant-numeric:tabular-nums;color:#f3c47e;letter-spacing:-.05em}
+.resultHero p{color:#a8c3c5;line-height:1.55}
+.resultActions{display:flex;gap:10px;flex-wrap:wrap}
+.timesPanel{border-left:1px solid #64868155;padding-left:30px;min-width:0}
+.timesPanel h3{font-size:24px;margin:6px 0 12px}
+.timesList{list-style:none;margin:0;padding:0;max-height:370px;overflow:auto}
+.timesList li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;padding:10px 0;border-bottom:1px solid #55727833;align-items:center}
+.timesList li>span{color:#78989d}.timesList li strong{font-variant-numeric:tabular-nums}
+.timesList small{display:block;color:#7f9ea2;margin-top:2px}
+.rotate{display:none;position:fixed;inset:0;z-index:100;background:#0c222a;place-items:center;text-align:center;padding:30px}
+.rotate strong{font-size:28px}.rotate p{color:#96adb1}
+@media(max-width:900px){
+ :root{--top:50px}.topbar{padding:5px 8px;gap:6px}.brand{font-size:21px}.brand small{display:none}.total{font-size:18px;min-width:75px}.icon{height:34px}
+ .game{padding:7px 10px 8px;grid-template-columns:minmax(0,1fr) 225px;gap:10px}.console{padding:7px 0 0 10px}
+ .question{font-size:29px;margin-top:4px}.consoleTop p{font-size:10px;margin:4px 0 6px}.deadline{padding:5px 0 7px}
+ #timer{font-size:22px;margin:3px 0 5px}.choice{min-height:42px;font-size:25px;padding:4px 12px}.choiceKey{width:20px;height:20px;font-size:9px}
+ .consoleFoot{font-size:10px;padding-top:6px}.fieldLabel{font-size:9px}.fieldLabel span:last-child{font-size:15px}.caption{font-size:9px}.caption #reserve{font-size:9px}
+ .lobby{grid-template-columns:1fr 1fr;gap:4%}.hero h1{font-size:38px;margin:10px 0}.hero p{font-size:12px}.rolePair{margin:12px 0;padding-top:10px;gap:10px}.rolePair span{font-size:10px}.lobbyControls{padding-left:14px;gap:7px}.tempo button{min-height:48px;font-size:20px}.primary{min-height:45px;padding:8px 12px}
+}
+@media(max-height:430px){
+ .consoleTop p{display:none}.question{font-size:27px}.deadline{padding-top:3px}.choice{min-height:39px}.game{padding-top:4px}.fieldLabel{height:22px}.caption{height:24px}
+}
+@media(orientation:portrait) and (max-width:900px){.rotate{display:grid}}
+</style>
+</head>
+<body>
+<div id="app">
+<header class="topbar">
+  <div class="brand">AXIOMA <small>KLEIDUIVEN 01</small></div>
+  <div id="progress" class="progress" aria-label="Voortgang per richting"></div>
+  <div class="hud"><strong id="total" class="total">00:00,00</strong><button id="mute" class="icon" aria-pressed="false" title="Geluid">♪</button><button id="restart" class="icon" title="Herstart">↻</button></div>
+</header>
+
+<main class="game">
+  <section class="arena">
+    <div class="fieldLabel"><span id="wave">PROEF A · REEKS 1</span><span>y = ax · b = 0</span></div>
+    <svg id="field" viewBox="0 0 1000 620" aria-label="Assenstelsel met schutter in de oorsprong en een vliegende kleiduif">
+      <defs>
+        <radialGradient id="ground"><stop stop-color="#25484d"/><stop offset=".7" stop-color="#19363d"/><stop offset="1" stop-color="#102a32"/></radialGradient>
+        <radialGradient id="disc"><stop stop-color="#ffdfa0"/><stop offset=".65" stop-color="#efa54f"/><stop offset="1" stop-color="#b66b2e"/></radialGradient>
+        <pattern id="grid" width="70" height="70" patternUnits="userSpaceOnUse" x="500" y="310"><path d="M70 0H0V70" fill="none" stroke="#7fb5b5" stroke-opacity=".12" stroke-width="1"/></pattern>
+        <filter id="shadow" x="-100%" y="-100%" width="300%" height="300%"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-opacity=".5"/></filter>
+        <clipPath id="boundary"><rect x="55" y="30" width="890" height="560" rx="30"/></clipPath>
+      </defs>
+      <g clip-path="url(#boundary)">
+        <rect x="55" y="30" width="890" height="560" rx="30" fill="url(#ground)"/>
+        <rect x="55" y="30" width="890" height="560" fill="url(#grid)"/>
+        <circle cx="500" cy="310" r="247" class="outer"/><circle cx="500" cy="310" r="253" class="rim"/>
+        <g id="rangeMarks"></g>
+        <circle cx="500" cy="310" r="140" class="range"/><circle cx="500" cy="310" r="70" class="range"/>
+        <path d="M85 310H915M500 48V573" class="axes"/>
+        <path d="m906 304 9 6-9 6M494 57l6-9 6 9" class="axes"/>
+        <g id="ticks"></g><text x="924" y="317" class="axisName">x</text><text x="513" y="57" class="axisName">y</text>
+        <path d="M70 65V45h28M930 65V45h-28M70 555v20h28M930 555v20h-28" class="corners"/>
+        <circle id="approachRing" cx="500" cy="310" r="230" fill="none" stroke="#9bb5aa" stroke-width="1.5" stroke-dasharray="4 10" opacity=".18"/>
+        <line id="wake" x1="500" y1="310" x2="500" y2="310"/>
+        <line id="shotTrail" x1="500" y1="310" x2="500" y2="310"/>
+        <circle id="projectile" cx="500" cy="310" r="5"/>
+        <g id="target" transform="translate(660 150)">
+          <ellipse cy="9" rx="21" ry="15" fill="#071a24" opacity=".4"/>
+          <g id="discSpin"><circle r="19" fill="url(#disc)" stroke="#ffe5ab" stroke-width="2"/><circle r="12" fill="none" stroke="#955b29" stroke-width="1.5"/><circle r="5" fill="#ffe0a0"/><path d="M-16 0h5M11 0h5M0-16v5M0 11v5" stroke="#ffeaca" stroke-width="2"/></g>
+          <circle r="27" class="targetRing"/>
+        </g>
+        <g id="turret" filter="url(#shadow)">
+          <circle cx="500" cy="310" r="32" fill="#10242b" stroke="#617b7d" stroke-width="2"/>
+          <circle cx="500" cy="310" r="25" fill="#203f45" stroke="#9dbbb7" stroke-width="1.5"/>
+          <g id="turretBarrel" transform="rotate(-45 500 310)">
+            <rect x="499" y="300" width="51" height="20" rx="5" fill="#8ca9a4" stroke="#cadbd2" stroke-width="1.5"/>
+            <rect x="527" y="304" width="24" height="12" rx="2" fill="#3e5e61"/>
+            <path d="M540 304v12" stroke="#cfdfd5" stroke-width="2"/>
+          </g>
+          <circle cx="500" cy="310" r="13" fill="#b7cfc0"/><circle cx="500" cy="310" r="6" fill="#e7eaca"/>
+        </g>
+        <g id="particles"></g><circle id="impact" cx="500" cy="310" r="10"/>
+      </g>
+    </svg>
+    <div class="caption"><span class="liveDot"></span><span id="status">Schutter aan het bord. Coach op afstand.</span><span id="reserve">Vaste proef · 7 richtingen</span></div>
+    <div id="countdown" hidden><span>STA KLAAR</span><strong id="countNum">3</strong><small>Coach kijkt. Schutter kiest.</small></div>
+  </section>
+
+  <aside class="console">
+    <div class="consoleTop"><span class="eyebrow">SCHUTTER / KIES & VUUR</span><div class="question">Welke <i>a</i>?</div><p>Lees de richting van links naar rechts.</p></div>
+    <div class="deadline"><span>TIJD VOOR DIT DOEL</span><strong id="timer">5,0 s</strong><div class="timeTrack"><i id="timeFill"></i></div></div>
+    <div id="choices" aria-label="Kies de richtingscoëfficiënt en vuur"></div>
+    <div class="consoleFoot"><span id="teamLabel">Duo 1</span><span id="attempts">0 missers</span></div>
+  </aside>
+</main>
+
+<div id="lobby" class="overlay">
+  <div class="lobby">
+    <div class="hero"><span class="eyebrow">TWEE LEERLINGEN. ÉÉN MISSIE.</span><h1>Kijk samen.<br>Raak ze allemaal.</h1><p>Jij kiest aan het bord. Je coach houdt vanop afstand het overzicht.</p><div class="rolePair"><span><b>01 / SCHUTTER</b>Tik de juiste a. Je vuurt meteen.</span><span><b>02 / COACH</b>Overzie het assenstelsel. Help de richting lezen.</span></div><p class="fair">Raak alle 7 richtingen. Een misser komt pas na de reeks terug. De klok stopt bij de laatste treffer.</p></div>
+    <div class="lobbyControls"><label for="teamName">NAAM VAN JULLIE DUO</label><input id="teamName" value="Duo 1" maxlength="28" autocomplete="off" spellcheck="false"><span class="eyebrow">TEMPO / TIJD PER DOEL</span><div class="tempo"><button data-speed="8">8 s<span>Rustig</span></button><button data-speed="5" aria-pressed="true">5 s<span>Vlot</span></button><button data-speed="3">3 s<span>Snel</span></button></div><p class="fair">Dezelfde 7 richtingen en dezelfde antwoordmogelijkheden. Vergelijk tijden alleen binnen hetzelfde tempo.</p><button id="start" class="primary">Start jullie proef <span>↗</span></button><div class="utilities"><button id="lobbyMute" class="utilityBtn">Geluid aan</button><button id="showTimes" class="utilityBtn">Tijden bekijken ↗</button></div></div>
+  </div>
+</div>
+
+<div id="results" class="overlay" hidden>
+  <div class="results">
+    <div class="resultHero"><span class="eyebrow">PROEF A VOLTOOID · 7 / 7</span><h2 id="resultName">Alles geraakt.</h2><strong id="finalTime" class="finalTime">00:00,00</strong><p id="resultStats"></p><p>Totaaltijd van het eerste doel tot de laatste treffer. Inclusief missers en herkansingen.</p><div class="resultActions"><button id="again" class="primary">Volgend duo <span>↗</span></button><button id="backLobby" class="utilityBtn">Terug</button></div></div>
+    <div class="timesPanel"><span class="eyebrow">DEZELFDE PROEF. JULLIE TIJDEN.</span><h3 id="timesTitle">Klastijden · 5 seconden</h3><ol id="timesList" class="timesList"></ol><p class="fair" id="storageNote"></p></div>
+  </div>
+</div>
+
+<div class="rotate"><div><strong>Draai je toestel.</strong><p>Kleiduifschieten gebruikt een landscape speelveld.</p></div></div>
+</div>
+
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
+const rounds=[
+  {id:'p1',a:1,x:2.3,choices:[1,-1,2]},
+  {id:'n1',a:-1,x:2.3,choices:[-1,1,-.5]},
+  {id:'p2',a:2,x:-1.15,choices:[2,.5,-2]},
+  {id:'nh',a:-.5,x:-3.0,choices:[-.5,.5,-2]},
+  {id:'ph',a:.5,x:-3.0,choices:[.5,2,-.5]},
+  {id:'n2',a:-2,x:1.15,choices:[-2,-.5,2]},
+  {id:'zero',a:0,x:-3.1,choices:[0,1,-1]}
+];
+const STORE='axioma.rechten.kleiduiven.standalone.v12';
+const SHOT_MS=320,GAP_MS=400;
+let speed=5,duration=5,queue=[],retry=[],mastered=new Set(),attempt=null,roundNo=1,state='lobby';
+let misses=0,shots=0,started=0,elapsed=0,runId='',team='Duo 1',selected=null,busy=false;
+let raf=0,lastHud=0,barrelAngle=-45,wantedAngle=-45,particles=[],impactAt=0,muted=false,audio=null,persistent=true,history=[];
+const reduced=matchMedia('(prefers-reduced-motion:reduce)');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fmt=v=>Number.isInteger(v)?String(v):String(v).replace('.',',');
+function makeSvg(tag,attrs={}){const e=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e}
+function tone(freq=880,dur=.08,type='sine',gain=.055,delay=0){
+  if(muted)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  try{audio??=new AC();audio.resume?.();const t=audio.currentTime+delay,o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(gain,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g).connect(audio.destination);o.start(t);o.stop(t+dur+.02)}catch{}
+}
+function noise(dur=.09,gain=.05){
+  if(muted)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  try{audio??=new AC();audio.resume?.();const n=Math.max(1,Math.floor(audio.sampleRate*dur)),buf=audio.createBuffer(1,n,audio.sampleRate),data=buf.getChannelData(0);for(let i=0;i<n;i++)data[i]=(Math.random()*2-1)*(1-i/n);const src=audio.createBufferSource(),g=audio.createGain();src.buffer=buf;g.gain.value=gain;src.connect(g).connect(audio.destination);src.start()}catch{}
+}
+function sStart(){tone(930,.075,'sine',.06);tone(1260,.055,'sine',.035,.055)}
+function sShot(){noise(.075,.07);tone(145,.1,'square',.025)}
+function sHit(){noise(.13,.045);tone(720,.08,'triangle',.04);tone(980,.1,'triangle',.03,.06)}
+function sMiss(){tone(190,.14,'triangle',.04)}
+function sTimeout(){tone(280,.11,'sine',.035);tone(180,.18,'sine',.03,.09)}
+function clockText(ms){const n=Math.max(0,Math.floor(ms/10));return String(Math.floor(n/6000)).padStart(2,'0')+':'+String(Math.floor(n/100)%60).padStart(2,'0')+','+String(n%100).padStart(2,'0')}
+function pxX(x){return 500+x*70}
+function pxY(y){return 310-y*70}
+function targetPos(r){return{x:pxX(r.x),y:pxY(r.a*r.x)}}
+function targetAt(A,time){
+  const u=clamp((time-A.start)/(A.deadline-A.start),0,1);
+  const vx=A.p.x-500,vy=A.p.y-310,len=Math.hypot(vx,vy)||1;
+  const ux=vx/len,uy=vy/len;
+  const outer=250,inner=118;
+  const radius=outer+(inner-outer)*u;
+  return {x:500+ux*radius,y:310+uy*radius,radius};
+}
+function positionTarget(p){$('target').setAttribute('transform',`translate(${p.x} ${p.y})`)}
+function resetProjectile(){$('projectile').style.opacity='0';$('shotTrail').style.opacity='0';$('projectile').setAttribute('cx',500);$('projectile').setAttribute('cy',310);$('shotTrail').setAttribute('x1',500);$('shotTrail').setAttribute('y1',310)}
+function setTimer(sec){$('timer').textContent=sec<0?'—':Math.max(0,sec).toFixed(1).replace('.',',')+' s';$('timer').classList.toggle('urgent',sec>=0&&sec<=2);$('timeFill').style.transform=`scaleX(${clamp(sec/duration,0,1)})`}
+function initField(){
+  for(let i=0;i<60;i++){const a=i*Math.PI/30,r=i%5===0?238:243;const e=makeSvg('line',{x1:500+Math.cos(a)*r,y1:310+Math.sin(a)*r,x2:500+Math.cos(a)*247,y2:310+Math.sin(a)*247,stroke:'#92b0a6','stroke-width':i%5===0?2:1,opacity:.35});$('rangeMarks').append(e)}
+  for(let i=-5;i<=5;i++){
+    if(!i)continue;
+    const x=500+i*70;if(x>80&&x<920){$('ticks').append(makeSvg('line',{x1:x,y1:305,x2:x,y2:315,stroke:'#a6c4ba',opacity:.6}));const t=makeSvg('text',{x,y:337,class:'tickLabel'});t.textContent=i;$('ticks').append(t)}
+    if(Math.abs(i)<=3){const y=310-i*70;$('ticks').append(makeSvg('line',{x1:495,y1:y,x2:505,y2:y,stroke:'#a6c4ba',opacity:.6}));const t=makeSvg('text',{x:479,y:y+5,class:'tickLabel'});t.textContent=i;$('ticks').append(t)}
+  }
+}
+function updateHud(){
+  $('reserve').textContent=retry.length?`${retry.length} naar de herkansing`:'Vaste proef · 7 richtingen';
+  $('wave').textContent=`PROEF A · ${roundNo===1?'REEKS 1':'HERKANSING '+(roundNo-1)}`;
+  $('attempts').textContent=misses+' '+(misses===1?'misser':'missers');$('teamLabel').textContent=team;
+  $('progress').replaceChildren();
+  for(const r of rounds){const e=document.createElement('span');e.className='dot'+(mastered.has(r.id)?' hit':attempt?.id===r.id?' current':retry.includes(r.id)?' retry':'');$('progress').append(e)}
+}
+function renderChoices(r){
+  $('choices').replaceChildren();
+  r.choices.forEach((v,i)=>{const b=document.createElement('button');b.className='choice';b.dataset.a=String(v);b.innerHTML=`<span>${fmt(v)}</span><span class="choiceKey">${i+1}</span>`;b.onclick=()=>{if(state!=='playing'||busy||!attempt||attempt.resolved)return;selected=v;fire()};$('choices').append(b)})
+}
+function burst(x,y){
+  impactAt=performance.now();$('impact').setAttribute('cx',x);$('impact').setAttribute('cy',y);$('particles').replaceChildren();particles=[];
+  for(let i=0;i<16;i++){const angle=i*Math.PI*2/16,speed=55+(i%4)*26,e=makeSvg('path',{d:'M-3 -2L4 -1L1 4Z',fill:i%3===0?'#fff0b6':'#e5aa63'});$('particles').append(e);particles.push({e,x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,start:impactAt,spin:i*31})}
+}
+function renderFx(now){
+  for(const p of particles){const dt=(now-p.start)/1000,k=clamp(dt/.7,0,1);p.e.setAttribute('transform',`translate(${p.x+p.vx*dt} ${p.y+p.vy*dt}) rotate(${p.spin+dt*150})`);p.e.setAttribute('opacity',String(1-k))}
+  if(impactAt){const t=clamp((now-impactAt)/500,0,1);$('impact').setAttribute('r',String(15+t*60));$('impact').style.opacity=String((1-t)*.8)}
+}
+function frame(now){
+  if(!['countdown','playing','gap'].includes(state))return;
+  raf=requestAnimationFrame(frame);
+  if(now-lastHud>30){$('total').textContent=clockText(started?now-started:0);lastHud=now}
+  if(state==='countdown'){$('countNum').textContent=String(Math.max(1,Math.ceil(($('countdown').dataset.end-now)/1000)));return}
+  if(!reduced.matches){let diff=(wantedAngle-barrelAngle+540)%360-180;barrelAngle+=diff*.2}else barrelAngle=wantedAngle;
+  $('turretBarrel').setAttribute('transform',`rotate(${barrelAngle} 500 310)`);renderFx(now);
+  const A=attempt;if(!A||A.resolved)return;
+  const p=targetAt(A,now);positionTarget(p);$('approachRing').setAttribute('r',p.radius);$('discSpin').setAttribute('transform','rotate(0)');
+  const tail=targetAt(A,now-180);$('wake').setAttribute('x1',tail.x);$('wake').setAttribute('y1',tail.y);$('wake').setAttribute('x2',p.x);$('wake').setAttribute('y2',p.y);
+  if(A.shot){
+    const t=clamp((now-A.shot.start)/SHOT_MS,0,1),x=500+(A.shot.end.x-500)*t,y=310+(A.shot.end.y-310)*t;
+    $('projectile').style.opacity='1';$('shotTrail').style.opacity=String(.9-t*.2);$('projectile').setAttribute('cx',x);$('projectile').setAttribute('cy',y);$('shotTrail').setAttribute('x1',500+(x-500)*.62);$('shotTrail').setAttribute('y1',310+(y-310)*.62);$('shotTrail').setAttribute('x2',x);$('shotTrail').setAttribute('y2',y);
+    if(t>=1){A.shot.correct?hit():fail('mis')}
+  }else{
+    setTimer((A.deadline-now)/1000);
+    if(now>=A.deadline)fail('tijd')
+  }
+}
+function beginAttempt(){
+  if(!queue.length){
+    if(!retry.length){finish();return}
+    roundNo++;queue=[...retry];retry=[];state='gap';attempt=null;updateHud();$('status').textContent=`Herkansing ${roundNo-1} · nog ${queue.length} ${queue.length===1?'richting':'richtingen'}.`;setTimeout(beginAttempt,950);return
+  }
+  state='playing';busy=false;selected=null;resetProjectile();$('target').style.opacity='1';$('wake').style.opacity='.18';$('approachRing').style.opacity='.18';
+  const id=queue.shift(),r=rounds.find(x=>x.id===id),now=performance.now(),p=targetPos(r);
+  attempt={id,r,p,start:now,deadline:now+duration*1000,shot:null,resolved:false};
+  const startP=targetAt(attempt,now);positionTarget(startP);$('approachRing').setAttribute('r',startP.radius);renderChoices(r);updateHud();setTimer(duration);sStart();
+  $('status').textContent=roundNo===1?'Lees de richting. Kies a en vuur.':'Alleen de gemiste richtingen komen terug.'
+}
+function fire(){
+  const A=attempt;if(state!=='playing'||!A||A.resolved||busy||selected===null)return;
+  const now=performance.now();if(now>=A.deadline){fail('tijd');return}
+  busy=true;shots++;const correct=Math.abs(selected-A.r.a)<1e-6;
+  const future=targetAt(A,now+SHOT_MS),radius=Math.hypot(future.x-500,future.y-310),sign=A.p.x>=500?1:-1,dx=sign*radius/Math.hypot(1,selected),dy=-selected*dx;
+  const end=correct?future:{x:500+dx,y:310+dy};
+  A.shot={start:now,correct,end};wantedAngle=Math.atan2(end.y-310,end.x-500)*180/Math.PI;
+  $('choices').querySelectorAll('button').forEach(b=>{b.disabled=true;b.classList.toggle('selected',Number(b.dataset.a)===selected)});setTimer(-1);sShot()
+}
+function hit(){
+  const A=attempt;if(!A||A.resolved)return;A.resolved=true;state='gap';mastered.add(A.id);$('target').style.opacity='0';$('wake').style.opacity='0';$('approachRing').style.opacity='0';resetProjectile();burst(A.shot.end.x,A.shot.end.y);sHit();
+  $('choices').querySelectorAll('button').forEach(b=>{b.classList.remove('selected');b.classList.toggle('correct',Number(b.dataset.a)===A.r.a)});updateHud();$('status').textContent='Raak. Deze richting is binnen.';
+  if(mastered.size===rounds.length){elapsed=performance.now()-started;finish();return}
+  setTimeout(()=>{attempt=null;beginAttempt()},GAP_MS)
+}
+function fail(kind){
+  const A=attempt;if(!A||A.resolved)return;A.resolved=true;state='gap';misses++;if(!retry.includes(A.id)&&!mastered.has(A.id))retry.push(A.id);
+  $('target').style.opacity='0';$('wake').style.opacity='0';$('approachRing').style.opacity='0';resetProjectile();sTimeout();
+  $('choices').querySelectorAll('button').forEach(b=>{b.disabled=true;b.classList.remove('selected');if(kind==='mis'&&Number(b.dataset.a)===selected)b.classList.add('wrong')});
+  updateHud();$('status').textContent=kind==='tijd'?'Te laat. Deze richting komt terug.':'Mis. Deze richting komt terug.';kind==='tijd'?sTimeout():sMiss();
+  setTimeout(()=>{attempt=null;beginAttempt()},650)
+}
+function startGame(){
+  duration=speed;misses=0;shots=0;retry=[];mastered=new Set();roundNo=1;queue=rounds.map(r=>r.id);attempt=null;elapsed=0;started=0;impactAt=0;particles=[];busy=false;selected=null;
+  runId=Date.now()+'-'+Math.random().toString(36).slice(2,7);team=$('teamName').value.trim().slice(0,28)||'Duo 1';$('teamName').value=team;
+  $('lobby').hidden=true;$('results').hidden=true;$('target').style.opacity='0';$('wake').style.opacity='0';$('particles').replaceChildren();$('impact').style.opacity='0';resetProjectile();$('total').textContent=clockText(0);updateHud();setTimer(duration);
+  state='countdown';const end=performance.now()+3000;$('countdown').dataset.end=String(end);$('countdown').hidden=false;$('countNum').textContent='3';cancelAnimationFrame(raf);raf=requestAnimationFrame(frame);
+  setTimeout(()=>{$('countdown').hidden=true;started=performance.now();beginAttempt()},3000)
+}
+function finish(){
+  if(state==='done'||mastered.size!==7)return;state='done';cancelAnimationFrame(raf);started=0;attempt=null;busy=true;$('total').textContent=clockText(elapsed);
+  saveResult();$('resultName').textContent=team+' · alles geraakt.';$('finalTime').textContent=clockText(elapsed);$('resultStats').textContent=`${shots} schoten · ${misses} ${misses===1?'misser':'missers'} · ${roundNo===1?'zonder herkansing':(roundNo-1)+' '+(roundNo===2?'herkansing':'herkansingen')}`;
+  showTimes();$('results').hidden=false
+}
+function readHistory(){try{const x=JSON.parse(localStorage.getItem(STORE)||'[]');if(Array.isArray(x))history=x.filter(r=>r&&typeof r.name==='string'&&Number.isFinite(r.ms)&&[3,5,8].includes(r.tempo)).slice(-100)}catch{persistent=false}}
+function saveResult(){if(history.some(r=>r.id===runId))return;history.push({id:runId,name:team,ms:elapsed,tempo:duration,misses,shots});history=history.slice(-100);try{localStorage.setItem(STORE,JSON.stringify(history))}catch{persistent=false}}
+function showTimes(){
+  $('timesTitle').textContent=`Klastijden · ${speed} seconden`;$('timesList').replaceChildren();
+  const rows=history.filter(r=>r.tempo===speed).sort((a,b)=>a.ms-b.ms);
+  if(!rows.length){const li=document.createElement('li');li.innerHTML='<span>—</span><div>Nog geen tijden op dit tempo.</div><strong>—</strong>';$('timesList').append(li)}
+  rows.forEach((r,i)=>{const li=document.createElement('li');const rank=document.createElement('span');rank.textContent=String(i+1).padStart(2,'0');const name=document.createElement('div');name.textContent=r.name;const note=document.createElement('small');note.textContent=`${r.misses} ${r.misses===1?'misser':'missers'}`;name.append(note);const time=document.createElement('strong');time.textContent=clockText(r.ms);li.append(rank,name,time);$('timesList').append(li)});
+  $('storageNote').textContent=persistent?'Tijden worden in deze browser bewaard.':'Tijden blijven alleen bewaard zolang deze pagina open is.'
+}
+document.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>{if(state!=='lobby')return;speed=Number(b.dataset.speed);duration=speed;document.querySelectorAll('[data-speed]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));setTimer(speed)});
+$('start').onclick=startGame;
+$('restart').onclick=()=>{if(state==='lobby')return;cancelAnimationFrame(raf);state='lobby';$('results').hidden=true;$('lobby').hidden=false};
+$('again').onclick=()=>{state='lobby';$('results').hidden=true;$('lobby').hidden=false;$('teamName').value='Duo '+(history.length+1)};
+$('backLobby').onclick=()=>{state='lobby';$('results').hidden=true;$('lobby').hidden=false};
+$('showTimes').onclick=()=>{showTimes();$('results').hidden=false};
+function toggleMute(){muted=!muted;$('mute').textContent=muted?'×':'♪';$('mute').setAttribute('aria-pressed',String(muted));$('lobbyMute').textContent=muted?'Geluid uit':'Geluid aan'}
+$('mute').onclick=toggleMute;$('lobbyMute').onclick=toggleMute;
+addEventListener('keydown',e=>{if(state!=='playing'||e.repeat||e.target.matches('input,select'))return;const i=Number(e.key)-1;if(i>=0&&i<3){e.preventDefault();$('choices').children[i]?.click()}});
+initField();readHistory();updateHud();setTimer(speed);$('teamName').value='Duo '+(history.length+1);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7f8f4">
+  <meta name="description" content="Ontdek, oefen en speel met wiskunde. Kies een spel of leerpad van Axioma en ga op je eigen tempo aan de slag.">
+  <title>Axioma · Leer. Speel. Begrijp.</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <script>try { document.documentElement.dataset.mode = localStorage.getItem('axioma-mode') === 'dark' ? 'dark' : 'light'; } catch {}</script>
+  <link rel="stylesheet" href="css/frontpage.css">
+  <script src="js/catalog.js" defer></script>
+  <script src="js/frontpage.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#ontdek">Ga naar de spellen</a>
+  <header class="top">
+    <div class="topline container">
+      <a class="brand" href="./" aria-label="Axioma, startpagina">
+        <svg class="brand-mark" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="11" fill="currentColor"/><path d="m10 26 8-17 8 17M13 21h10" fill="none" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="10" r="2" fill="#c8d8a8"/></svg>
+        <span>axioma<span class="brand-dot">.</span></span>
+      </a>
+      <span class="brand-caption">Leer. Speel. Begrijp.</span>
+      <div class="header-actions">
+        <button id="modeBtn" class="icon-button" type="button" aria-label="Donkere weergave" aria-pressed="false" title="Donkere weergave">
+          <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 13.4A8.7 8.7 0 0 1 10.6 3.4a8.7 8.7 0 1 0 10 10Z"/></svg>
+          <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+        </button>
+        <a class="account-link" href="games/rechten/trainer/" title="Open je account in de Rechtentrainer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg>Mijn trainer
+        </a>
+      </div>
+    </div>
+  </header>
+  <main class="container">
+    <section class="intro" aria-labelledby="intro-title">
+      <div class="intro-copy">
+        <p class="eyebrow"><span class="status-dot"></span> Wiskunde, op jouw manier</p>
+        <h1 id="intro-title">Meer begrijpen.<br><span>Gewoon door te doen.</span></h1>
+        <p class="intro-description">Ontdek hoe het werkt, oefen op jouw tempo of duik in een spel.<br class="desktop-break"> Kies iets dat je nieuwsgierig maakt.</p>
+        <a class="intro-link" href="#ontdek">Vind jouw uitdaging <span aria-hidden="true">↓</span></a>
+      </div>
+      <div class="intro-art" aria-hidden="true">
+        <svg viewBox="0 0 330 248" fill="none">
+          <defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="currentColor" opacity=".13"/></pattern></defs>
+          <rect x="32" y="10" width="280" height="220" fill="url(#dots)"/>
+          <circle cx="184" cy="114" r="82" class="art-halo"/>
+          <path d="M52 186H303M95 224V28" stroke="currentColor" opacity=".25" stroke-width="1.5"/>
+          <path d="m297 182 6 4-6 4M91 34l4-6 4 6" stroke="currentColor" opacity=".25" stroke-width="1.5"/>
+          <path d="M67 207 263 43" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M130 154h91V78" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 5" opacity=".4"/>
+          <circle cx="130" cy="154" r="6" class="art-point"/><circle cx="221" cy="78" r="6" class="art-point"/>
+          <rect x="160" y="168" width="47" height="26" rx="8" class="art-label"/><text x="171" y="186" fill="currentColor" font-size="13" font-family="system-ui">Δx</text>
+          <rect x="230" y="108" width="47" height="26" rx="8" class="art-label"/><text x="242" y="126" fill="currentColor" font-size="13" font-family="system-ui">Δy</text>
+          <g transform="translate(10 48) rotate(-8)"><rect width="117" height="39" rx="10" class="art-label"/><text x="17" y="26" fill="currentColor" font-size="18" font-family="Georgia,serif" font-style="italic">y = ax + b</text></g>
+          <path d="m281 204 4-10 4 10 10 4-10 4-4 10-4-10-10-4Z" fill="#b9c993"/>
+        </svg>
+      </div>
+    </section>
+    <section id="ontdek" class="library" aria-labelledby="library-title" tabindex="-1">
+      <div class="library-heading">
+        <div><p class="eyebrow">Een beetje nieuwsgierigheid is genoeg</p><h2 id="library-title">Waar begin jij?</h2></div>
+        <div class="search-wrap" role="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg>
+          <label class="sr-only" for="search">Zoek een spel of onderwerp</label>
+          <input id="search" type="search" placeholder="Zoek een spel of onderwerp" autocomplete="off" maxlength="120">
+        </div>
+      </div>
+      <div class="browse-bar">
+        <div id="filters" class="filters" role="group" aria-label="Filter op onderwerp"></div>
+        <span id="resultCount" class="result-count" role="status" aria-live="polite" aria-atomic="true"></span>
+      </div>
+      <div id="grid" class="grid"></div>
+      <div id="empty" class="empty" hidden>
+        <span class="empty-symbol" aria-hidden="true">⌕</span><h3>Even een andere richting?</h3>
+        <p>Geen spellen gevonden. Probeer een ander woord of bekijk alles.</p>
+        <button id="resetFilters" class="reset-button" type="button">Bekijk alle spellen <span aria-hidden="true">→</span></button>
+      </div>
+      <noscript><p>Open rechtstreeks een onderdeel:</p><ul><li><a href="games/rechten/trainer/">Rechtentrainer</a></li><li><a href="games/rechten/leerpad/">Functies &amp; rechten</a></li><li><a href="games/rechten/brandweer/">Brandweer</a></li><li><a href="games/rechten/kleiduiven/">Kleiduifschieten</a></li><li><a href="games/stelsels/">Stelsels</a></li></ul></noscript>
+    </section>
+    <aside class="account-note">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6l-8-3Z"/><path d="m8 12 3 3 5-6"/></svg>
+      <p><strong>Een kleine stap, steeds wat verder.</strong> Bewaar je voortgang met een account in de Rechtentrainer.</p>
+      <a href="games/rechten/trainer/">Naar mijn trainer <span aria-hidden="true">↗</span></a>
+    </aside>
+  </main>
+  <footer class="footer container"><a href="./" class="footer-brand">axioma.</a><p>Ruimte om te proberen. Tijd om te begrijpen.</p><a href="#">Terug naar boven <span aria-hidden="true">↑</span></a></footer>
+</body>
+</html>
