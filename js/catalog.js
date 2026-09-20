@@ -48,7 +48,10 @@ window.AXIOMA_CATALOG = [
     "progressType": "levels",
     "teacherVisible": true,
     "gameType": "game",
-    "tracking": "progress"
+    "tracking": "progress",
+    "progressTotal": 16,
+    "progressUnitSingular": "level",
+    "progressUnitPlural": "levels"
   },
   {
     "title": "Kleiduifschieten",
@@ -65,7 +68,10 @@ window.AXIOMA_CATALOG = [
     "progressType": "levels",
     "teacherVisible": true,
     "gameType": "arcade",
-    "tracking": "progress"
+    "tracking": "progress",
+    "progressTotal": 1,
+    "progressUnitSingular": "reeks",
+    "progressUnitPlural": "reeksen"
   },
   {
     "title": "Pythagoras",
@@ -82,7 +88,10 @@ window.AXIOMA_CATALOG = [
     "progressType": "levels",
     "teacherVisible": true,
     "gameType": "game",
-    "tracking": "progress"
+    "tracking": "progress",
+    "progressTotal": 10,
+    "progressUnitSingular": "stap",
+    "progressUnitPlural": "stappen"
   },
   {
     "title": "Stelsels",
@@ -99,7 +108,10 @@ window.AXIOMA_CATALOG = [
     "progressType": "levels",
     "teacherVisible": true,
     "gameType": "game",
-    "tracking": "progress"
+    "tracking": "progress",
+    "progressTotal": 14,
+    "progressUnitSingular": "oefening",
+    "progressUnitPlural": "oefeningen"
   },
   {
     "title": "Algebra Smederij",
@@ -116,7 +128,9 @@ window.AXIOMA_CATALOG = [
     "progressType": "levels",
     "teacherVisible": true,
     "gameType": "game",
-    "tracking": "progress"
+    "tracking": "progress",
+    "progressUnitSingular": "oefening",
+    "progressUnitPlural": "oefeningen"
   },
   {
     "title": "Taartenwinkel",
@@ -133,7 +147,10 @@ window.AXIOMA_CATALOG = [
     "progressType": "levels",
     "teacherVisible": true,
     "gameType": "game",
-    "tracking": "progress"
+    "tracking": "progress",
+    "progressTotal": 7,
+    "progressUnitSingular": "dienst",
+    "progressUnitPlural": "diensten"
   },
   {
     "title": "Kubusbouw",
@@ -150,7 +167,10 @@ window.AXIOMA_CATALOG = [
     "progressType": "levels",
     "teacherVisible": true,
     "gameType": "game",
-    "tracking": "progress"
+    "tracking": "progress",
+    "progressTotal": 22,
+    "progressUnitSingular": "oefening",
+    "progressUnitPlural": "oefeningen"
   },
   {
     "title": "Verfwinkel",
@@ -167,7 +187,10 @@ window.AXIOMA_CATALOG = [
     "progressType": "levels",
     "teacherVisible": true,
     "gameType": "game",
-    "tracking": "progress"
+    "tracking": "progress",
+    "progressTotal": 16,
+    "progressUnitSingular": "bestelling",
+    "progressUnitPlural": "bestellingen"
   },
   {
     "title": "Data Check",
@@ -184,7 +207,10 @@ window.AXIOMA_CATALOG = [
     "progressType": "levels",
     "teacherVisible": true,
     "gameType": "game",
-    "tracking": "progress"
+    "tracking": "progress",
+    "progressTotal": 22,
+    "progressUnitSingular": "dossier",
+    "progressUnitPlural": "dossiers"
   },
   {
     "title": "Signal Lab",
@@ -201,7 +227,10 @@ window.AXIOMA_CATALOG = [
     "progressType": "levels",
     "teacherVisible": true,
     "gameType": "game",
-    "tracking": "progress"
+    "tracking": "progress",
+    "progressTotal": 12,
+    "progressUnitSingular": "proef",
+    "progressUnitPlural": "proeven"
   },
   {
     "title": "Gravity Maze",
@@ -218,6 +247,9 @@ window.AXIOMA_CATALOG = [
     "progressType": "levels",
     "teacherVisible": true,
     "gameType": "game",
-    "tracking": "progress"
+    "tracking": "progress",
+    "progressTotal": 9,
+    "progressUnitSingular": "kamer",
+    "progressUnitPlural": "kamers"
   }
 ];

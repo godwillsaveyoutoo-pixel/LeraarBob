@@ -110,11 +110,32 @@ async function listGames(){
   return data||[];
 }
 
+// One overview for the signed-in student, including the trainer's older storage format.
+// Partial failures stay distinct from an empty result ("not started").
+async function loadOverview({signal}={}){
+  const account=await ensureStudent();
+  const sb=client();
+  const queries=[
+    sb.from('axioma_game_progress').select('game_id,state,updated_at').eq('user_id',account.id),
+    sb.from('axioma_progress').select('state,updated_at').eq('user_id',account.id).maybeSingle()
+  ];
+  const [games,trainer]=await Promise.allSettled(queries.map(query=>signal?query.abortSignal(signal):query));
+  if((await window.AxiomaAuth.getAccount())?.id!==account.id) throw new Error('Leerlingaccount gewijzigd.');
+  const failed=result=>result.status==='rejected'||!!result.value.error;
+  return {
+    accountId:account.id,
+    games:failed(games)?[]:games.value.data||[],
+    trainer:failed(trainer)?null:trainer.value.data,
+    errors:{games:failed(games),trainer:failed(trainer)}
+  };
+}
+
 window.AxiomaProgress=Object.freeze({
   load,
   save,
   saveLatest,
   completeUnit,
-  listGames
+  listGames,
+  loadOverview
 });
 })();

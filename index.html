@@ -15,6 +15,7 @@
   <script src="shared/axioma-progress.js" defer></script>
   <script src="js/account-ui.js" defer></script>
   <script src="js/catalog.js" defer></script>
+  <script src="js/catalog-progress.js" defer></script>
   <script src="js/frontpage.js" defer></script>
 </head>
 <body>
@@ -51,6 +52,10 @@
         </div>
       </div>
       <div class="catalog-content container">
+        <div id="progressNotice" class="progress-notice" hidden>
+          <p id="progressMessage" role="status"></p>
+          <button id="retryProgress" class="progress-retry" type="button">Opnieuw proberen</button>
+        </div>
         <span id="resultCount" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></span>
         <div id="grid" class="grid"></div>
         <div id="empty" class="empty" hidden>
