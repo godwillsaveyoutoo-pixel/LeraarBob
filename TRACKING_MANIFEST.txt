@@ -1,0 +1,16 @@
+Game ID             eenvoudige tracking
+-----------------------------------------------------
+pythagoras           10 levels voltooid
+stelsels             14 unieke oefeningen voltooid (methode/modus maakt niet uit)
+algebra-smederij      bestaande opgeloste challenges
+taartenwinkel         7 diensten voltooid
+kubusbouw             22 levels voltooid
+verfwinkel            16 levels voltooid
+data-check            22 dossiers voltooid
+signal-lab            12 proeven voltooid
+gravity-maze          9 kamers voltooid
+
+Alle spellen schrijven:
+axioma:game:<id>:progress
+met completed, total, current, complete en updatedAt.
+Bij volledige afronding wordt ook axioma:game:<id>:complete = 1 gezet.
