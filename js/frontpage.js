@@ -6,7 +6,7 @@
   const search = $('search');
   let allGames = [];
   let active = 'Alles';
-  const kinds = { train: ['Oefenen', 'Start met oefenen'], learn: ['Ontdekken', 'Ontdek het leerpad'], game: ['Spelen', 'Open het spel'], arcade: ['Spelen', 'Open het spel'] };
+  const kinds = { train: ['Oefenen', 'Start met oefenen'], learn: ['Verkennen', 'Start met verkennen'], game: ['Spelen', 'Open het spel'], arcade: ['Spelen', 'Open het spel'] };
   const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   function element(tag, className, text) {
     const node = document.createElement(tag);
@@ -23,11 +23,10 @@
     } catch { return null; }
   }
   function matchesCategory(game, category) {
-    return category === 'Alles' || (category === 'Spellen' ? ['game', 'arcade'].includes(game.kind) : (game.theme || game.category) === category);
+    return category === 'Alles' || (game.theme || game.category) === category;
   }
   function renderFilters() {
     const categories = ['Alles', ...new Set(allGames.map(game => game.theme || game.category).filter(Boolean))];
-    if (allGames.some(game => ['game', 'arcade'].includes(game.kind))) categories.push('Spellen');
     filters.replaceChildren();
     for (const category of [...new Set(categories)]) {
       const button = element('button', 'filter', category);
@@ -55,7 +54,7 @@
       image.loading = 'lazy';
       image.decoding = 'async';
       image.addEventListener('error', () => { image.src = 'assets/covers/graph.svg'; }, { once: true });
-      const [kind, action] = kinds[game.kind] || ['Ontdekken', 'Open het onderdeel'];
+      const [kind, action] = kinds[game.kind] || ['Verkennen', 'Open het onderdeel'];
       visual.append(image, element('span', 'card-kind', kind));
       const info = element('div', 'info');
       info.append(element('p', 'meta', game.category || game.theme || 'Wiskunde'), element('h3', '', game.title), element('p', 'description', game.subtitle));

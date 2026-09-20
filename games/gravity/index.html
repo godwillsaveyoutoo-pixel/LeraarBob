@@ -15,7 +15,7 @@
       <button id="reset" class="retry" aria-label="Kamer opnieuw beginnen" title="Opnieuw (R)"><span aria-hidden="true">↺</span></button>
       <button id="menu-handle" aria-label="Open spelmenu" aria-controls="top-menu" aria-expanded="false"><span aria-hidden="true"></span></button>
       <header id="top-menu" aria-label="Spelmenu" inert>
-        <button id="axioma-home" type="button" aria-label="Terug naar Axioma">AXIOMA</button><button id="menu-close" class="menu-icon" aria-label="Terug naar het spel">⌃</button>
+        <button id="axioma-home" type="button" aria-label="Terug naar leraarBob">leraarBob</button><button id="menu-close" class="menu-icon" aria-label="Terug naar het spel">⌃</button>
         <button id="level-menu" aria-label="Kies een kamer"><span id="level-number">1 / 9</span><span id="level-name">MASS-6</span><span aria-hidden="true">⌄</span></button>
         <button id="undo" class="menu-icon" aria-label="Laatste beslissing terugdraaien" title="Terug (Z)">↶</button>
         <button id="hint" class="menu-icon" aria-label="Geef een hint" hidden>◌</button>
@@ -80,7 +80,7 @@ function homeUrl(){
   u.pathname=i>=0?p.slice(0,i+1)+'index.html':p.replace(/[^/]*$/,'index.html'); u.search='';u.hash=''; return u.href;
 }
 function goHome(e){if(e){e.preventDefault();e.stopPropagation();} const url=homeUrl(); try{if(parent&&parent!==window)parent.postMessage({type:'axioma:navigate-home',gameId:GAME_ID,url},'*')}catch(_){} try{if(top&&top!==window){top.location.href=url;return}}catch(_){} location.href=url;}
-function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar Axioma';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
+function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar leraarBob';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
 wire(document.getElementById('axioma-home'));
 function gravitySync(){let best={completed:[],active:0};for(const k of ['gravity-maze-human-v1-blind','gravity-maze-human-v1-assisted']){try{const d=JSON.parse(localStorage.getItem(k)||'{}');if(Array.isArray(d.completed)&&d.completed.length>best.completed.length)best=d}catch(_){}}const units=[...new Set(best.completed||[])];emit(units.length,9,(Number.isInteger(best.active)?best.active:0)+1);cloudSync(units,9)}gravitySync();setInterval(gravitySync,1200);

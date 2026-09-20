@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#081225">
-<title>AXIOMA · Kubusbouw v0.6.3 — Perspectief & bediening</title>
+<title>leraarBob · Kubusbouw v0.6.3 — Perspectief & bediening</title>
 <style>
 :root{font-family:Inter,ui-rounded,"Avenir Next","Segoe UI",system-ui,sans-serif;--ink:#f4f7ff;--muted:#97a6c4;--navy:#081225;--teal:#55dfd3;--violet:#9678e5;--gold:#efc365;--line:rgba(157,188,245,.14);--rail:clamp(224px,31vw,304px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--navy);color:var(--ink)}button{font:inherit;color:inherit;touch-action:manipulation}button:disabled{opacity:.38}
@@ -162,7 +162,7 @@ body.mode-plan .workspace{grid-template-rows:auto minmax(0,1fr) auto auto}body.m
 <section class="sa-landing" id="saLanding" aria-label="Kubusbouw startscherm">
   <div class="sa-home-inner">
     <div class="sa-copy">
-      <div class="sa-kicker">AXIOMA · RUIMTELIJK INZICHT</div>
+      <div class="sa-kicker">leraarBob · RUIMTELIJK INZICHT</div>
       <h1>Kubus<br><span>bouw</span></h1>
       <p class="sa-lead">Bouw 3D-vormen uit kubussen. Lees voor-, boven- en zijaanzichten en ontdek wat een 2D-tekening wel — en niet — over een ruimtelijk model vertelt.</p>
       <div class="sa-home-actions">
@@ -198,7 +198,7 @@ body.mode-plan .workspace{grid-template-rows:auto minmax(0,1fr) auto auto}body.m
 <section class="stage"><canvas id="canvas" aria-label="3D bouwkamer"></canvas><span class="edge-orientation-label" id="stageFrontEdge" aria-hidden="true">VOOR</span><span class="edge-orientation-label" id="stageSideEdge" aria-hidden="true">ZIJ</span><div class="stage-label" id="stageLabel"></div><div class="stage-note" id="stageNote"></div><div class="stage-orientation" aria-hidden="true"><span>VOOR</span><span>ZIJ</span></div><div class="build-tutorial" id="buildTutorial" role="dialog" aria-label="Bouwen"><strong>Zo bouw je</strong><span>Tik om te bouwen. Houd een kubus vast om hem weg te nemen. Sleep horizontaal om de bouw te draaien.</span><button type="button" id="closeBuildTutorial">OK</button></div><div class="depth-picker" id="depthPicker" aria-live="polite"></div><div class="readout" id="readout"><small></small><strong></strong><span></span></div></section>
 <aside class="workspace"><section class="mission"><div class="id" id="levelId"></div><h1 id="missionTitle"></h1><p id="instruction"></p></section><section class="views" id="views"></section><div class="feedback" id="feedback"></div><div id="controls"></div><div class="hint" id="hint"></div></aside>
 </section>
-<section class="complete" id="complete"><div class="card"><div class="check">✓</div><div><p>AXIOMA · KUBUSBOUW</p><h2>Ruimtelijk denken voltooid.</h2></div><div class="facts"><span><b>22</b><small>oefeningen</small></span><span><b>3D</b><small>modellen</small></span><span><b>3</b><small>aanzichten</small></span></div><div class="completeBtns"><button id="again">Speel opnieuw</button><button class="gold" id="backHome">Terug naar start</button></div></div></section>
+<section class="complete" id="complete"><div class="card"><div class="check">✓</div><div><p>leraarBob · KUBUSBOUW</p><h2>Ruimtelijk denken voltooid.</h2></div><div class="facts"><span><b>22</b><small>oefeningen</small></span><span><b>3D</b><small>modellen</small></span><span><b>3</b><small>aanzichten</small></span></div><div class="completeBtns"><button id="again">Speel opnieuw</button><button class="gold" id="backHome">Terug naar start</button></div></div></section>
 </main>
 <script id="scaleAssemblyV050ShellJS">
 (() => {
@@ -2864,9 +2864,9 @@ function homeUrl(){
   u.pathname=i>=0?p.slice(0,i+1)+'index.html':p.replace(/[^/]*$/,'index.html'); u.search='';u.hash=''; return u.href;
 }
 function goHome(e){if(e){e.preventDefault();e.stopPropagation();} const url=homeUrl(); try{if(parent&&parent!==window)parent.postMessage({type:'axioma:navigate-home',gameId:GAME_ID,url},'*')}catch(_){} try{if(top&&top!==window){top.location.href=url;return}}catch(_){} location.href=url;}
-function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar Axioma';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
+function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar leraarBob';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
-const s=document.querySelector('.top .title small');if(s&&!s.querySelector('.axioma-platform-inline')){const old=s.textContent.trim();s.innerHTML='<span class="axioma-platform-inline">AXIOMA</span> · '+old;wire(s.querySelector('.axioma-platform-inline'))}
+const s=document.querySelector('.top .title small');if(s&&!s.querySelector('.axioma-platform-inline')){const old=s.textContent.trim();s.innerHTML='<span class="axioma-platform-inline">leraarBob</span> · '+old;wire(s.querySelector('.axioma-platform-inline'))}
 
 function sync(){let d={};try{d=JSON.parse(localStorage.getItem('axioma.scaleAssembly.v0.5.progress')||'{}')}catch(_){}const units=[...new Set(Array.isArray(d.completed)?d.completed:[])];emit(units.length,22,(Number.isInteger(d.lastLevel)?d.lastLevel:0)+1);cloudSync(units,22)}sync();addEventListener('scaleassembly:progress',sync);setInterval(sync,1200);
 

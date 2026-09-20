@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  // Publieke browserconfig voor Axioma.
+  // Publieke browserconfig voor leraarBob.
   // De publishable key mag in de frontend staan.
   // Zet hier NOOIT een service_role- of sb_secret_-key.
   window.AXIOMA_CONFIG = Object.freeze({

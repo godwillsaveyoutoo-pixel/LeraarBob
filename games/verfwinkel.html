@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<title>AXIOMA Verfwinkel v0.19.4 — Werktafel Doelhiërarchie</title>
+<title>leraarBob Verfwinkel v0.19.4 — Werktafel Doelhiërarchie</title>
 <style>
 :root{
   /* canonical design tokens */
@@ -255,7 +255,7 @@ body.vf-intro-open .rotate{display:none!important}.vf-intro-open .app{visibility
 </style>
 
 <style id="axiomaHighResolutionScaling">
-/* AXIOMA — high-resolution scaling pass.
+/* leraarBob — high-resolution scaling pass.
    Large landscape displays get proportionally larger vats, worktable,
    controls and level chooser. Mixing/math/game logic remains unchanged. */
 @media (min-width:1000px) and (min-height:560px) and (orientation:landscape){
@@ -1270,7 +1270,7 @@ if(qa.get('qa')==='1'){
   intro.innerHTML=`
     <div class="vf-intro-inner">
       <div class="vf-intro-copy">
-        <div class="vf-kicker">AXIOMA · MENGWERKPLAATS</div>
+        <div class="vf-kicker">leraarBob · MENGWERKPLAATS</div>
         <h1>Verfwinkel<span>verhouding wordt verf</span></h1>
         <p>Meng een bestelling uit echte voorraden. Wat je kiest, stroomt door de machine — en de verhouding moet kloppen.</p>
         <div class="vf-intro-actions">
@@ -1389,9 +1389,9 @@ function homeUrl(){
   u.pathname=i>=0?p.slice(0,i+1)+'index.html':p.replace(/[^/]*$/,'index.html'); u.search='';u.hash=''; return u.href;
 }
 function goHome(e){if(e){e.preventDefault();e.stopPropagation();} const url=homeUrl(); try{if(parent&&parent!==window)parent.postMessage({type:'axioma:navigate-home',gameId:GAME_ID,url},'*')}catch(_){} try{if(top&&top!==window){top.location.href=url;return}}catch(_){} location.href=url;}
-function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar Axioma';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
+function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar leraarBob';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
-const b=document.querySelector('.brandBtn')||document.querySelector('.brand');if(b&&!b.querySelector('.axioma-platform-inline')){const x=document.createElement('span');x.textContent='AXIOMA';x.className='axioma-platform-inline';b.prepend(x);b.insertBefore(document.createTextNode(' · '),x.nextSibling);wire(x)}
+const b=document.querySelector('.brandBtn')||document.querySelector('.brand');if(b&&!b.querySelector('.axioma-platform-inline')){const x=document.createElement('span');x.textContent='leraarBob';x.className='axioma-platform-inline';b.prepend(x);b.insertBefore(document.createTextNode(' · '),x.nextSibling);wire(x)}
 
 function sync(){let d={};try{d=JSON.parse(localStorage.getItem('axioma.verfwinkel.progress.v1')||'{}')}catch(_){}const units=[...new Set(Array.isArray(d.completed)?d.completed:[])];emit(units.length,16,(Number.isInteger(d.lastLevel)?d.lastLevel:0)+1);cloudSync(units,16)}sync();addEventListener('axioma:verf-progress',sync);setInterval(sync,1200);
 

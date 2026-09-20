@@ -1223,7 +1223,7 @@ button{font:inherit;color:inherit;touch-action:manipulation}
   <section class="signal-home" id="signalHome" aria-label="Signal Lab startscherm">
     <div class="signal-home-inner">
       <div class="signal-home-copy">
-        <div class="signal-home-kicker">AXIOMA · FUNCTIES</div>
+        <div class="signal-home-kicker">leraarBob · FUNCTIES</div>
         <h1>Signal<br>Lab</h1>
         <p class="signal-home-lead">Ontdek de verborgen regel. Test slim, bouw de machine en zet je signalen zelf op de grafiek.</p>
         <div class="signal-home-actions">
@@ -1859,9 +1859,9 @@ function homeUrl(){
   u.pathname=i>=0?p.slice(0,i+1)+'index.html':p.replace(/[^/]*$/,'index.html'); u.search='';u.hash=''; return u.href;
 }
 function goHome(e){if(e){e.preventDefault();e.stopPropagation();} const url=homeUrl(); try{if(parent&&parent!==window)parent.postMessage({type:'axioma:navigate-home',gameId:GAME_ID,url},'*')}catch(_){} try{if(top&&top!==window){top.location.href=url;return}}catch(_){} location.href=url;}
-function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar Axioma';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
+function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar leraarBob';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
-const strong=document.querySelector('.topbar .brandtext strong');if(strong&&!strong.querySelector('.axioma-platform-inline')){const old=strong.textContent.trim();strong.innerHTML='<span class="axioma-platform-inline">AXIOMA</span> · '+old;wire(strong.querySelector('.axioma-platform-inline'))}
+const strong=document.querySelector('.topbar .brandtext strong');if(strong&&!strong.querySelector('.axioma-platform-inline')){const old=strong.textContent.trim();strong.innerHTML='<span class="axioma-platform-inline">leraarBob</span> · '+old;wire(strong.querySelector('.axioma-platform-inline'))}
 
 function sync(){let d={};try{d=JSON.parse(localStorage.getItem('signalLab.v0.4.1.progress')||'{}')}catch(_){}const units=[...new Set(Array.isArray(d.completed)?d.completed:[])];const total=Number(document.getElementById('app')?.dataset.levelCount)||12;emit(units.length,total,(Number.isInteger(d.lastLevel)?d.lastLevel:0)+1);cloudSync(units,total)}sync();setInterval(sync,900);
 

@@ -28,7 +28,7 @@
       return 'E-mailadres of wachtwoord klopt niet.';
     }
     if (/permission denied|schema|function/i.test(error?.message || '')) {
-      return 'De login lukte, maar de Axioma-accountcontrole kreeg geen toegang. Gebruik v0.7c of nieuwer.';
+      return 'De login lukte, maar de leraarBob-accountcontrole kreeg geen toegang. Gebruik v0.7c of nieuwer.';
     }
     return 'Inloggen lukt niet. ' + (error?.message ? `Technische melding: ${error.message}` : 'Controleer je gegevens en probeer opnieuw.');
   }
@@ -78,8 +78,8 @@
       return `
         <div class="account-summary">
           <span class="account-role">Leerkracht</span>
-          <strong>${esc(account.email || 'Axioma')}</strong>
-          <p>Je account is gekoppeld aan de centrale Axioma-omgeving.</p>
+          <strong>${esc(account.email || 'leraarBob')}</strong>
+          <p>Je account is gekoppeld aan de centrale leraarBob-omgeving.</p>
         </div>
         <div class="auth-actions">
           <a class="auth-primary" href="teacher/">Open leraarmodus <span>→</span></a>
@@ -91,7 +91,7 @@
         <div class="account-summary">
           <span class="account-role">${esc(account.class_code)}</span>
           <strong>${esc(account.alias)}</strong>
-          <p>Je bent aangemeld voor heel Axioma. Ondersteunde spellen kunnen dezelfde sessie gebruiken.</p>
+          <p>Je bent aangemeld voor heel leraarBob. Ondersteunde spellen kunnen dezelfde sessie gebruiken.</p>
         </div>
         <div class="auth-actions">
           <a class="auth-primary" href="games/rechten/trainer/">Open Rechtentrainer <span>→</span></a>

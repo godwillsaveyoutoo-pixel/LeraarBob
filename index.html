@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#f7f8f4">
-  <meta name="description" content="Ontdek, oefen en speel met wiskunde. Kies een spel of leerpad van Axioma en ga op je eigen tempo aan de slag.">
-  <title>Axioma · Leer. Speel. Begrijp.</title>
+  <meta name="description" content="Ontdek, oefen en speel met wiskunde. Kies een onderdeel van leraarBob en ga op je eigen tempo aan de slag.">
+  <title>leraarBob · Leer. Speel. Begrijp.</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <script>try { document.documentElement.dataset.mode = localStorage.getItem('axioma-mode') === 'dark' ? 'dark' : 'light'; } catch {}</script>
   <link rel="stylesheet" href="css/frontpage.css">
@@ -18,12 +18,12 @@
   <script src="js/frontpage.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#ontdek">Ga naar de spellen</a>
+  <a class="skip-link" href="#ontdek">Ga naar de onderdelen</a>
   <header class="top">
     <div class="topline container">
-      <a class="brand" href="./" aria-label="Axioma, startpagina">
-        <svg class="brand-mark" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="11" fill="currentColor"/><path d="m10 26 8-17 8 17M13 21h10" fill="none" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="10" r="2" fill="#c8d8a8"/></svg>
-        <span>axioma<span class="brand-dot">.</span></span>
+      <a class="brand" href="./" aria-label="leraarBob, startpagina">
+        <svg class="brand-mark" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="11" fill="currentColor"/><path d="M12 26V10h6a4 4 0 0 1 0 8h-6m6 0a4 4 0 0 1 0 8h-6" fill="none" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="10" r="2" fill="#c8d8a8"/></svg>
+        <span>leraarBob<span class="brand-dot">.</span></span>
       </a>
       <span class="brand-caption">Leer. Speel. Begrijp.</span>
       <div class="header-actions">
@@ -31,7 +31,7 @@
           <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 13.4A8.7 8.7 0 0 1 10.6 3.4a8.7 8.7 0 1 0 10 10Z"/></svg>
           <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
         </button>
-        <button id="accountBtn" class="account-link" type="button" title="Axioma-account">
+        <button id="accountBtn" class="account-link" type="button" title="leraarBob-account">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg><span id="accountBtnLabel">Inloggen</span>
         </button>
       </div>
@@ -39,14 +39,14 @@
   </header>
   <main>
     <section id="ontdek" class="library" aria-labelledby="library-title" tabindex="-1">
-      <h1 id="library-title" class="sr-only">Ontdek de spellen</h1>
+      <h1 id="library-title" class="sr-only">Verkennen, oefenen en spelen</h1>
       <div class="browse-bar">
         <div class="browse-inner container">
           <div id="filters" class="filters" role="group" aria-label="Filter op onderwerp"></div>
           <div class="search-wrap" role="search">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg>
-            <label class="sr-only" for="search">Zoek een spel of onderwerp</label>
-            <input id="search" type="search" placeholder="Zoek een spel of onderwerp" autocomplete="off" maxlength="120">
+            <label class="sr-only" for="search">Zoek een onderdeel of onderwerp</label>
+            <input id="search" type="search" placeholder="Zoek een onderdeel of onderwerp" autocomplete="off" maxlength="120">
           </div>
         </div>
       </div>
@@ -55,10 +55,10 @@
         <div id="grid" class="grid"></div>
         <div id="empty" class="empty" hidden>
           <span class="empty-symbol" aria-hidden="true">⌕</span><h3>Even een andere richting?</h3>
-          <p>Geen spellen gevonden. Probeer een ander woord of bekijk alles.</p>
-          <button id="resetFilters" class="reset-button" type="button">Bekijk alle spellen <span aria-hidden="true">→</span></button>
+          <p>Geen onderdelen gevonden. Probeer een ander woord of bekijk alles.</p>
+          <button id="resetFilters" class="reset-button" type="button">Bekijk alle onderdelen <span aria-hidden="true">→</span></button>
         </div>
-        <noscript><p>Open rechtstreeks een onderdeel:</p><ul><li><a href="games/rechten/trainer/">Rechtentrainer</a></li><li><a href="games/rechten/leerpad/">Functies & rechten</a></li><li><a href="games/rechten/brandweer/">Brandweer</a></li><li><a href="games/rechten/kleiduiven/">Kleiduifschieten</a></li><li><a href="games/pythagoras.html?v=20260920-2">Pythagoras</a></li><li><a href="games/stelsels.html?v=20260920-2">Stelsels</a></li><li><a href="games/algebra-smederij.html?v=20260920-2">Algebra Smederij</a></li><li><a href="games/taartenwinkel.html?v=20260920-2">Taartenwinkel</a></li><li><a href="games/kubusbouw.html?v=20260920-2">Kubusbouw</a></li><li><a href="games/verfwinkel.html?v=20260920-2">Verfwinkel</a></li><li><a href="games/data-check.html?v=20260920-2">Data Check</a></li><li><a href="games/signal-lab.html?v=20260920-2">Signal Lab</a></li><li><a href="games/gravity/?v=20260920-2">Gravity Maze</a></li></ul></noscript>
+        <noscript><p>Open rechtstreeks een onderdeel:</p><ul><li><a href="games/rechten/trainer/">Rechtentrainer</a></li><li><a href="games/rechten/leerpad/">Functies & rechten</a></li><li><a href="games/rechten/brandweer/">Brandweer</a></li><li><a href="games/rechten/kleiduiven/">Kleiduifschieten</a></li><li><a href="games/pythagoras.html?v=20260920-3">Pythagoras</a></li><li><a href="games/stelsels.html?v=20260920-2">Stelsels</a></li><li><a href="games/algebra-smederij.html?v=20260920-2">Algebra Smederij</a></li><li><a href="games/taartenwinkel.html?v=20260920-2">Taartenwinkel</a></li><li><a href="games/kubusbouw.html?v=20260920-2">Kubusbouw</a></li><li><a href="games/verfwinkel.html?v=20260920-2">Verfwinkel</a></li><li><a href="games/data-check.html?v=20260920-2">Data Check</a></li><li><a href="games/signal-lab.html?v=20260920-2">Signal Lab</a></li><li><a href="games/gravity/?v=20260920-2">Gravity Maze</a></li></ul></noscript>
       </div>
     </section>
   </main>
@@ -68,7 +68,7 @@
     <section class="auth-sheet" role="dialog" aria-modal="true" aria-labelledby="authTitle">
       <div class="auth-sheet-head">
         <div>
-          <p class="eyebrow">Axioma-account</p>
+          <p class="eyebrow">leraarBob-account</p>
           <h2 id="authTitle">Neem je leerroute mee.</h2>
         </div>
         <button id="authClose" class="auth-close" type="button" aria-label="Sluiten">×</button>

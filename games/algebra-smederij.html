@@ -1043,7 +1043,7 @@ button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
 <div class="rf-home" id="rfHome" aria-label="Algebrasmederij startscherm">
   <div class="rf-home-inner">
     <section class="rf-home-copy">
-      <div class="rf-home-kicker">AXIOMA · ALGEBRA</div>
+      <div class="rf-home-kicker">leraarBob · ALGEBRA</div>
       <h1>Algebra<span>Smederij</span></h1>
       <p class="rf-home-tagline">Herschrijf algebra door de delen zelf te bewegen. Elke stap moet geldig blijven.</p>
       <div class="rf-home-actions">
@@ -2305,9 +2305,9 @@ function homeUrl(){
   u.pathname=i>=0?p.slice(0,i+1)+'index.html':p.replace(/[^/]*$/,'index.html'); u.search='';u.hash=''; return u.href;
 }
 function goHome(e){if(e){e.preventDefault();e.stopPropagation();} const url=homeUrl(); try{if(parent&&parent!==window)parent.postMessage({type:'axioma:navigate-home',gameId:GAME_ID,url},'*')}catch(_){} try{if(top&&top!==window){top.location.href=url;return}}catch(_){} location.href=url;}
-function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar Axioma';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
+function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar leraarBob';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
-document.querySelectorAll('.rf-game-brand .rf-brand-text,.rf-menu-brand .rf-brand-text').forEach(host=>{if(host.querySelector('.axioma-platform-inline'))return;const old=host.textContent.trim();host.innerHTML='<span class="axioma-platform-inline">AXIOMA</span> · '+old;wire(host.querySelector('.axioma-platform-inline'))})
+document.querySelectorAll('.rf-game-brand .rf-brand-text,.rf-menu-brand .rf-brand-text').forEach(host=>{if(host.querySelector('.axioma-platform-inline'))return;const old=host.textContent.trim();host.innerHTML='<span class="axioma-platform-inline">leraarBob</span> · '+old;wire(host.querySelector('.axioma-platform-inline'))})
 
 function read(){for(const k of ['rf22_done','rf21_done','rf20_done','rf19_done','rf18_done','rf17_done','rf16_done','rf15_done','rf14_done']){try{const v=localStorage.getItem(k);if(v!=null){const a=JSON.parse(v);if(Array.isArray(a))return a}}catch(_){}}return []}
 function sync(){const a=[...new Set(read())],total=window.RF22?.challenges?.length||0;emit(a.length,total,null);cloudSync(a,total)} sync();setInterval(sync,900);

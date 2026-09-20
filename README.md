@@ -1,4 +1,13 @@
-# Axioma site starter
+# leraarBob site starter
+
+De zichtbare platformnaam is **leraarBob**. Technische `Axioma*`-API's,
+`axioma-*`-bestandsnamen, opslagsleutels, leerling-loginadressen en databasetabellen
+blijven compatibel met bestaande accounts, integraties en opgeslagen voortgang.
+
+De catalogus gebruikt `kind` voor de werkvorm op de startpagina: `learn` = Verkennen,
+`train` = Oefenen, `game` / `arcade` = Spelen. Onderwerpfilters gebruiken `theme`.
+`gameType` en `progressType` beschrijven de bestaande registratie en voortgang.
+Werk zowel `games.json` als de offlinekopie `js/catalog.js` bij als de catalogus wijzigt.
 
 ## Structuur
 - `index.html` = frontpage
@@ -57,9 +66,9 @@ Voorbeeld in `games.json`:
 ```
 
 
-## v0.5 — Centrale Axioma-auth
+## v0.5 — Centrale leraarBob-auth
 
-De Supabase-login hoort nu bij **Axioma zelf**, niet meer bij één specifiek spel.
+De Supabase-login hoort nu bij **leraarBob zelf**, niet meer bij één specifiek spel.
 
 Centrale bestanden:
 
@@ -81,9 +90,9 @@ teacher/
 ```
 
 Die pagina toont voorlopig de bestaande Rechtentrainer-resultaten. Nieuwe spellen
-kunnen later als extra databronnen aan hetzelfde Axioma-dashboard worden toegevoegd.
+kunnen later als extra databronnen aan hetzelfde leraarBob-dashboard worden toegevoegd.
 
-### Nieuw spel met Axioma-login
+### Nieuw spel met leraarBob-login
 
 Laad vanaf het spel de gedeelde bestanden (pas het relatieve pad aan):
 
@@ -114,7 +123,7 @@ axioma_games
 axioma_game_progress
 ```
 
-`axioma_games` registreert welke spellen bij Axioma horen en hoe ze in de leraarsconsole behandeld worden.
+`axioma_games` registreert welke spellen bij leraarBob horen en hoe ze in de leraarsconsole behandeld worden.
 
 `axioma_game_progress` bewaart generieke voortgang per leerling + spel.
 
@@ -194,14 +203,14 @@ De frontpage vermeldt per tegel subtiel of voortgang wordt bewaard.
 Games blijven zonder account volledig speelbaar; `AxiomaProgress.completeUnit()` doet dan niets.
 
 
-## v0.7b — Axioma is altijd Home
+## v0.7b — leraarBob is altijd Home
 
-In elk opgenomen spel is het zichtbare **AXIOMA**-merk linksboven nu een vaste home-link.
+In elk opgenomen spel is het zichtbare **leraarBob**-merk linksboven nu een vaste home-link.
 
-- spellen in `games/rechten/...` gaan via `../../../` terug naar de Axioma-startpagina;
-- `games/stelsels/` gaat via `../../` terug naar de Axioma-startpagina.
+- spellen in `games/rechten/...` gaan via `../../../` terug naar de leraarBob-startpagina;
+- `games/stelsels/` gaat via `../../` terug naar de leraarBob-startpagina.
 
-Regel voor toekomstige spellen: **klik op AXIOMA = altijd terug naar Axioma Home**.
+Regel voor toekomstige spellen: **klik op leraarBob = altijd terug naar leraarBob Home**.
 
 
 ## v0.7c — Login fix

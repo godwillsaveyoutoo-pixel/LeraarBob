@@ -191,14 +191,14 @@ function exportCSV(){
     ...list.map(r=>[r.alias,r.class_code,...visibleGames.map(g=>summaryFor(r,g).label)])
   ];
   const url=URL.createObjectURL(new Blob(['\uFEFF'+rows.map(r=>r.map(csvCell).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}));
-  const a=document.createElement('a');a.href=url;a.download='axioma-overzicht.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const a=document.createElement('a');a.href=url;a.download='leraarBob-overzicht.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
 async function init(){
   try{
     const ready=await window.AxiomaAuth.ready();account=ready.account;sb=window.AxiomaAuth.client();
     if(account?.role!=='teacher'){
-      $('app').innerHTML='<div class="state"><h2>Leerkrachtlogin nodig.</h2><p>Meld je aan via de centrale Axioma-login.</p><a class="btn primary" href="../?login=1&return=teacher/">Naar Axioma-login</a></div>';
+      $('app').innerHTML='<div class="state"><h2>Leerkrachtlogin nodig.</h2><p>Meld je aan via de centrale leraarBob-login.</p><a class="btn primary" href="../?login=1&return=teacher/">Naar leraarBob-login</a></div>';
       $('teacherIdentity').textContent='';
       return;
     }

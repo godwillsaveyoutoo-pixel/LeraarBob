@@ -22,7 +22,7 @@
 
   function getClient() {
     if (client) return client;
-    if (!configured()) throw new Error('Axioma is nog niet aan Supabase gekoppeld.');
+    if (!configured()) throw new Error('leraarBob is nog niet aan Supabase gekoppeld.');
     if (!window.supabase?.createClient) throw new Error('De Supabase-browserbibliotheek is niet geladen.');
 
     const cfg = config();
@@ -133,7 +133,7 @@
         // Do not perform follow-up Supabase calls synchronously inside the callback.
         setTimeout(() => {
           resolveAccount(session).catch(error => {
-            console.error('Axioma auth refresh:', error);
+            console.error('leraarBob auth refresh:', error);
           });
         }, 0);
       });

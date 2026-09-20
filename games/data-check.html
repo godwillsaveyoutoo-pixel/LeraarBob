@@ -798,7 +798,7 @@ button:focus-visible{outline:3px solid #2d72d2;outline-offset:-3px}
   <section id="home" class="homeScreen" aria-label="Data Check startscherm">
     <div class="homeInner">
       <div class="homeCopy">
-        <div class="homeKicker">AXIOMA · DATAWIJSHEID</div>
+        <div class="homeKicker">leraarBob · DATAWIJSHEID</div>
         <h1>Data<br><span>Check</span></h1>
         <p class="homeLead">Check wat de data echt vertellen. Onderzoek uitschieters, misleidende grafieken en ontbrekende gegevens.</p>
         <div class="homeActions">
@@ -1732,9 +1732,9 @@ function homeUrl(){
   u.pathname=i>=0?p.slice(0,i+1)+'index.html':p.replace(/[^/]*$/,'index.html'); u.search='';u.hash=''; return u.href;
 }
 function goHome(e){if(e){e.preventDefault();e.stopPropagation();} const url=homeUrl(); try{if(parent&&parent!==window)parent.postMessage({type:'axioma:navigate-home',gameId:GAME_ID,url},'*')}catch(_){} try{if(top&&top!==window){top.location.href=url;return}}catch(_){} location.href=url;}
-function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar Axioma';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
+function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar leraarBob';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
-const bt=document.querySelector('.topbar .brand');if(bt){const txt=bt.querySelector('.brandText');if(txt&&!txt.querySelector('.axioma-platform-inline')){txt.innerHTML='<span class="axioma-platform-inline">AXIOMA</span> · Data Check';wire(txt.querySelector('.axioma-platform-inline'))}}
+const bt=document.querySelector('.topbar .brand');if(bt){const txt=bt.querySelector('.brandText');if(txt&&!txt.querySelector('.axioma-platform-inline')){txt.innerHTML='<span class="axioma-platform-inline">leraarBob</span> · Data Check';wire(txt.querySelector('.axioma-platform-inline'))}}
 
 function sync(){let a=[];try{a=JSON.parse(localStorage.getItem('evidenceDeskCompletedV06')||'[]')}catch(_){}if(!Array.isArray(a))a=[];let m={};try{m=JSON.parse(localStorage.getItem('evidenceDeskMetaV06')||'{}')}catch(_){}const units=a.map((v,i)=>v?i+1:null).filter(Boolean);emit(units.length,22,(Number.isInteger(m.lastLevel)?m.lastLevel:0)+1);cloudSync(units,22)}sync();setInterval(sync,900);
 

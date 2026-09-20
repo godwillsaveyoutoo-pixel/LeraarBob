@@ -1,4 +1,4 @@
-/* AXIOMA simple game bridge — include once in the platform shell. */
+/* leraarBob simple game bridge — include once in the platform shell. */
 (()=>{
   'use strict';
   const IDS=['pythagoras','stelsels','algebra-smederij','taartenwinkel','kubusbouw','verfwinkel','data-check','signal-lab','gravity-maze'];
