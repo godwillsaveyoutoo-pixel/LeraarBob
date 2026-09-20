@@ -103,3 +103,61 @@ const { account } = await AxiomaAuth.ready();
 (`role: "teacher"`).
 
 Voor toekomstige games hoeft de Supabase URL/key dus niet opnieuw gekopieerd te worden.
+
+
+## v0.6 — Spelregister + generieke voortgang
+
+Supabase bevat nu twee extra centrale onderdelen:
+
+```text
+axioma_games
+axioma_game_progress
+```
+
+`axioma_games` registreert welke spellen bij Axioma horen en hoe ze in de leraarsconsole behandeld worden.
+
+`axioma_game_progress` bewaart generieke voortgang per leerling + spel.
+
+De bestaande Rechtentrainer blijft bewust zijn gespecialiseerde `axioma_progress` gebruiken.
+
+Een nieuw spel gebruikt:
+
+```html
+<script src="../../shared/vendor/supabase.js"></script>
+<script src="../../shared/supabase-config.js"></script>
+<script src="../../shared/axioma-auth.js"></script>
+<script src="../../shared/axioma-progress.js"></script>
+```
+
+Voorbeeld:
+
+```js
+const GAME_ID = "pythagoras";
+
+const current = await AxiomaProgress.load(GAME_ID);
+
+const result = await AxiomaProgress.save(
+  GAME_ID,
+  {
+    completed: [1,2,3],
+    totalLevels: 10,
+    correct: 18,
+    total: 22
+  },
+  current.revision
+);
+```
+
+De leraarsconsole haalt het spelregister uit Supabase en toont geregistreerde spellen automatisch als kolommen/kaarten.
+Een spel krijgt pas leerlingdata zodra het zelf `AxiomaProgress.save(...)` aanroept.
+
+
+## v0.6b — Teacher login race fix
+
+Opgelost: bij een leerkrachtlogin kon `SIGNED_IN` tegelijk met de expliciete logincontrole
+een tweede account-resolutie starten. Daardoor kon de eerste controle tijdelijk `null`
+terugkrijgen en ten onrechte melden dat het account geen leerkrachtrechten had.
+
+De accountresolver accepteert nu gelijktijdige controles voor dezelfde sessie en verwerpt
+alleen echt verouderde resultaten (bijvoorbeeld na uitloggen). De teacherlogin leest
+daarnaast de actieve sessie opnieuw uit vóór de rolcontrole.

@@ -9,7 +9,6 @@
   let readyPromise = null;
   let currentSession = null;
   let currentAccount = null;
-  let generation = 0;
   const listeners = new Set();
 
   function config() {
@@ -62,12 +61,12 @@
     window.dispatchEvent(new CustomEvent('axioma:auth', { detail }));
   }
 
-  async function resolveAccount(session, token = ++generation) {
+  async function resolveAccount(session) {
     currentSession = session || null;
 
     if (!session?.user?.id) {
       currentAccount = null;
-      if (token === generation) emit();
+      emit();
       return null;
     }
 
@@ -83,11 +82,15 @@
           .maybeSingle()
       ]);
 
-    if (token !== generation) return currentAccount;
     if (teacherError) throw teacherError;
     if (profileError) throw profileError;
 
-    if (isTeacher) {
+    // A second auth event for the same user may arrive while these queries run.
+    // That is harmless. But if the user signed out or another session replaced it,
+    // never let an older request restore stale account state.
+    if (currentSession?.user?.id !== userId) return currentAccount;
+
+    if (isTeacher === true) {
       currentAccount = Object.freeze({
         id: userId,
         role: 'teacher',
@@ -160,12 +163,18 @@
 
   async function signInTeacher(email, password) {
     const sb = getClient();
-    const { data, error } = await sb.auth.signInWithPassword({
+    const { error } = await sb.auth.signInWithPassword({
       email: String(email || '').trim(),
       password
     });
     if (error) throw error;
-    const account = await resolveAccount(data.session);
+
+    // Read the session back from the shared client. This avoids a race with
+    // Supabase's SIGNED_IN callback and guarantees the RPC uses the active JWT.
+    const { data: sessionData, error: sessionError } = await sb.auth.getSession();
+    if (sessionError) throw sessionError;
+
+    const account = await resolveAccount(sessionData.session);
     if (account?.role !== 'teacher') {
       await sb.auth.signOut({ scope: 'local' });
       await resolveAccount(null);

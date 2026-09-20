@@ -9,7 +9,11 @@
     "theme": "Functies",
     "art": "trainer",
     "cover": "assets/covers/trainer.svg",
-    "detail": "Met voortgang"
+    "detail": "Met voortgang",
+    "id": "rechten-trainer",
+    "progressType": "trainer",
+    "teacherVisible": true,
+    "gameType": "train"
   },
   {
     "title": "Functies & rechten",
@@ -21,7 +25,11 @@
     "theme": "Functies",
     "art": "graph",
     "cover": "assets/covers/graph.svg",
-    "detail": "Op jouw tempo"
+    "detail": "Op jouw tempo",
+    "id": "functies-rechten",
+    "progressType": "levels",
+    "teacherVisible": true,
+    "gameType": "learn"
   },
   {
     "title": "Brandweer",
@@ -33,7 +41,11 @@
     "theme": "Functies",
     "art": "fire",
     "cover": "assets/covers/fire.svg",
-    "detail": "Leren in actie"
+    "detail": "Leren in actie",
+    "id": "brandweer",
+    "progressType": "levels",
+    "teacherVisible": true,
+    "gameType": "game"
   },
   {
     "title": "Kleiduifschieten",
@@ -45,7 +57,11 @@
     "theme": "Functies",
     "art": "clay",
     "cover": "assets/covers/clay.svg",
-    "detail": "Samen spelen"
+    "detail": "Samen spelen",
+    "id": "kleiduifschieten",
+    "progressType": "score",
+    "teacherVisible": true,
+    "gameType": "arcade"
   },
   {
     "title": "Stelsels",
@@ -57,6 +73,10 @@
     "theme": "Algebra",
     "art": "systems",
     "cover": "assets/covers/systems.svg",
-    "detail": "Stap voor stap"
+    "detail": "Stap voor stap",
+    "id": "stelsels",
+    "progressType": "levels",
+    "teacherVisible": true,
+    "gameType": "learn"
   }
 ]
