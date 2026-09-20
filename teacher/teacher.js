@@ -80,7 +80,7 @@ function renderShell(){
     <div class="toolbar">
       <label>Klas<select id="classFilter"><option value="">Alle klassen</option>${CLASSES.map(c=>`<option ${c===classFilter?'selected':''}>${c}</option>`).join('')}</select></label>
       <label>Thema<select id="themeFilter"><option value="">Alle thema's</option>${themes.map(t=>`<option ${t===themeFilter?'selected':''}>${esc(t)}</option>`).join('')}</select></label>
-      <label>Spel<select id="gameFilter"><option value="">Alle spellen</option>${games.filter(g=>g.teacher_visible).map(g=>`<option value="${esc(g.id)}" ${g.id===gameFilter?'selected':''}>${esc(g.title)}</option>`).join('')}</select></label>
+      <label>Onderdeel<select id="gameFilter"><option value="">Alle onderdelen</option>${games.filter(g=>g.teacher_visible).map(g=>`<option value="${esc(g.id)}" ${g.id===gameFilter?'selected':''}>${esc(g.title)}</option>`).join('')}</select></label>
       <label class="wide">Zoek alias<input id="searchStudent" type="search" value="${esc(query)}" placeholder="Zoek een leerling"></label>
       <button id="refresh" class="btn" type="button">Vernieuwen</button>
       <button id="export" class="btn" type="button">CSV</button>
@@ -118,7 +118,7 @@ function draw(){
   const list=filteredStudents(),visibleGames=filteredGames();
   if(!$('matrix')) return;
   drawRegistry();
-  $('summary').textContent=`${list.length} ${list.length===1?'leerling':'leerlingen'} · ${visibleGames.length} ${visibleGames.length===1?'spel':'spellen'} in beeld`;
+  $('summary').textContent=`${list.length} ${list.length===1?'leerling':'leerlingen'} · ${visibleGames.length} ${visibleGames.length===1?'onderdeel':'onderdelen'} in beeld`;
 
   $('matrix').innerHTML=`
     <table class="matrixTable">
@@ -154,7 +154,7 @@ function gameDetail(row,g){
     </article>`;
   }
   const p=genericFor(row.user_id,g.id);
-  if(!p) return `<article class="gameDetailCard"><div class="gameDetailHead"><div><p class="eyebrow">${esc(g.theme)} · ${esc(g.progress_type)}</p><h3>${esc(g.title)}</h3></div><strong>—</strong></div><p class="summary">Nog geen cloudvoortgang voor dit spel.</p></article>`;
+  if(!p) return `<article class="gameDetailCard"><div class="gameDetailHead"><div><p class="eyebrow">${esc(g.theme)} · ${esc(g.progress_type)}</p><h3>${esc(g.title)}</h3></div><strong>—</strong></div><p class="summary">Nog geen cloudvoortgang voor dit onderdeel.</p></article>`;
   return `<article class="gameDetailCard">
     <div class="gameDetailHead"><div><p class="eyebrow">${esc(g.theme)} · ${esc(g.progress_type)}</p><h3>${esc(g.title)}</h3></div><strong>${esc(summaryFor(row,g).label)}</strong></div>
     <p class="summary">Laatst opgeslagen: ${esc(new Date(p.updated_at).toLocaleString('nl-BE'))}</p>

@@ -91,7 +91,7 @@
         <div class="account-summary">
           <span class="account-role">${esc(account.class_code)}</span>
           <strong>${esc(account.alias)}</strong>
-          <p>Je bent aangemeld voor heel leraarBob. Ondersteunde spellen kunnen dezelfde sessie gebruiken.</p>
+          <p>Je bent aangemeld voor heel leraarBob. Ondersteunde onderdelen kunnen dezelfde sessie gebruiken.</p>
         </div>
         <div class="auth-actions">
           <a class="auth-primary" href="games/rechten/trainer/">Open Rechtentrainer <span>→</span></a>
