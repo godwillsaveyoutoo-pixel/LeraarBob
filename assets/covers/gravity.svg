@@ -1,1 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300"><rect width="600" height="300" rx="28" fill="#11131c"/><circle cx="520" cy="54" r="90" fill="#8a7ee8" opacity=".12"/><rect x="150" y="72" width="300" height="156" rx="28" fill="none" stroke="#646c86" stroke-width="10"/><path d="M230 115v72M230 187l-24-24M230 187l24-24" stroke="#fff" stroke-width="12" stroke-linecap="round"/><ellipse cx="375" cy="150" rx="38" ry="62" fill="none" stroke="#8a7ee8" stroke-width="14"/><rect x="282" y="172" width="52" height="52" fill="#c1a878"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" fill="none">
+  <defs><pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" stroke="#405040" stroke-opacity=".05"/></pattern></defs>
+  <rect width="600" height="300" fill="#ede9f3"/><rect width="600" height="300" fill="url(#grid)"/>
+  <circle cx="305" cy="143" r="108" fill="#e1d9ec"/>
+  <g font-family="Georgia,serif">
+  <g transform="rotate(-4 300 148)">
+    <rect x="155" y="55" width="300" height="203" rx="13" fill="#776094" opacity=".12"/><rect x="147" y="46" width="300" height="203" rx="13" fill="#f9f7fc"/>
+    <rect x="164" y="63" width="266" height="169" rx="6" fill="#eee9f3"/>
+    <path d="M187 87h70v53h63v-30h87M186 208h90v-34m36 34h95v-57" stroke="#b6aac8" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M187 83h70m0 53h63m0-30h87M186 204h90m36 0h95" stroke="#d3c9e0" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="188" cy="158" rx="13" ry="29" fill="#dce8e5" stroke="#7b9e98" stroke-width="4"/>
+    <ellipse cx="394" cy="76" rx="13" ry="29" fill="#e1d9ec" stroke="#8773a7" stroke-width="4"/>
+    <rect x="283" y="77" width="31" height="31" rx="4" fill="#c5ab7f"/><path d="M288 82h21v21" stroke="#e5d5b7" stroke-width="2" stroke-linecap="round"/>
+    <path d="M298 114v55m-7-7 7 7 7-7" stroke="#9c8bac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5"/>
+    <circle cx="344" cy="191" r="9" fill="#8773a7"/><circle cx="341" cy="188" r="2.5" fill="#e9e0f2"/>
+  </g>
+  <g transform="translate(108 176) rotate(-6)"><rect width="47" height="58" rx="10" fill="#8773a7"/><path d="M24 13v31m-9-9 9 9 9-9" stroke="#f9f7fc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+  </g>
+</svg>
