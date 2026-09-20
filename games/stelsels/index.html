@@ -705,6 +705,10 @@ body.is-dragging{user-select:none}
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="../../shared/vendor/supabase.js"></script>
+<script src="../../shared/supabase-config.js"></script>
+<script src="../../shared/axioma-auth.js"></script>
+<script src="../../shared/axioma-progress.js"></script>
 <script>
 (()=>{
 'use strict';
@@ -797,6 +801,16 @@ const EXERCISES=RAW_EXERCISES.map(raw=>{
   return {id:raw.id,eq,info:analyzeSystem(eq)}
 });
 let exerciseIndex=0,method='graphic',studyMode='beginner',state=null,history=[],graphObserver=null,tapMove=null;
+const AXIOMA_GAME_ID='stelsels';
+const axiomaTrackedExercises=new Set();
+function trackSolvedExercise(){
+  if(!state?.solved)return;
+  const unit=String(ex()?.id ?? (exerciseIndex+1));
+  if(axiomaTrackedExercises.has(unit))return;
+  axiomaTrackedExercises.add(unit);
+  window.AxiomaProgress?.completeUnit(AXIOMA_GAME_ID,unit,EXERCISES.length).catch(()=>{axiomaTrackedExercises.delete(unit)});
+}
+
 const ex=()=>EXERCISES[exerciseIndex],equations=()=>ex().eq,info=()=>ex().info,sol=()=>info().solution;
 
 /* ---------- formatting ---------- */
@@ -905,6 +919,7 @@ function render(){
     showToast(err.message||'Onverwachte fout',true)
   }
   undoBtn.disabled=!history.length
+  trackSolvedExercise()
 }
 
 

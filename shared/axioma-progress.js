@@ -72,6 +72,34 @@ async function saveLatest(gameId,state){
   return result;
 }
 
+async function completeUnit(gameId,unitId,total){
+  const id=validateGameId(gameId);
+  const unit=String(unitId);
+  const totalCount=Math.max(1,Number(total)||1);
+
+  // Games remain fully playable without an account.
+  const account=await window.AxiomaAuth.getAccount();
+  if(account?.role!=='student') return {status:'guest'};
+
+  for(let attempt=0;attempt<2;attempt++){
+    const current=await load(id);
+    const oldState=(current.state && typeof current.state==='object') ? current.state : {};
+    const completed=new Set(Array.isArray(oldState.completed) ? oldState.completed.map(String) : []);
+    completed.add(unit);
+
+    const nextState={
+      ...oldState,
+      completed:Array.from(completed),
+      total:totalCount,
+      finished:completed.size>=totalCount
+    };
+
+    const result=await save(id,nextState,current.revision);
+    if(result?.status!=='conflict') return result;
+  }
+  return {status:'conflict'};
+}
+
 async function listGames(){
   const sb=client();
   const {data,error}=await sb.from('axioma_games')
@@ -86,6 +114,7 @@ window.AxiomaProgress=Object.freeze({
   load,
   save,
   saveLatest,
+  completeUnit,
   listGames
 });
 })();

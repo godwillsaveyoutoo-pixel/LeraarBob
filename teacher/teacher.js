@@ -46,9 +46,12 @@ function genericSummary(p,game){
   if(game.progress_type==='levels'){
     const done=Array.isArray(s.completed)?s.completed.length:num(s.completed);
     const total=num(s.totalLevels||s.total||s.levelCount);
+    const singular=game.metadata?.unit_singular||'onderdeel';
+    const plural=game.metadata?.unit_plural||'onderdelen';
+    const unit=done===1?singular:plural;
     return {
       label: total ? `${done}/${total}` : done ? `${done} klaar` : 'Actief',
-      detail: total ? `${Math.round(100*done/Math.max(total,1))}% voltooid` : 'Voortgang opgeslagen',
+      detail: done ? `${done} ${unit} voltooid` : 'Nog niet voltooid',
       value: total ? done/Math.max(total,1) : 0
     };
   }

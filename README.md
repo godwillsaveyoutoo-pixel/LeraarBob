@@ -161,3 +161,34 @@ terugkrijgen en ten onrechte melden dat het account geen leerkrachtrechten had.
 De accountresolver accepteert nu gelijktijdige controles voor dezelfde sessie en verwerpt
 alleen echt verouderde resultaten (bijvoorbeeld na uitloggen). De teacherlogin leest
 daarnaast de actieve sessie opnieuw uit vóór de rolcontrole.
+
+
+## v0.6c — Teacher role via één account-RPC
+
+De centrale auth gebruikt nu niet langer twee losse requests (`axioma_is_teacher` + `axioma_profiles`)
+om een accountrol te bepalen. In plaats daarvan wordt één RPC gebruikt:
+
+```text
+axioma_account()
+```
+
+Die bepaalt server-side, binnen dezelfde JWT-context, of de huidige gebruiker:
+- `teacher`
+- `student`
+- of `unknown`
+
+is. Dit vermijdt timing/rolproblemen tussen afzonderlijke browserrequests.
+
+
+## v0.7 — Basisvoortgang in gewone spellen
+
+Drie spellen schrijven nu bewust slechts minimale voortgang weg:
+
+- **Brandweer**: welke reddingslevels minstens één keer voltooid zijn.
+- **Kleiduifschieten**: of de volledige reeks van zeven richtingen minstens één keer is afgewerkt.
+- **Stelsels**: welke oefeningen opgelost zijn, ongeacht methode (grafisch/substitutie/combinatie) of beginner/expert.
+- **Rechtentrainer**: behoudt zijn bestaande rijke leerdata.
+- **Functies & rechten**: voorlopig geen cloudopslag en dus niet in de leraarsconsole.
+
+De frontpage vermeldt per tegel subtiel of voortgang wordt bewaard.
+Games blijven zonder account volledig speelbaar; `AxiomaProgress.completeUnit()` doet dan niets.

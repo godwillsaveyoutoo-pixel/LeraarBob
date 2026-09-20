@@ -73,44 +73,17 @@
     const sb = getClient();
     const userId = session.user.id;
 
-    const [{ data: isTeacher, error: teacherError }, { data: profile, error: profileError }] =
-      await Promise.all([
-        sb.rpc('axioma_is_teacher'),
-        sb.from('axioma_profiles')
-          .select('user_id,alias,class_code')
-          .eq('user_id', userId)
-          .maybeSingle()
-      ]);
+    const { data: context, error } = await sb.rpc('axioma_account');
+    if (error) throw error;
 
-    if (teacherError) throw teacherError;
-    if (profileError) throw profileError;
-
-    // A second auth event for the same user may arrive while these queries run.
-    // That is harmless. But if the user signed out or another session replaced it,
-    // never let an older request restore stale account state.
+    // Ignore stale responses after logout/session replacement.
     if (currentSession?.user?.id !== userId) return currentAccount;
 
-    if (isTeacher === true) {
-      currentAccount = Object.freeze({
-        id: userId,
-        role: 'teacher',
-        email: session.user.email || ''
-      });
-    } else if (profile) {
-      currentAccount = Object.freeze({
-        id: userId,
-        role: 'student',
-        alias: profile.alias,
-        class_code: profile.class_code
-      });
-    } else {
-      currentAccount = Object.freeze({
-        id: userId,
-        role: 'unknown',
-        email: session.user.email || ''
-      });
+    if (!context || context.id !== userId) {
+      throw new Error('De accountcontrole gaf geen geldige gebruiker terug.');
     }
 
+    currentAccount = Object.freeze(context);
     emit();
     return currentAccount;
   }

@@ -220,6 +220,10 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 <div class="rotate"><div><strong>Draai je toestel.</strong><p>Kleiduifschieten gebruikt een landscape speelveld.</p></div></div>
 </div>
 
+<script src="../../../shared/vendor/supabase.js"></script>
+<script src="../../../shared/supabase-config.js"></script>
+<script src="../../../shared/axioma-auth.js"></script>
+<script src="../../../shared/axioma-progress.js"></script>
 <script>
 (()=>{
 'use strict';
@@ -236,6 +240,14 @@ const rounds=[
 const STORE='axioma.rechten.kleiduiven.standalone.v12';
 const SHOT_MS=320,GAP_MS=400;
 let speed=5,duration=5,queue=[],retry=[],mastered=new Set(),attempt=null,roundNo=1,state='lobby';
+const AXIOMA_GAME_ID='kleiduifschieten';
+let axiomaSeriesTracked=false;
+function trackAxiomaSeries(){
+  if(axiomaSeriesTracked)return;
+  axiomaSeriesTracked=true;
+  window.AxiomaProgress?.completeUnit(AXIOMA_GAME_ID,'reeks',1).catch(()=>{axiomaSeriesTracked=false});
+}
+
 let misses=0,shots=0,started=0,elapsed=0,runId='',team='Duo 1',selected=null,busy=false;
 let raf=0,lastHud=0,barrelAngle=-45,wantedAngle=-45,particles=[],impactAt=0,muted=false,audio=null,persistent=true,history=[];
 const reduced=matchMedia('(prefers-reduced-motion:reduce)');
@@ -358,7 +370,7 @@ function startGame(){
 }
 function finish(){
   if(state==='done'||mastered.size!==7)return;state='done';cancelAnimationFrame(raf);started=0;attempt=null;busy=true;$('total').textContent=clockText(elapsed);
-  saveResult();$('resultName').textContent=team+' · alles geraakt.';$('finalTime').textContent=clockText(elapsed);$('resultStats').textContent=`${shots} schoten · ${misses} ${misses===1?'misser':'missers'} · ${roundNo===1?'zonder herkansing':(roundNo-1)+' '+(roundNo===2?'herkansing':'herkansingen')}`;
+  saveResult();trackAxiomaSeries();$('resultName').textContent=team+' · alles geraakt.';$('finalTime').textContent=clockText(elapsed);$('resultStats').textContent=`${shots} schoten · ${misses} ${misses===1?'misser':'missers'} · ${roundNo===1?'zonder herkansing':(roundNo-1)+' '+(roundNo===2?'herkansing':'herkansingen')}`;
   showTimes();$('results').hidden=false
 }
 function readHistory(){try{const x=JSON.parse(localStorage.getItem(STORE)||'[]');if(Array.isArray(x))history=x.filter(r=>r&&typeof r.name==='string'&&Number.isFinite(r.ms)&&[3,5,8].includes(r.tempo)).slice(-100)}catch{persistent=false}}

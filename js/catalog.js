@@ -1,4 +1,3 @@
-// Offline fallback; regenerate from games.json (see README).
 window.AXIOMA_CATALOG = [
   {
     "title": "Rechtentrainer",
@@ -10,7 +9,12 @@ window.AXIOMA_CATALOG = [
     "theme": "Functies",
     "art": "trainer",
     "cover": "assets/covers/trainer.svg",
-    "detail": "Met voortgang"
+    "detail": "Leervoortgang bewaard",
+    "id": "rechten-trainer",
+    "progressType": "trainer",
+    "teacherVisible": true,
+    "gameType": "train",
+    "tracking": "learning"
   },
   {
     "title": "Functies & rechten",
@@ -22,7 +26,12 @@ window.AXIOMA_CATALOG = [
     "theme": "Functies",
     "art": "graph",
     "cover": "assets/covers/graph.svg",
-    "detail": "Op jouw tempo"
+    "detail": "Speel zonder opslag",
+    "id": "functies-rechten",
+    "progressType": "none",
+    "teacherVisible": false,
+    "gameType": "learn",
+    "tracking": "none"
   },
   {
     "title": "Brandweer",
@@ -34,7 +43,12 @@ window.AXIOMA_CATALOG = [
     "theme": "Functies",
     "art": "fire",
     "cover": "assets/covers/fire.svg",
-    "detail": "Leren in actie"
+    "detail": "Voortgang bewaard",
+    "id": "brandweer",
+    "progressType": "levels",
+    "teacherVisible": true,
+    "gameType": "game",
+    "tracking": "progress"
   },
   {
     "title": "Kleiduifschieten",
@@ -46,7 +60,12 @@ window.AXIOMA_CATALOG = [
     "theme": "Functies",
     "art": "clay",
     "cover": "assets/covers/clay.svg",
-    "detail": "Samen spelen"
+    "detail": "Reeks bewaard",
+    "id": "kleiduifschieten",
+    "progressType": "levels",
+    "teacherVisible": true,
+    "gameType": "arcade",
+    "tracking": "progress"
   },
   {
     "title": "Stelsels",
@@ -58,6 +77,11 @@ window.AXIOMA_CATALOG = [
     "theme": "Algebra",
     "art": "systems",
     "cover": "assets/covers/systems.svg",
-    "detail": "Stap voor stap"
+    "detail": "Voortgang bewaard",
+    "id": "stelsels",
+    "progressType": "levels",
+    "teacherVisible": true,
+    "gameType": "learn",
+    "tracking": "progress"
   }
 ];
