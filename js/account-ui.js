@@ -23,9 +23,14 @@
     if (action === 'register') return error?.message?.startsWith('Dit account vraagt')
       ? error.message
       : 'Registreren lukt niet. De alias kan al bezet zijn.';
-    return error?.message?.startsWith('Dit account heeft geen')
-      ? error.message
-      : 'Inloggen lukt niet. Controleer je gegevens en probeer opnieuw.';
+    if (error?.message?.startsWith('Dit account heeft geen')) return error.message;
+    if (error?.code === 'invalid_credentials' || /invalid login credentials/i.test(error?.message || '')) {
+      return 'E-mailadres of wachtwoord klopt niet.';
+    }
+    if (/permission denied|schema|function/i.test(error?.message || '')) {
+      return 'De login lukte, maar de Axioma-accountcontrole kreeg geen toegang. Gebruik v0.7c of nieuwer.';
+    }
+    return 'Inloggen lukt niet. ' + (error?.message ? `Technische melding: ${error.message}` : 'Controleer je gegevens en probeer opnieuw.');
   }
 
   function safeReturnPath() {

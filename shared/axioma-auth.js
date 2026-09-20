@@ -73,17 +73,42 @@
     const sb = getClient();
     const userId = session.user.id;
 
-    const { data: context, error } = await sb.rpc('axioma_account');
-    if (error) throw error;
+    // Use the two proven existing endpoints instead of the newer axioma_account()
+    // wrapper. Concurrent checks for the same session are harmless.
+    const { data: isTeacher, error: teacherError } = await sb.rpc('axioma_is_teacher');
+    if (teacherError) throw teacherError;
 
-    // Ignore stale responses after logout/session replacement.
+    const { data: profile, error: profileError } = await sb
+      .from('axioma_profiles')
+      .select('user_id,alias,class_code')
+      .eq('user_id', userId)
+      .maybeSingle();
+    if (profileError) throw profileError;
+
+    // Never let a late request restore an account after logout/session replacement.
     if (currentSession?.user?.id !== userId) return currentAccount;
 
-    if (!context || context.id !== userId) {
-      throw new Error('De accountcontrole gaf geen geldige gebruiker terug.');
+    if (isTeacher === true) {
+      currentAccount = Object.freeze({
+        id: userId,
+        role: 'teacher',
+        email: session.user.email || ''
+      });
+    } else if (profile) {
+      currentAccount = Object.freeze({
+        id: userId,
+        role: 'student',
+        alias: profile.alias,
+        class_code: profile.class_code
+      });
+    } else {
+      currentAccount = Object.freeze({
+        id: userId,
+        role: 'unknown',
+        email: session.user.email || ''
+      });
     }
 
-    currentAccount = Object.freeze(context);
     emit();
     return currentAccount;
   }

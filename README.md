@@ -202,3 +202,17 @@ In elk opgenomen spel is het zichtbare **AXIOMA**-merk linksboven nu een vaste h
 - `games/stelsels/` gaat via `../../` terug naar de Axioma-startpagina.
 
 Regel voor toekomstige spellen: **klik op AXIOMA = altijd terug naar Axioma Home**.
+
+
+## v0.7c — Login fix
+
+De centrale accountresolver gebruikt opnieuw de bestaande, bewezen combinatie:
+
+- `axioma_is_teacher()`
+- `axioma_profiles`
+
+De nieuwere `axioma_account()` wrapper wordt niet meer gebruikt door de frontend.
+Die wrapper kon in bepaalde deployments een permissieprobleem geven nadat de wachtwoordlogin al geslaagd was.
+
+Ook toont de login nu een specifiekere foutmelding wanneer de credentials zelf fout zijn
+of wanneer de rolcontrole faalt.
