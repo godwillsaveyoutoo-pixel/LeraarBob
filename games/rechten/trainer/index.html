@@ -44,12 +44,16 @@
 @media(max-height:500px){.authLayout{grid-template-columns:minmax(280px,1.2fr) minmax(200px,1fr);gap:24px}.authTabs{margin-bottom:12px;gap:4px}.authTabs button{font-size:12px;min-height:44px;padding:7px 10px}.accountForm{gap:10px;grid-template-columns:1fr 1fr}.accountForm label{font-size:12px;gap:4px}.accountForm input,.accountForm select{min-height:44px;padding:8px 10px}.accountForm>.formMessage,.accountForm>.primary,.accountForm>button{grid-column:1/-1}.authExplanation{padding-top:8px}.authExplanation h3{font-size:28px;margin:12px 0}.authExplanation p{font-size:12px;line-height:1.5}.authUtility{gap:8px;margin-top:12px}.authUtility button{font-size:11px;min-height:44px}.formMessage{font-size:12px}.teacherToolbar{gap:10px}.teacherToolbar label{font-size:12px;min-width:130px}.teacherToolbar input,.teacherToolbar select{min-height:44px}.teacherToolbar button{min-height:44px;font-size:12px}.teacherTable{font-size:12px}.teacherTable th,.teacherTable td{padding:8px 10px}.cloudLayout #passwordForm{grid-template-columns:1fr}.cloudLayout #passwordForm input{width:100%}}
 @media(max-width:700px){.authLayout{grid-template-columns:minmax(290px,1.3fr) minmax(170px,1fr);gap:20px}.authExplanation h3{font-size:25px}.authTabs button{padding-inline:8px}}
 
+
+.axiomaHome{color:inherit;text-decoration:none;cursor:pointer}
+.axiomaHome:hover{text-decoration:none;opacity:.78}
+.axiomaHome:focus-visible{outline:2px solid currentColor;outline-offset:5px;border-radius:4px}
 </style>
 </head>
 <body>
 <div id="app">
   <header class="topbar">
-    <div class="brand" aria-label="Axioma Trainer"><i class="brandMark" aria-hidden="true"></i>AXIOMA <span>Trainer</span></div>
+    <a class="brand axiomaHome" href="../../../" aria-label="Naar Axioma startpagina"><i class="brandMark" aria-hidden="true"></i>AXIOMA <span>Trainer</span></a>
     <nav class="appNav" aria-label="Hoofdnavigatie">
       <button id="playBtn" class="navButton screen-active" aria-current="page">Play</button>
       <button id="helpBtn" class="navButton">Uitleg</button>

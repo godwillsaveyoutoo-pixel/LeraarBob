@@ -192,3 +192,13 @@ Drie spellen schrijven nu bewust slechts minimale voortgang weg:
 
 De frontpage vermeldt per tegel subtiel of voortgang wordt bewaard.
 Games blijven zonder account volledig speelbaar; `AxiomaProgress.completeUnit()` doet dan niets.
+
+
+## v0.7b — Axioma is altijd Home
+
+In elk opgenomen spel is het zichtbare **AXIOMA**-merk linksboven nu een vaste home-link.
+
+- spellen in `games/rechten/...` gaan via `../../../` terug naar de Axioma-startpagina;
+- `games/stelsels/` gaat via `../../` terug naar de Axioma-startpagina.
+
+Regel voor toekomstige spellen: **klik op AXIOMA = altijd terug naar Axioma Home**.

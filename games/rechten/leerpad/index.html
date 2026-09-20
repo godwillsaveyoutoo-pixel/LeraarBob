@@ -732,12 +732,16 @@ main{background:linear-gradient(115deg,var(--paper) 35%,var(--scene-wash) 100%)}
 @media(max-height:650px){#app.vectorMode #formulaPane{padding-top:62px;padding-bottom:10px}.sceneType{display:none}#studioTag{font-size:20px;top:7px}#app.vectorMode .measureLiveBuild{margin:9px auto}#app.vectorMode .measureLiveFrac{font-size:28px}#app.vectorMode .trainingExplanation{font-size:19px}.gestureSteps{margin:10px 0;font-size:16px}#app[data-activity=uitleg] .studioWork h2{font-size:28px}.studioWork{font-size:20px}.routeGroup h3{font-size:24px}.routeGroup h3 small{font-size:17px}#measureOverlay text{font-size:19px}#measureOverlay .vectorLabel.anchor text{font-size:19px}}
 @media(max-width:700px){.routeOverview{grid-template-columns:repeat(2,1fr)}.routeOverview a:last-child{grid-column:1/-1}.routeTiles,.routeEndpoints{grid-template-columns:1fr}.chapterCount{display:none}.routeGroup h3{gap:10px}.sceneType{display:none}#studioTag{max-width:52%;font-size:17px}.routeItem .routeNumber{width:30px}}
 
+
+.axiomaHome{color:inherit;text-decoration:none;cursor:pointer}
+.axiomaHome:hover{text-decoration:none;opacity:.78}
+.axiomaHome:focus-visible{outline:2px solid currentColor;outline-offset:5px;border-radius:4px}
 </style>
 </head>
 <body>
 <div id="app">
 <header>
-  <div class="headerGroup"><span id="levelGlyph" aria-hidden="true"></span><span class="brand">axioma</span><button id="topPrev" class="topNav" type="button" aria-label="Vorige stap">‹</button><span class="title" id="headerTitle">Functies</span><button id="topNext" class="topNav" type="button" aria-label="Volgende stap">›</button></div>
+  <div class="headerGroup"><span id="levelGlyph" aria-hidden="true"></span><a class="brand axiomaHome" href="../../../" aria-label="Naar Axioma startpagina">axioma</a><button id="topPrev" class="topNav" type="button" aria-label="Vorige stap">‹</button><span class="title" id="headerTitle">Functies</span><button id="topNext" class="topNav" type="button" aria-label="Volgende stap">›</button></div>
   <div class="learningChrome" aria-label="Leerlijn eerstegraadsfuncties">
     <div id="chapterMap" class="chapterMap" aria-label="Hoofdstukken">
       <span class="chapterSeg" data-chapter="0" title="Functies" aria-label="Functies"></span>
