@@ -43,6 +43,11 @@ function findChain(lines,start,parts,ordered=false){
 }
 function validate(t,answer){
  const lines=(answer.strokes||[]).slice(0,24),vectors=lines,results=lines;
+ if(t.interaction==='choice'){
+  const chosen=t.options?.[answer.choice];if(!chosen)return fail('input','Kies eerst een antwoord.');
+  if(vectorEquals(chosen,t.target))return ok(t.choiceFormat==='coordinates'?`Goed: a = ${coord(t.target)}.`:'Goed. Lengte, richting en zin kloppen.');
+  const [code,message]=diagnose(chosen,t.target,t);return fail(code,message);
+ }
  if(t.interaction==='number'){
   const v=vec(parseNumber(answer.values?.[0]),parseNumber(answer.values?.[1]));
   if(!Number.isFinite(v.dx)||!Number.isFinite(v.dy))return fail('input','Vul beide componenten in. Een breuk zoals −1/2 mag ook.');
@@ -199,11 +204,21 @@ function generate(id,{seed=1,level=0,variant=0,repair=null}={}){
   if(level<2){t.interaction='point';t.axes=true;t.points=[mark(A,'A'),mark(B,'B'),mark(C,'C')];t.segments=[[A,B],[B,C]];t.targetPoint=D;t.pointName='D';}
   else {numeric(vec(D.x,D.y),'A, B, C, D liggen in die volgorde op een parallellogram. Bereken D.',`A = (${A.x}, ${A.y})    B = (${B.x}, ${B.y})    C = (${C.x}, ${C.y})`);t.answerLabel='D';}
  }else throw Error('Unknown skill: '+id);
+ // Recognition complements construction; arrow choices precede coordinate notation.
+ if(variant%4===1&&(['equal','opposite'].includes(id)||id==='coords'&&level>0)){
+  if(id!=='coords'){const reference=vec(2*Math.sign(a.dx||1),Math.sign(a.dy||1));t.target=id==='opposite'?scale(reference,-1):reference;t.refs=[ref(point(-6,0),reference,'a')];}
+  const target=t.target,candidates=[target,scale(target,-1),scale(target,2),vec(target.dy,target.dx),vec(-target.dy,target.dx),add(target,vec(1,0))],options=[];
+  for(const candidate of candidates)if(!options.some(x=>vectorEquals(x,candidate))&&options.length<4)options.push(candidate);
+  for(let i=options.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[options[i],options[j]]=[options[j],options[i]];}
+  t.options=options;t.interaction='choice';t.representation='choice-grid';t.choiceFormat=id==='coords'?'coordinates':'arrows';t.points=[];if(t.choiceFormat==='arrows')t.choicePositions=[point(0,2),point(6,2),point(0,-2),point(6,-2)];
+  t.prompt=id==='coords'?'Welke coördinaten horen bij a?':id==='opposite'?'Welke pijl is tegengesteld aan a?':'Welke pijl stelt dezelfde vector als a voor?';
+ }
  t.success=t.success||'';t.repair=repair;
  // Fit geometric givens AND every potential construction, never mark hidden target points.
  if(t.representation!=='symbolic'){
   const pts=[t.start,...t.points.map(p=>p.p),...t.refs.flatMap(r=>[r.start,endPointFromVector(r.start,r.v)]),...(t.segments||[]).flat()];
   if(t.target)pts.push(endPointFromVector(t.start,t.target));if(t.targetPoint)pts.push(t.targetPoint);
+  if(t.choicePositions)for(let i=0;i<t.options.length;i++)pts.push(t.choicePositions[i],endPointFromVector(t.choicePositions[i],t.options[i]));
   if(t.parts)for(const start of [t.start,t.secondStart].filter(Boolean))for(const p of t.parts)pts.push(endPointFromVector(start,p),endPointFromVector(start,sum(t.parts)));
   if(id==='combination')pts.push(endPointFromVector(t.start,scale(t.source,t.factor)),endPointFromVector(t.start,scale(b,-1)));
   if(t.dirs){const [d,e]=t.dirs;if(d&&e&&Math.abs(cross(d,e))>EPS){const k=cross(t.target,e)/cross(d,e),l=cross(d,t.target)/cross(d,e);pts.push(endPointFromVector(t.start,scale(d,k)),endPointFromVector(t.start,scale(e,l)));}}

@@ -5,7 +5,8 @@
   <meta name="theme-color" content="#e8e5dc"><title>Gravity Maze — basis + Tier 2</title>
   <link rel="icon" href="data:,"><link rel="stylesheet" href="style.css">
   <script defer src="legacy-engine.js"></script><script defer src="engine.js"></script><script defer src="levels.js"></script><script defer src="save-migration.js"></script><script defer src="telemetry.js"></script><script defer src="game.js"></script>
-<style>#axioma-home{min-width:76px;height:44px;border:1px solid rgba(255,255,255,.18);background:rgba(10,15,22,.72);color:#e7edf4;border-radius:8px;font:900 10px/1 system-ui;letter-spacing:.12em;cursor:pointer}#axioma-home:active{transform:translateY(1px)}</style></head>
+<style>#axioma-home{min-width:76px;height:44px;border:1px solid rgba(255,255,255,.18);background:rgba(10,15,22,.72);color:#e7edf4;border-radius:8px;font:900 10px/1 system-ui;letter-spacing:.12em;cursor:pointer}#axioma-home:active{transform:translateY(1px)}</style><script src="../../shared/axioma-platform.js"></script>
+</head>
 <body>
   <main>
     <div class="play">
@@ -75,13 +76,7 @@ async function cloudSync(units,total){
     }
   }catch(_){}finally{cloudBusy=false}
 }
-function homeUrl(){
-  const q=new URLSearchParams(location.search).get('axiomaHome'); if(q){try{return new URL(q,location.href).href}catch(_){}}
-  const u=new URL(location.href); const p=u.pathname; const i=p.indexOf('/games/');
-  u.pathname=i>=0?p.slice(0,i+1)+'index.html':p.replace(/[^/]*$/,'index.html'); u.search='';u.hash=''; return u.href;
-}
-function goHome(e){if(e){e.preventDefault();e.stopPropagation();} const url=homeUrl(); try{if(parent&&parent!==window)parent.postMessage({type:'axioma:navigate-home',gameId:GAME_ID,url},'*')}catch(_){} try{if(top&&top!==window){top.location.href=url;return}}catch(_){} location.href=url;}
-function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar leraarBob';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
+const goHome=window.AxiomaPlatform.goHome,wire=window.AxiomaPlatform.wireHome;
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
 wire(document.getElementById('axioma-home'));
 function gravitySync(){let best={completed:[],active:0};for(const k of ['gravity-maze-human-v1-blind','gravity-maze-human-v1-assisted']){try{const d=JSON.parse(localStorage.getItem(k)||'{}');if(Array.isArray(d.completed)&&d.completed.length>best.completed.length)best=d}catch(_){}}const units=[...new Set(best.completed||[])];emit(units.length,9,(Number.isInteger(best.active)?best.active:0)+1);cloudSync(units,9)}gravitySync();setInterval(gravitySync,1200);

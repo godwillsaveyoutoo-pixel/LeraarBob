@@ -157,6 +157,7 @@ body.mode-plan .workspace{grid-template-rows:auto minmax(0,1fr) auto auto}body.m
   .sa-level-layout{grid-template-columns:minmax(0,1.7fr) minmax(300px,.72fr);padding-top:12px}.sa-level-grid{padding-right:22px!important}.sa-level-row{grid-template-columns:clamp(132px,10vw,180px) minmax(0,1fr)}.sa-level-group small{font-size:clamp(8px,.58vw,11px)}.sa-level-group b{font-size:clamp(12px,.85vw,16px)}.sa-level-group span{font-size:clamp(8px,.56vw,10px)}.sa-level-track{gap:clamp(9px,.7vw,13px)}.sa-level-node{flex-basis:clamp(48px,3.8vw,62px);width:clamp(48px,3.8vw,62px);height:clamp(48px,3.8vw,62px);font-size:clamp(12px,.9vw,16px);border-radius:8px}.sa-level-detail{padding-left:clamp(22px,2vw,36px)}.sa-level-detail h3{font-size:clamp(25px,2vw,36px)}.sa-detail-copy{font-size:clamp(11px,.78vw,14px)}.sa-detail-meta{font-size:clamp(8px,.58vw,11px)}.sa-level-play{min-height:clamp(48px,4.6vh,62px);font-size:clamp(10px,.72vw,13px);width:min(230px,100%)}
 }
 </style>
+<script src="../shared/axioma-platform.js"></script>
 </head>
 <body class="shell-home">
 <section class="sa-landing" id="saLanding" aria-label="Kubusbouw startscherm">
@@ -2859,13 +2860,7 @@ async function cloudSync(units,total){
     }
   }catch(_){}finally{cloudBusy=false}
 }
-function homeUrl(){
-  const q=new URLSearchParams(location.search).get('axiomaHome'); if(q){try{return new URL(q,location.href).href}catch(_){}}
-  const u=new URL(location.href); const p=u.pathname; const i=p.indexOf('/games/');
-  u.pathname=i>=0?p.slice(0,i+1)+'index.html':p.replace(/[^/]*$/,'index.html'); u.search='';u.hash=''; return u.href;
-}
-function goHome(e){if(e){e.preventDefault();e.stopPropagation();} const url=homeUrl(); try{if(parent&&parent!==window)parent.postMessage({type:'axioma:navigate-home',gameId:GAME_ID,url},'*')}catch(_){} try{if(top&&top!==window){top.location.href=url;return}}catch(_){} location.href=url;}
-function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar leraarBob';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
+const goHome=window.AxiomaPlatform.goHome,wire=window.AxiomaPlatform.wireHome;
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
 const s=document.querySelector('.top .title small');if(s&&!s.querySelector('.axioma-platform-inline')){const old=s.textContent.trim();s.innerHTML='<span class="axioma-platform-inline">leraarBob</span> · '+old;wire(s.querySelector('.axioma-platform-inline'))}
 

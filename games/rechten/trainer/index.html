@@ -49,19 +49,20 @@
 .axiomaHome:hover{text-decoration:none;opacity:.78}
 .axiomaHome:focus-visible{outline:2px solid currentColor;outline-offset:5px;border-radius:4px}
 </style>
+<script src="../../../shared/axioma-platform.js"></script>
 </head>
 <body>
 <div id="app">
   <header class="topbar">
     <a class="brand axiomaHome" href="../../../" aria-label="Naar leraarBob startpagina"><i class="brandMark" aria-hidden="true"></i>leraarBob <span>Trainer</span></a>
     <nav class="appNav" aria-label="Hoofdnavigatie">
-      <button id="playBtn" class="navButton screen-active" aria-current="page">Play</button>
-      <button id="helpBtn" class="navButton">Uitleg</button>
-      <button id="progressBtn" class="navButton">Voortgang</button>
+      <button id="playBtn" data-trainer-action="play" class="navButton screen-active" aria-current="page">Oefenen</button>
+      <button id="helpBtn" data-trainer-action="help" class="navButton">Uitleg</button>
+      <button id="progressBtn" data-trainer-action="progress" class="navButton">Voortgang</button>
       <button id="teacherBtn" class="navButton" hidden>Opvolging</button>
       <button id="cloudBtn" class="navButton cloudstate local">Cloud</button>
       <button id="settingsBtn" class="navButton">Instellingen</button>
-      <button id="devBtn" class="navButton devNav" title="Ontwikkelomgeving">DEV</button>
+      <button id="devBtn" hidden class="navButton devNav" title="Ontwikkelomgeving">DEV</button>
     </nav>
   </header>
   <main class="world">
@@ -91,7 +92,7 @@
         <div class="eyebrow">Wiskunde in beweging</div>
         <h1>Eerstegraadsfuncties</h1>
         <p>Ontdek wat een rechte vertelt. Kijk, probeer en bouw stap voor stap je inzicht op.</p>
-        <div class="startActions"><button id="startBtn" class="primary">Start</button><button id="startDevBtn" class="secondary">DEV · vraagbrowser ↗</button></div>
+        <div class="startActions"><button id="startBtn" class="primary">Start</button><button id="startDevBtn" hidden class="secondary">DEV · vraagbrowser ↗</button></div>
         <div id="resume" class="resume"></div>
       </div>
       <svg class="startArt" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><pattern id="welcome-grid" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1.3" fill="#c8d7cd"/></pattern></defs><rect width="500" height="500" fill="url(#welcome-grid)"/><path d="M20 350H480M140 470V30" stroke="#b4c7bd" stroke-width="1.5"/><path d="M20 440L440 20" fill="none" stroke="#4d8070" stroke-width="3"/><path d="M30 130L470 350" fill="none" stroke="#a196c1" stroke-width="2"/><path d="M180 280H300V160" fill="none" stroke="#bd9048" stroke-width="2" stroke-dasharray="4 6"/><circle cx="180" cy="280" r="7" fill="#4d8070"/><circle cx="300" cy="160" r="7" fill="#bd9048"/><circle cx="240" cy="220" r="22" fill="#e9eee6"/><circle cx="240" cy="220" r="7" fill="#4d8070"/></svg>
@@ -280,7 +281,7 @@ function stopAccountExercise(){
   screenReturn='start';E.stage.hidden=true;E.start.hidden=true;E.sessionDone.hidden=true;
 }
 function updateAccountNav(){
-  E.teacherBtn.hidden=account?.role!=='teacher';E.devBtn.hidden=!!account&&account.role!=='teacher';E.startDevBtn.hidden=E.devBtn.hidden;
+  E.teacherBtn.hidden=account?.role!=='teacher';E.devBtn.hidden=new URLSearchParams(location.search).get('dev')!=='1'||!!account&&account.role!=='teacher';E.startDevBtn.hidden=E.devBtn.hidden;
   E.app.dataset.account=account?.role||'guest';
 }
 async function attachSession(session){
@@ -1136,12 +1137,12 @@ function seedFeatureTest(){
 }
 E.startBtn.addEventListener('click',start);
 E.continueBtn.addEventListener('click',continueTraining);
-E.helpBtn.addEventListener('click',()=>currentScreen==='help'?closeScreen():openHelp());
-E.progressBtn.addEventListener('click',()=>currentScreen==='progress'?closeScreen():openScreen('progress'));
+AxiomaPlatform.bindTrainer({play:()=>closeScreen(),help:()=>currentScreen==='help'?closeScreen():openHelp(),progress:()=>currentScreen==='progress'?closeScreen():openScreen('progress')});
+
 E.cloudBtn?.addEventListener('click',()=>currentScreen==='cloud'?closeScreen():openScreen('cloud'));
 E.devBtn.addEventListener('click',()=>currentScreen==='dev'?closeScreen():openScreen('dev'));
 E.startDevBtn.addEventListener('click',()=>openScreen('dev'));
-E.playBtn.addEventListener('click',()=>closeScreen());
+
 E.teacherBtn.addEventListener('click',()=>openScreen('teacher'));
 E.settingsBtn.addEventListener('click',()=>currentScreen==='settings'?closeScreen():openScreen('settings'));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&currentScreen!=='play'){e.preventDefault();closeScreen()}});

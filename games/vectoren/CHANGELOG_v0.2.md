@@ -4,6 +4,19 @@ Open **Axioma_Vectorentrainer_v0.2.html** rechtstreeks in een browser. Het besta
 bevat alle code en vormgeving, werkt zonder server of internet en bewaart
 voortgang en de lopende oefening in deze browser.
 
+## Platformflow
+
+De trainer opent direct in een nieuwe of hervatte oefensessie. Het logo
+leraarBob linksboven verwijst naar de website. Oefenen, Uitleg en Voortgang zijn
+aparte bestemmingen; uitleg bekijken bewaart de lopende tekening. Een antwoord
+na raadplegen van uitleg telt als ondersteunde oefening en krijgt later een
+zelfstandige herhaling. Goede antwoorden in een leersessie gaan na korte
+feedback door; uitleg, voortgang of een verborgen tabblad pauzeren dit.
+De onderwerplijst is nu een secundair scherm voor vrij oefenen.
+
+Navigatie komt uit `shared/axioma-platform.js`, dat ook door de andere spellen
+wordt gebruikt. De build neemt dezelfde module op in het losse HTML-bestand.
+
 ## Constructie en beoordeling
 
 - De vectorbank is vervangen door vrij tekenen: slepen of beginpunt → eindpunt
@@ -80,7 +93,7 @@ naar visuele ondersteuning of een begeleide constructie met nieuwe gegevens.
   vectoren_v2.html en rechtenTrainer.html zijn inhoudelijk geraadpleegd.
 - De bediening is opnieuw opgebouwd in plaats van boven op de oude vectorbank
   te worden gezet. Een compacte getallenpad met vijftien toetsen bespaart
-  hoogte. Er zijn geen meerkeuzevragen nodig in deze iteratie.
+  hoogte. Herkenningsvragen met meerkeuze wisselen nu af met constructie en rekenen; alle pijlen in een vergelijkingsvraag staan op hetzelfde rooster.
 - Voortgang uit v0.1 wordt niet automatisch als beheersing overgenomen: de
   constructie- en beoordelingsregels zijn gewijzigd. Deze versie gebruikt
   lokale opslag; gedeelde platformaccounts vragen een aparte integratie.

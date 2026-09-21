@@ -3,12 +3,12 @@
 const {VectorMath:M,TaskValidator:Validator,TaskGenerator:Generator,TrainerScheduler:Scheduler,parseNumber,format,coord}=VectorTrainerCore;
 const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',KEY='axioma-vectorentrainer-v020';
 const titles={locked:'Nog te ontdekken',new:'Nieuw',guided:'Begeleid',learning:'In opbouw',solid:'Stevig'};
-let progress=Scheduler.freshState(),session=null,task=null,answer={strokes:[],values:['',''],point:null},intro=false,done=false,dirty=false,errorCode=null,stage=0,role='vector',activeSlot=0,free=false,previousScreen='home',view={},anchor=null,drag=null,cursor=M.point(0,0),cursorVisible=false,seedSerial=Date.now()>>>0;
-let restored=null;
+let progress=Scheduler.freshState(),session=null,task=null,answer={strokes:[],values:['',''],point:null,choice:null},intro=false,done=false,dirty=false,errorCode=null,stage=0,role='vector',activeSlot=0,free=false,previousScreen='home',view={},anchor=null,drag=null,cursor=M.point(0,0),cursorVisible=false,seedSerial=Date.now()>>>0;
+let restored=null,advanceTimer=null,pendingAdvance=false;
 try{const raw=JSON.parse(localStorage.getItem(KEY)||'null');progress=Scheduler.sanitize(raw?.progress);if(raw?.mode==='dark')document.documentElement.dataset.mode='dark';if(raw?.draft&&Generator.skills.some(s=>s.id===raw.draft.skill))restored=raw.draft;}catch{storageError()}
 function storageError(){$('storageWarning').hidden=false;$('storageWarning').textContent='Deze browser kan je voortgang niet bewaren. Je kunt wel blijven oefenen.'}
 function save(){try{const draft=task?{skill:task.skill,seed:task.seed,variant:task.variant,level:task.level,repair:task.repair,intro,done,dirty,errorCode,stage,free,session,answer}:restored;localStorage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft}));}catch{storageError()}}
-function screen(name){cancelGesture();document.body.dataset.screen=name;for(const id of ['home','play','progressScreen','summary'])$(id).hidden=id!==name;if(name==='play')requestAnimationFrame(renderBoard);if(name==='home')renderHome()}
+function screen(name){cancelGesture();clearTimeout(advanceTimer);document.body.dataset.screen=name;AxiomaPlatform.trainerScreen(({play:'play',helpScreen:'help',progressScreen:'progress'})[name]||'');for(const id of ['home','play','progressScreen','helpScreen','summary'])$(id).hidden=id!==name;if(name==='play'){requestAnimationFrame(renderBoard);if(pendingAdvance)scheduleAdvance();}if(name==='home')renderHome()}
 function message(text,kind=''){$('feedback').textContent=text;$('feedback').className=kind}
 function newSeed(){return (++seedSerial+Math.floor(Math.random()*1e8))>>>0}
 function taskLevel(id){const s=progress.skills[id];return s.seen<2?0:s.seen<5?1:2}
@@ -21,36 +21,63 @@ function nextTask(){
  let t;for(let i=0;i<15;i++){t=Generator.generate(id,{seed:newSeed(),level,variant,repair:choice.repair});if(!progress.lastSignatures.includes(t.signature))break}
  task=t;intro=!free&&choice.mode==='intro';resetAnswer();updateUI();screen('play');save();
 }
-function resetAnswer(){answer={strokes:[],values:['',''],point:null};done=false;dirty=false;errorCode=null;stage=0;role='vector';activeSlot=0;cursor=M.point(0,0);cursorVisible=false;cancelGesture()}
+function resetAnswer(){clearTimeout(advanceTimer);pendingAdvance=false;answer={strokes:[],values:['',''],point:null,choice:null};done=false;dirty=false;errorCode=null;stage=0;role='vector';activeSlot=0;cursor=M.point(0,0);cursorVisible=false;cancelGesture()}
 function startSession(){free=false;session={answered:0,clean:0,repairs:0};nextTask()}
 function explore(id){free=true;session=null;task=Generator.generate(id,{seed:newSeed(),level:1,variant:0});intro=false;resetAnswer();updateUI();screen('play');save()}
 function finish(clean){
  done=true;if(!free){Scheduler.record(progress,task,{clean,code:errorCode||'practice'});session.answered++;if(clean)session.clean++;if(task.repair&&clean)session.repairs++;}
- updateUI(false);save();
+ updateUI(false);save();if(!free)scheduleAdvance();
 }
+function scheduleAdvance(){clearTimeout(advanceTimer);if(!done||free)return;pendingAdvance=true;advanceTimer=setTimeout(()=>{if(document.body.dataset.screen==='play'&&!document.hidden&&done){pendingAdvance=false;nextTask()}},1400)}
+document.addEventListener('visibilitychange',()=>{clearTimeout(advanceTimer);if(!document.hidden&&pendingAdvance&&document.body.dataset.screen==='play')scheduleAdvance()});
 function guidedPrompt(){if(task.guidedSteps&&!intro&&stage<2)return stage===0?'Maak vanuit P een kopie van u.':'Voeg nu een kopie van v toe aan je route.';return task.prompt}
 function updateUI(resetFeedback=true){
  if(!task)return;
  $('prompt').textContent=intro?Generator.skills.find(s=>s.id===task.skill).label:guidedPrompt();
  $('modeLabel').textContent=`${free?'Vrij oefenen':intro?'Nieuw begrip':task.repair?'Herstel · nieuwe voorstelling':task.level===0?'Begeleid':task.level===1?'Zelf proberen':'Gemengd oefenen'} · ${Generator.skills.find(s=>s.id===task.skill).label}`;
  $('roundLabel').textContent=free?'Vrij oefenen':`Oefening ${Math.min(12,(session?.answered||0)+(done?0:1))} / 12`;
- const numeric=task.interaction==='number',symbolic=task.representation==='symbolic';
- $('work').className='work '+(numeric?symbolic?'symbolic':'grid-number':'');$('numberWork').hidden=!numeric;
+ const choice=task.interaction==='choice',numeric=task.interaction==='number',symbolic=task.representation==='symbolic';
+ $('work').className='work '+(numeric?symbolic?'symbolic':'grid-number':choice?'choice-grid':'');$('numberWork').hidden=!numeric;$('choiceWork').hidden=!choice;renderChoices();
  $('givens').textContent=task.givens||task.prompt;$('scaffold').textContent=intro?Generator.skills.find(s=>s.id===task.skill).intro:(task.scaffold||'');
  $('introText').hidden=!intro||symbolic;
  if(intro&&!symbolic){$('introText').replaceChildren();const strong=document.createElement('strong');strong.textContent='Voorbeeld · kijk wat er verandert';$('introText').append(strong,document.createTextNode(Generator.skills.find(s=>s.id===task.skill).intro));}
- $('toolHint').textContent=intro?'Bekijk het voorbeeld. Daarna probeer je andere getallen.':numeric?'x eerst, y daarna. ± voor negatief; / voor een breuk.':task.interaction==='point'?(task.givens||'Tik een roosterpunt en controleer.'):'Sleep, of tik begin → einde. Niets wordt beoordeeld vóór Controleer.';
- $('drawTools').hidden=intro||numeric;
+ $('toolHint').textContent=intro?'Bekijk het voorbeeld. Daarna probeer je andere getallen.':choice?'Tik je antwoord. Elk roostervakje stelt één stap voor.':numeric?'x eerst, y daarna. ± voor negatief; / voor een breuk.':task.interaction==='point'?(task.givens||'Tik een roosterpunt en controleer.'):'Sleep, of tik begin → einde. Niets wordt beoordeeld vóór Controleer.';
+ $('drawTools').hidden=intro||numeric||choice;
  $('vectorTool').hidden=task.interaction==='point';
  $('resultTool').hidden=task.interaction!=='sketch'||!['headtail','ordered','parallelogram'].includes(task.policy)||task.guidedSteps&&stage<2;
  $('vectorTool').setAttribute('aria-pressed',String(role==='vector'));$('resultTool').setAttribute('aria-pressed',String(role==='result'));
  for(const id of ['vectorTool','resultTool','undoBtn'])$(id).disabled=done;
+ $('commit').hidden=choice&&!done&&!intro;
  $('commit').textContent=intro?'Zelf proberen →':done?'Verder →':'Controleer';$('skip').hidden=intro||done;
  $('labelX').textContent=task.slotLabels?.[0]||'x · horizontaal';$('labelY').textContent=task.slotLabels?.[1]||'y · verticaal';
  $('coordinateEditor').setAttribute('aria-label',task.slotLabels?'Coëfficiënten van eenheidsvectoren':'Coördinaten invoeren');
  if(resetFeedback)message(intro?'Dit is een uitgewerkt voorbeeld.':free?'Vrij oefenen telt niet mee voor je leerroute.':task.repair?repairHint(task.repair):'Je kiest zelf waar je tekent. Je kunt altijd een stap terug.');
  renderSlots();renderBoard();
 }
+
+function renderChoices(){
+ const root=$('choiceWork');root.replaceChildren();if(task.interaction!=='choice')return;
+ root.className=task.choiceFormat==='arrows'?'arrow-choices':'';
+ task.options.forEach((v,i)=>{
+  const b=document.createElement('button');b.className='choice-answer';b.dataset.choice=String(i);b.textContent=task.choiceFormat==='coordinates'?coord(v):`Pijl ${String.fromCharCode(65+i)}`;
+  b.disabled=intro||done;
+  if(answer.choice===i)b.classList.add(M.vectorEquals(v,task.target)?'correct':'incorrect');
+  b.onclick=()=>{answer.choice=i;commit();renderChoices()};root.append(b);
+ });
+}
+function showHelp(){
+ if(task&&!intro&&!done&&!free){dirty=true;errorCode=errorCode||'help';save()}
+ const select=$('helpTopic');select.replaceChildren();
+ for(const skill of Generator.skills){const option=document.createElement('option');option.value=skill.id;option.textContent=skill.label;select.append(option)}
+ select.value=task?.skill||Generator.skills[0].id;renderHelp();screen('helpScreen');
+}
+function renderHelp(){
+ const id=$('helpTopic').value,skill=Generator.skills.find(s=>s.id===id);$('helpTitle').textContent=skill.label;$('helpConcept').textContent=skill.intro;
+ const examples={props:'Een pijl twee keer zo lang maken verandert de lengte. Hem omkeren verandert de zin. Hem draaien verandert de richting.',equal:'Van (0, 0) naar (2, 1) en van (3, 2) naar (5, 3): twee verschillende plaatsen, dezelfde verplaatsing.',opposite:'Bij a = (2, 1) is −a = (−2, −1). De nulvector komt terug op zijn beginpunt.',scalar:'Bij a = (4, 2) is −½a = (−2, −1): half zo lang en de andere kant op.',headtail:'u eindigt in Q. Begin v in Q. De resultante loopt van het begin van u naar het einde van v.',parallelogram:'Kopieer u vanaf de kop van v en v vanaf de kop van u. Verbind het gemeenschappelijke begin met de overstaande hoek.',coords:'Drie vakken naar rechts en twee omlaag betekent (3, −2). Het beginpunt hoeft niet de oorsprong te zijn.',ab:'A = (−2, 1), B = (3, 4). Dan is AB = (3 − (−2), 4 − 1) = (5, 3).',coordadd:'(3, −2) + (−1, 4) = (2, 2). Je telt de twee x-componenten en de twee y-componenten apart op.',coordscale:'−2 × (3, −1) = (−6, 2). De factor geldt voor beide componenten.',basis:'3eₓ + 4eᵧ = (3, 4). eₓ geeft één stap naar rechts, eᵧ één stap omhoog.',figure:'AD + DC = AC: het eindpunt van de eerste verplaatsing is het begin van de tweede.'};
+ $('helpExample').textContent=examples[id]||'Werk vanuit het beginpunt. Onderzoek eerst welke verplaatsingen gegeven zijn en welke ene verplaatsing je zoekt. Teken of reken daarna zelf.';
+}
+$('helpTopic').onchange=renderHelp;$('closeHelp').onclick=()=>task?resume():startSession();
+
 function repairHint(code){return ({xy:'Let deze keer op het verschil tussen horizontaal en verticaal.',ba:'Volg van begin naar einde; trek de begincoördinaten af.',opposite:'Controleer de zin: welke kant wijst de pijl op?',scale:'Vergelijk de factor en de lengte van je nieuwe vector.','one-component':'De factor geldt voor zowel x als y.',headtail:'Onderzoek waar de volgende verplaatsing moet beginnen.',resultant:'Kijk naar het begin en einde van de volledige route.',order:'De gevraagde volgorde hoort hier bij de methode.'})[code]||'Probeer het opnieuw met andere getallen en een andere plaats.'}
 function commit(){
  if(intro){progress.skills[task.skill].intro=true;const old=task;task=Generator.generate(old.skill,{seed:newSeed(),level:0,variant:progress.skills[old.skill].seen,repair:old.repair});intro=false;resetAnswer();updateUI();save();return}
@@ -119,6 +146,7 @@ function renderBoard(){
  for(const [a,b] of task.segments||[])line(a,b,{stroke:'var(--muted)','stroke-width':1.5});
  for(const dir of task.dirs||[]){const k=30/Math.max(1,M.length(dir)),a=M.endPointFromVector(task.start,M.scale(dir,-k)),b=M.endPointFromVector(task.start,M.scale(dir,k));line(a,b,{stroke:'var(--muted)','stroke-width':1.3,'stroke-dasharray':'4 5'})}
  for(const r of task.refs)arrow(r.start,r.v,r.name+(task.interaction==='number'&&task.skill!=='coords'&&task.skill!=='ab'?' '+coord(r.v):''),'given');
+ if(task.choicePositions)task.options.forEach((v,i)=>arrow(task.choicePositions[i],v,String.fromCharCode(65+i),'given'));
  for(const s of answer.strokes)arrow(s.start,s,s.role==='result'?'r':'',s.role==='result'?'result':'student');
  if(answer.point)drawPoint(answer.point,task.pointName||'?',true);
  if(intro){if(task.interaction==='point')drawPoint(task.targetPoint,task.pointName||'P',true);else for(const s of exampleStrokes())arrow(s.start,s,s.role==='result'?'r':'','example',true);}
@@ -134,7 +162,7 @@ function renderBoard(){
 function snap(clientX,clientY){const r=$('board').getBoundingClientRect();if(!view.unit||clientX<r.left||clientY<r.top||clientX>r.right||clientY>r.bottom)return null;
  const x=Math.round((clientX-r.left-view.ox)/view.unit),y=Math.round((view.oy-clientY+r.top)/view.unit);return x>=view.minX&&x<=view.maxX&&y>=view.minY&&y<=view.maxY?M.point(x,y):null;
 }
-function editable(){return task&&!intro&&!done&&task.interaction!=='number'&&document.body.dataset.screen==='play'}
+function editable(){return task&&!intro&&!done&&['sketch','point'].includes(task.interaction)&&document.body.dataset.screen==='play'}
 function cancelGesture(){anchor=null;drag=null;}
 function draw(start,end){if(!editable())return;if(answer.strokes.length>=24){message('Je hebt 24 pijlen getekend. Gebruik Undo om plaats te maken.');return}answer.strokes.push(M.stroke(start,end,role));message('Tekening bewaard. Controleer als je klaar bent.');save();renderBoard()}
 function tap(p){if(task.interaction==='point'){answer.point=p;message('Punt gekozen. Controleer als je klaar bent.');save();renderBoard();return}if(anchor){const a=anchor;anchor=null;draw(a,p)}else{anchor=p;message('Beginpunt gekozen. Tik nu het eindpunt.');renderBoard()}}
@@ -160,17 +188,18 @@ function resume(){
  if(restored&&!task){const d=restored;restored=null;try{
   task=Generator.generate(d.skill,{seed:Number(d.seed)>>>0,level:Math.max(0,Math.min(2,Number(d.level)||0)),variant:Math.max(0,Number(d.variant)||0),repair:typeof d.repair==='string'?d.repair:null});
   const isPoint=p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y)&&Math.abs(p.x)<1000&&Math.abs(p.y)<1000;
-  answer={strokes:(d.answer?.strokes||[]).filter(s=>isPoint(s.start)&&isPoint(s.end)).slice(0,24).map(s=>M.stroke(s.start,s.end,s.role==='result'?'result':'vector')),values:[0,1].map(i=>typeof d.answer?.values?.[i]==='string'?d.answer.values[i].slice(0,12):''),point:isPoint(d.answer?.point)?d.answer.point:null};
+  answer={strokes:(d.answer?.strokes||[]).filter(s=>isPoint(s.start)&&isPoint(s.end)).slice(0,24).map(s=>M.stroke(s.start,s.end,s.role==='result'?'result':'vector')),values:[0,1].map(i=>typeof d.answer?.values?.[i]==='string'?d.answer.values[i].slice(0,12):''),point:isPoint(d.answer?.point)?d.answer.point:null,choice:Number.isInteger(d.answer?.choice)?d.answer.choice:null};
   free=!!d.free;intro=!!d.intro;done=!!d.done;dirty=!!d.dirty;errorCode=typeof d.errorCode==='string'?d.errorCode:null;stage=Math.max(0,Math.min(2,Number(d.stage)||0));session={answered:Math.max(0,Math.min(12,Number(d.session?.answered)||0)),clean:Math.max(0,Math.min(12,Number(d.session?.clean)||0)),repairs:Math.max(0,Math.min(12,Number(d.session?.repairs)||0))};
  }catch{task=null;startSession();return}}
  if(task){screen('play');updateUI();if(done)message('Deze oefening is al verwerkt. Ga verder naar een nieuwe vraag.','good')}
 }
-$('homeBtn').onclick=$('summaryHome').onclick=$('rotateHome').onclick=()=>{save();screen('home')};$('progressBtn').onclick=showProgress;$('closeProgress').onclick=()=>screen(previousScreen);$('startBtn').onclick=$('again').onclick=startSession;$('resumeBtn').onclick=resume;
+$('libraryBtn').onclick=$('summaryHome').onclick=$('rotateHome').onclick=()=>{save();screen('home')};
+ AxiomaPlatform.bindTrainer({play:()=>task||restored?resume():startSession(),help:showHelp,progress:showProgress});$('closeProgress').onclick=()=>screen(previousScreen);$('startBtn').onclick=$('again').onclick=startSession;$('resumeBtn').onclick=resume;
 $('themeBtn').onclick=()=>{document.documentElement.dataset.mode=document.documentElement.dataset.mode==='dark'?'light':'dark';save();renderBoard()};
 $('fullBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{if(task)message('Volledig scherm is hier niet beschikbaar. De oefening blijft bruikbaar.')}};
 new ResizeObserver(entries=>{const r=entries[0].contentRect;if(Math.abs(r.width-(view.w||0))>1||Math.abs(r.height-(view.h||0))>1)cancelGesture();renderBoard()}).observe($('boardWrap'));
 window.addEventListener('pagehide',save);
 // Read-only geometry inspection for reproducible release checks. No answer data is shown in the UI.
 window.AxiomaVectorTrainer=Object.freeze({inspect:()=>structuredClone({task,answer,intro,done,dirty,stage,free,session,progress,view}),project:p=>project(p)});
-renderHome();
+renderHome();if(restored)resume();else startSession();
 })();

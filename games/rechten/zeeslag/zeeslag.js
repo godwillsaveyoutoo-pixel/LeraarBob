@@ -439,7 +439,7 @@ function demoBotTurn(){
 }
 
 async function boot(){
-  $('#homeBtn').onclick=async()=>{if(S.matchId)await leaveMatch();if(!S.matchId)location.href='../../../'}; $('#demoBtn').onclick=initDemo; $('#leaveBtn').onclick=()=>leaveMatch(false); $('#rankingBtn').onclick=openRanking; $('#rankingCloseBtn').onclick=()=>$('#rankingOverlay').hidden=true; $('#rankingOverlay').addEventListener('click',e=>{if(e.target.id==='rankingOverlay')$('#rankingOverlay').hidden=true});
+  AxiomaPlatform.wireHome($('#homeBtn'),{beforeLeave:async()=>{if(S.matchId)await leaveMatch();return !S.matchId}}); $('#demoBtn').onclick=initDemo; $('#leaveBtn').onclick=()=>leaveMatch(false); $('#rankingBtn').onclick=openRanking; $('#rankingCloseBtn').onclick=()=>$('#rankingOverlay').hidden=true; $('#rankingOverlay').addEventListener('click',e=>{if(e.target.id==='rankingOverlay')$('#rankingOverlay').hidden=true});
   $('#playerList').onclick=e=>{const b=e.target.closest('[data-invite]');if(b)sendInvite(b.dataset.invite)};
   $('#ownBoard').addEventListener('click',e=>{const p=svgToGrid(e,$('#ownBoard'));if(p)placeAt(p)});
   $('#confirmShipBtn').onclick=confirmPlacement;

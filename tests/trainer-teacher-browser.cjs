@@ -19,6 +19,7 @@ class CDP{
  await c.send('Page.navigate',{url:'http://127.0.0.1:8765/games/rechten/trainer/'});
  const wait=async expr=>{for(let i=0;i<100;i++){if(await c.eval(expr))return;await new Promise(r=>setTimeout(r,50))}throw Error('Timeout: '+expr)};
  await wait(`document.querySelector('#app')?.dataset.account==='teacher'&&!document.querySelector('#start').hidden`);
+ assert.equal(await c.eval(`document.querySelector('#devBtn').hidden`),true);
  assert.match(await c.eval('location.pathname'),/rechten\/trainer/);
  await c.eval(`document.querySelector('#startBtn').click()`);
  await wait(`!document.querySelector('#stage').hidden&&document.querySelector('#question').textContent.length>0`);

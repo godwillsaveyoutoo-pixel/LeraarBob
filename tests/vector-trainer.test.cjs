@@ -4,6 +4,7 @@ const p=M.point,v=M.vec,s=(start,x,y,role='vector')=>M.stroke(start,M.endPointFr
 const origin=p(0,0),u=v(2,1),w=v(-1,2);
 function sumTask(policy='headtail'){return {interaction:'sketch',policy,start:origin,target:M.add(u,w),parts:[u,w]}}
 function solution(t){
+ if(t.interaction==='choice')return {choice:t.options.findIndex(v=>M.vectorEquals(v,t.target))};
  if(t.interaction==='number')return {values:[String(t.target.dx),String(t.target.dy)]};
  if(t.interaction==='point')return {point:t.targetPoint};
  if(t.policy==='decompose'){const [d,e]=t.dirs,k=M.cross(t.target,e)/M.cross(d,e),l=M.cross(d,t.target)/M.cross(d,e);return {strokes:[M.stroke(t.start,M.endPointFromVector(t.start,M.scale(d,k))),M.stroke(t.start,M.endPointFromVector(t.start,M.scale(e,l)))]}}

@@ -791,6 +791,7 @@ button:focus-visible{outline:3px solid #2d72d2;outline-offset:-3px}
 }
 </style>
 
+<script src="../shared/axioma-platform.js"></script>
 </head>
 <body>
 <div id="app">
@@ -1727,13 +1728,7 @@ async function cloudSync(units,total){
     }
   }catch(_){}finally{cloudBusy=false}
 }
-function homeUrl(){
-  const q=new URLSearchParams(location.search).get('axiomaHome'); if(q){try{return new URL(q,location.href).href}catch(_){}}
-  const u=new URL(location.href); const p=u.pathname; const i=p.indexOf('/games/');
-  u.pathname=i>=0?p.slice(0,i+1)+'index.html':p.replace(/[^/]*$/,'index.html'); u.search='';u.hash=''; return u.href;
-}
-function goHome(e){if(e){e.preventDefault();e.stopPropagation();} const url=homeUrl(); try{if(parent&&parent!==window)parent.postMessage({type:'axioma:navigate-home',gameId:GAME_ID,url},'*')}catch(_){} try{if(top&&top!==window){top.location.href=url;return}}catch(_){} location.href=url;}
-function wire(el){if(!el||el.dataset.axiomaHomeWired)return;el.dataset.axiomaHomeWired='1';el.classList.add('axioma-platform-inline');el.setAttribute('role','link');el.setAttribute('tabindex','0');el.title='Terug naar leraarBob';el.addEventListener('click',goHome,true);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')goHome(e)})}
+const goHome=window.AxiomaPlatform.goHome,wire=window.AxiomaPlatform.wireHome;
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
 const bt=document.querySelector('.topbar .brand');if(bt){const txt=bt.querySelector('.brandText');if(txt&&!txt.querySelector('.axioma-platform-inline')){txt.innerHTML='<span class="axioma-platform-inline">leraarBob</span> · Data Check';wire(txt.querySelector('.axioma-platform-inline'))}}
 

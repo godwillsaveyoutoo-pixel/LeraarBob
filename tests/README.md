@@ -75,3 +75,10 @@ server en Chromium als bij de andere browsertests. Voer browsertests na elkaar u
 De catalogusbrowsertest controleert ook de gedeelde onderwerpkleur en gouden rand.
 De social-browsertest controleert groepsaanmaak door een leerling in het spel en
 de zichtbaarheid van die groep in het startscherm van een andere leerling.
+
+## Platformnavigatie en trainerflow
+
+`node tests/platform-navigation-browser.cjs` doorloopt alle catalogusspellen en
+controleert de gedeelde native teruglink. De vectorbrowsertest controleert ook
+direct starten, Uitleg/Voortgang zonder verlies van deelantwoorden en
+herkenningsvragen. Zie `PLATFORM_FRAMEWORK.md` voor de platformafspraken.

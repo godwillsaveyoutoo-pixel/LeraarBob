@@ -12,15 +12,87 @@ footer{display:flex;align-items:center;gap:10px;padding:8px 20px;border-top:1px 
 @media(max-width:639px){.brand span{display:none}header{padding:4px 10px;gap:5px}.header-actions{gap:2px}#roundLabel{display:none}.home-layout{grid-template-columns:1fr;gap:28px}.hero-art{height:100px}.hero h1{font-size:42px}.skill-row{gap:5px}.screen-heading h1{font-size:23px}#home,#progressScreen,#summary{padding:22px 18px}}
 @media(orientation:portrait),(max-width:639px),(max-height:340px){body[data-screen=play] #rotate{display:grid}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+/* Common trainer destinations, independent of the subject engine. */
+.brand.axioma-platform-home{display:inline-flex;align-items:center;min-height:44px;text-decoration:none;color:inherit}
+.trainer-nav{display:flex;align-items:center;gap:3px;margin-left:auto}.trainer-nav button{font-size:13px;padding:6px 10px}.header-actions{margin-left:8px}
+#helpScreen{overflow:auto;padding:24px max(20px,5vw)}.help-content{max-width:900px;margin:auto;display:grid;gap:16px}.help-content h2{font-size:22px}.help-content p{line-height:1.7;color:var(--muted);max-width:700px}.help-content select{font:inherit;max-width:400px;min-height:44px;padding:8px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px}.help-content button{justify-self:start}.help-example{border-left:3px solid var(--teal);padding:12px 18px;line-height:1.7;color:var(--ink);background:var(--panel)}
+#choiceWork{width:350px;flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:center;padding:16px;background:var(--panel);border-left:1px solid var(--line)}.choice-answer{min-width:0;min-height:65px;padding:6px;font-size:22px}.choice-answer svg{display:block;width:100%;height:90px;color:var(--blue)}.choice-answer.correct{border:2px solid var(--teal);background:color-mix(in srgb,var(--teal) 12%,var(--paper))}.choice-answer.incorrect{border:2px solid var(--wrong)}
+@media(max-width:1100px){.brand span{display:none}#roundLabel{display:none}.header-actions{gap:0;margin-left:0}.trainer-nav{gap:0}.trainer-nav button{padding:5px 8px}}
+@media(max-height:500px) and (min-width:640px){#choiceWork{width:300px;padding:7px;gap:5px}.choice-answer{min-height:70px;font-size:20px}.choice-answer svg{height:72px}}
+@media(max-width:639px){.header-actions .icon{width:36px}.trainer-nav button{font-size:11px;padding:5px 6px}.brand{font-size:19px}.trainer-nav{margin-left:auto}}
+#choiceWork.arrow-choices{width:130px;grid-template-columns:1fr;gap:6px;padding:10px}.arrow-choices .choice-answer{min-height:44px;font-size:14px}
 </style></head>
 <body data-screen="home"><div id="app">
-<header><button id="homeBtn" class="brand quiet" aria-label="Naar startscherm">axioma<span>vectorentrainer</span></button><div class="header-actions"><span id="roundLabel">Jouw vectorroute</span><button id="progressBtn" class="quiet">Voortgang</button><button id="themeBtn" class="icon quiet" aria-label="Kleurmodus wisselen">◐</button><button id="fullBtn" class="icon quiet" aria-label="Volledig scherm">⛶</button></div></header>
+<header><a id="homeBtn" class="brand quiet" href="../../index.html" data-platform-home aria-label="Naar de startpagina van leraarBob">leraarBob<span>Vectorentrainer</span></a><nav class="trainer-nav" aria-label="Trainernavigatie"><button id="playBtn" data-trainer-action="play" class="quiet">Oefenen</button><button id="helpBtn" data-trainer-action="help" class="quiet">Uitleg</button><button id="progressBtn" data-trainer-action="progress" class="quiet">Voortgang</button></nav><div class="header-actions"><span id="roundLabel">Jouw vectorroute</span><button id="themeBtn" class="icon quiet" aria-label="Kleurmodus wisselen">◐</button><button id="fullBtn" class="icon quiet" aria-label="Volledig scherm">⛶</button></div></header>
 <section id="home" aria-label="Startscherm"><div class="home-layout"><div class="hero"><svg class="hero-art" viewBox="0 0 350 155" aria-hidden="true"><defs><marker id="herohead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10" fill="currentColor"/></marker></defs><path d="M25 135H330M25 105H330M25 75H330M25 45H330M25 15H330M25 15V135M85 15V135M145 15V135M205 15V135M265 15V135M325 15V135" fill="none" stroke="currentColor" opacity=".12"/><path d="M25 135L145 105L265 15" fill="none" stroke="currentColor" stroke-width="3" marker-mid="url(#herohead)" marker-end="url(#herohead)"/><path d="M25 135L265 15" stroke="currentColor" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#herohead)"/><circle cx="25" cy="135" r="4" fill="currentColor"/></svg><div class="eyebrow">Kijken · construeren · begrijpen</div><h1>Geef richting<br>aan je denken.</h1><p>Maak vectoren zelf. Ontdek hun samenhang, reken met verplaatsingen en oefen wat nog aandacht nodig heeft.</p><div class="actions"><button id="startBtn" class="primary">Start een sessie →</button><button id="resumeBtn" hidden>Hervat oefening</button></div><p class="storage-note">12 korte oefeningen per sessie. Je voortgang blijft in deze browser. Vrij oefenen telt niet mee voor je leerroute.</p><p id="storageWarning" class="storage-note" role="status" hidden></p></div><div><div class="path-head"><h2>Jouw vectorroute</h2><span id="masteryCount" class="eyebrow"></span></div><p class="legend">Nieuwe begrippen komen vrij zodra de basis lukt. Via ‘Verkennen’ kun je elke familie alvast uitproberen.</p><div id="skillList" class="skill-list"></div></div></div></section>
-<section id="play" hidden aria-label="Oefenruimte"><div class="questionbar"><div class="questiontext"><div id="modeLabel"></div><h1 id="prompt"></h1></div><p id="toolHint" class="toolhint"></p></div><div id="work" class="work"><div id="boardWrap"><svg id="board" tabindex="0" role="application" aria-label="Vectorenrooster. Sleep of tik begin en einde. Met pijltjestoetsen verplaats je de cursor; Enter kiest een punt."></svg><div id="introText" hidden></div></div><div id="numberWork" hidden><div id="calculation"><div id="givens"></div><div id="scaffold"></div></div><div id="coordinateEditor" class="coordinate-editor" role="group" aria-label="Coördinaten invoeren"><div class="slots"><button class="slot" id="slotX" aria-pressed="true"><small id="labelX">x · horizontaal</small><strong id="valueX">?</strong></button><button class="slot" id="slotY" aria-pressed="false"><small id="labelY">y · verticaal</small><strong id="valueY">?</strong></button></div><div id="keypad" class="keypad"></div><p id="keyHint">± wisselt het teken · / maakt een breuk · → wisselt component</p></div></div></div><footer><div id="drawTools" class="draw-tools"><button id="vectorTool" aria-pressed="true">Pijl</button><button id="resultTool" aria-pressed="false">Resultante</button><button id="undoBtn" aria-label="Laatste tekening ongedaan maken">↶ Undo</button></div><p id="feedback" role="status" aria-live="polite"></p><button id="skip" class="quiet">Later oefenen</button><button id="commit" class="primary">Controleer</button></footer></section>
+<section id="play" hidden aria-label="Oefenruimte"><div class="questionbar"><div class="questiontext"><div id="modeLabel"></div><h1 id="prompt"></h1></div><p id="toolHint" class="toolhint"></p></div><div id="work" class="work"><div id="boardWrap"><svg id="board" tabindex="0" role="application" aria-label="Vectorenrooster. Sleep of tik begin en einde. Met pijltjestoetsen verplaats je de cursor; Enter kiest een punt."></svg><div id="introText" hidden></div></div><div id="choiceWork" role="group" aria-label="Kies je antwoord" hidden></div><div id="numberWork" hidden><div id="calculation"><div id="givens"></div><div id="scaffold"></div></div><div id="coordinateEditor" class="coordinate-editor" role="group" aria-label="Coördinaten invoeren"><div class="slots"><button class="slot" id="slotX" aria-pressed="true"><small id="labelX">x · horizontaal</small><strong id="valueX">?</strong></button><button class="slot" id="slotY" aria-pressed="false"><small id="labelY">y · verticaal</small><strong id="valueY">?</strong></button></div><div id="keypad" class="keypad"></div><p id="keyHint">± wisselt het teken · / maakt een breuk · → wisselt component</p></div></div></div><footer><div id="drawTools" class="draw-tools"><button id="vectorTool" aria-pressed="true">Pijl</button><button id="resultTool" aria-pressed="false">Resultante</button><button id="undoBtn" aria-label="Laatste tekening ongedaan maken">↶ Undo</button></div><p id="feedback" role="status" aria-live="polite"></p><button id="skip" class="quiet">Later oefenen</button><button id="commit" class="primary">Controleer</button></footer></section>
+<section id="helpScreen" hidden aria-label="Uitleg"><div class="screen-heading"><div><h1>Uitleg bij je oefening</h1><p>Je tekening en je antwoorden blijven staan terwijl je hier kijkt.</p></div><button id="closeHelp">Terug naar oefening</button></div><div class="help-content"><label for="helpTopic">Onderwerp</label><select id="helpTopic"></select><h2 id="helpTitle"></h2><p id="helpConcept"></p><div id="helpExample" class="help-example"></div><h2>Zo bedien je de trainer</h2><p>Tekenen: sleep, of tik beginpunt en eindpunt. Undo neemt de laatste stap terug. Controleer beoordeelt je constructie. Bij een keuzevraag tik je meteen je antwoord aan. Bij rekenen gebruik je de vaste x- en y-velden.</p><button id="libraryBtn">Vrij oefenen per onderwerp</button></div></section>
 <section id="progressScreen" hidden aria-label="Leerroute"><div class="screen-heading"><div><h1>Wat wordt al stevig?</h1><p>Een juiste herhaling na een fout telt pas als zelfstandig bewijs bij een nieuwe vraag.</p></div><button id="closeProgress">Terug</button></div><div id="progressRows"></div></section>
 <section id="summary" hidden><div class="summary-inner"><div class="eyebrow">Sessie afgerond</div><h1>Een stap verder.</h1><div id="summaryStats" class="summary-stats"></div><p id="summaryText"></p><button id="again" class="primary">Nieuwe sessie →</button><button id="summaryHome" class="quiet">Naar start</button></div></section>
 </div><div id="rotate"><div><h2>Een breed werkbord.</h2><p>Draai je toestel om vectoren te tekenen. Je kunt de leerroute ook rechtop bekijken.</p><button id="rotateHome">Naar start</button></div></div>
-<script>/* Axioma Vectorentrainer v0.2 — Cartesian model, independent of the DOM. */
+<script data-platform-root="../../">/* Platform navigation. Subject engines own exercises; this layer owns destinations. */
+(() => {
+  'use strict';
+  if (window.AxiomaPlatform) return;
+  const script = document.currentScript;
+  const root = script?.src ? new URL('../', script.src) : new URL(script?.dataset.platformRoot || '../../', location.href);
+  const home = new URL('index.html', root);
+  const wired = new WeakSet();
+  function homeURL() { return home.href; }
+  function goHome(event) {
+    event?.preventDefault(); event?.stopPropagation();
+    // Keep previews inside their host; their existing navigation listener handles this event.
+    if (window !== window.top) {
+      window.parent.postMessage({type:'axioma:navigate-home',url:home.href}, location.origin === 'null' ? '*' : location.origin);
+      return;
+    }
+    location.assign(home.href);
+  }
+  function wireHome(element, { beforeLeave } = {}) {
+    if (!element) return null;
+    // Some imported games put the brand inside an old menu button. Convert that
+    // button, preserving its child nodes (and references to game title nodes).
+    let link = element.closest('button') || element;
+    if (wired.has(link)) return link;
+    if (link.tagName !== 'A') {
+      const anchor = document.createElement('a');
+      for (const attribute of link.attributes) if (!['type','role','tabindex','onclick'].includes(attribute.name)) anchor.setAttribute(attribute.name, attribute.value);
+      while (link.firstChild) anchor.append(link.firstChild);
+      link.replaceWith(anchor); link = anchor;
+    }
+    link.href = home.href;
+    link.dataset.platformHome = '';
+    link.classList.add('axioma-platform-home');
+    link.setAttribute('aria-label','Naar de startpagina van leraarBob');
+    link.title = 'Naar de startpagina van leraarBob';
+    link.addEventListener('click', async event => {
+      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault(); event.stopPropagation();
+      if (beforeLeave && await beforeLeave() === false) return;
+      goHome();
+    });
+    wired.add(link); return link;
+  }
+  function bindTrainer(actions) {
+    for (const button of document.querySelectorAll('[data-trainer-action]')) {
+      const action = actions[button.dataset.trainerAction];
+      if (action) button.addEventListener('click', action);
+    }
+  }
+  function trainerScreen(name) {
+    for (const button of document.querySelectorAll('[data-trainer-action]')) {
+      const active = button.dataset.trainerAction === name;
+      if (active) button.setAttribute('aria-current','page'); else button.removeAttribute('aria-current');
+    }
+  }
+  const style=document.createElement('style');
+  style.textContent='.axioma-platform-home{color:inherit;text-decoration:none;cursor:pointer}.axioma-platform-home:focus-visible{outline:3px solid currentColor;outline-offset:3px}[data-trainer-action][aria-current="page"]{box-shadow:inset 0 -2px currentColor}';
+  document.head.append(style);
+  window.AxiomaPlatform = Object.freeze({homeURL,goHome,wireHome,bindTrainer,trainerScreen});
+  const mount=()=>document.querySelectorAll('[data-platform-home],a.axiomaHome').forEach(element=>wireHome(element));
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+</script><script>/* Axioma Vectorentrainer v0.2 — Cartesian model, independent of the DOM. */
 (function(root){
 'use strict';
 const EPS=1e-8,point=(x,y)=>({x,y}),vec=(dx,dy)=>({dx,dy});
@@ -65,6 +137,11 @@ function findChain(lines,start,parts,ordered=false){
 }
 function validate(t,answer){
  const lines=(answer.strokes||[]).slice(0,24),vectors=lines,results=lines;
+ if(t.interaction==='choice'){
+  const chosen=t.options?.[answer.choice];if(!chosen)return fail('input','Kies eerst een antwoord.');
+  if(vectorEquals(chosen,t.target))return ok(t.choiceFormat==='coordinates'?`Goed: a = ${coord(t.target)}.`:'Goed. Lengte, richting en zin kloppen.');
+  const [code,message]=diagnose(chosen,t.target,t);return fail(code,message);
+ }
  if(t.interaction==='number'){
   const v=vec(parseNumber(answer.values?.[0]),parseNumber(answer.values?.[1]));
   if(!Number.isFinite(v.dx)||!Number.isFinite(v.dy))return fail('input','Vul beide componenten in. Een breuk zoals −1/2 mag ook.');
@@ -221,11 +298,21 @@ function generate(id,{seed=1,level=0,variant=0,repair=null}={}){
   if(level<2){t.interaction='point';t.axes=true;t.points=[mark(A,'A'),mark(B,'B'),mark(C,'C')];t.segments=[[A,B],[B,C]];t.targetPoint=D;t.pointName='D';}
   else {numeric(vec(D.x,D.y),'A, B, C, D liggen in die volgorde op een parallellogram. Bereken D.',`A = (${A.x}, ${A.y})    B = (${B.x}, ${B.y})    C = (${C.x}, ${C.y})`);t.answerLabel='D';}
  }else throw Error('Unknown skill: '+id);
+ // Recognition complements construction; arrow choices precede coordinate notation.
+ if(variant%4===1&&(['equal','opposite'].includes(id)||id==='coords'&&level>0)){
+  if(id!=='coords'){const reference=vec(2*Math.sign(a.dx||1),Math.sign(a.dy||1));t.target=id==='opposite'?scale(reference,-1):reference;t.refs=[ref(point(-6,0),reference,'a')];}
+  const target=t.target,candidates=[target,scale(target,-1),scale(target,2),vec(target.dy,target.dx),vec(-target.dy,target.dx),add(target,vec(1,0))],options=[];
+  for(const candidate of candidates)if(!options.some(x=>vectorEquals(x,candidate))&&options.length<4)options.push(candidate);
+  for(let i=options.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[options[i],options[j]]=[options[j],options[i]];}
+  t.options=options;t.interaction='choice';t.representation='choice-grid';t.choiceFormat=id==='coords'?'coordinates':'arrows';t.points=[];if(t.choiceFormat==='arrows')t.choicePositions=[point(0,2),point(6,2),point(0,-2),point(6,-2)];
+  t.prompt=id==='coords'?'Welke coördinaten horen bij a?':id==='opposite'?'Welke pijl is tegengesteld aan a?':'Welke pijl stelt dezelfde vector als a voor?';
+ }
  t.success=t.success||'';t.repair=repair;
  // Fit geometric givens AND every potential construction, never mark hidden target points.
  if(t.representation!=='symbolic'){
   const pts=[t.start,...t.points.map(p=>p.p),...t.refs.flatMap(r=>[r.start,endPointFromVector(r.start,r.v)]),...(t.segments||[]).flat()];
   if(t.target)pts.push(endPointFromVector(t.start,t.target));if(t.targetPoint)pts.push(t.targetPoint);
+  if(t.choicePositions)for(let i=0;i<t.options.length;i++)pts.push(t.choicePositions[i],endPointFromVector(t.choicePositions[i],t.options[i]));
   if(t.parts)for(const start of [t.start,t.secondStart].filter(Boolean))for(const p of t.parts)pts.push(endPointFromVector(start,p),endPointFromVector(start,sum(t.parts)));
   if(id==='combination')pts.push(endPointFromVector(t.start,scale(t.source,t.factor)),endPointFromVector(t.start,scale(b,-1)));
   if(t.dirs){const [d,e]=t.dirs;if(d&&e&&Math.abs(cross(d,e))>EPS){const k=cross(t.target,e)/cross(d,e),l=cross(d,t.target)/cross(d,e);pts.push(endPointFromVector(t.start,scale(d,k)),endPointFromVector(t.start,scale(e,l)));}}
@@ -267,12 +354,12 @@ if(typeof module!=='undefined'&&module.exports)module.exports=api;root.VectorTra
 const {VectorMath:M,TaskValidator:Validator,TaskGenerator:Generator,TrainerScheduler:Scheduler,parseNumber,format,coord}=VectorTrainerCore;
 const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',KEY='axioma-vectorentrainer-v020';
 const titles={locked:'Nog te ontdekken',new:'Nieuw',guided:'Begeleid',learning:'In opbouw',solid:'Stevig'};
-let progress=Scheduler.freshState(),session=null,task=null,answer={strokes:[],values:['',''],point:null},intro=false,done=false,dirty=false,errorCode=null,stage=0,role='vector',activeSlot=0,free=false,previousScreen='home',view={},anchor=null,drag=null,cursor=M.point(0,0),cursorVisible=false,seedSerial=Date.now()>>>0;
-let restored=null;
+let progress=Scheduler.freshState(),session=null,task=null,answer={strokes:[],values:['',''],point:null,choice:null},intro=false,done=false,dirty=false,errorCode=null,stage=0,role='vector',activeSlot=0,free=false,previousScreen='home',view={},anchor=null,drag=null,cursor=M.point(0,0),cursorVisible=false,seedSerial=Date.now()>>>0;
+let restored=null,advanceTimer=null,pendingAdvance=false;
 try{const raw=JSON.parse(localStorage.getItem(KEY)||'null');progress=Scheduler.sanitize(raw?.progress);if(raw?.mode==='dark')document.documentElement.dataset.mode='dark';if(raw?.draft&&Generator.skills.some(s=>s.id===raw.draft.skill))restored=raw.draft;}catch{storageError()}
 function storageError(){$('storageWarning').hidden=false;$('storageWarning').textContent='Deze browser kan je voortgang niet bewaren. Je kunt wel blijven oefenen.'}
 function save(){try{const draft=task?{skill:task.skill,seed:task.seed,variant:task.variant,level:task.level,repair:task.repair,intro,done,dirty,errorCode,stage,free,session,answer}:restored;localStorage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft}));}catch{storageError()}}
-function screen(name){cancelGesture();document.body.dataset.screen=name;for(const id of ['home','play','progressScreen','summary'])$(id).hidden=id!==name;if(name==='play')requestAnimationFrame(renderBoard);if(name==='home')renderHome()}
+function screen(name){cancelGesture();clearTimeout(advanceTimer);document.body.dataset.screen=name;AxiomaPlatform.trainerScreen(({play:'play',helpScreen:'help',progressScreen:'progress'})[name]||'');for(const id of ['home','play','progressScreen','helpScreen','summary'])$(id).hidden=id!==name;if(name==='play'){requestAnimationFrame(renderBoard);if(pendingAdvance)scheduleAdvance();}if(name==='home')renderHome()}
 function message(text,kind=''){$('feedback').textContent=text;$('feedback').className=kind}
 function newSeed(){return (++seedSerial+Math.floor(Math.random()*1e8))>>>0}
 function taskLevel(id){const s=progress.skills[id];return s.seen<2?0:s.seen<5?1:2}
@@ -285,36 +372,63 @@ function nextTask(){
  let t;for(let i=0;i<15;i++){t=Generator.generate(id,{seed:newSeed(),level,variant,repair:choice.repair});if(!progress.lastSignatures.includes(t.signature))break}
  task=t;intro=!free&&choice.mode==='intro';resetAnswer();updateUI();screen('play');save();
 }
-function resetAnswer(){answer={strokes:[],values:['',''],point:null};done=false;dirty=false;errorCode=null;stage=0;role='vector';activeSlot=0;cursor=M.point(0,0);cursorVisible=false;cancelGesture()}
+function resetAnswer(){clearTimeout(advanceTimer);pendingAdvance=false;answer={strokes:[],values:['',''],point:null,choice:null};done=false;dirty=false;errorCode=null;stage=0;role='vector';activeSlot=0;cursor=M.point(0,0);cursorVisible=false;cancelGesture()}
 function startSession(){free=false;session={answered:0,clean:0,repairs:0};nextTask()}
 function explore(id){free=true;session=null;task=Generator.generate(id,{seed:newSeed(),level:1,variant:0});intro=false;resetAnswer();updateUI();screen('play');save()}
 function finish(clean){
  done=true;if(!free){Scheduler.record(progress,task,{clean,code:errorCode||'practice'});session.answered++;if(clean)session.clean++;if(task.repair&&clean)session.repairs++;}
- updateUI(false);save();
+ updateUI(false);save();if(!free)scheduleAdvance();
 }
+function scheduleAdvance(){clearTimeout(advanceTimer);if(!done||free)return;pendingAdvance=true;advanceTimer=setTimeout(()=>{if(document.body.dataset.screen==='play'&&!document.hidden&&done){pendingAdvance=false;nextTask()}},1400)}
+document.addEventListener('visibilitychange',()=>{clearTimeout(advanceTimer);if(!document.hidden&&pendingAdvance&&document.body.dataset.screen==='play')scheduleAdvance()});
 function guidedPrompt(){if(task.guidedSteps&&!intro&&stage<2)return stage===0?'Maak vanuit P een kopie van u.':'Voeg nu een kopie van v toe aan je route.';return task.prompt}
 function updateUI(resetFeedback=true){
  if(!task)return;
  $('prompt').textContent=intro?Generator.skills.find(s=>s.id===task.skill).label:guidedPrompt();
  $('modeLabel').textContent=`${free?'Vrij oefenen':intro?'Nieuw begrip':task.repair?'Herstel · nieuwe voorstelling':task.level===0?'Begeleid':task.level===1?'Zelf proberen':'Gemengd oefenen'} · ${Generator.skills.find(s=>s.id===task.skill).label}`;
  $('roundLabel').textContent=free?'Vrij oefenen':`Oefening ${Math.min(12,(session?.answered||0)+(done?0:1))} / 12`;
- const numeric=task.interaction==='number',symbolic=task.representation==='symbolic';
- $('work').className='work '+(numeric?symbolic?'symbolic':'grid-number':'');$('numberWork').hidden=!numeric;
+ const choice=task.interaction==='choice',numeric=task.interaction==='number',symbolic=task.representation==='symbolic';
+ $('work').className='work '+(numeric?symbolic?'symbolic':'grid-number':choice?'choice-grid':'');$('numberWork').hidden=!numeric;$('choiceWork').hidden=!choice;renderChoices();
  $('givens').textContent=task.givens||task.prompt;$('scaffold').textContent=intro?Generator.skills.find(s=>s.id===task.skill).intro:(task.scaffold||'');
  $('introText').hidden=!intro||symbolic;
  if(intro&&!symbolic){$('introText').replaceChildren();const strong=document.createElement('strong');strong.textContent='Voorbeeld · kijk wat er verandert';$('introText').append(strong,document.createTextNode(Generator.skills.find(s=>s.id===task.skill).intro));}
- $('toolHint').textContent=intro?'Bekijk het voorbeeld. Daarna probeer je andere getallen.':numeric?'x eerst, y daarna. ± voor negatief; / voor een breuk.':task.interaction==='point'?(task.givens||'Tik een roosterpunt en controleer.'):'Sleep, of tik begin → einde. Niets wordt beoordeeld vóór Controleer.';
- $('drawTools').hidden=intro||numeric;
+ $('toolHint').textContent=intro?'Bekijk het voorbeeld. Daarna probeer je andere getallen.':choice?'Tik je antwoord. Elk roostervakje stelt één stap voor.':numeric?'x eerst, y daarna. ± voor negatief; / voor een breuk.':task.interaction==='point'?(task.givens||'Tik een roosterpunt en controleer.'):'Sleep, of tik begin → einde. Niets wordt beoordeeld vóór Controleer.';
+ $('drawTools').hidden=intro||numeric||choice;
  $('vectorTool').hidden=task.interaction==='point';
  $('resultTool').hidden=task.interaction!=='sketch'||!['headtail','ordered','parallelogram'].includes(task.policy)||task.guidedSteps&&stage<2;
  $('vectorTool').setAttribute('aria-pressed',String(role==='vector'));$('resultTool').setAttribute('aria-pressed',String(role==='result'));
  for(const id of ['vectorTool','resultTool','undoBtn'])$(id).disabled=done;
+ $('commit').hidden=choice&&!done&&!intro;
  $('commit').textContent=intro?'Zelf proberen →':done?'Verder →':'Controleer';$('skip').hidden=intro||done;
  $('labelX').textContent=task.slotLabels?.[0]||'x · horizontaal';$('labelY').textContent=task.slotLabels?.[1]||'y · verticaal';
  $('coordinateEditor').setAttribute('aria-label',task.slotLabels?'Coëfficiënten van eenheidsvectoren':'Coördinaten invoeren');
  if(resetFeedback)message(intro?'Dit is een uitgewerkt voorbeeld.':free?'Vrij oefenen telt niet mee voor je leerroute.':task.repair?repairHint(task.repair):'Je kiest zelf waar je tekent. Je kunt altijd een stap terug.');
  renderSlots();renderBoard();
 }
+
+function renderChoices(){
+ const root=$('choiceWork');root.replaceChildren();if(task.interaction!=='choice')return;
+ root.className=task.choiceFormat==='arrows'?'arrow-choices':'';
+ task.options.forEach((v,i)=>{
+  const b=document.createElement('button');b.className='choice-answer';b.dataset.choice=String(i);b.textContent=task.choiceFormat==='coordinates'?coord(v):`Pijl ${String.fromCharCode(65+i)}`;
+  b.disabled=intro||done;
+  if(answer.choice===i)b.classList.add(M.vectorEquals(v,task.target)?'correct':'incorrect');
+  b.onclick=()=>{answer.choice=i;commit();renderChoices()};root.append(b);
+ });
+}
+function showHelp(){
+ if(task&&!intro&&!done&&!free){dirty=true;errorCode=errorCode||'help';save()}
+ const select=$('helpTopic');select.replaceChildren();
+ for(const skill of Generator.skills){const option=document.createElement('option');option.value=skill.id;option.textContent=skill.label;select.append(option)}
+ select.value=task?.skill||Generator.skills[0].id;renderHelp();screen('helpScreen');
+}
+function renderHelp(){
+ const id=$('helpTopic').value,skill=Generator.skills.find(s=>s.id===id);$('helpTitle').textContent=skill.label;$('helpConcept').textContent=skill.intro;
+ const examples={props:'Een pijl twee keer zo lang maken verandert de lengte. Hem omkeren verandert de zin. Hem draaien verandert de richting.',equal:'Van (0, 0) naar (2, 1) en van (3, 2) naar (5, 3): twee verschillende plaatsen, dezelfde verplaatsing.',opposite:'Bij a = (2, 1) is −a = (−2, −1). De nulvector komt terug op zijn beginpunt.',scalar:'Bij a = (4, 2) is −½a = (−2, −1): half zo lang en de andere kant op.',headtail:'u eindigt in Q. Begin v in Q. De resultante loopt van het begin van u naar het einde van v.',parallelogram:'Kopieer u vanaf de kop van v en v vanaf de kop van u. Verbind het gemeenschappelijke begin met de overstaande hoek.',coords:'Drie vakken naar rechts en twee omlaag betekent (3, −2). Het beginpunt hoeft niet de oorsprong te zijn.',ab:'A = (−2, 1), B = (3, 4). Dan is AB = (3 − (−2), 4 − 1) = (5, 3).',coordadd:'(3, −2) + (−1, 4) = (2, 2). Je telt de twee x-componenten en de twee y-componenten apart op.',coordscale:'−2 × (3, −1) = (−6, 2). De factor geldt voor beide componenten.',basis:'3eₓ + 4eᵧ = (3, 4). eₓ geeft één stap naar rechts, eᵧ één stap omhoog.',figure:'AD + DC = AC: het eindpunt van de eerste verplaatsing is het begin van de tweede.'};
+ $('helpExample').textContent=examples[id]||'Werk vanuit het beginpunt. Onderzoek eerst welke verplaatsingen gegeven zijn en welke ene verplaatsing je zoekt. Teken of reken daarna zelf.';
+}
+$('helpTopic').onchange=renderHelp;$('closeHelp').onclick=()=>task?resume():startSession();
+
 function repairHint(code){return ({xy:'Let deze keer op het verschil tussen horizontaal en verticaal.',ba:'Volg van begin naar einde; trek de begincoördinaten af.',opposite:'Controleer de zin: welke kant wijst de pijl op?',scale:'Vergelijk de factor en de lengte van je nieuwe vector.','one-component':'De factor geldt voor zowel x als y.',headtail:'Onderzoek waar de volgende verplaatsing moet beginnen.',resultant:'Kijk naar het begin en einde van de volledige route.',order:'De gevraagde volgorde hoort hier bij de methode.'})[code]||'Probeer het opnieuw met andere getallen en een andere plaats.'}
 function commit(){
  if(intro){progress.skills[task.skill].intro=true;const old=task;task=Generator.generate(old.skill,{seed:newSeed(),level:0,variant:progress.skills[old.skill].seen,repair:old.repair});intro=false;resetAnswer();updateUI();save();return}
@@ -383,6 +497,7 @@ function renderBoard(){
  for(const [a,b] of task.segments||[])line(a,b,{stroke:'var(--muted)','stroke-width':1.5});
  for(const dir of task.dirs||[]){const k=30/Math.max(1,M.length(dir)),a=M.endPointFromVector(task.start,M.scale(dir,-k)),b=M.endPointFromVector(task.start,M.scale(dir,k));line(a,b,{stroke:'var(--muted)','stroke-width':1.3,'stroke-dasharray':'4 5'})}
  for(const r of task.refs)arrow(r.start,r.v,r.name+(task.interaction==='number'&&task.skill!=='coords'&&task.skill!=='ab'?' '+coord(r.v):''),'given');
+ if(task.choicePositions)task.options.forEach((v,i)=>arrow(task.choicePositions[i],v,String.fromCharCode(65+i),'given'));
  for(const s of answer.strokes)arrow(s.start,s,s.role==='result'?'r':'',s.role==='result'?'result':'student');
  if(answer.point)drawPoint(answer.point,task.pointName||'?',true);
  if(intro){if(task.interaction==='point')drawPoint(task.targetPoint,task.pointName||'P',true);else for(const s of exampleStrokes())arrow(s.start,s,s.role==='result'?'r':'','example',true);}
@@ -398,7 +513,7 @@ function renderBoard(){
 function snap(clientX,clientY){const r=$('board').getBoundingClientRect();if(!view.unit||clientX<r.left||clientY<r.top||clientX>r.right||clientY>r.bottom)return null;
  const x=Math.round((clientX-r.left-view.ox)/view.unit),y=Math.round((view.oy-clientY+r.top)/view.unit);return x>=view.minX&&x<=view.maxX&&y>=view.minY&&y<=view.maxY?M.point(x,y):null;
 }
-function editable(){return task&&!intro&&!done&&task.interaction!=='number'&&document.body.dataset.screen==='play'}
+function editable(){return task&&!intro&&!done&&['sketch','point'].includes(task.interaction)&&document.body.dataset.screen==='play'}
 function cancelGesture(){anchor=null;drag=null;}
 function draw(start,end){if(!editable())return;if(answer.strokes.length>=24){message('Je hebt 24 pijlen getekend. Gebruik Undo om plaats te maken.');return}answer.strokes.push(M.stroke(start,end,role));message('Tekening bewaard. Controleer als je klaar bent.');save();renderBoard()}
 function tap(p){if(task.interaction==='point'){answer.point=p;message('Punt gekozen. Controleer als je klaar bent.');save();renderBoard();return}if(anchor){const a=anchor;anchor=null;draw(a,p)}else{anchor=p;message('Beginpunt gekozen. Tik nu het eindpunt.');renderBoard()}}
@@ -424,18 +539,19 @@ function resume(){
  if(restored&&!task){const d=restored;restored=null;try{
   task=Generator.generate(d.skill,{seed:Number(d.seed)>>>0,level:Math.max(0,Math.min(2,Number(d.level)||0)),variant:Math.max(0,Number(d.variant)||0),repair:typeof d.repair==='string'?d.repair:null});
   const isPoint=p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y)&&Math.abs(p.x)<1000&&Math.abs(p.y)<1000;
-  answer={strokes:(d.answer?.strokes||[]).filter(s=>isPoint(s.start)&&isPoint(s.end)).slice(0,24).map(s=>M.stroke(s.start,s.end,s.role==='result'?'result':'vector')),values:[0,1].map(i=>typeof d.answer?.values?.[i]==='string'?d.answer.values[i].slice(0,12):''),point:isPoint(d.answer?.point)?d.answer.point:null};
+  answer={strokes:(d.answer?.strokes||[]).filter(s=>isPoint(s.start)&&isPoint(s.end)).slice(0,24).map(s=>M.stroke(s.start,s.end,s.role==='result'?'result':'vector')),values:[0,1].map(i=>typeof d.answer?.values?.[i]==='string'?d.answer.values[i].slice(0,12):''),point:isPoint(d.answer?.point)?d.answer.point:null,choice:Number.isInteger(d.answer?.choice)?d.answer.choice:null};
   free=!!d.free;intro=!!d.intro;done=!!d.done;dirty=!!d.dirty;errorCode=typeof d.errorCode==='string'?d.errorCode:null;stage=Math.max(0,Math.min(2,Number(d.stage)||0));session={answered:Math.max(0,Math.min(12,Number(d.session?.answered)||0)),clean:Math.max(0,Math.min(12,Number(d.session?.clean)||0)),repairs:Math.max(0,Math.min(12,Number(d.session?.repairs)||0))};
  }catch{task=null;startSession();return}}
  if(task){screen('play');updateUI();if(done)message('Deze oefening is al verwerkt. Ga verder naar een nieuwe vraag.','good')}
 }
-$('homeBtn').onclick=$('summaryHome').onclick=$('rotateHome').onclick=()=>{save();screen('home')};$('progressBtn').onclick=showProgress;$('closeProgress').onclick=()=>screen(previousScreen);$('startBtn').onclick=$('again').onclick=startSession;$('resumeBtn').onclick=resume;
+$('libraryBtn').onclick=$('summaryHome').onclick=$('rotateHome').onclick=()=>{save();screen('home')};
+ AxiomaPlatform.bindTrainer({play:()=>task||restored?resume():startSession(),help:showHelp,progress:showProgress});$('closeProgress').onclick=()=>screen(previousScreen);$('startBtn').onclick=$('again').onclick=startSession;$('resumeBtn').onclick=resume;
 $('themeBtn').onclick=()=>{document.documentElement.dataset.mode=document.documentElement.dataset.mode==='dark'?'light':'dark';save();renderBoard()};
 $('fullBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{if(task)message('Volledig scherm is hier niet beschikbaar. De oefening blijft bruikbaar.')}};
 new ResizeObserver(entries=>{const r=entries[0].contentRect;if(Math.abs(r.width-(view.w||0))>1||Math.abs(r.height-(view.h||0))>1)cancelGesture();renderBoard()}).observe($('boardWrap'));
 window.addEventListener('pagehide',save);
 // Read-only geometry inspection for reproducible release checks. No answer data is shown in the UI.
 window.AxiomaVectorTrainer=Object.freeze({inspect:()=>structuredClone({task,answer,intro,done,dirty,stage,free,session,progress,view}),project:p=>project(p)});
-renderHome();
+renderHome();if(restored)resume();else startSession();
 })();
 </script></body></html>
