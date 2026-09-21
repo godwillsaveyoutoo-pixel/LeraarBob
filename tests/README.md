@@ -82,3 +82,19 @@ de zichtbaarheid van die groep in het startscherm van een andere leerling.
 controleert de gedeelde native teruglink. De vectorbrowsertest controleert ook
 direct starten, Uitleg/Voortgang zonder verlies van deelantwoorden en
 herkenningsvragen. Zie `PLATFORM_FRAMEWORK.md` voor de platformafspraken.
+
+## Universele accounts en voortgang
+
+`node --test tests/account-auth.test.cjs` controleert accountwissels en late
+authreacties. `node tests/account-progress-browser.cjs` gebruikt de echte
+spelpagina's met fictieve accounts, geblokkeerde externe verzoeken en een
+database in het geheugen. De test dekt het hervatten van alle geïmporteerde
+spellen, offline herstel, accountwisseling tijdens opslaan en het volledige
+vectorconcept op een tweede browsercontext. De vectorbrowsertest controleert
+ook pijltjes boven symbolen en coherente keuzenummers. De social-browsertest
+doorloopt nu ook een complete solopartij en terugkeer naar de online lobby.
+
+`tests/account-progress-database.sql` wordt uitsluitend binnen BEGIN/ROLLBACK
+uitgevoerd. Hij maakt fictieve accounts binnen de transactie en controleert
+accountbinding, revisieconflicten en uitvoerrechten. Deze controle is op het
+gekoppelde project uitgevoerd; de testgegevens zijn teruggedraaid.

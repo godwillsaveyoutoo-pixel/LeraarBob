@@ -41,6 +41,10 @@ const BASE='http://127.0.0.1:8765/games/vectoren/Axioma_Vectorentrainer_v0.2.htm
  const beforeHelp=await ev('AxiomaVectorTrainer.inspect().answer');await click('helpBtn');assert.equal(await ev('document.body.dataset.screen'),'helpScreen');await click('closeHelp');assert.deepEqual(await ev('AxiomaVectorTrainer.inspect().answer'),beforeHelp);
  await click('progressBtn');await click('closeProgress');assert.deepEqual(await ev('AxiomaVectorTrainer.inspect().answer'),beforeHelp);
  await fixture('equal',{variant:1});t=await ev('AxiomaVectorTrainer.inspect().task');assert.equal(t.interaction,'choice');await layout('recognition');
+ assert(await ev(`!!document.querySelector('#prompt .vector-symbol[data-vector="a"] svg')`),'vector notation in prompt');
+ assert(await ev(`!!document.querySelector('#board path[data-vector="a"]')`),'vector notation above reference arrow');
+ assert.deepEqual(await ev(`[...document.querySelectorAll('.choice-answer')].map(b=>b.textContent)`),['Keuze 1','Keuze 2','Keuze 3','Keuze 4']);
+ assert(!await ev(`[...document.querySelectorAll('#board text')].some(t=>/^[ABCD]$/.test(t.textContent))`),'choice arrows are numbered, not named as points');
  const wrong=t.options.findIndex(v=>!Core.VectorMath.vectorEquals(v,t.target)),right=t.options.findIndex(v=>Core.VectorMath.vectorEquals(v,t.target));
  await ev(`document.querySelector('[data-choice="${wrong}"]').click()`);assert(await ev('AxiomaVectorTrainer.inspect().dirty'));assert.equal(await ev('AxiomaVectorTrainer.inspect().done'),false);
  await ev(`document.querySelector('[data-choice="${right}"]').click()`);assert(await ev('AxiomaVectorTrainer.inspect().done'));

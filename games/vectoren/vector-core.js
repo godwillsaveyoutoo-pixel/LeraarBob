@@ -123,7 +123,7 @@ const skills=[
  skill('decompose','Ontbinden in richtingen',['sum'],'Zoek twee componenten in de gegeven richtingen. Hun som moet r zijn. Negatieve en nulcomponenten zijn mogelijk.'),
  skill('coords','Van pijl naar (x, y)',['decompose'],'x is de horizontale verplaatsing, y de verticale. Rechts en omhoog zijn positief. De coördinaten beschrijven de verplaatsing, niet het eindpunt.'),
  skill('arrow','Van (x, y) naar pijl',['coords'],'(x, y) beschrijft hoeveel je horizontaal en verticaal verplaatst, vanaf om het even welk beginpunt.'),
- skill('ab','Van A naar B',['coords'],'Voor AB neem je eindpunt min beginpunt: B − A. Trek de x-coördinaten en de y-coördinaten afzonderlijk af.'),
+ skill('ab','Van A naar B',['coords'],'Voor de coördinaten van AB neem je die van eindpunt B min die van beginpunt A. Trek de x-coördinaten en de y-coördinaten afzonderlijk af.'),
  skill('points','Punt en plaatsvector',['ab','arrow'],'P is een plaats. OP is de verplaatsing vanuit O naar P. Een ander beginpunt verandert de puntcoördinaten van het eindpunt.'),
  skill('coordadd','Rekenen: som en verschil',['coords','difference'],'Werk horizontaal en verticaal apart. Tel x bij x en y bij y. Bij aftrekken verander je beide tekens van de tweede vector.'),
  skill('coordscale','Rekenen: veelvouden',['coords','scalar'],'Vermenigvuldig beide componenten met dezelfde factor. Dit geldt ook bij negatieve factoren en breuken.'),
@@ -132,7 +132,7 @@ const skills=[
  skill('basis','Eenheidsvectoren eₓ en eᵧ',['arrow','coordscale'],'eₓ = (1, 0) en eᵧ = (0, 1). Elke vector (x, y) is x eₓ + y eᵧ.'),
  skill('figure','Vectoren in figuren',['headtail','difference'],'Volg de letters: AD + DC gaat van A via D naar C. Het resultaat is AC, onafhankelijk van de omweg.'),
  skill('route','Route en eindpunt',['combination','points','coordcombo'],'Een vectoruitdrukking beschrijft de totale verplaatsing. Tel die bij je beginpunt om te weten waar je aankomt.'),
- skill('fourth','Vierde hoekpunt',['parallelogram','points'],'Bij opeenvolgende hoekpunten A, B, C, D geldt AD = BC. Dan is D = A + C − B. De volgorde van de hoekpunten doet ertoe.')
+ skill('fourth','Vierde hoekpunt',['parallelogram','points'],'Bij opeenvolgende hoekpunten A, B, C, D geldt AD = BC. Bereken elke coördinaat van D als die van A plus die van C min die van B. De volgorde van de hoekpunten doet ertoe.')
 ];
 function rng(seed){let a=seed>>>0;return ()=>{a+=0x6D2B79F5;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296}}
 const ref=(start,v,name)=>({start,v,name}),mark=(p,name)=>({p,name});
@@ -172,7 +172,7 @@ function generate(id,{seed=1,level=0,variant=0,repair=null}={}){
   else {t.interaction='number';t.representation='grid-number';t.axes=true;t.answerLabel='a';}
  }else if(id==='arrow')draw(a,`Teken de vector ${coord(a)} vanuit P.`,[]);
  else if(id==='ab'){
-  const A=point(-2,1),B=endPointFromVector(A,a);numeric(a,'Bepaal AB.',`A = (${A.x}, ${A.y})    B = (${B.x}, ${B.y})`,level<2);t.refs=level<2?[ref(A,a,'AB')]:[];t.points=level<2?[mark(A,'A'),mark(B,'B')]:[];t.answerLabel='AB';t.axes=true;
+  const A=point(-2,1),B=endPointFromVector(A,a);numeric(a,'Bepaal de coördinaten van AB.',`A = (${A.x}, ${A.y})    B = (${B.x}, ${B.y})`,level<2);t.refs=level<2?[ref(A,a,'AB')]:[];t.points=level<2?[mark(A,'A'),mark(B,'B')]:[];t.answerLabel='AB';t.axes=true;
  }else if(id==='points'){
   t.axes=true;
   if(v===0){t.start=O;t.points=[mark(O,'O'),mark(point(a.dx,a.dy),'P')];draw(a,`P = ${coord(a)}. Teken de plaatsvector OP.`,[]);}

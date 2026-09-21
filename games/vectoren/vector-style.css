@@ -23,3 +23,5 @@ footer{display:flex;align-items:center;gap:10px;padding:8px 20px;border-top:1px 
 
 /* Account and online controls remain available in the narrow home view. */
 @media(max-width:639px){#app{grid-template-rows:80px minmax(0,1fr)}header{flex-wrap:wrap}.trainer-nav{order:3;width:100%;justify-content:center}.header-actions{margin-left:auto}}
+
+.vector-symbol{position:relative;display:inline-block;padding-top:.2em;font-family:Georgia,serif;font-style:italic;white-space:nowrap;line-height:1.1}.vector-symbol>svg{position:absolute;top:-.12em;left:0;width:100%;height:.35em;overflow:visible}.vector-symbol>span{display:inline}

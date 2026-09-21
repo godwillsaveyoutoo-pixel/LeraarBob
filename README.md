@@ -9,6 +9,15 @@ De catalogus gebruikt `kind` voor de werkvorm op de startpagina: `learn` = Verke
 `gameType` en `progressType` beschrijven de bestaande registratie en voortgang.
 Werk zowel `games.json` als de offlinekopie `js/catalog.js` bij als de catalogus wijzigt.
 
+## Actuele account- en spelkoppeling
+
+Nieuwe spellen sluiten aan op de levenscyclus in
+[PLATFORM_FRAMEWORK.md](PLATFORM_FRAMEWORK.md). Deze regelt accountgebonden
+opslag, laden vóór het spelen, offline herstel en revisieconflicten. Kopieer
+geen losse synchronisatielussen uit oudere versiebeschrijvingen hieronder.
+Vectoren is gekoppeld aan leerlingaccounts. Zeeslag ondersteunt zowel online
+tegenstanders als solo tegen de computer.
+
 ## Structuur
 - `index.html` = frontpage
 - `games.json` = tegels op de frontpage

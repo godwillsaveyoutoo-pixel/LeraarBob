@@ -66,9 +66,12 @@ const mock=`(()=>{
   }
 
   const p=await open(game('pythagoras'),{remote:{completed:['1','2'],total:10}});
+  await p.send('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});
   await p.eval('AxiomaGame.flush()');
+  const dockWidth=await p.eval(`document.querySelector('#axioma-game-status').getBoundingClientRect().width`);
   await p.eval('testOffline=true;AxiomaSimple.cloud([1,2,3],10);AxiomaGame.flush()');
   assert.equal(await p.eval('AxiomaGame.status'),'offline');
+  assert.equal(await p.eval(`document.querySelector('#axioma-game-status').getBoundingClientRect().width`),dockWidth,'status width stays fixed while saving/offline');
   assert(await p.eval('Object.keys(localStorage).some(k=>k.includes("student:learner-b")&&JSON.parse(localStorage.getItem(k)).dirty)'));
   await p.eval('testOffline=false;AxiomaGame.flush()');assert.equal(await p.eval('AxiomaGame.status'),'saved');
   assert.deepEqual(await p.eval('testRow.state.completed'),['1','2','3']);
@@ -112,6 +115,7 @@ const mock=`(()=>{
    const c=await open(game(id),{account:{id:'teacher',role:'teacher'}});assert.equal(await c.eval('testWrites.length'),0,id);
    console.log('PASS teacher can open:',id);
   }
-  console.log('PASS guest/teacher separation; no actual accounts or database writes');
+  const navalGuest=await open(game('rechten-zeeslag'),{account:null});await navalGuest.eval(`document.querySelector('#demoBtn').click()`);assert.equal(await navalGuest.eval(`document.querySelector('#opponentName').textContent`),'Computer');assert(await navalGuest.eval(`document.querySelector('#gameScreen').classList.contains('active')`));
+  console.log('PASS guest/teacher separation and guest solo entry; no actual accounts or database writes');
  }finally{for(const id of contexts)await browser.send('Target.disposeBrowserContext',{browserContextId:id});for(const c of clients)c.ws.close();browser.ws.close()}
 })().catch(e=>{console.error(e);process.exit(1)});

@@ -20,8 +20,8 @@
     <section id="gateScreen" class="screen active">
       <div class="gate">
         <svg class="gateMark" viewBox="0 0 132 100" aria-hidden="true"><rect x="1" y="1" width="130" height="98" rx="14" fill="#e6efea" stroke="#9bb2ad"/><path d="M16 30H116 M16 50H116 M16 70H116 M36 14V86 M56 14V86 M76 14V86 M96 14V86" stroke="#b8cbc7"/><path d="M16 70H116 M56 14V86" stroke="#526f77" stroke-width="1.5"/><g transform="translate(32 70) rotate(-27)"><path d="M0 -6Q-8 0 0 6H65L79 0L65 -6Z" fill="#8eafa0" stroke="#436d61"/><path d="M8 0H62" stroke="#436d61"/><g fill="#f9f8ed"><circle cx="8" r="3"/><circle cx="32" r="3"/><circle cx="56" r="3"/></g></g></svg><h1>Rechten Zeeslag</h1><div class="gateMath">y = ax + b</div>
-        <p>Verdedig je vloot. Vind de schepen van je tegenstander met rechten op het assenstelsel. Log in op leraarBob om online tegen iemand te spelen. Je kunt ook zonder account een demopartij proberen.</p>
-        <p><a href="../../../">Naar leraarBob om in te loggen</a></p><button class="demoLink" id="demoBtn">Speel een demopartij</button>
+        <p>Verdedig je vloot. Vind de schepen van je tegenstander met rechten op het assenstelsel. Log in op leraarBob om online tegen iemand te spelen. Je kunt ook alleen tegen de computer spelen, met of zonder account.</p>
+        <p><a href="../../../">Naar leraarBob om in te loggen</a></p><button class="demoLink" id="demoBtn">Speel tegen de computer</button>
       </div>
     </section>
 
@@ -31,6 +31,7 @@
           <div><h1>Wie is online?</h1><p>Daag iemand op leraarBob uit, ook vanuit een ander spel.</p></div>
           <div class="lobbyTools"><p id="lobbyCount"></p><button class="rankBtn" id="rankingBtn">Ranglijst</button></div>
         </div>
+        <div class="soloChoice"><div><strong>Liever alleen spelen?</strong><p>Oefen tegen de computer, ook wanneer er niemand anders online is.</p></div><button class="rankBtn" id="soloBtn">Speel tegen de computer</button></div>
         <div class="playerList" id="playerList"></div>
         <div class="lobbyNote">Spelers die al in een partij zitten blijven zichtbaar als <b>In spel</b>, maar kunnen niet worden uitgenodigd. Een uitnodiging vervalt automatisch na 90 seconden.</div>
       </div>
@@ -39,7 +40,7 @@
     <section id="gameScreen" class="screen">
       <div class="matchbar">
         <button class="backLobby" id="leaveBtn">← Lobby</button>
-        <div class="matchTitle"><span id="meName">Jij</span> <span class="vs">tegen</span> <span id="opponentName">…</span></div>
+        <div class="matchTitle"><span id="meName">Jij</span> <span class="vs">tegen</span> <span id="opponentName">…</span><small class="soloNote" id="soloNote" hidden>Solo · geen online rangschikking</small></div>
         <div class="turnPill" id="turnPill">Vloot plaatsen</div>
       </div>
       <div class="boards">

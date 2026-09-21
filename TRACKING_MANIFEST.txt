@@ -10,12 +10,18 @@ data-check            22 dossiers
 signal-lab            12 proeven
 gravity-maze          9 kamers
 
-Lokale samenvatting:
-  axioma:game:<id>:progress
-  axioma:game:<id>:complete
+Accountgebonden browsercache:
+  axioma:progress:v2:<project>:<rol>:<account>:<spel>
+  Gastgegevens blijven afzonderlijk; geen automatische overname in een account.
 
 Cloud bij aangemelde leerling:
   public.axioma_game_progress
-  via shared/axioma-progress.js -> AxiomaProgress.completeUnit(...)
+  via shared/axioma-game.js en shared/axioma-progress.js
+  Snapshot: completed, total, finished, schemaVersion, storage.
+  De server controleert account-ID en revisie voordat hij schrijft.
 
-Het leraarscherm leest deze cloudvoortgang als progress_type = levels.
+Vectoren: vectoren-trainer, 24 vaardigheden + leermodel en oefenconcept.
+Rechtentrainer: eigen axioma_progress, dezelfde login en account-ID-controle.
+Zeeslag: online partijregistratie/ranglijst; solo telt niet mee in online ranking.
+Kleiduifgroepen: bestaande servergestuurde sessies en ranglijst.
+Zie PLATFORM_FRAMEWORK.md voor de volledige afspraken en tests.

@@ -84,7 +84,7 @@
     "theme": "Functies",
     "art": "naval",
     "cover": "assets/covers/zeeslag.svg",
-    "detail": "2 spelers · online uitnodigingen",
+    "detail": "Solo tegen de computer · samen online",
     "id": "rechten-zeeslag",
     "progressType": "multiplayer",
     "teacherVisible": false,

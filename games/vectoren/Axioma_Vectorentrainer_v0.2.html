@@ -24,6 +24,8 @@ footer{display:flex;align-items:center;gap:10px;padding:8px 20px;border-top:1px 
 
 /* Account and online controls remain available in the narrow home view. */
 @media(max-width:639px){#app{grid-template-rows:80px minmax(0,1fr)}header{flex-wrap:wrap}.trainer-nav{order:3;width:100%;justify-content:center}.header-actions{margin-left:auto}}
+
+.vector-symbol{position:relative;display:inline-block;padding-top:.2em;font-family:Georgia,serif;font-style:italic;white-space:nowrap;line-height:1.1}.vector-symbol>svg{position:absolute;top:-.12em;left:0;width:100%;height:.35em;overflow:visible}.vector-symbol>span{display:inline}
 </style></head>
 <body data-screen="home"><div id="app">
 <header><a id="homeBtn" class="brand quiet" href="../../index.html" data-platform-home aria-label="Naar de startpagina van leraarBob">leraarBob<span>Vectorentrainer</span></a><nav class="trainer-nav" aria-label="Trainernavigatie"><button id="playBtn" data-trainer-action="play" class="quiet">Oefenen</button><button id="helpBtn" data-trainer-action="help" class="quiet">Uitleg</button><button id="progressBtn" data-trainer-action="progress" class="quiet">Voortgang</button></nav><div class="header-actions"><span id="roundLabel">Jouw vectorroute</span><button id="themeBtn" class="icon quiet" aria-label="Kleurmodus wisselen">◐</button><button id="fullBtn" class="icon quiet" aria-label="Volledig scherm">⛶</button></div></header>
@@ -220,7 +222,7 @@ const skills=[
  skill('decompose','Ontbinden in richtingen',['sum'],'Zoek twee componenten in de gegeven richtingen. Hun som moet r zijn. Negatieve en nulcomponenten zijn mogelijk.'),
  skill('coords','Van pijl naar (x, y)',['decompose'],'x is de horizontale verplaatsing, y de verticale. Rechts en omhoog zijn positief. De coördinaten beschrijven de verplaatsing, niet het eindpunt.'),
  skill('arrow','Van (x, y) naar pijl',['coords'],'(x, y) beschrijft hoeveel je horizontaal en verticaal verplaatst, vanaf om het even welk beginpunt.'),
- skill('ab','Van A naar B',['coords'],'Voor AB neem je eindpunt min beginpunt: B − A. Trek de x-coördinaten en de y-coördinaten afzonderlijk af.'),
+ skill('ab','Van A naar B',['coords'],'Voor de coördinaten van AB neem je die van eindpunt B min die van beginpunt A. Trek de x-coördinaten en de y-coördinaten afzonderlijk af.'),
  skill('points','Punt en plaatsvector',['ab','arrow'],'P is een plaats. OP is de verplaatsing vanuit O naar P. Een ander beginpunt verandert de puntcoördinaten van het eindpunt.'),
  skill('coordadd','Rekenen: som en verschil',['coords','difference'],'Werk horizontaal en verticaal apart. Tel x bij x en y bij y. Bij aftrekken verander je beide tekens van de tweede vector.'),
  skill('coordscale','Rekenen: veelvouden',['coords','scalar'],'Vermenigvuldig beide componenten met dezelfde factor. Dit geldt ook bij negatieve factoren en breuken.'),
@@ -229,7 +231,7 @@ const skills=[
  skill('basis','Eenheidsvectoren eₓ en eᵧ',['arrow','coordscale'],'eₓ = (1, 0) en eᵧ = (0, 1). Elke vector (x, y) is x eₓ + y eᵧ.'),
  skill('figure','Vectoren in figuren',['headtail','difference'],'Volg de letters: AD + DC gaat van A via D naar C. Het resultaat is AC, onafhankelijk van de omweg.'),
  skill('route','Route en eindpunt',['combination','points','coordcombo'],'Een vectoruitdrukking beschrijft de totale verplaatsing. Tel die bij je beginpunt om te weten waar je aankomt.'),
- skill('fourth','Vierde hoekpunt',['parallelogram','points'],'Bij opeenvolgende hoekpunten A, B, C, D geldt AD = BC. Dan is D = A + C − B. De volgorde van de hoekpunten doet ertoe.')
+ skill('fourth','Vierde hoekpunt',['parallelogram','points'],'Bij opeenvolgende hoekpunten A, B, C, D geldt AD = BC. Bereken elke coördinaat van D als die van A plus die van C min die van B. De volgorde van de hoekpunten doet ertoe.')
 ];
 function rng(seed){let a=seed>>>0;return ()=>{a+=0x6D2B79F5;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296}}
 const ref=(start,v,name)=>({start,v,name}),mark=(p,name)=>({p,name});
@@ -269,7 +271,7 @@ function generate(id,{seed=1,level=0,variant=0,repair=null}={}){
   else {t.interaction='number';t.representation='grid-number';t.axes=true;t.answerLabel='a';}
  }else if(id==='arrow')draw(a,`Teken de vector ${coord(a)} vanuit P.`,[]);
  else if(id==='ab'){
-  const A=point(-2,1),B=endPointFromVector(A,a);numeric(a,'Bepaal AB.',`A = (${A.x}, ${A.y})    B = (${B.x}, ${B.y})`,level<2);t.refs=level<2?[ref(A,a,'AB')]:[];t.points=level<2?[mark(A,'A'),mark(B,'B')]:[];t.answerLabel='AB';t.axes=true;
+  const A=point(-2,1),B=endPointFromVector(A,a);numeric(a,'Bepaal de coördinaten van AB.',`A = (${A.x}, ${A.y})    B = (${B.x}, ${B.y})`,level<2);t.refs=level<2?[ref(A,a,'AB')]:[];t.points=level<2?[mark(A,'A'),mark(B,'B')]:[];t.answerLabel='AB';t.axes=true;
  }else if(id==='points'){
   t.axes=true;
   if(v===0){t.start=O;t.points=[mark(O,'O'),mark(point(a.dx,a.dy),'P')];draw(a,`P = ${coord(a)}. Teken de plaatsvector OP.`,[]);}
@@ -360,10 +362,24 @@ const titles={locked:'Nog te ontdekken',new:'Nieuw',guided:'Begeleid',learning:'
 let progress=Scheduler.freshState(),session=null,task=null,answer={strokes:[],values:['',''],point:null,choice:null},intro=false,done=false,dirty=false,errorCode=null,stage=0,role='vector',activeSlot=0,free=false,previousScreen='home',view={},anchor=null,drag=null,cursor=M.point(0,0),cursorVisible=false,seedSerial=Date.now()>>>0;
 let restored=null,advanceTimer=null,pendingAdvance=false;
 try{const raw=JSON.parse(window.AxiomaGame.storage.getItem(KEY)||'null');progress=Scheduler.sanitize(raw?.progress);if(raw?.mode==='dark')document.documentElement.dataset.mode='dark';if(raw?.draft&&Generator.skills.some(s=>s.id===raw.draft.skill))restored=raw.draft;}catch{storageError()}
+// Vector symbols have an arrow; point names and choice numbers deliberately do not.
+const vectorPattern=()=>/(?<![\p{L}\p{M}])(?:[A-Z]{2}|e[ₓᵧ]|[abcruv])(?![\p{L}\p{M}])/gu;
+function mathText(element,text){
+ text=String(text||'');element.replaceChildren();let end=0;
+ for(const match of text.matchAll(vectorPattern())){
+  element.append(document.createTextNode(text.slice(end,match.index)));
+  const symbol=document.createElement('span');symbol.className='vector-symbol';symbol.dataset.vector=match[0];symbol.setAttribute('role','math');symbol.setAttribute('aria-label','vector '+match[0]);
+  const letters=document.createElement('span');letters.textContent=match[0];letters.setAttribute('aria-hidden','true');symbol.append(letters);
+  const accent=document.createElementNS(NS,'svg');accent.setAttribute('viewBox','0 0 32 8');accent.setAttribute('preserveAspectRatio','none');accent.setAttribute('aria-hidden','true');
+  const path=document.createElementNS(NS,'path');path.setAttribute('d','M1 4H30M25 1L30 4L25 7');path.setAttribute('fill','none');path.setAttribute('stroke','currentColor');path.setAttribute('stroke-width','1.5');accent.append(path);symbol.append(accent);element.append(symbol);end=match.index+match[0].length;
+ }
+ element.append(document.createTextNode(text.slice(end)));
+}
+function optionText(text){return text.replace(vectorPattern(),name=>name.length===1?name+'⃗':name.startsWith('e')?'e⃗'+name.slice(1):name+'⃗')}
 function storageError(){$('storageWarning').hidden=false;$('storageWarning').textContent='Deze browser kan je voortgang niet bewaren. Je kunt wel blijven oefenen.'}
 function save(){try{const draft=task?{skill:task.skill,seed:task.seed,variant:task.variant,level:task.level,repair:task.repair,intro,done,dirty,errorCode,stage,free,session,answer}:restored;window.AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft}));window.AxiomaGame.report(Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').map(s=>s.id),Generator.skills.length);}catch{storageError()}}
 function screen(name){cancelGesture();clearTimeout(advanceTimer);document.body.dataset.screen=name;AxiomaPlatform.trainerScreen(({play:'play',helpScreen:'help',progressScreen:'progress'})[name]||'');for(const id of ['home','play','progressScreen','helpScreen','summary'])$(id).hidden=id!==name;if(name==='play'){requestAnimationFrame(renderBoard);if(pendingAdvance)scheduleAdvance();}if(name==='home')renderHome()}
-function message(text,kind=''){$('feedback').textContent=text;$('feedback').className=kind}
+function message(text,kind=''){mathText($('feedback'),text);$('feedback').className=kind}
 function newSeed(){return (++seedSerial+Math.floor(Math.random()*1e8))>>>0}
 function taskLevel(id){const s=progress.skills[id];return s.seen<2?0:s.seen<5?1:2}
 function nextTask(){
@@ -387,15 +403,16 @@ document.addEventListener('visibilitychange',()=>{clearTimeout(advanceTimer);if(
 function guidedPrompt(){if(task.guidedSteps&&!intro&&stage<2)return stage===0?'Maak vanuit P een kopie van u.':'Voeg nu een kopie van v toe aan je route.';return task.prompt}
 function updateUI(resetFeedback=true){
  if(!task)return;
- $('prompt').textContent=intro?Generator.skills.find(s=>s.id===task.skill).label:guidedPrompt();
- $('modeLabel').textContent=`${free?'Vrij oefenen':intro?'Nieuw begrip':task.repair?'Herstel · nieuwe voorstelling':task.level===0?'Begeleid':task.level===1?'Zelf proberen':'Gemengd oefenen'} · ${Generator.skills.find(s=>s.id===task.skill).label}`;
+ mathText($('prompt'),intro?Generator.skills.find(s=>s.id===task.skill).label:guidedPrompt());
+ $('modeLabel').textContent=`${free?'Vrij oefenen':intro?'Nieuw begrip':task.repair?'Herstel · nieuwe voorstelling':task.level===0?'Begeleid':task.level===1?'Zelf proberen':'Gemengd oefenen'} · ${Generator.skills.find(s=>s.id===task.skill).label}`;mathText($('modeLabel'),$('modeLabel').textContent);
  $('roundLabel').textContent=free?'Vrij oefenen':`Oefening ${Math.min(12,(session?.answered||0)+(done?0:1))} / 12`;
  const choice=task.interaction==='choice',numeric=task.interaction==='number',symbolic=task.representation==='symbolic';
  $('work').className='work '+(numeric?symbolic?'symbolic':'grid-number':choice?'choice-grid':'');$('numberWork').hidden=!numeric;$('choiceWork').hidden=!choice;renderChoices();
- $('givens').textContent=task.givens||task.prompt;$('scaffold').textContent=intro?Generator.skills.find(s=>s.id===task.skill).intro:(task.scaffold||'');
+ mathText($('givens'),task.givens||task.prompt);mathText($('scaffold'),intro?Generator.skills.find(s=>s.id===task.skill).intro:(task.scaffold||''));
  $('introText').hidden=!intro||symbolic;
- if(intro&&!symbolic){$('introText').replaceChildren();const strong=document.createElement('strong');strong.textContent='Voorbeeld · kijk wat er verandert';$('introText').append(strong,document.createTextNode(Generator.skills.find(s=>s.id===task.skill).intro));}
+ if(intro&&!symbolic){$('introText').replaceChildren();const strong=document.createElement('strong');strong.textContent='Voorbeeld · kijk wat er verandert';const explanation=document.createElement('span');mathText(explanation,Generator.skills.find(s=>s.id===task.skill).intro);$('introText').append(strong,explanation);}
  $('toolHint').textContent=intro?'Bekijk het voorbeeld. Daarna probeer je andere getallen.':choice?'Tik je antwoord. Elk roostervakje stelt één stap voor.':numeric?'x eerst, y daarna. ± voor negatief; / voor een breuk.':task.interaction==='point'?(task.givens||'Tik een roosterpunt en controleer.'):'Sleep, of tik begin → einde. Niets wordt beoordeeld vóór Controleer.';
+ mathText($('toolHint'),$('toolHint').textContent);
  $('drawTools').hidden=intro||numeric||choice;
  $('vectorTool').hidden=task.interaction==='point';
  $('resultTool').hidden=task.interaction!=='sketch'||!['headtail','ordered','parallelogram'].includes(task.policy)||task.guidedSteps&&stage<2;
@@ -403,7 +420,7 @@ function updateUI(resetFeedback=true){
  for(const id of ['vectorTool','resultTool','undoBtn'])$(id).disabled=done;
  $('commit').hidden=choice&&!done&&!intro;
  $('commit').textContent=intro?'Zelf proberen →':done?'Verder →':'Controleer';$('skip').hidden=intro||done;
- $('labelX').textContent=task.slotLabels?.[0]||'x · horizontaal';$('labelY').textContent=task.slotLabels?.[1]||'y · verticaal';
+ mathText($('labelX'),task.slotLabels?.[0]||'x · horizontaal');mathText($('labelY'),task.slotLabels?.[1]||'y · verticaal');
  $('coordinateEditor').setAttribute('aria-label',task.slotLabels?'Coëfficiënten van eenheidsvectoren':'Coördinaten invoeren');
  if(resetFeedback)message(intro?'Dit is een uitgewerkt voorbeeld.':free?'Vrij oefenen telt niet mee voor je leerroute.':task.repair?repairHint(task.repair):'Je kiest zelf waar je tekent. Je kunt altijd een stap terug.');
  renderSlots();renderBoard();
@@ -413,7 +430,7 @@ function renderChoices(){
  const root=$('choiceWork');root.replaceChildren();if(task.interaction!=='choice')return;
  root.className=task.choiceFormat==='arrows'?'arrow-choices':'';
  task.options.forEach((v,i)=>{
-  const b=document.createElement('button');b.className='choice-answer';b.dataset.choice=String(i);b.textContent=task.choiceFormat==='coordinates'?coord(v):`Pijl ${String.fromCharCode(65+i)}`;
+  const b=document.createElement('button');b.className='choice-answer';b.dataset.choice=String(i);b.textContent=task.choiceFormat==='coordinates'?coord(v):`Keuze ${i+1}`;
   b.disabled=intro||done;
   if(answer.choice===i)b.classList.add(M.vectorEquals(v,task.target)?'correct':'incorrect');
   b.onclick=()=>{answer.choice=i;commit();renderChoices()};root.append(b);
@@ -422,13 +439,13 @@ function renderChoices(){
 function showHelp(){
  if(task&&!intro&&!done&&!free){dirty=true;errorCode=errorCode||'help';save()}
  const select=$('helpTopic');select.replaceChildren();
- for(const skill of Generator.skills){const option=document.createElement('option');option.value=skill.id;option.textContent=skill.label;select.append(option)}
+ for(const skill of Generator.skills){const option=document.createElement('option');option.value=skill.id;option.textContent=optionText(skill.label);select.append(option)}
  select.value=task?.skill||Generator.skills[0].id;renderHelp();screen('helpScreen');
 }
 function renderHelp(){
- const id=$('helpTopic').value,skill=Generator.skills.find(s=>s.id===id);$('helpTitle').textContent=skill.label;$('helpConcept').textContent=skill.intro;
+ const id=$('helpTopic').value,skill=Generator.skills.find(s=>s.id===id);mathText($('helpTitle'),skill.label);mathText($('helpConcept'),skill.intro);
  const examples={props:'Een pijl twee keer zo lang maken verandert de lengte. Hem omkeren verandert de zin. Hem draaien verandert de richting.',equal:'Van (0, 0) naar (2, 1) en van (3, 2) naar (5, 3): twee verschillende plaatsen, dezelfde verplaatsing.',opposite:'Bij a = (2, 1) is −a = (−2, −1). De nulvector komt terug op zijn beginpunt.',scalar:'Bij a = (4, 2) is −½a = (−2, −1): half zo lang en de andere kant op.',headtail:'u eindigt in Q. Begin v in Q. De resultante loopt van het begin van u naar het einde van v.',parallelogram:'Kopieer u vanaf de kop van v en v vanaf de kop van u. Verbind het gemeenschappelijke begin met de overstaande hoek.',coords:'Drie vakken naar rechts en twee omlaag betekent (3, −2). Het beginpunt hoeft niet de oorsprong te zijn.',ab:'A = (−2, 1), B = (3, 4). Dan is AB = (3 − (−2), 4 − 1) = (5, 3).',coordadd:'(3, −2) + (−1, 4) = (2, 2). Je telt de twee x-componenten en de twee y-componenten apart op.',coordscale:'−2 × (3, −1) = (−6, 2). De factor geldt voor beide componenten.',basis:'3eₓ + 4eᵧ = (3, 4). eₓ geeft één stap naar rechts, eᵧ één stap omhoog.',figure:'AD + DC = AC: het eindpunt van de eerste verplaatsing is het begin van de tweede.'};
- $('helpExample').textContent=examples[id]||'Werk vanuit het beginpunt. Onderzoek eerst welke verplaatsingen gegeven zijn en welke ene verplaatsing je zoekt. Teken of reken daarna zelf.';
+ mathText($('helpExample'),examples[id]||'Werk vanuit het beginpunt. Onderzoek eerst welke verplaatsingen gegeven zijn en welke ene verplaatsing je zoekt. Teken of reken daarna zelf.');
 }
 $('helpTopic').onchange=renderHelp;$('closeHelp').onclick=()=>task?resume():startSession();
 
@@ -473,7 +490,14 @@ function arrow(start,v,name='',kind='given',dashed=false){
  const end=M.endPointFromVector(start,v),a=project(start),b=project(end),g=put('g',{class:kind});
  if(M.isZero(v)){put('circle',{cx:a.x,cy:a.y,r:7,fill:'none',stroke:'currentColor','stroke-width':3},undefined,g);}
  else {put('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'currentColor','stroke-width':kind==='result'?3.5:2.7,'stroke-dasharray':dashed?'5 4':'none'},undefined,g);const theta=Math.atan2(b.y-a.y,b.x-a.x),size=9;put('path',{d:`M${b.x-size*Math.cos(theta-.5)},${b.y-size*Math.sin(theta-.5)}L${b.x},${b.y}L${b.x-size*Math.cos(theta+.5)},${b.y-size*Math.sin(theta+.5)}`,fill:'none',stroke:'currentColor','stroke-width':2.7},undefined,g);}
- if(name)put('text',{x:Math.max(12,Math.min(view.w-35,(a.x+b.x)/2+9)),y:Math.max(16,Math.min(view.h-8,(a.y+b.y)/2-9)),fill:'currentColor',class:'vector-label'},name,g);
+ if(name){
+  const x=Math.max(12,Math.min(view.w-45,(a.x+b.x)/2+9)),y=Math.max(27,Math.min(view.h-8,(a.y+b.y)/2-9));
+  const label=put('text',{x,y,fill:'currentColor',class:'vector-label'},name,g);
+  for(const match of name.matchAll(vectorPattern())){
+   const left=x+(match.index?label.getSubStringLength(0,match.index):0),width=Math.max(10,label.getSubStringLength(match.index,match[0].length)),top=y-18;
+   put('path',{'data-vector':match[0],d:`M${left} ${top}H${left+width}M${left+width-4} ${top-3}L${left+width} ${top}L${left+width-4} ${top+3}`,fill:'none',stroke:'currentColor','stroke-width':1.3},undefined,g);
+  }
+ }
  return g;
 }
 function drawPoint(p,name='',selected=false){const q=project(p);put('circle',{cx:q.x,cy:q.y,r:selected?6:4,fill:'var(--paper)',stroke:selected?'var(--selection)':'var(--ink)','stroke-width':2});if(name)put('text',{x:Math.max(8,Math.min(view.w-20,q.x+9)),y:Math.max(15,Math.min(view.h-8,q.y+18)),fill:'var(--ink)',class:'vector-label'},name)}
@@ -500,7 +524,7 @@ function renderBoard(){
  for(const [a,b] of task.segments||[])line(a,b,{stroke:'var(--muted)','stroke-width':1.5});
  for(const dir of task.dirs||[]){const k=30/Math.max(1,M.length(dir)),a=M.endPointFromVector(task.start,M.scale(dir,-k)),b=M.endPointFromVector(task.start,M.scale(dir,k));line(a,b,{stroke:'var(--muted)','stroke-width':1.3,'stroke-dasharray':'4 5'})}
  for(const r of task.refs)arrow(r.start,r.v,r.name+(task.interaction==='number'&&task.skill!=='coords'&&task.skill!=='ab'?' '+coord(r.v):''),'given');
- if(task.choicePositions)task.options.forEach((v,i)=>arrow(task.choicePositions[i],v,String.fromCharCode(65+i),'given'));
+ if(task.choicePositions)task.options.forEach((v,i)=>arrow(task.choicePositions[i],v,String(i+1),'given'));
  for(const s of answer.strokes)arrow(s.start,s,s.role==='result'?'r':'',s.role==='result'?'result':'student');
  if(answer.point)drawPoint(answer.point,task.pointName||'?',true);
  if(intro){if(task.interaction==='point')drawPoint(task.targetPoint,task.pointName||'P',true);else for(const s of exampleStrokes())arrow(s.start,s,s.role==='result'?'r':'','example',true);}
@@ -532,10 +556,10 @@ $('skip').onclick=()=>{if(!task||done||intro)return;dirty=true;errorCode=errorCo
 function renderHome(){
  $('resumeBtn').hidden=!task&&!restored;$('startBtn').textContent=progress.total?'Start een nieuwe sessie →':'Start een sessie →';
  const solid=Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').length;$('masteryCount').textContent=`${solid} / ${Generator.skills.length} stevig`;
- $('skillList').replaceChildren();Generator.skills.forEach((s,i)=>{const phase=Scheduler.phase(progress,s.id),row=document.createElement('div');row.className='skill-row '+phase;const n=document.createElement('span');n.className='number';n.textContent=String(i+1).padStart(2,'0');const name=document.createElement('div'),title=document.createElement('strong'),small=document.createElement('small');title.textContent=s.label;small.textContent=titles[phase];name.append(title,document.createElement('br'),small);const b=document.createElement('button');b.textContent='Verkennen';b.setAttribute('aria-label',`${s.label} vrij verkennen`);b.onclick=()=>explore(s.id);row.append(n,name,b);$('skillList').append(row)});
+ $('skillList').replaceChildren();Generator.skills.forEach((s,i)=>{const phase=Scheduler.phase(progress,s.id),row=document.createElement('div');row.className='skill-row '+phase;const n=document.createElement('span');n.className='number';n.textContent=String(i+1).padStart(2,'0');const name=document.createElement('div'),title=document.createElement('strong'),small=document.createElement('small');mathText(title,s.label);small.textContent=titles[phase];name.append(title,document.createElement('br'),small);const b=document.createElement('button');b.textContent='Verkennen';b.setAttribute('aria-label',`${s.label} vrij verkennen`);b.onclick=()=>explore(s.id);row.append(n,name,b);$('skillList').append(row)});
 }
 function showProgress(){previousScreen=document.body.dataset.screen;$('progressRows').replaceChildren();
- for(const s of Generator.skills){const data=progress.skills[s.id],phase=Scheduler.phase(progress,s.id),row=document.createElement('div');row.className='skill-row';const label=document.createElement('span');label.textContent=phase==='solid'?'✓':'·';const detail=document.createElement('div'),strong=document.createElement('strong'),small=document.createElement('small');strong.textContent=s.label;small.textContent=`${data.clean} zelfstandig juist · ${data.seen} geoefend${progress.repairs.some(r=>r.skill===s.id)?' · herstel gepland':''}`;detail.append(strong,document.createElement('br'),small);const status=document.createElement('div');status.textContent=titles[phase];status.style.fontSize='12px';const meter=document.createElement('div');meter.className='meter';const fill=document.createElement('i');fill.style.width=Math.round(data.strength*100)+'%';meter.append(fill);status.append(meter);row.append(label,detail,status);$('progressRows').append(row)}screen('progressScreen');
+ for(const s of Generator.skills){const data=progress.skills[s.id],phase=Scheduler.phase(progress,s.id),row=document.createElement('div');row.className='skill-row';const label=document.createElement('span');label.textContent=phase==='solid'?'✓':'·';const detail=document.createElement('div'),strong=document.createElement('strong'),small=document.createElement('small');mathText(strong,s.label);small.textContent=`${data.clean} zelfstandig juist · ${data.seen} geoefend${progress.repairs.some(r=>r.skill===s.id)?' · herstel gepland':''}`;detail.append(strong,document.createElement('br'),small);const status=document.createElement('div');status.textContent=titles[phase];status.style.fontSize='12px';const meter=document.createElement('div');meter.className='meter';const fill=document.createElement('i');fill.style.width=Math.round(data.strength*100)+'%';meter.append(fill);status.append(meter);row.append(label,detail,status);$('progressRows').append(row)}screen('progressScreen');
 }
 function showSummary(){progress.sessions++;$('summaryStats').replaceChildren();for(const [n,label] of [[session.answered,'geoefend'],[session.clean,'zelfstandig juist'],[session.repairs,'herstelvragen juist']]){const d=document.createElement('div'),strong=document.createElement('strong'),span=document.createElement('span');strong.textContent=n;span.textContent=label;d.append(strong,span);$('summaryStats').append(d)}$('summaryText').textContent=progress.repairs.length?`Je volgende sessie haalt ${progress.repairs.length} vaardigheid${progress.repairs.length===1?'':'en'} opnieuw op met andere vragen. Zo kan je laten zien dat het ook zelfstandig lukt.`:'Je volgende sessie wisselt nieuwe begrippen af met herhaling. Stevig wordt een vaardigheid pas wanneer verschillende voorstellingen zelfstandig lukken.';task=null;restored=null;screen('summary');save()}
 function resume(){
@@ -652,7 +676,7 @@ function mount(){
  host=document.createElement('div');host.id='axioma-game-status';
  // Shadow DOM keeps game button/layout rules out of the shared account controls.
  const root=host.attachShadow({mode:'open'});
- root.innerHTML='<style>:host{display:inline-flex;flex:0 1 auto;min-width:34px;vertical-align:middle;z-index:10000;font:12px/1.4 system-ui;color:#132d34}:host([data-floating]){position:fixed;top:6px;left:6px}button{font:inherit;cursor:pointer;border:1px solid #80989e;border-radius:7px;padding:7px 10px;background:#f5f8f9;color:#132d34;min-height:32px}button:focus-visible{outline:3px solid #cd9930;outline-offset:2px}.dock{max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 1px 5px #0003}.panel{position:fixed;inset:0;background:#102028a6;display:grid;place-items:center;padding:16px}.panel[hidden]{display:none}.box{background:#f5f8f9;color:#132d34;padding:20px;border-radius:12px;width:min(420px,calc(100vw - 48px));box-shadow:0 8px 36px #0005}p{margin:0 0 16px}.actions{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:1100px){.dock{font-size:0;width:34px;padding:4px;min-height:34px}.dock:before{content:"◉";font-size:20px}.dock[data-status="saved"]{color:#277457}.dock[data-status="offline"],.dock[data-status="conflict"],.dock[data-status="pending"]{color:#936615}}@media(prefers-color-scheme:dark){button,.box{background:#17343d;color:#e9f2f5}}</style><button class="dock" aria-label="Account en opslagstatus"></button><section class="panel" hidden role="dialog" aria-modal="true" aria-label="Account en voortgang"><div class="box"><p role="status"></p><div class="actions"></div></div></section>';
+ root.innerHTML='<style>:host{display:inline-flex;flex:0 0 165px;width:165px;min-width:165px;vertical-align:middle;z-index:10000;font:12px/1.4 system-ui;color:#132d34}:host([data-floating]){position:fixed;top:6px;left:6px}button{font:inherit;cursor:pointer;border:1px solid #80989e;border-radius:7px;padding:7px 10px;background:#f5f8f9;color:#132d34;min-height:32px}button:focus-visible{outline:3px solid #cd9930;outline-offset:2px}.dock{box-sizing:border-box;width:165px;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 1px 5px #0003}.panel{position:fixed;inset:0;background:#102028a6;display:grid;place-items:center;padding:16px}.panel[hidden]{display:none}.box{background:#f5f8f9;color:#132d34;padding:20px;border-radius:12px;width:min(420px,calc(100vw - 48px));box-shadow:0 8px 36px #0005}p{margin:0 0 16px}.actions{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:1100px){:host{flex-basis:34px;width:34px;min-width:34px}.dock{font-size:0;width:34px;padding:4px;min-height:34px}.dock:before{content:"◉";font-size:20px}.dock[data-status="saved"]{color:#277457}.dock[data-status="offline"],.dock[data-status="conflict"],.dock[data-status="pending"]{color:#936615}}@media(prefers-color-scheme:dark){button,.box{background:#17343d;color:#e9f2f5}}</style><button class="dock" aria-label="Account en opslagstatus"></button><section class="panel" hidden role="dialog" aria-modal="true" aria-label="Account en voortgang"><div class="box"><p role="status"></p><div class="actions"></div></div></section>';
  document.body.append(host);dock=root.querySelector('.dock');panel=root.querySelector('.panel');message=root.querySelector('p');actions=root.querySelector('.actions');dock.onclick=details;setStatus('loading');
  new MutationObserver(placeDock).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','inert','class']});
  window.addEventListener('resize',placeDock);placeDock();

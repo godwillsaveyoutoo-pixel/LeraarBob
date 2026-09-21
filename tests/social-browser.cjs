@@ -193,6 +193,25 @@ async function setup(browser,uid){
   assert.equal(reportCount,2);
   await b.eval(`document.querySelector('#leaveBtn').click()`);await b.wait(`__naval.S.phase==='idle'`);
   console.log('PASS: leave/forfeit and mutual result reporting');
+  // An authenticated pupil can start a solo match directly from the ordinary lobby.
+  const reportsBeforeSolo=reportCount;
+  await a.eval(`document.querySelector('#soloBtn').click()`);await a.wait('__naval.S.demo&&__naval.S.phase==="placing"');
+  assert.equal(await a.eval('__naval.S.opponent.alias'),'Computer');
+  for(const [start,end] of [[[-4,-3],[-1,-3]],[[-4,-1],[-2,-1]],[[-4,1],[-3,1]]]){
+    await a.eval(`__naval.placeAt({x:${start[0]},y:${start[1]}});__naval.placeAt({x:${end[0]},y:${end[1]}});__naval.confirmPlacement()`);
+  }
+  await a.eval(`document.querySelector('#readyBtn').click()`);await a.wait('__naval.S.myTurn');
+  await a.eval(`(()=>{const S=__naval.S;const slopes=[[-2,1],[-1,1],[-1,2],[0,1],[1,2],[1,1],[2,1]],lines=slopes.flatMap(([n,d])=>Array.from({length:9},(_,i)=>({a:{n,d},b:{n:i-4,d:1}})));const hit=(fleet,line)=>fleet.some(ship=>ship.cells.some(p=>p.y*line.a.d===line.a.n*p.x+line.b.n*line.a.d));const miss=lines.find(l=>!hit(S.demoEnemyFleet,l));const botMiss=lines.findIndex(l=>!hit(S.ownFleet,l));window.originalRandom=Math.random;Math.random=()=>((botMiss+.1)/lines.length);S.aimA=miss.a;S.aimB=miss.b;__naval.fire()})()`);
+  await a.wait('__naval.S.enemyShots.length>0&&__naval.S.myTurn&&!__naval.V.busy');await a.eval('Math.random=originalRandom');
+  for(let shots=0;shots<10&&!await a.eval('__naval.S.finished');shots++){
+    await a.eval(`(()=>{const S=__naval.S;const ship=S.demoEnemyFleet.find(s=>s.hits.size<s.cells.length);const p=ship.cells.find(p=>!ship.hits.has(p.x+','+p.y));S.aimA={n:0,d:1};S.aimB={n:p.y,d:1};__naval.fire()})()`);
+    await a.wait('__naval.S.finished||(__naval.S.myTurn&&!__naval.V.busy)');
+  }
+  assert.equal(await a.eval('__naval.S.finished'),true);assert.equal(reportCount,reportsBeforeSolo,'solo never alters online ranking');
+  await a.eval(`document.querySelector('#leaveBtn').click()`);await a.wait('!__naval.S.demo&&__naval.S.phase==="idle"');
+  assert.equal(await a.eval('__naval.S.me.id'),A,'leaving solo retains actual platform account');
+  console.log('PASS: solo entry, placement, miss/bot turn, victory, return to online lobby; no fabricated players or ranked results');
+
   await a.go('games/rechten/kleiduiven/');await b.go('games/rechten/kleiduiven/');
   for(const c of [a,b])await c.wait('window.AxiomaGroups?.state().connected');
   await a.eval(`document.querySelector('#openGroup').click()`);await a.wait(`document.querySelector('[data-group-action="create"]')&&!document.querySelector('[data-group-action="create"]').disabled`);

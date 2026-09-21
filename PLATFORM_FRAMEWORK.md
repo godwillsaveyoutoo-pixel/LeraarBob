@@ -55,19 +55,77 @@ nu samenvoegen zou hun verschillen verbergen. Een volgende gedeelde trainerlaag
 moet eerst hetzelfde expliciete resultaatformaat kunnen dragen: skill,
 representatie, zelfstandig/ondersteund, resultaat, methode, foutcode en herhaling.
 
-## Bestaande gedeelde diensten en huidige grens
+## Accounts en voortgang: één levenscyclus
 
-`axioma-auth.js` verzorgt platformaccounts. `axioma-progress.js` verzorgt de
-bestaande online voortgang; `axioma-social.js` en `axioma-groups.js` verzorgen
-online aanwezigheid en samenspelen. Een oefenmotor hoort geen kopie van deze
-diensten te krijgen.
+Alle vijftien catalogusspellen gebruiken `shared/axioma-game.js` voor de
+accountstatus en het veilig openen. `axioma-auth.js` beheert de gedeelde login.
+Bij accountwisseling wordt de oude oefenmotor meteen geblokkeerd; opnieuw openen
+laadt de nieuwe leerling. Een accountfout wordt niet als een gastlogin behandeld.
+De statusknop staat in de bovenbalk en houdt per schermbreedte dezelfde breedte,
+onafhankelijk van de tekst tijdens het opslaan.
 
-Vectoren bewaart zijn volledige leermodel momenteel lokaal in de browser.
-De catalogus vermeldt dat en neemt dit niet op als centrale leerlingopvolging.
-Voor een accountkoppeling hoort een adapter boven op de bestaande voortgangsdienst
-te komen, met accountgebonden opslag, conflictafhandeling en een expliciete
-keuze over het overnemen van eerder lokaal oefenen. De navigatiewijziging doet
-geen stilzwijgende migratie van voortgang naar een leerlingaccount.
+Voor de negen geïmporteerde spellen, Brandweer, Kleiduifschieten en Vectoren:
+
+1. Wacht op het account en haal de online voortgang op voordat de motor start.
+2. Gebruik uitsluitend `AxiomaGame.storage` voor de spelopslag. De browsercache
+   is gescheiden per Supabase-project, rol, gebruiker en spel. Alleen gastmodus
+   kan de oude, niet toegewezen browsergegevens lezen; die worden nooit
+   automatisch in een leerlingaccount geïmporteerd.
+3. `axioma-game-adapters.js` declareert de opslagsleutels die online mogen en
+   vertaalt oude online voltooiingslijsten naar het native spelformaat.
+   `onWrite` werkt de samenvatting direct bij, zodat sluiten vóór de volgende
+   timer geen achterhaalde voortgang op de startpagina achterlaat.
+4. Opslag gebruikt een revisie en een expliciet verwacht leerling-ID. De nieuwe
+   databasefuncties controleren dit ID tegen `auth.uid()`, ook als de sessie
+   wisselt terwijl een aanvraag onderweg is. Wijzigingen tijdens een lopende
+   opslag worden daarna opnieuw verzonden.
+5. Bij verbindingsverlies blijft de eigen cache bruikbaar. Zonder bruikbare
+   cache stopt het laden met een herstelknop; er wordt geen lege online
+   voortgang teruggeschreven. Revisieconflicten blokkeren overschrijven en laten
+   de lokale kopie staan. Bij kiezen voor de online versie blijft een reservekopie
+   met tijdstempel op het toestel bewaard.
+
+De generieke cloudrij bevat `completed`, `total`, `finished`, `schemaVersion: 2`
+en `storage` met de gedeclareerde, geserialiseerde spelgegevens. Vectoren bewaart
+hierin het volledige leermodel, fouten/herhalingen, de sessie en het deelantwoord.
+De catalogus en leraarsconsole tonen het aantal stevige vectorvaardigheden.
+De Rechtentrainer behoudt zijn gespecialiseerde `axioma_progress` en
+conflictafhandeling, maar gebruikt dezelfde accountstatus en extra ID-controle.
+Leerkrachten oefenen zonder leerlingresultaten bij te schrijven.
+
+### Een bestaande HTML-motor aansluiten
+
+Laad auth, progress, platform en de adapters als gewone scripts. Markeer de
+spelscripts als `type="text/axioma-game"`; externe spelscripts gebruiken
+`data-src="game.js"`. Laad daarna `axioma-game.js` met `data-game-id="..."`.
+De module voert de motoren na het laden in documentvolgorde uit als klassieke
+scripts. Hierdoor blijven bestaande globale spel-API's werken. Gebruik geen
+nieuwe DOMContentLoaded-listeners in deze uitgestelde motoren: de DOM is klaar.
+Alleen de spelmotor verwijst naar `AxiomaGame.storage`; de echte browseropslag
+van Supabase wordt niet onderschept of vervangen.
+
+`supabase_account_progress.sql` bevat de aanvullende, als SECURITY INVOKER
+uitgevoerde opslagfuncties en de registratie van Vectoren. Deze wijziging is op
+het gekoppelde project toegepast en met teruggedraaide testtransacties gecontroleerd.
+Er zijn geen bestaande leerlingresultaten gereset of historische resultaten
+herverdeeld: hun oorspronkelijke eigenaar kan achteraf niet betrouwbaar worden afgeleid.
+
+## Samenspelen en solo
+
+`axioma-social.js` en `axioma-groups.js` blijven verantwoordelijk voor
+platformuitnodigingen en groepssessies. Zeeslag biedt daarnaast direct een
+computertegenstander, met of zonder account. Solo gebruikt dezelfde regels voor
+plaatsing, treffen, opnieuw schieten en winnen, en schrijft geen uitslagen naar
+de online ranglijst. De computer kiest ongebruikte toegestane rechten zonder
+kennis van de verborgen leerlingvloot. Er worden geen fictieve online spelers
+of ranglijstresultaten meer getoond.
+
+## Vectornotatie
+
+Punten krijgen hoofdletters zonder pijl; vectorsymbolen zoals a, u, AB en eₓ
+krijgen een echte pijl erboven. De tekstweergave gebruikt `mathText`; SVG-labels
+tekenen hetzelfde accent. Antwoordpijlen zijn genummerde keuzes, met dezelfde
+nummers op het rooster en op de knoppen. De menutegel gebruikt dezelfde conventie.
 
 ## Controle
 
@@ -80,3 +138,10 @@ geen stilzwijgende migratie van voortgang naar een leerlingaccount.
 - `tests/trainer-teacher-browser.cjs`: Rechten blijft toegankelijk voor
   leerkrachten en DEV is standaard verborgen.
 - `tests/social-browser.cjs`: uitnodigingen, Zeeslag en groepswedstrijden.
+
+- `tests/account-auth.test.cjs`: directe accountinvalidatie, late profielen en herproberen.
+- `tests/account-progress-browser.cjs`: oude gastgegevens, alle negen adapters,
+  accountwisseling tijdens opslaan, offline starten/herstellen, revisieconflict,
+  Vectoren hervatten op een ander toestel en vaste breedte van de accountknop.
+- `tests/account-progress-database.sql`: ID-binding, revisies en grants op de
+  echte database, uitsluitend tussen BEGIN en ROLLBACK met fictieve accounts.

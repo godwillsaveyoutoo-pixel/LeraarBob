@@ -363,6 +363,7 @@ async function leaveMatch(silent=false){
     history.replaceState(null,'',location.pathname);
   }
   S.match=null;S.matchId=null;S.opponent=null;S.hostId=null;S.persistentRegistered=false;S.phase='idle';
+  if(S.demo){S.demo=false;$('#soloNote').hidden=true;const platform=window.AxiomaSocial?.state();if(platform)syncPlatform(platform);if(!window.AxiomaGame?.account){S.me=null;setConnection('Gast','warn');showScreen('gateScreen');return}}
   showScreen('lobbyScreen');renderLobby();
 }
 // Re-send the same shot id: the opponent replays its cached result, never a new hit.
@@ -373,7 +374,7 @@ setInterval(()=>{
 },4000);
 
 function renderLobby(){if(!S.me)return;const list=[...S.players.values()].sort((a,b)=>{if(a.id===S.me.id)return -1;if(b.id===S.me.id)return 1;if(a.status!==b.status)return a.status==='available'?-1:1;return a.alias.localeCompare(b.alias,'nl')});
-  $('#lobbyCount').textContent=`${list.length} online`;const el=$('#playerList');if(!list.length){el.innerHTML='<div class="empty">Nog niemand anders online.</div>';return}
+  $('#lobbyCount').textContent=`${list.length} online`;$('#soloBtn').disabled=!!S.pendingOutgoing;const el=$('#playerList');if(!list.length){el.innerHTML='<div class="empty">Nog niemand anders online.</div>';return}
   el.innerHTML=list.map(p=>{const self=p.id===S.me.id,playing=p.status==='playing';const pending=S.pendingOutgoing?.to===p.id;const status=self?'Jij':playing?'In spel':'Beschikbaar';const cls=self?'self':playing?'playing':'';return `<div class="playerRow"><div><div class="playerName">${escapeHtml(p.alias)}${self?' <span style="color:#748083;font-weight:450">(jij)</span>':''}</div><div class="playerMeta">${escapeHtml(p.class_code||'')}</div></div><div class="status ${cls}"><i></i>${status}</div><button class="inviteBtn" data-invite="${p.id}" ${self||playing||pending||S.pendingOutgoing?'disabled':''}>${pending?'Wachten…':'Uitnodigen'}</button></div>`}).join('');
 }
 function syncPlatform(state){
@@ -405,7 +406,6 @@ async function setupLobby(){
 }
 async function sendInvite(toId){
   const p=S.players.get(toId);if(!p||p.status!=='available'||S.pendingOutgoing)return;
-  if(S.demo){enterDemoMatch(p);return}
   await AxiomaSocial.invite(toId);
 }
 
@@ -419,18 +419,21 @@ function renderRanking(rows){
 }
 async function openRanking(){
   $('#rankingOverlay').hidden=false;$('#rankingBody').innerHTML='<div class="rankEmpty">Ranking laden…</div>';
-  if(S.demo){renderRanking([{rank:1,user_id:'mila',alias:'Mila',played:8,won:6,lost:2,win_pct:75,qualified:true},{rank:2,user_id:'noor',alias:'Noor',played:7,won:5,lost:2,win_pct:71.4,qualified:true},{rank:3,user_id:'demo-me',alias:'Jij',played:2,won:1,lost:1,win_pct:50,qualified:true}]);return}
+  if(!S.profile?.class_code){renderRanking([]);$('#rankingSubtitle').textContent='Online partijen';$('#myStats').textContent='Log in als leerling om de online ranglijst van je klas te zien.';return}
   try{const {data,error}=await supa.rpc('axioma_naval_ranking');if(error)throw error;renderRanking(data||[])}catch(err){console.error(err);$('#rankingBody').innerHTML='<div class="rankEmpty">Ranking kon niet worden geladen.</div>'}
 }
 
 function randomFleet(){const fleet=[];const occ=new Set();for(const def of SHIP_DEFS){let ok=false;for(let tries=0;tries<500&&!ok;tries++){const start={x:GRID_MIN+Math.floor(Math.random()*9),y:GRID_MIN+Math.floor(Math.random()*9)};const options=[];for(const sl of ALLOWED_SLOPES)for(const sign of [-1,1]){if(!shootableIntercept(sl.a,start))continue;const sx=sl.dx*sign,sy=sl.dy*sign;const cells=Array.from({length:def.length},(_,i)=>({x:start.x+i*sx,y:start.y+i*sy}));if(cells.some(p=>p.x<GRID_MIN||p.x>GRID_MAX||p.y<GRID_MIN||p.y>GRID_MAX||occ.has(cellKey(p))))continue;options.push(cells)}if(!options.length)continue;const cells=options[Math.floor(Math.random()*options.length)];cells.forEach(p=>occ.add(cellKey(p)));fleet.push({name:def.name,length:def.length,cells,hits:new Set()});ok=true}if(!ok)throw new Error('demo fleet failed')}return fleet}
-function initDemo(){S.demo=true;S.me={id:'demo-me'};S.profile={alias:'Jij',class_code:'Demo'};S.players=new Map([
-  ['demo-me',{id:'demo-me',alias:'Jij',status:'available',class_code:'Demo'}],
-  ['mila',{id:'mila',alias:'Mila',status:'available',class_code:'3TMW'}],
-  ['yassin',{id:'yassin',alias:'Yassin',status:'playing',class_code:'3TMW'}],
-  ['noor',{id:'noor',alias:'Noor',status:'available',class_code:'3TBO'}]
-]);$('#whoBtn').hidden=false;$('#whoBtn').textContent='Demomodus';setConnection('demo','warn');showScreen('lobbyScreen');renderLobby()}
-function enterDemoMatch(opp){S.opponent=opp;S.matchId='demo';S.hostId=S.me.id;S.demoEnemyFleet=randomFleet();showScreen('gameScreen');resetGameState();S.demoEnemyFleet=randomFleet();S.oppReady=true;renderGameUI()}
+function initSolo(){
+  if(S.matchId&&!S.demo)return;
+  const account=window.AxiomaGame?.account;
+  S.demo=true;S.me={id:account?.id||'solo-player'};
+  S.profile={alias:account?.alias||'Jij',class_code:account?.class_code||''};
+  S.opponent={id:'computer',alias:'Computer'};S.matchId='solo';S.hostId=S.me.id;S.unranked=true;
+  resetGameState();S.demoEnemyFleet=randomFleet();S.oppReady=true;
+  $('#whoBtn').hidden=false;$('#whoBtn').textContent=S.profile.alias;setConnection('Solo · computer','on');
+  $('#soloNote').hidden=false;showScreen('gameScreen');renderGameUI();renderBoards();
+}
 function demoBotTurn(){
   if(!S.demo||S.finished||S.phase!=='battle'||S.myTurn||V.busy)return;
   const candidates=[];for(const sl of ALLOWED_SLOPES)for(const bv of B_VALUES){const a=sl.a,b={n:bv,d:1},key=lineKey(a,b);if(!S.enemyShots.some(s=>s.key===key))candidates.push({a,b,key})}
@@ -439,7 +442,7 @@ function demoBotTurn(){
 }
 
 async function boot(){
-  AxiomaPlatform.wireHome($('#homeBtn'),{beforeLeave:async()=>{if(S.matchId)await leaveMatch();return !S.matchId}}); $('#demoBtn').onclick=initDemo; $('#leaveBtn').onclick=()=>leaveMatch(false); $('#rankingBtn').onclick=openRanking; $('#rankingCloseBtn').onclick=()=>$('#rankingOverlay').hidden=true; $('#rankingOverlay').addEventListener('click',e=>{if(e.target.id==='rankingOverlay')$('#rankingOverlay').hidden=true});
+  AxiomaPlatform.wireHome($('#homeBtn'),{beforeLeave:async()=>{if(S.matchId)await leaveMatch();return !S.matchId}}); $('#demoBtn').onclick=initSolo;$('#soloBtn').onclick=initSolo; $('#leaveBtn').onclick=()=>leaveMatch(false); $('#rankingBtn').onclick=openRanking; $('#rankingCloseBtn').onclick=()=>$('#rankingOverlay').hidden=true; $('#rankingOverlay').addEventListener('click',e=>{if(e.target.id==='rankingOverlay')$('#rankingOverlay').hidden=true});
   $('#playerList').onclick=e=>{const b=e.target.closest('[data-invite]');if(b)sendInvite(b.dataset.invite)};
   $('#ownBoard').addEventListener('click',e=>{const p=svgToGrid(e,$('#ownBoard'));if(p)placeAt(p)});
   $('#confirmShipBtn').onclick=confirmPlacement;
@@ -450,7 +453,7 @@ async function boot(){
   $('#aUpBtn').onclick=()=>shiftAimA(1);$('#aDownBtn').onclick=()=>shiftAimA(-1);
   $('#bUpBtn').onclick=()=>shiftAimB(1);$('#bDownBtn').onclick=()=>shiftAimB(-1);$('#fireBtn').onclick=fire;
   window.addEventListener('pagehide',saveMatch);
-  if(new URLSearchParams(location.search).get('demo')==='1'){initDemo();return}
+  if(['demo','solo'].some(key=>new URLSearchParams(location.search).get(key)==='1')){initSolo();return}
   if(!supa){setConnection('Supabase niet geladen','warn');return}
   setConnection('login controleren…','');
   try{
