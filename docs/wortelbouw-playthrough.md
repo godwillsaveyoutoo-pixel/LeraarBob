@@ -41,6 +41,10 @@ minimum. De stappenaantallen zijn wel minimaal: de doelen zijn geen
 startkwadraten, en 14 is geen som of verschil van twee beschikbare kwadraten.
 Een onafhankelijke breedte-eerst zoekcontrole bevestigt deze ondergrenzen.
 Alleen optellen vraagt voor √15 drie stappen, tegenover één verschilconstructie.
+Ook die langere route is geometrisch gecontroleerd: 9 → 13 → 14 → 15,
+met zijden 1, 4 en 2 (de laatste gespiegeld). Een tweede minimale route voor
+√14 is 16 → 15 → 14: tweemaal verschil met maat 1, eerst zijde 2, daarna
+zijde 4 gespiegeld. De laatste stap gebruikt √15 als echte hypotenuse.
 
 ## Wat het spelen leert
 
@@ -90,6 +94,7 @@ uitgevoerd.
 | Mobiele bediening | Minimaal 44×44 aanraakzones; bediening binnen scherm; geen gameplay-scroll of normale modals; footerknoppen raken elkaar niet; portret draait terug zonder toestandsverlies |
 | Camera beperkt de wiskunde niet | Geometriekern kent geen schermgrenzen. Camera omvat ook de komende tegels en heeft geen vaste minimumzoom |
 | Lage renderkosten | Geen doorlopende tekenlus in rust, DPR maximaal 2, enkele vectoraders per tegel, geen blur/noise of beeldbestanden in het spel; interactie getest met 6× CPU-vertraging |
+| Website-ingang | Nieuwe tegel en illustratie in beide catalogi; werkelijke klik op de tegel opent het spel, merklink keert terug naar het menu |
 
 De throttlingproef is een proxy, geen meting op een echte Samsung A20. Een
 fysieke toestelproef blijft nuttig; de referentieafmetingen zijn wel daadwerkelijk

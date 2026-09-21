@@ -45,8 +45,8 @@ hulp- en resultaattegel en vooraf controle van de hele stap. Daardoor komt de
 speler niet vast te zitten na een driehoek waarvan het verplichte vierkant
 niet meer past. Bij blokkering kan men spiegelen, een andere zijde, maat of
 vierkant kiezen. Geen kunstmatige obstakels of extra campagne toevoegen.
-Toon de gebruikte stappen en voetafdruk als observatie, zonder te beweren dat
-een gevonden lay-out een globaal minimaal oppervlak heeft.
+Toon de gebruikte stappen; vergelijk de voetafdruk in het speelverslag, zonder
+te beweren dat een gevonden lay-out een globaal minimaal oppervlak heeft.
 
 ## Bediening en visuele logica
 
