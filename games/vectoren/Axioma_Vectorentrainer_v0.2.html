@@ -256,7 +256,7 @@ const skills=[
  skill('parallelogram','Parallellogram',['headtail'],'Bij hetzelfde beginpunt kopieer je elke vector vanaf de kop van de andere. De diagonaal vanaf het beginpunt is de som.'),
  skill('difference','Vectoren aftrekken',['scalar','sum'],'a − b betekent a + (−b). Je telt de omgekeerde verplaatsing van b op.'),
  skill('combination','Lineaire combinaties',['difference'],'Je mag veelvouden samenstellen en verplaatsingen in een andere volgorde zetten. 2a − b kan als a + a − b of als −b + 2a.'),
- skill('decompose','Ontbinden in richtingen',['sum'],'Zoek twee componenten in de gegeven richtingen. Hun som moet r zijn. Negatieve en nulcomponenten zijn mogelijk.'),
+ skill('decompose','Ontbinden in richtingen',['sum'],'Zoek twee componenten in de gegeven richtingen. Hun som moet r zijn. In deze opgaven zijn beide componenten niet nul; ze mogen ook de tegengestelde zin hebben.'),
  skill('coords','Van pijl naar (x, y)',['decompose'],'x is de horizontale verplaatsing, y de verticale. Rechts en omhoog zijn positief. De coördinaten beschrijven de verplaatsing, niet het eindpunt.'),
  skill('arrow','Van (x, y) naar pijl',['coords'],'(x, y) beschrijft hoeveel je horizontaal en verticaal verplaatst, vanaf om het even welk beginpunt.'),
  skill('ab','Van A naar B',['coords'],'Voor de coördinaten van AB neem je die van eindpunt B min die van beginpunt A. Trek de x-coördinaten en de y-coördinaten afzonderlijk af.'),
@@ -301,9 +301,13 @@ function generate(id,{seed=1,level=0,variant=0,repair=null}={}){
  else if(id==='combination'){
   t.acceptChain=true;const factor=v%2?.5:2;t.source=vec(Math.sign(a.dx)*2,Math.sign(a.dy)*2);t.factor=factor;draw(subtract(scale(t.source,factor),b),`Construeer ${format(factor)} a − b vanuit P. Je kiest zelf de tussenstappen.`,[ref(R,t.source,'a'),ref(point(2,-2),b,'b')]);
  }else if(id==='decompose'){
-  t.dirs=level&&v%2?[vec(1,1),vec(-1,1)]:[vec(1,0),vec(0,1)];t.target=add(scale(t.dirs[0],a.dx),scale(t.dirs[1],a.dy));t.policy='decompose';t.refs=[ref(P,t.target,'r')];t.prompt='Ontbind r volgens de twee stippelrichtingen. Teken zelf beide componenten.';
+  // Choose nonzero coefficients in the given basis, including for oblique directions.
+  const k=pick([1,2,3])*sign(),l=pick([1,2])*sign();
+  t.dirs=level&&v%2?[vec(1,1),vec(-1,1)]:[vec(1,0),vec(0,1)];t.target=add(scale(t.dirs[0],k),scale(t.dirs[1],l));t.policy='decompose';t.refs=[ref(P,t.target,'r')];t.prompt='Ontbind r volgens de twee stippelrichtingen. Teken zelf beide componenten.';
  }else if(id==='coords'){
-  t.target=a;t.refs=[ref(P,a,'a')];t.points=[];t.prompt='Bepaal de vectorcoördinaten van a.';
+  // Drawing both components requires a displacement along both axes.
+  t.target=level===0?vec(pick([1,2,3])*sign(),pick([1,2])*sign()):a;
+  t.refs=[ref(P,t.target,'a')];t.points=[];t.prompt='Bepaal de vectorcoördinaten van a.';
   if(level===0){t.policy='decompose';t.dirs=[vec(1,0),vec(0,1)];t.prompt='Teken de horizontale en verticale component van a.';t.representation='components';}
   else {t.interaction='number';t.representation='grid-number';t.axes=true;t.answerLabel='a';}
  }else if(id==='arrow')draw(a,`Teken de vector ${coord(a)} vanuit P.`,[]);
@@ -839,6 +843,7 @@ function indexed(key,total,field='lastLevel'){
  return {keys:[key],hydrate(state){const done=numbers(state,0,total);put(state,key,{completed:done,[field]:next(done,0,total)})}};
 }
 const adapters={
+ 'wortelbouw':{keys:['axioma.wortelbouw.progress.v1']},
  'pythagoras':{keys:['axioma.pythagoras.completed.v1','axioma.pythagoras.current.v1'],hydrate(state){const done=numbers(state,1,10);put(state,this.keys[0],done);put(state,this.keys[1],next(done,1,10))}},
  'stelsels':{keys:['axioma.stelsels.completed.v1','axioma.stelsels.current.v1'],hydrate(state){const done=numbers(state,0,14);put(state,this.keys[0],done);put(state,this.keys[1],next(done,0,14))}},
  'algebra-smederij':{keys:['rf22_done','rf21_last','rf21_theme'],hydrate(state){put(state,'rf22_done',(state.completed||[]).map(String))}},

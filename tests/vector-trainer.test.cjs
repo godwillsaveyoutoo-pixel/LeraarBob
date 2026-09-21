@@ -40,6 +40,31 @@ test('H: decomposition accepts free components, swapped directions, negative and
  assert(V.validate({...t,target:v(2,2)},{strokes:[s(origin,0,0),s(origin,2,2)]}).ok);
  assert.equal(V.validate(t,{strokes:[s(origin,1,0),s(origin,0,3)]}).code,'component-direction');
 });
+test('generated dotted-direction decompositions require two nonzero components at every level',()=>{
+ const signs=new Set(),directions=new Set();
+ for(let level=0;level<3;level++)for(let variant=0;variant<8;variant++)for(let seed=1;seed<=100;seed++){
+  const t=G.generate('decompose',{seed,level,variant}),answer=solution(t),[d,e]=t.dirs;
+  assert(answer.strokes.every(s=>!M.isZero(s)),`L${level} variant${variant} seed${seed}`);
+  assert(V.validate(t,answer).ok);
+  assert(!M.isParallel(t.target,d)&&!M.isParallel(t.target,e));
+  signs.add(answer.strokes.map((s,i)=>Math.sign(M.dot(s,t.dirs[i]))).join(','));
+  directions.add(JSON.stringify(t.dirs));
+ }
+ assert.equal(signs.size,4,'both signs and their combinations remain available');
+ assert.equal(directions.size,2,'axis-aligned and oblique directions remain available');
+});
+test('horizontal and vertical drawing tasks always have two nonzero components',()=>{
+ const signs=new Set();
+ for(let variant=0;variant<8;variant++)for(let seed=1;seed<=100;seed++){
+  const t=G.generate('coords',{seed,level:0,variant}),answer=solution(t);
+  assert.equal(t.policy,'decompose');
+  assert(answer.strokes.every(s=>!M.isZero(s)),`variant${variant} seed${seed}`);
+  assert(M.vectorEquals(t.refs[0].v,t.target),'the given arrow matches the solution');
+  assert(V.validate(t,answer).ok);
+  signs.add([Math.sign(t.target.dx),Math.sign(t.target.dy)].join(','));
+ }
+ assert.equal(signs.size,4,'all four quadrants remain available');
+});
 test('I/J/K/L/M: B-A, x/y, signed numbers, fractions, sums and basis coefficients',()=>{
  const t={interaction:'number',target:v(5,3),skill:'ab'};
  assert(V.validate(t,{values:['5','3']}).ok);assert.equal(V.validate(t,{values:['-5','-3']}).code,'ba');assert.equal(V.validate(t,{values:['3','5']}).code,'xy');

@@ -123,10 +123,13 @@
     "cover": "assets/covers/wortelbouw.svg",
     "detail": "14 bouwpuzzels · prototype",
     "id": "wortelbouw",
-    "progressType": "none",
-    "teacherVisible": false,
+    "progressType": "levels",
+    "teacherVisible": true,
     "gameType": "game",
-    "tracking": "none"
+    "tracking": "progress",
+    "progressTotal": 14,
+    "progressUnitSingular": "opgave",
+    "progressUnitPlural": "opgaven"
   },
   {
     "title": "Vectorentrainer",

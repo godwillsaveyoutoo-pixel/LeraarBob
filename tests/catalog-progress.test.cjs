@@ -106,3 +106,12 @@ test('late responses cannot deliver the previous student’s overview after acco
   s.pending.forEach(resolve => resolve());
   await assert.rejects(request, /Leerlingaccount gewijzigd/);
 });
+
+test('Wortelbouw shows tracked puzzle completion and reaches the gold completion state',()=>{
+ const catalog=JSON.parse(script('games.json')),entry=catalog.find(g=>g.id==='wortelbouw');
+ assert.equal(entry.tracking,'progress');assert.equal(entry.teacherVisible,true);
+ assert.equal(summary(entry,null).label,'0 van 14 opgaven');
+ assert.equal(summary(entry,{state:{completed:['length-2'],total:14}}).label,'1 van 14 opgaven');
+ const ids=require('../games/wortelbouw/progress.js').ids;
+ assert.equal(summary(entry,{state:{completed:ids,total:14}}).status,'complete');
+});

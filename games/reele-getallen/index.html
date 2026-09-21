@@ -47,10 +47,12 @@ footer{display:flex;align-items:center;gap:10px;padding:8px 24px;border-top:1px 
 @media(max-height:500px) and (min-width:640px){.set-region:has(>.set-region){padding-top:10px;padding-bottom:3px}}
 #workspace.readonly.sets .set-region:has(>.set-region){padding-top:6px;padding-bottom:1px}#workspace.readonly.sets .set-map-board{min-height:82px}#workspace.readonly.sets .lesson-copy{padding-block:6px}#workspace.readonly.sets,#workspace.readonly.sets .canvas{gap:3px}
 @media(min-height:600px){#workspace.readonly.sets .set-region:has(>.set-region){padding-top:20px;padding-bottom:2px}#workspace.readonly.sets .set-map-board{min-height:130px}}
+
+#seriesReturn{flex-shrink:0;font-size:13px;padding:5px 10px;border-color:var(--blue);color:var(--blue)}
 </style></head>
 <body><div id="app"><header><a class="brand" data-platform-home aria-label="Naar de startpagina van leraarBob" href="../../index.html">leraarBob</a><nav aria-label="Trainer"><button data-trainer-action="play" id="playNav">Oefenen</button><button id="topicsNav">Onderwerpen</button><button data-trainer-action="help" id="helpNav">Uitleg</button><button data-trainer-action="progress" id="progressNav">Voortgang</button></nav><div class="header-actions"><span id="xp" title="Ervaringspunten">0 XP</span><button id="theme" aria-label="Lichte of donkere modus">◐</button></div></header>
-<main id="stage"><div class="question"><div><p id="eyebrow"></p><h1 id="prompt"></h1></div><span id="round"></span></div><div id="workspace"></div><footer><p id="hint" role="status"></p><button id="back" hidden>← Vorige</button><button id="skip">Later</button><button id="commit" class="primary">Controleer</button></footer></main>
-<section id="library" hidden><div class="page-heading"><div><p class="eyebrow">Getallenatelier</p><h1>Hetzelfde getal. Anders bekeken.</h1><p>Breuken, decimalen, wortels en intervallen krijgen betekenis door hun verbanden.</p></div><button id="resume" class="primary">Verder oefenen →</button></div><div class="page-actions"><button id="newSession">Nieuwe reeks</button><span>8 opgaven per reeks · vrij oefenen verdient geen XP</span></div><div id="topics" class="topic-grid"></div></section>
+<main id="stage"><div class="question"><div><p id="eyebrow"></p><h1 id="prompt"></h1></div><span id="round"></span><button id="seriesReturn" hidden>Volg leerroute →</button></div><div id="workspace"></div><footer><p id="hint" role="status"></p><button id="back" hidden>← Vorige</button><button id="skip">Later</button><button id="commit" class="primary">Controleer</button></footer></main>
+<section id="library" hidden><div class="page-heading"><div><p class="eyebrow">Getallenatelier</p><h1>Hetzelfde getal. Anders bekeken.</h1><p>Breuken, decimalen, wortels en intervallen krijgen betekenis door hun verbanden.</p></div><button id="resume" class="primary">Verder oefenen →</button></div><div class="page-actions"><button id="newSession">Nieuwe reeks</button><span>Volg je leerroute of kies zelf een onderwerp. Alles telt mee voor XP en voortgang en wordt automatisch bewaard. 8 opgaven per reeks.</span></div><div id="topics" class="topic-grid"></div></section>
 <section id="help" hidden><div class="page-heading"><div><p class="eyebrow">Uitgewerkte voorbeelden</p><h1>Bekijk het verband.</h1><p>Dezelfde voorbeelden als in je leerroute. Je antwoord blijft bewaard.</p></div><button id="closeHelp">Terug naar oefening</button></div><div id="helpTopics" class="topic-grid"></div></section>
 <section id="progress" hidden><div class="page-heading"><div><p class="eyebrow">Jouw leerroute</p><h1 id="progressTitle">Wat begrijp je al zelfstandig?</h1><p>Na twee zelfstandige antwoorden gaat een volgend onderwerp open. ‘Stevig’ vraagt ook verschillende voorstellingen en een latere herhaling.</p></div><button id="closeProgress">Terug</button></div><div id="progressRows"></div></section>
 <section id="summary" hidden><div class="summary-inner"><p class="eyebrow">Reeks afgerond</p><h1>Een verband meer gezien.</h1><div id="stats"></div><p id="summaryText"></p><button id="again" class="primary">Nieuwe reeks →</button><button id="browse">Onderwerpen bekijken</button></div></section>
@@ -369,30 +371,48 @@ const api={build};if(typeof module!=='undefined'&&module.exports)module.exports=
 'use strict';
 const C=RealNumbersCore,P=C.Progress,L=RealNumbersLessons,$=id=>document.getElementById(id),KEY='axioma-real-numbers-v1';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let progress=P.fresh(),task=null,answer=null,session=null,phase='answer',free=false,dirty=false,errorCode=null,lessonStep=0,feedback=null,preview=null,activeSlot=0,activeGroup='A',serial=Date.now()>>>0,drag=null,digitDrag=null,setDrag=null,activeToken=0,previous='stage';
+let progress=P.fresh(),task=null,answer=null,session=null,phase='answer',topic=null,dirty=false,errorCode=null,lessonStep=0,feedback=null,preview=null,activeSlot=0,activeGroup='A',serial=Date.now()>>>0,drag=null,digitDrag=null,setDrag=null,activeToken=0,previous='stage',suspendedSeries=null;
 function m(e){const num=n=>`<mn>${esc(C.format(n))}</mn>`;let body='';if(e.kind==='fraction')body=`${e.n<0?'<mo>−</mo>':''}<mfrac>${num(Math.abs(e.n))}${num(e.d)}</mfrac>`;else if(e.kind==='root')body=`${e.sign<0?'<mo>−</mo>':''}${e.degree===3?'<mroot>':'<msqrt>'}${num(e.n)}${e.degree===3?'<mn>3</mn></mroot>':'</msqrt>'}`;else if(e.kind==='pi')body='<mi>π</mi>';else if(e.kind==='period')body=`${num(e.whole||0)}<mo>,</mo><mn>${esc(e.lead||'')}</mn><mover accent="true"><mn>${esc(e.repeat)}</mn><mo>¯</mo></mover>`;else body=num(e.kind==='decimal'?e.text:e.n)+(e.kind==='percent'?'<mo>%</mo>':'');return `<math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="${esc(C.label(e))}"><mrow>${body}</mrow></math>`}
 const rationalMath=r=>m(C.fraction(r.n,r.d));
 const intervalText=C.intervalLabel;const endpointText=v=>v==='-inf'?'−∞':v==='inf'?'+∞':C.format(v||'?');
-function save(){try{AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft:task?{skill:task.skill,seed:task.seed,variant:task.variant,level:task.level,contentVersion:task.contentVersion,answer,session,phase,free,dirty,errorCode,lessonStep,feedback,activeSlot,activeGroup,activeToken}:null}));AxiomaGame.report(C.skills.filter(s=>P.mastered(progress,s.id)).map(s=>s.id),C.skills.length)}catch{$('storageWarning').hidden=false;$('storageWarning').textContent='Bewaren lukt niet. Laat deze pagina open om je werk te behouden.'}}
+function snapshot(){return task?structuredClone({skill:task.skill,seed:task.seed,variant:task.variant,level:task.level,contentVersion:task.contentVersion,answer,session,phase,topic,dirty,errorCode,lessonStep,feedback,activeSlot,activeGroup,activeToken}):null}
+function save(){try{AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft:snapshot(),suspendedSeries}));AxiomaGame.report(C.skills.filter(s=>P.mastered(progress,s.id)).map(s=>s.id),C.skills.length)}catch{$('storageWarning').hidden=false;$('storageWarning').textContent='Bewaren lukt niet. Laat deze pagina open om je werk te behouden.'}}
 function restore(){try{
- const raw=JSON.parse(AxiomaGame.storage.getItem(KEY)||'null');progress=P.sanitize(raw?.progress);if(raw?.mode==='dark')document.documentElement.dataset.mode='dark';const d=raw?.draft;if(!d||!C.skills.some(s=>s.id===d.skill))return false;
+ const raw=JSON.parse(AxiomaGame.storage.getItem(KEY)||'null');progress=P.sanitize(raw?.progress);if(raw?.mode==='dark')document.documentElement.dataset.mode='dark';suspendedSeries=raw?.suspendedSeries&&C.skills.some(s=>s.id===raw.suspendedSeries.skill)?raw.suspendedSeries:null;return restoreDraft(raw?.draft);
+ }catch{return false}}
+function restoreDraft(d){try{
+ if(!d||!C.skills.some(s=>s.id===d.skill))return false;
  task=C.generate(d.skill,{contentVersion:d.contentVersion===2?2:1,seed:Number(d.seed)>>>0,variant:Math.max(0,Math.floor(Number(d.variant)||0)),level:Math.min(2,Math.max(0,Math.floor(Number(d.level)||0)))});answer=C.freshAnswer(task);const a=d.answer||{};
  answer.values=[0,1].map(i=>typeof a.values?.[i]==='string'?a.values[i].slice(0,8):'');answer.sign=a.sign===-1?-1:1;answer.relation=[-1,0,1].includes(a.relation)?a.relation:null;answer.groups=Array.from({length:6},(_,i)=>['A','B'].includes(a.groups?.[i])?a.groups[i]:null);answer.labels=[...new Set((Array.isArray(a.labels)?a.labels:[]).filter(x=>['N','Z','Q','irr','R'].includes(x)))];answer.tick=Number.isInteger(a.tick)&&a.tick>=0&&a.tick<=32?a.tick:null;answer.closedLo=a.closedLo===true;answer.closedHi=a.closedHi===true;answer.stage=a.stage===1?1:0;
  for(const key of ['start','end'])answer[key]=Number.isInteger(a[key])&&a[key]>=0&&a[key]<(task.digits?.length||0)?a[key]:null;
  if(task.skill==='interval')C.orderInterval(answer);if(task.skill==='period'&&answer.start!==null&&answer.end===null)answer.end=answer.start;answer.periodAnchor=Number.isInteger(a.periodAnchor)&&a.periodAnchor===answer.start&&answer.start===answer.end?a.periodAnchor:null;
  answer.placements=Array.from({length:task.tokens?.length||4},(_,i)=>['N','Z','Q','R'].includes(a.placements?.[i])?a.placements[i]:null);answer.decimalType=Object.hasOwn(C.decimalNames,a.decimalType)?a.decimalType:null;activeToken=Math.max(0,Math.min((task.tokens?.length||4)-1,Number(d.activeToken)||0));
- phase=['intro','answer','feedback','done'].includes(d.phase)?d.phase:'answer';free=d.free===true;dirty=d.dirty===true;errorCode=typeof d.errorCode==='string'?d.errorCode:null;lessonStep=Math.max(0,Math.min(L.build(task).length-1,Math.floor(Number(d.lessonStep)||0)));
+ phase=['intro','answer','feedback','done'].includes(d.phase)?d.phase:'answer';topic=C.skills.some(s=>s.id===d.topic)?d.topic:d.free===true?task.skill:null;dirty=d.dirty===true;errorCode=typeof d.errorCode==='string'?d.errorCode:null;lessonStep=Math.max(0,Math.min(L.build(task).length-1,Math.floor(Number(d.lessonStep)||0)));
  session={answered:0,clean:0,xp:0};for(const k of ['answered','clean','xp'])session[k]=Math.min(k==='xp'?10000:8,Math.max(0,Number(d.session?.[k])||0));
  feedback=d.feedback&&typeof d.feedback.message==='string'?{...d.feedback,message:d.feedback.message.slice(0,600)}:null;if(phase==='feedback'&&!feedback)phase='answer';if(phase==='done'&&!feedback)feedback={ok:true,message:'Deze oefening is al verwerkt. Je kunt verdergaan.',xp:0};activeSlot=d.activeSlot===1?1:0;activeGroup=d.activeGroup==='B'?'B':'A';return true;
  }catch{return false}}
 function screen(name){document.body.dataset.screen=name;document.body.dataset.preview=String(!!preview);for(const id of ['stage','library','help','progress','summary'])$(id).hidden=id!==name;AxiomaPlatform.trainerScreen(preview?'help':({stage:'play',help:'help',progress:'progress'})[name]||'');$('xp').textContent=`${progress.xp} XP`;if(name==='stage')render();}
-function makeTask(id,{practice=false}={}){
- const previousTask=task?.skill===id?task.signature:null;preview=null;free=practice;const s=progress.skills[id],level=practice?1:s.seen<2?0:s.seen<5?1:2;
- let candidate;for(let i=0;i<30;i++){candidate=C.generate(id,{seed:++serial,variant:s.seen+(practice?serial%24:0)+(i>14?i-14:0),level});if(candidate.signature!==previousTask&&!s.signatures.slice(-3).includes(candidate.signature))break}task=candidate;
- answer=C.freshAnswer(task);phase=!practice&&!s.intro?'intro':'answer';lessonStep=0;dirty=false;errorCode=null;feedback=null;activeSlot=0;activeToken=0;save();screen('stage');
+function makeTask(id){
+ const previousTask=task?.skill===id?task.signature:null;preview=null;const s=progress.skills[id],level=s.seen<2?0:s.seen<5?1:2;
+ let candidate;for(let i=0;i<30;i++){candidate=C.generate(id,{seed:++serial,variant:s.seen+(i>14?i-14:0),level});if(candidate.signature!==previousTask&&!s.signatures.slice(-3).includes(candidate.signature))break}task=candidate;
+ answer=C.freshAnswer(task);phase=!s.intro?'intro':'answer';lessonStep=0;dirty=false;errorCode=null;feedback=null;activeSlot=0;activeToken=0;save();screen('stage');
 }
-function next(){if(!free&&session.answered>=8){finishSession();return}makeTask(free?task.skill:P.choose(progress),{practice:free})}
-function start(){session={answered:0,clean:0,xp:0};free=false;next()}
+function next(){if(session.answered>=8){finishSession();return}makeTask(topic||P.choose(progress))}
+function start(){suspendedSeries=null;session={answered:0,clean:0,xp:0};topic=null;next()}
+function resume(){preview=null;task?screen('stage'):start()}
+function followRoute(){
+ preview=null;
+ if(!topic){resume();return}
+ if(session.answered>=8){finishSession();return}
+ topic=null;
+ if(suspendedSeries){const draft=suspendedSeries,currentSession=session;suspendedSeries=null;if(restoreDraft(draft)){topic=null;session=currentSession;save();screen('stage');return}}
+ next();
+}
+function explore(id){
+ if(task&&!topic)suspendedSeries=snapshot();
+ if(!session||session.answered>=8)session={answered:0,clean:0,xp:0};
+ topic=id;makeTask(id);
+}
 function button(label,data,extra=''){return `<button ${data} ${extra}>${label}</button>`}
 function slot(a,i,label,readonly){return button(`<small>${esc(label)}</small>${esc(endpointText(a.values[i]))}`,`class="slot" data-slot="${i}" aria-label="${esc(label)}" aria-pressed="${activeSlot===i}"`,readonly?'disabled':'')}
 function pad(){return `<div class="keypad" aria-label="Getallen invoeren">${[['7','7'],['8','8'],['9','9'],['back','⌫'],['4','4'],['5','5'],['6','6'],['sign','±'],['1','1'],['2','2'],['3','3'],['next','⇥'],['0','0'],['clear','Wis']].map(([key,label])=>button(label,`data-key="${key}" aria-label="${({back:'Laatste cijfer wissen',sign:'Teken wisselen',next:'Ander invoerveld',clear:'Actief veld wissen'})[key]||label}"`)).join('')}<span class="empty-key"></span></div>`}
@@ -451,21 +471,22 @@ function render(){
  const focused=document.activeElement,focusKey=focused&&$('workspace').contains(focused)?['slot','key','token','set','selectGroup','digit','toggle','step','reset','sortToken','zone','decimalType','infinity'].find(k=>focused.dataset[k]!==undefined):null,focusValue=focusKey?focused.dataset[focusKey]:null,focusLine=focused?.id==='numberline';
  const t=preview?.task||task,isLesson=!!preview||phase==='intro',step=isLesson?L.build(t)[preview?preview.step:lessonStep]:null,a=step?.answer||answer;
  document.body.dataset.preview=String(!!preview);$('xp').textContent=`${progress.xp} XP`;$('xp').title=`${progress.xp} XP totaal · ${session?.xp||0} XP deze reeks`;
- $('eyebrow').textContent=`${preview?'Uitlegcollectie':isLesson?'Nieuw begrip':free?'Vrij oefenen':progress.skills[t.skill].repair?'Opnieuw proberen':'Jouw leerroute'} · ${C.skills.find(s=>s.id===t.skill).short}`;
+ $('eyebrow').textContent=`${preview?'Uitlegcollectie':isLesson?'Nieuw begrip':topic?'Zelfgekozen onderwerp':progress.skills[t.skill].repair?'Opnieuw proberen':'Jouw leerroute'} · ${C.skills.find(s=>s.id===t.skill).short}`;
  $('prompt').textContent=t.skill==='root'&&a.stage===1?'Bouw nu de grenzen voor de wortelwaarde.':t.prompt;
- $('round').hidden=!!preview;$('round').textContent=free?'Vrij oefenen':`Opgave ${Math.min(8,(session?.answered||0)+(phase==='done'?0:1))} / 8`;
+ $('seriesReturn').hidden=!topic||!!preview;
+ $('round').hidden=!!preview||!!topic;$('round').textContent=`Opgave ${Math.min(8,(session?.answered||0)+(phase==='done'?0:1))} / 8`;
  const feedbackMode=!isLesson&&['feedback','done'].includes(phase);
  $('workspace').className=`${isLesson?'readonly ':''}${feedbackMode?'feedback ':''}${t.skill}`;
  const parts=taskMarkup(t,a,isLesson);
  if(feedbackMode){
-  $('workspace').innerHTML=`<div class="feedback-picture">${feedbackSource(t,a)}</div><div class="feedback-copy ${feedback.ok?'good':'repair'}" role="status" aria-live="polite"><h2>${feedback.partial?'Waarde juist · vorm nog aanpassen':feedback.ok?(phase==='done'?'Juist!':'Deze stap klopt'):'Bekijk dit verband'}</h2>${phase==='done'?`<strong class="xp-earned">${free?'Vrij oefenen · geen XP':`+${feedback.xp} XP · ${dirty?'met hulp of na verbetering':'zelfstandig opgelost'}`}</strong>`:''}<p>${esc(feedback.message)}</p>${feedback.detail?`<p>${esc(feedback.detail)}</p>`:''}</div>`;
+  $('workspace').innerHTML=`<div class="feedback-picture">${feedbackSource(t,a)}</div><div class="feedback-copy ${feedback.ok?'good':'repair'}" role="status" aria-live="polite"><h2>${feedback.partial?'Waarde juist · vorm nog aanpassen':feedback.ok?(phase==='done'?'Juist!':'Deze stap klopt'):'Bekijk dit verband'}</h2>${phase==='done'?`<strong class="xp-earned">+${feedback.xp} XP · ${dirty?'met hulp of na verbetering':'zelfstandig opgelost'}</strong>`:''}<p>${esc(feedback.message)}</p>${feedback.detail?`<p>${esc(feedback.detail)}</p>`:''}</div>`;
  }else{
   $('workspace').innerHTML=`<div class="canvas">${parts.canvas}</div>${isLesson?`<aside class="lesson-copy"><span class="eyebrow">Stap ${(preview?preview.step:lessonStep)+1} van ${L.build(t).length}</span><h2>${esc(step.title)}</h2><p>${esc(step.text)}</p></aside>`:parts.panel?`<aside class="answer-panel">${parts.panel}</aside>`:''}`;
   if(isLesson)$('workspace').querySelectorAll('button').forEach(b=>b.disabled=true);
  }
  $('skip').hidden=isLesson||feedbackMode;$('back').hidden=!isLesson&&!(feedbackMode&&!feedback.ok);$('back').textContent=isLesson?'← Vorige':'Voorbeeld';$('back').disabled=isLesson&&(preview?preview.step:lessonStep)===0;
  $('commit').textContent=isLesson?((preview?preview.step:lessonStep)<L.build(t).length-1?'Volgende stap →':preview?(task?'Terug naar oefening':'Naar uitlegcollectie'):'Zelf proberen →'):phase==='done'?'Volgende →':phase==='feedback'?(feedback.ok?'Bouw de wortelgrenzen →':'Verbeter je antwoord'):'Controleer';
- $('hint').textContent=isLesson?'Bekijk het voorbeeld op je eigen tempo.':feedbackMode?'Lees rustig. Je kiest zelf wanneer je verdergaat.':t.skill==='interval'?'Tik een grens: hol ↔ vol. Kies −∞ of +∞ voor een onbegrensde kant.':t.skill==='sets'?'Sleep naar de kleinste verzameling, of tik een kaart en daarna een vak. ℕ bevat ook 0.':free?'Vrij oefenen telt niet mee voor je leerroute.':t.skill==='root'?'Beide stappen samen vormen één opgave.':'Je keuze wordt pas beoordeeld na Controleer.';
+ $('hint').textContent=isLesson?'Bekijk het voorbeeld op je eigen tempo.':feedbackMode?'Lees rustig. Je kiest zelf wanneer je verdergaat.':t.skill==='interval'?'Tik een grens: hol ↔ vol. Kies −∞ of +∞ voor een onbegrensde kant.':t.skill==='sets'?'Sleep naar de kleinste verzameling, of tik een kaart en daarna een vak. ℕ bevat ook 0.':t.skill==='root'?'Beide stappen samen vormen één opgave.':'Je keuze wordt pas beoordeeld na Controleer.';
  drawLine(t,a);
  if(focusLine)$('numberline')?.focus({preventScroll:true});else if(focusKey){const attr=focusKey.replace(/[A-Z]/g,c=>'-'+c.toLowerCase());$('workspace').querySelector(`[data-${attr}="${focusValue}"]`)?.focus({preventScroll:true});}
 }
@@ -585,31 +606,32 @@ function commit(){
  if(phase==='done'){next();return}
  if(phase==='feedback'){if(feedback.ok&&task.skill==='root'){answer.stage=1;answer.values=['',''];activeSlot=0;}phase='answer';feedback=null;save();render();return}
  const r=C.validate(task,answer);feedback=r;
- if(!r.ok){if(!r.input){dirty=true;errorCode=r.code;if(!free){progress.skills[task.skill].repair=r.code;progress.skills[task.skill].due=progress.total+3;}}phase='feedback';save();render();return}
+ if(!r.ok){if(!r.input){dirty=true;errorCode=r.code;progress.skills[task.skill].repair=r.code;progress.skills[task.skill].due=progress.total+3;}phase='feedback';save();render();return}
  if(task.skill==='root'&&answer.stage===0){phase='feedback';save();render();return}
- phase='done';let xp=0;if(!free){xp=P.record(progress,task,{clean:!dirty,solved:true,code:errorCode||'practice'});session.answered++;session.xp+=xp;if(!dirty)session.clean++;}feedback={...r,xp};save();render();
+ phase='done';const xp=P.record(progress,task,{clean:!dirty,solved:true,code:errorCode||'practice'});session.answered++;session.xp+=xp;if(!dirty)session.clean++;feedback={...r,xp};save();render();
 }
 $('commit').onclick=commit;$('back').onclick=()=>{if(phase==='feedback'&&!feedback?.ok&&!preview){example(task.skill);return}if(preview)preview.step=Math.max(0,preview.step-1);else lessonStep=Math.max(0,lessonStep-1);save();render()};
-$('skip').onclick=()=>{if(preview||phase!=='answer')return;if(!free){P.record(progress,task,{clean:false,solved:false,code:errorCode||'practice'});session.answered++;}next()};
+$('skip').onclick=()=>{if(preview||phase!=='answer')return;P.record(progress,task,{clean:false,solved:false,code:errorCode||'practice'});session.answered++;next()};
 function topicCards(root,help=false){
- root.replaceChildren();C.skills.forEach((s,i)=>{const card=document.createElement('article');card.className='topic-card'+(P.mastered(progress,s.id)?' solid':'');const status=P.mastered(progress,s.id)?'Stevig':progress.skills[s.id].seen?'In opbouw':P.unlocked(progress,s.id)?'Klaar om te ontdekken':'Later in je leerroute';card.innerHTML=`<span class="eyebrow">${String(i+1).padStart(2,'0')} · ${help?'Uitgewerkt voorbeeld':status}</span><h2>${esc(s.short)}</h2><p>${esc(s.concept)}</p><button>${help?'Bekijk het voorbeeld':'Vrij oefenen →'}</button>`;card.querySelector('button').onclick=()=>help?example(s.id):(session=null,makeTask(s.id,{practice:true}));root.append(card);});
+ root.replaceChildren();C.skills.forEach((s,i)=>{const card=document.createElement('article');card.className='topic-card'+(P.mastered(progress,s.id)?' solid':'');const status=P.mastered(progress,s.id)?'Stevig':progress.skills[s.id].seen?'In opbouw':P.unlocked(progress,s.id)?'Klaar om te ontdekken':'Later in je leerroute';card.innerHTML=`<span class="eyebrow">${String(i+1).padStart(2,'0')} · ${help?'Uitgewerkt voorbeeld':status}</span><h2>${esc(s.short)}</h2><p>${esc(s.concept)}</p><button>${help?'Bekijk het voorbeeld':'Oefen dit onderwerp →'}</button>`;card.querySelector('button').onclick=()=>help?example(s.id):explore(s.id);root.append(card);});
 }
-function library(){preview=null;topicCards($('topics'));screen('library')}
+function library(){preview=null;$('resume').textContent=task?'Verder oefenen →':'Start oefeningen →';topicCards($('topics'));screen('library')}
 function showHelp(){preview=null;topicCards($('helpTopics'),true);screen('help')}
 function example(id){
- if(task&&phase==='answer'&&!free){dirty=true;errorCode=errorCode||'help';progress.skills[task.skill].repair=errorCode;progress.skills[task.skill].due=progress.total+3;save();}
+ if(task&&phase==='answer'){dirty=true;errorCode=errorCode||'help';progress.skills[task.skill].repair=errorCode;progress.skills[task.skill].due=progress.total+3;save();}
  preview={task:C.generate(id,{seed:++serial,variant:task?.skill===id?task.variant:0,level:task?.skill===id?task.level:0}),step:0};screen('stage');
 }
 function showProgress(){previous=document.body.dataset.screen;preview=null;$('progressTitle').textContent=`${progress.xp} XP · ${C.skills.filter(s=>P.mastered(progress,s.id)).length} van ${C.skills.length} stevig`;$('progressRows').innerHTML=C.skills.map(s=>{const d=progress.skills[s.id];return `<div class="progress-row"><div><strong>${esc(s.short)}</strong><small>${d.clean} zelfstandig juist · ${d.seen} geoefend${d.repair?' · herhaling gepland':''}</small></div><span>${P.mastered(progress,s.id)?'★ Stevig':!P.unlocked(progress,s.id)?'Later in de route':d.seen?'In opbouw':'Nieuw'}</span></div>`}).join('');screen('progress')}
-function finishSession(){progress.sessions++;$('stats').innerHTML=[[session.answered,'geoefend'],[session.clean,'zelfstandig juist'],[session.xp,'XP verdiend']].map(([n,label])=>`<div><strong>${n}</strong><span>${label}</span></div>`).join('');$('summaryText').textContent='De volgende reeks haalt eerdere begrippen opnieuw op. Nieuwe waarden en andere voorstellingen laten zien wat zelfstandig blijft lukken.';task=null;answer=null;save();screen('summary')}
-AxiomaPlatform.bindTrainer({play:()=>{preview=null;task?screen('stage'):start()},help:showHelp,progress:showProgress});
-$('resume').onclick=$('closeHelp').onclick=()=>{preview=null;task?screen('stage'):start()};$('closeProgress').onclick=()=>previous==='stage'&&!task?showHelp():screen(previous==='progress'?'stage':previous);
+function finishSession(){progress.sessions++;$('stats').innerHTML=[[session.answered,'geoefend'],[session.clean,'zelfstandig juist'],[session.xp,'XP verdiend']].map(([n,label])=>`<div><strong>${n}</strong><span>${label}</span></div>`).join('');$('summaryText').textContent='De volgende reeks haalt eerdere begrippen opnieuw op. Nieuwe waarden en andere voorstellingen laten zien wat zelfstandig blijft lukken.';task=null;answer=null;suspendedSeries=null;save();screen('summary')}
+AxiomaPlatform.bindTrainer({play:resume,help:showHelp,progress:showProgress});
+$('resume').onclick=resume;$('seriesReturn').onclick=followRoute;
+$('closeHelp').onclick=()=>{preview=null;task?screen('stage'):start()};$('closeProgress').onclick=()=>previous==='stage'&&!task?showHelp():screen(previous==='progress'?'stage':previous);
 $('newSession').onclick=$('again').onclick=start;$('topicsNav').onclick=$('browse').onclick=$('rotateLibrary').onclick=library;
 $('theme').onclick=()=>{document.documentElement.dataset.mode=document.documentElement.dataset.mode==='dark'?'light':'dark';save();if(document.body.dataset.screen==='stage')render()};
 new ResizeObserver(()=>{if(document.body.dataset.screen==='stage')drawLine()}).observe($('workspace'));
 window.addEventListener('pagehide',save);
 // Read-only model inspection, useful for reproducible browser checks.
-window.AxiomaRealTrainer=Object.freeze({inspect:()=>structuredClone({task,answer,phase,lessonStep,preview,session,progress,free,dirty,feedback})});
+window.AxiomaRealTrainer=Object.freeze({inspect:()=>structuredClone({task,answer,phase,lessonStep,preview,session,progress,topic,dirty,feedback,suspendedSeries})});
 if(restore())screen('stage');else start();
 })();
 </script><script src="../../shared/vendor/supabase.js"></script><script src="../../shared/supabase-config.js"></script><script src="../../shared/axioma-auth.js"></script><script src="../../shared/axioma-social.js"></script><script src="../../shared/axioma-progress.js"></script><script>// Translates the existing completion records into each engine's native save format.
@@ -623,6 +645,7 @@ function indexed(key,total,field='lastLevel'){
  return {keys:[key],hydrate(state){const done=numbers(state,0,total);put(state,key,{completed:done,[field]:next(done,0,total)})}};
 }
 const adapters={
+ 'wortelbouw':{keys:['axioma.wortelbouw.progress.v1']},
  'pythagoras':{keys:['axioma.pythagoras.completed.v1','axioma.pythagoras.current.v1'],hydrate(state){const done=numbers(state,1,10);put(state,this.keys[0],done);put(state,this.keys[1],next(done,1,10))}},
  'stelsels':{keys:['axioma.stelsels.completed.v1','axioma.stelsels.current.v1'],hydrate(state){const done=numbers(state,0,14);put(state,this.keys[0],done);put(state,this.keys[1],next(done,0,14))}},
  'algebra-smederij':{keys:['rf22_done','rf21_last','rf21_theme'],hydrate(state){put(state,'rf22_done',(state.completed||[]).map(String))}},

@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs');
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 class CDP{
-  async connect(url){this.ws=new WebSocket(url);this.id=0;this.pending=new Map();this.errors=[];await new Promise(r=>this.ws.onopen=r);this.ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){const p=this.pending.get(m.id);this.pending.delete(m.id);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result)}else if(m.method==='Runtime.exceptionThrown')this.errors.push(m.params.exceptionDetails)}}
+  async connect(url){this.ws=new WebSocket(url);this.id=0;this.pending=new Map();this.errors=[];await new Promise(r=>this.ws.onopen=r);this.ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){const p=this.pending.get(m.id);this.pending.delete(m.id);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result)}else{if(m.method==='Runtime.exceptionThrown')this.errors.push(m.params.exceptionDetails);this.event?.(m)}}}
   send(method,params={}){return new Promise((resolve,reject)=>{const id=++this.id;this.pending.set(id,{resolve,reject});this.ws.send(JSON.stringify({id,method,params}))})}
   async eval(expression){const r=await this.send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value}
   async wait(expression){for(let i=0;i<100;i++){if(await this.eval(expression))return;await delay(50)}throw Error('Timeout: '+expression)}
@@ -14,6 +14,10 @@ const routes=require('./fixtures/wortelbouw-routes.cjs');
   const {targetId}=await browser.send('Target.createTarget',{url:'about:blank',browserContextId});
   const tab=(await(await fetch('http://127.0.0.1:9235/json')).json()).find(t=>t.id===targetId);
   const c=new CDP();await c.connect(tab.webSocketDebuggerUrl);await c.send('Page.enable');await c.send('Runtime.enable');
+  c.event=m=>{if(m.method==='Fetch.requestPaused'){const auth=m.params.request.url.endsWith('/axioma-auth.js');c.send('Fetch.fulfillRequest',{requestId:m.params.requestId,responseCode:200,responseHeaders:[{name:'Content-Type',value:'application/javascript'}],body:Buffer.from(auth?'window.AxiomaAuth={ready:async()=>null,getAccount:async()=>null,onChange:()=>()=>{}};':'').toString('base64')})}};
+  await c.send('Fetch.enable',{patterns:[{urlPattern:'*axioma-auth.js'},{urlPattern:'*axioma-social.js'}]});
+  // A fresh guest save for each complete campaign run; persistence is tested separately.
+  await c.send('Page.addScriptToEvaluateOnNewDocument',{source:'localStorage.clear();'});
   // Capture actual text submitted to canvas, including labels absent from the DOM.
   await c.send('Page.addScriptToEvaluateOnNewDocument',{source:`window.drawnText=[];const original=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(t,...args){drawnText.push(String(t));return original.call(this,t,...args)};`});
   const inspect=()=>c.eval('Wortelbouw.inspect()');
@@ -137,7 +141,7 @@ const routes=require('./fixtures/wortelbouw-routes.cjs');
     }
   }
   // Undo during the animation must cancel the pending reveal, without stale callbacks.
-  await tap('#next');await tap('[data-length="1"]');await tap('[data-target="start"]');await tap('[data-length="1"]');await tap('[data-target="edge-0"]');await tap('[data-target="triangle"]');await tap('[data-target="helper"]');await tap('[data-target="result"]');await tap('#undo');
+  await tap('#next');await tap('#restart');await tap('[data-length="1"]');await tap('[data-target="start"]');await tap('[data-length="1"]');await tap('[data-target="edge-0"]');await tap('[data-target="triangle"]');await tap('[data-target="helper"]');await tap('[data-target="result"]');await tap('#undo');
   await delay(800);assert.equal((await inspect()).state.phase,'result');assert.equal(await c.eval(`document.querySelector('#cordLabel').hidden`),true);assert.equal(await c.eval(`document.querySelector('#success').hidden`),true);
   // Keyboard placement, pointer cancellation and rotation preserve the pending construction.
   await c.eval(`document.querySelector('[data-target="result"]').focus()`);

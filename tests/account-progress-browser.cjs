@@ -124,10 +124,17 @@ const mock=`(()=>{
   const real2=await open(game('reele-getallen-trainer'),{remote:realSaved}),realAfter=await real2.eval('AxiomaRealTrainer.inspect()');
   for(const key of ['progress','session','task','answer','phase'])assert.deepEqual(realAfter[key],realBefore[key],'real numbers second device '+key);
   console.log('PASS real numbers: earned XP, learning route and completed answer restored on a second device');
-  await real.eval(`document.querySelector('#browse').click();document.querySelectorAll('#topics .topic-card button')[RealNumbersCore.skills.findIndex(s=>s.id==='sets')].click();document.querySelector('[data-sort-token="0"]').click();document.querySelector('[data-zone="R"]').click();AxiomaGame.flush()`);
+  await real.eval(`document.querySelector('#topicsNav').click();document.querySelectorAll('#topics .topic-card button')[RealNumbersCore.skills.findIndex(s=>s.id==='sets')].click();while(AxiomaRealTrainer.inspect().phase==='intro')document.querySelector('#commit').click();document.querySelector('[data-sort-token="0"]').click();document.querySelector('[data-zone="R"]').click()`);
+  await real.wait(`AxiomaGame.status==='saved'&&JSON.parse(testRow.state.storage['axioma-real-numbers-v1']).draft.answer.placements[0]==='R'`);
   const sortedBefore=await real.eval('AxiomaRealTrainer.inspect()'),sortedRemote=await real.eval('testRow.state');assert.equal(sortedRemote.total,10);
   const real3=await open(game('reele-getallen-trainer'),{remote:sortedRemote});assert.deepEqual(await real3.eval('AxiomaRealTrainer.inspect().answer'),sortedBefore.answer,'nested-set placement restored on another device');assert.equal(await real3.eval('AxiomaRealTrainer.inspect().progress.xp'),10);
-  console.log('PASS real numbers: ten-skill catalog, unfinished set sorting and prior XP on a second device');
+  assert.equal(await real3.eval('AxiomaRealTrainer.inspect().topic'),'sets');
+  await real3.eval(`AxiomaRealTrainer.inspect().task.target.forEach((zone,i)=>{document.querySelector('[data-sort-token="'+i+'"]').click();document.querySelector('[data-zone="'+zone+'"]').click()});document.querySelector('#commit').click()`);
+  await real3.wait(`AxiomaGame.status==='saved'&&JSON.parse(testRow.state.storage['axioma-real-numbers-v1']).progress.xp===20`);
+  assert.equal(await real3.eval('AxiomaRealTrainer.inspect().progress.skills.sets.clean'),1,'chosen topic contributes to mastery');
+  await real3.eval(`document.querySelector('#seriesReturn').click()`);
+  const routeBack=await real3.eval('AxiomaRealTrainer.inspect()');assert.equal(routeBack.topic,null);assert.deepEqual(routeBack.answer,realBefore.answer);assert.equal(routeBack.session.answered,2);assert.equal(routeBack.progress.xp,20);
+  console.log('PASS real numbers: automatic account saves, chosen topic and partial sorting on a second device; shared XP, mastery and session count on return to route');
 
 
   for(const role of [null,{id:'teacher',role:'teacher'}]){

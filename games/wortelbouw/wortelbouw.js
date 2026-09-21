@@ -1,7 +1,9 @@
 (() => {
   'use strict';
   const G=window.WortelbouwGeometry,$=id=>document.getElementById(id);
-  const game=new G.Game(),canvas=$('floor'),ctx=canvas.getContext('2d'),stage=$('stage');
+  const P=window.WortelbouwProgress;
+  let game=new G.Game(),progress=P.fresh();
+  const canvas=$('floor'),ctx=canvas.getContext('2d'),stage=$('stage');
   let ruler=3,mode='sum',flip=false,edgeIndex=null,active=null,preview=null;
   let width=0,height=0,dpr=1,camera={unit:24,x:0,y:0},revealFrame=0,revealStart=0,revealProgress=0,noticeTimer;
   let lastReveal=null,renderCount=0,manual=true,gesture=null;
@@ -190,6 +192,7 @@
   function instruction(title,detail){$('instruction').replaceChildren();const strong=document.createElement('strong'),span=document.createElement('span');strong.textContent=title;span.textContent=detail;$('instruction').append(strong,span)}
   function ui(){
     const s=game.state,level=targetLevel(),sq=activeSquare();
+    $('completedCount').textContent=`${P.completed(progress).length}/${G.levels.length}`;
     $('levelCount').textContent=`${s.level+1} / ${G.levels.length}`;$('goal').textContent=level.kind==='area'?`Oppervlakte ${level.n}`:`Lengte ${G.goalLabel(level)}`;$('steps').textContent=`${s.steps} ${s.steps===1?'stap':'stappen'}`;
     $('colorKey').hidden=s.phase==='start';$('lesson').hidden=s.phase!=='start';
     $('lessonTitle').textContent=level.title;$('lessonHint').textContent=level.hint;
@@ -261,7 +264,30 @@
     $('cordLabel').style.transform=`translate(-50%,-50%) rotate(${p.angle}deg)`;
   }
   function render(){ui();if(syncSize())reframe();draw();targets();positionCordLabel()}
-  function refresh(){updatePreview();reframe();render()}
+  function save(){
+    if(!window.AxiomaGame?.active)return;
+    try{P.record(progress,game);progress.manual=manual;AxiomaGame.storage.setItem(P.KEY,JSON.stringify(progress));AxiomaGame.report(P.completed(progress),G.levels.length,progress.current);$('completedCount').textContent=`${P.completed(progress).length}/${G.levels.length}`}catch{notify('Bewaren lukt niet. Laat deze pagina open om je bouwwerk te behouden.')}
+  }
+  function refresh(){updatePreview();reframe();render();save()}
+  function openLevel(index){
+    cancelGesture();cancelReveal();dismissNotice();
+    const id=P.ids[index],row=progress.levels[id];
+    try{game=row?.actions?P.replay(id,row.actions):new G.Game(index)}catch{game=new G.Game(index);notify('Je afgeronde opgaven zijn behouden; deze bouwpoging begint opnieuw.')}
+    if(game.state.phase==='reveal')game.commit({type:'reveal'});
+    active=game.state.active;edgeIndex=null;preview=null;
+    lastReveal=[...game.state.objects].reverse().find(o=>o.type==='triangle'&&o.revealed)||null;
+    ruler=3;mode='sum';flip=false;refresh();
+  }
+  function showProgress(){
+    cancelGesture();save();const count=P.completed(progress).length;$('progressSummary').textContent=`${count} van ${G.levels.length} opgaven afgerond`;$('progressLevels').replaceChildren();
+    G.levels.forEach((level,index)=>{
+      const id=P.ids[index],row=progress.levels[id],button=document.createElement('button'),mark=document.createElement('span'),text=document.createElement('span'),title=document.createElement('strong'),detail=document.createElement('small');
+      button.className='progressLevel'+(row?.completed?' done':'');button.setAttribute('aria-current',String(index===game.state.level));mark.className='mark';mark.textContent=row?.completed?'✓':String(index+1);
+      title.textContent=(level.kind==='area'?`A = ${level.n}`:G.goalLabel(level))+' · '+level.title;
+      detail.textContent=row?.completed?`Afgerond${row.bestSteps?' · beste: '+row.bestSteps+' '+(row.bestSteps===1?'bouwstap':'bouwstappen'):''}`:row?.routes?.length?`${row.routes.length} van 2 manieren gevonden`:row?.actions?.length?'Bezig · hervat je bouwwerk':'Nog te ontdekken';
+      text.append(title,detail);button.append(mark,text);button.onclick=()=>{$('progressDialog').close();openLevel(index)};$('progressLevels').append(button);
+    });$('progressDialog').showModal();
+  }
   function selectSquare(id){active=id;edgeIndex=null;preview=null;cancelReveal();dismissNotice();if(mode==='difference'&&ruler*ruler>=activeSquare().area)mode='sum';refresh()}
   function selectEdge(index){edgeIndex=index;flip=false;cancelReveal();dismissNotice();updatePreview();if(preview&&!preview.valid){const other=G.plan(game.state,activeSquare().id,index,ruler,mode,true);if(other?.valid)flip=true}refresh()}
   function place(action){
@@ -295,8 +321,8 @@
   });
   $('longMeasure').onchange=()=>{ruler=Number($('longMeasure').value);dismissNotice();refresh()};
   $('flip').onclick=()=>{flip=!flip;refresh()};$('undo').onclick=undo;$('restart').onclick=()=>reset();$('overview').onclick=()=>{reframe();render()};
-  $('next').onclick=()=>reset((game.state.level+1)%G.levels.length);
-  $('continue').onclick=()=>{if(game.state.phase==='routeDone'){cancelReveal();game.commit({type:'nextRoute'});active=null;edgeIndex=null;preview=null;ruler=3;mode='sum';flip=false;refresh()}else $('next').onclick()};$('previous').onclick=()=>reset((game.state.level+G.levels.length-1)%G.levels.length);
+  $('next').onclick=()=>{save();openLevel((game.state.level+1)%G.levels.length)};
+  $('continue').onclick=()=>{if(game.state.phase==='routeDone'){cancelReveal();game.commit({type:'nextRoute'});active=null;edgeIndex=null;preview=null;ruler=3;mode='sum';flip=false;refresh()}else $('next').onclick()};$('previous').onclick=()=>{save();openLevel((game.state.level+G.levels.length-1)%G.levels.length)};
   // A tap on a proposed piece works as well as its large semantic + button.
   function inside(p,poly){let sign=0;for(let i=0;i<poly.length;i++){const c=G.cross(G.sub(poly[(i+1)%poly.length],poly[i]),G.sub(p,poly[i]));if(Math.abs(c)<G.EPS)continue;const next=Math.sign(c);if(sign&&sign!==next)return false;sign=next}return true}
   canvas.addEventListener('click',e=>{
@@ -379,9 +405,14 @@
   canvas.addEventListener('pointercancel',cancelGesture);
   canvas.addEventListener('lostpointercapture',cancelGesture);
   $('manual').onclick=()=>{cancelGesture();manual=!manual;edgeIndex=null;preview=null;refresh()};
+  $('progressButton').onclick=showProgress;$('closeProgress').onclick=()=>$('progressDialog').close();
+  window.addEventListener('pagehide',save);
   window.addEventListener('resize',()=>{cancelGesture();resize()});
-  window.addEventListener('keydown',e=>{if(e.key==='Escape'&&(gesture||edgeIndex!==null)){e.preventDefault();undo()}});
+  window.addEventListener('keydown',e=>{if($('progressDialog').open)return;if(e.key==='Escape'&&(gesture||edgeIndex!==null)){e.preventDefault();undo()}});
   // Read-only diagnostic snapshot: tests still perform all placements through the UI.
-  window.Wortelbouw=Object.freeze({inspect:()=>JSON.parse(JSON.stringify({state:game.state,manual,gesture,ruler,mode,flip,edgeIndex,active,preview,camera,renderCount,revealing:!!revealFrame}))});
-  resize();
+  window.Wortelbouw=Object.freeze({inspect:()=>JSON.parse(JSON.stringify({state:game.state,progress,manual,gesture,ruler,mode,flip,edgeIndex,active,preview,camera,renderCount,revealing:!!revealFrame}))});
+  let recovered=false;
+  try{const loaded=P.read(JSON.parse(AxiomaGame.storage.getItem(P.KEY)||'null'),AxiomaGame.state.completed||[]);progress=loaded.progress;recovered=loaded.recovered;manual=progress.manual!==false}catch{progress=P.read(null,AxiomaGame.state.completed||[]).progress;recovered=true}
+  openLevel(P.ids.indexOf(progress.current));resize();
+  if(recovered)notify('Je afgeronde opgaven zijn behouden. Een oude bouwpoging kon niet worden hervat.');
 })();

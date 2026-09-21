@@ -304,7 +304,7 @@ latere herhaling en drie recente juiste antwoorden zonder open herstelvraag.
 Dit is een toetsbare ontwerpregel, geen bewezen maat voor leerwinst. Een reeks
 heeft acht opgaven; beide stappen van wortelbegrenzing vormen één opgave.
 Zelfstandig oplossen levert 10–14 XP, een herstelvraag 15 XP, opgelost na hulp of
-verbetering 5 XP. Voorbeelden, vrij oefenen en overslaan leveren geen XP.
+verbetering 5 XP. Voorbeelden en overslaan leveren geen XP. Zelfgekozen onderwerpen gebruiken dezelfde beoordeling, XP en foutopvolging als de leerroute. `topic` bepaalt alleen de onderwerpkeuze; `suspendedSeries` bewaart de onderbroken routeopgave. Beide delen dezelfde sessieteller. Oude `free`-opgaven worden bij het hervatten omgezet naar een zelfgekozen onderwerp; reeds afgeronde antwoorden krijgen niet opnieuw XP.
 
 De registratie is `reele-getallen-trainer`, met tien vaardigheden en opslagkey
 `axioma-real-numbers-v1`. De gedeelde accountlaag bewaart leerroute, XP, sessie,
@@ -331,3 +331,14 @@ of een sleepbeweging selecteren een langer blok, in beide richtingen. Een
 aparte wisknop maakt opnieuw kiezen expliciet. Selectie en eventueel eerste
 selectiepunt blijven in het bestaande concept bewaard. De voortzettingsregel
 noemt het kleinste herhaalblok (bijvoorbeeld 3, niet 33).
+
+### Wortelbouw
+
+Wortelbouw gebruikt dezelfde `AxiomaGame`-levenscyclus als de overige spellen.
+De accountgebonden sleutel is `axioma.wortelbouw.progress.v1`; de samenvatting
+bevat stabiele opgave-ID’s en een totaal van veertien opgaven. De engine wordt
+pas geladen na het ophalen van het account en de voortgang. Voltooiingen en
+beste routes blijven behouden bij opnieuw spelen; compacte bouwacties maken
+hervatten met Undo mogelijk. De twee routes naar √6 tellen samen als één
+voltooide opgave. De catalogus en het lerarenoverzicht hergebruiken de bestaande
+voortgangsweergave. SQL-registratie: `supabase_wortelbouw.sql`.

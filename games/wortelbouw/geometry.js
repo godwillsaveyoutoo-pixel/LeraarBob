@@ -19,6 +19,7 @@
     {n:6,kind:'length',best:2,compareRoutes:true,title:'Eén wortel, twee manieren',hint:'Bouw √6 eerst op jouw manier. Zoek daarna een route die anders eindigt: met optellen of met aftrekken.',lesson:'Dezelfde lengte √6 kun je met een som én met een verschil van oppervlakten bouwen.'},
     {n:104,kind:'length',best:1,maxLength:10,title:'De grote verrassing',hint:'De liniaal gaat tot 10. Groot hoeft niet ingewikkeld te zijn.',lesson:'10² + 2² = 100 + 4 = 104. Ook deze grote wortel lukt in één bouwstap!'}
   ];
+  const levelId=level=>`${level.kind}-${level.n}${level.compareRoutes?'-two-ways':''}`;
   const maxLength=s=>levels[s.level].maxLength||5;
   const goalLabel=level=>level.label||`√${level.n}`;
   const add=(a,b)=>({x:a.x+b.x,y:a.y+b.y}),sub=(a,b)=>({x:a.x-b.x,y:a.y-b.y});
@@ -117,15 +118,15 @@
     throw Error('Leg eerst het aangegeven stuk.');
   }
   class Game{
-    constructor(level=0){this.state=initial(level);this.history=[]}
-    commit(action){const next=apply(this.state,action);if(action.type!=='reveal')this.history.push(copy(this.state));this.state=next;return next}
-    undo(){if(this.history.length)this.state=this.history.pop();return this.state}
-    reset(level=this.state.level){this.state=initial(level);this.history=[]}
+    constructor(level=0){this.state=initial(level);this.history=[];this.actions=[];this.historyLengths=[]}
+    commit(action){const next=apply(this.state,action);if(action.type!=='reveal'){this.history.push(copy(this.state));this.historyLengths.push(this.actions.length)}this.actions.push(Object.fromEntries(['type','k','x','owner','edgeIndex','mode','flip'].filter(k=>Object.hasOwn(action,k)).map(k=>[k,action[k]])));this.state=next;return next}
+    undo(){if(this.history.length){this.state=this.history.pop();this.actions.length=this.historyLengths.pop()}return this.state}
+    reset(level=this.state.level){this.state=initial(level);this.history=[];this.actions=[];this.historyLengths=[]}
   }
   function bounds(objects){
     const p=objects.flatMap(o=>o.points);if(!p.length)return {minX:-3,maxX:3,minY:0,maxY:5};
     return {minX:Math.min(...p.map(p=>p.x)),maxX:Math.max(...p.map(p=>p.x)),minY:Math.min(...p.map(p=>p.y)),maxY:Math.max(...p.map(p=>p.y))};
   }
-  return {levels,maxLength,goalLabel,Game,initial,startSquare,plan,apply,overlap,sharedBoundary,freeEdges,edges,squareOn,bounds,
+  return {levels,levelId,maxLength,goalLabel,Game,initial,startSquare,plan,apply,overlap,sharedBoundary,freeEdges,edges,squareOn,bounds,
     add,sub,mul,dot,cross,len,norm,perp,center,signedArea,EPS};
 });

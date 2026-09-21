@@ -23,6 +23,8 @@ Met dezelfde server en geïsoleerde Chromium:
 ```sh
 node tests/wortelbouw.test.cjs
 node tests/wortelbouw-browser.cjs
+node --test tests/wortelbouw-progress.test.cjs
+node tests/wortelbouw-progress-browser.cjs
 ```
 
 De geometriecontrole verifieert 840 maat/richting/spiegelcombinaties, exact
@@ -31,6 +33,9 @@ De browser bouwt alle veertien puzzels handmatig met muis (780×360) en aanrakin
 (640×360), controleert daarnaast de optionele tikbediening op beide formaten en controleert voortijdige onthullingen ook in canvaslabels,
 de uitgebreide liniaal, beide routes naar √6, de doelbeloning, het gedraaide lengtelabel, undo tijdens
 de animatie, toetsenbord, schermrotatie, overlappende knoppen en tekenen in rust. Screenshots verschijnen in `/tmp/wortelbouw-*.png`.
+De opslagtest gebruikt fictieve accounts en een nagebootste database. Hij controleert
+voltooiing, beste stappen, hervatten op een tweede toestel, herladen, gedeeltelijke
+√6-routes, offline opnieuw bewaren en gescheiden gast-, leerling- en leraarvoortgang.
 Zie [speelverslag en acceptatie](../docs/wortelbouw-playthrough.md).
 
 ## Zeeslag en platformuitnodigingen
@@ -150,6 +155,10 @@ opgeloste antwoord op een tweede toestel met fictieve accounts.
 780 × 360, alle introductiestappen, bediening, context bij fouten, hervatten van
 invoer en XP, volledige reeksen en lichte/donkere weergave. De accountbrowsertest
 controleert ook deze trainer op een tweede toestel met fictieve accounts.
+Zelfgekozen onderwerpen gebruiken dezelfde XP en foutopvolging als de leerroute.
+De tests controleren de omzetting van oude vrij-oefenopgaven, het behoud van de
+routeopgave en sessieteller, en automatisch bewaren van gekozen onderwerpen en
+onafgewerkte antwoorden naar het account zonder handmatige bewaaractie.
 Bouw na bronwijzigingen met `node scripts/build-real-trainer.cjs`.
 
 De Reële Getallen-tests controleren ook intervalconstructies in beide

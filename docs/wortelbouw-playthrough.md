@@ -88,8 +88,11 @@ node --test tests/wortelbouw.test.cjs
 node tests/wortelbouw-browser.cjs
 ```
 
-Het prototype bewaart geen voortgang, accountgegevens of XP. De catalogus
-vermeldt veertien bouwpuzzels en `tracking: none`.
+Wortelbouw gebruikt nu de gedeelde accountopslag (`AxiomaGame`) en rapporteert
+veertien opgaven aan de catalogus. De speltegel toont de voortgang en krijgt
+bij volledige afronding de bestaande gouden voltooiingsrand. Er wordt geen XP
+toegevoegd. De bestaande registratie in `axioma_games` maakt deze voortgang
+ook zichtbaar in het lerarenoverzicht.
 
 ## Twee manieren voor √6
 
@@ -104,5 +107,31 @@ De vergelijking toont de werkelijk gebouwde ketens van oppervlakten, niet
 een vooraf ingevuld voorbeeld. Ook andere geldige routes naar √6 worden
 aangenomen. De verwijzingen volgen de gebruikte vierkanten: ongebruikte
 zijtakken komen niet in de berekening. Undo neemt ook de laatst verworven
-route terug; de knop om de puzzel opnieuw te starten wist beide routes.
-Dit is sessiestaat, geen nieuwe opslag op het account.
+route uit het huidige bouwwerk terug. Opnieuw starten begint een nieuw bouwwerk;
+eerder geregistreerde manieren en voltooiingen blijven in je voortgang staan.
+De lopende constructie en de gevonden routes worden met de andere opgaven bewaard.
+
+## Accountvoortgang en hervatten
+
+- `progress.js` bewaart afgeronde opgaven, beste stappen en de gevonden routes
+  met stabiele opgave-ID’s, zodat de volgorde later mag veranderen.
+- Iedere opgave heeft een compacte reeks bouwacties. Bij hervatten wordt deze
+  opnieuw door de geometriekern gevalideerd; inclusief Undo en de eerste
+  √6-route wanneer de tweede nog niet af is. Een begonnen onthulling wordt
+  bij hervatten afgerond.
+- Het overzicht **Mijn Wortelbouw** laat toe elke opgave te hervatten. Opnieuw
+  bouwen of Undo wist een eerdere voltooiing niet. Bij √6 telt de beste
+  oplossing de bouwstappen van beide gevonden routes samen.
+- De sleutel `axioma.wortelbouw.progress.v1` is toegelaten in de gedeelde adapter.
+  Accountcontrole gebeurt vóór de spelcode wordt gestart. Gasten en leraren
+  bewaren alleen op het eigen toestel; hun oefenwerk wordt niet als
+  leerlingvoortgang online gezet. Offline leerlingwerk blijft aan dezelfde
+  leerling gekoppeld. Wisselen van account blokkeert de oude spelinstantie.
+- `supabase_wortelbouw.sql` registreert het spel voor de bestaande opslag-API.
+  Er zijn geen nieuwe tabellen, rechten of RLS-regels toegevoegd. Registratie,
+  opslaan en accountbinding zijn online geverifieerd met tijdelijke testgebruikers
+  binnen een teruggedraaide transactie. De browsertest gebruikt uitsluitend
+  fictieve accounts en onderschept externe verzoeken.
+
+Eerdere sessies uit de versie zonder opslag kunnen niet worden teruggehaald.
+Vanaf deze versie blijven behaalde resultaten en lopende bouwwerken bewaard.

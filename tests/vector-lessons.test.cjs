@@ -19,6 +19,7 @@ test('every family supplies concrete progressive steps for every task representa
   assert(!/undefined|NaN/.test(JSON.stringify(l)),sk.id);
   assert.equal(l.steps[0].strokes.length,0,sk.id+' starts with givens');
   for(const step of l.steps)for(const stroke of step.strokes)assert(M.vectorEquals(stroke,M.vectorFromPoints(stroke.start,stroke.end)),sk.id+' drawn geometry');
+  if(t.policy==='decompose')for(const step of l.steps)assert(step.strokes.every(s=>!M.isZero(s)),'decomposition examples use two actual arrows');
   if(t.interaction==='point')assert.deepEqual(l.steps.at(-1).point,t.targetPoint,sk.id+' example endpoint');
   if(t.interaction==='number')assert(l.conclusion.includes(C.coord(t.target))||sk.id==='route'||sk.id==='fourth',sk.id+' numerical conclusion');
  }

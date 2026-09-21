@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="wortelbouw.css">
   <script src="../../shared/axioma-platform.js" defer></script>
   <script src="geometry.js" defer></script>
-  <script src="wortelbouw.js" defer></script>
+  <script src="progress.js" defer></script>
 </head>
 <body>
 <div id="app">
@@ -16,6 +16,7 @@
     <a href="../../" data-platform-home class="home" aria-label="Naar leraarBob">leraarBob</a>
     <div class="title">WORTELBOUW <span id="levelCount">1 / 14</span></div>
     <h1 id="goal">Lengte √2</h1>
+    <button id="progressButton" class="progressButton" aria-label="Mijn voortgang">Voortgang <span id="completedCount">0/14</span></button>
     <span id="steps">0 stappen</span>
     <button id="previous" class="tool" aria-label="Vorige puzzel">‹</button>
     <button id="next" class="tool" aria-label="Volgende puzzel">›</button>
@@ -55,5 +56,14 @@
   </footer>
 </div>
 <aside id="rotate"><strong>Draai je toestel</strong><p>Leg je mozaïek met je scherm in de breedte.</p><a href="../../">Terug naar leraarBob</a></aside>
+<dialog id="progressDialog" aria-labelledby="progressHeading"><div class="progressHeading"><div><h2 id="progressHeading">Mijn Wortelbouw</h2><p id="progressSummary"></p></div><button id="closeProgress" class="tool" aria-label="Voortgang sluiten">×</button></div><p class="progressNote">Afgeronde opgaven blijven meetellen als je opnieuw bouwt. Een lopend bouwwerk kun je hervatten.</p><div id="progressLevels"></div></dialog>
+<script type="text/axioma-game" data-src="wortelbouw.js"></script>
+<script src="../../shared/vendor/supabase.js" defer></script>
+<script src="../../shared/supabase-config.js" defer></script>
+<script src="../../shared/axioma-auth.js" defer></script>
+<script src="../../shared/axioma-social.js" defer></script>
+<script src="../../shared/axioma-progress.js" defer></script>
+<script src="../../shared/axioma-game-adapters.js" defer></script>
+<script src="../../shared/axioma-game.js" data-game-id="wortelbouw" defer></script>
 </body>
 </html>
