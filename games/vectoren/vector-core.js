@@ -172,7 +172,7 @@ function generate(id,{seed=1,level=0,variant=0,repair=null}={}){
   else {t.interaction='number';t.representation='grid-number';t.axes=true;t.answerLabel='a';}
  }else if(id==='arrow')draw(a,`Teken de vector ${coord(a)} vanuit P.`,[]);
  else if(id==='ab'){
-  const A=point(-2,1),B=endPointFromVector(A,a);numeric(a,'Bepaal de coördinaten van AB.',`A = (${A.x}, ${A.y})    B = (${B.x}, ${B.y})`,level<2);t.refs=level<2?[ref(A,a,'AB')]:[];t.points=level<2?[mark(A,'A'),mark(B,'B')]:[];t.answerLabel='AB';t.axes=true;
+  const A=point(-2,1),B=endPointFromVector(A,a);numeric(a,'Bepaal de coördinaten van AB.',`A = (${A.x}, ${A.y})    B = (${B.x}, ${B.y})`,level<2);t.refs=level<2?[ref(A,a,'AB')]:[];t.points=level<2?[mark(A,'A'),mark(B,'B')]:[];t.answerLabel='AB';t.axes=true;t.inputPoints={A,B};
  }else if(id==='points'){
   t.axes=true;
   if(v===0){t.start=O;t.points=[mark(O,'O'),mark(point(a.dx,a.dy),'P')];draw(a,`P = ${coord(a)}. Teken de plaatsvector OP.`,[]);}
@@ -180,14 +180,14 @@ function generate(id,{seed=1,level=0,variant=0,repair=null}={}){
   else {t.interaction='point';t.start=v===1?O:P;t.targetPoint=endPointFromVector(t.start,a);t.points=[mark(t.start,v===1?'O':'A')];t.refs=[];t.prompt=v===1?`OP = ${coord(a)}. Plaats het punt P.`:`A = (${P.x}, ${P.y}) en AP = ${coord(a)}. Plaats P.`;}
  }else if(id==='coordadd'){
   const u=level>1?scale(a,4):a,w=level>1?scale(b,3):b,minus=level>0&&v%2;
-  numeric(minus?subtract(u,w):add(u,w),`Bereken a ${minus?'−':'+'} b.`,`a = ${coord(u)}     b = ${coord(w)}`,level===0);t.operation=minus?'subtract':'add';
+  numeric(minus?subtract(u,w):add(u,w),`Bereken a ${minus?'−':'+'} b.`,`a = ${coord(u)}     b = ${coord(w)}`,level===0);t.operation=minus?'subtract':'add';t.operands=[u,w];
   if(level===0)t.scaffold=`x: ${format(u.dx)} + (${format(w.dx)})     y: ${format(u.dy)} + (${format(w.dy)})`;
  }else if(id==='coordscale'){
   t.source=level>1?scale(a,3):a;t.factor=pick(level?[.5,-.5,-2,1.5]:[2,-1]);numeric(scale(t.source,t.factor),`Bereken ${format(t.factor)} a.`,`a = ${coord(t.source)}`,level===0);t.refs=level===0?[ref(P,t.source,'a')]:[];
  }else if(id==='coordcombo'){
-  const c=vec(7,-5),u=scale(a,3),w=scale(b,2);numeric(add(subtract(scale(u,2),scale(w,3)),c),'Bereken 2a − 3b + c.',`a = ${coord(u)}    b = ${coord(w)}    c = ${coord(c)}`);
+  const c=vec(7,-5),u=scale(a,3),w=scale(b,2);numeric(add(subtract(scale(u,2),scale(w,3)),c),'Bereken 2a − 3b + c.',`a = ${coord(u)}    b = ${coord(w)}    c = ${coord(c)}`);t.operands=[u,w,c];
  }else if(id==='unknown'){
-  const u=scale(a,2),r=vec(7,-1);numeric(subtract(r,scale(u,2)),'2a + b = r. Bepaal b.',`a = ${coord(u)}    r = ${coord(r)}`);t.answerLabel='b';
+  const u=scale(a,2),r=vec(7,-1);numeric(subtract(r,scale(u,2)),'2a + b = r. Bepaal b.',`a = ${coord(u)}    r = ${coord(r)}`);t.answerLabel='b';t.operands=[u,r];
  }else if(id==='basis'){
   if(v%2){numeric(a,`Schrijf a = ${coord(a)} als x eₓ + y eᵧ.`);t.slotLabels=['coëfficiënt van eₓ','coëfficiënt van eᵧ'];t.success=`${format(a.dx)}eₓ + (${format(a.dy)})eᵧ`;}
   else {draw(a,`Teken ${format(a.dx)}eₓ + (${format(a.dy)})eᵧ vanuit P.`,level===0?[ref(point(-4,3),vec(1,0),'eₓ'),ref(point(2,2),vec(0,1),'eᵧ')]:[]);t.axes=true;}
@@ -195,12 +195,12 @@ function generate(id,{seed=1,level=0,variant=0,repair=null}={}){
   const x=pick([-3,-2]),y=pick([-2,-1]),w=pick([3,4,5]),h=pick([2,3,4]),A=point(x,y),B=point(x+w,y),C=point(x+w,y+h),D=point(x,y+h),expr=['AD + DC','AB + BC','CA + AB','AB − CB'][v];
   const s=v===2?C:A,e=v===2?B:C;t.start=s;t.target=vectorFromPoints(s,e);t.prompt=`Teken ${expr} vanuit ${v===2?'C':'A'}.`;t.refs=[];t.points=[mark(A,'A'),mark(B,'B'),mark(C,'C'),mark(D,'D')];t.segments=[[A,B],[B,C],[C,D],[D,A]];
  }else if(id==='route'){
-  const u=vec(1,1),w=vec(-1,2),c=vec(0,1),r=subtract(add(scale(u,2),scale(w,3)),c);t.start=point(2,-3);t.points=[mark(t.start,'P')];t.target=r;
+  const u=vec(1,1),w=vec(-1,2),c=vec(0,1),r=subtract(add(scale(u,2),scale(w,3)),c);t.start=point(2,-3);t.points=[mark(t.start,'P')];t.target=r;t.operands=[u,w,c];
   if(level===0){draw(r,'Vertrek bij P. Construeer 2a + 3b − c en teken de totale verplaatsing.',[ref(R,u,'a'),ref(point(3,0),w,'b'),ref(point(-4,0),c,'c')]);t.start=point(2,-3);}
   else if(level===1){t.interaction='point';t.targetPoint=endPointFromVector(t.start,r);t.axes=true;t.prompt='Voorspel het eindpunt van 2a + 3b − c vanaf P(2, −3).';t.givens=`a = ${coord(u)}    b = ${coord(w)}    c = ${coord(c)}`;}
-  else {const r2=add(scale(a,2),scale(b,3)),start=point(12,-9),e=endPointFromVector(start,r2);numeric(vec(e.x,e.y),'Waar eindigt 2a + 3b vanaf P?',`P = (12, −9)    a = ${coord(a)}    b = ${coord(b)}`);t.answerLabel='E';}
+  else {const r2=add(scale(a,2),scale(b,3)),start=point(12,-9),e=endPointFromVector(start,r2);numeric(vec(e.x,e.y),'Waar eindigt 2a + 3b vanaf P?',`P = (12, −9)    a = ${coord(a)}    b = ${coord(b)}`);t.answerLabel='E';t.operands=[a,b];t.routeStart=start;}
  }else if(id==='fourth'){
-  const A=point(-2,pick([0,1,2])),B=point(pick([1,2,3]),0),C=point(pick([2,3,4]),pick([2,3,4])),D=point(A.x+C.x-B.x,A.y+C.y-B.y);t.prompt='A, B, C, D zijn opeenvolgende hoekpunten van een parallellogram. Plaats D.';
+  const A=point(-2,pick([0,1,2])),B=point(pick([1,2,3]),0),C=point(pick([2,3,4]),pick([2,3,4])),D=point(A.x+C.x-B.x,A.y+C.y-B.y);t.inputPoints={A,B,C,D};t.prompt='A, B, C, D zijn opeenvolgende hoekpunten van een parallellogram. Plaats D.';
   if(level<2){t.interaction='point';t.axes=true;t.points=[mark(A,'A'),mark(B,'B'),mark(C,'C')];t.segments=[[A,B],[B,C]];t.targetPoint=D;t.pointName='D';}
   else {numeric(vec(D.x,D.y),'A, B, C, D liggen in die volgorde op een parallellogram. Bereken D.',`A = (${A.x}, ${A.y})    B = (${B.x}, ${B.y})    C = (${C.x}, ${C.y})`);t.answerLabel='D';}
  }else throw Error('Unknown skill: '+id);
@@ -227,10 +227,10 @@ function generate(id,{seed=1,level=0,variant=0,repair=null}={}){
  t.signature=JSON.stringify([id,t.representation,t.interaction,t.prompt,t.targetPoint||t.target,t.refs,t.points,t.source,t.factor,t.property,t.policy]);return t;
 }
 const freshSkill=()=>({intro:false,seen:0,clean:0,strength:0,lastAt:0,lastIndex:-10,representations:[],signatures:[],recent:[],variants:[],due:0});
-function freshState(){return {version:2,total:0,sessions:0,skills:Object.fromEntries(skills.map(s=>[s.id,freshSkill()])),repairs:[],lastSkill:null,lastSignatures:[]}}
+function freshState(){return {version:2,total:0,xp:0,sessions:0,skills:Object.fromEntries(skills.map(s=>[s.id,freshSkill()])),repairs:[],lastSkill:null,lastSignatures:[]}}
 function sanitize(raw){const p=freshState();if(!raw||raw.version!==2)return p;
  const number=(n,max=1e7)=>Number.isFinite(n)?Math.min(max,Math.max(0,n)):0;
- p.total=number(raw.total);p.sessions=number(raw.sessions);p.lastSkill=skills.some(s=>s.id===raw.lastSkill)?raw.lastSkill:null;
+ p.total=number(raw.total);p.xp=Math.floor(number(raw.xp));p.sessions=number(raw.sessions);p.lastSkill=skills.some(s=>s.id===raw.lastSkill)?raw.lastSkill:null;
  for(const s of skills){const v=raw.skills?.[s.id]||{},out=p.skills[s.id];out.intro=v.intro===true;for(const k of ['seen','clean','lastAt','due'])out[k]=number(v[k],1e14);out.lastIndex=Number.isFinite(v.lastIndex)?Math.max(-10,Math.min(1e14,v.lastIndex)):-10;out.strength=number(v.strength,1);for(const k of ['representations','signatures','variants'])out[k]=Array.isArray(v[k])?v[k].filter(x=>typeof x==='string').slice(-30):[];out.recent=Array.isArray(v.recent)?v.recent.filter(x=>typeof x==='boolean').slice(-6):[];}
  p.repairs=Array.isArray(raw.repairs)?raw.repairs.filter(r=>p.skills[r.skill]&&typeof r.code==='string').slice(-30).map(r=>({skill:r.skill,code:r.code,due:number(r.due),stage:number(r.stage,1)})):[];
  p.lastSignatures=Array.isArray(raw.lastSignatures)?raw.lastSignatures.filter(x=>typeof x==='string').slice(-20):[];return p;
@@ -245,12 +245,15 @@ function choose(p,{now=Date.now(),round=0}={}){
  const scored=ids.map(id=>{const s=p.skills[id],age=p.total-s.lastIndex,days=(now-s.lastAt)/86400000;return {id,score:(1-s.strength)*4+Math.min(10,age)*.45+(s.lastAt?Math.min(4,days):0)+(s.due<=p.total&&s.clean>=3?2:0)-(id===p.lastSkill?2:0)};}).sort((a,b)=>b.score-a.score);
  const id=scored[0].id;return {id,mode:!p.skills[id].intro?'intro':p.skills[id].seen<2?'guided':round===0?'recall':'practice'};
 }
-function record(p,t,{clean,code='practice',now=Date.now()}={}){
+function record(p,t,{clean,solved=clean,code='practice',now=Date.now()}={}){
+ const repair=p.repairs.find(r=>r.skill===t.skill);
+ const xp=clean?(t.repair?(repair?.stage===1?18:15):10+2*t.level):solved?5:0;
+ p.xp=(p.xp||0)+xp;
  const s=p.skills[t.skill];s.intro=true;s.seen++;s.lastAt=now;s.lastIndex=p.total;p.total++;p.lastSkill=t.skill;s.recent=[...s.recent,!!clean].slice(-6);
  if(clean){s.clean++;s.strength=Math.min(1,s.strength+(t.level===0?.13:.19));s.signatures=[...new Set([...s.signatures,t.signature])].slice(-30);s.representations=[...new Set([...s.representations,t.representation])];s.variants=[...new Set([...s.variants,`${t.level}:${t.variant%4}`])];s.due=p.total+Math.min(30,3+s.clean*3);
   const r=p.repairs.find(r=>r.skill===t.skill);if(r&&t.repair){if(r.stage===0){r.stage=1;r.due=p.total+6}else p.repairs=p.repairs.filter(x=>x!==r)}
  }else {s.strength=Math.max(0,s.strength-.14);let r=p.repairs.find(r=>r.skill===t.skill);if(!r){r={skill:t.skill};p.repairs.push(r)}Object.assign(r,{code,due:p.total+2,stage:0});}
- p.lastSignatures=[...p.lastSignatures,t.signature].slice(-20);
+ p.lastSignatures=[...p.lastSignatures,t.signature].slice(-20);return xp;
 }
 const api={VectorMath,TaskValidator:{validate,findChain},MisconceptionModel:{diagnose},TaskGenerator:{generate,skills,rng},TrainerScheduler:{freshState,sanitize,unlocked,phase,choose,record},parseNumber,format,coord};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;root.VectorTrainerCore=api;

@@ -766,7 +766,18 @@ body.vf-immersive .menu.open{gap:7px}
 </style>
 
 <script src="../shared/axioma-platform.js"></script>
-</head>
+<style>
+.workspace.with-plan{margin-bottom:34px;overflow:visible}.order-plan{position:absolute;top:100%;left:0;right:0;min-height:34px;padding:6px 10px;background:#fff9df;color:#493913;border-top:1px solid #bda968;font-size:13px;font-weight:750;text-align:center;z-index:3}.machine-status{max-width:100%;white-space:normal}.machine-layout{grid-template-rows:minmax(0,1fr) auto}
+@media(max-width:900px) and (max-height:430px) and (orientation:landscape){
+ .workspace.with-plan{--tank-h:54px}
+ .with-plan .mathscene{grid-template-rows:114px minmax(0,1fr) 0;gap:3px}
+ .with-plan .mathscene .tanks{height:114px}
+ .with-plan .mathscene .tankcol{grid-template-rows:24px 42px 36px;gap:4px}
+ .with-plan .mathscene .tank-stage{height:36px}
+ .with-plan .mathwork:not(.step1){grid-template-rows:16px var(--slot-h) 16px var(--slot-h) minmax(18px,1fr);gap:3px;padding-block:3px}
+ .with-plan .mathhint{display:none}
+}
+</style></head>
 <body>
 <div class="rotate">Draai je toestel naar landscape om Verfwinkel te spelen.</div>
 <div class="app" id="app">
@@ -781,7 +792,7 @@ body.vf-immersive .menu.open{gap:7px}
     </div>
   </header>
 
-  <main class="workspace">
+  <main class="workspace"><div id="orderPlan" class="order-plan" hidden></div>
     <section class="view machine" id="machine"></section>
     <section class="view math offright" id="math"></section>
     <section class="menu" id="menu">
@@ -803,7 +814,7 @@ body.vf-immersive .menu.open{gap:7px}
 </div>
 
 <script type="text/axioma-game">
-const LEVELS=[{"group":"basis","title":"Eerste bestelling","sources":[{"b":2,"y":1,"total":12},{"b":0,"y":1,"total":3}],"orders":[{"vol":12,"b":1,"y":1}]},{"group":"basis","title":"Omgekeerd","sources":[{"b":1,"y":2,"total":12},{"b":1,"y":0,"total":3}],"orders":[{"vol":12,"b":1,"y":1}]},{"group":"basis","title":"Doel 3 : 2","sources":[{"b":2,"y":1,"total":9},{"b":0,"y":1,"total":3}],"orders":[{"vol":10,"b":3,"y":2}]},{"group":"basis","title":"Twee mengsels","sources":[{"b":2,"y":1,"total":6},{"b":1,"y":2,"total":6}],"orders":[{"vol":6,"b":1,"y":1}]},{"group":"basis","title":"Sterker mengsel","sources":[{"b":3,"y":1,"total":4},{"b":0,"y":1,"total":2}],"orders":[{"vol":6,"b":1,"y":1}]},{"group":"basis","title":"Doel 3 : 2 · mix","sources":[{"b":3,"y":1,"total":4},{"b":1,"y":1,"total":6}],"orders":[{"vol":10,"b":3,"y":2}]},{"group":"basis","title":"Bewaar 1 l","rule":{"type":"minRemain","source":1,"amount":1,"text":"Hou minstens 1 l over in vat B."},"sources":[{"b":2,"y":1,"total":4},{"b":1,"y":2,"total":5}],"orders":[{"vol":6,"b":1,"y":1}]},{"group":"basis","title":"Twee bestellingen","sources":[{"b":2,"y":1,"total":7},{"b":1,"y":2,"total":7}],"orders":[{"vol":6,"b":1,"y":1},{"vol":6,"b":1,"y":1}]},{"group":"bridge","title":"Extra vat","sources":[{"b":2,"y":1,"total":6},{"b":1,"y":2,"total":6},{"b":1,"y":0,"total":1}],"orders":[{"vol":6,"b":1,"y":1}]},{"group":"bridge","title":"Vrij recept","sources":[{"b":2,"y":1,"total":9},{"b":1,"y":2,"total":9},{"b":0,"y":1,"total":2}],"orders":[{"vol":8,"b":1,"y":1}]},{"group":"advanced","title":"Drie onbekenden","sources":[{"b":2,"y":1,"total":9},{"b":1,"y":2,"total":9},{"b":1,"y":0,"total":3}],"orders":[{"vol":6,"b":1,"y":1}]},{"group":"advanced","title":"Receptenfamilie","sources":[{"b":2,"y":1,"total":9},{"b":1,"y":2,"total":9},{"b":0,"y":1,"total":6}],"orders":[{"vol":8,"b":1,"y":1}]},{"group":"advanced","title":"Voorraad beslist","sources":[{"b":3,"y":1,"total":4},{"b":1,"y":1,"total":3},{"b":0,"y":1,"total":3}],"orders":[{"vol":8,"b":1,"y":1}]},{"group":"advanced","title":"Bewaar vat A","rule":{"type":"minRemain","source":0,"amount":5,"text":"Hou minstens 5 l over in vat A."},"sources":[{"b":2,"y":1,"total":9},{"b":1,"y":2,"total":9},{"b":0,"y":1,"total":6}],"orders":[{"vol":6,"b":1,"y":1}]},{"group":"advanced","title":"Twee bestellingen · 3 vaten","sources":[{"b":2,"y":1,"total":7},{"b":1,"y":2,"total":7},{"b":0,"y":1,"total":1}],"orders":[{"vol":6,"b":1,"y":1},{"vol":6,"b":1,"y":1}]},{"group":"advanced","title":"Meesterbestelling","rule":{"type":"minRemain","source":0,"amount":2,"text":"Hou minstens 2 l over in vat A."},"sources":[{"b":2,"y":1,"total":9},{"b":1,"y":1,"total":4},{"b":0,"y":1,"total":1}],"orders":[{"vol":10,"b":3,"y":2}]}];
+const LEVELS=[{"group":"basis","title":"Evenveel van elke kleur","objective":"1 : 1 betekent evenveel blauw als geel.","sources":[{"b":1,"y":0,"total":12},{"b":0,"y":1,"total":12}],"orders":[{"vol":6,"b":1,"y":1}]},{"group":"basis","title":"Twee delen blauw","objective":"2 : 1 heeft drie delen: twee blauw, één geel.","sources":[{"b":1,"y":0,"total":12},{"b":0,"y":1,"total":12}],"orders":[{"vol":6,"b":2,"y":1}]},{"group":"basis","title":"Hetzelfde recept, meer verf","objective":"Van 6 naar 9 liter: schaal beide kleuren met dezelfde factor.","sources":[{"b":1,"y":0,"total":12},{"b":0,"y":1,"total":12}],"orders":[{"vol":9,"b":2,"y":1}]},{"group":"basis","title":"Meer geel dan blauw","objective":"1 : 3 heeft vier delen. Welke kleur heb je het meest nodig?","sources":[{"b":1,"y":0,"total":12},{"b":0,"y":1,"total":12}],"orders":[{"vol":8,"b":1,"y":3}]},{"group":"basis","title":"Geel toevoegen","objective":"Vat A is al gemengd. Tel ook het geel in dat vat mee.","sources":[{"b":2,"y":1,"total":12},{"b":0,"y":1,"total":4}],"orders":[{"vol":10,"b":3,"y":2}]},{"group":"basis","title":"Blauw toevoegen","objective":"Vertrek van een geelrijk mengsel en voeg zuiver blauw toe.","sources":[{"b":1,"y":2,"total":12},{"b":1,"y":0,"total":4}],"orders":[{"vol":10,"b":2,"y":3}]},{"group":"basis","title":"Twee mengsels combineren","objective":"Beide vaten bevatten blauw én geel. Hun hoeveelheden hoeven niet gelijk te zijn.","sources":[{"b":3,"y":1,"total":12},{"b":1,"y":1,"total":8}],"orders":[{"vol":12,"b":2,"y":1}]},{"group":"basis","title":"Twee verschillende klanten","objective":"Een andere verhouding vraagt een ander recept. Je voorraad loopt door.","sources":[{"b":3,"y":1,"total":12},{"b":1,"y":1,"total":10}],"orders":[{"vol":12,"b":2,"y":1},{"vol":10,"b":3,"y":2}]},{"group":"bridge","title":"Een extra mogelijkheid","objective":"Vat C is optioneel. Kun je dezelfde kleur op twee manieren maken?","sources":[{"b":2,"y":1,"total":9},{"b":1,"y":2,"total":9},{"b":1,"y":0,"total":3}],"orders":[{"vol":9,"b":2,"y":1}]},{"group":"bridge","title":"Verschillende recepten","objective":"Ook voor dit geelrijke doel bestaan verschillende recepten.","sources":[{"b":2,"y":1,"total":9},{"b":1,"y":2,"total":9},{"b":0,"y":1,"total":6}],"orders":[{"vol":10,"b":2,"y":3}]},{"group":"advanced","title":"Dezelfde kleur, andere vaten","objective":"Zoek een recept met drie vaten. Vergelijk met een recept zonder vat B.","sources":[{"b":3,"y":1,"total":8},{"b":1,"y":1,"total":8},{"b":0,"y":1,"total":4}],"orders":[{"vol":12,"b":1,"y":1}]},{"group":"advanced","title":"Een geelrijker doel","objective":"Dezelfde mengsels, een andere verhouding: welke hoeveelheden veranderen?","sources":[{"b":3,"y":1,"total":8},{"b":1,"y":1,"total":8},{"b":0,"y":1,"total":8}],"orders":[{"vol":12,"b":1,"y":2}]},{"group":"advanced","title":"Voorraad beslist","objective":"Niet elk passend recept is haalbaar met deze voorraad.","sources":[{"b":3,"y":1,"total":4},{"b":1,"y":1,"total":6},{"b":0,"y":1,"total":1}],"orders":[{"vol":10,"b":3,"y":2}]},{"group":"advanced","title":"Een reserve aanleggen","objective":"Zoek een ander recept als je te veel uit vat A zou gebruiken.","sources":[{"b":2,"y":1,"total":9},{"b":1,"y":2,"total":9},{"b":1,"y":0,"total":3}],"orders":[{"vol":9,"b":2,"y":1}],"rule":{"type":"minRemain","source":0,"amount":4,"text":"Hou minstens 4 l over in vat A."}},{"group":"advanced","title":"Vooruitplannen","objective":"Bekijk beide bestellingen vóór je giet. Bewaar genoeg van het geelrijke mengsel.","sources":[{"b":2,"y":1,"total":9},{"b":1,"y":2,"total":6},{"b":1,"y":0,"total":3}],"orders":[{"vol":9,"b":2,"y":1},{"vol":6,"b":1,"y":2}]},{"group":"advanced","title":"Meesterbestelling","objective":"Combineer twee verschillende doelen met een blijvende reserve.","sources":[{"b":3,"y":1,"total":8},{"b":1,"y":1,"total":10},{"b":0,"y":1,"total":6}],"orders":[{"vol":10,"b":2,"y":3},{"vol":8,"b":1,"y":1}],"rule":{"type":"minRemain","source":0,"amount":4,"text":"Hou minstens 4 l over in vat A."}}];
 const $=s=>document.querySelector(s);
 const app=$('#app'), machine=$('#machine'), math=$('#math'), dock=$('#dockCenter'), mainBtn=$('#mainBtn'), viewBtn=$('#viewBtn');
 const fmt=n=>Number.isInteger(n)?String(n):String(Math.round(n*100)/100).replace('.',',');
@@ -999,6 +1010,10 @@ function haptic(ms=10){if(state.haptics&&navigator.vibrate)navigator.vibrate(ms)
 function feedback(kind,i){sfx(kind,i);haptic(kind==='bad'?18:8)}
 
 function render(){
+  const next=L().orders[state.order+1];
+  const plan=[L().rule?.text,next?`Daarna: ${next.vol} l · blauw : geel = ${next.b} : ${next.y}`:''].filter(Boolean).join(' · ');
+  $('#orderPlan').hidden=!plan;$('#orderPlan').textContent=plan;document.querySelector('.workspace').classList.toggle('with-plan',!!plan);
+  $('#levelTitle').title=L().title+' · '+L().objective;
   $('#levelTitle').textContent=`LEVEL ${state.level+1} / 16`;
   $('#orderVol').textContent=`${order().vol} liter${L().orders.length>1?` · ${state.order+1}/${L().orders.length}`:''}`;
   $('#orderRatio').textContent=`${order().b} : ${order().y}`;
@@ -1010,7 +1025,7 @@ function render(){
   viewBtn.textContent=state.view==='machine'?'∑ WERKTAFEL':'← MACHINE';
 }
 function renderMachine(){
-  const instruction=state.running?'Verf stroomt door de leidingen…':state.solved?'Bestelling klaar ✓':state.fullError|| (state.readyCheck?'Doelvat vol — druk op CONTROLEER wanneer je klaar bent.':state.mixTotal>0?`${fmt(state.mixTotal)} van ${order().vol} l gevuld — je mag verder gieten.`:L().rule?L().rule.text:'Stel een hoeveelheid in en draai de messing kraanhendel open.');
+  const instruction=state.running?'Verf stroomt door de leidingen…':state.solved?'Bestelling klaar ✓':state.fullError|| (state.readyCheck?'Doelvat vol — druk op CONTROLEER wanneer je klaar bent.':state.mixTotal>0?`${fmt(state.mixTotal)} van ${order().vol} l gevuld — je mag verder gieten.`:L().objective);
   machine.innerHTML=`<div class="machine-layout">${tanksHTML(false)}<div class="machine-status ${state.solved?'ok':state.fullError?'bad':''}" id="machineStatus">${instruction}</div></div>`;
   machine.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>{
     if(state.running)return;const [i,d]=b.dataset.step.split(':').map(Number),vals=available(i),cur=state.pick[i];
@@ -1127,7 +1142,7 @@ function renderMath(){
         <div class="strip">${state.recipeSlots.map((v,i)=>`<button class="slot ${Number.isInteger(v)?'filled':''} ${i===state.animSlot?'snap':''}" style="${slotStyle()}" data-recipe="${i}">${Number.isInteger(v)?sourceBlock(v):'?'}</button>`).join('')}</div>
         <div class="compare ${math.dataset.ok==='1'?'good':lastMathMsg?'bad':''}">${lastMathMsg||sources().map((s,i)=>`${String.fromCharCode(65+i)} ${vals[i]} l`).join(' · ')}</div>
       </div>
-      <div class="mathhint">${L().group==='bridge'?'Vat C is optioneel.':'Bouw exact dezelfde totale kleurverdeling als het doel.'}</div></div>`;
+      <div class="mathhint">Bouw exact dezelfde totale kleurverdeling als het doel.</div></div>`;
     bindSlots('recipe');
   }else{
     const vals=recipeCount();
@@ -1222,7 +1237,7 @@ function renderMenu(){
     const bg=hexMix(color,'#ffffff',.22);
     const light=hexMix(color,'#ffffff',.48);
     const mark=idx===state.level?'<span class="levelmark">▶</span>':progress.completed.has(idx)?'<span class="levelmark done">✓</span>':'<span class="levelmark"></span>';
-    return `<button class="levelbtn ${idx===state.level?'current':''}" data-level="${idx}" style="--goal-color:${color};--goal-bg:${bg};--goal-light:${light}" aria-label="Level ${idx+1}: ${o.vol} liter, verhouding ${o.b} op ${o.y}">
+    return `<button class="levelbtn ${idx===state.level?'current':''}" data-level="${idx}" style="--goal-color:${color};--goal-bg:${bg};--goal-light:${light}" title="${l.title} · ${l.objective}" aria-label="Level ${idx+1}: ${l.title}. ${o.vol} liter, verhouding ${o.b} op ${o.y}. ${l.objective}">
       <div class="leveltop"><span class="levelnum">${String(idx+1).padStart(2,'0')}</span>${mark}</div>
       <div class="levelratio">${o.b} : ${o.y}</div>
       <div class="levelliters">${fmt(o.vol)} L</div>

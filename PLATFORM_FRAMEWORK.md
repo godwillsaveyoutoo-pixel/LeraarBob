@@ -44,8 +44,9 @@ meteen een sessie of hervat de opgeslagen oefening. Constructie, herkennen via
 meerkeuze en coördinatenrekenen wisselen af. Beoordeling blijft vakinhoudelijk:
 een correcte resultante is iets anders dan een complete constructiemethode.
 
-De oefenmotor bewaart taak en deelantwoorden bij hulp/voortgang. Automatisch
-doorgaan na feedback wacht terwijl een ander scherm of browser-tab actief is.
+De oefenmotor bewaart taak en deelantwoorden bij hulp/voortgang. In Vectoren
+blijft feedback naast het werkbord staan tot de leerling zelf verdergaat. Bij
+een fout kan de leerling de feedback sluiten en het eigen antwoord aanpassen.
 Uitleg raadplegen telt als ondersteund oefenen; later volgt een zelfstandige
 controle. Ook fouten krijgen gerichte herhaling met nieuwe gegevens.
 
@@ -54,6 +55,37 @@ herstelregels; Vectoren voegt geometrische methodebeoordeling toe. Die motoren
 nu samenvoegen zou hun verschillen verbergen. Een volgende gedeelde trainerlaag
 moet eerst hetzelfde expliciete resultaatformaat kunnen dragen: skill,
 representatie, zelfstandig/ondersteund, resultaat, methode, foutcode en herhaling.
+
+### Vectoren: uitgewerkte voorbeelden en XP
+
+`vector-lessons.js` levert stapsgewijze voorbeelden voor alle 24 vaardigheden.
+Dezelfde voorbeelden verschijnen bij een nieuw begrip in de leerroute en in de
+uitlegcollectie. Ze gebruiken de taakgenerator, het bestaande rooster en dezelfde
+vectornotatie. Getallen en tekenstappen komen uit het taakmodel; uitleg staat
+niet als afzonderlijke, mogelijk afwijkende antwoorden in de pagina. Geometrische
+lessen gaan vooraf aan coördinatenrekenen. Het uitlegscherm heeft een eigen
+voorbeeld zonder het lopende deelantwoord te veranderen.
+
+Zelfstandig oplossen verdient 10–14 XP, afhankelijk van het niveau. Een
+opgeloste herstelvraag levert 15 XP op, de bevestigende herhaling 18 XP. Juist na
+hulp of verbetering levert 5 XP op. Voorbeelden, overslaan en vrij verkennen
+leveren geen XP op. De motor verwerkt een opgave maar één keer; hervatten van een
+al afgewerkt antwoord telt niet opnieuw. XP staat los van beheersing: de gouden
+voltooiingsrand blijft gebaseerd op zelfstandig aangetoonde vaardigheden.
+Bestaande vectorvoortgang behoudt versie 2; oudere gegevens zonder XP beginnen
+met 0 XP en houden hun vaardigheden, fouten en sessie.
+
+### Verfwinkel: opbouw van verhoudingen
+
+De 16 opdrachten gaan van zuivere kleuren en delen naar evenredig opschalen,
+verdunnen, twee mengsels combineren en recepten met drie vaten. Er zijn zes
+doelverhoudingen. Oefening 7 vraagt 8 l en 4 l uit twee verschillende mengsels;
+oefening 8 vraagt achtereenvolgens een ander doel en een ander recept. De latere
+opdrachten onderscheiden meerdere recepten, voorraadbeperkingen, een reserve en
+vooruitplannen. De volgende bestelling en eventuele reserve zijn vooraf zichtbaar
+in beide werkweergaven. Elke reeks is oplosbaar met de toegestane schenkstappen
+(en gehele liters pigment voor de werktafel). Bestaande voltooiingsmarkeringen
+blijven behouden; de herziening wist geen eerdere voortgang.
 
 ## Accounts en voortgang: één levenscyclus
 
@@ -87,7 +119,8 @@ Voor de negen geïmporteerde spellen, Brandweer, Kleiduifschieten en Vectoren:
 
 De generieke cloudrij bevat `completed`, `total`, `finished`, `schemaVersion: 2`
 en `storage` met de gedeclareerde, geserialiseerde spelgegevens. Vectoren bewaart
-hierin het volledige leermodel, fouten/herhalingen, de sessie en het deelantwoord.
+hierin het volledige leermodel, fouten/herhalingen, XP, de sessie, de uitlegstap
+en het deelantwoord. Ook de laatst getoonde feedback blijft bij hervatten bewaard.
 De catalogus en leraarsconsole tonen het aantal stevige vectorvaardigheden.
 De Rechtentrainer behoudt zijn gespecialiseerde `axioma_progress` en
 conflictafhandeling, maar gebruikt dezelfde accountstatus en extra ID-controle.
@@ -135,6 +168,11 @@ nummers op het rooster en op de knoppen. De menutegel gebruikt dezelfde conventi
   uitleg/voortgang, meerkeuze en foutfeedback, constructie en volledige sessie,
   780 × 360, thema's en portable HTML.
 - `tests/vector-trainer.test.cjs`: wiskundige validatie en herstelplanning.
+- `tests/vector-lessons.test.cjs`: 576 voorbeeldvarianten, rekenstappen en XP.
+- `tests/verfwinkel-curriculum.test.cjs`: onafhankelijke controle van recepten,
+  schenkstappen, voorraad en volledige reeksen.
+- `tests/verfwinkel-browser.cjs`: recepten in de echte motor en bereikbare
+  bediening met zichtbare planningsvoorwaarden.
 - `tests/trainer-teacher-browser.cjs`: Rechten blijft toegankelijk voor
   leerkrachten en DEV is standaard verborgen.
 - `tests/social-browser.cjs`: uitnodigingen, Zeeslag en groepswedstrijden.

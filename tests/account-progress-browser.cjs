@@ -97,8 +97,14 @@ const mock=`(()=>{
   assert.deepEqual(await c.eval('testRow.state.completed'),['1','2','3','4']);
 
 
-  const v=await open(game('vectoren-trainer'));await v.eval('document.querySelector("#commit").click();document.querySelector("#skip").click();AxiomaGame.flush()');
-  const before=await v.eval('AxiomaVectorTrainer.inspect()'),saved=await v.eval('testRow.state');
+  const v=await open(game('vectoren-trainer'));await v.eval('while(AxiomaVectorTrainer.inspect().intro)document.querySelector("#commit").click();AxiomaGame.flush()');
+  const vectorTask=await v.eval('AxiomaVectorTrainer.inspect().task');
+  for(const point of [vectorTask.start,{x:vectorTask.start.x+vectorTask.target.dx,y:vectorTask.start.y+vectorTask.target.dy}]){
+   const position=await v.eval(`(()=>{const p=AxiomaVectorTrainer.project(${JSON.stringify(point)}),r=document.getElementById('board').getBoundingClientRect();return {x:p.x+r.x,y:p.y+r.y}})()`);
+   await v.send('Input.dispatchMouseEvent',{type:'mousePressed',...position,button:'left',clickCount:1});await v.send('Input.dispatchMouseEvent',{type:'mouseReleased',...position,button:'left',clickCount:1});
+  }
+  await v.eval('document.querySelector("#commit").click();AxiomaGame.flush()');
+  const before=await v.eval('AxiomaVectorTrainer.inspect()'),saved=await v.eval('testRow.state');assert.equal(before.progress.xp,10,'earned XP saved with the learning model');
   assert(before.progress.total>0,'record an actual vector exercise');
   const v2=await open(game('vectoren-trainer'),{remote:saved});const after=await v2.eval('AxiomaVectorTrainer.inspect()');
   for(const key of ['progress','session','task','answer'])assert.deepEqual(after[key],before[key],'vector new device '+key);

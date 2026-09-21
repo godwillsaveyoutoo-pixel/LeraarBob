@@ -30,6 +30,7 @@ const BASE='http://127.0.0.1:8765/games/vectoren/Axioma_Vectorentrainer_v0.2.htm
  async function xy(p){return ev(`(()=>{const p=AxiomaVectorTrainer.project(${JSON.stringify(p)}),r=document.getElementById('board').getBoundingClientRect();return {x:p.x+r.x,y:p.y+r.y}})()`)}
  async function tap(p){const q=await xy(p);await c.send('Input.dispatchMouseEvent',{type:'mousePressed',...q,button:'left',clickCount:1});await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...q,button:'left',clickCount:1})}
  async function draw(start,end,role='vector',drag=false){
+  if(await ev(`!document.getElementById('feedbackPanel').hidden&&!document.getElementById('dismissFeedback').hidden`))await click('dismissFeedback');
   if(role==='result')await click('resultTool');else if(await ev(`!document.getElementById('vectorTool').hidden`))await click('vectorTool');
   if(drag){const a=await xy(start),b=await xy(end);await c.send('Input.dispatchMouseEvent',{type:'mousePressed',...a,button:'left',clickCount:1});await c.send('Input.dispatchMouseEvent',{type:'mouseMoved',...b,button:'left',buttons:1});await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...b,button:'left',clickCount:1})}else{await tap(start);await tap(end)}
  }
@@ -47,7 +48,7 @@ const BASE='http://127.0.0.1:8765/games/vectoren/Axioma_Vectorentrainer_v0.2.htm
  assert(!await ev(`[...document.querySelectorAll('#board text')].some(t=>/^[ABCD]$/.test(t.textContent))`),'choice arrows are numbered, not named as points');
  const wrong=t.options.findIndex(v=>!Core.VectorMath.vectorEquals(v,t.target)),right=t.options.findIndex(v=>Core.VectorMath.vectorEquals(v,t.target));
  await ev(`document.querySelector('[data-choice="${wrong}"]').click()`);assert(await ev('AxiomaVectorTrainer.inspect().dirty'));assert.equal(await ev('AxiomaVectorTrainer.inspect().done'),false);
- await ev(`document.querySelector('[data-choice="${right}"]').click()`);assert(await ev('AxiomaVectorTrainer.inspect().done'));
+ await click('dismissFeedback');await ev(`document.querySelector('[data-choice="${right}"]').click()`);assert(await ev('AxiomaVectorTrainer.inspect().done'));
  console.log('PASS: immediate entry, help/progress preserve answers, mixed recognition and mistake feedback');
  await fixture('scalar',{level:2,variant:1});t=await ev('AxiomaVectorTrainer.inspect().task');await draw(t.start,Core.VectorMath.endPointFromVector(t.start,t.target));await click('commit');assert(await ev('AxiomaVectorTrainer.inspect().done'));
  await fixture('headtail',{level:1,variant:0});t=await ev('AxiomaVectorTrainer.inspect().task');const mid=Core.VectorMath.endPointFromVector(t.start,t.parts[1]),end=Core.VectorMath.endPointFromVector(mid,t.parts[0]);await draw(mid,end);await draw(t.start,mid);await draw(t.start,end,'result');await click('commit');assert(await ev('AxiomaVectorTrainer.inspect().done'),'reverse construction accepted');
@@ -64,9 +65,17 @@ const BASE='http://127.0.0.1:8765/games/vectoren/Axioma_Vectorentrainer_v0.2.htm
  await draw(t.start,guidedMid);await click('commit');assert.equal(await ev('AxiomaVectorTrainer.inspect().stage'),1);
  await draw(guidedMid,guidedEnd);await click('commit');assert.equal(await ev('AxiomaVectorTrainer.inspect().stage'),2);
  await draw(t.start,guidedEnd,'result');await click('commit');assert.equal(await ev('AxiomaVectorTrainer.inspect().session.answered'),1);
+ const awarded=await ev('AxiomaVectorTrainer.inspect().progress.xp');assert.equal(awarded,10,'guided construction awards XP once');
+ assert(await ev(`!document.getElementById('feedbackPanel').hidden`));
+ assert(await ev(`parseFloat(getComputedStyle(document.getElementById('feedback')).fontSize)>=15`));
+ const solvedSeed=await ev('AxiomaVectorTrainer.inspect().task.seed');await new Promise(r=>setTimeout(r,1700));assert.equal(await ev('AxiomaVectorTrainer.inspect().task.seed'),solvedSeed,'learner decides when feedback closes');
+ const feedbackShot=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/vector-feedback-780.png',Buffer.from(feedbackShot.data,'base64'));
+ await c.send('Page.reload');await c.wait('!!window.AxiomaVectorTrainer');assert.equal(await ev('AxiomaVectorTrainer.inspect().progress.xp'),awarded);assert(await ev('AxiomaVectorTrainer.inspect().done'));assert(await ev(`!document.getElementById('feedbackPanel').hidden`));
+ await click('helpBtn');await click('closeHelp');assert.equal(await ev('AxiomaVectorTrainer.inspect().progress.xp'),awarded,'help and resume do not award again');
+ console.log('PASS: visible learner-paced feedback; XP and completed answer survive reload without duplicate awards');
  await click('libraryBtn');await click('startBtn');
  for(let i=0;i<12;i++){
-  if(await ev('AxiomaVectorTrainer.inspect().intro'))await click('commit');
+  while(await ev('AxiomaVectorTrainer.inspect().intro'))await click('commit');
   t=await ev('AxiomaVectorTrainer.inspect().task');
   assert(['properties','free'].includes(t.policy),'early session uses introductory construction');
   if(t.interaction==='choice'){const choice=t.options.findIndex(v=>Core.VectorMath.vectorEquals(v,t.target));await ev(`document.querySelector('[data-choice="${choice}"]').click()`)}else{await draw(t.start,Core.VectorMath.endPointFromVector(t.start,t.target));await click('commit');}
@@ -74,8 +83,21 @@ const BASE='http://127.0.0.1:8765/games/vectoren/Axioma_Vectorentrainer_v0.2.htm
  }
  assert.equal(await ev('document.body.dataset.screen'),'summary');assert.match(await ev(`document.getElementById('summaryStats').textContent`),/12geoefend/);
  console.log('PASS: guided construction counts once; 12-question adaptive session reaches summary');
- for(const sk of Core.TaskGenerator.skills){await fixture(sk.id);await layout(sk.id);}
- for(const id of ['free','headtail','coords','coordadd','coordscale','route']){await fixture(id,{level:0,intro:true,free:false,session:{answered:0,clean:0,repairs:0}});await layout(id+' intro');if(id==='coords'){const shot=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/vector-v02-intro-780.png',Buffer.from(shot.data,'base64'))}await click('commit');await layout(id+' guided');}
+ for(const sk of Core.TaskGenerator.skills){
+  await fixture(sk.id);await layout(sk.id);
+  await fixture(sk.id,{level:0,intro:true,free:false,session:{answered:0,clean:0,repairs:0,xp:0}});
+  while(await ev('AxiomaVectorTrainer.inspect().intro')){
+   await layout(sk.id+' lesson step '+await ev('AxiomaVectorTrainer.inspect().lessonStep'));
+   if(sk.id==='coords'&&await ev('AxiomaVectorTrainer.inspect().lessonStep')===2){const shot=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/vector-v02-intro-780.png',Buffer.from(shot.data,'base64'))}
+   await click('commit');
+  }
+  assert.equal(await ev('AxiomaVectorTrainer.inspect().progress.xp'),0,'examples do not award XP');await layout(sk.id+' guided');
+  const draft=await ev('AxiomaVectorTrainer.inspect().answer');await click('helpBtn');
+  while(!await ev(`document.getElementById('helpNext').disabled`))await click('helpNext');
+  assert(await ev(`document.getElementById('helpConcept').textContent.length>0`));
+  if(sk.id==='headtail'){const shot=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/vector-help-780.png',Buffer.from(shot.data,'base64'))}
+  await click('closeHelp');assert.deepEqual(await ev('AxiomaVectorTrainer.inspect().answer'),draft);
+ }
  await fixture('coordcombo');await click('themeBtn');const dark=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/vector-v02-arithmetic-dark-780.png',Buffer.from(dark.data,'base64'));
  await fixture('headtail');const grid=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/vector-v02-grid-780.png',Buffer.from(grid.data,'base64'));
  await size(390,844);assert.equal(await ev(`getComputedStyle(document.getElementById('rotate')).display`),'grid');await click('rotateHome');assert.equal(await ev(`getComputedStyle(document.getElementById('rotate')).display`),'none');assert.equal(await ev('document.documentElement.scrollWidth>innerWidth'),false);

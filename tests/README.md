@@ -98,3 +98,17 @@ doorloopt nu ook een complete solopartij en terugkeer naar de online lobby.
 uitgevoerd. Hij maakt fictieve accounts binnen de transactie en controleert
 accountbinding, revisieconflicten en uitvoerrechten. Deze controle is op het
 gekoppelde project uitgevoerd; de testgegevens zijn teruggedraaid.
+
+## Didactische opbouw, uitleg en XP
+
+`node tests/verfwinkel-curriculum.test.cjs` rekent onafhankelijk alle legale
+recepten door, inclusief voorraad en opeenvolgende bestellingen.
+`node tests/verfwinkel-browser.cjs` controleert ze in de echte spelmotor en
+controleert of de planningsmelding geen knoppen afdekt op 780 × 360 en desktop.
+
+`node tests/vector-lessons.test.cjs` controleert de 576 voorbeeldvarianten en
+XP voor zelfstandig oplossen, verbeteren, herstel en overslaan.
+`node tests/vector-trainer-browser.cjs` doorloopt alle uitlegstappen, controleert
+leesbare feedback zonder automatisch doorgaan en herladen zonder dubbele XP.
+`node tests/account-progress-browser.cjs` controleert ook verdiende XP en het
+opgeloste antwoord op een tweede toestel met fictieve accounts.
