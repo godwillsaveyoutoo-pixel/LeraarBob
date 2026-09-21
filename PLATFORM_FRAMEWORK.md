@@ -82,6 +82,15 @@ voltooiingsrand blijft gebaseerd op zelfstandig aangetoonde vaardigheden.
 Bestaande vectorvoortgang behoudt versie 2; oudere gegevens zonder XP beginnen
 met 0 XP en houden hun vaardigheden, fouten en sessie.
 
+Begeleide kop-staartconstructies controleren elke afgeronde pijl meteen:
+**u vanuit P → v vanaf de kop van u → resultante vanuit P**. De volgende
+instructie en tekentool staan automatisch klaar. Tussenfeedback verschijnt
+boven het rooster en blokkeert of verschuift het bord niet. Bij een nieuwe
+poging wordt alleen de huidige, nog onjuiste pijl vervangen; juiste eerdere
+stappen blijven behouden. Undo en hervatten bepalen de actuele stap uit de
+constructie. Alleen de voltooide opgave krijgt XP en een knop **Verder**.
+Zelfstandige constructies blijven hun vrije tekenvolgorde en eindcontrole houden.
+
 ### Verfwinkel: opbouw van verhoudingen
 
 De 16 opdrachten gaan van zuivere kleuren en delen naar evenredig opschalen,

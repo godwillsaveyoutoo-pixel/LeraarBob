@@ -19,6 +19,11 @@ wordt gebruikt. De build neemt dezelfde module op in het losse HTML-bestand.
 
 ## Constructie en beoordeling
 
+- Begeleide kop-staartopgaven gaan na elke juiste pijl automatisch verder naar
+  de volgende tekenstap. Tussenfeedback staat boven het rooster; bevestigen of
+  een feedbackpaneel sluiten is niet nodig. De resultante-tool wordt automatisch
+  gekozen. Een fout opnieuw tekenen vervangt alleen die poging. Undo en
+  herladen herstellen de passende tekenstap; XP telt één keer voor de opgave.
 - De vectorbank is vervangen door vrij tekenen: slepen of beginpunt → eindpunt
   aantikken. Alle roosterpunten snappen op dezelfde manier. Ook een nulvector
   kan met twee tikken op hetzelfde punt worden gemaakt. Undo herstelt een stap.

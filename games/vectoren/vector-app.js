@@ -26,8 +26,19 @@ function snapshot(){return task?structuredClone({skill:task.skill,seed:task.seed
 function save(){try{const draft=snapshot();window.AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft,suspendedSeries}));window.AxiomaGame.report(Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').map(s=>s.id),Generator.skills.length);}catch{storageError()}}
 function screen(name){cancelGesture();document.body.dataset.screen=name;AxiomaPlatform.trainerScreen(({play:'play',helpScreen:'help',progressScreen:'progress'})[name]||'');for(const id of ['home','play','progressScreen','helpScreen','summary'])$(id).hidden=id!==name;if(name==='play')requestAnimationFrame(()=>renderBoard());if(name==='helpScreen')requestAnimationFrame(paintHelp);if(name==='home')renderHome();$('freeBtn').setAttribute('aria-current',name==='home'||name==='play'&&free?'page':'false');if(name==='play'&&free)$('playBtn').removeAttribute('aria-current')}
 function renderXP(){const xp=progress.xp||0;$('xpLabel').textContent=`${xp} XP`;$('xpLabel').title=`${xp} XP totaal · ${session?.xp||0} XP deze sessie`;}
+function guidedFlow(){return !!task?.guidedSteps&&!intro&&!done}
+function guidedStart(){return stage===1?M.endPointFromVector(task.start,task.parts[0]):task.start}
+function syncGuidedStage(){
+ if(!task?.guidedSteps||intro||done)return;
+ const remaining=[...answer.strokes],accepted=[];let start=task.start;
+ for(const part of task.parts){const i=remaining.findIndex(s=>M.samePoint(s.start,start)&&M.vectorEquals(s,part));if(i<0)break;const s=remaining.splice(i,1)[0];accepted.push({...s,role:'vector'});start=s.end;}
+ stage=accepted.length;role=stage===2?'result':'vector';
+ answer.strokes=[...accepted,...(remaining.length?[{...remaining.at(-1),role}]:[])];
+}
 function displayFeedback(){
- const visible=!!feedbackState?.kind&&!intro;$('feedbackPanel').hidden=!visible;$('work').classList.toggle('has-feedback',visible);
+ const flow=guidedFlow();$('flowFeedback').hidden=!flow;
+ if(flow){$('flowFeedback').dataset.kind=feedbackState?.kind||'';mathText($('flowFeedback'),feedbackState?.text||'Sleep een pijl, of tik begin en einde. Elke pijl wordt meteen nagekeken.');}
+ const visible=!!feedbackState?.kind&&!intro&&!flow;$('feedbackPanel').hidden=!visible;$('work').classList.toggle('has-feedback',visible);
  if(!visible)return;
  $('feedbackPanel').className='teaching-panel '+feedbackState.kind;
  $('feedbackTitle').textContent=feedbackState.title||({good:done?'Juist!':'Deze stap klopt',repair:'Kijk nog eens',method:'Resultaat juist · methode nog niet af'})[feedbackState.kind];
@@ -36,7 +47,7 @@ function displayFeedback(){
  $('dismissFeedback').hidden=done;$('dismissFeedback').textContent=feedbackState.kind==='good'?'Verder tekenen':'Pas mijn antwoord aan';
 }
 function message(text,kind=''){
- feedbackState=kind?{text,kind}:null;$('activityHint').textContent=kind?'Lees de feedback naast je oefening.':text;displayFeedback();requestAnimationFrame(()=>renderBoard());
+ feedbackState=kind?{text,kind}:null;$('activityHint').textContent=kind?(guidedFlow()?'Teken meteen verder, of gebruik Undo.':'Lees de feedback naast je oefening.'):text;displayFeedback();requestAnimationFrame(()=>renderBoard());
 }
 $('dismissFeedback').onclick=()=>{feedbackState=null;displayFeedback();save();requestAnimationFrame(()=>renderBoard())};
 function renderLesson(){
@@ -73,7 +84,7 @@ function finish(clean,solved=true){
  if(solved){const example=lesson(task);feedbackState={...feedbackState,title:dirty?(errorCode==='help'?'Juist met hulp':'Juist na verbetering'):'Juist!',reason:task.interaction==='number'?example.conclusion:Generator.skills.find(s=>s.id===task.skill).intro};}
  updateUI(false);save();
 }
-function guidedPrompt(){if(task.guidedSteps&&!intro&&stage<2)return stage===0?'Maak vanuit P een kopie van u.':'Voeg nu een kopie van v toe aan je route.';return task.prompt}
+function guidedPrompt(){if(guidedFlow())return ['1 / 3 · Teken u vanuit P.','2 / 3 · Teken v vanaf de kop van u.','3 / 3 · Teken u + v van P naar het einde van je route.'][stage];return task.prompt}
 function updateUI(resetFeedback=true){
  if(!task)return;
  mathText($('prompt'),intro?task.prompt:guidedPrompt());
@@ -86,11 +97,11 @@ function updateUI(resetFeedback=true){
  $('toolHint').textContent=task.interaction==='point'?(task.givens||''):'';$('toolHint').hidden=!$('toolHint').textContent;
  mathText($('toolHint'),$('toolHint').textContent);
  $('drawTools').hidden=intro||numeric||choice;
- $('vectorTool').hidden=task.interaction==='point';
- $('resultTool').hidden=task.interaction!=='sketch'||!['headtail','ordered','parallelogram'].includes(task.policy)||task.guidedSteps&&stage<2;
+ $('vectorTool').hidden=task.interaction==='point'||guidedFlow();
+ $('resultTool').hidden=task.interaction!=='sketch'||!['headtail','ordered','parallelogram'].includes(task.policy)||guidedFlow();
  $('vectorTool').setAttribute('aria-pressed',String(role==='vector'));$('resultTool').setAttribute('aria-pressed',String(role==='result'));
  for(const id of ['vectorTool','resultTool','undoBtn'])$(id).disabled=done;
- $('commit').hidden=choice&&!done&&!intro;
+ $('commit').hidden=choice&&!done&&!intro||guidedFlow();
  $('commit').textContent=intro?(lessonStep<lesson(task).steps.length-1?'Volgende stap →':'Zelf proberen →'):done?'Verder →':'Controleer';$('skip').hidden=intro||done;
  mathText($('labelX'),task.slotLabels?.[0]||'x · horizontaal');mathText($('labelY'),task.slotLabels?.[1]||'y · verticaal');
  $('coordinateEditor').setAttribute('aria-label',task.slotLabels?'Coëfficiënten van eenheidsvectoren':'Coördinaten invoeren');
@@ -139,8 +150,8 @@ function commit(){
  let result;
  if(task.guidedSteps&&stage<2){
   const start=stage===0?task.start:M.endPointFromVector(task.start,task.parts[0]);
-  const sub={...task,policy:'free',start,target:task.parts[stage]};result=Validator.validate(sub,answer);
-  if(!result.ok&&stage===1&&answer.strokes.some(s=>M.vectorEquals(s,task.parts[1])))result={...result,code:'headtail',message:'v zelf klopt. Leg zijn staart aan de kop van u.'};
+  const sub={...task,policy:'free',start,target:task.parts[stage]};result=Validator.validate(sub,{...answer,strokes:answer.strokes.slice(stage)});
+  if(!result.ok&&stage===1&&answer.strokes.slice(stage).some(s=>M.vectorEquals(s,task.parts[1])))result={...result,code:'headtail',message:'v zelf klopt. Leg zijn staart aan de kop van u.'};
   if(result.ok){stage++;role=stage===2?'result':'vector';updateUI(false);message(stage===1?'u klopt. Voeg nu v toe.':'De route klopt. Teken nu de resultante.', 'good');save();return}
  }else result=Validator.validate(task,answer);
  if(result.ok){message(result.message,'good');finish(!dirty);renderBoard();return}
@@ -218,7 +229,7 @@ function renderBoard(drawTask=task,svg=$('board'),example=intro,step=lessonStep,
  for(const dir of task.dirs||[]){const k=30/Math.max(1,M.length(dir)),a=M.endPointFromVector(task.start,M.scale(dir,-k)),b=M.endPointFromVector(task.start,M.scale(dir,k));line(a,b,{stroke:'var(--muted)','stroke-width':1.3,'stroke-dasharray':'4 5'})}
  for(const r of task.refs)arrow(r.start,r.v,r.name+(task.interaction==='number'&&task.skill!=='coords'&&task.skill!=='ab'?' '+coord(r.v):''),'given');
  if(task.choicePositions)task.options.forEach((v,i)=>arrow(task.choicePositions[i],v,String(i+1),'given'));
- for(const s of answer.strokes)arrow(s.start,s,s.role==='result'?'r':'',s.role==='result'?'result':'student');
+ for(const [i,s] of answer.strokes.entries())arrow(s.start,s,s.role==='result'?'r':task.guidedSteps&&i<stage?['u','v'][i]:'',s.role==='result'?'result':'student');
  if(answer.point)drawPoint(answer.point,task.pointName||'?',true);
  if(intro){const frames=lesson(task).steps,frame=frames[step],previous=step?frames[step-1].strokes.length:0;
   if(frame.point)drawPoint(frame.point,task.pointName||'P',true);
@@ -230,6 +241,7 @@ function renderBoard(drawTask=task,svg=$('board'),example=intro,step=lessonStep,
  }
  if(done&&!intro&&task.policy==='decompose'){const label=coord(task.target);put('text',{x:16,y:view.h-12,fill:'var(--teal)',class:'vector-label'},`Δx = ${format(task.target.dx)} · Δy = ${format(task.target.dy)} → ${label}`);}
  for(const m of task.points)drawPoint(m.p,m.name);
+ if(interactive&&guidedFlow()){const p=project(guidedStart());put('circle',{'data-guided-start':'',cx:p.x,cy:p.y,r:12,fill:'none',stroke:'var(--teal)','stroke-width':2,'stroke-dasharray':'3 3'});}
  if(interactive&&anchor){const p=project(anchor);put('circle',{cx:p.x,cy:p.y,r:9,fill:'none',stroke:'var(--selection)','stroke-width':2});}
  if(interactive&&drag?.moved)arrow(drag.start,M.vectorFromPoints(drag.start,drag.last),'',role==='result'?'result':'student',true);
  if(interactive&&cursorVisible){const p=project(cursor);put('circle',{cx:p.x,cy:p.y,r:11,fill:'none',stroke:'var(--ink)','stroke-width':1.5,'stroke-dasharray':'3 3'});}
@@ -238,16 +250,25 @@ function renderBoard(drawTask=task,svg=$('board'),example=intro,step=lessonStep,
 function snap(clientX,clientY){const r=$('board').getBoundingClientRect();if(!view.unit||clientX<r.left||clientY<r.top||clientX>r.right||clientY>r.bottom)return null;
  const x=Math.round((clientX-r.left-view.ox)/view.unit),y=Math.round((view.oy-clientY+r.top)/view.unit);return x>=view.minX&&x<=view.maxX&&y>=view.minY&&y<=view.maxY?M.point(x,y):null;
 }
-function editable(){return task&&!intro&&!done&&!feedbackState?.kind&&['sketch','point'].includes(task.interaction)&&document.body.dataset.screen==='play'}
+function editable(){return task&&!intro&&!done&&(!feedbackState?.kind||guidedFlow())&&['sketch','point'].includes(task.interaction)&&document.body.dataset.screen==='play'}
 function cancelGesture(){anchor=null;drag=null;}
-function draw(start,end){if(!editable())return;if(answer.strokes.length>=24){message('Je hebt 24 pijlen getekend. Gebruik Undo om plaats te maken.');return}answer.strokes.push(M.stroke(start,end,role));message('Tekening bewaard. Controleer als je klaar bent.');save();renderBoard()}
+function draw(start,end){
+ if(!editable())return;
+ if(guidedFlow()){
+  // Replace only the current attempt; already accepted parts remain on the board.
+  answer.strokes=answer.strokes.slice(0,stage);role=stage===2?'result':'vector';
+  answer.strokes.push(M.stroke(start,end,role));commit();renderBoard();return;
+ }
+ if(answer.strokes.length>=24){message('Je hebt 24 pijlen getekend. Gebruik Undo om plaats te maken.');return}
+ answer.strokes.push(M.stroke(start,end,role));message('Tekening bewaard. Controleer als je klaar bent.');save();renderBoard();
+}
 function tap(p){if(task.interaction==='point'){answer.point=p;message('Punt gekozen. Controleer als je klaar bent.');save();renderBoard();return}if(anchor){const a=anchor;anchor=null;draw(a,p)}else{anchor=p;message('Beginpunt gekozen. Tik nu het eindpunt.');renderBoard()}}
 $('board').addEventListener('pointerdown',e=>{if(!editable()||e.button>0)return;const p=snap(e.clientX,e.clientY);if(!p)return;e.preventDefault();$('board').focus({preventScroll:true});cursorVisible=false;drag={id:e.pointerId,start:p,last:p,x:e.clientX,y:e.clientY,moved:false};$('board').setPointerCapture(e.pointerId)});
 $('board').addEventListener('pointermove',e=>{if(drag?.id!==e.pointerId)return;const p=snap(e.clientX,e.clientY);if(!p)return;drag.last=p;if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>6){drag.moved=true;renderBoard()}});
 $('board').addEventListener('pointerup',e=>{if(drag?.id!==e.pointerId)return;const d=drag,p=snap(e.clientX,e.clientY);drag=null;if(!p){anchor=null;renderBoard();return}if(d.moved&&task.interaction==='sketch'){anchor=null;draw(d.start,p)}else tap(p)});
 $('board').addEventListener('pointercancel',()=>{cancelGesture();renderBoard()});
 $('board').addEventListener('keydown',e=>{if(!editable())return;cursorVisible=true;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();cursor=M.point(Math.max(Math.ceil(view.minX),Math.min(Math.floor(view.maxX),cursor.x+(e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0))),Math.max(Math.ceil(view.minY),Math.min(Math.floor(view.maxY),cursor.y+(e.key==='ArrowUp'?1:e.key==='ArrowDown'?-1:0))));renderBoard()}else if(e.key==='Enter'||e.key===' '){e.preventDefault();tap(cursor)}else if(e.key==='Escape'){cancelGesture();renderBoard()}});
-$('undoBtn').onclick=()=>{if(!editable())return;if(anchor)anchor=null;else if(task.interaction==='point')answer.point=null;else answer.strokes.pop();message('Laatste stap teruggenomen.');save();renderBoard()};
+$('undoBtn').onclick=()=>{if(!editable())return;if(anchor)anchor=null;else if(task.interaction==='point')answer.point=null;else answer.strokes.pop();syncGuidedStage();message('Laatste stap teruggenomen.');updateUI(false);save();renderBoard()};
 for(const [id,value] of [['vectorTool','vector'],['resultTool','result']])$(id).onclick=()=>{role=value;cancelGesture();updateUI(false)};
 $('commit').onclick=commit;
 $('skip').onclick=()=>{if(!task||done||intro)return;dirty=true;errorCode=errorCode||'practice';finish(false,false);nextTask()};
@@ -269,7 +290,7 @@ function resume(){
   lessonStep=Math.max(0,Math.min(lesson(task).steps.length-1,Number(d.lessonStep)||0));feedbackState=d.feedbackState&&['good','repair','method'].includes(d.feedbackState.kind)?d.feedbackState:null;lastXP=Math.max(0,Math.min(18,Number(d.lastXP)||0));
   free=!!d.free;intro=!!d.intro;done=!!d.done;dirty=!!d.dirty;errorCode=typeof d.errorCode==='string'?d.errorCode:null;stage=Math.max(0,Math.min(2,Number(d.stage)||0));session={xp:Math.max(0,Math.min(10000,Number(d.session?.xp)||0)),answered:Math.max(0,Math.min(12,Number(d.session?.answered)||0)),clean:Math.max(0,Math.min(12,Number(d.session?.clean)||0)),repairs:Math.max(0,Math.min(12,Number(d.session?.repairs)||0))};
  }catch{task=null;startSession();return}}
- if(task){screen('play');updateUI(!feedbackState);if(done&&!feedbackState)message('Deze oefening is al verwerkt. Ga verder naar een nieuwe vraag.','good')}
+ if(task){syncGuidedStage();screen('play');updateUI(!feedbackState);if(guidedFlow()&&stage===2&&Validator.validate(task,answer).ok)commit();if(done&&!feedbackState)message('Deze oefening is al verwerkt. Ga verder naar een nieuwe vraag.','good')}
 }
 $('freeBtn').onclick=$('libraryBtn').onclick=$('summaryHome').onclick=$('rotateHome').onclick=()=>{save();screen('home')};
  AxiomaPlatform.bindTrainer({play:resumeSeries,help:showHelp,progress:showProgress});$('closeProgress').onclick=()=>screen(previousScreen);$('startBtn').onclick=$('seriesReturn').onclick=resumeSeries;$('again').onclick=startSession;$('resumeBtn').onclick=resume;

@@ -56,3 +56,9 @@ footer{display:flex;align-items:center;gap:10px;padding:8px 20px;border-top:1px 
 @media(max-width:639px){#helpScreen{overflow:auto}.help-toolbar{padding:8px;gap:8px;flex-wrap:wrap}.help-toolbar label{display:none}.help-toolbar select{max-width:100%;width:100%}#closeHelp{font-size:12px}.help-content{display:block}.help-question{padding:14px}.help-example-layout{display:flex;flex-direction:column}.help-visual{min-height:240px}#helpBoard{height:260px;flex:none}.help-steps{overflow:visible;border-left:0;border-top:3px solid var(--blue)}.help-footer{position:sticky;bottom:0;background:var(--paper);padding:8px;gap:8px}.help-footer button{font-size:11px;padding:6px}.help-footer #libraryBtn{max-width:100px}.trainer-nav button{font-size:11px}}
 
 @media(max-height:500px) and (min-width:640px){.teaching-panel .step-track,.help-steps .step-track{display:none}#lessonBack{font-size:13px}body:has(.work.is-lesson) #activityHint{font-size:10px}.teaching-panel #lessonTitle{font-size:17px}.teaching-panel #lessonText{font-size:15px;line-height:1.4}}
+
+/* Guided construction stays on one stable board, including after a mistake. */
+.flow-feedback{height:2.8em;line-height:1.4;font-size:13px;margin:3px 0 0;color:var(--muted)}
+.flow-feedback[data-kind="good"]{color:var(--teal)}
+.flow-feedback[data-kind="repair"],.flow-feedback[data-kind="method"]{color:var(--wrong)}
+@media(max-height:500px) and (min-width:640px){.flow-feedback{font-size:12px}}

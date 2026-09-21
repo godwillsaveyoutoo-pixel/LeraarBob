@@ -31,7 +31,7 @@ const BASE='http://127.0.0.1:8765/games/vectoren/Axioma_Vectorentrainer_v0.2.htm
  async function tap(p){const q=await xy(p);await c.send('Input.dispatchMouseEvent',{type:'mousePressed',...q,button:'left',clickCount:1});await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...q,button:'left',clickCount:1})}
  async function draw(start,end,role='vector',drag=false){
   if(await ev(`!document.getElementById('feedbackPanel').hidden&&!document.getElementById('dismissFeedback').hidden`))await click('dismissFeedback');
-  if(role==='result')await click('resultTool');else if(await ev(`!document.getElementById('vectorTool').hidden`))await click('vectorTool');
+  if(role==='result'){if(await ev(`!document.getElementById('resultTool').hidden`))await click('resultTool')}else if(await ev(`!document.getElementById('vectorTool').hidden`))await click('vectorTool');
   if(drag){const a=await xy(start),b=await xy(end);await c.send('Input.dispatchMouseEvent',{type:'mousePressed',...a,button:'left',clickCount:1});await c.send('Input.dispatchMouseEvent',{type:'mouseMoved',...b,button:'left',buttons:1});await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...b,button:'left',clickCount:1})}else{await tap(start);await tap(end)}
  }
  async function enter(values){for(let i=0;i<2;i++){await click(i?'slotY':'slotX');for(const char of values[i])await ev(`document.querySelector('[data-key="${char==='-'?'sign':char}"]').click()`);}}
@@ -61,10 +61,33 @@ const BASE='http://127.0.0.1:8765/games/vectoren/Axioma_Vectorentrainer_v0.2.htm
  console.log('PASS: drag, tap-tap, no live leakage, reversed head-tail, incomplete method, arithmetic keypad, fractions and draft restore');
  // Guided steps use the same drawing handlers and only score the whole task once.
  await fixture('headtail',{level:0,free:false,session:{answered:0,clean:0,repairs:0}});t=await ev('AxiomaVectorTrainer.inspect().task');
+ const repairMid=Core.VectorMath.endPointFromVector(t.start,t.parts[0]),repairEnd=Core.VectorMath.endPointFromVector(repairMid,t.parts[1]);
+ const boardBefore=await ev('AxiomaVectorTrainer.inspect().view');
+ await draw(t.start,t.start);assert.equal(await ev('AxiomaVectorTrainer.inspect().stage'),0);assert(await ev('AxiomaVectorTrainer.inspect().dirty'));
+ assert(await ev(`document.getElementById('feedbackPanel').hidden`),'errors do not block the board');
+ assert.equal(await ev(`document.getElementById('flowFeedback').dataset.kind`),'repair');
+ assert.deepEqual(await ev('AxiomaVectorTrainer.inspect().view'),boardBefore,'feedback keeps the board in place');
+ await draw(t.start,repairMid);assert.equal(await ev('AxiomaVectorTrainer.inspect().stage'),1);assert.equal(await ev('AxiomaVectorTrainer.inspect().answer.strokes.length'),1,'retry replaces the failed attempt');
+ await draw(t.start,Core.VectorMath.endPointFromVector(t.start,t.parts[1]));
+ assert.equal(await ev('AxiomaVectorTrainer.inspect().stage'),1);assert.match(await ev(`document.getElementById('flowFeedback').textContent`),/staart aan de kop/);
+ await draw(repairMid,repairEnd);assert.equal(await ev('AxiomaVectorTrainer.inspect().stage'),2);
+ await click('undoBtn');assert.equal(await ev('AxiomaVectorTrainer.inspect().stage'),1,'undo restores the preceding instruction');
+ await draw(repairMid,repairEnd);await c.send('Page.reload');await c.wait('!!window.AxiomaVectorTrainer');
+ assert.equal(await ev('AxiomaVectorTrainer.inspect().stage'),2,'reload resumes at the result vector');assert(await ev(`document.getElementById('feedbackPanel').hidden`));
+ await size(640,360);await layout('guided inline feedback 640');await click('themeBtn');
+ const flowShot=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/vector-flow-640-dark.png',Buffer.from(flowShot.data,'base64'));
+ await draw(t.start,repairEnd);assert(await ev('AxiomaVectorTrainer.inspect().done'));assert.equal(await ev('AxiomaVectorTrainer.inspect().session.answered'),1);assert.equal(await ev('AxiomaVectorTrainer.inspect().answer.strokes.length'),3);
+ await size(780,360);
+ await fixture('headtail',{level:0,free:false,session:{answered:0,clean:0,repairs:0}});t=await ev('AxiomaVectorTrainer.inspect().task');
  const guidedMid=Core.VectorMath.endPointFromVector(t.start,t.parts[0]),guidedEnd=Core.VectorMath.endPointFromVector(guidedMid,t.parts[1]);
- await draw(t.start,guidedMid);await click('commit');assert.equal(await ev('AxiomaVectorTrainer.inspect().stage'),1);
- await draw(guidedMid,guidedEnd);await click('commit');assert.equal(await ev('AxiomaVectorTrainer.inspect().stage'),2);
- await draw(t.start,guidedEnd,'result');await click('commit');assert.equal(await ev('AxiomaVectorTrainer.inspect().session.answered'),1);
+ await draw(t.start,guidedMid);assert.equal(await ev('AxiomaVectorTrainer.inspect().stage'),1);
+ assert(await ev(`document.getElementById('commit').hidden&&document.getElementById('feedbackPanel').hidden`),'no intermediate confirmation');
+ assert(await ev(`!!document.querySelector('#prompt .vector-symbol[data-vector="v"] svg')`),'next vector keeps arrow notation');
+ await draw(guidedMid,guidedEnd,'vector',true);assert.equal(await ev('AxiomaVectorTrainer.inspect().stage'),2);
+ await layout('guided continuous drawing');
+ const guidedShot=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/vector-flow-780.png',Buffer.from(guidedShot.data,'base64'));
+ for(const point of [t.start,guidedEnd]){const p=await xy(point);await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[p]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]})}
+ assert.equal(await ev('AxiomaVectorTrainer.inspect().session.answered'),1);assert.equal(await ev('AxiomaVectorTrainer.inspect().answer.strokes.at(-1).role'),'result','result tool selected automatically');
  const awarded=await ev('AxiomaVectorTrainer.inspect().progress.xp');assert.equal(awarded,10,'guided construction awards XP once');
  assert(await ev(`!document.getElementById('feedbackPanel').hidden`));
  assert(await ev(`parseFloat(getComputedStyle(document.getElementById('feedback')).fontSize)>=15`));

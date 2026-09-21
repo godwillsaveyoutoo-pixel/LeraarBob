@@ -57,11 +57,17 @@ footer{display:flex;align-items:center;gap:10px;padding:8px 20px;border-top:1px 
 @media(max-width:639px){#helpScreen{overflow:auto}.help-toolbar{padding:8px;gap:8px;flex-wrap:wrap}.help-toolbar label{display:none}.help-toolbar select{max-width:100%;width:100%}#closeHelp{font-size:12px}.help-content{display:block}.help-question{padding:14px}.help-example-layout{display:flex;flex-direction:column}.help-visual{min-height:240px}#helpBoard{height:260px;flex:none}.help-steps{overflow:visible;border-left:0;border-top:3px solid var(--blue)}.help-footer{position:sticky;bottom:0;background:var(--paper);padding:8px;gap:8px}.help-footer button{font-size:11px;padding:6px}.help-footer #libraryBtn{max-width:100px}.trainer-nav button{font-size:11px}}
 
 @media(max-height:500px) and (min-width:640px){.teaching-panel .step-track,.help-steps .step-track{display:none}#lessonBack{font-size:13px}body:has(.work.is-lesson) #activityHint{font-size:10px}.teaching-panel #lessonTitle{font-size:17px}.teaching-panel #lessonText{font-size:15px;line-height:1.4}}
+
+/* Guided construction stays on one stable board, including after a mistake. */
+.flow-feedback{height:2.8em;line-height:1.4;font-size:13px;margin:3px 0 0;color:var(--muted)}
+.flow-feedback[data-kind="good"]{color:var(--teal)}
+.flow-feedback[data-kind="repair"],.flow-feedback[data-kind="method"]{color:var(--wrong)}
+@media(max-height:500px) and (min-width:640px){.flow-feedback{font-size:12px}}
 </style></head>
 <body data-screen="home"><div id="app">
 <header><a id="homeBtn" class="brand quiet" href="../../index.html" data-platform-home aria-label="Naar de startpagina van leraarBob">leraarBob<span>Vectorentrainer</span></a><nav class="trainer-nav" aria-label="Trainernavigatie"><button id="playBtn" data-trainer-action="play" class="quiet">Oefeningenreeks</button><button id="freeBtn" class="quiet">Vrij oefenen</button><button id="helpBtn" data-trainer-action="help" class="quiet">Uitleg</button><button id="progressBtn" data-trainer-action="progress" class="quiet">Voortgang</button></nav><div class="header-actions"><span id="xpLabel" class="xp-label" aria-label="Ervaringspunten">0 XP</span><span id="roundLabel">Jouw vectorroute</span><button id="themeBtn" class="icon quiet" aria-label="Kleurmodus wisselen">◐</button><button id="fullBtn" class="icon quiet" aria-label="Volledig scherm">⛶</button></div></header>
 <section id="home" aria-label="Startscherm"><div class="home-layout"><div class="hero"><svg class="hero-art" viewBox="0 0 350 155" aria-hidden="true"><defs><marker id="herohead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10" fill="currentColor"/></marker></defs><path d="M25 135H330M25 105H330M25 75H330M25 45H330M25 15H330M25 15V135M85 15V135M145 15V135M205 15V135M265 15V135M325 15V135" fill="none" stroke="currentColor" opacity=".12"/><path d="M25 135L145 105L265 15" fill="none" stroke="currentColor" stroke-width="3" marker-mid="url(#herohead)" marker-end="url(#herohead)"/><path d="M25 135L265 15" stroke="currentColor" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#herohead)"/><circle cx="25" cy="135" r="4" fill="currentColor"/></svg><div class="eyebrow">Kijken · construeren · begrijpen</div><h1>Kies wat je<br>wilt oefenen.</h1><p>In de oefeningenreeks krijg je uitleg, nieuwe vragen en herhaling op maat. Je verdient XP en bouwt je voortgang op.</p><div class="actions"><button id="startBtn" class="primary">Start een sessie →</button><button id="resumeBtn" hidden>Hervat oefening</button></div><p class="storage-note">12 oefeningen per reeks · met XP en voortgang. Je lopende reeks blijft bewaard als je rechts een losse oefening kiest.</p><p id="storageWarning" class="storage-note" role="status" hidden></p></div><div><div class="path-head"><h2>Vrij oefenen</h2><span id="masteryCount" class="eyebrow"></span></div><p class="legend">Kies zelf een onderwerp. Deze losse oefeningen geven geen XP en veranderen je leerroute niet. Terug naar je reeks? Klik bovenaan op ‘Oefeningenreeks’.</p><div id="skillList" class="skill-list"></div></div></div></section>
-<section id="play" hidden aria-label="Oefenruimte"><div class="questionbar"><div class="questiontext"><div class="practice-labels"><strong id="practiceMode"></strong><span id="modeLabel"></span></div><h1 id="prompt"></h1></div><p id="toolHint" class="toolhint"></p><button id="seriesReturn" hidden>Hervat reeks · XP →</button></div><div id="work" class="work"><div id="boardWrap"><div id="lessonVisualKey" class="visual-key" hidden><span>Gegeven</span><span>Constructie</span><span>Resultaat</span></div><svg id="board" class="vector-board" tabindex="0" role="application" aria-label="Vectorenrooster. Sleep of tik begin en einde. Met pijltjestoetsen verplaats je de cursor; Enter kiest een punt."></svg></div><div id="choiceWork" role="group" aria-label="Kies je antwoord" hidden></div><div id="numberWork" hidden><div id="calculation"><div id="givens"></div><div id="scaffold"></div></div><div id="coordinateEditor" class="coordinate-editor" role="group" aria-label="Coördinaten invoeren"><div class="slots"><button class="slot" id="slotX" aria-pressed="true"><small id="labelX">x · horizontaal</small><strong id="valueX">?</strong></button><button class="slot" id="slotY" aria-pressed="false"><small id="labelY">y · verticaal</small><strong id="valueY">?</strong></button></div><div id="keypad" class="keypad"></div></div></div><aside id="lessonPanel" class="teaching-panel" hidden><div id="lessonCount" class="eyebrow"></div><div id="lessonTrack" class="step-track" aria-label="Stappen van het voorbeeld"></div><h2 id="lessonTitle"></h2><p id="lessonText"></p><div id="lessonCalculation" class="lesson-calculation"></div></aside><aside id="feedbackPanel" class="teaching-panel" role="status" aria-live="polite" hidden><h2 id="feedbackTitle"></h2><strong id="earnedXP"></strong><p id="feedback"></p><div id="feedbackReason" class="lesson-calculation"></div><button id="dismissFeedback">Pas mijn antwoord aan</button></aside></div><footer><button id="lessonBack" class="quiet" hidden>← Vorige stap</button><div id="drawTools" class="draw-tools"><button id="vectorTool" aria-pressed="true">Pijl</button><button id="resultTool" aria-pressed="false">Resultante</button><button id="undoBtn" aria-label="Laatste tekening ongedaan maken">↶ Undo</button></div><p id="activityHint"></p><button id="skip" class="quiet">Later oefenen</button><button id="commit" class="primary">Controleer</button></footer></section>
+<section id="play" hidden aria-label="Oefenruimte"><div class="questionbar"><div class="questiontext"><div class="practice-labels"><strong id="practiceMode"></strong><span id="modeLabel"></span></div><h1 id="prompt"></h1><p id="flowFeedback" class="flow-feedback" role="status" aria-live="polite" hidden></p></div><p id="toolHint" class="toolhint"></p><button id="seriesReturn" hidden>Hervat reeks · XP →</button></div><div id="work" class="work"><div id="boardWrap"><div id="lessonVisualKey" class="visual-key" hidden><span>Gegeven</span><span>Constructie</span><span>Resultaat</span></div><svg id="board" class="vector-board" tabindex="0" role="application" aria-label="Vectorenrooster. Sleep of tik begin en einde. Met pijltjestoetsen verplaats je de cursor; Enter kiest een punt."></svg></div><div id="choiceWork" role="group" aria-label="Kies je antwoord" hidden></div><div id="numberWork" hidden><div id="calculation"><div id="givens"></div><div id="scaffold"></div></div><div id="coordinateEditor" class="coordinate-editor" role="group" aria-label="Coördinaten invoeren"><div class="slots"><button class="slot" id="slotX" aria-pressed="true"><small id="labelX">x · horizontaal</small><strong id="valueX">?</strong></button><button class="slot" id="slotY" aria-pressed="false"><small id="labelY">y · verticaal</small><strong id="valueY">?</strong></button></div><div id="keypad" class="keypad"></div></div></div><aside id="lessonPanel" class="teaching-panel" hidden><div id="lessonCount" class="eyebrow"></div><div id="lessonTrack" class="step-track" aria-label="Stappen van het voorbeeld"></div><h2 id="lessonTitle"></h2><p id="lessonText"></p><div id="lessonCalculation" class="lesson-calculation"></div></aside><aside id="feedbackPanel" class="teaching-panel" role="status" aria-live="polite" hidden><h2 id="feedbackTitle"></h2><strong id="earnedXP"></strong><p id="feedback"></p><div id="feedbackReason" class="lesson-calculation"></div><button id="dismissFeedback">Pas mijn antwoord aan</button></aside></div><footer><button id="lessonBack" class="quiet" hidden>← Vorige stap</button><div id="drawTools" class="draw-tools"><button id="vectorTool" aria-pressed="true">Pijl</button><button id="resultTool" aria-pressed="false">Resultante</button><button id="undoBtn" aria-label="Laatste tekening ongedaan maken">↶ Undo</button></div><p id="activityHint"></p><button id="skip" class="quiet">Later oefenen</button><button id="commit" class="primary">Controleer</button></footer></section>
 <section id="helpScreen" hidden aria-label="Uitleg"><div class="help-toolbar"><label for="helpTopic">Uitleg</label><select id="helpTopic"></select><button id="closeHelp">Terug naar oefening</button></div><div class="help-content"><div class="help-question"><h2 id="helpTitle"></h2><p id="helpPrompt"></p></div><div class="help-example-layout"><div class="help-visual"><div id="helpVisualKey" class="visual-key"><span>Gegeven</span><span>Constructie</span><span>Resultaat</span></div><div id="helpGivens"></div><svg id="helpBoard" class="vector-board" role="img" aria-label="Uitgewerkt vectorvoorbeeld"></svg></div><div class="help-steps"><div id="helpCount" class="eyebrow"></div><div id="helpTrack" class="step-track" aria-label="Stappen van het voorbeeld"></div><h2 id="helpStepTitle"></h2><p id="helpConcept"></p><div id="helpExample" class="lesson-calculation"></div></div></div></div><div class="help-footer"><button id="libraryBtn" class="quiet">Kies een losse oefening</button><div class="lesson-actions"><button id="helpPrevious">← Vorige</button><button id="helpNext" class="primary">Volgende stap →</button></div></div></section>
 <section id="progressScreen" hidden aria-label="Leerroute"><div class="screen-heading"><div><h1>Wat wordt al stevig?</h1><p>Een juiste herhaling na een fout telt pas als zelfstandig bewijs bij een nieuwe vraag.</p></div><button id="closeProgress">Terug</button></div><div id="progressRows"></div></section>
 <section id="summary" hidden><div class="summary-inner"><div class="eyebrow">Sessie afgerond</div><h1>Een stap verder.</h1><div id="summaryStats" class="summary-stats"></div><p id="summaryText"></p><button id="again" class="primary">Nieuwe sessie →</button><button id="summaryHome" class="quiet">Naar start</button></div></section>
@@ -545,8 +551,19 @@ function snapshot(){return task?structuredClone({skill:task.skill,seed:task.seed
 function save(){try{const draft=snapshot();window.AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft,suspendedSeries}));window.AxiomaGame.report(Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').map(s=>s.id),Generator.skills.length);}catch{storageError()}}
 function screen(name){cancelGesture();document.body.dataset.screen=name;AxiomaPlatform.trainerScreen(({play:'play',helpScreen:'help',progressScreen:'progress'})[name]||'');for(const id of ['home','play','progressScreen','helpScreen','summary'])$(id).hidden=id!==name;if(name==='play')requestAnimationFrame(()=>renderBoard());if(name==='helpScreen')requestAnimationFrame(paintHelp);if(name==='home')renderHome();$('freeBtn').setAttribute('aria-current',name==='home'||name==='play'&&free?'page':'false');if(name==='play'&&free)$('playBtn').removeAttribute('aria-current')}
 function renderXP(){const xp=progress.xp||0;$('xpLabel').textContent=`${xp} XP`;$('xpLabel').title=`${xp} XP totaal · ${session?.xp||0} XP deze sessie`;}
+function guidedFlow(){return !!task?.guidedSteps&&!intro&&!done}
+function guidedStart(){return stage===1?M.endPointFromVector(task.start,task.parts[0]):task.start}
+function syncGuidedStage(){
+ if(!task?.guidedSteps||intro||done)return;
+ const remaining=[...answer.strokes],accepted=[];let start=task.start;
+ for(const part of task.parts){const i=remaining.findIndex(s=>M.samePoint(s.start,start)&&M.vectorEquals(s,part));if(i<0)break;const s=remaining.splice(i,1)[0];accepted.push({...s,role:'vector'});start=s.end;}
+ stage=accepted.length;role=stage===2?'result':'vector';
+ answer.strokes=[...accepted,...(remaining.length?[{...remaining.at(-1),role}]:[])];
+}
 function displayFeedback(){
- const visible=!!feedbackState?.kind&&!intro;$('feedbackPanel').hidden=!visible;$('work').classList.toggle('has-feedback',visible);
+ const flow=guidedFlow();$('flowFeedback').hidden=!flow;
+ if(flow){$('flowFeedback').dataset.kind=feedbackState?.kind||'';mathText($('flowFeedback'),feedbackState?.text||'Sleep een pijl, of tik begin en einde. Elke pijl wordt meteen nagekeken.');}
+ const visible=!!feedbackState?.kind&&!intro&&!flow;$('feedbackPanel').hidden=!visible;$('work').classList.toggle('has-feedback',visible);
  if(!visible)return;
  $('feedbackPanel').className='teaching-panel '+feedbackState.kind;
  $('feedbackTitle').textContent=feedbackState.title||({good:done?'Juist!':'Deze stap klopt',repair:'Kijk nog eens',method:'Resultaat juist · methode nog niet af'})[feedbackState.kind];
@@ -555,7 +572,7 @@ function displayFeedback(){
  $('dismissFeedback').hidden=done;$('dismissFeedback').textContent=feedbackState.kind==='good'?'Verder tekenen':'Pas mijn antwoord aan';
 }
 function message(text,kind=''){
- feedbackState=kind?{text,kind}:null;$('activityHint').textContent=kind?'Lees de feedback naast je oefening.':text;displayFeedback();requestAnimationFrame(()=>renderBoard());
+ feedbackState=kind?{text,kind}:null;$('activityHint').textContent=kind?(guidedFlow()?'Teken meteen verder, of gebruik Undo.':'Lees de feedback naast je oefening.'):text;displayFeedback();requestAnimationFrame(()=>renderBoard());
 }
 $('dismissFeedback').onclick=()=>{feedbackState=null;displayFeedback();save();requestAnimationFrame(()=>renderBoard())};
 function renderLesson(){
@@ -592,7 +609,7 @@ function finish(clean,solved=true){
  if(solved){const example=lesson(task);feedbackState={...feedbackState,title:dirty?(errorCode==='help'?'Juist met hulp':'Juist na verbetering'):'Juist!',reason:task.interaction==='number'?example.conclusion:Generator.skills.find(s=>s.id===task.skill).intro};}
  updateUI(false);save();
 }
-function guidedPrompt(){if(task.guidedSteps&&!intro&&stage<2)return stage===0?'Maak vanuit P een kopie van u.':'Voeg nu een kopie van v toe aan je route.';return task.prompt}
+function guidedPrompt(){if(guidedFlow())return ['1 / 3 · Teken u vanuit P.','2 / 3 · Teken v vanaf de kop van u.','3 / 3 · Teken u + v van P naar het einde van je route.'][stage];return task.prompt}
 function updateUI(resetFeedback=true){
  if(!task)return;
  mathText($('prompt'),intro?task.prompt:guidedPrompt());
@@ -605,11 +622,11 @@ function updateUI(resetFeedback=true){
  $('toolHint').textContent=task.interaction==='point'?(task.givens||''):'';$('toolHint').hidden=!$('toolHint').textContent;
  mathText($('toolHint'),$('toolHint').textContent);
  $('drawTools').hidden=intro||numeric||choice;
- $('vectorTool').hidden=task.interaction==='point';
- $('resultTool').hidden=task.interaction!=='sketch'||!['headtail','ordered','parallelogram'].includes(task.policy)||task.guidedSteps&&stage<2;
+ $('vectorTool').hidden=task.interaction==='point'||guidedFlow();
+ $('resultTool').hidden=task.interaction!=='sketch'||!['headtail','ordered','parallelogram'].includes(task.policy)||guidedFlow();
  $('vectorTool').setAttribute('aria-pressed',String(role==='vector'));$('resultTool').setAttribute('aria-pressed',String(role==='result'));
  for(const id of ['vectorTool','resultTool','undoBtn'])$(id).disabled=done;
- $('commit').hidden=choice&&!done&&!intro;
+ $('commit').hidden=choice&&!done&&!intro||guidedFlow();
  $('commit').textContent=intro?(lessonStep<lesson(task).steps.length-1?'Volgende stap →':'Zelf proberen →'):done?'Verder →':'Controleer';$('skip').hidden=intro||done;
  mathText($('labelX'),task.slotLabels?.[0]||'x · horizontaal');mathText($('labelY'),task.slotLabels?.[1]||'y · verticaal');
  $('coordinateEditor').setAttribute('aria-label',task.slotLabels?'Coëfficiënten van eenheidsvectoren':'Coördinaten invoeren');
@@ -658,8 +675,8 @@ function commit(){
  let result;
  if(task.guidedSteps&&stage<2){
   const start=stage===0?task.start:M.endPointFromVector(task.start,task.parts[0]);
-  const sub={...task,policy:'free',start,target:task.parts[stage]};result=Validator.validate(sub,answer);
-  if(!result.ok&&stage===1&&answer.strokes.some(s=>M.vectorEquals(s,task.parts[1])))result={...result,code:'headtail',message:'v zelf klopt. Leg zijn staart aan de kop van u.'};
+  const sub={...task,policy:'free',start,target:task.parts[stage]};result=Validator.validate(sub,{...answer,strokes:answer.strokes.slice(stage)});
+  if(!result.ok&&stage===1&&answer.strokes.slice(stage).some(s=>M.vectorEquals(s,task.parts[1])))result={...result,code:'headtail',message:'v zelf klopt. Leg zijn staart aan de kop van u.'};
   if(result.ok){stage++;role=stage===2?'result':'vector';updateUI(false);message(stage===1?'u klopt. Voeg nu v toe.':'De route klopt. Teken nu de resultante.', 'good');save();return}
  }else result=Validator.validate(task,answer);
  if(result.ok){message(result.message,'good');finish(!dirty);renderBoard();return}
@@ -737,7 +754,7 @@ function renderBoard(drawTask=task,svg=$('board'),example=intro,step=lessonStep,
  for(const dir of task.dirs||[]){const k=30/Math.max(1,M.length(dir)),a=M.endPointFromVector(task.start,M.scale(dir,-k)),b=M.endPointFromVector(task.start,M.scale(dir,k));line(a,b,{stroke:'var(--muted)','stroke-width':1.3,'stroke-dasharray':'4 5'})}
  for(const r of task.refs)arrow(r.start,r.v,r.name+(task.interaction==='number'&&task.skill!=='coords'&&task.skill!=='ab'?' '+coord(r.v):''),'given');
  if(task.choicePositions)task.options.forEach((v,i)=>arrow(task.choicePositions[i],v,String(i+1),'given'));
- for(const s of answer.strokes)arrow(s.start,s,s.role==='result'?'r':'',s.role==='result'?'result':'student');
+ for(const [i,s] of answer.strokes.entries())arrow(s.start,s,s.role==='result'?'r':task.guidedSteps&&i<stage?['u','v'][i]:'',s.role==='result'?'result':'student');
  if(answer.point)drawPoint(answer.point,task.pointName||'?',true);
  if(intro){const frames=lesson(task).steps,frame=frames[step],previous=step?frames[step-1].strokes.length:0;
   if(frame.point)drawPoint(frame.point,task.pointName||'P',true);
@@ -749,6 +766,7 @@ function renderBoard(drawTask=task,svg=$('board'),example=intro,step=lessonStep,
  }
  if(done&&!intro&&task.policy==='decompose'){const label=coord(task.target);put('text',{x:16,y:view.h-12,fill:'var(--teal)',class:'vector-label'},`Δx = ${format(task.target.dx)} · Δy = ${format(task.target.dy)} → ${label}`);}
  for(const m of task.points)drawPoint(m.p,m.name);
+ if(interactive&&guidedFlow()){const p=project(guidedStart());put('circle',{'data-guided-start':'',cx:p.x,cy:p.y,r:12,fill:'none',stroke:'var(--teal)','stroke-width':2,'stroke-dasharray':'3 3'});}
  if(interactive&&anchor){const p=project(anchor);put('circle',{cx:p.x,cy:p.y,r:9,fill:'none',stroke:'var(--selection)','stroke-width':2});}
  if(interactive&&drag?.moved)arrow(drag.start,M.vectorFromPoints(drag.start,drag.last),'',role==='result'?'result':'student',true);
  if(interactive&&cursorVisible){const p=project(cursor);put('circle',{cx:p.x,cy:p.y,r:11,fill:'none',stroke:'var(--ink)','stroke-width':1.5,'stroke-dasharray':'3 3'});}
@@ -757,16 +775,25 @@ function renderBoard(drawTask=task,svg=$('board'),example=intro,step=lessonStep,
 function snap(clientX,clientY){const r=$('board').getBoundingClientRect();if(!view.unit||clientX<r.left||clientY<r.top||clientX>r.right||clientY>r.bottom)return null;
  const x=Math.round((clientX-r.left-view.ox)/view.unit),y=Math.round((view.oy-clientY+r.top)/view.unit);return x>=view.minX&&x<=view.maxX&&y>=view.minY&&y<=view.maxY?M.point(x,y):null;
 }
-function editable(){return task&&!intro&&!done&&!feedbackState?.kind&&['sketch','point'].includes(task.interaction)&&document.body.dataset.screen==='play'}
+function editable(){return task&&!intro&&!done&&(!feedbackState?.kind||guidedFlow())&&['sketch','point'].includes(task.interaction)&&document.body.dataset.screen==='play'}
 function cancelGesture(){anchor=null;drag=null;}
-function draw(start,end){if(!editable())return;if(answer.strokes.length>=24){message('Je hebt 24 pijlen getekend. Gebruik Undo om plaats te maken.');return}answer.strokes.push(M.stroke(start,end,role));message('Tekening bewaard. Controleer als je klaar bent.');save();renderBoard()}
+function draw(start,end){
+ if(!editable())return;
+ if(guidedFlow()){
+  // Replace only the current attempt; already accepted parts remain on the board.
+  answer.strokes=answer.strokes.slice(0,stage);role=stage===2?'result':'vector';
+  answer.strokes.push(M.stroke(start,end,role));commit();renderBoard();return;
+ }
+ if(answer.strokes.length>=24){message('Je hebt 24 pijlen getekend. Gebruik Undo om plaats te maken.');return}
+ answer.strokes.push(M.stroke(start,end,role));message('Tekening bewaard. Controleer als je klaar bent.');save();renderBoard();
+}
 function tap(p){if(task.interaction==='point'){answer.point=p;message('Punt gekozen. Controleer als je klaar bent.');save();renderBoard();return}if(anchor){const a=anchor;anchor=null;draw(a,p)}else{anchor=p;message('Beginpunt gekozen. Tik nu het eindpunt.');renderBoard()}}
 $('board').addEventListener('pointerdown',e=>{if(!editable()||e.button>0)return;const p=snap(e.clientX,e.clientY);if(!p)return;e.preventDefault();$('board').focus({preventScroll:true});cursorVisible=false;drag={id:e.pointerId,start:p,last:p,x:e.clientX,y:e.clientY,moved:false};$('board').setPointerCapture(e.pointerId)});
 $('board').addEventListener('pointermove',e=>{if(drag?.id!==e.pointerId)return;const p=snap(e.clientX,e.clientY);if(!p)return;drag.last=p;if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>6){drag.moved=true;renderBoard()}});
 $('board').addEventListener('pointerup',e=>{if(drag?.id!==e.pointerId)return;const d=drag,p=snap(e.clientX,e.clientY);drag=null;if(!p){anchor=null;renderBoard();return}if(d.moved&&task.interaction==='sketch'){anchor=null;draw(d.start,p)}else tap(p)});
 $('board').addEventListener('pointercancel',()=>{cancelGesture();renderBoard()});
 $('board').addEventListener('keydown',e=>{if(!editable())return;cursorVisible=true;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();cursor=M.point(Math.max(Math.ceil(view.minX),Math.min(Math.floor(view.maxX),cursor.x+(e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0))),Math.max(Math.ceil(view.minY),Math.min(Math.floor(view.maxY),cursor.y+(e.key==='ArrowUp'?1:e.key==='ArrowDown'?-1:0))));renderBoard()}else if(e.key==='Enter'||e.key===' '){e.preventDefault();tap(cursor)}else if(e.key==='Escape'){cancelGesture();renderBoard()}});
-$('undoBtn').onclick=()=>{if(!editable())return;if(anchor)anchor=null;else if(task.interaction==='point')answer.point=null;else answer.strokes.pop();message('Laatste stap teruggenomen.');save();renderBoard()};
+$('undoBtn').onclick=()=>{if(!editable())return;if(anchor)anchor=null;else if(task.interaction==='point')answer.point=null;else answer.strokes.pop();syncGuidedStage();message('Laatste stap teruggenomen.');updateUI(false);save();renderBoard()};
 for(const [id,value] of [['vectorTool','vector'],['resultTool','result']])$(id).onclick=()=>{role=value;cancelGesture();updateUI(false)};
 $('commit').onclick=commit;
 $('skip').onclick=()=>{if(!task||done||intro)return;dirty=true;errorCode=errorCode||'practice';finish(false,false);nextTask()};
@@ -788,7 +815,7 @@ function resume(){
   lessonStep=Math.max(0,Math.min(lesson(task).steps.length-1,Number(d.lessonStep)||0));feedbackState=d.feedbackState&&['good','repair','method'].includes(d.feedbackState.kind)?d.feedbackState:null;lastXP=Math.max(0,Math.min(18,Number(d.lastXP)||0));
   free=!!d.free;intro=!!d.intro;done=!!d.done;dirty=!!d.dirty;errorCode=typeof d.errorCode==='string'?d.errorCode:null;stage=Math.max(0,Math.min(2,Number(d.stage)||0));session={xp:Math.max(0,Math.min(10000,Number(d.session?.xp)||0)),answered:Math.max(0,Math.min(12,Number(d.session?.answered)||0)),clean:Math.max(0,Math.min(12,Number(d.session?.clean)||0)),repairs:Math.max(0,Math.min(12,Number(d.session?.repairs)||0))};
  }catch{task=null;startSession();return}}
- if(task){screen('play');updateUI(!feedbackState);if(done&&!feedbackState)message('Deze oefening is al verwerkt. Ga verder naar een nieuwe vraag.','good')}
+ if(task){syncGuidedStage();screen('play');updateUI(!feedbackState);if(guidedFlow()&&stage===2&&Validator.validate(task,answer).ok)commit();if(done&&!feedbackState)message('Deze oefening is al verwerkt. Ga verder naar een nieuwe vraag.','good')}
 }
 $('freeBtn').onclick=$('libraryBtn').onclick=$('summaryHome').onclick=$('rotateHome').onclick=()=>{save();screen('home')};
  AxiomaPlatform.bindTrainer({play:resumeSeries,help:showHelp,progress:showProgress});$('closeProgress').onclick=()=>screen(previousScreen);$('startBtn').onclick=$('seriesReturn').onclick=resumeSeries;$('again').onclick=startSession;$('resumeBtn').onclick=resume;
