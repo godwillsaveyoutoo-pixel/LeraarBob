@@ -2,17 +2,18 @@
 'use strict';
 const C=RealNumbersCore,P=C.Progress,L=RealNumbersLessons,$=id=>document.getElementById(id),KEY='axioma-real-numbers-v1';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let progress=P.fresh(),task=null,answer=null,session=null,phase='answer',free=false,dirty=false,errorCode=null,lessonStep=0,feedback=null,preview=null,activeSlot=0,activeGroup='A',serial=Date.now()>>>0,drag=null,digitDrag=null,previous='stage';
-function m(e){const num=n=>`<mn>${esc(C.format(n))}</mn>`;let body='';if(e.kind==='fraction')body=`${e.n<0?'<mo>−</mo>':''}<mfrac>${num(Math.abs(e.n))}${num(e.d)}</mfrac>`;else if(e.kind==='root')body=`${e.sign<0?'<mo>−</mo>':''}<msqrt>${num(e.n)}</msqrt>`;else if(e.kind==='period')body=`${num(e.whole||0)}<mo>,</mo><mn>${esc(e.lead||'')}</mn><mover accent="true"><mn>${esc(e.repeat)}</mn><mo>¯</mo></mover>`;else body=num(e.kind==='decimal'?e.text:e.n)+(e.kind==='percent'?'<mo>%</mo>':'');return `<math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="${esc(C.label(e))}"><mrow>${body}</mrow></math>`}
+let progress=P.fresh(),task=null,answer=null,session=null,phase='answer',free=false,dirty=false,errorCode=null,lessonStep=0,feedback=null,preview=null,activeSlot=0,activeGroup='A',serial=Date.now()>>>0,drag=null,digitDrag=null,setDrag=null,activeToken=0,previous='stage';
+function m(e){const num=n=>`<mn>${esc(C.format(n))}</mn>`;let body='';if(e.kind==='fraction')body=`${e.n<0?'<mo>−</mo>':''}<mfrac>${num(Math.abs(e.n))}${num(e.d)}</mfrac>`;else if(e.kind==='root')body=`${e.sign<0?'<mo>−</mo>':''}${e.degree===3?'<mroot>':'<msqrt>'}${num(e.n)}${e.degree===3?'<mn>3</mn></mroot>':'</msqrt>'}`;else if(e.kind==='pi')body='<mi>π</mi>';else if(e.kind==='period')body=`${num(e.whole||0)}<mo>,</mo><mn>${esc(e.lead||'')}</mn><mover accent="true"><mn>${esc(e.repeat)}</mn><mo>¯</mo></mover>`;else body=num(e.kind==='decimal'?e.text:e.n)+(e.kind==='percent'?'<mo>%</mo>':'');return `<math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="${esc(C.label(e))}"><mrow>${body}</mrow></math>`}
 const rationalMath=r=>m(C.fraction(r.n,r.d));
-const intervalText=(lo,hi,cl,ch)=>`${cl?'[':']'}${C.format(lo)}; ${C.format(hi)}${ch?']':'['}`;
-function save(){try{AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft:task?{skill:task.skill,seed:task.seed,variant:task.variant,level:task.level,answer,session,phase,free,dirty,errorCode,lessonStep,feedback,activeSlot,activeGroup}:null}));AxiomaGame.report(C.skills.filter(s=>P.mastered(progress,s.id)).map(s=>s.id),C.skills.length)}catch{$('storageWarning').hidden=false;$('storageWarning').textContent='Bewaren lukt niet. Laat deze pagina open om je werk te behouden.'}}
+const intervalText=C.intervalLabel;const endpointText=v=>v==='-inf'?'−∞':v==='inf'?'+∞':C.format(v||'?');
+function save(){try{AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft:task?{skill:task.skill,seed:task.seed,variant:task.variant,level:task.level,contentVersion:task.contentVersion,answer,session,phase,free,dirty,errorCode,lessonStep,feedback,activeSlot,activeGroup,activeToken}:null}));AxiomaGame.report(C.skills.filter(s=>P.mastered(progress,s.id)).map(s=>s.id),C.skills.length)}catch{$('storageWarning').hidden=false;$('storageWarning').textContent='Bewaren lukt niet. Laat deze pagina open om je werk te behouden.'}}
 function restore(){try{
  const raw=JSON.parse(AxiomaGame.storage.getItem(KEY)||'null');progress=P.sanitize(raw?.progress);if(raw?.mode==='dark')document.documentElement.dataset.mode='dark';const d=raw?.draft;if(!d||!C.skills.some(s=>s.id===d.skill))return false;
- task=C.generate(d.skill,{seed:Number(d.seed)>>>0,variant:Math.max(0,Math.floor(Number(d.variant)||0)),level:Math.min(2,Math.max(0,Math.floor(Number(d.level)||0)))});answer=C.freshAnswer(task);const a=d.answer||{};
+ task=C.generate(d.skill,{contentVersion:d.contentVersion===2?2:1,seed:Number(d.seed)>>>0,variant:Math.max(0,Math.floor(Number(d.variant)||0)),level:Math.min(2,Math.max(0,Math.floor(Number(d.level)||0)))});answer=C.freshAnswer(task);const a=d.answer||{};
  answer.values=[0,1].map(i=>typeof a.values?.[i]==='string'?a.values[i].slice(0,8):'');answer.sign=a.sign===-1?-1:1;answer.relation=[-1,0,1].includes(a.relation)?a.relation:null;answer.groups=Array.from({length:6},(_,i)=>['A','B'].includes(a.groups?.[i])?a.groups[i]:null);answer.labels=[...new Set((Array.isArray(a.labels)?a.labels:[]).filter(x=>['N','Z','Q','irr','R'].includes(x)))];answer.tick=Number.isInteger(a.tick)&&a.tick>=0&&a.tick<=32?a.tick:null;answer.closedLo=a.closedLo===true;answer.closedHi=a.closedHi===true;answer.stage=a.stage===1?1:0;
  for(const key of ['start','end'])answer[key]=Number.isInteger(a[key])&&a[key]>=0&&a[key]<(task.digits?.length||0)?a[key]:null;
  if(task.skill==='interval')C.orderInterval(answer);if(task.skill==='period'&&answer.start!==null&&answer.end===null)answer.end=answer.start;answer.periodAnchor=Number.isInteger(a.periodAnchor)&&a.periodAnchor===answer.start&&answer.start===answer.end?a.periodAnchor:null;
+ answer.placements=Array.from({length:task.tokens?.length||4},(_,i)=>['N','Z','Q','R'].includes(a.placements?.[i])?a.placements[i]:null);answer.decimalType=Object.hasOwn(C.decimalNames,a.decimalType)?a.decimalType:null;activeToken=Math.max(0,Math.min((task.tokens?.length||4)-1,Number(d.activeToken)||0));
  phase=['intro','answer','feedback','done'].includes(d.phase)?d.phase:'answer';free=d.free===true;dirty=d.dirty===true;errorCode=typeof d.errorCode==='string'?d.errorCode:null;lessonStep=Math.max(0,Math.min(L.build(task).length-1,Math.floor(Number(d.lessonStep)||0)));
  session={answered:0,clean:0,xp:0};for(const k of ['answered','clean','xp'])session[k]=Math.min(k==='xp'?10000:8,Math.max(0,Number(d.session?.[k])||0));
  feedback=d.feedback&&typeof d.feedback.message==='string'?{...d.feedback,message:d.feedback.message.slice(0,600)}:null;if(phase==='feedback'&&!feedback)phase='answer';if(phase==='done'&&!feedback)feedback={ok:true,message:'Deze oefening is al verwerkt. Je kunt verdergaan.',xp:0};activeSlot=d.activeSlot===1?1:0;activeGroup=d.activeGroup==='B'?'B':'A';return true;
@@ -20,13 +21,13 @@ function restore(){try{
 function screen(name){document.body.dataset.screen=name;document.body.dataset.preview=String(!!preview);for(const id of ['stage','library','help','progress','summary'])$(id).hidden=id!==name;AxiomaPlatform.trainerScreen(preview?'help':({stage:'play',help:'help',progress:'progress'})[name]||'');$('xp').textContent=`${progress.xp} XP`;if(name==='stage')render();}
 function makeTask(id,{practice=false}={}){
  const previousTask=task?.skill===id?task.signature:null;preview=null;free=practice;const s=progress.skills[id],level=practice?1:s.seen<2?0:s.seen<5?1:2;
- let candidate;for(let i=0;i<30;i++){candidate=C.generate(id,{seed:++serial,variant:s.seen+(practice?serial%5:0),level});if(candidate.signature!==previousTask&&!s.signatures.slice(-3).includes(candidate.signature))break}task=candidate;
- answer=C.freshAnswer(task);phase=!practice&&!s.intro?'intro':'answer';lessonStep=0;dirty=false;errorCode=null;feedback=null;activeSlot=0;save();screen('stage');
+ let candidate;for(let i=0;i<30;i++){candidate=C.generate(id,{seed:++serial,variant:s.seen+(practice?serial%24:0)+(i>14?i-14:0),level});if(candidate.signature!==previousTask&&!s.signatures.slice(-3).includes(candidate.signature))break}task=candidate;
+ answer=C.freshAnswer(task);phase=!practice&&!s.intro?'intro':'answer';lessonStep=0;dirty=false;errorCode=null;feedback=null;activeSlot=0;activeToken=0;save();screen('stage');
 }
 function next(){if(!free&&session.answered>=8){finishSession();return}makeTask(free?task.skill:P.choose(progress),{practice:free})}
 function start(){session={answered:0,clean:0,xp:0};free=false;next()}
 function button(label,data,extra=''){return `<button ${data} ${extra}>${label}</button>`}
-function slot(a,i,label,readonly){return button(`<small>${esc(label)}</small>${esc(a.values[i]||'?')}`,`class="slot" data-slot="${i}" aria-label="${esc(label)}" aria-pressed="${activeSlot===i}"`,readonly?'disabled':'')}
+function slot(a,i,label,readonly){return button(`<small>${esc(label)}</small>${esc(endpointText(a.values[i]))}`,`class="slot" data-slot="${i}" aria-label="${esc(label)}" aria-pressed="${activeSlot===i}"`,readonly?'disabled':'')}
 function pad(){return `<div class="keypad" aria-label="Getallen invoeren">${[['7','7'],['8','8'],['9','9'],['back','⌫'],['4','4'],['5','5'],['6','6'],['sign','±'],['1','1'],['2','2'],['3','3'],['next','⇥'],['0','0'],['clear','Wis']].map(([key,label])=>button(label,`data-key="${key}" aria-label="${({back:'Laatste cijfer wissen',sign:'Teken wisselen',next:'Ander invoerveld',clear:'Actief veld wissen'})[key]||label}"`)).join('')}<span class="empty-key"></span></div>`}
 function svgLine(){return '<svg class="line-canvas" id="numberline" role="application" tabindex="0" aria-label="Getallijn. Tik een plaats of gebruik de pijltjestoetsen en stapknoppen."></svg>'}
 function relationButtons(a){return `<div class="relations">${[-1,0,1].map((v,i)=>button(['&lt;','=','&gt;'][i],`data-relation="${v}" aria-pressed="${a.relation===v}" aria-label="${['Kleiner dan','Gelijk aan','Groter dan'][i]}"`)).join('')}</div>`}
@@ -42,16 +43,23 @@ function taskMarkup(t,a,readonly){
   canvas=`<div class="token-grid">${t.tokens.map((e,i)=>button(`${m(e)}<small>Kaart ${i+1} · ${a.groups[i]?'groep '+a.groups[i]:'nog geen groep'}</small>`,`class="number-token" data-token="${i}" data-group="${a.groups[i]||''}" aria-label="Kaart ${i+1}: ${esc(C.label(e))}, ${a.groups[i]?'groep '+a.groups[i]:'nog geen groep'}"`)).join('')}</div>`;
   panel=`<p class="muted">Kies een groep. Tik daarna op de kaartjes die erbij horen.</p><div class="group-keys line-tools">${['A','B'].map(g=>button('Groep '+g,`data-group="${g}" data-select-group="${g}" aria-pressed="${activeGroup===g}"`)).join('')}</div><p class="muted">Nogmaals tikken maakt een kaartje vrij.</p>`;
  }else if(t.skill==='root'){
-  const center=a.stage?m(t.source):m(C.integer(t.n));
-  canvas=`${t.representation==='area'&&!a.stage?`<svg class="root-area" viewBox="0 0 240 100" role="img" aria-label="Vierkant met oppervlakte ${t.n}, schematisch"><rect x="15" y="8" width="80" height="80" fill="var(--panel)" stroke="currentColor" stroke-width="2"/><text x="55" y="53" text-anchor="middle">${t.n}</text><text x="112" y="37">oppervlakte</text><text x="112" y="63">schematisch</text></svg>`:''}${a.stage?`<div class="saved-step">Vorige stap: ${t.k*t.k} &lt; ${t.n} &lt; ${(t.k+1)**2}</div>`:'<div class="source-caption">Twee opeenvolgende gehele kwadraten</div>'}<div class="formula-row">${slot(a,0,'ondergrens',readonly)}<span>&lt;</span><span class="math-medium">${center}</span><span>&lt;</span>${slot(a,1,'bovengrens',readonly)}</div>${a.stage?'<p class="source-caption">Van kwadraten naar positieve zijden.</p>':''}`;panel=pad();
+  const center=a.stage?m(t.source):m(C.integer(t.n)),powers=C.rootBounds(t,0);
+  canvas=`${t.representation==='area'&&!a.stage?`<svg class="root-area" viewBox="0 0 240 100" role="img" aria-label="Vierkant met oppervlakte ${t.n}, schematisch"><rect x="15" y="8" width="80" height="80" fill="var(--panel)" stroke="currentColor" stroke-width="2"/><text x="55" y="53" text-anchor="middle">${t.n}</text><text x="112" y="37">oppervlakte</text><text x="112" y="63">schematisch</text></svg>`:''}${a.stage?`<div class="saved-step">Vorige stap: ${powers[0]} &lt; ${t.n} &lt; ${powers[1]}</div>`:`<div class="source-caption">Twee opeenvolgende ${t.degree===3?'gehele derdemachten':'gehele kwadraten'}</div>`}<div class="formula-row">${slot(a,0,'ondergrens',readonly)}<span>&lt;</span><span class="math-medium">${center}</span><span>&lt;</span>${slot(a,1,'bovengrens',readonly)}</div>${a.stage?`<p class="source-caption">${t.source.sign<0?'Neem de tegengestelden en keer de volgorde om.':t.degree===3?'Van derdemachten naar gehele wortelgrenzen.':'Van kwadraten naar positieve zijden.'}</p>`:''}`;panel=pad();
  }else if(t.skill==='interval'){
-  const source=t.sourceMode==='notation'?esc(intervalText(t.lo,t.hi,t.closedLo,t.closedHi)):`Van ${C.format(t.lo)} tot ${C.format(t.hi)}.<br>${C.format(t.lo)} telt ${t.closedLo?'wel':'niet'} mee; ${C.format(t.hi)} telt ${t.closedHi?'wel':'niet'} mee.`;
-  canvas=`<div class="interval-source">${source}</div>${svgLine()}`;
-  panel=`<div class="interval-controls">${[0,1].map(i=>button(`${a.values.every(Boolean)?i?'Rechts':'Links':'Punt'} ${esc(a.values[i]||'?')}`,`data-slot="${i}" aria-pressed="${activeSlot===i}"`)).join('')}</div><div class="line-tools">${button('−','data-step="-1" aria-label="Actief grenspunt één naar links"')}<span class="muted">Verplaats punt</span>${button('+','data-step="1" aria-label="Actief grenspunt één naar rechts"')}</div>${button('Opnieuw tekenen','data-reset="interval"')}<p class="muted">○ telt niet mee · ● telt mee</p>`;
+  const source=t.sourceText?esc(t.sourceText):t.sourceMode==='notation'?esc(intervalText(t.lo,t.hi,t.closedLo,t.closedHi)):`x is groter ${t.closedLo?'dan of gelijk aan':'dan'} ${C.format(t.lo)} en kleiner ${t.closedHi?'dan of gelijk aan':'dan'} ${C.format(t.hi)}.`;
+  canvas=`<div class="interval-source">${source}</div>${t.convention?`<p class="interval-convention">${esc(t.convention)}</p>`:''}${svgLine()}`;
+  panel=`<div class="interval-controls">${[0,1].map(i=>button(`${a.values.every(Boolean)?i?'Rechts':'Links':'Punt'} ${esc(endpointText(a.values[i]))}`,`data-slot="${i}" aria-pressed="${activeSlot===i}"`)).join('')}</div><div class="line-tools">${button('−','data-step="-1" aria-label="Actief grenspunt één naar links"')}<span class="muted">Verplaats punt</span>${button('+','data-step="1" aria-label="Actief grenspunt één naar rechts"')}</div><div class="infinity-tools">${button('← −∞','data-infinity="-inf" aria-label="Onbegrensd naar links"')}${button('+∞ →','data-infinity="inf" aria-label="Onbegrensd naar rechts"')}</div>${button('Opnieuw tekenen','data-reset="interval"')}`;
  }else if(t.skill==='classify'){
   canvas=`<div class="math-large">${m(t.source)}</div><p class="source-caption">Meerdere namen kunnen tegelijk juist zijn.</p>`;
   panel=`<div class="sets">${[['N','ℕ'],['Z','ℤ'],['Q','ℚ'],['irr','irrationaal'],['R','ℝ']].map(([id,name])=>button(name,`data-set="${id}" aria-pressed="${a.labels.includes(id)}"`)).join('')}</div><p class="muted">ℕ bevat hier ook 0.</p>`;
   if(readonly&&a.labels.length)canvas+=`<div class="set-map">${a.labels.map(id=>({N:'ℕ',Z:'ℤ',Q:'ℚ',R:'ℝ',irr:'irrationaal'})[id]).join(' · ')}</div>`;
+ }else if(t.skill==='sets'){
+  const bank=t.tokens.map((e,i)=>button(`${m(e)}<small>${a.placements[i]?({N:'ℕ',Z:'ℤ',Q:'ℚ',R:'ℝ'})[a.placements[i]]:'Kies of sleep'}</small>`,`class="set-token" data-sort-token="${i}" aria-pressed="${activeToken===i}" aria-label="${esc(C.label(e))}, ${a.placements[i]?'geplaatst in '+a.placements[i]:'nog te plaatsen'}"`)).join('');
+  const region=i=>{const id=['R','Q','Z','N'][i];return `<div class="set-region"><button class="set-zone" data-zone="${id}" aria-label="Plaats in ${id}"><strong>${({R:'ℝ',Q:'ℚ',Z:'ℤ',N:'ℕ'})[id]}</strong><span>${t.tokens.map((e,j)=>a.placements[j]===id?m(e):'').join(' ')}</span></button>${i<3?region(i+1):''}</div>`};
+  canvas=`<div class="set-bank">${bank}</div><div class="set-map-board">${region(0)}</div>`;
+ }else if(t.skill==='decimaltype'){
+  canvas=`<div class="math-large">${m(t.source)}</div>${t.rule?`<p class="rule">${esc(t.rule)}</p>`:''}${readonly&&a.decimalType?`<p class="type-answer">${esc(C.decimalNames[a.decimalType])}</p>`:''}`;
+  panel=`<div class="decimal-types">${Object.entries(C.decimalNames).map(([id,name])=>button(name,`data-decimal-type="${id}" aria-pressed="${a.decimalType===id}"`)).join('')}</div>`;
  }else if(t.skill==='period'){
   const selected=a.start!==null&&a.end!==null;
   canvas=`<p class="rule">${esc(t.rule)}</p><div class="digits"><span class="digits-prefix">${t.whole},</span>${[...t.digits].map((digit,i)=>button(digit,`class="digit ${selected&&i>=a.start&&i<=a.end?'selected':''}" data-digit="${i}" aria-pressed="${selected&&i>=a.start&&i<=a.end}" aria-label="Decimaal ${i+1}: ${digit}"`)).join('')}<span>…</span></div><p class="source-caption" aria-live="polite">${selected?`Jouw blok: ${esc(t.digits.slice(a.start,a.end+1))}`:'Nog geen blok gekozen'}</p>${!readonly?`<div class="period-tools"><p class="muted">Eén cijfer? Tik één keer.<br>Meer cijfers? Sleep erover, of tik de twee uiteinden.</p>${button('Wis selectie','data-reset="period"')}</div>`:''}`;
@@ -64,18 +72,20 @@ function feedbackSource(t,a){
  if(t.skill==='compare')return caption('Jouw vergelijking')+`<div class="feedback-comparison">${m(t.left)}<span>${esc(a.relation===null?'?':['<','=','>'][a.relation+1])}</span>${m(t.right)}</div>`;
  if(t.skill==='group')return (feedback.pair||[0,1]).map(i=>caption(`Kaart ${i+1} · ${a.groups[i]?'groep '+a.groups[i]:'geen groep'}`)+m(t.tokens[i])).join('');
  if(t.skill==='root')return caption('Jouw grenzen')+`<div class="feedback-comparison"><span>${values[0]}</span><span>&lt;</span>${a.stage?m(t.source):m(C.integer(t.n))}<span>&lt;</span><span>${values[1]}</span></div>`;
- if(t.skill==='interval')return caption('Gevraagd')+`<div>${esc(intervalText(t.lo,t.hi,t.closedLo,t.closedHi))}</div>`+caption('Jouw interval')+`<div>${esc(intervalText(a.values[0]||'?',a.values[1]||'?',a.closedLo,a.closedHi))}</div>`;
+ if(t.skill==='interval')return caption('Gevraagd')+`<div>${esc(intervalText(t.lo,t.hi,t.closedLo,t.closedHi))}</div>`+caption('Jouw interval')+`<div>${esc(intervalText(a.values[0]==='-inf'?null:a.values[0]||'?',a.values[1]==='inf'?null:a.values[1]||'?',a.closedLo,a.closedHi))}</div>`;
+ if(t.skill==='sets')return caption('Kleinste passende verzameling')+t.tokens.map((e,i)=>`<div class="feedback-set">${m(e)} → ${({N:'ℕ',Z:'ℤ',Q:'ℚ',R:'ℝ'})[a.placements[i]]||'?'}</div>`).join('');
+ if(t.skill==='decimaltype')return m(t.source)+caption(C.decimalNames[a.decimalType]||'Nog niet gekozen');
  if(t.skill==='classify')return m(t.source)+caption('Jouw selectie')+`<div class="selected-sets">${a.labels.map(id=>({N:'ℕ',Z:'ℤ',Q:'ℚ',R:'ℝ',irr:'irrationaal'})[id]).join(' · ')||'Nog niets gekozen'}</div>`;
  if(t.skill==='period')return caption(t.rule)+caption(phase==='done'?'Exact genoteerd':'Jouw herhaalblok')+(phase==='done'?m({kind:'period',whole:t.whole,lead:t.lead,repeat:t.repeat}):`<div>${a.start!==null&&a.end!==null?esc(t.digits.slice(a.start,a.end+1)):'?'}</div>`);
  return caption('Gevraagd')+m(t.source)+caption('Jouw punt')+`<div>${a.tick===null?'?':C.decimalOf(C.rational(t.min*t.step.d+a.tick*t.step.n,t.step.d))}</div>`;
 }
 function render(){
  if(!task&&!preview)return;
- const focused=document.activeElement,focusKey=focused&&$('workspace').contains(focused)?['slot','key','token','set','selectGroup','digit','toggle','step','reset'].find(k=>focused.dataset[k]!==undefined):null,focusValue=focusKey?focused.dataset[focusKey]:null,focusLine=focused?.id==='numberline';
+ const focused=document.activeElement,focusKey=focused&&$('workspace').contains(focused)?['slot','key','token','set','selectGroup','digit','toggle','step','reset','sortToken','zone','decimalType','infinity'].find(k=>focused.dataset[k]!==undefined):null,focusValue=focusKey?focused.dataset[focusKey]:null,focusLine=focused?.id==='numberline';
  const t=preview?.task||task,isLesson=!!preview||phase==='intro',step=isLesson?L.build(t)[preview?preview.step:lessonStep]:null,a=step?.answer||answer;
  document.body.dataset.preview=String(!!preview);$('xp').textContent=`${progress.xp} XP`;$('xp').title=`${progress.xp} XP totaal · ${session?.xp||0} XP deze reeks`;
  $('eyebrow').textContent=`${preview?'Uitlegcollectie':isLesson?'Nieuw begrip':free?'Vrij oefenen':progress.skills[t.skill].repair?'Opnieuw proberen':'Jouw leerroute'} · ${C.skills.find(s=>s.id===t.skill).short}`;
- $('prompt').textContent=t.skill==='root'&&a.stage===1?'Bouw nu de grenzen voor de wortel.':t.prompt;
+ $('prompt').textContent=t.skill==='root'&&a.stage===1?'Bouw nu de grenzen voor de wortelwaarde.':t.prompt;
  $('round').hidden=!!preview;$('round').textContent=free?'Vrij oefenen':`Opgave ${Math.min(8,(session?.answered||0)+(phase==='done'?0:1))} / 8`;
  const feedbackMode=!isLesson&&['feedback','done'].includes(phase);
  $('workspace').className=`${isLesson?'readonly ':''}${feedbackMode?'feedback ':''}${t.skill}`;
@@ -88,7 +98,7 @@ function render(){
  }
  $('skip').hidden=isLesson||feedbackMode;$('back').hidden=!isLesson&&!(feedbackMode&&!feedback.ok);$('back').textContent=isLesson?'← Vorige':'Voorbeeld';$('back').disabled=isLesson&&(preview?preview.step:lessonStep)===0;
  $('commit').textContent=isLesson?((preview?preview.step:lessonStep)<L.build(t).length-1?'Volgende stap →':preview?(task?'Terug naar oefening':'Naar uitlegcollectie'):'Zelf proberen →'):phase==='done'?'Volgende →':phase==='feedback'?(feedback.ok?'Bouw de wortelgrenzen →':'Verbeter je antwoord'):'Controleer';
- $('hint').textContent=isLesson?'Bekijk het voorbeeld op je eigen tempo.':feedbackMode?'Lees rustig. Je kiest zelf wanneer je verdergaat.':t.skill==='interval'?'Tik twee punten. Tik opnieuw: hol ↔ vol. Sleep om te verplaatsen.':free?'Vrij oefenen telt niet mee voor je leerroute.':t.skill==='root'?'Beide stappen samen vormen één opgave.':'Je keuze wordt pas beoordeeld na Controleer.';
+ $('hint').textContent=isLesson?'Bekijk het voorbeeld op je eigen tempo.':feedbackMode?'Lees rustig. Je kiest zelf wanneer je verdergaat.':t.skill==='interval'?'Tik een grens: hol ↔ vol. Kies −∞ of +∞ voor een onbegrensde kant.':t.skill==='sets'?'Sleep naar de kleinste verzameling, of tik een kaart en daarna een vak. ℕ bevat ook 0.':free?'Vrij oefenen telt niet mee voor je leerroute.':t.skill==='root'?'Beide stappen samen vormen één opgave.':'Je keuze wordt pas beoordeeld na Controleer.';
  drawLine(t,a);
  if(focusLine)$('numberline')?.focus({preventScroll:true});else if(focusKey){const attr=focusKey.replace(/[A-Z]/g,c=>'-'+c.toLowerCase());$('workspace').querySelector(`[data-${attr}="${focusValue}"]`)?.focus({preventScroll:true});}
 }
@@ -96,14 +106,16 @@ function drawLine(t=preview?.task||task,a=(preview||phase==='intro')?L.build(t)[
  const svg=$('numberline');if(!svg)return;const box=svg.getBoundingClientRect(),w=box.width,h=box.height;if(!w||!h)return;
  const compare=t.skill==='compare',min=compare?Math.floor(Math.min(C.number(C.value(t.left)),C.number(C.value(t.right))))-1:t.min,max=compare?Math.ceil(Math.max(C.number(C.value(t.left)),C.number(C.value(t.right))))+1:t.max,step=t.skill==='line'?C.number(t.step):1;
  const x=v=>28+(v-min)/(max-min)*(w-56),y=Math.max(35,Math.min(h-38,h*.52));let html=`<line class="axis" x1="28" y1="${y}" x2="${w-28}" y2="${y}" stroke-width="2"/>`;
- for(let i=0;i<=Math.round((max-min)/step);i++){const v=min+i*step,px=x(v);html+=`<line class="tick" x1="${px}" y1="${y-5}" x2="${px}" y2="${y+5}"/>`;if(Number.isInteger(v)&&(w>400||v%2===0||v===min||v===max))html+=`<text x="${px}" y="${y+26}" text-anchor="middle">${C.format(v)}</text>`;}
+ for(let i=0;i<=Math.round((max-min)/step);i++){if(t.skill==='interval'&&(i===0&&a.values.includes('-inf')||i===Math.round((max-min)/step)&&a.values.includes('inf')))continue;const v=min+i*step,px=x(v);html+=`<line class="tick" x1="${px}" y1="${y-5}" x2="${px}" y2="${y+5}"/>`;if(Number.isInteger(v)&&(w>400||v%2===0||v===min||v===max))html+=`<text x="${px}" y="${y+26}" text-anchor="middle">${C.format(v)}</text>`;}
  const marker=(v,closed,label,offset=0)=>{const px=x(v);html+=`<circle cx="${px}" cy="${y}" r="7" fill="${closed?'var(--blue)':'var(--paper)'}" stroke="var(--blue)" stroke-width="3"/>${label?`<text x="${Math.max(35,Math.min(w-35,px))}" y="${y-17-offset}" text-anchor="middle">${esc(label)}</text>`:''}`};
  if(compare){marker(C.number(C.value(t.left)),true,'A',0);marker(C.number(C.value(t.right)),false,'B',18);}
  if(t.skill==='line'&&a.tick!==null){const v=min+a.tick*step;marker(v,true,C.format(Number(v.toFixed(4))));}
  if(t.skill==='interval'){
-  const l=C.parse(a.values[0]),r=C.parse(a.values[1]);if(l&&r&&C.compare(l,r)<0)html+=`<line x1="${x(C.number(l))}" x2="${x(C.number(r))}" y1="${y}" y2="${y}" stroke="var(--blue)" stroke-width="7" opacity=".5"/>`;
-  if(l)marker(C.number(l),a.closedLo,C.format(C.number(l)));if(r)marker(C.number(r),a.closedHi,C.format(C.number(r)));
-  if(!preview&&phase==='answer'&&a.values[activeSlot]!==''){const px=x(Number(a.values[activeSlot]));html+=`<circle cx="${px}" cy="${y}" r="14" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="3 3"/>`}
+  const l=C.endpoint(a.values[0]),r=C.endpoint(a.values[1]),edge=v=>v===-Infinity?min:v===Infinity?max:v;
+  if(l!==null&&r!==null&&l<r)html+=`<line x1="${x(edge(l))}" x2="${x(edge(r))}" y1="${y}" y2="${y}" stroke="var(--blue)" stroke-width="7" opacity=".5"/>`;
+  for(const [v,closed] of [[l,a.closedLo],[r,a.closedHi]])if(v!==null){if(Number.isFinite(v))marker(v,closed,C.format(v));else {const px=x(edge(v)),direction=v<0?-1:1;html+=`<path d="M ${px-direction*14} ${y-10} L ${px} ${y} L ${px-direction*14} ${y+10}" stroke="var(--blue)" stroke-width="4" fill="none"/><text x="${px-direction*8}" y="${y-18}" text-anchor="middle">${v<0?'−∞':'+∞'}</text>`;}}
+  const active=C.endpoint(a.values[activeSlot]);if(!preview&&phase==='answer'&&active!==null&&Number.isFinite(active)){html+=`<circle cx="${x(active)}" cy="${y}" r="14" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="3 3"/>`}
+
  }
  if(t.skill==='interval')svg.setAttribute('aria-label','Interval. Tik twee grenspunten in willekeurige volgorde. Tik opnieuw voor hol of vol. Sleep om te verplaatsen. Pijltjestoetsen verplaatsen het actieve punt; Enter wisselt hol en vol.');
  svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.innerHTML=html;
@@ -112,10 +124,10 @@ function drawLine(t=preview?.task||task,a=(preview||phase==='intro')?L.build(t)[
  const place=clientX=>{const v=at(clientX);if(t.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((max-min)/step),Math.round((v-min)/step)));else moveEndpoint(Math.round(v));drawLine(t,answer)};
  svg.onpointerdown=e=>{
   if(e.button>0||drag)return;e.preventDefault();svg.focus({preventScroll:true});
-  const v=Math.round(at(e.clientX)),hit=t.skill==='interval'?answer.values.findIndex(s=>s!==''&&Number(s)===v):-1;
+  const v=Math.round(at(e.clientX)),hit=t.skill==='interval'?answer.values.findIndex(s=>C.endpoint(s)===v):-1;
   drag={answer:structuredClone(answer),slot:activeSlot,id:e.pointerId,x:e.clientX,y:e.clientY,hit,moved:false};svg.setPointerCapture(e.pointerId);
   if(t.skill==='interval'){
-   activeSlot=hit>=0?hit:answer.values.indexOf('')>=0?answer.values.indexOf(''):[0,1].sort((i,j)=>Math.abs(Number(answer.values[i])-v)-Math.abs(Number(answer.values[j])-v))[0];
+   activeSlot=hit>=0?hit:answer.values.indexOf('')>=0?answer.values.indexOf(''):[0,1].sort((i,j)=>Math.abs((C.endpoint(answer.values[i])??0)-v)-Math.abs((C.endpoint(answer.values[j])??0)-v))[0];
    if(hit<0)place(e.clientX);else drawLine(t,answer);
   }else place(e.clientX);
  };
@@ -132,10 +144,10 @@ function drawLine(t=preview?.task||task,a=(preview||phase==='intro')?L.build(t)[
 function moveEndpoint(value){
  const other=1-activeSlot;
  // Distinct endpoints cannot collapse; crossing them keeps each circle's inclusion.
- if(answer.values[other]!==''&&Number(answer.values[other])===value)return;
- answer.values[activeSlot]=String(value);if(C.orderInterval(answer))activeSlot=1-activeSlot;
+ if(answer.values[other]!==''&&C.endpoint(answer.values[other])===C.endpoint(value))return;
+ answer.values[activeSlot]=String(value);if(value==='-inf'||value==='inf')answer[activeSlot?'closedHi':'closedLo']=false;if(C.orderInterval(answer))activeSlot=1-activeSlot;
 }
-function toggleEndpoint(){const key=activeSlot?'closedHi':'closedLo';answer[key]=!answer[key]}
+function toggleEndpoint(){if(!Number.isFinite(C.endpoint(answer.values[activeSlot])))return;const key=activeSlot?'closedHi':'closedLo';answer[key]=!answer[key]}
 function selectDigit(i){
  if(answer.periodAnchor!==null&&answer.periodAnchor!==i){answer.start=Math.min(answer.periodAnchor,i);answer.end=Math.max(answer.periodAnchor,i);answer.periodAnchor=null;}
  else {answer.start=answer.end=i;answer.periodAnchor=i;}
@@ -165,7 +177,7 @@ function key(k){
  else if(k==='clear')answer.values[activeSlot]='';else if(k==='back')answer.values[activeSlot]=answer.values[activeSlot].slice(0,-1);else if(/^\d$/.test(k)&&answer.values[activeSlot].replace('-','').length<6)answer.values[activeSlot]+=k;
  save();render();
 }
-function stepValue(d){if(preview||phase!=='answer')return;if(task.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((task.max-task.min)/C.number(task.step)),(answer.tick??Math.round(-task.min/C.number(task.step)))+d));else if(task.skill==='interval'){let v=Math.max(task.min,Math.min(task.max,(Number(answer.values[activeSlot])||0)+d));if(answer.values[1-activeSlot]!==''&&Number(answer.values[1-activeSlot])===v)v=Math.max(task.min,Math.min(task.max,v+d));moveEndpoint(v);}save();render()}
+function stepValue(d){if(preview||phase!=='answer')return;if(task.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((task.max-task.min)/C.number(task.step)),(answer.tick??Math.round(-task.min/C.number(task.step)))+d));else if(task.skill==='interval'){let v=Math.max(task.min,Math.min(task.max,(answer.values[activeSlot]==='-inf'?task.min:answer.values[activeSlot]==='inf'?task.max:Number(answer.values[activeSlot])||0)+d));if(answer.values[1-activeSlot]!==''&&Number(answer.values[1-activeSlot])===v)v=Math.max(task.min,Math.min(task.max,v+d));moveEndpoint(v);}save();render()}
 $('workspace').onclick=e=>{
  const b=e.target.closest('button');if(!b||b.disabled)return;const d=b.dataset;
  if(d.example){example(d.example);return}if(preview||phase!=='answer')return;
@@ -176,10 +188,26 @@ $('workspace').onclick=e=>{
  if(d.set)answer.labels=answer.labels.includes(d.set)?answer.labels.filter(x=>x!==d.set):[...answer.labels,d.set];
  if(d.toggle)answer[d.toggle]=!answer[d.toggle];
  if(d.digit!==undefined){if(e.detail>0)return;selectDigit(Number(d.digit))}
+ if(d.infinity){const existing=answer.values.indexOf(d.infinity);activeSlot=existing>=0?existing:answer.values.indexOf('')>=0?answer.values.indexOf(''):d.infinity==='-inf'?0:1;moveEndpoint(d.infinity);}
+ if(d.sortToken!==undefined){if(e.detail>0&&setDrag)return;activeToken=Number(d.sortToken);}
+ if(d.zone){answer.placements[activeToken]=d.zone;activeToken=answer.placements.indexOf(null)>=0?answer.placements.indexOf(null):activeToken;}
+ if(d.decimalType)answer.decimalType=d.decimalType;
  if(d.reset==='interval'){answer.values=['',''];answer.closedLo=answer.closedHi=false;activeSlot=0;}
  if(d.reset==='period')answer.start=answer.end=answer.periodAnchor=null;
  if(d.step){stepValue(Number(d.step));return}save();render();
 };
+// Pointer-based sorting also works on touch screens; tapping remains an alternative.
+$('workspace').addEventListener('pointerdown',e=>{
+ const token=e.target.closest('[data-sort-token]');if(!token||token.disabled||preview||phase!=='answer'||e.button>0)return;
+ e.preventDefault();activeToken=Number(token.dataset.sortToken);const ghost=token.cloneNode(true);ghost.removeAttribute('data-sort-token');ghost.className='set-token drag-ghost';ghost.setAttribute('aria-hidden','true');ghost.tabIndex=-1;ghost.style.left=e.clientX+'px';ghost.style.top=e.clientY+'px';document.body.append(ghost);setDrag={id:e.pointerId,token:activeToken,ghost};$('workspace').setPointerCapture(e.pointerId);token.classList.add('dragging');
+});
+$('workspace').addEventListener('pointermove',e=>{
+ if(setDrag?.id!==e.pointerId)return;setDrag.ghost.style.left=e.clientX+'px';setDrag.ghost.style.top=e.clientY+'px';const zone=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-zone]');for(const z of $('workspace').querySelectorAll('[data-zone]'))z.classList.toggle('drop-active',z===zone);
+});
+$('workspace').addEventListener('pointerup',e=>{
+ if(setDrag?.id!==e.pointerId)return;const zone=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-zone]');if(zone)answer.placements[setDrag.token]=zone.dataset.zone;setDrag.ghost.remove();setDrag=null;save();render();
+});
+$('workspace').addEventListener('pointercancel',()=>{if(setDrag){setDrag.ghost.remove();setDrag=null;render()}});
 document.addEventListener('keydown',e=>{if(document.body.dataset.screen!=='stage'||preview||phase!=='answer'||!['fraction','root'].includes(task.skill)||e.ctrlKey||e.metaKey||e.altKey)return;if(/^\d$/.test(e.key)){e.preventDefault();key(e.key)}else if(['Backspace','-'].includes(e.key)){e.preventDefault();key(e.key==='-'?'sign':'back')}});
 function commit(){
  if(preview){if(preview.step<L.build(preview.task).length-1){preview.step++;render()}else{preview=null;task?screen('stage'):showHelp()}return;}
@@ -205,11 +233,11 @@ function example(id){
  if(task&&phase==='answer'&&!free){dirty=true;errorCode=errorCode||'help';progress.skills[task.skill].repair=errorCode;progress.skills[task.skill].due=progress.total+3;save();}
  preview={task:C.generate(id,{seed:++serial,variant:task?.skill===id?task.variant:0,level:task?.skill===id?task.level:0}),step:0};screen('stage');
 }
-function showProgress(){previous=document.body.dataset.screen;preview=null;$('progressTitle').textContent=`${progress.xp} XP · ${C.skills.filter(s=>P.mastered(progress,s.id)).length} van 8 stevig`;$('progressRows').innerHTML=C.skills.map(s=>{const d=progress.skills[s.id];return `<div class="progress-row"><div><strong>${esc(s.short)}</strong><small>${d.clean} zelfstandig juist · ${d.seen} geoefend${d.repair?' · herhaling gepland':''}</small></div><span>${P.mastered(progress,s.id)?'★ Stevig':!P.unlocked(progress,s.id)?'Later in de route':d.seen?'In opbouw':'Nieuw'}</span></div>`}).join('');screen('progress')}
+function showProgress(){previous=document.body.dataset.screen;preview=null;$('progressTitle').textContent=`${progress.xp} XP · ${C.skills.filter(s=>P.mastered(progress,s.id)).length} van ${C.skills.length} stevig`;$('progressRows').innerHTML=C.skills.map(s=>{const d=progress.skills[s.id];return `<div class="progress-row"><div><strong>${esc(s.short)}</strong><small>${d.clean} zelfstandig juist · ${d.seen} geoefend${d.repair?' · herhaling gepland':''}</small></div><span>${P.mastered(progress,s.id)?'★ Stevig':!P.unlocked(progress,s.id)?'Later in de route':d.seen?'In opbouw':'Nieuw'}</span></div>`}).join('');screen('progress')}
 function finishSession(){progress.sessions++;$('stats').innerHTML=[[session.answered,'geoefend'],[session.clean,'zelfstandig juist'],[session.xp,'XP verdiend']].map(([n,label])=>`<div><strong>${n}</strong><span>${label}</span></div>`).join('');$('summaryText').textContent='De volgende reeks haalt eerdere begrippen opnieuw op. Nieuwe waarden en andere voorstellingen laten zien wat zelfstandig blijft lukken.';task=null;answer=null;save();screen('summary')}
 AxiomaPlatform.bindTrainer({play:()=>{preview=null;task?screen('stage'):start()},help:showHelp,progress:showProgress});
 $('resume').onclick=$('closeHelp').onclick=()=>{preview=null;task?screen('stage'):start()};$('closeProgress').onclick=()=>previous==='stage'&&!task?showHelp():screen(previous==='progress'?'stage':previous);
-$('newSession').onclick=$('again').onclick=start;$('browse').onclick=$('rotateLibrary').onclick=library;
+$('newSession').onclick=$('again').onclick=start;$('topicsNav').onclick=$('browse').onclick=$('rotateLibrary').onclick=library;
 $('theme').onclick=()=>{document.documentElement.dataset.mode=document.documentElement.dataset.mode==='dark'?'light':'dark';save();if(document.body.dataset.screen==='stage')render()};
 new ResizeObserver(()=>{if(document.body.dataset.screen==='stage')drawLine()}).observe($('workspace'));
 window.addEventListener('pagehide',save);

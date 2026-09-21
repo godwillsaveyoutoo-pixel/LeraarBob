@@ -23,18 +23,29 @@ function build(t){
   const first=C.value(t.tokens[0]);a.groups=t.tokens.map(e=>C.equal(C.value(e),first)?'A':null);add('Verbind één waarde',`De kaartjes in A stellen allemaal ${C.decimalOf(first)} voor. Procent betekent per honderd.`);
   a.groups=a.groups.map(x=>x||'B');add('Controleer binnen én tussen groepen','Binnen elke groep zijn de waarden gelijk. De twee groepen hebben verschillende waarden. A en B omwisselen mag ook.');break;
  }
- case 'root':
-  add('Een wortel is een zijde',`Een vierkant met oppervlakte ${t.n} heeft zijde √${t.n}. Vergelijk met vierkanten met gehele zijden.`);
-  a.values=[String(t.k*t.k),String((t.k+1)**2)];add('Zoek de naburige kwadraten',`${t.k}² = ${t.k*t.k} en ${t.k+1}² = ${(t.k+1)**2}. De oppervlakte ligt ertussen.`);
-  a.stage=1;a.values=['',''];add('Ga van oppervlakte naar zijde','Neem nu de positieve zijden van die twee vierkanten. Je schrijft dus andere grensgetallen.');
-  a.values=[String(t.k),String(t.k+1)];add('Begrens zonder afronden',`${t.k} < √${t.n} < ${t.k+1}. Dit is een exacte insluiting, geen afgeronde waarde voor de wortel.`);break;
+ case 'root':{
+  const powers=C.rootBounds(t,0),bounds=C.rootBounds(t,1),cube=t.degree===3;
+  add(cube?'Van derde macht naar wortel':'Van kwadraat naar wortel',cube?`Zoek een getal waarvan de derde macht ${t.n} is. Negatieve getallen hebben ook een reële derdemachtswortel.`:t.source.sign<0?`Bij ${C.label(t.source)} staat het minteken vóór de wortel. Zoek eerst de positieve wortelwaarde en neem daarna het tegengestelde.`:`Een vierkant met oppervlakte ${t.n} heeft zijde √${t.n}. Vergelijk met gehele zijden.`);
+  a.values=powers.map(String);add('Zoek de naburige machten',`${t.k}${cube?'³':'²'} = ${powers[0]} en ${t.k+1}${cube?'³':'²'} = ${powers[1]}. ${t.n} ligt ertussen.`);
+  a.stage=1;a.values=['',''];add('Ga naar de wortelwaarde',t.source.sign<0?'Door het tegengestelde te nemen keert de volgorde om: het grootste positieve getal wordt het kleinste negatieve.':cube?'Derdemachtswortels behouden de volgorde, ook bij negatieve getallen.':'Neem de positieve zijden. √9 is 3; −√9 is −3. √(−9) is geen reëel getal.');
+  a.values=bounds.map(String);add('Begrens zonder afronden',`${C.format(bounds[0])} < ${C.label(t.source)} < ${C.format(bounds[1])}. Dit zijn exacte grenzen, geen afgeronde wortelwaarde.`);break;
+ }
  case 'interval':
-  add('Een gebied van getallen','Alle punten tussen de grenzen horen erbij. Voor de grenspunten moet je apart beslissen.');
-  a.values=[String(t.lo),String(t.hi)];add('Kies de grenswaarden',`Links ${C.format(t.lo)}, rechts ${C.format(t.hi)}. Een leeg rondje betekent: deze grens telt niet mee.`);
-  a.closedLo=t.closedLo;a.closedHi=t.closedHi;add('Beslis over beide grenspunten',`${C.format(t.lo)} ${t.closedLo?'telt mee: een vol rondje':'telt niet mee: een leeg rondje'}. ${C.format(t.hi)} ${t.closedHi?'telt mee':'telt niet mee'}.`);break;
+  add('Vertaal de voorwaarde',t.sourceText||'Alle punten tussen de grenzen horen erbij. Voor de grenspunten beslis je apart.');
+  a.values=[t.lo===null?'-inf':String(t.lo),t.hi===null?'inf':String(t.hi)];add('Kies de grenzen en de richting',t.lo===null||t.hi===null?'Aan een onbegrensde kant teken je een pijl. Kies −∞ voor alle kleinere waarden, +∞ voor alle grotere waarden.':'Je mag links of rechts beginnen. Tik beide grensgetallen op de lijn.');
+  a.closedLo=t.closedLo;a.closedHi=t.closedHi;add('Open of gesloten?',`${t.lo===null||t.hi===null?'Een oneindige kant is altijd open. ':''}Bij < of > blijft het grenspunt hol. Bij ≤ of ≥ maak je het vol. ${t.convention||''}`);break;
+ case 'sets':{
+  add('Verzamelingen liggen in elkaar','ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ. Een natuurlijk getal hoort dus ook bij de drie grotere verzamelingen.');
+  const first=t.target.indexOf('N');a.placements[first]='N';add('Kies het kleinste vak',`${C.label(t.tokens[first])} is natuurlijk. Het komt in ℕ, het binnenste vak. Dat vak ligt tegelijk in ℤ, ℚ en ℝ.`);
+  a.placements=[...t.target];add('Plaats ook de andere getallen','Negatieve gehele getallen komen in ℤ buiten ℕ. Niet-gehele rationale getallen in ℚ buiten ℤ. Irrationale getallen in ℝ buiten ℚ.');break;
+ }
+ case 'decimaltype':
+  add('Vier verschillende voortzettingen','Eindig: de cijfers stoppen. Zuiver repeterend: het herhaalblok begint meteen na de komma.');
+  add('Een aanloop of helemaal geen periode?','Gemengd repeterend: eerst een vaste aanloop, daarna een periode. Irrationaal: oneindig veel cijfers, zonder periode.');
+  a.decimalType=t.target;add(C.decimalNames[t.target],({finite:'Dit getal heeft een eindige decimale ontwikkeling. Gehele getallen ook: 3 kun je schrijven als 3,0.',pure:'Dit getal heeft een periode die meteen na de komma begint.',mixed:'Na de komma staat eerst een vaste aanloop. Daarna blijft hetzelfde blok terugkomen.',irr:'Deze waarde is irrationaal. De decimale ontwikkeling is oneindig en niet-periodiek. Dat besluit je niet uit alleen enkele zichtbare cijfers.'})[t.target]);break;
  case 'classify':{
   const r=C.value(t.source);
-  add('Lees de waarde, niet de vorm',r.root!==undefined?`${C.label(t.source)} is irrationaal: deze wortel van een niet-kwadraat kan niet als breuk van gehele getallen worden geschreven.`:`${C.label(t.source)} heeft waarde ${C.decimalOf(r)}. Bijvoorbeeld: √16 = 4, dus een wortelteken betekent niet automatisch irrationaal.`);
+  add('Lees de waarde, niet de vorm',r.root!==undefined?`${C.label(t.source)} is irrationaal: ${t.source.degree===3?'het getal onder deze derdemachtswortel is geen gehele derdemacht':'het getal onder deze vierkantswortel is geen geheel kwadraat'}.`:`${C.label(t.source)} heeft waarde ${C.decimalOf(r)}. Bijvoorbeeld: √16 = 4, dus een wortelteken betekent niet automatisch irrationaal.`);
   add('Verzamelingen passen in elkaar','ℕ = {0, 1, 2, …}. ℤ bevat ook negatieve gehele getallen. Elk geheel getal is een breuk met noemer 1 en hoort dus ook bij ℚ.');
   a.labels=t.target;add('Kies alle passende namen','ℝ bevat zowel rationale als irrationale getallen. Daarom kies je ℝ ook. De buitenste verzameling vervangt de andere juiste namen niet.');break;
  }

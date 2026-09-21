@@ -191,9 +191,9 @@ nummers op het rooster en op de knoppen. De menutegel gebruikt dezelfde conventi
 - `tests/account-progress-database.sql`: ID-binding, revisies en grants op de
   echte database, uitsluitend tussen BEGIN en ROLLBACK met fictieve accounts.
 
-## Trainer Reële Getallen — eerste versie
+## Trainer Reële Getallen
 
-`games/reele-getallen/` bevat de eerste acht werkvormen uit het preproductieplan.
+`games/reele-getallen/` bevat tien werkvormen, met geneste verzamelingen en decimale classificatie.
 De leerroute start met breuken bouwen, plaatsen, vergelijken en equivalenten
 groeperen. Wortelgrenzen verbinden dit met intervallen en getalsoorten; periodieke
 decimalen volgen na een eigen introductie. Elke familie heeft stapsgewijze uitleg
@@ -202,11 +202,20 @@ beheert exacte waarden, beoordeling en planning; `real-lessons.js` de voorbeelde
 `real-app.js` de schermtoestanden en bediening. De portable `index.html` wordt
 gebouwd met `node scripts/build-real-trainer.cjs`.
 
-Deze versie gebruikt rationele invoer, geijkte lijnen, eindige intervallen,
-positieve niet-volkomen vierkantswortels met gehele grenzen en korte periodes.
-Verdere verfijning/zoom, onbegrensde intervallen, wortelalgebra en de overige
-werkvormen uit de 31-templatebank volgen later. De opgaven worden gegenereerd;
-de 155 vaste documentitems zijn niet als volledige bank overgenomen.
+Deze versie gebruikt rationele invoer, geijkte lijnen, eindige en onbegrensde
+intervallen, positieve en negatieve vierkantswortelwaarden, derdemachtswortels
+van positieve en negatieve getallen, en korte periodes. Intervallen worden uit
+ongelijkheden, natuurlijke taal of verzamelingsnotatie opgebouwd. De gebruikte
+conventie voor ℝ⁺/ℝ⁻ staat bij de opgave; een oneindige kant heeft een pijl en
+is altijd open. De geneste sleepgebieden tonen ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ en vragen om de
+kleinste passende verzameling. Decimale classificatie onderscheidt eindig,
+zuiver repeterend, gemengd repeterend en irrationaal, op grond van de waarde.
+
+Nieuwe concepten hebben `contentVersion: 2`; bestaande opgeslagen oefeningen
+zonder versie worden met de oude generatorvarianten hervat. De voortgangsversie
+en opslagkey blijven gelijk, met lege vaardigheidsvelden voor nieuwe onderdelen.
+Zoom, wortelalgebra en de overige werkvormen uit de 31-templatebank volgen later.
+De 155 vaste documentitems zijn niet als volledige bank overgenomen.
 
 Na twee zelfstandige antwoorden opent een volgend begrip. Stevig vereist vier
 zelfstandige antwoorden, drie verschillende opgaven, twee voorstellingen, een
@@ -216,13 +225,13 @@ heeft acht opgaven; beide stappen van wortelbegrenzing vormen één opgave.
 Zelfstandig oplossen levert 10–14 XP, een herstelvraag 15 XP, opgelost na hulp of
 verbetering 5 XP. Voorbeelden, vrij oefenen en overslaan leveren geen XP.
 
-De registratie is `reele-getallen-trainer`, met acht vaardigheden en opslagkey
+De registratie is `reele-getallen-trainer`, met tien vaardigheden en opslagkey
 `axioma-real-numbers-v1`. De gedeelde accountlaag bewaart leerroute, XP, sessie,
 invoer, uitlegstap en feedback. De database gebruikt de bestaande tabellen en
 accountcontrole; `supabase_real_numbers.sql` registreert alleen het spel. Die
 registratie is uitgevoerd en teruggelezen. Leerlinggegevens zijn niet gewijzigd.
 
-Controles: `tests/real-numbers.test.cjs` (1.440 opgavevarianten en hun voorbeelden),
+Controles: `tests/real-numbers.test.cjs` (1.800 opgavevarianten en hun voorbeelden),
 `tests/real-numbers-browser.cjs` (640/780 × 360, touch/pointer, toetsenbord, uitleg,
 foutfeedback, XP, herladen, thema's, portretuitleg en offline HTML) en de uitgebreide
 `tests/account-progress-browser.cjs` (hervatten op een tweede toestel met fictieve

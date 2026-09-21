@@ -119,8 +119,8 @@ opgeloste antwoord op een tweede toestel met fictieve accounts.
 ## Reële getallen
 
 `node tests/real-numbers.test.cjs` controleert exacte waarden, foutdiagnoses,
-1.440 gegenereerde opgaven met hun uitgewerkte voorbeelden en de leerroute.
-`node tests/real-numbers-browser.cjs` doorloopt de acht werkvormen op 640 en
+1.800 gegenereerde opgaven met hun uitgewerkte voorbeelden en de leerroute.
+`node tests/real-numbers-browser.cjs` doorloopt de tien werkvormen op 640 en
 780 × 360, alle introductiestappen, bediening, context bij fouten, hervatten van
 invoer en XP, volledige reeksen en lichte/donkere weergave. De accountbrowsertest
 controleert ook deze trainer op een tweede toestel met fictieve accounts.
@@ -131,3 +131,8 @@ richtingen, alle open/gesloten combinaties, het kruisen en annuleren van
 versleepte eindpunten, één tik voor een eencijferige periode, selectie in
 omgekeerde richting, en behouden invoer na herladen. De kerncontrole controleert
 bovendien dat de voortzettingsregel het kleinste herhaalblok noemt.
+
+De uitbreiding controleert ook alle twaalf interval- en decimaalvarianten,
+negatieve vierkantswortelwaarden en positieve/negatieve derdemachtswortels,
+exacte vergelijkingen tussen wortels, echte sleepgebaren met muis en touch,
+onbegrensde kanten na herladen, oude concepten en nieuwe vaardigheden met XP.

@@ -124,6 +124,11 @@ const mock=`(()=>{
   const real2=await open(game('reele-getallen-trainer'),{remote:realSaved}),realAfter=await real2.eval('AxiomaRealTrainer.inspect()');
   for(const key of ['progress','session','task','answer','phase'])assert.deepEqual(realAfter[key],realBefore[key],'real numbers second device '+key);
   console.log('PASS real numbers: earned XP, learning route and completed answer restored on a second device');
+  await real.eval(`document.querySelector('#browse').click();document.querySelectorAll('#topics .topic-card button')[RealNumbersCore.skills.findIndex(s=>s.id==='sets')].click();document.querySelector('[data-sort-token="0"]').click();document.querySelector('[data-zone="R"]').click();AxiomaGame.flush()`);
+  const sortedBefore=await real.eval('AxiomaRealTrainer.inspect()'),sortedRemote=await real.eval('testRow.state');assert.equal(sortedRemote.total,10);
+  const real3=await open(game('reele-getallen-trainer'),{remote:sortedRemote});assert.deepEqual(await real3.eval('AxiomaRealTrainer.inspect().answer'),sortedBefore.answer,'nested-set placement restored on another device');assert.equal(await real3.eval('AxiomaRealTrainer.inspect().progress.xp'),10);
+  console.log('PASS real numbers: ten-skill catalog, unfinished set sorting and prior XP on a second device');
+
 
   for(const role of [null,{id:'teacher',role:'teacher'}]){
    const guest=await open(game('pythagoras'),{account:role,local:{'axioma.pythagoras.completed.v1':[1,2]}});

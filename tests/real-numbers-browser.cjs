@@ -17,7 +17,7 @@ const BASE='http://127.0.0.1:8765/games/reele-getallen/';
  const ev=x=>c.eval(x),click=s=>ev(`document.querySelector(${JSON.stringify(s)}).click()`);
  const size=async(width,height)=>{await c.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:false});await new Promise(r=>setTimeout(r,60))};
  await size(640,360);await c.send('Page.navigate',{url:BASE});await c.wait('!!window.AxiomaRealTrainer');
- assert.equal(await ev('document.body.dataset.screen'),'stage');
+ assert.equal(await ev('document.body.dataset.screen'),'stage');await click('#topicsNav');assert.equal(await ev('document.body.dataset.screen'),'library');assert.equal(await ev('document.querySelectorAll("#topics .topic-card").length'),10);await click('#resume');
  const inspect=()=>ev('AxiomaRealTrainer.inspect()');
  async function fixture(skill,opts={}){
   const t=C.generate(skill,{seed:41,level:1,variant:1,...opts}),draft={...t,phase:'answer',answer:C.freshAnswer(t),free:true,session:{answered:0,clean:0,xp:0},...opts};
@@ -32,8 +32,10 @@ const BASE='http://127.0.0.1:8765/games/reele-getallen/';
   if(t.skill==='compare')await click(`[data-relation="${a.relation}"]`);
   if(t.skill==='line')await point(C.number(t.target),t);
   if(t.skill==='group')for(let i=0;i<6;i++){await click(`[data-select-group="${a.groups[i]}"]`);await click(`[data-token="${i}"]`)}
-  if(t.skill==='root'){await enter([String(t.k*t.k),String((t.k+1)**2)]);await click('#commit');assert.equal((await inspect()).phase,'feedback');assert.equal((await inspect()).progress.xp,0);await click('#commit');await enter(a.values);}
-  if(t.skill==='interval'){await point(t.hi,t);if(a.closedHi)await point(t.hi,t);await point(t.lo,t);if(a.closedLo)await point(t.lo,t);}
+  if(t.skill==='root'){await enter([String(t.k**(t.degree||2)),String((t.k+1)**(t.degree||2))]);await click('#commit');assert.equal((await inspect()).phase,'feedback');assert.equal((await inspect()).progress.xp,0);await click('#commit');await enter(a.values);}
+  if(t.skill==='interval'){if(t.hi===null)await click('[data-infinity="inf"]');else {await point(t.hi,t);if(a.closedHi)await point(t.hi,t);}if(t.lo===null)await click('[data-infinity="-inf"]');else {await point(t.lo,t);if(a.closedLo)await point(t.lo,t);}}
+  if(t.skill==='sets')for(let i=0;i<t.tokens.length;i++){await click(`[data-sort-token="${i}"]`);await click(`[data-zone="${a.placements[i]}"]`);}
+  if(t.skill==='decimaltype')await click(`[data-decimal-type="${a.decimalType}"]`);
   if(t.skill==='classify')for(const id of a.labels)await click(`[data-set="${id}"]`);
   if(t.skill==='period'){await click(`[data-digit="${a.start}"]`);if(a.end!==a.start)await click(`[data-digit="${a.end}"]`);}
   await click('#commit');assert.equal((await inspect()).phase,'done',t.skill+' solved '+JSON.stringify((await inspect()).answer)+' '+JSON.stringify((await inspect()).feedback));
@@ -44,9 +46,37 @@ const BASE='http://127.0.0.1:8765/games/reele-getallen/';
    await fixture(sk.id,{phase:'intro',free:false,level:0});const exampleSignature=(await inspect()).task.signature;while((await inspect()).phase==='intro'){await layout(sk.id+' intro '+width+' step '+(await inspect()).lessonStep);await click('#commit');}assert.equal((await inspect()).progress.xp,0);assert.notEqual((await inspect()).task.signature,exampleSignature,'independent task differs from worked example');
   }
  }
+ // New families and representations: actual drag input, unbounded rays and roots.
+ for(const width of [640,780]){
+  await size(width,360);
+  for(let variant=0;variant<12;variant++){
+   await fixture('interval',{variant});await layout('interval '+variant+' at '+width);await solve();
+   await fixture('decimaltype',{variant});await layout('decimal type '+variant);await solve();
+  }
+  for(const variant of [1,2]){
+   await fixture('root',{variant,level:1});await solve();
+   await fixture('root',{variant,level:1,phase:'intro'});while((await inspect()).phase==='intro'){await layout('signed root lesson '+variant);await click('#commit');}
+  }
+ }
+ await fixture('sets',{free:false});let sorting=(await inspect()).task;
+ const center=async selector=>ev(`(()=>{const r=document.querySelector(${JSON.stringify(selector)}).getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`);
+ for(let i=0;i<sorting.tokens.length;i++){
+  const from=await center(`[data-sort-token="${i}"]`),to=await center(`[data-zone="${sorting.target[i]}"]`);
+  if(i%2){await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[from]});await c.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[to]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});}
+  else {await c.send('Input.dispatchMouseEvent',{type:'mousePressed',...from,button:'left',clickCount:1});await c.send('Input.dispatchMouseEvent',{type:'mouseMoved',...to,buttons:1});await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...to,button:'left',clickCount:1});}
+  assert.equal((await inspect()).answer.placements[i],sorting.target[i],'dragged token '+i);
+ }
+ let capture=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/real-nested-sets.png',Buffer.from(capture.data,'base64'));
+ await c.send('Page.reload');await c.wait('!!window.AxiomaRealTrainer');assert.deepEqual((await inspect()).answer.placements,sorting.target);await click('#commit');assert.equal((await inspect()).phase,'done');assert.equal((await inspect()).progress.xp,12);
+ await fixture('interval',{variant:4});let ray=(await inspect()).task;await point(ray.lo,ray);await click('[data-infinity="inf"]');
+ await c.send('Page.reload');await c.wait('!!window.AxiomaRealTrainer');assert.deepEqual((await inspect()).answer.values,[String(ray.lo),'inf']);
+ capture=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/real-unbounded-interval.png',Buffer.from(capture.data,'base64'));await click('#commit');assert.equal((await inspect()).phase,'done');
+ await fixture('decimaltype',{variant:7});assert(await ev('!!document.querySelector("mroot")'),'cube root has a native root index');await click('[data-decimal-type="irr"]');capture=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/real-decimal-type.png',Buffer.from(capture.data,'base64'));
+ await fixture('root',{contentVersion:1,variant:2,answer:{...C.freshAnswer({skill:'root'}),values:['4','9']}});assert.equal((await inspect()).task.degree,undefined,'old root tasks keep their question');assert.deepEqual((await inspect()).answer.values,['4','9']);
+ console.log('PASS: all interval/decimal variants, signed-root lessons, actual mouse/touch sorting, native cube roots, XP and restored new/legacy drafts');
  // Direct interval construction, with both orders and all four endpoint combinations.
  for(const variant of [0,1,2,3])for(const reverse of [false,true]){
-  await fixture('interval',{variant});const t=(await inspect()).task;
+  await fixture('interval',{variant,contentVersion:1});const t=(await inspect()).task;
   for(const v of reverse?[t.hi,t.lo]:[t.lo,t.hi]){await point(v,t);if(v===t.lo?t.closedLo:t.closedHi)await point(v,t);}
   assert.deepEqual((await inspect()).answer.values,[String(t.lo),String(t.hi)]);
   await click('#commit');assert.equal((await inspect()).phase,'done','both interval orders '+variant);
@@ -55,7 +85,7 @@ const BASE='http://127.0.0.1:8765/games/reele-getallen/';
  await point(2,t);await point(2,t);const lone=(await inspect()).answer;
  await c.send('Page.reload');await c.wait('!!window.AxiomaRealTrainer');assert.deepEqual((await inspect()).answer,lone,'first closed endpoint survives reload');
  await point(-2,t);assert.deepEqual((await inspect()).answer.values,['-2','2']);assert.equal((await inspect()).answer.closedHi,true);
- const lineXY=async v=>ev(`(()=>{const r=document.getElementById('numberline').getBoundingClientRect();return {x:r.x+28+(${v}+4)/10*(r.width-56),y:r.y+r.height*.52}})()`);
+ const lineXY=async v=>ev(`(()=>{const r=document.getElementById('numberline').getBoundingClientRect();return {x:r.x+28+(${v}-AxiomaRealTrainer.inspect().task.min)/(AxiomaRealTrainer.inspect().task.max-AxiomaRealTrainer.inspect().task.min)*(r.width-56),y:r.y+r.height*.52}})()`);
  const from=await lineXY(2),to=await lineXY(-3);
  await c.send('Input.dispatchMouseEvent',{type:'mousePressed',...from,button:'left',clickCount:1});await c.send('Input.dispatchMouseEvent',{type:'mouseMoved',...to,buttons:1});await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...to,button:'left',clickCount:1});
  assert.deepEqual((await inspect()).answer.values,['-3','-2']);assert.equal((await inspect()).answer.closedLo,true,'closed circle travels with dragged endpoint');assert.equal((await inspect()).answer.closedHi,false);
@@ -82,7 +112,7 @@ const BASE='http://127.0.0.1:8765/games/reele-getallen/';
  const lineRect=await ev('document.getElementById("numberline").getBoundingClientRect().toJSON()');await c.send('Input.dispatchMouseEvent',{type:'mousePressed',x:lineRect.x+30,y:lineRect.y+45,button:'left',clickCount:1});await ev('document.getElementById("numberline").dispatchEvent(new PointerEvent("pointercancel"))');await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',x:lineRect.x+30,y:lineRect.y+45,button:'left',clickCount:1});assert.equal((await inspect()).answer.tick,cursor,'cancel restores previous placement');
  await fixture('group',{free:false});for(let i=0;i<6;i++)await click(`[data-token="${i}"]`);await click('#commit');assert.equal((await inspect()).phase,'feedback');assert.equal((await inspect()).progress.skills.group.repair,'equivalence','error recorded before task completion');await layout('group error context');assert.equal(await ev('document.querySelectorAll(".feedback-picture math").length'),2,'the incorrect pair stays visible');
  await fixture('fraction',{free:false});await click('[data-key="2"]');const partial=(await inspect()).answer;await c.send('Page.reload');await c.wait('!!window.AxiomaRealTrainer');assert.deepEqual((await inspect()).answer,partial,'unfinished draft survives reload');await click('#helpNav');await click('#helpTopics button');while((await inspect()).preview)await click('#commit');assert.deepEqual((await inspect()).answer,partial);assert.equal((await inspect()).progress.xp,0);
- console.log('PASS: eight exercise families and all lesson steps at 640 and 780 × 360; real controls solve every task');
+ console.log('PASS: ten exercise families and all lesson steps at 640 and 780 × 360; real controls solve every task');
  await fixture('fraction',{free:false,level:0});let before=await inspect();await enter(['1','0']);await click('#commit');assert.equal((await inspect()).dirty,false,'invalid denominator is not a math error');await click('#commit');await click('[data-slot="0"]');await click('[data-key="clear"]');await click('[data-slot="1"]');await click('[data-key="clear"]');await solve();
  const won=await inspect();assert.equal(won.progress.xp,10);assert.equal(won.session.answered,1);await new Promise(r=>setTimeout(r,1700));assert.equal((await inspect()).task.seed,won.task.seed,'feedback does not auto-advance');
  await c.send('Page.reload');await c.wait('!!window.AxiomaRealTrainer');assert.equal((await inspect()).progress.xp,10);assert.equal((await inspect()).phase,'done');
