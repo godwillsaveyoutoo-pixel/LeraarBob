@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
-const rounds=[
+const legacyRounds=[
   {id:'p1',a:1,x:2.3,choices:[1,-1,2]},
   {id:'n1',a:-1,x:2.3,choices:[-1,1,-.5]},
   {id:'p2',a:2,x:-1.15,choices:[2,.5,-2]},
@@ -10,6 +10,8 @@ const rounds=[
   {id:'n2',a:-2,x:1.15,choices:[-2,-.5,2]},
   {id:'zero',a:0,x:-3.1,choices:[0,1,-1]}
 ];
+const questions=window.AxiomaClayQuestions;
+let rounds=legacyRounds,groupTask=null;
 const STORE='axioma.rechten.kleiduiven.standalone.v12';
 const SHOT_MS=320,GAP_MS=400;
 let speed=5,duration=5,queue=[],retry=[],mastered=new Set(),attempt=null,roundNo=1,state='lobby';
@@ -21,7 +23,7 @@ function trackAxiomaSeries(){
   window.AxiomaGame?.report(['reeks'],1);
 }
 
-let misses=0,shots=0,started=0,elapsed=0,runId='',team='Duo 1',selected=null,busy=false;
+let misses=0,shots=0,started=0,elapsed=0,runId='',team='Jij',selected=null,busy=false;
 let raf=0,lastHud=0,barrelAngle=-45,wantedAngle=-45,particles=[],impactAt=0,muted=false,audio=null,persistent=true,history=[];
 
 let groupData=null,groupMode=false,groupVersion=-1,groupSessionId=null,groupRequest=null,groupNextTimer=null,groupDismissed=null,groupPrompt=null;
@@ -70,16 +72,16 @@ function initField(){
   }
 }
 function updateHud(){
-  $('reserve').textContent=retry.length?`${retry.length} naar de herkansing`:'Vaste proef · 7 richtingen';
-  $('wave').textContent=`PROEF A · ${roundNo===1?'REEKS 1':'HERKANSING '+(roundNo-1)}`;
+  $('reserve').textContent=retry.length?`${retry.length} naar de herkansing`:'7 richtingen';
+  $('wave').textContent=`SOLO · ${roundNo===1?'REEKS 1':'HERKANSING '+(roundNo-1)}`;
   $('attempts').textContent=misses+' '+(misses===1?'misser':'missers');$('teamLabel').textContent=team;
   $('progress').replaceChildren();
-  for(const r of rounds){const e=document.createElement('span');e.className='dot'+(mastered.has(r.id)?' hit':attempt?.id===r.id?' current':retry.includes(r.id)?' retry':'');$('progress').append(e)}
+  for(const [index,r] of rounds.entries()){const e=document.createElement('span');e.className='dot'+(mastered.has(r.id)?' hit':(groupMode?index===mastered.size:attempt?.id===r.id)?' current':retry.includes(r.id)?' retry':'');$('progress').append(e)}
   if(groupMode){$('reserve').textContent='Foutloos: '+mastered.size+' / 7';$('wave').textContent='GROEPSWEDSTRIJD · 7 OP RIJ'}
 }
 function renderChoices(r){
   $('choices').replaceChildren();
-  r.choices.forEach((v,i)=>{const b=document.createElement('button');b.className='choice';b.dataset.a=String(v);b.innerHTML=`<span>${fmt(v)}</span><span class="choiceKey">${i+1}</span>`;b.onclick=()=>{if(state!=='playing'||busy||!attempt||attempt.resolved)return;selected=v;fire()};$('choices').append(b)})
+  r.choices.forEach((v,i)=>{const b=document.createElement('button');b.className='choice';b.dataset.a=String(v);b.innerHTML=`<span>${r.labels?.[i]||fmt(v)}</span><span class="choiceKey">${i+1}</span>`;b.onclick=()=>{if(state!=='playing'||busy||!attempt||attempt.resolved)return;selected=v;fire()};$('choices').append(b)})
 }
 function burst(x,y){
   impactAt=performance.now();$('impact').setAttribute('cx',x);$('impact').setAttribute('cy',y);$('particles').replaceChildren();particles=[];
@@ -114,7 +116,7 @@ function beginAttempt(){
     roundNo++;queue=[...retry];retry=[];state='gap';attempt=null;updateHud();$('status').textContent=`Herkansing ${roundNo-1} · nog ${queue.length} ${queue.length===1?'richting':'richtingen'}.`;later(beginAttempt,950);return
   }
   state='playing';busy=false;selected=null;resetProjectile();$('target').style.opacity='1';$('wake').style.opacity='.18';$('approachRing').style.opacity='.18';
-  const id=queue.shift(),r=rounds.find(x=>x.id===id),now=performance.now(),p=targetPos(r);
+  const id=queue.shift(),r=groupMode?groupTask:rounds.find(x=>x.id===id),now=performance.now(),p=targetPos(r);
   attempt={id,r,p,start:now,deadline:now+duration*1000,shot:null,resolved:false};
   const startP=targetAt(attempt,now);positionTarget(startP);$('approachRing').setAttribute('r',startP.radius);renderChoices(r);updateHud();setTimer(duration);sStart();
   $('status').textContent=roundNo===1?'Lees de richting. Kies a en vuur.':'Alleen de gemiste richtingen komen terug.'
@@ -146,8 +148,9 @@ function fail(kind){
 }
 function startGame(){
   if(groupMode){openGroupMenu();return}stopGame();
+  const seed=crypto.randomUUID();rounds=Array.from({length:7},(_,i)=>questions.round(questions.question(seed,i)));
   duration=speed;misses=0;shots=0;retry=[];mastered=new Set();roundNo=1;queue=rounds.map(r=>r.id);attempt=null;elapsed=0;started=0;impactAt=0;particles=[];busy=false;selected=null;
-  runId=Date.now()+'-'+Math.random().toString(36).slice(2,7);team=$('teamName').value.trim().slice(0,28)||'Duo 1';$('teamName').value=team;
+  runId=Date.now()+'-'+Math.random().toString(36).slice(2,7);team=window.AxiomaGame?.account?.alias||'Jij';
   $('lobby').hidden=true;$('results').hidden=true;$('target').style.opacity='0';$('wake').style.opacity='0';$('particles').replaceChildren();$('impact').style.opacity='0';resetProjectile();$('total').textContent=clockText(0);updateHud();setTimer(duration);
   state='countdown';const end=performance.now()+3000;$('countdown').dataset.end=String(end);$('countdown').hidden=false;$('countNum').textContent='3';cancelAnimationFrame(raf);raf=requestAnimationFrame(frame);
   later(()=>{$('countdown').hidden=true;started=performance.now();beginAttempt()},3000)
@@ -160,18 +163,17 @@ function finish(){
 function readHistory(){try{const x=JSON.parse(window.AxiomaGame.storage.getItem(STORE)||'[]');if(Array.isArray(x))history=x.filter(r=>r&&typeof r.name==='string'&&Number.isFinite(r.ms)&&[3,5,8].includes(r.tempo)).slice(-100)}catch{persistent=false}}
 function saveResult(){if(history.some(r=>r.id===runId))return;history.push({id:runId,name:team,ms:elapsed,tempo:duration,misses,shots});history=history.slice(-100);try{window.AxiomaGame.storage.setItem(STORE,JSON.stringify(history))}catch{persistent=false}}
 function showTimes(){
-  $('timesTitle').textContent=`Klastijden · ${speed} seconden`;$('timesList').replaceChildren();
+  $('timesTitle').textContent=`Oefentijden · ${speed} seconden`;$('timesList').replaceChildren();
   const rows=history.filter(r=>r.tempo===speed).sort((a,b)=>a.ms-b.ms);
   if(!rows.length){const li=document.createElement('li');li.innerHTML='<span>—</span><div>Nog geen tijden op dit tempo.</div><strong>—</strong>';$('timesList').append(li)}
   rows.forEach((r,i)=>{const li=document.createElement('li');const rank=document.createElement('span');rank.textContent=String(i+1).padStart(2,'0');const name=document.createElement('div');name.textContent=r.name;const note=document.createElement('small');note.textContent=`${r.misses} ${r.misses===1?'misser':'missers'}`;name.append(note);const time=document.createElement('strong');time.textContent=clockText(r.ms);li.append(rank,name,time);$('timesList').append(li)});
   $('storageNote').textContent=persistent?(window.AxiomaGame?.account?.role==='student'?'Je eigen tijden worden bij je account bewaard.':'Tijden worden op dit toestel bewaard.'):'Tijden blijven alleen bewaard zolang deze pagina open is.'
 }
-document.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>{if(state!=='lobby')return;speed=Number(b.dataset.speed);duration=speed;document.querySelectorAll('[data-speed]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));setTimer(speed)});
+document.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>{if(!['lobby','groupdone'].includes(state))return;speed=Number(b.dataset.speed);duration=speed;document.querySelectorAll('[data-speed]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));setTimer(speed)});
 $('start').onclick=startGame;
 $('restart').onclick=()=>{if(groupMode){openGroupMenu();return}if(state==='lobby')return;stopGame();state='lobby';$('results').hidden=true;$('lobby').hidden=false};
-$('again').onclick=()=>{stopGame();state='lobby';$('results').hidden=true;$('lobby').hidden=false;$('teamName').value='Duo '+(history.length+1)};
+$('again').onclick=()=>{stopGame();state='lobby';$('results').hidden=true;$('lobby').hidden=false};
 $('backLobby').onclick=()=>{stopGame();state='lobby';$('results').hidden=true;$('lobby').hidden=false};
-$('showTimes').onclick=()=>{showTimes();$('results').hidden=false};
 function toggleMute(){muted=!muted;$('mute').textContent=muted?'×':'♪';$('mute').setAttribute('aria-pressed',String(muted));$('lobbyMute').textContent=muted?'Geluid uit':'Geluid aan'}
 $('mute').onclick=toggleMute;$('lobbyMute').onclick=toggleMute;
 addEventListener('keydown',e=>{if(state!=='playing'||e.repeat||e.target.matches('input,select')||$('groupDialog').open)return;const i=Number(e.key)-1;if(i>=0&&i<3){e.preventDefault();$('choices').children[i]?.click()}});
@@ -184,10 +186,12 @@ function groupNow(){return Date.now()+(groupData?.clockOffset||0)}
 function openGroupMenu(){if(!$('groupDialog').open)$('groupDialog').showModal();renderGroupMenu();window.AxiomaGroups?.refresh()}
 function renderLobbyGroups(){
   const d=groupData,root=$('lobbyGroupList');
+  $('openGroup').disabled=!d?.account||!d.connected||d.pending;
+  $('start').disabled=!!groupActive(d)||!!d?.pending;
   let html;
-  if(!d?.account)html='<p>Log in op leraarBob om een groep te openen of mee te doen.</p>';
+  if(!d?.account)html='<p><a href="../../../?login=1&amp;return=games%2Frechten%2Fkleiduiven%2F">Log in</a> om een groep te maken of mee te doen. Solo oefenen kan ook zonder account.</p>';
   else if(!d.connected)html='<p>Verbinding met de groepen wordt hersteld…</p>';
-  else html=d.sessions.length?d.sessions.map(s=>`<div class="groupRow"><div><strong>Groep van ${groupEscape(s.host_alias)}</strong><small>${s.player_count} spelers · ${s.speed} s per doel</small></div><button class="utilityBtn" data-group-action="join" data-id="${groupEscape(s.id)}" ${d.pending?'disabled':''}>Meedoen</button></div>`).join(''):'<p>Er is nog geen open groep. Open zelf de eerste!</p>';
+  else html=d.sessions.length?d.sessions.map(s=>`<div class="groupRow"><div><strong>Groep van ${groupEscape(s.host_alias)}</strong><small>${s.player_count} spelers · ${s.speed} s per doel</small></div><button class="utilityBtn" data-group-action="join" data-id="${groupEscape(s.id)}" ${d.pending?'disabled':''}>Meedoen</button></div>`).join(''):'<p>Nog geen open groepen. Maak er zelf een; anderen kunnen hier meedoen.</p>';
   if(root.innerHTML!==html)root.innerHTML=html;
 }
 function renderGroupMenu(){
@@ -195,7 +199,7 @@ function renderGroupMenu(){
   const d=groupData,g=d?.current,active=groupActive(d),disabled=d?.pending||!d?.connected?'disabled':'';
   $('groupRanking').disabled=!d?.account||d?.pending;
   if(!d?.account){$('groupContent').innerHTML='<p>Log in op leraarBob om samen te spelen en in de ranglijst te komen.</p><a class="axiomaHome" href="../../../">Naar leraarBob →</a>';return}
-  let html=(!d.connected?'<p role="status">Geen verbinding met de groepen. We proberen opnieuw verbinding te maken.</p>':'')+'<p>De eerste speler met <strong>7 juiste antwoorden achter elkaar</strong> wint. Bij een misser of een verlopen timer begin je opnieuw bij de eerste richting. Iedereen krijgt hetzelfde tempo.</p>';
+  let html=(!d.connected?'<p role="status">Geen verbinding met de groepen. We proberen opnieuw verbinding te maken.</p>':'')+'<p>De eerste speler met <strong>7 juiste antwoorden achter elkaar</strong> wint. Bij een misser of een verlopen timer staat je teller weer op nul. Er volgt een nieuwe vraag. Iedereen krijgt hetzelfde tempo.</p>';
   if(g&&g.id!==groupDismissed&&(active||g.status==='finished'||g.status==='cancelled')){
     html+=`<h3>${g.status==='finished'?groupEscape(g.winner_alias)+' wint!':g.status==='cancelled'?'Sessie gesloten':g.status==='running'?'De wedstrijd loopt':'Wachtkamer van '+groupEscape(g.host_alias)}</h3>`;
     html+=`<p>${g.speed} seconden per doel${g.elapsed_ms?' · winnende tijd '+clockText(g.elapsed_ms):''}</p>`;
@@ -229,7 +233,7 @@ function updateGroup(d){
   const g=d.current;
   if(!d.account){if(groupMode){stopGame();groupMode=false;state='lobby';$('lobby').hidden=false}renderGroupMenu();return}
   if(groupActive(d)&&groupOwnTab(d)){
-    if(groupSessionId!==g.id){stopGame();groupMode=true;groupSessionId=g.id;groupVersion=-1;groupRequest=null;state='groupwait';groupDismissed=null;$('groupRankSpeed').value=String(g.speed)}
+    if(groupSessionId!==g.id){stopGame();rounds=legacyRounds;groupMode=true;groupSessionId=g.id;groupVersion=-1;groupRequest=null;state='groupwait';groupDismissed=null;$('groupRankSpeed').value=String(g.speed)}
     $('lobby').hidden=true;$('results').hidden=true;team=d.account.alias||'Leerkracht';duration=g.speed;
     if(g.status==='waiting'){
       if(groupPrompt!==g.id+':waiting'){groupPrompt=g.id+':waiting';if(!$('groupDialog').open)$('groupDialog').showModal()}
@@ -258,12 +262,13 @@ function scheduleGroupRound(){
   }
   if(groupRequest){retryGroupAnswer();return}
   $('countdown').hidden=true;groupVersion=m.version;misses=m.misses;shots=m.version;
-  mastered=new Set(rounds.slice(0,m.streak).map(r=>r.id));retry=[];queue=[rounds[m.streak].id];roundNo=1;
+  groupTask=g.question_version===2?questions.round(questions.question(g.id,m.version)):legacyRounds[m.streak];
+  mastered=new Set(legacyRounds.slice(0,m.streak).map(r=>r.id));retry=[];queue=[groupTask.id];roundNo=1;
   started=performance.now()-Math.max(0,groupNow()-Date.parse(g.starts_at));
   beginAttempt();
   const remaining=Math.max(0,Date.parse(m.next_at)+g.speed*1000-groupNow());
   attempt.deadline=performance.now()+remaining;attempt.start=attempt.deadline-g.speed*1000;
-  $('status').textContent=`${m.streak} / 7 foutloos · een misser start de reeks opnieuw.`;
+  $('status').textContent=`${m.streak} / 7 foutloos · een misser zet je teller op nul.`;
   cancelAnimationFrame(raf);raf=requestAnimationFrame(frame);
 }
 async function submitGroupAnswer(answer){
@@ -299,10 +304,17 @@ function finishGroupVisual(correct){
   if(correct){mastered.add(A.id);burst(A.shot.end.x,A.shot.end.y);sHit()}
   else{mastered.clear();sMiss()}
   $('choices').querySelectorAll('button').forEach(b=>{b.classList.toggle(correct?'correct':'wrong',Number(b.dataset.a)===selected);b.disabled=true});
-  updateHud();$('status').textContent=correct?'Raak. Verder naar de volgende richting.':'Mis of te laat. De volledige reeks begint opnieuw.';
+  updateHud();$('status').textContent=correct?'Raak. Verder naar de volgende richting.':'Mis of te laat. Je teller staat weer op nul. Een nieuwe richting volgt.';
   later(()=>{attempt=null;busy=false;state='groupwait';scheduleGroupRound()},correct?GAP_MS:650);
 }
-$('openGroup').onclick=openGroupMenu;$('groupMenu').onclick=openGroupMenu;$('groupClose').onclick=()=>$('groupDialog').close();
+$('openGroup').onclick=async()=>{
+  if(groupActive()){openGroupMenu();return}
+  if(!groupData?.account||groupData.pending||!groupData.connected)return;
+  $('lobbyMessage').textContent='';
+  try{await AxiomaGroups.create(speed)}catch(error){$('lobbyMessage').textContent=error.message}
+};
+$('lobbyRanking').onclick=()=>{openGroupMenu();$('groupRankSpeed').value=String(speed);$('groupRanking').click()};
+$('groupMenu').onclick=openGroupMenu;$('groupClose').onclick=()=>$('groupDialog').close();
 $('lobbyGroupList').onclick=$('groupContent').onclick=async e=>{
   const b=e.target.closest('[data-group-action]');if(!b||b.disabled||!window.AxiomaGroups)return;
   const action=b.dataset.groupAction;$('groupMessage').textContent='';
@@ -325,10 +337,10 @@ $('groupRanking').onclick=async()=>{
 };
 function connectGroups(){
   if(!window.AxiomaGroups)return;
-  AxiomaGroups.onChange(updateGroup);AxiomaGroups.ready().then(updateGroup);
+  AxiomaGroups.onChange(updateGroup);AxiomaGroups.ready().then(()=>updateGroup(AxiomaGroups.state()));
   if(new URLSearchParams(location.search).has('group'))openGroupMenu();
 }
 if(window.AxiomaGroups)connectGroups();else window.addEventListener('axioma:groups-ready',connectGroups,{once:true});
 
-initField();readHistory();updateHud();setTimer(speed);$('teamName').value='Duo '+(history.length+1);
+initField();readHistory();updateHud();setTimer(speed);
 })();

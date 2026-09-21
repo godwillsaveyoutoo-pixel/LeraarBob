@@ -19,7 +19,7 @@ test('group requests use the shared tab identity and send answers with a stable 
  await s.api.create(8);await s.api.join('session');
  const answer={sessionId:'session',answer:-.5,eventId:'answer-1',version:3};
  await s.api.answer(answer);await s.api.answer(answer);
- assert(s.calls.every(c=>c.name==='axioma_clay'&&c.args.p_tab_id==='tab-a'));
+ assert(s.calls.every(c=>c.name==='axioma_clay_v2'&&c.args.p_tab_id==='tab-a'));
  const answers=s.calls.filter(c=>c.args.p_action==='answer');
  assert.equal(answers.length,2);assert.equal(answers[0].args.p_event_id,answers[1].args.p_event_id);
  assert.equal(answers[0].args.p_version,3);assert.equal(answers[0].args.p_answer,-.5);

@@ -2,6 +2,7 @@
 // Start the local server and isolated Chromium as described in tests/README.md.
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
+const Q = require('../shared/axioma-clay-questions.js');
 const {randomUUID} = require('node:crypto');
 const delay = ms => new Promise(r => setTimeout(r,ms));
 class CDP {
@@ -32,11 +33,11 @@ function rpc(c,name,args){
   if(name==='axioma_register_multiplayer_match')return {};
   if(name==='axioma_report_multiplayer_result'){if(failResultOnce&&c.account===B){failResultOnce=false;throw Error('Test: uitslag tijdelijk niet opgeslagen')}reportCount++;return {}}
   if(name==='axioma_multiplayer_ranking'||name==='axioma_naval_ranking')return [];
-  if(name==='axioma_clay'){
+  if(name==='axioma_clay'||name==='axioma_clay_v2'){
     const uid=c.account,action=args.p_action,now=Date.now();
     let current=groupSessions.get(args.p_session_id||groupMemberships.get(uid)),member=current?.members.get(uid);
     if(action==='create'){
-      current={id:randomUUID(),host_id:uid,host_alias:accounts[uid].alias,speed:args.p_speed,status:'waiting',created_at:new Date(now).toISOString(),members:new Map()};
+      current={id:randomUUID(),host_id:uid,host_alias:accounts[uid].alias,speed:args.p_speed,status:'waiting',question_version:name==='axioma_clay_v2'?2:1,created_at:new Date(now).toISOString(),members:new Map()};
       groupSession=current;groupSessions.set(current.id,current);
     }
     if(action==='create'||action==='join'){
@@ -49,7 +50,8 @@ function rpc(c,name,args){
     }
     if(action==='answer'){
       assert.equal(current.status,'running');assert.equal(member.version,args.p_version);
-      const correct=args.p_answer===[1,-1,2,-.5,.5,-2,0][member.streak];
+      const q=current.question_version===2?Q.question(current.id,member.version):null;
+      const correct=args.p_answer===(q?q.n/q.d:[1,-1,2,-.5,.5,-2,0][member.streak]);
       member.streak=correct?member.streak+1:0;member.misses+=correct?0:1;member.version++;
       member.last_event_id=args.p_event_id;member.last_correct=correct;member.next_at=new Date(now+800).toISOString();
       if(member.streak===7){current.status='finished';current.winner_id=uid;current.winner_alias=accounts[uid].alias;current.elapsed_ms=now-Date.parse(current.starts_at)}
@@ -274,8 +276,18 @@ async function setup(browser,uid){
 
   await a.go('games/rechten/kleiduiven/');await b.go('games/rechten/kleiduiven/');
   for(const c of [a,b])await c.wait('window.AxiomaGroups?.state().connected');
-  await a.eval(`document.querySelector('#openGroup').click()`);await a.wait(`document.querySelector('[data-group-action="create"]')&&!document.querySelector('[data-group-action="create"]').disabled`);
-  await a.eval(`document.querySelector('[data-group-action="create"]').click()`);
+  for(const c of [a,b])await c.wait(`document.querySelector('#openGroup').onclick&&!document.querySelector('#openGroup').disabled`);
+  for(const [width,height] of [[320,568],[390,844],[640,360],[780,360],[1440,900]]){
+    await b.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<900});
+    assert.equal(await b.eval(`document.querySelector('#lobby').scrollHeight>document.querySelector('#lobby').clientHeight+2`),false,'battle lobby fits vertically '+width+'x'+height);
+    assert.equal(await b.eval(`document.documentElement.scrollWidth>innerWidth`),false,'battle lobby fits horizontally '+width);
+    for(const id of ['openGroup','start','lobbyRanking'])assert(await b.eval(`(()=>{const r=document.querySelector('#${id}').getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth})()`),id+' visible '+width);
+    const shot=await b.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(`/tmp/leraarbob-clay-lobby-${width}.png`,Buffer.from(shot.data,'base64'));
+  }
+  await b.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
+  await a.eval(`document.querySelector('[data-speed="8"]').click();document.querySelector('#openGroup').click()`);
+  await a.wait(`AxiomaGroups.state().current?.status==='waiting'`);
+  assert.equal(groupSession.speed,8,'lobby tempo applies directly to the new group');
   await a.wait(`location.pathname.includes('/kleiduiven/')&&document.querySelector('#groupDialog')?.open`);
   await b.eval('AxiomaGroups.refresh()');await b.wait(`document.querySelector('#lobbyGroupList').textContent.includes('Groep van Test-A')`);
   await b.go('games/pythagoras.html');await b.wait('window.AxiomaGroups?.state().connected');
@@ -284,13 +296,17 @@ async function setup(browser,uid){
   await a.eval('AxiomaGroups.refresh()');await a.wait(`!document.querySelector('[data-group-action="start"]').disabled`);
   await a.eval(`document.querySelector('[data-group-action="start"]').click()`);
   for(const c of [a,b])await c.wait(`document.querySelector('#choices button:not(:disabled)')&&!document.querySelector('#groupDialog').open`);
-  await a.eval(`document.querySelector('#choices [data-a="1"]').click()`);
-  await a.wait(`document.querySelector('#choices [data-a="-1"]:not(:disabled)')`);
-  await a.eval(`document.querySelector('#choices [data-a="1"]').click()`);
-  await a.wait(`AxiomaGroups.state().member.misses===1&&document.querySelector('#choices [data-a="2"]:not(:disabled)')`);
+  assert.deepEqual(await a.eval(`[...document.querySelectorAll('#choices button')].map(b=>[b.dataset.a,b.textContent])`),await b.eval(`[...document.querySelectorAll('#choices button')].map(b=>[b.dataset.a,b.textContent])`),'same choices and notation for both players');
+  const first=Q.question(groupSession.id,0),second=Q.question(groupSession.id,1);
+  await a.eval(`document.querySelector('#choices [data-a="${first.n/first.d}"]').click()`);
+  await a.wait(`AxiomaGroups.state().member.version===1&&document.querySelector('#choices button:not(:disabled)')`);
+  const wrong=second.choices.find(c=>c.n/c.d!==second.n/second.d);
+  await a.eval(`document.querySelector('#choices [data-a="${wrong.n/wrong.d}"]').click()`);
+  await a.wait(`AxiomaGroups.state().member.misses===1&&document.querySelector('#choices button:not(:disabled)')`);
   assert.equal(await a.eval('AxiomaGroups.state().member.streak'),0);
-  for(const slope of [1,-1,2,-.5,.5,-2,0]){
-    await b.wait(`document.querySelector('#choices [data-a="${slope}"]:not(:disabled)')`);
+  for(let index=0;index<7;index++){
+    const q=Q.question(groupSession.id,index),slope=q.n/q.d;
+    await b.wait(`AxiomaGroups.state().member.version===${index}&&document.querySelector('#choices [data-a="${slope}"]:not(:disabled)')`);
     await b.eval(`document.querySelector('#choices [data-a="${slope}"]').click()`);
     await delay(1200);
   }
@@ -317,9 +333,10 @@ async function setup(browser,uid){
   await a.wait(`AxiomaGroups.state().current?.status==='cancelled'`);
   assert.equal(groupSessions.get(firstGroup).winner_id,B,'previous winner retained after rematch and exit');
   await a.go('games/rechten/kleiduiven/');await a.wait(`window.AxiomaGroups?.state().current?.status==='cancelled'`);
-  await a.eval(`document.querySelector('#openGroup').click()`);await a.wait(`document.querySelector('[data-group-action="done"]')`);
+  await a.eval(`document.querySelector('#groupMenu').click()`);await a.wait(`document.querySelector('[data-group-action="done"]')`);
   await a.eval(`document.querySelector('[data-group-action="done"]').click()`);await a.wait(`!document.querySelector('#groupDialog').open`);
   await a.eval('AxiomaGroups.refresh()');assert.equal(await a.eval(`document.querySelector('#groupDialog').open`),false,'completed session stays dismissed after refresh');
+  await a.eval(`document.querySelector('#start').click()`);await a.wait(`!document.querySelector('#countdown').hidden`);await a.eval(`document.querySelector('#restart').click()`);await a.wait(`!document.querySelector('#lobby').hidden`);
   console.log('PASS: host opens fresh round, participant opts in and leaves, host ends group from global Online menu; previous result retained');
   // Popover layout and keyboard dismissal on small screens.
   await a.go('');await a.wait('window.AxiomaSocial?.state().connected');

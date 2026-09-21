@@ -162,6 +162,13 @@ of ranglijstresultaten meer getoond.
 
 ### Wedstrijden afronden
 
+Het startscherm van Kleiduifschieten richt zich op de groepswedstrijd: rechtstreeks
+een groep maken met 3, 5 of 8 seconden per doel, of aansluiten bij een open groep.
+Solo oefenen en de ranglijst staan als kleinere opties onderaan. Duonamen en
+coachrollen maken geen deel meer uit van de bediening; solo gebruikt de eigen
+accountalias. Bestaande opgeslagen oefentijden blijven behouden. Het startscherm
+is gecontroleerd op 320 × 568, 390 × 844, 640 × 360, 780 × 360 en 1440 × 900.
+
 Zeeslag toont na winst, verlies of het vertrek van de tegenstander een eindscherm
 met **Opnieuw** en **Beëindigen**. De uitslag wordt eerst gemeld; daarna sluit de
 gedeelde service de partij af en zijn de spelers weer beschikbaar. Bij een

@@ -3,6 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 const {randomUUID}=require('node:crypto');
+const Q=require('../shared/axioma-clay-questions.js');
 function game(){
   let now=100000,timerId=0;const timers=new Map(),frames=new Map(),nodes=new Map(),speeds=[];
   class Element{
@@ -22,7 +23,7 @@ function game(){
   const emit=()=>{snapshot.server_time=new Date(now).toISOString();snapshot.clockOffset=0;listener?.(copies(snapshot))};
   const api={state:()=>copies(snapshot),ready:async()=>copies(snapshot),onChange:fn=>{listener=fn},refresh:async()=>{emit()},answer:async packet=>{
     answerCalls.push(packet);const m=snapshot.member;
-    assert.equal(packet.version,m.version);const correct=packet.answer===[1,-1,2,-.5,.5,-2,0][m.streak];
+    assert.equal(packet.version,m.version);const q=snapshot.current.question_version===2?Q.question(snapshot.current.id,m.version):null;const correct=packet.answer===(q?q.n/q.d:[1,-1,2,-.5,.5,-2,0][m.streak]);
     m.streak=correct?m.streak+1:0;m.misses+=correct?0:1;m.version++;m.last_event_id=packet.eventId;m.last_correct=correct;m.next_at=new Date(now+800).toISOString();
     snapshot.members[0]={...snapshot.members[0],streak:m.streak,misses:m.misses};
     if(m.streak===7){snapshot.current.status='finished';snapshot.current.winner_id=account.id;snapshot.current.winner_alias=account.alias;snapshot.current.elapsed_ms=now-Date.parse(snapshot.current.starts_at)}
@@ -33,13 +34,13 @@ function game(){
     matchMedia:()=>({matches:true}),localStorage:{getItem:()=>null,setItem:()=>{}},location:{search:''},URLSearchParams,
     setTimeout:(fn,ms)=>{const id=++timerId;timers.set(id,{fn,at:now+ms});return id},clearTimeout:id=>timers.delete(id),
     requestAnimationFrame:fn=>{const id=++timerId;frames.set(id,fn);return id},cancelAnimationFrame:id=>frames.delete(id),
-    addEventListener:()=>{},AxiomaGame:{state:{},storage:{getItem:()=>null,setItem:()=>{}},report:()=>{}},AxiomaGroups:api,AxiomaProgress:{completeUnit:async()=>{}}};
+    addEventListener:()=>{},AxiomaClayQuestions:Q,AxiomaGame:{state:{},storage:{getItem:()=>null,setItem:()=>{}},report:()=>{}},AxiomaGroups:api,AxiomaProgress:{completeUnit:async()=>{}}};
   ctx.window=ctx;vm.createContext(ctx);
   let script=fs.readFileSync('games/rechten/kleiduiven/kleiduiven.js','utf8');
   script=script.replace('initField();readHistory();',`window.testGame={updateGroup,startGame,stopGame,fire,fail,groupState:()=>({groupMode,groupVersion,state,streak:mastered.size,attempt:attempt?.id}),renderGroupMenu};initField();readHistory();`);
   vm.runInContext(script,ctx);
   async function tick(ms){const until=now+ms;while(now<until){now=Math.min(until,now+20);for(const [id,t]of[...timers])if(t.at<=now){timers.delete(id);t.fn()}const fs=[...frames];frames.clear();for(const[,fn]of fs)fn(now);await Promise.resolve();await Promise.resolve()}}
-  function startGroup(){snapshot.current={id:'session-a',status:'running',speed:5,host_id:account.id,host_alias:account.alias,starts_at:new Date(now+5000).toISOString()};snapshot.member={user_id:account.id,tab_id:tabId,left_at:null,streak:0,misses:0,version:0,next_at:snapshot.current.starts_at};snapshot.members=[{...snapshot.member,alias:account.alias,online:true}];emit()}
+  function startGroup(question_version=1){snapshot.current={id:'12345678-1111-4111-8111-111111111111',question_version,status:'running',speed:5,host_id:account.id,host_alias:account.alias,starts_at:new Date(now+5000).toISOString()};snapshot.member={user_id:account.id,tab_id:tabId,left_at:null,streak:0,misses:0,version:0,next_at:snapshot.current.starts_at};snapshot.members=[{...snapshot.member,alias:account.alias,online:true}];emit()}
   async function choose(value){const b=get('choices').children.find(b=>Number(b.dataset.a)===value);assert(b,'answer choice exists');b.onclick();await tick(1200)}
   return {ctx,get,tick,startGroup,choose,snapshot,answerCalls,emit};
 }
@@ -63,5 +64,14 @@ test('a timeout submits one miss and a remote winner stops the remaining animati
 test('standalone still runs and restart cancels its delayed countdown',async()=>{
  const g=game();await Promise.resolve();await Promise.resolve();g.ctx.testGame.startGame();assert.equal(g.ctx.testGame.groupState().state,'countdown');
  g.get('restart').onclick();await g.tick(4000);assert.equal(g.ctx.testGame.groupState().state,'lobby');assert.equal(g.ctx.testGame.groupState().attempt,undefined);
- g.ctx.testGame.startGame();await g.tick(3100);assert.equal(g.ctx.testGame.groupState().state,'playing');assert.equal(g.ctx.testGame.groupState().attempt,'p1');
+ g.ctx.testGame.startGame();await g.tick(3100);assert.equal(g.ctx.testGame.groupState().state,'playing');assert.equal(g.ctx.testGame.groupState().attempt,'mixed-0');
+});
+
+test('mixed group advances to a new shared question after a miss and wins at seven consecutive correct answers',async()=>{
+ const g=game();await Promise.resolve();await Promise.resolve();g.startGroup(2);await g.tick(5100);
+ let q=Q.question(g.snapshot.current.id,0);await g.choose(q.n/q.d);
+ q=Q.question(g.snapshot.current.id,1);const wrong=q.choices.find(c=>c.n/c.d!==q.n/q.d);await g.choose(wrong.n/wrong.d);
+ assert.equal(g.snapshot.member.streak,0);assert.equal(g.ctx.testGame.groupState().attempt,'mixed-2');
+ for(let i=2;i<9;i++){q=Q.question(g.snapshot.current.id,i);await g.choose(q.n/q.d)}
+ assert.equal(g.snapshot.current.status,'finished');assert.equal(g.snapshot.member.streak,7);
 });

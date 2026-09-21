@@ -25,7 +25,7 @@
       if (!id || version!==epoch) return null;
       const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),10000);
       try {
-        const {data:result,error}=await AxiomaAuth.client().rpc('axioma_clay',{
+        const {data:result,error}=await AxiomaAuth.client().rpc('axioma_clay_v2',{
           p_action:action,p_tab_id:AxiomaSocial.state().tabId,...args
         }).abortSignal(controller.signal);
         if(error)throw error;if(version!==epoch)return null;
