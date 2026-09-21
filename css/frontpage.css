@@ -108,7 +108,7 @@ body.auth-open{overflow:hidden}
   .auth-message,.auth-submit{grid-column:1}
 }
 
-/* Shared subject colours; completion keeps the subject marker visible. */
+/* Subject colours fill the tile; borders indicate completion only. */
 [data-topic]{--topic:#547eb6}
 [data-topic="Functies"]{--topic:#528bea}
 [data-topic="Meetkunde"]{--topic:#35a68b}
@@ -119,7 +119,8 @@ body.auth-open{overflow:hidden}
 [data-topic="Statistiek"]{--topic:#3dabbc}
 [data-topic="Logica"]{--topic:#9aab48}
 .filter[data-topic]::before,.meta::before{content:"";display:inline-block;width:9px;height:9px;flex-shrink:0;border-radius:50%;background:var(--topic)}
-.card{border:2px solid color-mix(in srgb,var(--topic) 55%,var(--surface));border-top:5px solid var(--topic)}
+.card{border:4px solid transparent;background:color-mix(in srgb,var(--topic) 18%,var(--surface));background-clip:padding-box}
+[data-mode="dark"] .card{background-color:color-mix(in srgb,var(--topic) 24%,var(--surface))}
 .meta{display:flex;align-items:center;gap:7px}
 .card.is-complete{border-color:#c99b32;box-shadow:0 0 0 1px #c99b3240,0 4px 15px #c99b3218}
 .card.is-complete:hover{box-shadow:0 0 0 1px #c99b3260,0 10px 25px #c99b3230}
