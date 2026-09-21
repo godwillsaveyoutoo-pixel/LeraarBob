@@ -75,3 +75,17 @@ test('mixed group advances to a new shared question after a miss and wins at sev
  for(let i=2;i<9;i++){q=Q.question(g.snapshot.current.id,i);await g.choose(q.n/q.d)}
  assert.equal(g.snapshot.current.status,'finished');assert.equal(g.snapshot.member.streak,7);
 });
+
+test('ranking keeps the selected tempo when an older request completes later and clears on logout',async()=>{
+ const g=game();await Promise.resolve();await Promise.resolve();
+ const pending=[];g.ctx.AxiomaGroups.ranking=tempo=>new Promise(resolve=>pending.push({tempo,resolve}));
+ g.get('rankingMenu').onclick();assert.equal(g.get('rankingDialog').open,true);
+ g.get('groupRankSpeed').value='3';const latest=g.get('groupRankSpeed').onchange();
+ assert.deepEqual(pending.map(p=>p.tempo),[5,3]);
+ const row={rank:1,user_id:'player-a',alias:'Testspeler',wins:2,best_ms:7000};
+ pending[1].resolve({ranking:[row]});await latest;
+ const html=g.get('groupRankingContent').innerHTML;assert.match(html,/3 seconden per doel/);assert.match(html,/Testspeler \(jij\)/);
+ pending[0].resolve({ranking:[]});await Promise.resolve();assert.equal(g.get('groupRankingContent').innerHTML,html);
+ g.snapshot.account=null;g.emit();assert.equal(g.get('rankingDialog').open,false);assert.equal(g.get('groupRankingContent').textContent,'');
+ g.get('rankingMenu').onclick();assert.match(g.get('groupRankingContent').innerHTML,/Log in/);assert.equal(pending.length,2);
+});

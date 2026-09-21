@@ -162,12 +162,43 @@ of ranglijstresultaten meer getoond.
 
 ### Wedstrijden afronden
 
+Kleiduifschieten gebruikt een gemengde vragenstroom uit
+`shared/axioma-clay-questions.js`: vier kernvragen (0, ±½, ±1, ±2) en één
+variant (±⅓ of ±¼) per vijf vragen. De kernrichtingen wisselen elkaar af in
+een geschudde cyclus. Antwoordposities en de kant van de oorsprong variëren.
+Alle antwoordopties verschillen minstens 18 graden; dit is een ontwerpgrens,
+geen reeds met leerlingen gevalideerde perceptiedrempel. Een kwart en een
+derde staan nooit als alternatieven bij dezelfde vraag. Soms verschijnen
+halven en kwarten als exacte kommagetallen; derden blijven breuken.
+
+De sessie-ID en het aantal verwerkte antwoorden bepalen de vraag. Iedereen
+in dezelfde groep krijgt dus dezelfde stroom, inclusief antwoordposities en
+notatie. Een misser zet de reeks op nul, maar gaat verder naar de volgende
+vraag. De server beoordeelt de eigen gegenereerde vraag en bewaakt nog steeds
+tempo, tabblad, antwoordversie, idempotentie en de eerste winnaar. Solo krijgt
+zeven gegenereerde vragen en behoudt de herkansing van gemiste vragen.
+
+`supabase_clay_mixed_questions.sql` voegt versie 2 toe via `axioma_clay_v2`.
+De oorspronkelijke API en lopende wedstrijden behouden versie 1; oude pagina's
+kunnen geen gemengde wedstrijd verkeerd beoordelen. Uitslagen worden niet gewist.
+De uitbreiding is toegepast op het gekoppelde project en teruggelezen.
+`tests/clay-questions.test.cjs` controleert 50.000 vragen. De server en browser
+zijn bovendien op 510 voorbeelden met elkaar vergeleken. De bestaande en
+nieuwe databasetests zijn met tijdelijke accounts binnen een rollback uitgevoerd.
+
 Het startscherm van Kleiduifschieten richt zich op de groepswedstrijd: rechtstreeks
 een groep maken met 3, 5 of 8 seconden per doel, of aansluiten bij een open groep.
 Solo oefenen en de ranglijst staan als kleinere opties onderaan. Duonamen en
 coachrollen maken geen deel meer uit van de bediening; solo gebruikt de eigen
 accountalias. Bestaande opgeslagen oefentijden blijven behouden. Het startscherm
 is gecontroleerd op 320 × 568, 390 × 844, 640 × 360, 780 × 360 en 1440 × 900.
+
+De knop **Ranglijst** staat ook in de spelbalk en opent een eigen venster,
+meteen op het tempo van de huidige wedstrijd. Wisselen tussen 3, 5 en 8 seconden
+laadt automatisch de bijbehorende top 100. Die is gerangschikt op overwinningen,
+daarna beste winnende tijd; de eigen rij is gemarkeerd. Solo-oefentijden blijven
+apart bij het soloresultaat. Een lopende wedstrijd pauzeert niet bij het bekijken
+van de ranglijst; bij de einduitslag sluit het ranglijstvenster automatisch.
 
 Zeeslag toont na winst, verlies of het vertrek van de tegenstander een eindscherm
 met **Opnieuw** en **Beëindigen**. De uitslag wordt eerst gemeld; daarna sluit de

@@ -63,7 +63,7 @@ function rpc(c,name,args){
       }
     }
     const sessions=[...groupSessions.values()].filter(g=>g.status==='waiting').map(g=>({...g,player_count:[...g.members.values()].filter(m=>!m.left_at).length}));
-    const ranking=action==='ranking'?[...groupSessions.values()].filter(g=>g.status==='finished').map(g=>({rank:1,user_id:g.winner_id,alias:g.winner_alias,wins:1,best_ms:g.elapsed_ms})):null;
+    const ranking=action==='ranking'?[...groupSessions.values()].filter(g=>g.status==='finished'&&g.speed===args.p_speed).map(g=>({rank:1,user_id:g.winner_id,alias:g.winner_alias,wins:1,best_ms:g.elapsed_ms})):null;
     return {sessions,current:member?current:null,member:member||null,members:member?[...current.members.values()]:[],ranking,server_time:new Date(now).toISOString()};
   }
   assert.equal(name,'axioma_social');
@@ -281,10 +281,14 @@ async function setup(browser,uid){
     await b.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<900});
     assert.equal(await b.eval(`document.querySelector('#lobby').scrollHeight>document.querySelector('#lobby').clientHeight+2`),false,'battle lobby fits vertically '+width+'x'+height);
     assert.equal(await b.eval(`document.documentElement.scrollWidth>innerWidth`),false,'battle lobby fits horizontally '+width);
-    for(const id of ['openGroup','start','lobbyRanking'])assert(await b.eval(`(()=>{const r=document.querySelector('#${id}').getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth})()`),id+' visible '+width);
+    for(const id of ['openGroup','start','lobbyRanking','rankingMenu'])assert(await b.eval(`(()=>{const r=document.querySelector('#${id}').getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth})()`),id+' visible '+width);
     const shot=await b.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(`/tmp/leraarbob-clay-lobby-${width}.png`,Buffer.from(shot.data,'base64'));
   }
   await b.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
+  await b.eval(`document.querySelector('#rankingMenu').click()`);
+  await b.wait(`document.querySelector('#rankingDialog').open&&document.querySelector('#groupRankingContent').textContent.includes('Nog geen groepswinnaars')`);
+  assert.equal(await b.eval(`document.querySelector('#groupDialog').open`),false,'ranking opens directly without group setup');
+  await b.eval(`document.querySelector('#rankingClose').click()`);
   await a.eval(`document.querySelector('[data-speed="8"]').click();document.querySelector('#openGroup').click()`);
   await a.wait(`AxiomaGroups.state().current?.status==='waiting'`);
   assert.equal(groupSession.speed,8,'lobby tempo applies directly to the new group');
@@ -304,6 +308,10 @@ async function setup(browser,uid){
   await a.eval(`document.querySelector('#choices [data-a="${wrong.n/wrong.d}"]').click()`);
   await a.wait(`AxiomaGroups.state().member.misses===1&&document.querySelector('#choices button:not(:disabled)')`);
   assert.equal(await a.eval('AxiomaGroups.state().member.streak'),0);
+  await a.eval(`document.querySelector('#rankingMenu').click()`);
+  await a.wait(`document.querySelector('#rankingDialog').open`);
+  assert.equal(await a.eval(`document.querySelector('#groupRankSpeed').value`),'8','ranking uses the current match tempo');
+  assert.equal(await a.eval(`document.querySelector('#rankingLive').hidden`),false,'live timer remains running');
   for(let index=0;index<7;index++){
     const q=Q.question(groupSession.id,index),slope=q.n/q.d;
     await b.wait(`AxiomaGroups.state().member.version===${index}&&document.querySelector('#choices [data-a="${slope}"]:not(:disabled)')`);
@@ -311,14 +319,23 @@ async function setup(browser,uid){
     await delay(1200);
   }
   for(const c of [a,b])await c.wait(`document.querySelector('#groupContent').textContent.includes('Test-B wint!')`);
+  assert.equal(await a.eval(`document.querySelector('#rankingDialog').open`),false,'finished match brings result back to the front');
   await b.eval(`document.querySelector('#groupRanking').click()`);await b.wait(`document.querySelector('#groupRankingContent table')`);
   assert.match(await b.eval(`document.querySelector('#groupRankingContent').textContent`),/Test-B/);
-  for(const [width,height] of [[390,844],[844,390],[1440,1000]]){
+  assert.match(await b.eval(`document.querySelector('#groupRankingContent .me').textContent`),/Test-B \(jij\)/);
+  await b.eval(`document.querySelector('#groupRankSpeed').value='3';document.querySelector('#groupRankSpeed').dispatchEvent(new Event('change'))`);
+  await b.wait(`document.querySelector('#groupRankingContent').textContent.includes('Nog geen groepswinnaars')`);
+  await b.eval(`document.querySelector('#groupRankSpeed').value='8';document.querySelector('#groupRankSpeed').dispatchEvent(new Event('change'))`);
+  await b.wait(`document.querySelector('#groupRankingContent table')`);
+  for(const [width,height] of [[320,568],[390,844],[844,390],[1440,1000]]){
     await b.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<900});
     assert.equal(await b.eval('document.documentElement.scrollWidth>innerWidth'),false,'group page overflow '+width);
+    assert.equal(await b.eval(`document.querySelector('#rankingDialog').scrollWidth>document.querySelector('#rankingDialog').clientWidth`),false,'ranking fits horizontally '+width);
     const shot=await b.send('Page.captureScreenshot',{format:'png'});
     fs.writeFileSync(`/tmp/leraarbob-clay-group-${width}.png`,Buffer.from(shot.data,'base64'));
   }
+  await b.eval(`document.querySelector('#rankingClose').click()`);
+  assert.equal(await b.eval(`document.querySelector('#groupDialog').open`),true,'closing ranking returns to match results');
   console.log('PASS: student creates group in game, visible in lobby, join from another game, shared start, mistake resets all, seven correct wins and ranks');
   const firstGroup=groupSession.id;
   await a.eval(`document.querySelector('[data-group-action="again"]').click()`);await a.wait(`AxiomaGroups.state().current?.status==='waiting'`);

@@ -149,13 +149,16 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .axiomaHome:focus-visible{outline:2px solid currentColor;outline-offset:5px;border-radius:4px}
 
 .topbar{grid-template-columns:auto minmax(0,1fr) auto auto}
-#groupMenu{padding:5px 9px;font-size:13px}
-#groupDialog{width:min(700px,calc(100vw - 28px));max-height:calc(100dvh - 28px);overflow:auto;margin:auto;border:1px solid #698783;border-radius:14px;padding:24px;background:#102b33;color:#e6eee7;font:15px/1.5 system-ui,sans-serif}
-#groupDialog::backdrop{background:#061b26b8}.groupHead{display:flex;justify-content:space-between;align-items:start;gap:16px}.groupHead h2{font-size:25px;margin:0}.groupHead button{font-size:22px}
+#groupMenu,#rankingMenu{padding:5px 9px;font-size:13px}
+#groupDialog,#rankingDialog{width:min(700px,calc(100vw - 28px));max-height:calc(100dvh - 28px);overflow:auto;margin:auto;border:1px solid #698783;border-radius:14px;padding:24px;background:#102b33;color:#e6eee7;font:15px/1.5 system-ui,sans-serif}
+#groupDialog::backdrop,#rankingDialog::backdrop{background:#061b26b8}.groupHead{display:flex;justify-content:space-between;align-items:start;gap:16px}.groupHead h2{font-size:25px;margin:0}.groupHead button{font-size:22px}
 .overlay{align-items:safe center}
 #groupMessage{color:#f3c47e;min-height:1.5em}#groupContent p{color:#b1c8c5}.groupRow{display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid #64868155;padding:12px 0}.groupRow small{display:block;color:#96adb1}.groupActions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:20px}.groupActions .primary{width:auto;min-height:42px;padding:8px 14px}.groupRank{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:28px;border-top:1px solid #64868155;padding-top:16px}
-#groupDialog select{font:inherit;color:#e6eee7;background:#173b43;border:1px solid #698783;border-radius:6px;padding:7px}#groupDialog button:disabled{opacity:.45;cursor:default}#groupRankingContent table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}#groupRankingContent th,#groupRankingContent td{padding:10px 6px;border-bottom:1px solid #64868155;text-align:left}#groupRankingContent .me{color:#f3c47e}
-@media(max-width:900px){.topbar .progress{gap:4px}.dot{width:16px}.hud{gap:5px}#groupDialog{padding:16px}.groupHead h2{font-size:21px}}
+#groupDialog select,#rankingDialog select{font:inherit;color:#e6eee7;background:#173b43;border:1px solid #698783;border-radius:6px;padding:7px}#groupDialog button:disabled{opacity:.45;cursor:default}#groupRankingContent table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}#groupRankingContent th,#groupRankingContent td{padding:10px 6px;border-bottom:1px solid #64868155;text-align:left}#groupRankingContent .me{color:#f3c47e;background:#f3c47e0b}
+#rankingDialog .groupRank{margin-top:16px}#rankingDialog p{color:#b1c8c5}#rankingDialog a{color:#f3c47e}#rankingLive{color:#f3c47e!important}#groupRankingContent td:nth-child(2){overflow-wrap:anywhere}#groupRankingContent td:last-child{white-space:nowrap}#groupRankingContent caption{text-align:left;color:#b1c8c5;padding:12px 0}
+@media(max-width:900px){.topbar .progress{gap:4px}.dot{width:16px}.hud{gap:5px}#groupDialog,#rankingDialog{padding:16px}.groupHead h2{font-size:21px}}
+@media(max-width:700px){.topbar{grid-template-columns:1fr auto auto}.topbar .progress{display:none}}
+@media(max-width:420px){#rankingDialog{padding:12px;font-size:13px}#groupRankingContent th,#groupRankingContent td{padding:10px 3px}}
 @media(orientation:portrait) and (max-width:900px){.topbar{grid-template-columns:1fr auto auto}.topbar .progress,.topbar .total,.topbar #mute,.topbar #restart{display:none}}
 </style>
 <script src="../../../shared/axioma-platform.js"></script>
@@ -165,7 +168,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 <header class="topbar">
   <a class="brand axiomaHome" href="../../../" aria-label="Naar leraarBob startpagina">leraarBob <small>KLEIDUIVEN 01</small></a>
   <div id="progress" class="progress" aria-label="Voortgang per richting"></div>
-  <div class="hud"><button id="groupMenu" class="icon" title="Groepssessies en ranglijst">Groep</button><strong id="total" class="total">00:00,00</strong><button id="mute" class="icon" aria-pressed="false" title="Geluid">♪</button><button id="restart" class="icon" title="Herstart">↻</button></div>
+  <div class="hud"><button id="groupMenu" class="icon" title="Groepssessies">Groep</button><button id="rankingMenu" class="icon" aria-haspopup="dialog">Ranglijst</button><strong id="total" class="total">00:00,00</strong><button id="mute" class="icon" aria-pressed="false" title="Geluid">♪</button><button id="restart" class="icon" title="Herstart">↻</button></div>
 </header>
 
 <main class="game">
@@ -253,8 +256,15 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
   <div class="groupHead"><h2 id="groupTitle">Kleiduifschieten in groep</h2><button id="groupClose" class="utilityBtn" aria-label="Sluiten">×</button></div>
   <p id="groupMessage" role="status"></p>
   <div id="groupContent"></div>
-  <div class="groupRank"><label for="groupRankSpeed">Ranglijst · tijd per doel</label><select id="groupRankSpeed"><option value="3">3 seconden</option><option value="5" selected>5 seconden</option><option value="8">8 seconden</option></select><button id="groupRanking" class="utilityBtn">Ranglijst bekijken</button></div>
-  <div id="groupRankingContent"></div>
+  <div class="groupRank"><button id="groupRanking" class="utilityBtn" aria-haspopup="dialog">Ranglijst bekijken</button></div>
+</dialog>
+<dialog id="rankingDialog" aria-labelledby="rankingTitle">
+  <div class="groupHead"><h2 id="rankingTitle">Ranglijst · Kleiduifschieten</h2><button id="rankingClose" class="utilityBtn" aria-label="Ranglijst sluiten">×</button></div>
+  <p>Groepswedstrijden: de meeste overwinningen staan bovenaan. Bij een gelijk aantal beslist de beste winnende tijd.</p>
+  <p id="rankingLive" hidden>De wedstrijd en de timer lopen door terwijl je de ranglijst bekijkt.</p>
+  <div class="groupRank"><label for="groupRankSpeed">Tijd per doel</label><select id="groupRankSpeed"><option value="3">3 seconden</option><option value="5" selected>5 seconden</option><option value="8">8 seconden</option></select></div>
+  <div id="groupRankingContent" aria-live="polite"></div>
+  <p class="fair">Solo oefenen heeft eigen oefentijden. Die zie je na je oefenreeks.</p>
 </dialog>
 <script src="../../../shared/vendor/supabase.js"></script>
 <script src="../../../shared/supabase-config.js"></script>

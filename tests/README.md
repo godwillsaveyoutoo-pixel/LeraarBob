@@ -49,6 +49,7 @@ rollen en beleidsfuncties zijn afzonderlijk op het gekoppelde project gecontrole
 ```sh
 node tests/clay-game.test.cjs
 node tests/clay-service.test.cjs
+node --test tests/clay-questions.test.cjs
 node tests/catalog-progress.test.cjs
 ```
 
@@ -62,6 +63,12 @@ fictieve leerlingen doorlopen. Het Supabase-transport wordt daarbij vervangen;
 de echte backend wordt afzonderlijk met teruggedraaide transacties getest.
 
 `clay-groups-database.sql` wordt alleen tussen `BEGIN` en `ROLLBACK` uitgevoerd.
+Hetzelfde geldt voor `clay-mixed-database.sql`, na installatie van
+`supabase_clay_mixed_questions.sql`. Die controleert de gemengde reeks,
+oude-cliëntcompatibiliteit, een nieuwe vraag na een misser, dubbel ontvangen
+antwoorden, de winnaar, opnieuw spelen en de toegangsrechten. De vragenbanktest
+controleert 50.000 vragen, 80/20-verdeling, exacte breuk- en kommanotatie en
+minstens 18 graden verschil tussen alle antwoordmogelijkheden.
 Hij controleert startrechten, minstens twee spelers, lidmaatschap en tabblad,
 gedeelde starttijd, foute/te late antwoorden, idempotentie, één winnaar,
 ranglijsten per tempo en de eerste Zeeslag-overwinning. Synthetische accounts

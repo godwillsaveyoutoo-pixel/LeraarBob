@@ -76,7 +76,7 @@ function updateHud(){
   $('wave').textContent=`SOLO · ${roundNo===1?'REEKS 1':'HERKANSING '+(roundNo-1)}`;
   $('attempts').textContent=misses+' '+(misses===1?'misser':'missers');$('teamLabel').textContent=team;
   $('progress').replaceChildren();
-  for(const [index,r] of rounds.entries()){const e=document.createElement('span');e.className='dot'+(mastered.has(r.id)?' hit':(groupMode?index===mastered.size:attempt?.id===r.id)?' current':retry.includes(r.id)?' retry':'');$('progress').append(e)}
+  for(const [index,r] of rounds.entries()){const e=document.createElement('span');e.className='dot'+((groupMode?index<mastered.size:mastered.has(r.id))?' hit':(groupMode?index===mastered.size:attempt?.id===r.id)?' current':retry.includes(r.id)?' retry':'');$('progress').append(e)}
   if(groupMode){$('reserve').textContent='Foutloos: '+mastered.size+' / 7';$('wave').textContent='GROEPSWEDSTRIJD · 7 OP RIJ'}
 }
 function renderChoices(r){
@@ -176,7 +176,7 @@ $('again').onclick=()=>{stopGame();state='lobby';$('results').hidden=true;$('lob
 $('backLobby').onclick=()=>{stopGame();state='lobby';$('results').hidden=true;$('lobby').hidden=false};
 function toggleMute(){muted=!muted;$('mute').textContent=muted?'×':'♪';$('mute').setAttribute('aria-pressed',String(muted));$('lobbyMute').textContent=muted?'Geluid uit':'Geluid aan'}
 $('mute').onclick=toggleMute;$('lobbyMute').onclick=toggleMute;
-addEventListener('keydown',e=>{if(state!=='playing'||e.repeat||e.target.matches('input,select')||$('groupDialog').open)return;const i=Number(e.key)-1;if(i>=0&&i<3){e.preventDefault();$('choices').children[i]?.click()}});
+addEventListener('keydown',e=>{if(state!=='playing'||e.repeat||e.target.matches('input,select')||$('groupDialog').open||$('rankingDialog').open)return;const i=Number(e.key)-1;if(i>=0&&i<3){e.preventDefault();$('choices').children[i]?.click()}});
 
 // Group race controller. The server checks each answer and selects one winner.
 const groupEscape=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -229,6 +229,7 @@ function renderGroupMenu(){
   }
 }
 function updateGroup(d){
+  if(groupData?.account?.id!==d.account?.id){rankingRequest++;$('groupRankingContent').textContent='';if($('rankingDialog').open)$('rankingDialog').close()}
   groupData=d;
   const g=d.current;
   if(!d.account){if(groupMode){stopGame();groupMode=false;state='lobby';$('lobby').hidden=false}renderGroupMenu();return}
@@ -236,10 +237,10 @@ function updateGroup(d){
     if(groupSessionId!==g.id){stopGame();rounds=legacyRounds;groupMode=true;groupSessionId=g.id;groupVersion=-1;groupRequest=null;state='groupwait';groupDismissed=null;$('groupRankSpeed').value=String(g.speed)}
     $('lobby').hidden=true;$('results').hidden=true;team=d.account.alias||'Leerkracht';duration=g.speed;
     if(g.status==='waiting'){
-      if(groupPrompt!==g.id+':waiting'){groupPrompt=g.id+':waiting';if(!$('groupDialog').open)$('groupDialog').showModal()}
+      if(groupPrompt!==g.id+':waiting'){groupPrompt=g.id+':waiting';if($('rankingDialog').open)$('rankingDialog').close();if(!$('groupDialog').open)$('groupDialog').showModal()}
     }
     else if(state==='groupwait'&&d.connected){
-      if(groupVersion<0&&$('groupDialog').open)$('groupDialog').close();
+      if(groupVersion<0){if($('rankingDialog').open)$('rankingDialog').close();if($('groupDialog').open)$('groupDialog').close()}
       scheduleGroupRound();
     }
   }else if(groupMode&&g?.id===groupSessionId&&['finished','cancelled'].includes(g.status)){
@@ -247,6 +248,7 @@ function updateGroup(d){
     $('lobby').hidden=false;
     if(g.winner_id===d.account.id)trackAxiomaSeries();
     $('total').textContent=g.elapsed_ms?clockText(g.elapsed_ms):'—';
+    if($('rankingDialog').open)$('rankingDialog').close();
     if(g.id!==groupDismissed&&!$('groupDialog').open)$('groupDialog').showModal();
   }else if(groupMode&&d.member?.left_at){stopGame();groupMode=false;state='lobby';$('lobby').hidden=false}
   renderGroupMenu();
@@ -313,7 +315,10 @@ $('openGroup').onclick=async()=>{
   $('lobbyMessage').textContent='';
   try{await AxiomaGroups.create(speed)}catch(error){$('lobbyMessage').textContent=error.message}
 };
-$('lobbyRanking').onclick=()=>{openGroupMenu();$('groupRankSpeed').value=String(speed);$('groupRanking').click()};
+$('lobbyRanking').onclick=$('rankingMenu').onclick=$('groupRanking').onclick=openRanking;
+$('rankingClose').onclick=()=>$('rankingDialog').close();
+$('rankingDialog').onclose=()=>{rankingRequest++};
+$('groupRankSpeed').onchange=loadRanking;
 $('groupMenu').onclick=openGroupMenu;$('groupClose').onclick=()=>$('groupDialog').close();
 $('lobbyGroupList').onclick=$('groupContent').onclick=async e=>{
   const b=e.target.closest('[data-group-action]');if(!b||b.disabled||!window.AxiomaGroups)return;
@@ -327,14 +332,24 @@ $('lobbyGroupList').onclick=$('groupContent').onclick=async e=>{
     if(action==='leave'){await AxiomaGroups.leave();stopGame();groupMode=false;groupSessionId=null;state='lobby';$('lobby').hidden=false;$('groupDialog').close()}
   }catch(error){openGroupMenu();$('groupMessage').textContent=error.message}
 };
-$('groupRanking').onclick=async()=>{
+let rankingRequest=0;
+function openRanking(){
+  $('groupRankSpeed').value=String(groupMode||state==='groupdone'?groupData.current?.speed||speed:speed);
+  $('rankingLive').hidden=!['playing','countdown','gap','groupwait','groupnetwork'].includes(state);
+  if(!$('rankingDialog').open)$('rankingDialog').showModal();
+  loadRanking();
+}
+async function loadRanking(){
+  const request=++rankingRequest,accountId=groupData?.account?.id,tempo=Number($('groupRankSpeed').value);
+  if(!accountId){$('groupRankingContent').innerHTML='<p><a href="../../../?login=1&amp;return=games%2Frechten%2Fkleiduiven%2F">Log in</a> om de groepsranglijst te bekijken en mee te spelen.</p>';return}
   $('groupRankingContent').textContent='Ranglijst laden…';
   try{
-    const result=await AxiomaGroups.ranking(Number($('groupRankSpeed').value));
+    const result=await AxiomaGroups.ranking(tempo);
+    if(request!==rankingRequest||accountId!==groupData?.account?.id)return;
     const rows=result?.ranking||[];
-    $('groupRankingContent').innerHTML=rows.length?`<table><thead><tr><th>#</th><th>Speler</th><th>Gewonnen</th><th>Beste tijd</th></tr></thead><tbody>${rows.map(r=>`<tr class="${r.user_id===groupData.account.id?'me':''}"><td>${r.rank}</td><td>${groupEscape(r.alias)}</td><td>${r.wins}</td><td>${clockText(r.best_ms)}</td></tr>`).join('')}</tbody></table>`:'<p>Nog geen groepswinnaars op dit tempo. De eerste overwinning komt meteen in de ranglijst.</p>';
-  }catch(error){$('groupRankingContent').textContent=error.message}
-};
+    $('groupRankingContent').innerHTML=rows.length?`<table><caption>Top 100 · ${tempo} seconden per doel</caption><thead><tr><th scope="col">#</th><th scope="col">Speler</th><th scope="col">Gewonnen</th><th scope="col">Beste winnende tijd</th></tr></thead><tbody>${rows.map(r=>`<tr class="${r.user_id===accountId?'me':''}"><td>${r.rank}</td><td>${groupEscape(r.alias)}${r.user_id===accountId?' (jij)':''}</td><td>${r.wins}</td><td>${clockText(r.best_ms)}</td></tr>`).join('')}</tbody></table>`:'<p>Nog geen groepswinnaars op dit tempo. De eerste overwinning komt meteen in de ranglijst.</p>';
+  }catch(error){if(request===rankingRequest)$('groupRankingContent').textContent=error.message}
+}
 function connectGroups(){
   if(!window.AxiomaGroups)return;
   AxiomaGroups.onChange(updateGroup);AxiomaGroups.ready().then(()=>updateGroup(AxiomaGroups.state()));
