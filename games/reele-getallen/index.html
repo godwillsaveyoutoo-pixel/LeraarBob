@@ -41,6 +41,12 @@ footer{display:flex;align-items:center;gap:10px;padding:8px 24px;border-top:1px 
 #workspace.readonly.sets .set-map-board{margin-top:9px;min-height:66px}#workspace.readonly.sets .set-label{font-size:18px}
 
 #workspace.readonly.sets .set-bank{flex:none;gap:12px}.set-preview-token{display:inline-flex;align-items:center;justify-content:center;min-width:66px;font-size:18px;line-height:1.1}#workspace.readonly.sets .lesson-copy{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:3px 10px}#workspace.readonly.sets .lesson-copy p{grid-column:1/-1}#workspace.readonly.sets .canvas{justify-content:flex-start}
+
+/* More room between the upper boundaries, while keeping small boards usable. */
+.set-region:has(>.set-region){padding-top:20px}
+@media(max-height:500px) and (min-width:640px){.set-region:has(>.set-region){padding-top:10px;padding-bottom:3px}}
+#workspace.readonly.sets .set-region:has(>.set-region){padding-top:6px;padding-bottom:1px}#workspace.readonly.sets .set-map-board{min-height:82px}#workspace.readonly.sets .lesson-copy{padding-block:6px}#workspace.readonly.sets,#workspace.readonly.sets .canvas{gap:3px}
+@media(min-height:600px){#workspace.readonly.sets .set-region:has(>.set-region){padding-top:20px;padding-bottom:2px}#workspace.readonly.sets .set-map-board{min-height:130px}}
 </style></head>
 <body><div id="app"><header><a class="brand" data-platform-home aria-label="Naar de startpagina van leraarBob" href="../../index.html">leraarBob</a><nav aria-label="Trainer"><button data-trainer-action="play" id="playNav">Oefenen</button><button id="topicsNav">Onderwerpen</button><button data-trainer-action="help" id="helpNav">Uitleg</button><button data-trainer-action="progress" id="progressNav">Voortgang</button></nav><div class="header-actions"><span id="xp" title="Ervaringspunten">0 XP</span><button id="theme" aria-label="Lichte of donkere modus">◐</button></div></header>
 <main id="stage"><div class="question"><div><p id="eyebrow"></p><h1 id="prompt"></h1></div><span id="round"></span></div><div id="workspace"></div><footer><p id="hint" role="status"></p><button id="back" hidden>← Vorige</button><button id="skip">Later</button><button id="commit" class="primary">Controleer</button></footer></main>
