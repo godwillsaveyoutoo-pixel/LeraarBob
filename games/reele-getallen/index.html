@@ -1,0 +1,682 @@
+<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#fffef9"><title>Reële getallen · leraarBob</title><style>:root{color-scheme:light;--paper:#fffef9;--ink:#303e43;--muted:#576c76;--panel:#edf4f5;--line:#d7e3e6;--blue:#347794;--green:#267762;--rust:#a24d3a;--gold:#916413;--violet:#775caa;--grid:#dde8ea;font:16px/1.45 'Segoe UI',system-ui,sans-serif}
+:root[data-mode=dark]{color-scheme:dark;--paper:#162830;--ink:#edf5ef;--muted:#b4c8cf;--panel:#203c46;--line:#3a5360;--blue:#85c5e1;--green:#83d6b5;--rust:#ffad91;--gold:#eac77f;--violet:#ceb0ee;--grid:#2d4854}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);height:100dvh;overflow:hidden}h1,h2,p{margin:0}button,a,select{-webkit-tap-highlight-color:transparent}button{font:inherit;font-weight:650;color:inherit;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:9px;background:var(--paper);padding:7px 13px;cursor:pointer}button:hover{background:var(--panel)}button:disabled{opacity:.5;cursor:default}button[aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--blue);background:var(--panel)}button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--gold);outline-offset:2px}.primary{background:var(--blue);border-color:var(--blue);color:var(--paper)}[hidden]{display:none!important}
+#app{height:100%;display:grid;grid-template-rows:54px minmax(0,1fr)}header{display:flex;gap:12px;align-items:center;padding:3px 20px;border-bottom:1px solid var(--line)}.brand{color:inherit;text-decoration:none;letter-spacing:-1px;font-size:23px;min-height:44px;display:flex;align-items:center}nav{margin-left:auto;display:flex;gap:3px}nav button{border-color:transparent;font-size:13px;padding:7px 10px}.header-actions{display:flex;gap:5px;align-items:center}#xp{width:86px;text-align:center;color:var(--gold);font-weight:750;font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}#theme{font-size:22px;padding:4px;border-color:transparent}
+#stage{min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr) 62px}.question{display:flex;justify-content:space-between;align-items:center;padding:8px 24px;border-bottom:1px solid var(--line);gap:10px;min-height:64px}.question h1{font-size:clamp(18px,2.2vw,27px);font-weight:650;line-height:1.25;letter-spacing:-.4px}.eyebrow,#eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}#round{font-size:12px;white-space:nowrap;color:var(--muted)}
+#workspace{min-width:0;min-height:0;padding:16px 24px;display:flex;gap:24px;overflow:hidden}.canvas{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;position:relative}.answer-panel{width:244px;flex:0 0 244px;display:flex;flex-direction:column;justify-content:center;gap:12px;min-height:0}.math-large{font-size:clamp(38px,5vw,68px);line-height:1.15}.math-medium{font-size:30px}.muted{font-size:15px;color:var(--muted)}math{font-family:'Cambria Math','STIX Two Math',serif;white-space:nowrap;font-size:1em}math mfrac{font-size:1em}.formula-row{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:nowrap;max-width:100%}.source-caption{font-size:14px;color:var(--muted);text-align:center}.fraction-answer{display:grid;grid-template-columns:44px 90px;align-items:center;gap:6px}.fraction-answer .sign{grid-row:1/3;font-size:27px;border:0}.fraction-answer .slot:first-of-type{border-bottom:2px solid var(--ink)}.fraction-stack{display:flex;flex-direction:column;align-items:stretch;gap:4px;width:88px}.fraction-rule{height:2px;background:var(--ink)}.slot{min-width:80px;font-size:30px;font-variant-numeric:tabular-nums}.slot small{display:block;font-size:11px;font-weight:500;color:var(--muted)}.keypad{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.keypad button{font-size:21px;padding:4px;min-height:48px}.keypad .empty-key{grid-column:span 2}
+.relations{display:flex;gap:14px}.relations button{font-size:32px;min-width:64px;min-height:56px}.comparison-gap{font-size:36px;min-width:40px;text-align:center;color:var(--blue)}.line-canvas{width:100%;min-height:120px;flex:1;max-height:230px;touch-action:none}.line-canvas text{font:16px 'Segoe UI',sans-serif;fill:var(--ink)}.line-canvas .tick{stroke:var(--muted)}.line-canvas .axis{stroke:var(--ink)}.line-canvas .selection{stroke:var(--blue);fill:var(--blue)}.line-tools{display:flex;gap:8px;align-items:center;justify-content:center}.line-tools output{min-width:85px;text-align:center;font-size:22px}.interval-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px}.interval-controls button{font-size:16px;padding:5px}.interval-controls .wide{grid-column:1/-1}.interval-preview{font-size:24px;text-align:center}.interval-source{font-size:clamp(22px,3vw,40px);text-align:center;line-height:1.35}
+.token-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:1fr 1fr;gap:14px;width:100%;max-width:780px;min-height:0}.number-token{font-size:34px;min-height:94px;position:relative;padding:12px 4px 24px;border-width:2px}.number-token small{position:absolute;bottom:5px;left:0;right:0;font:11px system-ui;color:var(--muted)}.number-token[data-group=A]{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 10%,var(--paper))}.number-token[data-group=B]{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 10%,var(--paper))}.group-keys button{font-size:18px}.group-keys button[data-group=A]{color:var(--blue)}.group-keys button[data-group=B]{color:var(--gold)}.sets{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sets button{font-size:25px;min-height:54px}.sets [data-set=irr]{font-size:16px}.set-map{font-size:22px;color:var(--blue)}
+.digits{display:flex;align-items:center;justify-content:center;gap:4px;max-width:100%}.digits .digit{font:28px Georgia,serif;padding:5px;min-width:44px;min-height:54px;border-radius:3px;position:relative}.digits .digit.selected{background:var(--panel);border-top:3px solid var(--blue)}.digits-prefix{font-size:34px;margin-right:5px}.rule{max-width:680px;font-size:17px;text-align:center;line-height:1.55}.root-area{height:100px;width:100%;color:var(--blue)}.root-area text{fill:var(--ink);font:16px system-ui}.saved-step{font-size:17px;color:var(--muted)}
+.lesson-copy,.feedback-copy{flex:0 0 320px;width:320px;display:flex;flex-direction:column;justify-content:center;gap:16px;min-height:0;background:var(--panel);border-left:3px solid var(--blue);padding:22px}.lesson-copy h2,.feedback-copy h2{font-size:25px;line-height:1.2}.lesson-copy p,.feedback-copy p{font-size:18px;line-height:1.55}.feedback-copy.good{border-color:var(--green)}.feedback-copy.repair{border-color:var(--rust)}.feedback-copy.good h2{color:var(--green)}.feedback-copy.repair h2{color:var(--rust)}.xp-earned{font-size:17px;color:var(--gold)}#workspace.readonly .canvas{pointer-events:none}#workspace.feedback .canvas{pointer-events:none}.feedback-copy{flex:1;max-width:760px;margin:auto;width:auto}.feedback-picture{width:180px;flex:0 0 180px;display:grid;place-items:center;font-size:64px;color:var(--blue)}
+footer{display:flex;align-items:center;gap:10px;padding:8px 24px;border-top:1px solid var(--line)}#hint{flex:1;font-size:13px;line-height:1.35;color:var(--muted)}#skip{font-size:12px;border-color:transparent}#commit{min-width:130px}#back{font-size:13px}
+#library,#help,#progress,#summary{padding:30px max(24px,5vw);overflow:auto}.page-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;max-width:1150px;margin:0 auto 24px}.page-heading h1{font-size:36px;line-height:1.15;letter-spacing:-1px;margin:8px 0 12px}.page-heading p{max-width:750px;color:var(--muted);line-height:1.65}.page-actions{max-width:1150px;margin:0 auto 24px;display:flex;gap:20px;align-items:center}.page-actions span{font-size:14px;color:var(--muted)}.topic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:15px;max-width:1150px;margin:auto}.topic-card{padding:20px;background:var(--panel);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;gap:12px}.topic-card h2{font-size:20px}.topic-card p{font-size:14px;color:var(--muted)}.topic-card button{margin-top:auto;align-self:flex-start}.topic-card.solid{border:3px solid var(--gold)}#progressRows{max-width:1000px;margin:auto}.progress-row{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:15px 0;border-bottom:1px solid var(--line)}.progress-row strong{display:block}.progress-row span,.progress-row small{color:var(--muted);font-size:14px}.summary-inner{max-width:800px;margin:8vh auto}.summary-inner h1{font-size:45px;letter-spacing:-1px;margin:15px 0}.summary-inner p{line-height:1.65;margin:18px 0}.summary-inner button{margin-right:8px}#stats{display:flex;gap:32px;margin:25px 0}#stats strong{font-size:32px;display:block;color:var(--blue)}#stats span{font-size:14px;color:var(--muted)}
+#rotate{display:none;position:fixed;inset:54px 0 0;background:var(--paper);z-index:20;place-items:center;padding:25px;text-align:center}#rotate p{max-width:360px;margin:15px auto;line-height:1.6}#storageWarning{position:fixed;bottom:0;left:0;right:0;background:var(--rust);color:var(--paper);padding:8px;z-index:30}
+@media(max-height:500px) and (min-width:640px){#app{grid-template-rows:48px minmax(0,1fr)}header{padding:2px 10px;gap:6px}.brand{font-size:21px}nav button{padding:5px 8px}.header-actions{gap:2px}#xp{width:70px}#stage{grid-template-rows:52px minmax(0,1fr) 54px}.question{padding:3px 16px;min-height:0}.question h1{font-size:18px}#round{font-size:11px}#workspace{padding:6px 14px;gap:14px}.canvas{gap:8px}.answer-panel{width:216px;flex-basis:216px;gap:6px}.keypad{gap:4px}.keypad button{min-height:44px;font-size:20px}.math-large{font-size:42px}.math-medium{font-size:25px}.slot{font-size:26px;min-height:48px}.source-caption{font-size:13px}.line-canvas{min-height:90px}.line-tools{gap:6px}.line-tools output{font-size:19px}.token-grid{gap:9px}.number-token{min-height:76px;font-size:29px;padding:8px 3px 22px}.sets{gap:6px}.sets button{min-height:48px}.muted{font-size:13px}.rule{font-size:15px}.digits{gap:2px}.digits .digit{font-size:24px;min-width:44px;min-height:48px}.digits-prefix{font-size:28px}.root-area{height:64px}.saved-step{font-size:15px}.lesson-copy{flex-basis:270px;width:270px;padding:13px;gap:10px}.lesson-copy h2,.feedback-copy h2{font-size:20px}.lesson-copy p,.feedback-copy p{font-size:16px;line-height:1.45}.feedback-copy{padding:14px;gap:10px}.feedback-picture{flex-basis:110px;width:110px;font-size:48px}footer{padding:5px 12px;gap:6px}#hint{font-size:12px}#commit{min-width:120px;padding:6px 10px}#back{padding:6px 8px}.interval-controls{gap:5px}.interval-controls button{font-size:14px}.interval-source{font-size:25px}.interval-preview{font-size:20px}.formula-row{gap:10px}}
+@media(max-width:700px){#round{display:none}.question h1{font-size:17px}.lesson-copy{width:255px;flex-basis:255px}.lesson-copy h2{font-size:18px}.lesson-copy p{font-size:15px}.digits .digit{min-width:44px}#workspace.readonly .digits{flex-wrap:wrap}.formula-row{gap:8px}}
+@media(max-width:639px){header{padding:4px 8px;gap:4px}.brand{font-size:19px}nav{gap:0}nav button{font-size:11px;padding:4px 6px}.header-actions{gap:0}#xp{width:62px;font-size:12px}#theme{display:none}#app{grid-template-rows:90px minmax(0,1fr)}header{flex-wrap:wrap}nav{order:3;width:100%;justify-content:center}.header-actions{margin-left:auto}#rotate{inset:90px 0 0}.page-heading{flex-wrap:wrap}.page-heading h1{font-size:28px}.page-actions{flex-wrap:wrap}.summary-inner h1{font-size:34px}}
+@media(orientation:portrait),(max-width:639px),(max-height:340px){body[data-screen=stage] #rotate{display:grid}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style></head>
+<body><div id="app"><header><a class="brand" data-platform-home href="../../index.html">leraarBob</a><nav aria-label="Trainer"><button data-trainer-action="play" id="playNav">Oefenen</button><button data-trainer-action="help" id="helpNav">Uitleg</button><button data-trainer-action="progress" id="progressNav">Voortgang</button></nav><div class="header-actions"><span id="xp" title="Ervaringspunten">0 XP</span><button id="theme" aria-label="Lichte of donkere modus">◐</button></div></header>
+<main id="stage"><div class="question"><div><p id="eyebrow"></p><h1 id="prompt"></h1></div><span id="round"></span></div><div id="workspace"></div><footer><p id="hint" role="status"></p><button id="back" hidden>← Vorige</button><button id="skip">Later</button><button id="commit" class="primary">Controleer</button></footer></main>
+<section id="library" hidden><div class="page-heading"><div><p class="eyebrow">Getallenatelier</p><h1>Hetzelfde getal. Anders bekeken.</h1><p>Breuken, decimalen, wortels en intervallen krijgen betekenis door hun verbanden.</p></div><button id="resume" class="primary">Verder oefenen →</button></div><div class="page-actions"><button id="newSession">Nieuwe reeks</button><span>8 opgaven per reeks · vrij oefenen verdient geen XP</span></div><div id="topics" class="topic-grid"></div></section>
+<section id="help" hidden><div class="page-heading"><div><p class="eyebrow">Uitgewerkte voorbeelden</p><h1>Bekijk het verband.</h1><p>Dezelfde voorbeelden als in je leerroute. Je antwoord blijft bewaard.</p></div><button id="closeHelp">Terug naar oefening</button></div><div id="helpTopics" class="topic-grid"></div></section>
+<section id="progress" hidden><div class="page-heading"><div><p class="eyebrow">Jouw leerroute</p><h1 id="progressTitle">Wat begrijp je al zelfstandig?</h1><p>Na twee zelfstandige antwoorden gaat een volgend onderwerp open. ‘Stevig’ vraagt ook verschillende voorstellingen en een latere herhaling.</p></div><button id="closeProgress">Terug</button></div><div id="progressRows"></div></section>
+<section id="summary" hidden><div class="summary-inner"><p class="eyebrow">Reeks afgerond</p><h1>Een verband meer gezien.</h1><div id="stats"></div><p id="summaryText"></p><button id="again" class="primary">Nieuwe reeks →</button><button id="browse">Onderwerpen bekijken</button></div></section>
+</div><div id="rotate"><div><h2>Geef je getallen ruimte.</h2><p>Draai je toestel om te oefenen. Uitleg en voortgang kun je ook rechtop bekijken.</p><button id="rotateLibrary">Bekijk de onderwerpen</button></div></div><p id="storageWarning" role="status" hidden></p>
+<script data-platform-root="../../">/* Platform navigation. Subject engines own exercises; this layer owns destinations. */
+(() => {
+  'use strict';
+  if (window.AxiomaPlatform) return;
+  const script = document.currentScript;
+  const root = script?.src ? new URL('../', script.src) : new URL(script?.dataset.platformRoot || '../../', location.href);
+  const home = new URL('index.html', root);
+  const wired = new WeakSet();
+  function homeURL() { return home.href; }
+  function goHome(event) {
+    event?.preventDefault(); event?.stopPropagation();
+    // Keep previews inside their host; their existing navigation listener handles this event.
+    if (window !== window.top) {
+      window.parent.postMessage({type:'axioma:navigate-home',url:home.href}, location.origin === 'null' ? '*' : location.origin);
+      return;
+    }
+    location.assign(home.href);
+  }
+  function wireHome(element, { beforeLeave } = {}) {
+    if (!element) return null;
+    // Some imported games put the brand inside an old menu button. Convert that
+    // button, preserving its child nodes (and references to game title nodes).
+    let link = element.closest('button') || element;
+    if (wired.has(link)) return link;
+    if (link.tagName !== 'A') {
+      const anchor = document.createElement('a');
+      for (const attribute of link.attributes) if (!['type','role','tabindex','onclick'].includes(attribute.name)) anchor.setAttribute(attribute.name, attribute.value);
+      while (link.firstChild) anchor.append(link.firstChild);
+      link.replaceWith(anchor); link = anchor;
+    }
+    link.href = home.href;
+    link.dataset.platformHome = '';
+    link.classList.add('axioma-platform-home');
+    link.setAttribute('aria-label','Naar de startpagina van leraarBob');
+    link.title = 'Naar de startpagina van leraarBob';
+    link.addEventListener('click', async event => {
+      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault(); event.stopPropagation();
+      if (beforeLeave && await beforeLeave() === false) return;
+      goHome();
+    });
+    wired.add(link); return link;
+  }
+  function bindTrainer(actions) {
+    for (const button of document.querySelectorAll('[data-trainer-action]')) {
+      const action = actions[button.dataset.trainerAction];
+      if (action) button.addEventListener('click', action);
+    }
+  }
+  function trainerScreen(name) {
+    for (const button of document.querySelectorAll('[data-trainer-action]')) {
+      const active = button.dataset.trainerAction === name;
+      if (active) button.setAttribute('aria-current','page'); else button.removeAttribute('aria-current');
+    }
+  }
+  const style=document.createElement('style');
+  style.textContent='.axioma-platform-home{color:inherit;text-decoration:none;cursor:pointer}.axioma-platform-home:focus-visible{outline:3px solid currentColor;outline-offset:3px}[data-trainer-action][aria-current="page"]{box-shadow:inset 0 -2px currentColor}';
+  document.head.append(style);
+  window.AxiomaPlatform = Object.freeze({homeURL,goHome,wireHome,bindTrainer,trainerScreen});
+  const mount=()=>document.querySelectorAll('[data-platform-home],a.axiomaHome').forEach(element=>wireHome(element));
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+</script><script>/* Exact values and learning state. No DOM, pixels, network or learner identity. */
+(function(root){
+'use strict';
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+function rational(n,d=1){if(!Number.isSafeInteger(n)||!Number.isSafeInteger(d)||!d)throw Error('Ongeldige breuk');if(d<0){n=-n;d=-d}const g=gcd(n,d);return {n:n/g,d:d/g}}
+const integer=n=>({kind:'integer',n}),fraction=(n,d)=>({kind:'fraction',n,d}),decimal=text=>({kind:'decimal',text:String(text).replace('.',',')}),percent=n=>({kind:'percent',n}),sqrt=(n,sign=1)=>({kind:'root',n,sign});
+function parse(text){
+ const s=String(text??'').trim().replace('−','-');if(!/^-?\d{1,6}(?:[.,]\d{1,4})?$/.test(s))return null;
+ const negative=s[0]==='-',[a,b='']=s.replace('-','').replace(',','.').split('.');return rational((negative?-1:1)*Number(a+b),10**b.length);
+}
+function value(e){
+ switch(e.kind){case 'integer':return rational(e.n);case 'fraction':return rational(e.n,e.d);case 'decimal':return parse(e.text);case 'percent':return rational(e.n,100);case 'root':{const k=Math.sqrt(e.n);if(Number.isInteger(k))return rational(e.sign*k);return {root:e.n,sign:e.sign}}case 'period':{const lead=e.lead||'',repeat=e.repeat,den=10**lead.length*(10**repeat.length-1);return rational(Number(e.whole||0)*den+Number(lead||0)*(10**repeat.length-1)+Number(repeat),den)}default:throw Error('Onbekende voorstelling')}
+}
+function compare(a,b){
+ if(a.root!==undefined&&b.root!==undefined)return a.sign!==b.sign?Math.sign(a.sign-b.sign):a.sign*Math.sign(a.root-b.root);
+ if(a.root!==undefined){if(a.sign>0&&b.n<0)return 1;if(a.sign<0&&b.n>=0)return -1;return a.sign*Math.sign(a.root*b.d*b.d-b.n*b.n)}
+ if(b.root!==undefined)return -compare(b,a);
+ return Math.sign(a.n*b.d-b.n*a.d);
+}
+const equal=(a,b)=>compare(a,b)===0,number=v=>v.root!==undefined?v.sign*Math.sqrt(v.root):v.n/v.d;
+function format(n){return String(n).replace('-', '−').replace('.',',')}
+function decimalOf(v){return format(Number((v.n/v.d).toFixed(4)))}
+function label(e){switch(e.kind){case 'fraction':return `${format(e.n)}/${e.d}`;case 'integer':return format(e.n);case 'decimal':return e.text.replace('-','−');case 'percent':return `${format(e.n)}%`;case 'root':return `${e.sign<0?'−':''}√${e.n}`;case 'period':return `${e.whole||0},${e.lead||''}(${e.repeat}) periodiek`;default:return ''}}
+const skills=[
+ {id:'fraction',title:'Een waarde, meerdere vormen',short:'Breuken bouwen',deps:[],concept:'Een breuk, decimaal en procent kunnen precies hetzelfde getal voorstellen.'},
+ {id:'line',title:'Getallen krijgen een plaats',short:'De getallijn',deps:['fraction'],concept:'De schaal bepaalt de plaats. Gelijke afstanden betekenen gelijke verschillen.'},
+ {id:'compare',title:'Groter, kleiner of gelijk',short:'Vergelijken',deps:['line'],concept:'Vergelijk de waarden, ook als de schrijfwijzen verschillen. Links op de lijn ligt het kleinere getal.'},
+ {id:'group',title:'Andere vorm, dezelfde waarde',short:'Equivalenten groeperen',deps:['compare'],concept:'Voorstellingen horen samen als ze exact dezelfde waarde hebben.'},
+ {id:'root',title:'Tussen twee bekende getallen',short:'Wortels begrenzen',deps:['group'],concept:'Vergelijk eerst met kwadraten. Zet daarna de grenzen om naar de wortel.'},
+ {id:'interval',title:'Een heel gebied op de lijn',short:'Intervallen bouwen',deps:['root'],concept:'Een interval heeft grenzen. Open betekent dat de grens niet meetelt, gesloten dat ze wel meetelt.'},
+ {id:'classify',title:'Tot welke verzamelingen?',short:'Getalsoorten',deps:['root'],concept:'Kijk naar de waarde. Een geheel getal is ook rationaal en reëel; een wortelteken maakt een getal niet automatisch irrationaal.'},
+ {id:'period',title:'Een blok dat blijft terugkomen',short:'Periodieke decimalen',deps:['classify'],concept:'Een overbar betekent dat een blok onbeperkt wordt herhaald. Een vaste aanloop hoort niet bij dat blok.'}
+];
+function rng(seed){let a=seed>>>0;return()=>{a+=0x6D2B79F5;let t=Math.imul(a^a>>>15,1|a);t^=t+Math.imul(t^t>>>7,61|t);return((t^t>>>14)>>>0)/4294967296}}
+function generate(skill,{seed=1,variant=0,level=0}={}){
+ if(!skills.some(s=>s.id===skill))throw Error('Onbekende vaardigheid');
+ const random=rng(seed),pick=a=>a[Math.floor(random()*a.length)],v=variant%5;
+ const t={skill,seed,variant,level,representation:'symbols'};
+ if(skill==='fraction'){
+  const values=level?[rational(3,4),rational(7,20),rational(-3,5),rational(5,4),rational(9,8),rational(7,8)]:[rational(3,4),rational(1,2),rational(1,4),rational(2,5),rational(3,5)];
+  t.target=pick(values);t.source=v%2?percent(t.target.n*100/t.target.d):decimal(decimalOf(t.target));if(t.source.kind==='percent'&&!Number.isInteger(t.source.n))t.source=decimal(decimalOf(t.target));
+  t.prompt='Bouw een vereenvoudigde breuk met dezelfde waarde.';t.representation=t.source.kind;
+ }else if(skill==='line'){
+  t.step=level&&v%2?rational(1,4):rational(1,2);t.min=level?-2:0;t.max=level?2:2;
+  const ticks=Math.round((t.max-t.min)/number(t.step));t.tick=pick(Array.from({length:ticks+1},(_,i)=>i));t.target=rational(t.min*t.step.d+t.tick*t.step.n,t.step.d);
+  t.source=v%2?decimal(decimalOf(t.target)):fraction(t.target.n,t.target.d);t.prompt='Plaats dit getal op de geijkte lijn.';t.representation=t.source.kind;
+ }else if(skill==='compare'){
+  const pairs=level?[[decimal('-0,8'),decimal('-0,75')],[fraction(8,4),integer(2)],[fraction(-3,4),decimal('-0,7')],[fraction(7,8),decimal('0,9')],[fraction(4,5),percent(75)],[percent(125),fraction(5,4)]]:[[percent(75),decimal('0,8')],[fraction(1,2),decimal('0,5')],[fraction(3,4),percent(70)],[decimal('0,4'),fraction(1,2)],[fraction(1,4),percent(25)]];
+  [t.left,t.right]=pick(pairs);if(random()>.5)[t.left,t.right]=[t.right,t.left];t.target=compare(value(t.left),value(t.right));t.prompt='Vergelijk de waarden. Kies <, = of >.';t.representation=v%2?'numberline':'symbols';
+ }else if(skill==='group'){
+  const pairs=level?[[rational(-1,2),rational(3,4)],[rational(5,4),rational(1,4)],[rational(2,5),rational(3,5)]]:[[rational(1,2),rational(3,4)],[rational(1,4),rational(1,2)],[rational(2,5),rational(3,4)]];
+  const values=level&&v%2?[rational(pick([1,2,3,4])),rational(1,2)]:pick(pairs);t.tokens=values.flatMap(r=>[fraction(r.n,r.d),r.d===1?integer(r.n):decimal(decimalOf(r)),percent(r.n*100/r.d)]).map(e=>({e,shuffle:random()})).sort((a,b)=>a.shuffle-b.shuffle).map(x=>x.e);
+  t.prompt='Groepeer de zes kaartjes volgens hun waarde.';t.representation=t.tokens.some(e=>e.kind==='integer')?'whole-mix':'fraction-mix';
+ }else if(skill==='root'){
+  t.n=pick(level?[2,5,10,17,20,26,35,50]:[2,5,10,17,20]);t.k=Math.floor(Math.sqrt(t.n));t.source=sqrt(t.n);t.prompt='Zoek eerst de twee opeenvolgende kwadraten.';t.representation=v%2?'area':'bounds';
+ }else if(skill==='interval'){
+  t.lo=pick(level?[-3,-2,-1,0]:[-1,0,1]);t.hi=t.lo+pick([2,3,4]);t.closedLo=!!(v&1);t.closedHi=!!(v&2);t.min=-4;t.max=6;
+  t.sourceMode=v%2?'words':'notation';t.prompt='Bouw het interval op de lijn.';t.representation=t.sourceMode;
+ }else if(skill==='classify'){
+  t.source=pick(level?[integer(0),integer(-3),fraction(6,3),fraction(-3,4),sqrt(16),sqrt(2),sqrt(3,-1),decimal('1,25')]:[integer(5),integer(-2),integer(0),fraction(3,4),sqrt(16)]);
+  const val=value(t.source);t.target=val.root!==undefined?['irr','R']:val.d===1?[...(val.n>=0?['N']:[]),'Z','Q','R']:['Q','R'];
+  t.prompt='Kies alle verzamelingen waartoe dit getal behoort.';t.representation=t.source.kind;
+ }else if(skill==='period'){
+  const pairs=level?[['1','6'],['03','27'],['','125'],['','27'],['','3'],['2','45']]:[['','3'],['','27'],['1','6'],['','12'],['','09']];
+  [t.lead,t.repeat]=pick(pairs);t.whole=pick([0,1,2]);t.digits=t.lead+t.repeat.repeat(t.repeat.length>3?2:3);t.target={start:t.lead.length,end:t.lead.length+t.repeat.length-1};
+  t.rule=`${t.lead?'Eerst '+t.lead+', daarna':'Na de komma'} blijft het blok ${t.repeat.repeat(t.repeat.length>3?1:2)} zich onbeperkt herhalen.`;
+  t.prompt='Duid één kortste herhaalblok aan, zo vroeg mogelijk.';t.representation=t.lead?'with-prefix':'pure-period';
+ }
+ t.signature=JSON.stringify({...t,seed:0,variant:0,level:0});return t;
+}
+function freshAnswer(t){return {values:t.skill==='interval'?['','']:['',''],sign:1,relation:null,groups:Array(6).fill(null),labels:[],tick:null,closedLo:false,closedHi:false,start:null,end:null,stage:0}}
+const result=(ok,code,message,extra={})=>({ok,code,message,...extra});
+function validate(t,a){
+ const good=message=>result(true,'ok',message),bad=(code,message)=>result(false,code,message),empty=()=>result(false,'input','Maak eerst je antwoord af.',{input:true});
+ if(t.skill==='fraction'){
+  if(!/^\d{1,6}$/.test(a.values[0])||!/^\d{1,6}$/.test(a.values[1]))return empty();const n=Number(a.values[0])*a.sign,d=Number(a.values[1]);
+  if(!d)return result(false,'input','De noemer mag niet 0 zijn.',{input:true});
+  if(!equal(rational(n,d),t.target))return bad('value',`Je breuk heeft de waarde ${decimalOf(rational(n,d))}. Vergelijk die met het gegeven getal.`);
+  if(gcd(n,d)!==1)return result(false,'simplify','De waarde klopt. Deel teller en noemer nog door dezelfde gemeenschappelijke deler.',{partial:true});
+  return good('Dezelfde waarde, nu als vereenvoudigde breuk.');
+ }
+ if(t.skill==='compare'){if(a.relation===null)return empty();if(a.relation===t.target)return good(t.target===0?'Deze twee schrijfwijzen stellen hetzelfde getal voor.':'Het kleinere getal ligt links van het grotere.');return bad('order',number(value(t.left))<0&&number(value(t.right))<0?'Bij negatieve getallen ligt het getal met de grootste afstand tot nul verder naar links.':t.left.kind==='root'||t.right.kind==='root'?'Onderzoek de wortelwaarde met een bekend kwadraat. Het wortelteken alleen vertelt niet hoe groot het getal is.':'Breng de waarden naar dezelfde voorstelling. Bijvoorbeeld: procent betekent per honderd.');}
+ if(t.skill==='line'){
+  if(!Number.isInteger(a.tick))return empty();const n=rational(t.min*t.step.d+a.tick*t.step.n,t.step.d);
+  return equal(n,t.target)?good('Je punt past bij de waarde én de schaal.'):bad('scale',`Je punt staat op ${decimalOf(n)}. Tel de gelijke tussenruimten vanaf een bekend anker.`);
+ }
+ if(t.skill==='group'){
+  if(a.groups.length!==6||a.groups.some(x=>!['A','B'].includes(x)))return empty();
+  for(let i=0;i<6;i++)for(let j=i+1;j<6;j++)if((a.groups[i]===a.groups[j])!==equal(value(t.tokens[i]),value(t.tokens[j])))return bad('equivalence',`Vergelijk kaart ${i+1} en kaart ${j+1}: ${a.groups[i]===a.groups[j]?'hebben ze echt dezelfde waarde?':'stellen ze misschien hetzelfde getal voor?'}`);
+  return good('In elke groep staan drie schrijfwijzen van dezelfde waarde.');
+ }
+ if(t.skill==='root'){
+  const l=parse(a.values[0]),u=parse(a.values[1]);if(!l||!u)return empty();
+  const lower=a.stage===0?t.k*t.k:t.k,upper=a.stage===0?(t.k+1)**2:t.k+1;
+  if(equal(l,rational(lower))&&equal(u,rational(upper)))return good(a.stage===0?'De kwadraten kloppen. Bouw nu zelf de grenzen voor de wortel.':'De wortel ligt tussen de bijbehorende positieve zijden.');
+  return bad(a.stage===0?'squares':'root-bounds',a.stage===0?'Zoek de grootste gehele kwadraatwaarde onder het gegeven getal en het eerstvolgende kwadraat.':`Controleer je grenzen door ze te kwadrateren: ${decimalOf(l)}² = ${format(number(l)**2)} en ${decimalOf(u)}² = ${format(number(u)**2)}.`);
+ }
+ if(t.skill==='interval'){
+  const l=parse(a.values[0]),u=parse(a.values[1]);if(!l||!u)return empty();if(compare(l,u)>=0)return bad('bounds-order','De linkergrens moet kleiner zijn dan de rechtergrens.');
+  if(!equal(l,rational(t.lo))||!equal(u,rational(t.hi)))return bad('bounds','Controleer de twee grenswaarden. Open of gesloten verandert de waarde van de grens niet.');
+  if(a.closedLo!==t.closedLo)return bad('inclusion',`${format(t.lo)} ${t.closedLo?'hoort wel':'hoort niet'} bij het gevraagde interval. Pas de linkergrens aan.`);
+  if(a.closedHi!==t.closedHi)return bad('inclusion',`${format(t.hi)} ${t.closedHi?'hoort wel':'hoort niet'} bij het gevraagde interval. Pas de rechtergrens aan.`);
+  return good('Zowel de grenswaarden als het wel of niet meetellen kloppen.');
+ }
+ if(t.skill==='classify'){
+  if(!a.labels.length)return empty();const wrong=a.labels.find(x=>!t.target.includes(x)),missing=t.target.find(x=>!a.labels.includes(x));
+  if(wrong||missing)return bad('sets',t.source.kind==='root'&&Number.isInteger(Math.sqrt(t.source.n))?`Bereken eerst de wortel. ${label(t.source)} is ${format(number(value(t.source)))}. Kies daarna alle passende verzamelingen.`:wrong==='N'?'Natuurlijke getallen zijn 0, 1, 2, …; negatieve en niet-gehele waarden horen daar niet bij.':wrong==='irr'||missing==='Q'?'Een getal is rationaal als het als breuk van twee gehele getallen kan worden geschreven, met een niet-nulle noemer.':missing==='R'?'Alle getallen in deze oefening zijn reëel. ℝ telt dus ook mee.':'Denk aan de insluiting: ℕ binnen ℤ, ℤ binnen ℚ en ℚ binnen ℝ. Irrationale getallen liggen ook in ℝ.');
+  return good('Je hebt alle passende verzamelingen gekozen. ℕ bevat hier ook 0.');
+ }
+ if(t.skill==='period'){
+  if(a.start===null||a.end===null)return empty();
+  if(a.start===t.target.start&&a.end===t.target.end)return good('De overbar omvat één kortste blok. De vaste aanloop blijft ervoor.');
+  const selected=t.digits.slice(a.start,a.end+1),tail=t.digits.slice(a.start);
+  return bad('period',tail.startsWith(selected.repeat(2))?'Je blok herhaalt zich. Kan het korter of begint dezelfde herhaling al eerder?':'Herhaal je gekozen blok. Dan krijg je niet dezelfde opeenvolging van cijfers; controleer ook de vaste aanloop.');
+ }
+ throw Error('Onbekende beoordeling');
+}
+const freshSkill=()=>({intro:false,seen:0,clean:0,recent:[],signatures:[],representations:[],reviewClean:0,last:-1,repair:null,due:0});
+function fresh(){return {version:1,xp:0,total:0,sessions:0,lastSkill:null,skills:Object.fromEntries(skills.map(s=>[s.id,freshSkill()]))}}
+const count=n=>Number.isFinite(n)?Math.floor(Math.max(0,Math.min(1e7,n))):0;
+function sanitize(raw){const p=fresh();if(raw?.version!==1)return p;for(const k of ['xp','total','sessions'])p[k]=count(raw[k]);p.lastSkill=skills.some(s=>s.id===raw.lastSkill)?raw.lastSkill:null;for(const {id} of skills){const d=raw.skills?.[id]||{},s=p.skills[id];s.intro=d.intro===true;for(const k of ['seen','clean','reviewClean','due'])s[k]=count(d[k]);s.last=Number.isInteger(d.last)?Math.max(-1,Math.min(p.total,d.last)):-1;s.repair=typeof d.repair==='string'?d.repair.slice(0,30):null;for(const k of ['signatures','representations'])s[k]=Array.isArray(d[k])?[...new Set(d[k].filter(x=>typeof x==='string'))].slice(-30):[];s.recent=Array.isArray(d.recent)?d.recent.filter(x=>typeof x==='boolean').slice(-4):[];}return p}
+function unlocked(p,id){return skills.find(s=>s.id===id).deps.every(d=>p.skills[d].clean>=2)}
+function mastered(p,id){const s=p.skills[id];return s.clean>=4&&s.reviewClean>=1&&s.signatures.length>=3&&s.representations.length>=2&&s.recent.length>=3&&s.recent.slice(-3).every(Boolean)&&!s.repair}
+function choose(p){
+ const available=skills.filter(s=>unlocked(p,s.id));const due=available.find(s=>p.skills[s.id].repair&&p.skills[s.id].due<=p.total);if(due)return due.id;
+ const fresh=available.find(s=>!p.skills[s.id].intro);if(fresh)return fresh.id;
+ return available.map(s=>({id:s.id,score:(p.total-p.skills[s.id].last)+(mastered(p,s.id)?-5:3)+(s.id===p.lastSkill?-4:0)})).sort((a,b)=>b.score-a.score)[0].id;
+}
+function record(p,t,{clean=false,solved=false,code='practice'}={}){
+ const s=p.skills[t.skill],repair=!!s.repair,age=p.total-s.last;
+ const xp=clean?(repair?15:10+2*t.level):solved?5:0;p.xp+=xp;p.total++;p.lastSkill=t.skill;
+ s.intro=true;s.seen++;s.last=p.total;s.recent=[...s.recent,!!clean].slice(-4);
+ if(clean){s.clean++;if(age>=3)s.reviewClean++;s.signatures=[...new Set([...s.signatures,t.signature])].slice(-30);s.representations=[...new Set([...s.representations,t.representation])];s.repair=null;}
+ else{s.repair=code;s.due=p.total+3;}return xp;
+}
+const api={rational,parse,value,compare,equal,number,format,decimalOf,label,integer,fraction,decimal,percent,sqrt,skills,generate,freshAnswer,validate,Progress:{fresh,sanitize,choose,unlocked,mastered,record}};
+if(typeof module!=='undefined'&&module.exports)module.exports=api;root.RealNumbersCore=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
+</script><script>(function(root){
+'use strict';
+const C=typeof module!=='undefined'&&module.exports?require('./real-core.js'):root.RealNumbersCore;
+function build(t){
+ const a=C.freshAnswer(t),steps=[];const add=(title,text)=>steps.push({title,text,answer:JSON.parse(JSON.stringify(a))});
+ switch(t.skill){
+ case 'fraction':{
+  const r=t.target,isPercent=t.source.kind==='percent',places=isPercent?2:(t.source.text.split(',')[1]||'').length,d=10**places,n=Math.abs(r.n*d/r.d);
+  add('Lees wat één deel betekent',isPercent?'Procent betekent per honderd. De teller vertelt hoeveel honderdsten je neemt.':`Er staan ${places} cijfers na de komma. Schrijf het getal eerst in ${places===1?'tienden':places===2?'honderdsten':'duizendsten'}.`);
+  a.values=[String(n),String(d)];a.sign=Math.sign(r.n)||1;add('Bewaar dezelfde waarde','De breuk stelt hetzelfde getal voor. Een eventueel minteken geldt voor de hele breuk.');
+  a.values=[String(Math.abs(r.n)),String(r.d)];add('Vereenvoudig samen','Deel teller én noemer door dezelfde gemeenschappelijke deler. De waarde verandert niet.');break;
+ }
+ case 'line':
+  add('Lees eerst de schaal',`Van ${C.format(t.min)} naar ${C.format(t.max)}. Eén klein streepje verder is ${C.decimalOf(t.step)} erbij.`);
+  a.tick=Math.round((0-t.min)/C.number(t.step));add('Begin bij een bekend anker','Vanaf nul beweeg je naar rechts voor positieve waarden en naar links voor negatieve. Tel tussenruimten, niet streepjes.');
+  a.tick=t.tick;add('Koppel waarde aan plaats',`${C.label(t.source)} is ${C.decimalOf(t.target)}. Het gekozen punt ligt op precies die waarde.`);break;
+ case 'compare':
+  add('Vergelijk de waarden','Een langere schrijfwijze maakt een getal niet groter. Zet beide waarden eerst om naar dezelfde voorstelling.');
+  add('Maak de vergelijking zichtbaar',`${C.label(t.left)} = ${C.decimalOf(C.value(t.left))}; ${C.label(t.right)} = ${C.decimalOf(C.value(t.right))}. Bij negatieve waarden ligt het kleinste getal verder naar links.`);
+  a.relation=t.target;add('Lees van links naar rechts',t.target===0?'De waarden zijn gelijk. Daarom past =.':t.target<0?'De linkse waarde is kleiner. Daarom past <.':'De linkse waarde is groter. Daarom past >.');break;
+ case 'group':{
+  add('Maak groepen op waarde','Groep A en B hebben vooraf geen betekenis. Jij kiest welke waarde bij welke letter hoort.');
+  const first=C.value(t.tokens[0]);a.groups=t.tokens.map(e=>C.equal(C.value(e),first)?'A':null);add('Verbind één waarde',`De kaartjes in A stellen allemaal ${C.decimalOf(first)} voor. Procent betekent per honderd.`);
+  a.groups=a.groups.map(x=>x||'B');add('Controleer binnen én tussen groepen','Binnen elke groep zijn de waarden gelijk. De twee groepen hebben verschillende waarden. A en B omwisselen mag ook.');break;
+ }
+ case 'root':
+  add('Een wortel is een zijde',`Een vierkant met oppervlakte ${t.n} heeft zijde √${t.n}. Vergelijk met vierkanten met gehele zijden.`);
+  a.values=[String(t.k*t.k),String((t.k+1)**2)];add('Zoek de naburige kwadraten',`${t.k}² = ${t.k*t.k} en ${t.k+1}² = ${(t.k+1)**2}. De oppervlakte ligt ertussen.`);
+  a.stage=1;a.values=['',''];add('Ga van oppervlakte naar zijde','Neem nu de positieve zijden van die twee vierkanten. Je schrijft dus andere grensgetallen.');
+  a.values=[String(t.k),String(t.k+1)];add('Begrens zonder afronden',`${t.k} < √${t.n} < ${t.k+1}. Dit is een exacte insluiting, geen afgeronde waarde voor de wortel.`);break;
+ case 'interval':
+  add('Een gebied van getallen','Alle punten tussen de grenzen horen erbij. Voor de grenspunten moet je apart beslissen.');
+  a.values=[String(t.lo),String(t.hi)];add('Kies de grenswaarden',`Links ${C.format(t.lo)}, rechts ${C.format(t.hi)}. Een leeg rondje betekent: deze grens telt niet mee.`);
+  a.closedLo=t.closedLo;a.closedHi=t.closedHi;add('Beslis over beide grenspunten',`${C.format(t.lo)} ${t.closedLo?'telt mee: een vol rondje':'telt niet mee: een leeg rondje'}. ${C.format(t.hi)} ${t.closedHi?'telt mee':'telt niet mee'}.`);break;
+ case 'classify':{
+  const r=C.value(t.source);
+  add('Lees de waarde, niet de vorm',r.root!==undefined?`${C.label(t.source)} is irrationaal: deze wortel van een niet-kwadraat kan niet als breuk van gehele getallen worden geschreven.`:`${C.label(t.source)} heeft waarde ${C.decimalOf(r)}. Bijvoorbeeld: √16 = 4, dus een wortelteken betekent niet automatisch irrationaal.`);
+  add('Verzamelingen passen in elkaar','ℕ = {0, 1, 2, …}. ℤ bevat ook negatieve gehele getallen. Elk geheel getal is een breuk met noemer 1 en hoort dus ook bij ℚ.');
+  a.labels=t.target;add('Kies alle passende namen','ℝ bevat zowel rationale als irrationale getallen. Daarom kies je ℝ ook. De buitenste verzameling vervangt de andere juiste namen niet.');break;
+ }
+ case 'period':
+  add('De voortzetting is gegeven',t.rule+' Met alleen een eindig rijtje cijfers zou je niet zeker weten hoe het getal verdergaat.');
+  add('Laat de vaste aanloop staan',t.lead?`De aanloop ${t.lead} komt maar één keer. Het herhaalblok begint daarna.`:'Er is geen vaste aanloop. De herhaling begint meteen na de komma.');
+  a.start=t.target.start;a.end=t.target.end;add('Neem het kortste blok',`Het blok ${t.repeat} herhaalt zich onbeperkt. Extra herhalingen hoeven niet onder de overbar.`);break;
+ }
+ return steps;
+}
+const api={build};if(typeof module!=='undefined'&&module.exports)module.exports=api;root.RealNumbersLessons=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
+</script><script type="text/axioma-game">(function(){
+'use strict';
+const C=RealNumbersCore,P=C.Progress,L=RealNumbersLessons,$=id=>document.getElementById(id),KEY='axioma-real-numbers-v1';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let progress=P.fresh(),task=null,answer=null,session=null,phase='answer',free=false,dirty=false,errorCode=null,lessonStep=0,feedback=null,preview=null,activeSlot=0,activeGroup='A',serial=Date.now()>>>0,drag=null,previous='stage';
+function m(e){const num=n=>`<mn>${esc(C.format(n))}</mn>`;let body='';if(e.kind==='fraction')body=`${e.n<0?'<mo>−</mo>':''}<mfrac>${num(Math.abs(e.n))}${num(e.d)}</mfrac>`;else if(e.kind==='root')body=`${e.sign<0?'<mo>−</mo>':''}<msqrt>${num(e.n)}</msqrt>`;else if(e.kind==='period')body=`${num(e.whole||0)}<mo>,</mo><mn>${esc(e.lead||'')}</mn><mover accent="true"><mn>${esc(e.repeat)}</mn><mo>¯</mo></mover>`;else body=num(e.kind==='decimal'?e.text:e.n)+(e.kind==='percent'?'<mo>%</mo>':'');return `<math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="${esc(C.label(e))}"><mrow>${body}</mrow></math>`}
+const rationalMath=r=>m(C.fraction(r.n,r.d));
+const intervalText=(lo,hi,cl,ch)=>`${cl?'[':']'}${C.format(lo)}; ${C.format(hi)}${ch?']':'['}`;
+function save(){try{AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft:task?{skill:task.skill,seed:task.seed,variant:task.variant,level:task.level,answer,session,phase,free,dirty,errorCode,lessonStep,feedback,activeSlot,activeGroup}:null}));AxiomaGame.report(C.skills.filter(s=>P.mastered(progress,s.id)).map(s=>s.id),C.skills.length)}catch{$('storageWarning').hidden=false;$('storageWarning').textContent='Bewaren lukt niet. Laat deze pagina open om je werk te behouden.'}}
+function restore(){try{
+ const raw=JSON.parse(AxiomaGame.storage.getItem(KEY)||'null');progress=P.sanitize(raw?.progress);if(raw?.mode==='dark')document.documentElement.dataset.mode='dark';const d=raw?.draft;if(!d||!C.skills.some(s=>s.id===d.skill))return false;
+ task=C.generate(d.skill,{seed:Number(d.seed)>>>0,variant:Math.max(0,Math.floor(Number(d.variant)||0)),level:Math.min(2,Math.max(0,Math.floor(Number(d.level)||0)))});answer=C.freshAnswer(task);const a=d.answer||{};
+ answer.values=[0,1].map(i=>typeof a.values?.[i]==='string'?a.values[i].slice(0,8):'');answer.sign=a.sign===-1?-1:1;answer.relation=[-1,0,1].includes(a.relation)?a.relation:null;answer.groups=Array.from({length:6},(_,i)=>['A','B'].includes(a.groups?.[i])?a.groups[i]:null);answer.labels=[...new Set((Array.isArray(a.labels)?a.labels:[]).filter(x=>['N','Z','Q','irr','R'].includes(x)))];answer.tick=Number.isInteger(a.tick)&&a.tick>=0&&a.tick<=32?a.tick:null;answer.closedLo=a.closedLo===true;answer.closedHi=a.closedHi===true;answer.stage=a.stage===1?1:0;
+ for(const key of ['start','end'])answer[key]=Number.isInteger(a[key])&&a[key]>=0&&a[key]<(task.digits?.length||0)?a[key]:null;
+ phase=['intro','answer','feedback','done'].includes(d.phase)?d.phase:'answer';free=d.free===true;dirty=d.dirty===true;errorCode=typeof d.errorCode==='string'?d.errorCode:null;lessonStep=Math.max(0,Math.min(L.build(task).length-1,Math.floor(Number(d.lessonStep)||0)));
+ session={answered:0,clean:0,xp:0};for(const k of ['answered','clean','xp'])session[k]=Math.min(k==='xp'?10000:8,Math.max(0,Number(d.session?.[k])||0));
+ feedback=d.feedback&&typeof d.feedback.message==='string'?{...d.feedback,message:d.feedback.message.slice(0,600)}:null;if(phase==='feedback'&&!feedback)phase='answer';if(phase==='done'&&!feedback)feedback={ok:true,message:'Deze oefening is al verwerkt. Je kunt verdergaan.',xp:0};activeSlot=d.activeSlot===1?1:0;activeGroup=d.activeGroup==='B'?'B':'A';return true;
+ }catch{return false}}
+function screen(name){document.body.dataset.screen=name;document.body.dataset.preview=String(!!preview);for(const id of ['stage','library','help','progress','summary'])$(id).hidden=id!==name;AxiomaPlatform.trainerScreen(({stage:'play',help:'help',progress:'progress'})[name]||'');$('xp').textContent=`${progress.xp} XP`;if(name==='stage')render();}
+function makeTask(id,{practice=false}={}){
+ preview=null;free=practice;const s=progress.skills[id],level=practice?1:s.seen<2?0:s.seen<5?1:2;
+ let candidate;for(let i=0;i<30;i++){candidate=C.generate(id,{seed:++serial,variant:s.seen+(practice?serial%5:0),level});if(!s.signatures.slice(-3).includes(candidate.signature))break}task=candidate;
+ answer=C.freshAnswer(task);phase=!practice&&!s.intro?'intro':'answer';lessonStep=0;dirty=false;errorCode=null;feedback=null;activeSlot=0;save();screen('stage');
+}
+function next(){if(!free&&session.answered>=8){finishSession();return}makeTask(free?task.skill:P.choose(progress),{practice:free})}
+function start(){session={answered:0,clean:0,xp:0};free=false;next()}
+function button(label,data,extra=''){return `<button ${data} ${extra}>${label}</button>`}
+function slot(a,i,label,readonly){return button(`<small>${esc(label)}</small>${esc(a.values[i]||'?')}`,`class="slot" data-slot="${i}" aria-label="${esc(label)}" aria-pressed="${activeSlot===i}"`,readonly?'disabled':'')}
+function pad(){return `<div class="keypad" aria-label="Getallen invoeren">${[['7','7'],['8','8'],['9','9'],['back','⌫'],['4','4'],['5','5'],['6','6'],['sign','±'],['1','1'],['2','2'],['3','3'],['next','⇥'],['0','0'],['clear','Wis']].map(([key,label])=>button(label,`data-key="${key}" aria-label="${({back:'Laatste cijfer wissen',sign:'Teken wisselen',next:'Ander invoerveld',clear:'Actief veld wissen'})[key]||label}"`)).join('')}<span class="empty-key"></span></div>`}
+function svgLine(){return '<svg class="line-canvas" id="numberline" role="application" tabindex="0" aria-label="Getallijn. Tik een plaats of gebruik de pijltjestoetsen en stapknoppen."></svg>'}
+function relationButtons(a){return `<div class="relations">${[-1,0,1].map((v,i)=>button(['&lt;','=','&gt;'][i],`data-relation="${v}" aria-pressed="${a.relation===v}" aria-label="${['Kleiner dan','Gelijk aan','Groter dan'][i]}"`)).join('')}</div>`}
+function taskMarkup(t,a,readonly){
+ let canvas='',panel='';
+ if(t.skill==='fraction'){
+  canvas=`<div class="source-caption">Dezelfde waarde</div><div class="formula-row"><div class="math-large">${m(t.source)}</div><span class="math-medium">=</span><div class="fraction-answer">${button(a.sign===-1?'−':'+','class="sign" data-key="sign" aria-label="Teken van de breuk wisselen"',readonly?'disabled':'')}<div class="fraction-stack">${slot(a,0,'teller',readonly)}<span class="fraction-rule"></span>${slot(a,1,'noemer',readonly)}</div></div></div>`;panel=pad();
+ }else if(t.skill==='compare'){
+  canvas=`<div class="formula-row math-large">${m(t.left)}<span class="comparison-gap">${a.relation===null?'?':['<','=','>'][a.relation+1]}</span>${m(t.right)}</div>${t.representation==='numberline'?svgLine():'<p class="source-caption">Verschillende schrijfwijzen, echte waarden.</p>'}`;panel=relationButtons(a);
+ }else if(t.skill==='line'){
+  canvas=`<div class="math-large">${m(t.source)}</div>${svgLine()}`;panel=`<p class="muted">Tik op de lijn. Verfijn met de stapknoppen.</p><div class="line-tools">${button('−','data-step="-1" aria-label="Eén streepje naar links"')}<output>${a.tick===null?'Nog geen punt':C.decimalOf(C.rational(t.min*t.step.d+a.tick*t.step.n,t.step.d))}</output>${button('+','data-step="1" aria-label="Eén streepje naar rechts"')}</div><p class="muted">Eén streepje = ${C.decimalOf(t.step)}</p>`;
+ }else if(t.skill==='group'){
+  canvas=`<div class="token-grid">${t.tokens.map((e,i)=>button(`${m(e)}<small>Kaart ${i+1} · ${a.groups[i]?'groep '+a.groups[i]:'nog geen groep'}</small>`,`class="number-token" data-token="${i}" data-group="${a.groups[i]||''}" aria-label="Kaart ${i+1}: ${esc(C.label(e))}, ${a.groups[i]?'groep '+a.groups[i]:'nog geen groep'}"`)).join('')}</div>`;
+  panel=`<p class="muted">Kies een groep. Tik daarna op de kaartjes die erbij horen.</p><div class="group-keys line-tools">${['A','B'].map(g=>button('Groep '+g,`data-group="${g}" data-select-group="${g}" aria-pressed="${activeGroup===g}"`)).join('')}</div><p class="muted">Nogmaals tikken maakt een kaartje vrij.</p>`;
+ }else if(t.skill==='root'){
+  const center=a.stage?m(t.source):m(C.integer(t.n));
+  canvas=`${t.representation==='area'&&!a.stage?`<svg class="root-area" viewBox="0 0 240 100" role="img" aria-label="Vierkant met oppervlakte ${t.n}, schematisch"><rect x="15" y="8" width="80" height="80" fill="var(--panel)" stroke="currentColor" stroke-width="2"/><text x="55" y="53" text-anchor="middle">${t.n}</text><text x="112" y="37">oppervlakte</text><text x="112" y="63">schematisch</text></svg>`:''}${a.stage?`<div class="saved-step">Vorige stap: ${t.k*t.k} &lt; ${t.n} &lt; ${(t.k+1)**2}</div>`:'<div class="source-caption">Twee opeenvolgende gehele kwadraten</div>'}<div class="formula-row">${slot(a,0,'ondergrens',readonly)}<span>&lt;</span><span class="math-medium">${center}</span><span>&lt;</span>${slot(a,1,'bovengrens',readonly)}</div>${a.stage?'<p class="source-caption">Van kwadraten naar positieve zijden.</p>':''}`;panel=pad();
+ }else if(t.skill==='interval'){
+  const source=t.sourceMode==='notation'?esc(intervalText(t.lo,t.hi,t.closedLo,t.closedHi)):`Van ${C.format(t.lo)} tot ${C.format(t.hi)}.<br>${C.format(t.lo)} telt ${t.closedLo?'wel':'niet'} mee; ${C.format(t.hi)} telt ${t.closedHi?'wel':'niet'} mee.`;
+  canvas=`<div class="interval-source">${source}</div>${svgLine()}`;
+  panel=`<div class="interval-controls">${button(`Links ${esc(a.values[0]||'?')}`,`data-slot="0" aria-pressed="${activeSlot===0}"`)}${button(`Rechts ${esc(a.values[1]||'?')}`,`data-slot="1" aria-pressed="${activeSlot===1}"`)}${button(a.closedLo?'● Telt mee':'○ Telt niet mee','data-toggle="closedLo" aria-label="Linkergrens telt '+(a.closedLo?'wel':'niet')+' mee"')}${button(a.closedHi?'● Telt mee':'○ Telt niet mee','data-toggle="closedHi" aria-label="Rechtergrens telt '+(a.closedHi?'wel':'niet')+' mee"')}</div><div class="line-tools">${button('−','data-step="-1" aria-label="Actieve grens één naar links"')}<span class="muted">${activeSlot===0?'Linkergrens':'Rechtergrens'}</span>${button('+','data-step="1" aria-label="Actieve grens één naar rechts"')}</div><p class="muted">Kies een grens, tik de lijn en beslis of het punt meetelt.</p>`;
+ }else if(t.skill==='classify'){
+  canvas=`<div class="math-large">${m(t.source)}</div><p class="source-caption">Meerdere namen kunnen tegelijk juist zijn.</p>`;
+  panel=`<div class="sets">${[['N','ℕ'],['Z','ℤ'],['Q','ℚ'],['irr','irrationaal'],['R','ℝ']].map(([id,name])=>button(name,`data-set="${id}" aria-pressed="${a.labels.includes(id)}"`)).join('')}</div><p class="muted">ℕ bevat hier ook 0.</p>`;
+  if(readonly&&a.labels.length)canvas+=`<div class="set-map">${a.labels.map(id=>({N:'ℕ',Z:'ℤ',Q:'ℚ',R:'ℝ',irr:'irrationaal'})[id]).join(' · ')}</div>`;
+ }else if(t.skill==='period'){
+  canvas=`<p class="rule">${esc(t.rule)}</p><div class="digits"><span class="digits-prefix">${t.whole},</span>${[...t.digits].map((digit,i)=>button(digit,`class="digit ${a.start!==null&&i>=a.start&&i<=(a.end??a.start)?'selected':''}" data-digit="${i}" aria-pressed="${a.start!==null&&i>=a.start&&i<=(a.end??a.start)}" aria-label="Decimaal ${i+1}: ${digit}"`)).join('')}<span>…</span></div><p class="source-caption">${a.start===null?'Tik het eerste en daarna het laatste cijfer van je blok.':a.end===null?'Tik nu het laatste cijfer. Voor één cijfer tik je nogmaals hetzelfde.':`Jouw blok: ${esc(t.digits.slice(a.start,a.end+1))}. Een nieuwe tik begint een andere selectie.`}</p>`;
+ }
+ return {canvas,panel};
+}
+function render(){
+ if(!task)return;const t=preview?.task||task,isLesson=!!preview||phase==='intro',step=isLesson?L.build(t)[preview?preview.step:lessonStep]:null,a=step?.answer||answer;
+ document.body.dataset.preview=String(!!preview);$('xp').textContent=`${progress.xp} XP`;$('xp').title=`${progress.xp} XP totaal · ${session?.xp||0} XP deze reeks`;
+ $('eyebrow').textContent=`${preview?'Uitlegcollectie':isLesson?'Nieuw begrip':free?'Vrij oefenen':progress.skills[t.skill].repair?'Opnieuw proberen':'Jouw leerroute'} · ${C.skills.find(s=>s.id===t.skill).short}`;
+ $('prompt').textContent=t.skill==='root'&&a.stage===1?'Bouw nu de grenzen voor de wortel.':t.prompt;
+ $('round').textContent=free?'Vrij oefenen':`Opgave ${Math.min(8,(session?.answered||0)+(phase==='done'?0:1))} / 8`;
+ const feedbackMode=!isLesson&&['feedback','done'].includes(phase);
+ $('workspace').className=`${isLesson?'readonly ':''}${feedbackMode?'feedback ':''}${t.skill}`;
+ const parts=taskMarkup(t,a,isLesson);
+ if(feedbackMode){
+  $('workspace').innerHTML=`<div class="feedback-picture" aria-hidden="true">${t.source?m(t.source):t.skill==='compare'?m(t.left):t.skill==='interval'?'○—●':'='}</div><div class="feedback-copy ${feedback.ok?'good':'repair'}" role="status" aria-live="polite"><h2>${feedback.partial?'Waarde juist · vorm nog aanpassen':feedback.ok?(phase==='done'?'Juist!':'Deze stap klopt'):'Bekijk dit verband'}</h2>${phase==='done'?`<strong class="xp-earned">${free?'Vrij oefenen · geen XP':`+${feedback.xp} XP · ${dirty?'met hulp of na verbetering':'zelfstandig opgelost'}`}</strong>`:''}<p>${esc(feedback.message)}</p>${feedback.detail?`<p>${esc(feedback.detail)}</p>`:''}${!feedback.ok?button('Bekijk een voorbeeld','data-example="'+t.skill+'"'):''}</div>`;
+ }else{
+  $('workspace').innerHTML=`<div class="canvas">${parts.canvas}</div>${isLesson?`<aside class="lesson-copy"><span class="eyebrow">Stap ${(preview?preview.step:lessonStep)+1} van ${L.build(t).length}</span><h2>${esc(step.title)}</h2><p>${esc(step.text)}</p></aside>`:parts.panel?`<aside class="answer-panel">${parts.panel}</aside>`:''}`;
+  if(isLesson)$('workspace').querySelectorAll('button').forEach(b=>b.disabled=true);
+ }
+ $('skip').hidden=isLesson||feedbackMode;$('back').hidden=!isLesson;$('back').disabled=isLesson&&(preview?preview.step:lessonStep)===0;
+ $('commit').textContent=isLesson?((preview?preview.step:lessonStep)<L.build(t).length-1?'Volgende stap →':preview?'Terug naar oefening':'Zelf proberen →'):phase==='done'?'Volgende →':phase==='feedback'?(feedback.ok?'Bouw de wortelgrenzen →':'Verbeter je antwoord'):'Controleer';
+ $('hint').textContent=isLesson?'Bekijk het voorbeeld op je eigen tempo.':feedbackMode?'Lees rustig. Je kiest zelf wanneer je verdergaat.':free?'Vrij oefenen telt niet mee voor je leerroute.':t.skill==='root'?'Beide stappen samen vormen één opgave.':'Je keuze wordt pas beoordeeld na Controleer.';
+ requestAnimationFrame(()=>drawLine(t,a));
+}
+function drawLine(t=preview?.task||task,a=(preview||phase==='intro')?L.build(t)[preview?preview.step:lessonStep].answer:answer){
+ const svg=$('numberline');if(!svg)return;const box=svg.getBoundingClientRect(),w=box.width,h=box.height;if(!w||!h)return;
+ const compare=t.skill==='compare',min=compare?Math.floor(Math.min(C.number(C.value(t.left)),C.number(C.value(t.right))))-1:t.min,max=compare?Math.ceil(Math.max(C.number(C.value(t.left)),C.number(C.value(t.right))))+1:t.max,step=t.skill==='line'?C.number(t.step):1;
+ const x=v=>28+(v-min)/(max-min)*(w-56),y=Math.max(35,Math.min(h-38,h*.52));let html=`<line class="axis" x1="28" y1="${y}" x2="${w-28}" y2="${y}" stroke-width="2"/>`;
+ for(let i=0;i<=Math.round((max-min)/step);i++){const v=min+i*step,px=x(v);html+=`<line class="tick" x1="${px}" y1="${y-5}" x2="${px}" y2="${y+5}"/>`;if(Number.isInteger(v)&&(w>400||v%2===0||v===min||v===max))html+=`<text x="${px}" y="${y+26}" text-anchor="middle">${C.format(v)}</text>`;}
+ const marker=(v,closed,label,offset=0)=>{const px=x(v);html+=`<circle cx="${px}" cy="${y}" r="7" fill="${closed?'var(--blue)':'var(--paper)'}" stroke="var(--blue)" stroke-width="3"/>${label?`<text x="${Math.max(35,Math.min(w-35,px))}" y="${y-17-offset}" text-anchor="middle">${esc(label)}</text>`:''}`};
+ if(compare){marker(C.number(C.value(t.left)),true,'A',0);marker(C.number(C.value(t.right)),false,'B',18);}
+ if(t.skill==='line'&&a.tick!==null){const v=min+a.tick*step;marker(v,true,C.format(Number(v.toFixed(4))));}
+ if(t.skill==='interval'){
+  const l=C.parse(a.values[0]),r=C.parse(a.values[1]);if(l&&r&&C.compare(l,r)<0)html+=`<line x1="${x(C.number(l))}" x2="${x(C.number(r))}" y1="${y}" y2="${y}" stroke="var(--blue)" stroke-width="7" opacity=".5"/>`;
+  if(l)marker(C.number(l),a.closedLo,'L');if(r)marker(C.number(r),a.closedHi,'R');
+ }
+ svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.innerHTML=html;
+ if(preview||phase!=='answer'||!['line','interval'].includes(t.skill))return;
+ const place=clientX=>{const r=svg.getBoundingClientRect(),v=min+Math.max(0,Math.min(1,(clientX-r.left-28)/(r.width-56)))*(max-min);if(t.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((max-min)/step),Math.round((v-min)/step)));else answer.values[activeSlot]=String(Math.round(v));drawLine(t,answer)};
+ svg.onpointerdown=e=>{if(e.button>0)return;e.preventDefault();drag={answer:structuredClone(answer),id:e.pointerId};svg.setPointerCapture(e.pointerId);place(e.clientX)};
+ svg.onpointermove=e=>{if(drag?.id===e.pointerId)place(e.clientX)};
+ svg.onpointerup=e=>{if(drag?.id!==e.pointerId)return;drag=null;save();render()};
+ svg.onpointercancel=()=>{if(drag){answer=drag.answer;drag=null;save();render()}};
+ svg.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();stepValue(e.key==='ArrowLeft'?-1:1)}};
+}
+function key(k){
+ if(phase!=='answer'||preview)return;
+ if(k==='next')activeSlot=1-activeSlot;
+ else if(k==='sign'){if(task.skill==='fraction')answer.sign*=-1;else answer.values[activeSlot]=answer.values[activeSlot].startsWith('-')?answer.values[activeSlot].slice(1):'-'+answer.values[activeSlot];}
+ else if(k==='clear')answer.values[activeSlot]='';else if(k==='back')answer.values[activeSlot]=answer.values[activeSlot].slice(0,-1);else if(/^\d$/.test(k)&&answer.values[activeSlot].replace('-','').length<6)answer.values[activeSlot]+=k;
+ save();render();
+}
+function stepValue(d){if(preview||phase!=='answer')return;if(task.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((task.max-task.min)/C.number(task.step)),(answer.tick??Math.round(-task.min/C.number(task.step)))+d));else if(task.skill==='interval')answer.values[activeSlot]=String(Math.max(task.min,Math.min(task.max,(Number(answer.values[activeSlot])||0)+d)));save();render()}
+$('workspace').onclick=e=>{
+ const b=e.target.closest('button');if(!b||b.disabled)return;const d=b.dataset;
+ if(d.example){example(d.example);return}if(preview||phase!=='answer')return;
+ if(d.key){key(d.key);return}if(d.slot!==undefined)activeSlot=Number(d.slot);
+ if(d.relation!==undefined)answer.relation=Number(d.relation);
+ if(d.selectGroup)activeGroup=d.selectGroup;
+ if(d.token!==undefined){const i=Number(d.token);answer.groups[i]=answer.groups[i]===activeGroup?null:activeGroup;}
+ if(d.set)answer.labels=answer.labels.includes(d.set)?answer.labels.filter(x=>x!==d.set):[...answer.labels,d.set];
+ if(d.toggle)answer[d.toggle]=!answer[d.toggle];
+ if(d.digit!==undefined){const i=Number(d.digit);if(answer.start===null||answer.end!==null){answer.start=i;answer.end=null}else{answer.end=Math.max(i,answer.start);answer.start=Math.min(i,answer.start)}}
+ if(d.step){stepValue(Number(d.step));return}save();render();
+};
+document.addEventListener('keydown',e=>{if(document.body.dataset.screen!=='stage'||preview||phase!=='answer'||!['fraction','root'].includes(task.skill)||e.ctrlKey||e.metaKey||e.altKey)return;if(/^\d$/.test(e.key)){e.preventDefault();key(e.key)}else if(['Backspace','-'].includes(e.key)){e.preventDefault();key(e.key==='-'?'sign':'back')}});
+function commit(){
+ if(preview){if(preview.step<L.build(preview.task).length-1){preview.step++;render()}else{preview=null;screen('stage')}return;}
+ if(phase==='intro'){
+  if(lessonStep<L.build(task).length-1){lessonStep++;save();render();return}
+  progress.skills[task.skill].intro=true;makeTask(task.skill);return;
+ }
+ if(phase==='done'){next();return}
+ if(phase==='feedback'){if(feedback.ok&&task.skill==='root'){answer.stage=1;answer.values=['',''];activeSlot=0;}phase='answer';feedback=null;save();render();return}
+ const r=C.validate(task,answer);feedback=r;
+ if(!r.ok){if(!r.input){dirty=true;errorCode=r.code;}phase='feedback';save();render();return}
+ if(task.skill==='root'&&answer.stage===0){phase='feedback';save();render();return}
+ phase='done';let xp=0;if(!free){xp=P.record(progress,task,{clean:!dirty,solved:true,code:errorCode||'practice'});session.answered++;session.xp+=xp;if(!dirty)session.clean++;}feedback={...r,xp};save();render();
+}
+$('commit').onclick=commit;$('back').onclick=()=>{if(preview)preview.step=Math.max(0,preview.step-1);else lessonStep=Math.max(0,lessonStep-1);save();render()};
+$('skip').onclick=()=>{if(preview||phase!=='answer')return;if(!free){P.record(progress,task,{clean:false,solved:false,code:errorCode||'practice'});session.answered++;}next()};
+function topicCards(root,help=false){
+ root.replaceChildren();C.skills.forEach((s,i)=>{const card=document.createElement('article');card.className='topic-card'+(P.mastered(progress,s.id)?' solid':'');const status=P.mastered(progress,s.id)?'Stevig':progress.skills[s.id].seen?'In opbouw':P.unlocked(progress,s.id)?'Klaar om te ontdekken':'Later in je leerroute';card.innerHTML=`<span class="eyebrow">${String(i+1).padStart(2,'0')} · ${help?'Uitgewerkt voorbeeld':status}</span><h2>${esc(s.short)}</h2><p>${esc(s.concept)}</p><button>${help?'Bekijk het voorbeeld':'Vrij oefenen →'}</button>`;card.querySelector('button').onclick=()=>help?example(s.id):(session=null,makeTask(s.id,{practice:true}));root.append(card);});
+}
+function library(){preview=null;topicCards($('topics'));screen('library')}
+function showHelp(){preview=null;topicCards($('helpTopics'),true);screen('help')}
+function example(id){
+ if(task&&phase==='answer'&&!free){dirty=true;errorCode=errorCode||'help';save();}
+ preview={task:C.generate(id,{seed:++serial,variant:task?.skill===id?task.variant:0,level:task?.skill===id?task.level:0}),step:0};screen('stage');
+}
+function showProgress(){previous=document.body.dataset.screen;preview=null;$('progressTitle').textContent=`${progress.xp} XP · ${C.skills.filter(s=>P.mastered(progress,s.id)).length} van 8 stevig`;$('progressRows').innerHTML=C.skills.map(s=>{const d=progress.skills[s.id];return `<div class="progress-row"><div><strong>${esc(s.short)}</strong><small>${d.clean} zelfstandig juist · ${d.seen} geoefend${d.repair?' · herhaling gepland':''}</small></div><span>${P.mastered(progress,s.id)?'★ Stevig':!P.unlocked(progress,s.id)?'Later in de route':d.seen?'In opbouw':'Nieuw'}</span></div>`}).join('');screen('progress')}
+function finishSession(){progress.sessions++;$('stats').innerHTML=[[session.answered,'geoefend'],[session.clean,'zelfstandig juist'],[session.xp,'XP verdiend']].map(([n,label])=>`<div><strong>${n}</strong><span>${label}</span></div>`).join('');$('summaryText').textContent='De volgende reeks haalt eerdere begrippen opnieuw op. Nieuwe waarden en andere voorstellingen laten zien wat zelfstandig blijft lukken.';task=null;answer=null;save();screen('summary')}
+AxiomaPlatform.bindTrainer({play:()=>{preview=null;task?screen('stage'):start()},help:showHelp,progress:showProgress});
+$('resume').onclick=$('closeHelp').onclick=()=>{preview=null;task?screen('stage'):start()};$('closeProgress').onclick=()=>screen(previous==='progress'?'stage':previous);
+$('newSession').onclick=$('again').onclick=start;$('browse').onclick=$('rotateLibrary').onclick=library;
+$('theme').onclick=()=>{document.documentElement.dataset.mode=document.documentElement.dataset.mode==='dark'?'light':'dark';save();if(document.body.dataset.screen==='stage')render()};
+new ResizeObserver(()=>{if(document.body.dataset.screen==='stage')drawLine()}).observe($('workspace'));
+window.addEventListener('pagehide',save);
+// Read-only model inspection, useful for reproducible browser checks.
+window.AxiomaRealTrainer=Object.freeze({inspect:()=>structuredClone({task,answer,phase,lessonStep,preview,session,progress,free,dirty,feedback})});
+if(restore())screen('stage');else start();
+})();
+</script><script src="../../shared/vendor/supabase.js"></script><script src="../../shared/supabase-config.js"></script><script src="../../shared/axioma-auth.js"></script><script src="../../shared/axioma-social.js"></script><script src="../../shared/axioma-progress.js"></script><script>// Translates the existing completion records into each engine's native save format.
+// Once a full snapshot exists, the engine owns that format and it is restored verbatim.
+(() => {
+'use strict';
+const numbers=(state,first,total)=>(state.completed||[]).map(Number).filter(n=>Number.isInteger(n)&&n>=first&&n<first+total);
+const put=(state,key,value)=>{if(!Object.hasOwn(state.storage,key))state.storage[key]=JSON.stringify(value)};
+const next=(done,first,total)=>{for(let i=first;i<first+total;i++)if(!done.includes(i))return i;return first+total-1};
+function indexed(key,total,field='lastLevel'){
+ return {keys:[key],hydrate(state){const done=numbers(state,0,total);put(state,key,{completed:done,[field]:next(done,0,total)})}};
+}
+const adapters={
+ 'pythagoras':{keys:['axioma.pythagoras.completed.v1','axioma.pythagoras.current.v1'],hydrate(state){const done=numbers(state,1,10);put(state,this.keys[0],done);put(state,this.keys[1],next(done,1,10))}},
+ 'stelsels':{keys:['axioma.stelsels.completed.v1','axioma.stelsels.current.v1'],hydrate(state){const done=numbers(state,0,14);put(state,this.keys[0],done);put(state,this.keys[1],next(done,0,14))}},
+ 'algebra-smederij':{keys:['rf22_done','rf21_last','rf21_theme'],hydrate(state){put(state,'rf22_done',(state.completed||[]).map(String))}},
+ 'taartenwinkel':indexed('axioma.taartenwinkel.v05.progress',7,'lastService'),
+ 'kubusbouw':indexed('axioma.scaleAssembly.v0.5.progress',22),
+ 'verfwinkel':indexed('axioma.verfwinkel.progress.v1',16),
+ 'signal-lab':indexed('signalLab.v0.4.1.progress',12),
+ 'data-check':{keys:['evidenceDeskCompletedV06','evidenceDeskMetaV06'],hydrate(state){const done=numbers(state,1,22);put(state,this.keys[0],Array.from({length:22},(_,i)=>done.includes(i+1)));put(state,this.keys[1],{lastLevel:next(done,1,22)-1})}},
+ 'gravity-maze':{keys:['gravity-maze-human-v1-blind','gravity-maze-human-v1-assisted']},
+ 'vectoren-trainer':{keys:['axioma-vectorentrainer-v020']},
+ 'brandweer':{keys:['axioma.brandweer.current.v1'],hydrate(state){const done=numbers(state,1,16);put(state,this.keys[0],next(done,1,16)-1)}},
+ 'kleiduifschieten':{keys:['axioma.rechten.kleiduiven.standalone.v12']},
+ 'rechten-trainer':{tracking:false,external:true},
+ 'functies-rechten':{tracking:false},
+ 'rechten-zeeslag':{tracking:false,multiplayer:true}
+};
+const readers={
+ 'pythagoras':['axioma.pythagoras.completed.v1',10,value=>value],
+ 'stelsels':['axioma.stelsels.completed.v1',14,value=>value],
+ 'algebra-smederij':['rf22_done',()=>window.RF?.Challenges?.length||0,value=>value],
+ 'taartenwinkel':['axioma.taartenwinkel.v05.progress',7,value=>value.completed],
+ 'kubusbouw':['axioma.scaleAssembly.v0.5.progress',22,value=>value.completed],
+ 'verfwinkel':['axioma.verfwinkel.progress.v1',16,value=>value.completed],
+ 'signal-lab':['signalLab.v0.4.1.progress',12,value=>value.completed],
+ 'data-check':['evidenceDeskCompletedV06',22,value=>value.map((done,i)=>done?i+1:null).filter(Boolean)]
+};
+for(const [id,[key,total,read]] of Object.entries(readers))adapters[id].onWrite=(changed,value)=>{
+ if(changed!==key)return;
+ try{const units=read(JSON.parse(value));if(Array.isArray(units))return {completed:[...new Set(units.map(String))],total:typeof total==='function'?total():total}}catch(_){}
+};
+adapters['gravity-maze'].onWrite=(key,value,state)=>{
+ if(!adapters['gravity-maze'].keys.includes(key))return;
+ let best=[];for(const k of adapters['gravity-maze'].keys){try{const units=JSON.parse(state.storage[k]||'{}').completed;if(Array.isArray(units)&&units.length>best.length)best=units}catch(_){}}
+ return {completed:best.map(String),total:9};
+};
+window.AxiomaGameAdapters=Object.freeze(adapters);
+})();
+</script><script data-game-id="reele-getallen-trainer">// Account-bound lifecycle for games. Engines use storage below, never browser-wide progress.
+(() => {
+'use strict';
+const script=document.currentScript, gameId=script.dataset.gameId;
+const config=window.AxiomaGameAdapters?.[gameId] || {};
+const clone=v=>JSON.parse(JSON.stringify(v));
+let account=null, cacheKey='', record={state:{storage:{}},revision:0,dirty:false};
+let active=false, started=false, booting=false, busy=false, timer=null, edit=0, status='loading', storageFailed=false;
+let host, dock, panel, message, actions, readyResolve;
+const ready=new Promise(resolve=>readyResolve=resolve);
+const nativeStorage=()=>window.localStorage;
+function deadline(promise){
+ let timeout;
+ return Promise.race([promise,new Promise((_,reject)=>{timeout=setTimeout(()=>reject(Error('Verbinding duurt te lang')),12000)})]).finally(()=>clearTimeout(timeout));
+}
+const label=()=>account?.role==='student'?(account.alias||'Leerling'):account?.role==='teacher'?'Leerkracht':'Gast';
+const accountKey=a=>a ? a.role+':'+a.id : 'guest';
+const keyFor=a=>'axioma:progress:v2:'+encodeURIComponent(window.AXIOMA_CONFIG?.url||'offline')+':'+accountKey(a)+':'+gameId;
+
+function setStatus(value){
+ status=value;
+ if(dock)dock.textContent=label()+' · '+({loading:'Laden…',saved:'Opgeslagen',saving:'Opslaan…',pending:'Nog te bewaren',offline:'Alleen op dit toestel',guest:'Op dit toestel',teacher:'Oefenmodus',conflict:'Voortgang gewijzigd',error:'Controle nodig',changed:'Account gewijzigd',untracked:'Vrij verkennen',multiplayer:'Samen spelen'})[value];
+ if(dock){dock.title=dock.textContent;dock.setAttribute('aria-label','Account en opslag: '+dock.textContent);dock.dataset.status=value;}
+ if(storageFailed&&dock)dock.textContent=label()+' · Opslag niet beschikbaar';
+}
+function persist(){
+ try{nativeStorage().setItem(cacheKey,JSON.stringify(record));return true}
+ catch(_){storageFailed=true;setStatus(status);return false}
+}
+function notice(text,buttons,blocking=false){
+ message.textContent=text;actions.replaceChildren();
+ for(const [text,fn] of buttons){const b=document.createElement('button');b.type='button';b.textContent=text;b.onclick=fn;actions.append(b)}
+ panel.dataset.blocking=String(blocking);panel.hidden=false;
+ actions.querySelector('button')?.focus();
+}
+function home(){return window.AxiomaPlatform?.homeURL() || new URL('../',location.href).href}
+function login(){const url=new URL(home());url.searchParams.set('login','1');url.searchParams.set('return',location.href);location.href=url.href}
+function details(){
+ if(!active&&!started)return;
+ if(!active&&started){if(status==='conflict')conflict();else changed();return}
+ const explanation=storageFailed?'Bewaren op dit toestel lukt niet. Laat deze pagina open en probeer opnieuw.':({saved:'Je voortgang is gekoppeld aan '+label()+'. Je kunt op een ander toestel verdergaan.',saving:'Je wijzigingen worden bewaard.',pending:'Je laatste wijzigingen staan op dit toestel en worden nog online bewaard.',offline:'Online bewaren lukt momenteel niet. Je wijzigingen blijven apart voor jouw account op dit toestel staan. Probeer opnieuw voordat je op een ander toestel verdergaat.',guest:'Je oefent als gast. Deze voortgang blijft op dit toestel en wordt niet automatisch naar een leerlingaccount overgenomen.',teacher:'Je oefent als leerkracht. Dit telt niet als leerlingvoortgang.',untracked:'Dit is een vrije verkenning zonder persoonlijke voortgang.',multiplayer:'Partijen en ranglijsten worden door het samenspel bijgehouden.'})[status]||'Je account en voortgang worden gecontroleerd.';
+ notice(explanation,[...(['offline','pending','saving'].includes(status)?[['Opnieuw bewaren',async()=>{await flush();if(status==='saved')panel.hidden=true;else details()}]]:[]),[account?'Account op startpagina':'Inloggen',login],['Sluiten',()=>panel.hidden=true]]);
+}
+function mount(){
+ host=document.createElement('div');host.id='axioma-game-status';
+ // Shadow DOM keeps game button/layout rules out of the shared account controls.
+ const root=host.attachShadow({mode:'open'});
+ root.innerHTML='<style>:host{display:inline-flex;flex:0 0 165px;width:165px;min-width:165px;vertical-align:middle;z-index:10000;font:12px/1.4 system-ui;color:#132d34}:host([data-floating]){position:fixed;top:6px;left:6px}button{font:inherit;cursor:pointer;border:1px solid #80989e;border-radius:7px;padding:7px 10px;background:#f5f8f9;color:#132d34;min-height:32px}button:focus-visible{outline:3px solid #cd9930;outline-offset:2px}.dock{box-sizing:border-box;width:165px;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 1px 5px #0003}.panel{position:fixed;inset:0;background:#102028a6;display:grid;place-items:center;padding:16px}.panel[hidden]{display:none}.box{background:#f5f8f9;color:#132d34;padding:20px;border-radius:12px;width:min(420px,calc(100vw - 48px));box-shadow:0 8px 36px #0005}p{margin:0 0 16px}.actions{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:1100px){:host{flex-basis:34px;width:34px;min-width:34px}.dock{font-size:0;width:34px;padding:4px;min-height:34px}.dock:before{content:"◉";font-size:20px}.dock[data-status="saved"]{color:#277457}.dock[data-status="offline"],.dock[data-status="conflict"],.dock[data-status="pending"]{color:#936615}}@media(prefers-color-scheme:dark){button,.box{background:#17343d;color:#e9f2f5}}</style><button class="dock" aria-label="Account en opslagstatus"></button><section class="panel" hidden role="dialog" aria-modal="true" aria-label="Account en voortgang"><div class="box"><p role="status"></p><div class="actions"></div></div></section>';
+ document.body.append(host);dock=root.querySelector('.dock');panel=root.querySelector('.panel');message=root.querySelector('p');actions=root.querySelector('.actions');dock.onclick=details;setStatus('loading');
+ new MutationObserver(placeDock).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','inert','class']});
+ window.addEventListener('resize',placeDock);placeDock();
+ root.addEventListener('keydown',event=>{
+  if(panel.hidden)return;
+  if(event.key==='Escape'&&panel.dataset.blocking!=='true'){event.preventDefault();panel.hidden=true;dock.focus()}
+  if(event.key==='Tab'){
+   const buttons=[...actions.querySelectorAll('button')];if(!buttons.length)return;
+   const index=buttons.indexOf(root.activeElement);event.preventDefault();buttons[(index+(event.shiftKey?-1:1)+buttons.length)%buttons.length].focus();
+  }
+ });
+ // Block input to the old engine immediately on logout or account replacement.
+ for(const type of ['click','pointerdown','keydown','touchstart'])document.addEventListener(type,event=>{
+  if((!active||!panel.hidden)&&!event.composedPath().includes(host)){
+   if(event.composedPath().some(node=>node.matches?.('a[data-platform-home]')))return;
+   event.preventDefault();event.stopImmediatePropagation();
+  }
+ },true);
+}
+function placeDock(){
+ if(!host)return;
+ const header=[...document.querySelectorAll('.header-actions'),...document.querySelectorAll('header')].find(el=>{const r=el.getBoundingClientRect();return r.width&&r.height&&r.top>=-5&&r.bottom<=innerHeight&&!el.closest('[inert]')&&getComputedStyle(el).visibility!=='hidden'});
+ const parent=header||document.body;if(host.parentNode!==parent)parent.append(host);
+ if(host.hasAttribute('data-floating')===!!header)host.toggleAttribute('data-floating',!header);
+}
+function changed(){
+ if(!started)return;
+ active=false;clearTimeout(timer);setStatus('changed');
+ notice('Je account is gewijzigd. Open het spel opnieuw om met de juiste voortgang verder te gaan.',[['Verder met mijn account',()=>location.reload()]],true);
+}
+function check(detail){
+ if(started&&(detail.pending||accountKey(detail.account)!==accountKey(account)))changed();
+}
+function dirty(){
+ if(!active)return;
+ record.dirty=true;edit++;persist();
+ if(account?.role==='student'){
+  setStatus(status==='offline'?'offline':'pending');clearTimeout(timer);timer=setTimeout(flush,700);
+ }
+}
+function getItem(key){
+ key=String(key);
+ if(Object.hasOwn(record.state.storage,key))return record.state.storage[key];
+ // Unassigned legacy browser progress is available only in guest mode.
+ if(!account){try{return nativeStorage().getItem(key)}catch(_){return null}}
+ return null;
+}
+function setItem(key,value){
+ if(!active)return;
+ key=String(key);value=String(value);
+ if(record.state.storage[key]===value)return;
+ record.state.storage[key]=value;
+ const summary=config.onWrite?.(key,value,record.state);
+ if(summary)Object.assign(record.state,summary,{finished:!!summary.total&&summary.completed.length>=summary.total});
+ dirty();
+}
+function removeItem(key){if(!active)return;record.state.storage[String(key)]=null;dirty()}
+function report(completed,total,current){
+ if(!active)return;
+ const units=[...new Set((Array.isArray(completed)?completed:[]).map(String))];
+ const next={completed:units,total:Math.max(0,Number(total)||0),finished:!!total&&units.length>=total};
+ if(current!=null)next.current=current;
+ if(Object.entries(next).some(([key,v])=>JSON.stringify(record.state[key])!==JSON.stringify(v))){Object.assign(record.state,next);dirty()}
+}
+function emit(completed,total,current){
+ window.dispatchEvent(new CustomEvent('axioma:game-progress',{detail:{gameId,accountId:account?.id||null,completed,total,current}}));
+}
+function snapshot(){
+ const state=clone(record.state);
+ // Only declared engine save keys go online (no device telemetry or incidental UI keys).
+ state.storage=Object.fromEntries(Object.entries(state.storage).filter(([key])=>(config.keys||[]).includes(key)));
+ state.schemaVersion=2;
+ return state;
+}
+function conflict(){
+ active=false;setStatus('conflict');
+ notice('Dit spel is ook op een ander tabblad of toestel gewijzigd. Je werk op dit toestel blijft apart bewaard. Laad de online versie om verder te gaan.',[['Laad online voortgang',()=>{
+  try{nativeStorage().setItem(cacheKey+':conflict:'+Date.now(),JSON.stringify(record));nativeStorage().removeItem(cacheKey)}catch(_){notice('De reservekopie kan niet worden bewaard. Maak ruimte vrij op dit toestel en probeer opnieuw.',[['Opnieuw proberen',conflict]],true);return}
+  location.reload();
+ }]],true);
+}
+async function flush(){
+ if(config.external){window.dispatchEvent(new Event('axioma:retry-save'));return}
+ if(!active||busy||!record.dirty||account?.role!=='student'||config.tracking===false)return;
+ busy=true;const version=edit,owner=account.id,state=snapshot();setStatus('saving');
+ try{
+  const result=await window.AxiomaProgress.save(gameId,state,record.revision,owner);
+  if(!active)return;
+  if(result?.status==='conflict'){conflict();return}
+  if(!result||result.status==='guest')throw Error('Niet bewaard');
+  record.revision=Number(result.revision)||record.revision+1;
+  record.dirty=edit!==version;persist();setStatus(record.dirty?'pending':'saved');
+ }catch(_){if(active)setStatus('offline')}
+ finally{busy=false;if(active&&record.dirty&&status==='pending'){clearTimeout(timer);timer=setTimeout(flush,700)}}
+}
+async function engines(){
+ for(const placeholder of document.querySelectorAll('script[type="text/axioma-game"]')){
+  if(!active)return;
+  const executable=document.createElement('script');
+  if(placeholder.dataset.src){
+   executable.src=placeholder.dataset.src;executable.async=false;
+   await new Promise((resolve,reject)=>{executable.onload=resolve;executable.onerror=()=>reject(Error('Spelbestand kon niet laden'));placeholder.after(executable)});
+  }else{executable.textContent=placeholder.textContent;placeholder.after(executable)}
+ }
+ placeDock();window.dispatchEvent(new Event('axioma:game-ready'));
+}
+async function boot(){
+ if(booting||started)return;booting=true;
+ notice('Je account en voortgang worden geladen…',[],true);
+ try{
+  if(!Object.hasOwn(window.AxiomaGameAdapters||{},gameId))throw Error('Spelkoppeling ontbreekt');
+  if(location.protocol!=='file:'){
+   await deadline(window.AxiomaAuth.ready());account=await deadline(window.AxiomaAuth.getAccount());
+   if(account&& !['student','teacher'].includes(account.role))throw Error('Account niet beschikbaar');
+  }
+  cacheKey=keyFor(account);
+  let cached=null;try{cached=JSON.parse(nativeStorage().getItem(cacheKey)||'null')}catch(_){}
+  record={state:{storage:{}},revision:0,dirty:false};
+  if(cached?.state?.storage&&typeof cached.state.storage==='object')record=cached;
+  if(account?.role==='student'&&config.tracking!==false){
+   let remote;
+   try{remote=await deadline(window.AxiomaProgress.load(gameId,account.id))}
+   catch(error){
+    if(!cached){throw error}
+    setStatus('offline');
+   }
+   if(remote){
+    if(record.dirty&&record.revision!==remote.revision){conflict();return}
+    if(!record.dirty){record={state:remote.state||{storage:{}},revision:remote.revision,dirty:false};record.state.storage ||= {}}
+    setStatus(record.dirty?'pending':'saved');
+   }
+  }else setStatus(config.external?(account?.role==='student'?'loading':account?'teacher':'guest'):config.tracking===false?(config.multiplayer?'multiplayer':'untracked'):account?'teacher':'guest');
+  // Recheck after network requests; never mount an old account's engine.
+  if(location.protocol!=='file:'&&accountKey(await window.AxiomaAuth.getAccount())!==accountKey(account))throw Error('Account gewijzigd');
+  if(account?.role==='student')config.hydrate?.(record.state);
+  active=true;started=true;panel.hidden=true;persist();
+  window.AxiomaAuth?.onChange(check);
+  readyResolve();await engines();
+  if(record.dirty)timer=setTimeout(flush,700);
+ }catch(_){
+  active=false;setStatus('error');
+  notice('Je account of opgeslagen voortgang kon niet worden geladen. Probeer opnieuw; je bestaande voortgang blijft behouden.',[['Opnieuw proberen',()=>{if(started)location.reload();else boot()}],['Naar startpagina',()=>location.href=home()]],true);
+ }finally{booting=false}
+}
+window.AxiomaGame=Object.freeze({ready,storage:Object.freeze({getItem,setItem,removeItem}),report,emit,flush,
+ get state(){return clone(record.state)},get account(){return account},get active(){return active},get status(){return status}
+});
+window.addEventListener('pagehide',()=>{if(active){persist();flush()}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)flush()});
+window.addEventListener('online',()=>{if(active)flush()});
+window.addEventListener('axioma:save-status',event=>{if(config.external&&active)setStatus(event.detail)});
+window.addEventListener('pageshow',event=>{if(event.persisted)window.AxiomaAuth?.getAccount().then(a=>check({account:a})).catch(changed)});
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{mount();boot()},{once:true});else{mount();boot()}
+})();
+</script></body></html>
