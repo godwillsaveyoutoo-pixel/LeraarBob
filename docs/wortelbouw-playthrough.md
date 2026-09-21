@@ -1,133 +1,91 @@
 # Wortelbouw — speelverslag en acceptatie
 
-## Uitvoering
+## Huidige bediening en presentatie
 
-De huidige versie staat in `games/wortelbouw/` en is vanuit de catalogus onder
-Meetkunde bereikbaar. Ze is gestart vanuit het gevonden v0.4-prototype
-`wortelbouw.html` (SHA-256
+`games/wortelbouw/` is bereikbaar vanuit de catalogus Meetkunde. De geometrie
+komt uit het oorspronkelijke v0.4-prototype (`wortelbouw.html`, SHA-256
 `e0a5180d0c180b3a3ff4893920dc3b4f7a5d653df1c75028b7c233b281cdcdbf`).
-De nieuwe versie scheidt geometrie, toestanden en de mobiele weergave.
-Het [onderzoek vóór de implementatie](wortelbouw-investigation.md) onderbouwt
-de routes en de oorspronkelijke bedieningskeuzes. Na feedback van de gebruiker
-is handmatig bouwen weer de standaard: de verplichte tikken op voorgestelde
-stukken namen het plezier van zelf construeren weg.
+Het [eerste onderzoek](wortelbouw-investigation.md) beschrijft de uitgangspunten;
+de huidige bediening en leerlijn volgen de latere gebruikersfeedback.
 
-Alle zes puzzels worden met muissleepbewegingen bij **780×360** en met
-aanraaksleepbewegingen bij **640×360 CSS px** gecontroleerd. De optionele
-tikbediening wordt daarnaast op beide formaten doorlopen. De browserproef
-verandert geen speltoestand via een test-API: `Wortelbouw.inspect()` is alleen
-een kopie om de actuele toestand te lezen. Screenshots zijn apart visueel
-gecontroleerd; de geteste artefacten staan in `/tmp/wortelbouw-*.png`.
+Handmatig bouwen is de standaard: startvierkant uitrekken, vanaf een vrije
+zijde een driehoek trekken, vervolgens beide vierkanten uitbouwen. Maten
+klikken vast op gehele eenheden. Beginpunt bepaalt de spiegeling; de gebruiker
+kiest of de bestaande zijde een been of de schuine zijde wordt. De camera
+blijft tijdens het gebaar stil. Geannuleerde of ongeldige gebaren plaatsen
+niets. Vanaf 65% uittrekken klikt een hulp- of resultaatvierkant exact vast.
+Undo neemt één fysiek stuk terug. De potloodknop biedt optionele tikbediening,
+met toetsenbordbediening van dezelfde knoppen.
 
-Dit is een diagnostisch prototype: geen accountopslag, XP of verzonnen
-competitieranglijst. De catalogus vermeldt zes bouwpuzzels en `tracking: none`.
+Drie verschillende marmerkleuren verduidelijken de huidige bouwstap:
+kobaltblauw voor het bestaande vierkant, koraal voor het hulpvierkant en
+petroleumgroen voor het resultaat. De driehoek is zandkleurig. Een korte
+legenda ondersteunt de kleuren. De gevonden lengte staat op het midden van
+de gemeten zijde en draait mee; bij een verschil staat ook de lengte van de
+bestaande schuine zijde langs die zijde. Een uitkomst wordt pas onthuld nadat
+alle stukken liggen en het koord de nieuwe zijde heeft overgenomen.
 
-## Kortste gespeelde routes
+Bij het bereiken van het doel blijft een grote kaart met **Doel bereikt!**, de
+gevonden lengte, de oppervlakteberekening en een kort leermoment zichtbaar.
+Het resultaatvierkant krijgt een gouden omlijsting. De kaart staat naast de
+mozaïek, met ruimte gereserveerd door de camera. Undo verwijdert de beloning
+weer; de volgende opgave begint pas na een bewuste klik. De korte entreeanimatie
+respecteert de voorkeur voor minder beweging.
 
-Een stap telt pas als driehoek en beide vierkanten zijn geplaatst. De liniaal
-kiest de zijde, niet de oppervlakte. De zijdenummers hieronder horen bij de
-zijdevolgorde in de optionele tikbediening; de starttegel heeft zijde 1 onderaan, 2 rechts, 3 bovenaan.
-Alle genoemde plaatsingen gebruiken de eerste spiegeling.
+## Leerlijn en gespeelde routes
 
-| Puzzel | Handelingen | Oppervlakten | Stappen | Voetafdruk in wereldeenheden |
+Elke route plaatst daadwerkelijk een driehoek en beide bijbehorende vierkanten.
+Een beginvierkant met de gevraagde gehele lengte is op zichzelf geen voltooide
+constructie. De spelhint vraagt bij 5 en 10 om een schuine zijde te bouwen.
+
+| Volgorde | Doel | Gespeelde constructie in oppervlakten | Bouwstappen | Leermoment |
 | --- | --- | --- | --- | --- |
-| √13 | Startzijde 3; rechthoekszijde, maat 2, zijde 1 | 9 + 4 = 13 | **1** | 7,000 × 8,000 |
-| √12 | Startzijde 4; schuine zijde, maat 2, zijde 3 | 16 − 4 = 12 | **1** | 7,464 × 8,732 |
-| √14 | Startzijde 3; rechthoekszijde, maat 2, zijde 1; daarna op resultaattegel maat 1, zijde 4 | 9 + 4 = 13; 13 + 1 = 14 | **2** | 10,277 × 8,000 |
-| A = 7 | Startzijde 4; schuine zijde, maat 3, zijde 1 | 16 − 9 = 7 | **1** | 7,969 × 8,234 |
-| √15 | Startzijde 4; schuine zijde, maat 1, zijde 2 | 16 − 1 = 15 | **1** | 8,718 × 5,936 |
-| √21 | Startzijde 5; schuine zijde, maat 2, zijde 2 | 25 − 4 = 21 | **1** | 11,033 × 8,666 |
+| 1 | √2 | 1 + 1 = 2 | 1 | Twee gelijke benen |
+| 2 | 3√2 | 9 + 9 = 18 | 1 | Driemaal lengte geeft negenmaal oppervlakte; √18 = 3√2 |
+| 3 | √5 | 1 + 4 = 5 | 1 | Ongelijke benen |
+| 4 | 5 | 9 + 16 = 25 | 1 | 3–4–5; een wortel kan geheel zijn |
+| 5 | 10 | 36 + 64 = 100 | 1 | 6–8–10; lengtes ×2, oppervlakten ×4 |
+| 6 | √13 | 9 + 4 = 13 | 1 | Twee kwadraten optellen |
+| 7 | √12 | 16 − 4 = 12 | 1 | De bestaande zijde als schuine zijde gebruiken |
+| 8 | √11 | 36 − 25 = 11 | 1 | Een kleine wortel uit grotere vierkanten |
+| 9 | A = 7 | 16 − 9 = 7 | 1 | Verband tussen oppervlakte en zijde |
+| 10 | √15 | 16 − 1 = 15 | 1 | Net onder een geheel kwadraat |
+| 11 | √21 | 25 − 4 = 21 | 1 | Zelf een passend verschil kiezen |
+| 12 | √14 | 9 + 4 = 13; 13 + 1 = 14 | 2 | Verder bouwen op een gedraaide, irrationale zijde |
+| 13 | √104 | 100 + 4 = 104 | 1 | Een groot getal hoeft geen moeilijke constructie te zijn |
 
-De voetafdruk is de breedte × hoogte van de omhullende rechthoek, geen bewezen
-minimum. De stappenaantallen zijn wel minimaal: de doelen zijn geen
-startkwadraten, en 14 is geen som of verschil van twee beschikbare kwadraten.
-Een onafhankelijke breedte-eerst zoekcontrole bevestigt deze ondergrenzen.
-Alleen optellen vraagt voor √15 drie stappen, tegenover één verschilconstructie.
-Ook die langere route is geometrisch gecontroleerd: 9 → 13 → 14 → 15,
-met zijden 1, 4 en 2 (de laatste gespiegeld). Een tweede minimale route voor
-√14 is 16 → 15 → 14: tweemaal verschil met maat 1, eerst zijde 2, daarna
-zijde 4 gespiegeld. De laatste stap gebruikt √15 als echte hypotenuse.
+De liniaal gaat normaal tot 5, bij √11 tot 6 en bij 10 en √104 tot 10. Deze
+limieten worden ook in de geometriekern afgedwongen. Bij de uitgebreide
+liniaal biedt de optionele tikbediening een compacte keuzelijst.
+De constructies staan onafhankelijk van de leveldefinities in
+`tests/fixtures/wortelbouw-routes.cjs`.
 
-## Wat het spelen leert
+De reeks is bedoeld om te leren. Er is geen straf voor een langere geldige
+route. De kortste aantallen zijn rekenkundig gecontroleerd én ruimtelijk
+uitgevoerd. De vele verschilopgaven zijn variaties van hetzelfde principe;
+het is geen bewijs van een uitgebreide ruimtelijke campagne. De onbeperkte
+vloer en de twee spiegelingen laten veel botsingen omzeilen. Een proef met
+echte leerlingen moet de moeilijkheidsvolgorde verder onderbouwen.
 
-- **√13:** de drie gekleurde vierkanten maken de som begrijpelijk. De keuze
-  tussen beginzijden verandert vooral de oriëntatie, niet de moeilijkheid.
-- **√12:** de bestaande zijde blijft de hypotenuse. Het rechthoektekentje staat
-  aan de nieuwe derde hoek. Dat onderscheid is essentieel; alleen een +/−-knop
-  maakte dit in het oude prototype onvoldoende zichtbaar.
-- **√14:** de tweede stap bouwt daadwerkelijk op een gedraaide zijde. Dit is
-  de sterkste proef voor het koordidee en voor lokaal meten zonder globaal raster.
-- **Oppervlakte 7:** één verschilconstructie volstaat. De oude referentie van
-  drie stappen zou een leerling met de juiste korte oplossing verkeerd belonen.
-  Als spelroute is dit verder weinig anders dan √12; het verschil zit in de
-  oppervlaktemissie en de verhouding van de benen.
-- **√15:** het verschil is duidelijk eleganter dan de som. De driehoek is
-  smal; een sleepgebaar mag binnen 24 pixels van de bedoelde zijde beginnen.
-  De gekozen beginhoek bepaalt de spiegeling.
-- **√21:** opnieuw een verschilpuzzel. Kleinere maatverhouding en andere vorm,
-  maar geen wezenlijk nieuw oplossingsprincipe.
+## Controles
 
-Op de onbeperkte vloer zijn veel botsingen te omzeilen door naar buiten te
-bouwen. De twee spiegelingen en het kiezen van een ander bestaand vierkant
-leveren echte plaatsingskeuzes op, maar dit bewijst **nog geen rijke ruimtelijke
-campagne**. Voor vervolgonderzoek zijn gerichte opdrachten met een beperkt
-aantal stappen of een expliciet ontworpen vloercontour kansrijker dan veel
-extra getallen. Zo'n vloercontour is hier bewust geen verborgen cameragrens.
-
-Een volledig tekstloze introductie is evenmin bewezen. Kleuren, rechthoekmarkering,
-maataanduiding, het meegroeiende stuk tijdens het slepen en het koord dragen de uitleg;
-korte contextzinnen blijven als steun. Begrippen als hypotenuse of schuine zijde
-vragen nog een proef met echte leerlingen. Er is geen leerlinggebruikersonderzoek
-uitgevoerd.
-
-## Acceptatiebewijs
-
-| Eis | Controle in de huidige versie |
-| --- | --- |
-| Alleen correcte rechte driehoeken | 840 combinaties van liniaalmaten, zijden, spiegelingen en rotaties; inproduct bij de rechte hoek = 0, alle exacte kwadratische lengtes gecontroleerd |
-| Verschil gebruikt bestaande hypotenuse | De basislengte voldoet aan basis² = bekend² + resultaat²; derde hoek is recht |
-| Grenscontact mag, overlap niet | SAT onderscheidt gedeelde zijde/hoek van positieve doorsnede; elke geplaatste vorm blijft verbonden; gereserveerde hele stap voorkomt een onplaatsbaar verplicht vierkant |
-| Werkelijke stukken plaatsen | Browser trekt startvierkant, driehoek, hulpvierkant en resultaatvierkant uit met muis en aanraking; aparte controle van optionele tikbediening |
-| Uitkomst verborgen | Werkelijk naar canvas geschreven tekst wordt gecontroleerd; resultaat blijft `?` tot alle stukken liggen en de koordanimatie klaar is. De doelwaarde in de kop is de opdracht, geen voortijdige uitkomst |
-| Duidelijke onthulling | Gouden lijn wordt langs de zijde getekend; daarna apart √n-label en resultaattegel A = n; screenshots van alle zes eindbeelden |
-| Gedraaide constructies | √14 krijgt een tweede stap op een niet-horizontale/niet-verticale zijde; aanvullende willekeurig gedraaide geometriegevallen |
-| Herstel per stap | Elke fysieke plaatsing heeft een eigen momentopname. Alle fasen teruggedraaid, daarna een andere route; undo tijdens animatie annuleert de onthulling |
-| Alle doelen haalbaar | 24 complete speelroutes: zes doelen met beide bedieningen op beide schermformaten |
-| Mobiele bediening | Knoppen minimaal 44×44; zijden hebben 24 px hittolerantie; bediening binnen scherm; geen gameplay-scroll of normale modals; footerknoppen raken elkaar niet; portret draait terug zonder toestandsverlies |
-| Camera beperkt de wiskunde niet | Geometriekern kent geen schermgrenzen. Camera omvat ook de komende tegels en heeft geen vaste minimumzoom |
-| Lage renderkosten | Geen doorlopende tekenlus in rust, DPR maximaal 2, enkele vectoraders per tegel, geen blur/noise of beeldbestanden in het spel; interactie getest met 6× CPU-vertraging |
-| Website-ingang | Nieuwe tegel en illustratie in beide catalogi; werkelijke klik op de tegel opent het spel, merklink keert terug naar het menu |
-
-De throttlingproef is een proxy, geen meting op een echte Samsung A20. Een
-fysieke toestelproef blijft nuttig; de referentieafmetingen zijn wel daadwerkelijk
-gecontroleerd. De eerste volledige 6× CPU-proef mat 32 ms voor driehoek plaatsen
-inclusief CDP-communicatie; dit is een waarneming, geen prestatiegarantie.
-
-## Herhaalbare controles
-
-Met de lokale server en aparte Chromium uit `tests/README.md`:
+- Meetkundig: 840 combinaties van maten, zijden, spiegelingen en rotaties;
+  rechte hoeken, exacte kwadratische lengtes, gedeelde grenzen zonder overlap,
+  verbondenheid en herstel per stuk. Aanvullend alle grotere nieuwe routes.
+- Browser: alle dertien routes handmatig met muis op 780×360 en aanraking op
+  640×360; daarnaast tikbediening op beide formaten: 52 volledige routes.
+- Uitkomsten blijven verborgen tot de onthulling. Het doel verschijnt daarna
+  in de beloningskaart; het lengtelabel ligt op het midden van zijn eigen zijde.
+- Undo, annuleren, opnieuw tekenen, toetsenbord, schermrotatie, alle knoppen
+  binnen het venster, beloningskaart binnen de vloer en geen scroll in gameplay.
+- Canvas staat stil in rust, DPR maximaal 2, geen bitmap/noise-lus. De 6× CPU-proef
+  is een browserproxy, geen meting op een echt mobiel toestel.
+- Screenshots worden bewaard in `/tmp/wortelbouw-*.png` en visueel nagekeken.
 
 ```sh
-node tests/wortelbouw.test.cjs
+node --test tests/wortelbouw.test.cjs
 node tests/wortelbouw-browser.cjs
-node --test tests/catalog-progress.test.cjs
 ```
 
-Het spel is lokaal bereikbaar via `http://127.0.0.1:8765/games/wortelbouw/`.
-Publiceren gebeurt pas wanneer deze bestanden naar de website worden gepusht.
-
-## Handmatig bouwen na gebruikersfeedback
-
-- Trek op de stippellijn een startvierkant uit. De zijde klikt vast op 1–5.
-- Kies rechthoekszijde of schuine zijde. Trek vanaf een vrije gouden zijde
-  naar buiten: afstand bepaalt de gehele maat, het beginpunt de spiegeling.
-- Trek de volgende gouden zijde naar buiten om het hulpvierkant en daarna
-  het resultaatvierkant uit te bouwen. Ze groeien met de beweging mee;
-  vanaf 65% trekken klikt het volledige, meetkundig exacte vierkant vast.
-- Geen extra controle- of bevestigingsklik. Loslaten plaatst het stuk;
-  onvoldoende trekken, naar binnen trekken of een geannuleerd gebaar
-  plaatst niets. Undo neemt één geplaatst stuk terug.
-- De camera blijft tijdens trekken stil en kadreert na plaatsing opnieuw.
-  De volgende vierkanten krijgen ruimte zonder hun vorm vooraf te tonen.
-- Het potlood schakelt naar de optionele tik- en toetsenbordbediening.
-  De meetkundige kern, overlapcontrole en onthulling zijn ongewijzigd.
+Het prototype bewaart geen voortgang, accountgegevens of XP. De catalogus
+vermeldt dertien bouwpuzzels en `tracking: none`.

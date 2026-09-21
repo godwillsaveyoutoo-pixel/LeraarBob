@@ -17,3 +17,13 @@ footer{border-top:1px solid var(--line);padding:4px 12px 6px;background:#ececde;
 /* Direct construction is the default. The pencil toggles the optional tap controls. */
 #floor{touch-action:none;cursor:crosshair}.manual .ruler,.manual #flip{display:none}.rulerIcon{display:none}
 #manual{flex-shrink:0;font-size:25px}#manual[aria-pressed=true]{background:#d1dfcc;color:#215951}.manual .modes{margin-left:0}.manual .workTools{justify-content:flex-start}
+
+#colorKey{position:absolute;top:10px;left:14px;display:flex;gap:14px;font-size:11px;color:#4d5c58;pointer-events:none}#colorKey span:before{content:'';display:inline-block;width:10px;height:10px;margin-right:5px;border-radius:2px;background:#365f9c}#colorKey .helper:before{background:#bf674e}#colorKey .result:before{background:#296861}
+#lesson{position:absolute;top:18px;left:24px;right:24px;pointer-events:none}#lesson strong{display:block;font-size:19px;margin-bottom:4px}#lesson span{font-size:13px;color:var(--muted)}
+#cordLabel{padding:2px 7px;font-size:18px;line-height:1.15;border:1px solid #b68d43;border-radius:3px}
+#success{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:210px;text-align:center;padding:12px;border:1px solid #ccaf62;border-radius:12px;background:linear-gradient(145deg,#fff9dc,#efdfaa);box-shadow:0 4px 20px #946c2520;animation:goal-arrives .65s ease-out}
+.successMark{display:inline-grid;place-items:center;background:#286d61;color:#fff6da;width:30px;height:30px;border-radius:50%;font-size:21px}#success h2{font-size:18px;margin:5px 0 0;color:#725018}#successRoot{display:block;font-family:Georgia,serif;font-size:44px;line-height:1.1;margin:5px 0;color:#654714}#successEquation{font-size:15px;font-weight:650;color:#725018}#success p{font-size:12px;line-height:1.45;margin:8px 0 0;color:#524c36}
+.finished #goal{color:#86601d}.finished #stage{box-shadow:inset 0 0 0 3px #d0ae57}
+#extendedRuler{display:flex;align-items:center;gap:8px;font-size:12px}#longMeasure{height:44px;min-width:100px;border:1px solid #a18c64;background:#faf5e8;border-radius:3px;font:inherit;font-size:18px;color:var(--ink)}
+@keyframes goal-arrives{from{opacity:0;transform:translateY(-50%) scale(.86)}to{opacity:1;transform:translateY(-50%) scale(1)}}
+@media(prefers-reduced-motion:reduce){#success{animation:none}}

@@ -4,10 +4,22 @@
   'use strict';
   const EPS=1e-8;
   const levels=[
-    {n:13,kind:'length',best:1}, {n:12,kind:'length',best:1},
-    {n:14,kind:'length',best:2}, {n:7,kind:'area',best:1},
-    {n:15,kind:'length',best:1}, {n:21,kind:'length',best:1}
+    {n:2,kind:'length',best:1,title:'De eerste wortel',hint:'Probeer twee even lange benen.',lesson:'1² + 1² = 2. De schuine zijde is dus √2.'},
+    {n:18,kind:'length',label:'3√2',best:1,title:'Drie keer zo lang',hint:'Denk terug aan √2. Maak beide benen drie keer zo lang.',lesson:'(3√2)² = 9 × 2 = 18. Driemaal de lengte geeft negenmaal de oppervlakte.'},
+    {n:5,kind:'length',best:1,title:'Ongelijke benen',hint:'Ook twee verschillende maten kunnen samen een wortel maken.',lesson:'1² + 2² = 5. De twee benen hoeven niet even lang te zijn.'},
+    {n:25,kind:'length',label:'5',best:1,title:'Een bekende driehoek',hint:'Bouw 5 als schuine zijde met twee verschillende benen.',lesson:'3² + 4² = 5²: de bekende 3–4–5-driehoek. Een wortel kan ook een geheel getal zijn.'},
+    {n:100,kind:'length',label:'10',best:1,maxLength:10,title:'Dubbel zo groot',hint:'Bouw 10 als schuine zijde. Denk terug aan 3–4–5 en verdubbel beide benen.',lesson:'6–8–10 is tweemaal 3–4–5. De lengtes verdubbelen; de oppervlakten worden viermaal zo groot.'},
+    {n:13,kind:'length',best:1,title:'Twee kwadraten samen',hint:'Welke twee kwadraten vormen samen 13?',lesson:'De oppervlakten op de benen vormen samen de oppervlakte op de schuine zijde.'},
+    {n:12,kind:'length',best:1,title:'Een vierkant eraf',hint:'Gebruik een bestaande zijde als schuine zijde.',lesson:'Bij een verschil is de bestaande zijde de schuine zijde: je trekt een oppervlakte af.'},
+    {n:11,kind:'length',best:1,maxLength:6,title:'Een maatje groter',hint:'Je liniaal gaat nu tot 6. Welk verschil van kwadraten geeft 11?',lesson:'6² − 5² = 36 − 25 = 11. Een kleine wortel kan uit twee grote vierkanten ontstaan.'},
+    {n:7,kind:'area',best:1,title:'Denk in oppervlakte',hint:'Nu is de oppervlakte je doel. Welke zijde hoort daarbij?',lesson:'Oppervlakte 7 en zijde √7 horen bij hetzelfde vierkant.'},
+    {n:15,kind:'length',best:1,title:'Net geen vier',hint:'15 ligt vlak onder een kwadraat.',lesson:'16 − 1 = 15. De gevonden lengte √15 is iets kleiner dan 4.'},
+    {n:21,kind:'length',best:1,title:'Kies je verschil',hint:'Zoek een kwadraat boven 21 en haal er een kleiner kwadraat af.',lesson:'25 − 4 = 21. Oppervlakten helpen je om een onbekende lengte te bouwen.'},
+    {n:14,kind:'length',best:2,title:'Bouw verder',hint:'Niet alles lukt in één stap. Gebruik een gevonden zijde opnieuw.',lesson:'Het koord bewaart je nieuwe lengte, zodat je op het resultaat kunt verder bouwen.'},
+    {n:104,kind:'length',best:1,maxLength:10,title:'De grote verrassing',hint:'De liniaal gaat tot 10. Groot hoeft niet ingewikkeld te zijn.',lesson:'10² + 2² = 100 + 4 = 104. Ook deze grote wortel lukt in één bouwstap!'}
   ];
+  const maxLength=s=>levels[s.level].maxLength||5;
+  const goalLabel=level=>level.label||`√${level.n}`;
   const add=(a,b)=>({x:a.x+b.x,y:a.y+b.y}),sub=(a,b)=>({x:a.x-b.x,y:a.y-b.y});
   const mul=(a,k)=>({x:a.x*k,y:a.y*k}),dot=(a,b)=>a.x*b.x+a.y*b.y;
   const cross=(a,b)=>a.x*b.y-a.y*b.x,len=a=>Math.hypot(a.x,a.y);
@@ -41,11 +53,11 @@
   }
   function initial(level=0){return {level,objects:[],phase:'start',active:null,pending:null,steps:0}}
   function startSquare(k,x=0){
-    if(!Number.isInteger(k)||k<1||k>5||!Number.isFinite(x))throw Error('Kies een liniaalmaat van 1 tot 5.');
+    if(!Number.isInteger(k)||k<1||k>10||!Number.isFinite(x))throw Error('Kies een liniaalmaat van 1 tot 10.');
     return {id:'s0',type:'square',role:'result',area:k*k,points:[{x:x-k/2,y:0},{x:x+k/2,y:0},{x:x+k/2,y:k},{x:x-k/2,y:k}],start:true};
   }
   function plan(s,owner,edgeIndex,k,mode='sum',flip=false){
-    if(!Number.isInteger(k)||k<1||k>5||!['sum','difference'].includes(mode))return null;
+    if(!Number.isInteger(k)||k<1||k>maxLength(s)||!['sum','difference'].includes(mode))return null;
     const square=s.objects.find(o=>o.id===owner&&o.type==='square');
     if(!square||!freeEdges(s,square).some(e=>e.index===edgeIndex))return null;
     const edge=edges(square)[edgeIndex],A=flip?edge.b:edge.a,B=flip?edge.a:edge.b;
@@ -55,7 +67,7 @@
     const c=Math.sqrt(square.area);
     const C=mode==='sum'?add(A,mul(out,k)):add(A,add(mul(u,k*k/c),mul(out,k*Math.sqrt(area)/c)));
     const step=s.steps+1;
-    const triangle={id:`t${step}`,type:'triangle',points:ccw([A,B,C]),mode,known:k,
+    const triangle={id:`t${step}`,type:'triangle',owner,points:ccw([A,B,C]),mode,known:k,
       base:{a:A,b:B,area:square.area},helper:{a:A,b:C,area:k*k},result:{a:B,b:C,area},
       right:mode==='sum'?A:C,revealed:false};
     const helper=squareOn(triangle.helper,triangle,'helper',`h${step}`);
@@ -67,6 +79,7 @@
   function apply(s,action){
     const next=copy(s);
     if(action.type==='start'&&s.phase==='start'){
+      if(action.k>maxLength(s))throw Error(`De liniaal gaat hier tot ${maxLength(s)}.`);
       next.objects=[startSquare(action.k,action.x)];next.active='s0';next.phase='choose';return next;
     }
     if(action.type==='triangle'&&s.phase==='choose'){
@@ -96,6 +109,6 @@
     const p=objects.flatMap(o=>o.points);if(!p.length)return {minX:-3,maxX:3,minY:0,maxY:5};
     return {minX:Math.min(...p.map(p=>p.x)),maxX:Math.max(...p.map(p=>p.x)),minY:Math.min(...p.map(p=>p.y)),maxY:Math.max(...p.map(p=>p.y))};
   }
-  return {levels,Game,initial,startSquare,plan,apply,overlap,sharedBoundary,freeEdges,edges,squareOn,bounds,
+  return {levels,maxLength,goalLabel,Game,initial,startSquare,plan,apply,overlap,sharedBoundary,freeEdges,edges,squareOn,bounds,
     add,sub,mul,dot,cross,len,norm,perp,center,signedArea,EPS};
 });

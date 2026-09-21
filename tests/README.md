@@ -27,10 +27,10 @@ node tests/wortelbouw-browser.cjs
 
 De geometriecontrole verifieert 840 maat/richting/spiegelcombinaties, exact
 grenscontact, echte overlap, verbondenheid, minimale routes en herstel per stuk.
-De browser bouwt alle zes puzzels handmatig met muis (780×360) en aanraking
+De browser bouwt alle dertien puzzels handmatig met muis (780×360) en aanraking
 (640×360), controleert daarnaast de optionele tikbediening op beide formaten en controleert voortijdige onthullingen ook in canvaslabels,
-undo tijdens de animatie, toetsenbord, schermrotatie, overlappende knoppen en
-tekenen in rust. Screenshots verschijnen in `/tmp/wortelbouw-*.png`.
+de uitgebreide liniaal, de doelbeloning, het gedraaide lengtelabel, undo tijdens
+de animatie, toetsenbord, schermrotatie, overlappende knoppen en tekenen in rust. Screenshots verschijnen in `/tmp/wortelbouw-*.png`.
 Zie [speelverslag en acceptatie](../docs/wortelbouw-playthrough.md).
 
 ## Zeeslag en platformuitnodigingen

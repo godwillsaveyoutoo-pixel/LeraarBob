@@ -14,8 +14,8 @@
 <div id="app">
   <header>
     <a href="../../" data-platform-home class="home" aria-label="Naar leraarBob">leraarBob</a>
-    <div class="title">WORTELBOUW <span id="levelCount">1 / 6</span></div>
-    <h1 id="goal">Lengte √13</h1>
+    <div class="title">WORTELBOUW <span id="levelCount">1 / 13</span></div>
+    <h1 id="goal">Lengte √2</h1>
     <span id="steps">0 stappen</span>
     <button id="previous" class="tool" aria-label="Vorige puzzel">‹</button>
     <button id="next" class="tool" aria-label="Volgende puzzel">›</button>
@@ -25,6 +25,9 @@
     <div id="targets" aria-label="Stukken op de vloer"></div>
     <div id="notice" role="status" hidden></div>
     <div id="cordLabel" hidden></div>
+    <div id="colorKey" aria-label="Kleuren van de vierkanten"><span class="base">Bestaand</span><span class="helper">Hulp</span><span class="result">Resultaat</span></div>
+    <div id="lesson"><strong id="lessonTitle"></strong><span id="lessonHint"></span></div>
+    <section id="success" role="status" aria-live="polite" hidden><span class="successMark" aria-hidden="true">✓</span><h2>Doel bereikt!</h2><strong id="successRoot"></strong><div id="successEquation"></div><p id="successLesson"></p></section>
   </main>
   <footer>
     <div class="instructionRow">
@@ -37,6 +40,7 @@
     </div>
     <div id="workTools" class="workTools">
       <button id="manual" class="tool" aria-label="Handmatig bouwen" aria-pressed="true" title="Handmatig bouwen · klik voor tikbediening">✎</button>
+      <label id="extendedRuler" hidden>Liniaal <select id="longMeasure" aria-label="Bekende zijde"></select></label>
       <div class="ruler" role="group" aria-label="Liniaal: bekende zijde">
         <span class="rulerIcon" aria-hidden="true">↔</span>
         <button data-length="1" aria-pressed="false">1</button><button data-length="2" aria-pressed="false">2</button><button data-length="3" aria-pressed="true">3</button><button data-length="4" aria-pressed="false">4</button><button data-length="5" aria-pressed="false">5</button>

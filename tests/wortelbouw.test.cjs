@@ -30,21 +30,14 @@ function finishStep(g,p){
   g.commit({type:'result'});verifyMosaic(g.state);assert.equal(g.state.phase,'reveal');
   g.commit({type:'reveal'});verifyMosaic(g.state);
 }
-const routes=[
-  {start:3,steps:[['sum',2,0,false]]},
-  {start:4,steps:[['difference',2,2,false]]},
-  {start:3,steps:[['sum',2,0,false],['sum',1,3,false]]},
-  {start:4,steps:[['difference',3,0,false]]},
-  {start:4,steps:[['difference',1,1,false]]},
-  {start:5,steps:[['difference',2,1,false]]}
-];
+const routes=require('./fixtures/wortelbouw-routes.cjs');
 test('every diagnostic puzzle has a spatially legal shortest route',()=>{
   routes.forEach((route,index)=>{
     const g=new G.Game(index);g.commit({type:'start',k:route.start});
     for(const [mode,k,edgeIndex,flip] of route.steps)finishStep(g,{owner:g.state.active,mode,k,edgeIndex,flip});
     assert.equal(g.state.phase,'won');assert.equal(g.state.steps,G.levels[index].best);
     assert.equal(g.state.objects.find(o=>o.id===g.state.active).area,G.levels[index].n);
-    if(index===2){const t=g.state.objects.find(o=>o.id==='t2');assert(Math.abs(t.base.b.x-t.base.a.x)>.1&&Math.abs(t.base.b.y-t.base.a.y)>.1,'second step is off the global grid')}
+    if(route.n===14){const t=g.state.objects.find(o=>o.id==='t2');assert(Math.abs(t.base.b.x-t.base.a.x)>.1&&Math.abs(t.base.b.y-t.base.a.y)>.1,'second step is off the global grid')}
   });
 });
 test('all ruler values, orientations and reflections produce exact right triangles and connected squares',()=>{
@@ -63,7 +56,7 @@ test('shared edges and vertices are legal; positive area overlap and a used side
   assert.equal(G.overlap(a,a.map(p=>({...p,x:p.x+2}))),false);
   assert.equal(G.overlap(a,a.map(p=>({x:p.x+2,y:p.y+2}))),false);
   assert.equal(G.overlap(a,a.map(p=>({...p,x:p.x+1.99}))),true);
-  const g=new G.Game(2);g.commit({type:'start',k:3});finishStep(g,{owner:'s0',edgeIndex:0,k:2,mode:'sum',flip:false});
+  const g=new G.Game(11);g.commit({type:'start',k:3});finishStep(g,{owner:'s0',edgeIndex:0,k:2,mode:'sum',flip:false});
   assert.equal(G.plan(g.state,'s0',0,1,'sum',false),null,'cannot attach twice to the same edge');
   let blocked;
   for(const square of g.state.objects.filter(o=>o.type==='square'))for(let e=0;e<4;e++)for(let k=1;k<=5;k++)for(const flip of [false,true]){
@@ -73,7 +66,7 @@ test('shared edges and vertices are legal; positive area overlap and a used side
   assert.throws(()=>g.commit({type:'triangle',...blocked}),/overlapt/);assert.equal(JSON.stringify(g.state),before);
 });
 test('undo restores each physical piece, cancels completed reveals and supports branching',()=>{
-  const g=new G.Game();const states=[JSON.stringify(g.state)];
+  const g=new G.Game(5);const states=[JSON.stringify(g.state)];
   for(const action of [{type:'start',k:3},{type:'triangle',owner:'s0',edgeIndex:0,k:2,mode:'sum',flip:false},{type:'helper'},{type:'result'}]){
     g.commit(action);states.push(JSON.stringify(g.state));
   }
@@ -83,17 +76,28 @@ test('undo restores each physical piece, cancels completed reveals and supports 
   assert.equal(g.state.objects.at(-1).area,15);
 });
 test('area-only breadth-first search confirms the campaign lower bounds',()=>{
-  const seen=new Map([1,4,9,16,25].map(n=>[n,0])),q=[...seen.keys()];
-  while(q.length){const n=q.shift(),d=seen.get(n);if(d>=3)continue;for(let k=1;k<=5;k++)for(const sign of [1,-1]){const next=n+sign*k*k;if(next>0&&!seen.has(next)){seen.set(next,d+1);q.push(next)}}}
-  for(const level of G.levels)assert.equal(seen.get(level.n),level.best);
+  for(const level of G.levels){
+    const limit=level.maxLength||5,seen=new Map(Array.from({length:limit},(_,i)=>[(i+1)**2,0])),q=[...seen.keys()];
+    while(q.length){const n=q.shift(),d=seen.get(n);if(d>=3)continue;for(let k=1;k<=limit;k++)for(const sign of [1,-1]){const next=n+sign*k*k;if(next>0&&!seen.has(next)){seen.set(next,d+1);q.push(next)}}}
+    // A construction must include a right triangle, even if the target is an integer.
+    assert.equal(Math.max(1,seen.get(level.n)),level.best);
+  }
 });
 test('difference works on an irrational hypotenuse, and the longer sum route for 15 is also playable',()=>{
-  const g=new G.Game(2);g.commit({type:'start',k:4});
+  const g=new G.Game(11);g.commit({type:'start',k:4});
   finishStep(g,{owner:'s0',mode:'difference',k:1,edgeIndex:1,flip:false});
   finishStep(g,{owner:'s1',mode:'difference',k:1,edgeIndex:3,flip:true});
   assert.equal(g.state.phase,'won');assert.equal(g.state.objects.find(o=>o.id==='t2').base.area,15);
-  const h=new G.Game(4);h.commit({type:'start',k:3});
+  const h=new G.Game(9);h.commit({type:'start',k:3});
   for(const [k,edgeIndex,flip]of [[2,0,false],[1,3,false],[1,1,true]])finishStep(h,{owner:h.state.active,mode:'sum',k,edgeIndex,flip});
   assert.equal(h.state.phase,'won');assert.equal(h.state.steps,3);
 });
 module.exports={routes};
+
+test('larger rulers are introduced by level and equivalent roots share the exact goal',()=>{
+  const g=new G.Game();assert.throws(()=>g.commit({type:'start',k:6}),/liniaal/);
+  const large=new G.Game(12);large.commit({type:'start',k:10});assert.equal(large.state.objects[0].area,100);
+  assert.equal(G.plan(g.state,'s0',0,6),null);
+  assert.equal(G.levels[1].n,3**2*2);assert.equal(G.goalLabel(G.levels[1]),'3√2');
+  assert.equal(G.maxLength(new G.Game(7).state),6);assert.equal(G.maxLength(large.state),10);
+});

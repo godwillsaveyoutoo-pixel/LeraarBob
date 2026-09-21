@@ -5,13 +5,13 @@
   let ruler=3,mode='sum',flip=false,edgeIndex=null,active=null,preview=null;
   let width=0,height=0,dpr=1,camera={unit:24,x:0,y:0},revealFrame=0,revealStart=0,revealProgress=0,noticeTimer;
   let lastReveal=null,renderCount=0,manual=true,gesture=null;
-  const colors={result:['#428580','#296861','#c0d7c5'],helper:['#e0e7cf','#bfd1b7','#f9f5df'],triangle:['#d2a071','#b77d53','#f1d5af']};
+  const colors={base:['#648fcd','#365f9c','#d7e5fa'],result:['#428580','#296861','#c0d7c5'],helper:['#e49d80','#bf674e','#ffe3ce'],triangle:['#f2deb5','#d8bd88','#fff7df']};
   const screen=p=>({x:camera.x+p.x*camera.unit,y:camera.y-p.y*camera.unit});
   const world=p=>({x:(p.x-camera.x)/camera.unit,y:(camera.y-p.y)/camera.unit});
   const pointBetween=(a,b,t)=>G.add(a,G.mul(G.sub(b,a),t));
   const targetLevel=()=>G.levels[game.state.level];
   const activeSquare=()=>game.state.objects.find(o=>o.id===(active||game.state.active));
-  const rootLabel=n=>`√${n}`;
+  const rootLabel=n=>Number.isInteger(Math.sqrt(n))?String(Math.sqrt(n)):`√${n}`;
   function notify(text){clearTimeout(noticeTimer);$('notice').textContent=text;$('notice').hidden=false;noticeTimer=setTimeout(()=>{$('notice').hidden=true},3600)}
   function dismissNotice(){clearTimeout(noticeTimer);$('notice').hidden=true}
   function cancelReveal(){cancelAnimationFrame(revealFrame);revealFrame=0;revealProgress=0;lastReveal=null;$('cordLabel').hidden=true}
@@ -31,14 +31,16 @@
   function reframe(){
     const s=game.state;
     if(s.phase==='start'){
-      camera.unit=Math.min(35,(height-55)/(manual?5:ruler));camera.x=width/2;camera.y=height-25;return;
+      camera.unit=Math.min(35,(height-55)/(manual?G.maxLength(s):ruler));camera.x=width/2;camera.y=height-25;return;
     }
     const pending=manual&&s.pending?[s.pending.helper,s.pending.result]:futurePieces();
     const b=G.bounds([...s.objects,...pending]);
     // Never clamp to a minimum world scale: off-screen geometry is not a collision.
-    const room=manual&&s.phase==='choose'?6:0;
-    const unit=Math.min(64,(width-160)/Math.max(1,b.maxX-b.minX+room),(height-46)/Math.max(1,b.maxY-b.minY+room));
-    camera={unit,x:width/2-(b.minX+b.maxX)*unit/2,y:height/2+(b.minY+b.maxY)*unit/2};
+    const room=manual&&s.phase==='choose'?2*Math.min(G.maxLength(s),Math.ceil(Math.sqrt(targetLevel().n/2))):0;
+    const availableWidth=s.phase==='won'?width-240:width;
+    const top=s.phase==='start'?0:28;
+    const unit=Math.min(64,(availableWidth-60)/Math.max(1,b.maxX-b.minX+room),(height-46-top)/Math.max(1,b.maxY-b.minY+room));
+    camera={unit,x:availableWidth/2-(b.minX+b.maxX)*unit/2,y:(height+top)/2+(b.minY+b.maxY)*unit/2};
   }
   function syncSize(){const r=stage.getBoundingClientRect();if(width===r.width&&height===r.height&&dpr===Math.min(devicePixelRatio||1,2))return false;width=r.width;height=r.height;dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);return true}
   function resize(){syncSize();reframe();render()}
@@ -49,7 +51,9 @@
     const w=ctx.measureText(text).width;ctx.fillStyle='#f6f2e6ed';ctx.fillRect(q.x-w/2-4,q.y-size/2-3+offset,w+8,size+6);ctx.fillStyle=color;ctx.fillText(text,q.x,q.y+offset);
   }
   function marble(o,ghost=false,blocked=false){
-    const palette=colors[o.type==='triangle'?'triangle':o.role],bounds=G.bounds([o]);
+    const t=game.state.pending?.triangle||[...game.state.objects].reverse().find(p=>p.type==='triangle');
+    const role=o.type==='triangle'?'triangle':o.start||o.id===t?.owner?'base':o.role;
+    const palette=colors[role],bounds=G.bounds([o]);
     const top=screen({x:bounds.minX,y:bounds.maxY}),bottom=screen({x:bounds.maxX,y:bounds.minY});
     ctx.save();path(o.points);
     const gradient=ctx.createLinearGradient(top.x,top.y,bottom.x,bottom.y);gradient.addColorStop(0,palette[0]);gradient.addColorStop(.52,palette[1]);gradient.addColorStop(1,palette[0]);
@@ -98,11 +102,18 @@
     for(const o of s.objects){
       if(o.type==='triangle'){
         rightAngle(o);edgeText(String(o.known),o.helper,o,{size:12});
-        if(o.revealed){cord(o.result);if(s.phase==='choose'&&!preview&&o.result.area===activeSquare()?.area&&(!lastReveal||lastReveal.id!==o.id))edgeText(rootLabel(o.result.area),o.result,o,{size:14,color:'#725018'})}
+        if(o.revealed)cord(o.result);
+        if(o.mode==='difference'&&o.id===(s.pending?.triangle.id||lastReveal?.id))alignedLabel(rootLabel(o.base.area),o.base,13);
       }else{
-        const center=G.center(o.points),placingId=s.phase==='reveal'?s.pending.result.id:null;
+        let center=G.center(o.points);
+        const measured=[...s.objects].reverse().find(t=>t.type==='triangle'&&t.revealed&&t.id===lastReveal?.id);
+        if(measured&&o.id==='s'+s.steps){
+          const mid=pointBetween(measured.result.a,measured.result.b,.5),out=G.norm(G.sub(center,mid));
+          center=G.add(center,G.mul(out,Math.min(Math.sqrt(o.area)*.22,Math.max(0,34/camera.unit-Math.sqrt(o.area)/2))));
+        }
+        const placingId=s.phase==='reveal'?s.pending.result.id:null;
         // DOM square buttons carry these labels while selecting; avoid double text.
-        if(manual||!(s.phase==='choose'&&o.id!==(active||s.active)))label(`A = ${visibleArea(o)}`,center,{color:o.role==='helper'?'#42624b':'#164d49',size:13,offset:placingId===o.id?-18:0});
+        if(manual||!(s.phase==='choose'&&o.id!==(active||s.active)))label(`A = ${visibleArea(o)}`,center,{color:o.role==='helper'?'#703b2b':'#164d49',size:12,offset:placingId===o.id?-18:0});
       }
     }
     if(!manual&&s.phase==='start'){
@@ -134,6 +145,9 @@
       }
     }
     if(s.phase==='reveal')cord(s.pending.triangle.result,revealProgress);
+    if(s.phase==='won'){
+      const tile=s.objects.find(o=>o.id===s.active);ctx.save();path(tile.points);ctx.strokeStyle='#f5d77c';ctx.lineWidth=6;ctx.stroke();path(tile.points);ctx.strokeStyle='#9b712c';ctx.lineWidth=1.5;ctx.stroke();ctx.restore();
+    }
   }
   function buttonTarget(key,point,text,description,kind,action,disabled=false){
     const p=screen(point),button=document.createElement('button');button.className=`target ${kind}`;button.dataset.target=key;button.style.left=`${Math.max(24,Math.min(width-24,p.x))}px`;button.style.top=`${Math.max(24,Math.min(height-24,p.y))}px`;button.setAttribute('aria-label',description);button.title=description;button.disabled=disabled;
@@ -161,7 +175,15 @@
   function instruction(title,detail){$('instruction').replaceChildren();const strong=document.createElement('strong'),span=document.createElement('span');strong.textContent=title;span.textContent=detail;$('instruction').append(strong,span)}
   function ui(){
     const s=game.state,level=targetLevel(),sq=activeSquare();
-    $('levelCount').textContent=`${s.level+1} / ${G.levels.length}`;$('goal').textContent=level.kind==='area'?`Oppervlakte ${level.n}`:`Lengte √${level.n}`;$('steps').textContent=`${s.steps} ${s.steps===1?'stap':'stappen'}`;
+    $('levelCount').textContent=`${s.level+1} / ${G.levels.length}`;$('goal').textContent=level.kind==='area'?`Oppervlakte ${level.n}`:`Lengte ${G.goalLabel(level)}`;$('steps').textContent=`${s.steps} ${s.steps===1?'stap':'stappen'}`;
+    $('colorKey').hidden=s.phase==='start';$('lesson').hidden=s.phase!=='start';
+    $('lessonTitle').textContent=level.title;$('lessonHint').textContent=level.hint;
+    const won=s.phase==='won';$('success').hidden=!won;
+    if(won){$('successRoot').textContent=level.kind==='area'?`A = ${level.n}`:G.goalLabel(level);$('successEquation').textContent=level.label?`√${level.n} = ${level.label}`:`${s.pending?.k||''}`;$('successLesson').textContent=level.lesson}
+    const extended=G.maxLength(s)>5;$('extendedRuler').hidden=manual||!extended;
+    document.querySelector('.ruler').hidden=extended;
+    if($('longMeasure').options.length!==G.maxLength(s))$('longMeasure').replaceChildren(...Array.from({length:G.maxLength(s)},(_,i)=>new Option(String(i+1),String(i+1))));
+    $('longMeasure').value=String(ruler);[...$('longMeasure').options].forEach(o=>o.disabled=s.phase==='choose'&&mode==='difference'&&Number(o.value)**2>=sq?.area);
     $('undo').disabled=!game.history.length&&edgeIndex===null;$('flip').disabled=!preview||s.phase!=='choose';
     const canMeasure=['start','choose'].includes(s.phase);
     document.querySelectorAll('[data-length]').forEach(b=>{const k=Number(b.dataset.length);b.setAttribute('aria-pressed',String(k===ruler));b.disabled=!canMeasure||(s.phase==='choose'&&mode==='difference'&&sq&&k*k>=sq.area)});
@@ -174,26 +196,36 @@
       if(preview&&!preview.valid)instruction('Hier past de hele stap niet',`Het ${preview.blocked} overlapt. Spiegel, wijzig de maat of ga terug met ↶.`);
       else if(preview)instruction('Leg je driehoek','Tik op de driehoek of haar +. De vierkanten volgen.');
       else instruction('Kies een gouden zijde',`Meet ${ruler}. Bouw aan ${mode==='sum'?'een rechthoekszijde':'de schuine zijde'}.`);
-    }else if(s.phase==='helper')instruction('Leg het lichte hulpvierkant',`De bekende zijde is ${s.pending.k}. Tik op + in de lichte tegel.`);
-    else if(s.phase==='result')instruction('Leg het blauwe resultaatvierkant','Tik op +. Daarna meet het koord de nieuwe zijde.');
+    }else if(s.phase==='helper')instruction('Leg het koraalkleurige hulpvierkant',`De bekende zijde is ${s.pending.k}. Tik op + in de koraalkleurige tegel.`);
+    else if(s.phase==='result')instruction('Leg het groene resultaatvierkant','Tik op +. Daarna meet het koord de nieuwe zijde.');
     else if(s.phase==='reveal')instruction('Het koord neemt de nieuwe maat over…','Driehoek en beide vierkanten liggen op hun plek.');
     else if(s.phase==='won'){
       const t=[...s.objects].reverse().find(o=>o.type==='triangle');$('relationship').textContent=`${t.base.area} ${t.mode==='sum'?'+':'−'} ${t.helper.area} = ${t.result.area}`;
-      instruction(`${rootLabel(level.n)} gebouwd · A = ${level.n}`,`${$('relationship').textContent} · ${s.steps===level.best?'kortste route':'probeer het in '+level.best+' stappen'}`);
+      instruction('Mooi gebouwd!',`${$('relationship').textContent} · ${s.steps} ${s.steps===1?'bouwstap':'bouwstappen'}`);
+      if(!level.label)$('successEquation').textContent=$('relationship').textContent;
     }
     if(manual){
-      if(s.phase==='start')instruction('Trek je eerste vierkant uit','Begin onderaan en sleep omhoog. Laat los bij maat 1 tot 5.');
+      if(s.phase==='start')instruction('Trek je eerste vierkant uit',`Begin onderaan en sleep omhoog. Laat los bij maat 1 tot ${G.maxLength(s)}.`);
       else if(s.phase==='choose')instruction(gesture?.type==='triangle'?`Bekende zijde: ${ruler}`:'Trek een driehoek aan een gouden zijde',preview&&!preview.valid?`Het ${preview.blocked} zou overlappen. Trek anders of kies een andere zijde.`:'Begin bij een uiteinde, trek naar buiten en laat los bij de gewenste maat.');
-      else if(s.phase==='helper')instruction('Bouw het lichte hulpvierkant','Trek de gouden zijde naar buiten tot het vierkant staat.');
-      else if(s.phase==='result')instruction('Bouw het blauwe resultaatvierkant','Trek de gouden zijde naar buiten. Daarna meet het koord.');
+      else if(s.phase==='helper')instruction('Bouw het koraalkleurige hulpvierkant','Trek de gouden zijde naar buiten tot het vierkant staat.');
+      else if(s.phase==='result')instruction('Bouw het groene resultaatvierkant','Trek de gouden zijde naar buiten. Daarna meet het koord.');
     }
+  }
+  function edgePlacement(edge){
+    const a=screen(edge.a),b=screen(edge.b);let angle=Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI;
+    if(angle>90)angle-=180;if(angle<-90)angle+=180;
+    return {x:(a.x+b.x)/2,y:(a.y+b.y)/2,angle};
+  }
+  function alignedLabel(text,edge,size=16){
+    const p=edgePlacement(edge);ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle*Math.PI/180);
+    ctx.font=`600 ${size}px system-ui`;const w=ctx.measureText(text).width;
+    ctx.fillStyle='#fff7e6';ctx.fillRect(-w/2-5,-size/2-3,w+10,size+6);ctx.fillStyle='#654919';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,0,0);ctx.restore();
   }
   function positionCordLabel(){
     $('cordLabel').hidden=!lastReveal;if(!lastReveal)return;
-    const edge=lastReveal.result,mid=screen(pointBetween(edge.a,edge.b,.5)),bounds=G.bounds(game.state.objects),right=screen({x:bounds.maxX,y:0}).x;
-    const p={x:Math.min(width-40,right+52),y:Math.max(20,Math.min(height-20,mid.y))};
-    $('cordLabel').textContent=rootLabel(edge.area);$('cordLabel').style.left=`${Math.max(40,Math.min(width-40,p.x))}px`;$('cordLabel').style.top=`${Math.max(20,Math.min(height-20,p.y))}px`;
-    ctx.beginPath();ctx.moveTo(mid.x,mid.y);ctx.lineTo(p.x-29,p.y);ctx.lineWidth=1;ctx.strokeStyle='#9b84568a';ctx.setLineDash([2,3]);ctx.stroke();ctx.setLineDash([]);
+    const edge=lastReveal.result,p=edgePlacement(edge);
+    $('cordLabel').textContent=rootLabel(edge.area);$('cordLabel').style.left=`${p.x}px`;$('cordLabel').style.top=`${p.y}px`;
+    $('cordLabel').style.transform=`translate(-50%,-50%) rotate(${p.angle}deg)`;
   }
   function render(){ui();if(syncSize())reframe();draw();targets();positionCordLabel()}
   function refresh(){updatePreview();reframe();render()}
@@ -228,6 +260,7 @@
     mode=b.dataset.mode;if(mode==='difference'&&ruler*ruler>=sq.area)ruler=Math.max(1,Math.ceil(Math.sqrt(sq.area))-1);
     dismissNotice();refresh();
   });
+  $('longMeasure').onchange=()=>{ruler=Number($('longMeasure').value);dismissNotice();refresh()};
   $('flip').onclick=()=>{flip=!flip;refresh()};$('undo').onclick=undo;$('restart').onclick=()=>reset();$('overview').onclick=()=>{reframe();render()};
   $('next').onclick=$('continue').onclick=()=>reset((game.state.level+1)%G.levels.length);$('previous').onclick=()=>reset((game.state.level+G.levels.length-1)%G.levels.length);
   // A tap on a proposed piece works as well as its large semantic + button.
@@ -259,15 +292,15 @@
     if(!gesture||gesture.id!==e.pointerId)return;
     const p=pointerPoint(e),g=gesture,s=game.state;g.distance=G.len(G.sub(p,g.down))*camera.unit;
     if(g.type==='start'){
-      ruler=Math.max(1,Math.min(5,Math.round(Math.max(Math.abs(p.x-g.anchor.x),p.y))));
+      ruler=Math.max(1,Math.min(G.maxLength(s),Math.round(Math.max(Math.abs(p.x-g.anchor.x),p.y))));
       g.x=g.anchor.x+(p.x<g.anchor.x?-1:1)*ruler/2;
       g.valid=p.y>0&&g.distance>=10;g.pieces=g.valid?[G.startSquare(ruler,g.x)]:[];
     }else if(g.type==='triangle'){
       const outward=G.mul(G.perp(G.norm(G.sub(g.edge.b,g.edge.a))),-1),delta=G.sub(p,g.anchor);
-      const maximum=mode==='sum'?5:Math.min(5,Math.ceil(Math.sqrt(activeSquare().area))-1);
+      const maximum=mode==='sum'?G.maxLength(s):Math.min(G.maxLength(s),Math.ceil(Math.sqrt(activeSquare().area))-1);
       ruler=Math.max(1,Math.min(maximum,Math.round(mode==='sum'?G.dot(delta,outward):G.len(delta))));
       preview=G.plan(s,active,g.edge.index,ruler,mode,flip);
-      g.valid=G.dot(delta,outward)*camera.unit>=10&&preview?.valid;
+      g.valid=G.dot(delta,outward)*camera.unit>=Math.min(10,camera.unit*.6)&&preview?.valid;
       g.pieces=preview?[preview.triangle]:[];
     }else{
       const edge=s.pending.triangle[g.type],tile=s.pending[g.type],mid=pointBetween(edge.a,edge.b,.5);

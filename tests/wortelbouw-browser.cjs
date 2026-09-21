@@ -7,7 +7,7 @@ class CDP{
   async eval(expression){const r=await this.send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value}
   async wait(expression){for(let i=0;i<100;i++){if(await this.eval(expression))return;await delay(50)}throw Error('Timeout: '+expression)}
 }
-const routes=[{start:3,steps:[['sum',2,0]]},{start:4,steps:[['difference',2,2]]},{start:3,steps:[['sum',2,0],['sum',1,3]]},{start:4,steps:[['difference',3,0]]},{start:4,steps:[['difference',1,1]]},{start:5,steps:[['difference',2,1]]}];
+const routes=require('./fixtures/wortelbouw-routes.cjs');
 (async()=>{
   const browser=new CDP();await browser.connect((await(await fetch('http://127.0.0.1:9235/json/version')).json()).webSocketDebuggerUrl);
   const {browserContextId}=await browser.send('Target.createBrowserContext');
@@ -24,12 +24,25 @@ const routes=[{start:3,steps:[['sum',2,0]]},{start:4,steps:[['difference',2,2]]}
     if(touch){await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:p.x,y:p.y}]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]})}
     else for(const type of ['mousePressed','mouseReleased'])await c.send('Input.dispatchMouseEvent',{type,x:p.x,y:p.y,button:'left',clickCount:1});
   }
-  async function shot(name){const r=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(`/tmp/wortelbouw-${name}.png`,Buffer.from(r.data,'base64'))}
+  async function measure(k){
+    if(await c.eval(`document.querySelector('#extendedRuler').getClientRects().length>0&&!document.querySelector('#extendedRuler').hidden`)){
+      await tap('#longMeasure');await c.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Home',code:'Home',windowsVirtualKeyCode:36});
+      for(let i=1;i<k;i++)await c.send('Input.dispatchKeyEvent',{type:'keyDown',key:'ArrowDown',code:'ArrowDown',windowsVirtualKeyCode:40});
+      await c.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});await c.send('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+    }else await tap(`[data-length="${k}"]`);
+  }
+  async function shot(name){if((await inspect()).state.phase==='won')await c.wait(`getComputedStyle(document.querySelector('#success')).opacity==='1'`);const r=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(`/tmp/wortelbouw-${name}.png`,Buffer.from(r.data,'base64'))}
   async function fits(){
     assert(await c.eval('document.documentElement.scrollWidth<=innerWidth&&document.documentElement.scrollHeight<=innerHeight'),'no scrolling');
     assert(await c.eval(`[...document.querySelectorAll('button:not([hidden])')].filter(b=>b.getClientRects().length).every(b=>{const r=b.getBoundingClientRect();return r.left>=0&&r.top>=0&&r.right<=innerWidth+.5&&r.bottom<=innerHeight+.5})`),'all controls inside the viewport');
     assert(await c.eval(`(()=>{const r=[...document.querySelectorAll('footer button')].filter(b=>b.getClientRects().length).map(b=>b.getBoundingClientRect());return r.every((a,i)=>r.slice(i+1).every(b=>Math.min(a.right,b.right)-Math.max(a.left,b.left)<=0||Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)<=0))})()`),'footer controls do not overlap');
     assert(await c.eval(`(()=>{const d=Wortelbouw.inspect(),r=document.querySelector('#stage').getBoundingClientRect();return d.state.objects.flatMap(o=>o.points).every(p=>{const x=d.camera.x+p.x*d.camera.unit,y=d.camera.y-p.y*d.camera.unit;return x>=0&&y>=0&&x<=r.width&&y<=r.height})})()`),'camera contains every placed piece');
+  }
+  async function victory(){
+    assert.equal(await c.eval(`document.querySelector('#success').hidden`),false,'goal is visibly celebrated');
+    assert.equal(await c.eval(`document.querySelector('#successRoot').textContent`),await c.eval(`(()=>{const l=WortelbouwGeometry.levels[Wortelbouw.inspect().state.level];return l.kind==='area'?'A = '+l.n:WortelbouwGeometry.goalLabel(l)})()`));
+    assert(await c.eval(`(()=>{const d=Wortelbouw.inspect(),t=d.state.objects.filter(o=>o.type==='triangle').at(-1),e=t.result,b=document.querySelector('#cordLabel');return Math.abs(parseFloat(b.style.left)-(d.camera.x+(e.a.x+e.b.x)/2*d.camera.unit))<.1&&Math.abs(parseFloat(b.style.top)-(d.camera.y-(e.a.y+e.b.y)/2*d.camera.unit))<.1&&b.style.transform.includes('rotate(')})()`),'root is centered on its own edge');
+    assert(await c.eval(`(()=>{const a=document.querySelector('#success').getBoundingClientRect(),b=document.querySelector('#stage').getBoundingClientRect();return a.top>=b.top&&a.bottom<=b.bottom&&a.right<=b.right})()`),'celebration stays within floor');
   }
   async function drag(points,touch=true,cancel=false){
     const first=points[0];
@@ -70,7 +83,7 @@ const routes=[{start:3,steps:[['sum',2,0]]},{start:4,steps:[['difference',2,2]]}
         await drag(await squarePoints(),touch);await c.wait(`!['result','reveal'].includes(Wortelbouw.inspect().state.phase)`);
         if(level===0){await tap('#undo',touch);await c.wait(`Wortelbouw.inspect().state.phase==='result'`);assert.equal((await inspect()).state.phase,'result');await drag(await squarePoints(),touch);await c.wait(`Wortelbouw.inspect().state.phase==='won'`)}
       }
-      assert.equal((await inspect()).state.phase,'won');await fits();await shot(`${width}-manual-puzzle-${level+1}`);
+      assert.equal((await inspect()).state.phase,'won');await victory();await fits();await shot(`${width}-manual-puzzle-${level+1}`);
       console.log(`PASS manual ${touch?'touch':'mouse'} ${width}×360: puzzle ${level+1}`);
       if(level<routes.length-1)await tap('#continue',touch);
     }
@@ -81,9 +94,9 @@ const routes=[{start:3,steps:[['sum',2,0]]},{start:4,steps:[['difference',2,2]]}
     await fits();await shot(`${width}-start`);
     for(let level=0;level<routes.length;level++){
       const route=routes[level];assert.equal((await inspect()).state.level,level);
-      await tap(`[data-length="${route.start}"]`);await tap('[data-target="start"]');
+      await measure(route.start);await tap('[data-target="start"]');
       for(const [index,[mode,k,edgeIndex]] of route.steps.entries()){
-        await tap(`[data-mode="${mode}"]`);await tap(`[data-length="${k}"]`);await tap(`[data-target="edge-${edgeIndex}"]`);
+        await tap(`[data-mode="${mode}"]`);await measure(k);await tap(`[data-target="edge-${edgeIndex}"]`);
         assert((await inspect()).preview?.valid,'preview physically fits');await fits();
         if(level===0&&index===0){await shot(`${width}-triangle`);await tap('#flip');assert.equal((await inspect()).flip,true);await tap('#flip')}
         await c.eval('drawnText=[]');await tap('[data-target="triangle"]');assert.equal((await inspect()).state.phase,'helper');
@@ -94,22 +107,22 @@ const routes=[{start:3,steps:[['sum',2,0]]},{start:4,steps:[['difference',2,2]]}
         await tap('[data-target="result"]');await c.wait(`Wortelbouw.inspect().state.phase!=='reveal'`);
         if(level===0){
           // Undo removes the result and hides its exact label again, then re-place.
-          await tap('#undo');assert.equal((await inspect()).state.phase,'result');assert.equal(await c.eval(`document.querySelector('#cordLabel').hidden`),true);
+          await tap('#undo');assert.equal((await inspect()).state.phase,'result');assert.equal(await c.eval(`document.querySelector('#cordLabel').hidden`),true);assert.equal(await c.eval(`document.querySelector('#success').hidden`),true);
           await c.eval('drawnText=[]');await c.send('Emulation.setDeviceMetricsOverride',{width,height:360,deviceScaleFactor:1,mobile:true});
-          assert.equal(await c.eval(`drawnText.some(t=>t==='√13')`),false);
+          assert.equal(await c.eval(`drawnText.some(t=>t==='√2')`),false);
           await tap('[data-target="result"]');await c.wait(`Wortelbouw.inspect().state.phase==='won'`);
         }
       }
       const s=(await inspect()).state;assert.equal(s.phase,'won');assert.equal(s.steps,route.steps.length);
-      assert.equal(await c.eval(`document.querySelector('#cordLabel').textContent`),'√'+[13,12,14,7,15,21][level]);
+      assert.equal(await c.eval(`document.querySelector('#cordLabel').textContent`),Number.isInteger(Math.sqrt(routes[level].n))?String(Math.sqrt(routes[level].n)):'√'+routes[level].n);
       await fits();await shot(`${width}-puzzle-${level+1}`);
       console.log(`PASS ${width}×360: puzzle ${level+1}, ${s.steps} step(s), all pieces placed through touch`);
       if(level<routes.length-1)await tap('#continue');
     }
   }
   // Undo during the animation must cancel the pending reveal, without stale callbacks.
-  await tap('#next');await tap('[data-length="3"]');await tap('[data-target="start"]');await tap('[data-length="2"]');await tap('[data-target="edge-0"]');await tap('[data-target="triangle"]');await tap('[data-target="helper"]');await tap('[data-target="result"]');await tap('#undo');
-  await delay(800);assert.equal((await inspect()).state.phase,'result');assert.equal(await c.eval(`document.querySelector('#cordLabel').hidden`),true);
+  await tap('#next');await tap('[data-length="1"]');await tap('[data-target="start"]');await tap('[data-length="1"]');await tap('[data-target="edge-0"]');await tap('[data-target="triangle"]');await tap('[data-target="helper"]');await tap('[data-target="result"]');await tap('#undo');
+  await delay(800);assert.equal((await inspect()).state.phase,'result');assert.equal(await c.eval(`document.querySelector('#cordLabel').hidden`),true);assert.equal(await c.eval(`document.querySelector('#success').hidden`),true);
   // Keyboard placement, pointer cancellation and rotation preserve the pending construction.
   await c.eval(`document.querySelector('[data-target="result"]').focus()`);
   await c.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',windowsVirtualKeyCode:13});await c.send('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});await c.wait(`Wortelbouw.inspect().state.phase==='won'`);
