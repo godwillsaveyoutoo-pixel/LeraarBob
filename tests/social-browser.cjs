@@ -23,14 +23,36 @@ class CDP {
 const A='11111111-1111-4111-8111-111111111111', B='22222222-2222-4222-8222-222222222222';
 const accounts = {[A]:{id:A,role:'student',alias:'Test-A',class_code:'3TMW'},[B]:{id:B,role:'student',alias:'Test-B',class_code:'3TMW'}};
 let invitations=[], sessions=new Map(), fail=false, reportCount=0;
-const clients=[];
+const clients=[];let groupSession=null;const groupMembers=new Map();
 const playerList=()=>[...new Set([...sessions.values()].map(s=>s.id))].map(id=>({...accounts[id],status:invitations.some(i=>i.status==='accepted'&&[i.sender_id,i.recipient_id].includes(id))?'playing':'available'}));
 function rpc(c,name,args){
   if(fail)throw Error('Test: verbinding verbroken');
   if(name==='axioma_is_teacher')return false;
   if(name==='axioma_register_multiplayer_match')return {};
   if(name==='axioma_report_multiplayer_result'){reportCount++;return {}}
-  if(name==='axioma_multiplayer_ranking')return [];
+  if(name==='axioma_multiplayer_ranking'||name==='axioma_naval_ranking')return [];
+  if(name==='axioma_clay'){
+    const uid=c.account,action=args.p_action,now=Date.now();let member=groupMembers.get(uid);
+    if(action==='create'){groupSession={id:randomUUID(),host_id:uid,host_alias:accounts[uid].alias,speed:args.p_speed,status:'waiting',created_at:new Date(now).toISOString()};groupMembers.clear()}
+    if(action==='create'||action==='join'){
+      member={user_id:uid,alias:accounts[uid].alias,tab_id:args.p_tab_id,streak:0,misses:0,version:0,left_at:null,online:true};groupMembers.set(uid,member);
+    }
+    if(action==='start'){
+      assert.equal(uid,groupSession.host_id);assert(groupMembers.size>=2);groupSession.status='running';groupSession.starts_at=new Date(now+5000).toISOString();
+      for(const m of groupMembers.values()){m.next_at=groupSession.starts_at;m.participated=true}
+    }
+    if(action==='answer'){
+      assert.equal(groupSession.status,'running');assert.equal(member.version,args.p_version);
+      const correct=args.p_answer===[1,-1,2,-.5,.5,-2,0][member.streak];
+      member.streak=correct?member.streak+1:0;member.misses+=correct?0:1;member.version++;
+      member.last_event_id=args.p_event_id;member.last_correct=correct;member.next_at=new Date(now+800).toISOString();
+      if(member.streak===7){groupSession.status='finished';groupSession.winner_id=uid;groupSession.winner_alias=accounts[uid].alias;groupSession.elapsed_ms=now-Date.parse(groupSession.starts_at)}
+    }
+    if(action==='leave'&&member)member.left_at=new Date(now).toISOString();
+    const sessions=groupSession?.status==='waiting'?[{...groupSession,player_count:groupMembers.size}]:[];
+    const ranking=action==='ranking'&&groupSession?.status==='finished'?[{rank:1,user_id:groupSession.winner_id,alias:groupSession.winner_alias,wins:1,best_ms:groupSession.elapsed_ms}]:null;
+    return {sessions,current:member?groupSession:null,member:member||null,members:member?[...groupMembers.values()]:[],ranking,server_time:new Date(now).toISOString()};
+  }
   assert.equal(name,'axioma_social');
   const uid=c.account,tab=args.p_tab_id,action=args.p_action;
   const inv=invitations.find(i=>i.id===args.p_invite_id);
@@ -169,6 +191,35 @@ async function setup(browser,uid){
   assert.equal(reportCount,2);
   await b.eval(`document.querySelector('#leaveBtn').click()`);await b.wait(`__naval.S.phase==='idle'`);
   console.log('PASS: leave/forfeit and mutual result reporting');
+  await a.go('');await b.go('games/pythagoras.html');
+  for(const c of [a,b])await c.wait('window.AxiomaGroups?.state().connected');
+  await a.eval('AxiomaSocial.open()');await click(a,'[data-action="group-create"]');
+  await a.wait(`location.pathname.includes('/kleiduiven/')&&document.querySelector('#groupDialog')?.open`);
+  await b.eval('AxiomaGroups.refresh();AxiomaSocial.open()');await b.wait(`${panel}.querySelector('[data-action="group-join"]')`);
+  await click(b,'[data-action="group-join"]');await b.wait(`location.pathname.includes('/kleiduiven/')&&document.querySelector('#groupDialog')?.open`);
+  await a.eval('AxiomaGroups.refresh()');await a.wait(`!document.querySelector('[data-group-action="start"]').disabled`);
+  await a.eval(`document.querySelector('[data-group-action="start"]').click()`);
+  for(const c of [a,b])await c.wait(`document.querySelector('#choices button:not(:disabled)')&&!document.querySelector('#groupDialog').open`);
+  await a.eval(`document.querySelector('#choices [data-a="1"]').click()`);
+  await a.wait(`document.querySelector('#choices [data-a="-1"]:not(:disabled)')`);
+  await a.eval(`document.querySelector('#choices [data-a="1"]').click()`);
+  await a.wait(`AxiomaGroups.state().member.misses===1&&document.querySelector('#choices [data-a="2"]:not(:disabled)')`);
+  assert.equal(await a.eval('AxiomaGroups.state().member.streak'),0);
+  for(const slope of [1,-1,2,-.5,.5,-2,0]){
+    await b.wait(`document.querySelector('#choices [data-a="${slope}"]:not(:disabled)')`);
+    await b.eval(`document.querySelector('#choices [data-a="${slope}"]').click()`);
+    await delay(1200);
+  }
+  for(const c of [a,b])await c.wait(`document.querySelector('#groupContent').textContent.includes('Test-B wint!')`);
+  await b.eval(`document.querySelector('#groupRanking').click()`);await b.wait(`document.querySelector('#groupRankingContent table')`);
+  assert.match(await b.eval(`document.querySelector('#groupRankingContent').textContent`),/Test-B/);
+  for(const [width,height] of [[390,844],[844,390],[1440,1000]]){
+    await b.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<900});
+    assert.equal(await b.eval('document.documentElement.scrollWidth>innerWidth'),false,'group page overflow '+width);
+    const shot=await b.send('Page.captureScreenshot',{format:'png'});
+    fs.writeFileSync(`/tmp/leraarbob-clay-group-${width}.png`,Buffer.from(shot.data,'base64'));
+  }
+  console.log('PASS: create group from header, join from another game, shared start, mistake resets all, seven correct wins and ranks');
   // Popover layout and keyboard dismissal on small screens.
   await a.go('');await a.wait('window.AxiomaSocial?.state().connected');
   for(const width of [320,390,768,1440]){

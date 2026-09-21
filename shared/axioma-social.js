@@ -132,7 +132,11 @@
       const text = { declined:'Uitnodiging geweigerd', cancelled:'Uitnodiging ingetrokken', expired:'Uitnodiging verlopen', finished:'Partij afgelopen' }[i.status];
       return text ? `<p class="result">${name} · ${text}</p>` : '';
     }).join('');
-    const html = `<p class="intro">Nodig iemand uit voor <strong>Rechten Zeeslag</strong>, ook vanuit een ander spel.</p>${!connected ? '<p class="error" role="status">Verbinding herstellen… <button data-action="retry">Opnieuw proberen</button></p>' : ''}${note ? `<p class="feedback" role="status">${esc(note)}</p>` : ''}${invites}<h3>Online op leraarBob</h3>${players.length ? players.map(p => `<div class="player"><div><strong>${esc(p.alias)}</strong><small>${esc(p.class_code)}${p.class_code ? ' · ' : ''}${p.status === 'playing' ? 'In Zeeslag' : 'Beschikbaar'}</small></div><button data-action="invite" data-id="${p.id}" ${disabled || active || p.status === 'playing' ? 'disabled' : ''}>Uitnodigen</button></div>`).join('') : '<p class="empty">Nog niemand anders online.</p>'}<p class="foot">Uitnodigingen vervallen na 90 seconden.</p>`;
+    const g=window.AxiomaGroups?.state();
+    const inGroup=g?.member&&!g.member.left_at&&['waiting','running'].includes(g.current?.status);
+    const groupDisabled=pending||g?.pending||!g?.connected||inGroup||active?'disabled':'';
+    const groups=g?`<h3>Kleiduifschieten in groep</h3><p class="intro">Zeven juiste antwoorden op rij. De eerste wint.</p>${inGroup?`<p class="result">Je doet mee met ${esc(g.current.host_alias)}.</p>`:''}${g.sessions.map(s=>`<div class="player"><div><strong>${esc(s.host_alias)}</strong><small>${s.player_count} spelers · ${s.speed} s per doel</small></div><button data-action="group-join" data-id="${s.id}" ${groupDisabled}>Meedoen</button></div>`).join('')}<button data-action="group-create" ${groupDisabled}>Groepssessie starten · 5 s</button>`:'';
+    const html = `<p class="intro">Nodig iemand uit voor <strong>Rechten Zeeslag</strong>, ook vanuit een ander spel.</p>${!connected ? '<p class="error" role="status">Verbinding herstellen… <button data-action="retry">Opnieuw proberen</button></p>' : ''}${note ? `<p class="feedback" role="status">${esc(note)}</p>` : ''}${invites}<h3>Online op leraarBob</h3>${players.length ? players.map(p => `<div class="player"><div><strong>${esc(p.alias)}</strong><small>${esc(p.class_code)}${p.class_code ? ' · ' : ''}${p.status === 'playing' ? 'In spel' : 'Beschikbaar'}</small></div><button data-action="invite" data-id="${p.id}" ${disabled || active || inGroup || p.status === 'playing' ? 'disabled' : ''}>Uitnodigen</button></div>`).join('') : '<p class="empty">Nog niemand anders online.</p>'}${groups}<p class="foot">Zeeslag-uitnodigingen vervallen na 90 seconden.</p>`;
     if (content.innerHTML !== html) content.innerHTML = html;
   }
   function buildUI() {
@@ -164,6 +168,10 @@
     content.onclick = e => {
       const b = e.target.closest('button[data-action]'); if (!b || b.disabled) return;
       if (b.dataset.action === 'retry') { refresh(); return; }
+      if(b.dataset.action.startsWith('group-')){
+        const action=b.dataset.action==='group-create'?AxiomaGroups.create(5):AxiomaGroups.join(b.dataset.id);
+        action.catch(error=>{note=error.message;render()});return;
+      }
       act(b.dataset.action, b.dataset.action === 'invite' ? {p_target_id:b.dataset.id} : {p_invite_id:b.dataset.id});
     };
     // Some lesson headers slide away or are replaced as levels change.
@@ -211,4 +219,8 @@
   window.addEventListener('pageshow', e => { if (e.persisted) refresh(); });
   window.addEventListener('online', refresh);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(); });
+  window.addEventListener('axioma:groups',render);
+  const groupsScript=document.createElement('script');
+  groupsScript.src=new URL('shared/axioma-groups.js',base).href;
+  document.head.append(groupsScript);
 })();

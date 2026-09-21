@@ -413,14 +413,14 @@ function renderRanking(rows){
   const mine=rows.find(r=>r.user_id===S.me?.id);
   $('#rankingSubtitle').textContent=S.profile?.class_code?`Klas ${S.profile.class_code}`:'Jouw klas';
   if(mine){$('#myStats').innerHTML=`<strong>${mine.won} gewonnen · ${mine.lost} verloren</strong><span>${mine.played} gespeeld · ${Number(mine.win_pct).toFixed(1).replace('.0','')}%</span>`}
-  else{$('#myStats').innerHTML='<strong>Nog geen partijen</strong><span>Speel vijf partijen om in de ranking te komen.</span>'}
+  else{$('#myStats').innerHTML='<strong>Nog geen partijen</strong><span>Je eerste voltooide partij telt mee voor de ranglijst.</span>'}
   if(!rows.length){$('#rankingBody').innerHTML='<div class="rankEmpty">Nog geen voltooide partijen in deze klas.</div>';return}
   $('#rankingBody').innerHTML=`<table class="rankTable"><thead><tr><th>#</th><th>Speler</th><th>W</th><th>V</th><th>Gespeeld</th><th>%</th></tr></thead><tbody>${rows.map(r=>`<tr class="${r.user_id===S.me?.id?'me':''}"><td class="${r.qualified?'':'pendingRank'}">${r.qualified?r.rank:'—'}</td><td>${escapeHtml(r.alias)}${r.user_id===S.me?.id?' (jij)':''}</td><td>${r.won}</td><td>${r.lost}</td><td>${r.played}</td><td>${Number(r.win_pct).toFixed(1).replace('.0','')}%</td></tr>`).join('')}</tbody></table>`;
 }
 async function openRanking(){
   $('#rankingOverlay').hidden=false;$('#rankingBody').innerHTML='<div class="rankEmpty">Ranking laden…</div>';
-  if(S.demo){renderRanking([{rank:1,user_id:'mila',alias:'Mila',played:8,won:6,lost:2,win_pct:75,qualified:true},{rank:2,user_id:'noor',alias:'Noor',played:7,won:5,lost:2,win_pct:71.4,qualified:true},{rank:null,user_id:'demo-me',alias:'Jij',played:2,won:1,lost:1,win_pct:50,qualified:false}]);return}
-  try{const {data,error}=await supa.rpc('axioma_multiplayer_ranking',{p_game_id:GAME_ID});if(error)throw error;renderRanking(data||[])}catch(err){console.error(err);$('#rankingBody').innerHTML='<div class="rankEmpty">Ranking kon niet worden geladen.</div>'}
+  if(S.demo){renderRanking([{rank:1,user_id:'mila',alias:'Mila',played:8,won:6,lost:2,win_pct:75,qualified:true},{rank:2,user_id:'noor',alias:'Noor',played:7,won:5,lost:2,win_pct:71.4,qualified:true},{rank:3,user_id:'demo-me',alias:'Jij',played:2,won:1,lost:1,win_pct:50,qualified:true}]);return}
+  try{const {data,error}=await supa.rpc('axioma_naval_ranking');if(error)throw error;renderRanking(data||[])}catch(err){console.error(err);$('#rankingBody').innerHTML='<div class="rankEmpty">Ranking kon niet worden geladen.</div>'}
 }
 
 function randomFleet(){const fleet=[];const occ=new Set();for(const def of SHIP_DEFS){let ok=false;for(let tries=0;tries<500&&!ok;tries++){const start={x:GRID_MIN+Math.floor(Math.random()*9),y:GRID_MIN+Math.floor(Math.random()*9)};const options=[];for(const sl of ALLOWED_SLOPES)for(const sign of [-1,1]){if(!shootableIntercept(sl.a,start))continue;const sx=sl.dx*sign,sy=sl.dy*sign;const cells=Array.from({length:def.length},(_,i)=>({x:start.x+i*sx,y:start.y+i*sy}));if(cells.some(p=>p.x<GRID_MIN||p.x>GRID_MAX||p.y<GRID_MIN||p.y>GRID_MAX||occ.has(cellKey(p))))continue;options.push(cells)}if(!options.length)continue;const cells=options[Math.floor(Math.random()*options.length)];cells.forEach(p=>occ.add(cellKey(p)));fleet.push({name:def.name,length:def.length,cells,hits:new Set()});ok=true}if(!ok)throw new Error('demo fleet failed')}return fleet}

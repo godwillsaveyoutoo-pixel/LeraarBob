@@ -257,9 +257,39 @@ uit op een project waar deze tabellen al bestaan.
 - De twee deelnemers spelen via een privé-Realtime-kanaal met toegangscontrole.
   Vloten blijven lokaal. Vernieuwen herstelt de partij uit de sessieopslag van
   hetzelfde tabblad; herhaalde schotpakketten gebruiken hetzelfde resultaat.
-- De bestaande multiplayer-RPC's bewaren leerlingresultaten en klasrankings.
+- De bestaande multiplayer-RPC's bewaren leerlingresultaten. De Zeeslag-ranglijst
+  gebruikt `axioma_naval_ranking` en telt vanaf de eerste voltooide partij.
   Partijen met een leerkracht zijn oefenpartijen zonder ranking. De speluitkomst
   is zoals in het aangeleverde spel door de twee browsers bepaald, niet door
   een server die alle zetten en vloten controleert.
 
 Zie `tests/README.md` voor de browser- en databasetests.
+
+## Kleiduifschieten in groep
+
+Via **Groep** in Kleiduifschieten of **Online → Groepssessie starten** op het
+platform kan een ingelogde speler een wachtkamer openen. Andere spelers zien
+die onder Online en kiezen Meedoen. De organisator start met 2–30 deelnemers;
+iedereen krijgt dezelfde starttijd en hetzelfde tempo (3, 5 of 8 seconden).
+
+De eerste deelnemer die de zeven richtingen achter elkaar juist beantwoordt,
+wint. Een fout of verlopen timer zet de reeks volledig terug op nul. De server
+controleert de verwachte richting, de tijd, de antwoordvolgorde en de deelnemer.
+Herhaalde aanvragen tellen niet dubbel. Een vergrendeling op de sessie zorgt
+ervoor dat twee gelijktijdige finishes maar één winnaar opleveren.
+
+De groepsranglijst is platformbreed en apart per tempo: eerst het aantal
+overwinningen, dan de beste winnende tijd. De eerste overwinning verschijnt
+meteen. De bestaande duomodus en lokale duotijden blijven beschikbaar.
+
+`shared/axioma-groups.js` wordt door de gedeelde social-module geladen.
+`games/rechten/kleiduiven/kleiduiven.js` bevat het spel en de groepsbediening.
+De geïnstalleerde backend staat in `supabase_clay_groups.sql` (migratie
+`clay_group_races_and_first_match_naval_ranking`); voer deze eerste-installatie-SQL
+niet opnieuw uit op een project waar de groepsfuncties al bestaan.
+
+Sessies en deelnemers blijven in het privéschema, achter gecontroleerde RPC's.
+Zeeslag en groepsdeelname sluiten elkaar uit. Een lopende groepswedstrijd is
+aan het deelnemende tabblad gebonden, herstelt bij vernieuwen en sluit na
+twee uur automatisch. De timer wordt server-side gecontroleerd; de aankomsttijd
+van het laatste antwoord bepaalt de winnaar, dus netwerkvertraging kan verschil maken.

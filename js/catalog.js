@@ -55,7 +55,7 @@ window.AXIOMA_CATALOG = [
   },
   {
     "title": "Kleiduifschieten",
-    "subtitle": "Kies de juiste helling. Richt, probeer en raak!",
+    "subtitle": "Kies de juiste helling. Speel samen of race in groep naar zeven op rij.",
     "href": "games/rechten/kleiduiven/",
     "category": "Eerstegraadsfuncties",
     "kind": "arcade",
@@ -71,7 +71,8 @@ window.AXIOMA_CATALOG = [
     "tracking": "progress",
     "progressTotal": 1,
     "progressUnitSingular": "reeks",
-    "progressUnitPlural": "reeksen"
+    "progressUnitPlural": "reeksen",
+    "supportsGroup": true
   },
   {
     "title": "Rechten Zeeslag",

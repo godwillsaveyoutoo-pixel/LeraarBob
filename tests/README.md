@@ -43,3 +43,27 @@ na de rollback blijven er geen testaccounts, uitnodigingen of resultaten over.
 De browsertest vervangt Supabase-transport. Een volledige test met twee echte
 authsessies en echte WebSockets is daarmee niet afgedekt. De uitgerolde RPC's,
 rollen en beleidsfuncties zijn afzonderlijk op het gekoppelde project gecontroleerd.
+
+## Groepswedstrijden Kleiduifschieten
+
+```sh
+node tests/clay-game.test.cjs
+node tests/clay-service.test.cjs
+node tests/catalog-progress.test.cjs
+```
+
+De groepsspeltest gebruikt de echte spellogica met een minimale DOM en een
+bestuurbare klok: gezamenlijke start, misser/reset, timeout, zeven op rij,
+een andere winnaar en annuleren van oude starttimers. De servicetest controleert
+tabbladidentiteit, antwoordcodes en het verwerpen van late antwoorden na uitloggen.
+De social-browsertest is uitgebreid met sessie openen, vanuit Pythagoras deelnemen,
+samen starten, reeks resetten na een fout, winnaar en ranglijst. Hij is met twee
+fictieve leerlingen doorlopen. Het Supabase-transport wordt daarbij vervangen;
+de echte backend wordt afzonderlijk met teruggedraaide transacties getest.
+
+`clay-groups-database.sql` wordt alleen tussen `BEGIN` en `ROLLBACK` uitgevoerd.
+Hij controleert startrechten, minstens twee spelers, lidmaatschap en tabblad,
+gedeelde starttijd, foute/te late antwoorden, idempotentie, één winnaar,
+ranglijsten per tempo en de eerste Zeeslag-overwinning. Synthetische accounts
+en uitslagen verdwijnen bij de rollback. Deze test is ook op de uitgerolde
+database uitgevoerd.
