@@ -89,7 +89,7 @@ blijven behouden; de herziening wist geen eerdere voortgang.
 
 ## Accounts en voortgang: één levenscyclus
 
-Alle vijftien catalogusspellen gebruiken `shared/axioma-game.js` voor de
+Alle zestien catalogusspellen gebruiken `shared/axioma-game.js` voor de
 accountstatus en het veilig openen. `axioma-auth.js` beheert de gedeelde login.
 Bij accountwisseling wordt de oude oefenmotor meteen geblokkeerd; opnieuw openen
 laadt de nieuwe leerling. Een accountfout wordt niet als een gastlogin behandeld.
@@ -162,7 +162,7 @@ nummers op het rooster en op de knoppen. De menutegel gebruikt dezelfde conventi
 
 ## Controle
 
-- `tests/platform-navigation-browser.cjs`: alle 15 spellen hebben een native
+- `tests/platform-navigation-browser.cjs`: alle 16 spellen hebben een native
   platformlink met de juiste bestemming; de link navigeert naar de website.
 - `tests/vector-trainer-browser.cjs`: direct starten, antwoorden behouden bij
   uitleg/voortgang, meerkeuze en foutfeedback, constructie en volledige sessie,
@@ -183,3 +183,40 @@ nummers op het rooster en op de knoppen. De menutegel gebruikt dezelfde conventi
   Vectoren hervatten op een ander toestel en vaste breedte van de accountknop.
 - `tests/account-progress-database.sql`: ID-binding, revisies en grants op de
   echte database, uitsluitend tussen BEGIN en ROLLBACK met fictieve accounts.
+
+## Trainer Reële Getallen — eerste versie
+
+`games/reele-getallen/` bevat de eerste acht werkvormen uit het preproductieplan.
+De leerroute start met breuken bouwen, plaatsen, vergelijken en equivalenten
+groeperen. Wortelgrenzen verbinden dit met intervallen en getalsoorten; periodieke
+decimalen volgen na een eigen introductie. Elke familie heeft stapsgewijze uitleg
+op hetzelfde werkvlak en is ook afzonderlijk vrij toegankelijk. `real-core.js`
+beheert exacte waarden, beoordeling en planning; `real-lessons.js` de voorbeelden;
+`real-app.js` de schermtoestanden en bediening. De portable `index.html` wordt
+gebouwd met `node scripts/build-real-trainer.cjs`.
+
+Deze versie gebruikt rationele invoer, geijkte lijnen, eindige intervallen,
+positieve niet-volkomen vierkantswortels met gehele grenzen en korte periodes.
+Verdere verfijning/zoom, onbegrensde intervallen, wortelalgebra en de overige
+werkvormen uit de 31-templatebank volgen later. De opgaven worden gegenereerd;
+de 155 vaste documentitems zijn niet als volledige bank overgenomen.
+
+Na twee zelfstandige antwoorden opent een volgend begrip. Stevig vereist vier
+zelfstandige antwoorden, drie verschillende opgaven, twee voorstellingen, een
+latere herhaling en drie recente juiste antwoorden zonder open herstelvraag.
+Dit is een toetsbare ontwerpregel, geen bewezen maat voor leerwinst. Een reeks
+heeft acht opgaven; beide stappen van wortelbegrenzing vormen één opgave.
+Zelfstandig oplossen levert 10–14 XP, een herstelvraag 15 XP, opgelost na hulp of
+verbetering 5 XP. Voorbeelden, vrij oefenen en overslaan leveren geen XP.
+
+De registratie is `reele-getallen-trainer`, met acht vaardigheden en opslagkey
+`axioma-real-numbers-v1`. De gedeelde accountlaag bewaart leerroute, XP, sessie,
+invoer, uitlegstap en feedback. De database gebruikt de bestaande tabellen en
+accountcontrole; `supabase_real_numbers.sql` registreert alleen het spel. Die
+registratie is uitgevoerd en teruggelezen. Leerlinggegevens zijn niet gewijzigd.
+
+Controles: `tests/real-numbers.test.cjs` (1.440 opgavevarianten en hun voorbeelden),
+`tests/real-numbers-browser.cjs` (640/780 × 360, touch/pointer, toetsenbord, uitleg,
+foutfeedback, XP, herladen, thema's, portretuitleg en offline HTML) en de uitgebreide
+`tests/account-progress-browser.cjs` (hervatten op een tweede toestel met fictieve
+accounts). De fysieke Samsung A20 en leertransfer zijn nog niet met leerlingen getest.

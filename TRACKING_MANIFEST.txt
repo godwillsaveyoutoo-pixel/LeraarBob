@@ -20,6 +20,7 @@ Cloud bij aangemelde leerling:
   Snapshot: completed, total, finished, schemaVersion, storage.
   De server controleert account-ID en revisie voordat hij schrijft.
 
+Reële getallen: reele-getallen-trainer, 8 vaardigheden + XP, leerroute en oefenconcept.
 Vectoren: vectoren-trainer, 24 vaardigheden + leermodel en oefenconcept.
 Rechtentrainer: eigen axioma_progress, dezelfde login en account-ID-controle.
 Zeeslag: online partijregistratie/ranglijst; solo telt niet mee in online ranking.

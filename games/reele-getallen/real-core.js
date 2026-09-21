@@ -9,7 +9,7 @@ function parse(text){
  const negative=s[0]==='-',[a,b='']=s.replace('-','').replace(',','.').split('.');return rational((negative?-1:1)*Number(a+b),10**b.length);
 }
 function value(e){
- switch(e.kind){case 'integer':return rational(e.n);case 'fraction':return rational(e.n,e.d);case 'decimal':return parse(e.text);case 'percent':return rational(e.n,100);case 'root':{const k=Math.sqrt(e.n);if(Number.isInteger(k))return rational(e.sign*k);return {root:e.n,sign:e.sign}}case 'period':{const lead=e.lead||'',repeat=e.repeat,den=10**lead.length*(10**repeat.length-1);return rational(Number(e.whole||0)*den+Number(lead||0)*(10**repeat.length-1)+Number(repeat),den)}default:throw Error('Onbekende voorstelling')}
+ switch(e.kind){case 'integer':return rational(e.n);case 'fraction':return rational(e.n,e.d);case 'decimal':return parse(e.text);case 'percent':return rational(e.n,100);case 'root':{if(!Number.isSafeInteger(e.n)||e.n<0||![-1,1].includes(e.sign))throw Error('Geen reële vierkantswortel');const k=Math.sqrt(e.n);if(Number.isInteger(k))return rational(e.sign*k);return {root:e.n,sign:e.sign}}case 'period':{const lead=e.lead||'',repeat=e.repeat,den=10**lead.length*(10**repeat.length-1);return rational(Number(e.whole||0)*den+Number(lead||0)*(10**repeat.length-1)+Number(repeat),den)}default:throw Error('Onbekende voorstelling')}
 }
 function compare(a,b){
  if(a.root!==undefined&&b.root!==undefined)return a.sign!==b.sign?Math.sign(a.sign-b.sign):a.sign*Math.sign(a.root-b.root);
@@ -75,7 +75,7 @@ function validate(t,a){
  if(t.skill==='fraction'){
   if(!/^\d{1,6}$/.test(a.values[0])||!/^\d{1,6}$/.test(a.values[1]))return empty();const n=Number(a.values[0])*a.sign,d=Number(a.values[1]);
   if(!d)return result(false,'input','De noemer mag niet 0 zijn.',{input:true});
-  if(!equal(rational(n,d),t.target))return bad('value',`Je breuk heeft de waarde ${decimalOf(rational(n,d))}. Vergelijk die met het gegeven getal.`);
+  if(!equal(rational(n,d),t.target)){const r=rational(n,d),shown=decimalOf(r),exact=equal(r,parse(shown));return bad('value',`Je breuk ${exact?'heeft de waarde':'is ongeveer'} ${shown}. Vergelijk die met het gegeven getal.`);}
   if(gcd(n,d)!==1)return result(false,'simplify','De waarde klopt. Deel teller en noemer nog door dezelfde gemeenschappelijke deler.',{partial:true});
   return good('Dezelfde waarde, nu als vereenvoudigde breuk.');
  }
@@ -86,7 +86,7 @@ function validate(t,a){
  }
  if(t.skill==='group'){
   if(a.groups.length!==6||a.groups.some(x=>!['A','B'].includes(x)))return empty();
-  for(let i=0;i<6;i++)for(let j=i+1;j<6;j++)if((a.groups[i]===a.groups[j])!==equal(value(t.tokens[i]),value(t.tokens[j])))return bad('equivalence',`Vergelijk kaart ${i+1} en kaart ${j+1}: ${a.groups[i]===a.groups[j]?'hebben ze echt dezelfde waarde?':'stellen ze misschien hetzelfde getal voor?'}`);
+  for(let i=0;i<6;i++)for(let j=i+1;j<6;j++)if((a.groups[i]===a.groups[j])!==equal(value(t.tokens[i]),value(t.tokens[j])))return {...bad('equivalence',`Vergelijk kaart ${i+1} en kaart ${j+1}: ${a.groups[i]===a.groups[j]?'hebben ze echt dezelfde waarde?':'stellen ze misschien hetzelfde getal voor?'}`),pair:[i,j]};
   return good('In elke groep staan drie schrijfwijzen van dezelfde waarde.');
  }
  if(t.skill==='root'){

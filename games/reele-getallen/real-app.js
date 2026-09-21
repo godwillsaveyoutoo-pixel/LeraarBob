@@ -16,10 +16,10 @@ function restore(){try{
  session={answered:0,clean:0,xp:0};for(const k of ['answered','clean','xp'])session[k]=Math.min(k==='xp'?10000:8,Math.max(0,Number(d.session?.[k])||0));
  feedback=d.feedback&&typeof d.feedback.message==='string'?{...d.feedback,message:d.feedback.message.slice(0,600)}:null;if(phase==='feedback'&&!feedback)phase='answer';if(phase==='done'&&!feedback)feedback={ok:true,message:'Deze oefening is al verwerkt. Je kunt verdergaan.',xp:0};activeSlot=d.activeSlot===1?1:0;activeGroup=d.activeGroup==='B'?'B':'A';return true;
  }catch{return false}}
-function screen(name){document.body.dataset.screen=name;document.body.dataset.preview=String(!!preview);for(const id of ['stage','library','help','progress','summary'])$(id).hidden=id!==name;AxiomaPlatform.trainerScreen(({stage:'play',help:'help',progress:'progress'})[name]||'');$('xp').textContent=`${progress.xp} XP`;if(name==='stage')render();}
+function screen(name){document.body.dataset.screen=name;document.body.dataset.preview=String(!!preview);for(const id of ['stage','library','help','progress','summary'])$(id).hidden=id!==name;AxiomaPlatform.trainerScreen(preview?'help':({stage:'play',help:'help',progress:'progress'})[name]||'');$('xp').textContent=`${progress.xp} XP`;if(name==='stage')render();}
 function makeTask(id,{practice=false}={}){
- preview=null;free=practice;const s=progress.skills[id],level=practice?1:s.seen<2?0:s.seen<5?1:2;
- let candidate;for(let i=0;i<30;i++){candidate=C.generate(id,{seed:++serial,variant:s.seen+(practice?serial%5:0),level});if(!s.signatures.slice(-3).includes(candidate.signature))break}task=candidate;
+ const previousTask=task?.skill===id?task.signature:null;preview=null;free=practice;const s=progress.skills[id],level=practice?1:s.seen<2?0:s.seen<5?1:2;
+ let candidate;for(let i=0;i<30;i++){candidate=C.generate(id,{seed:++serial,variant:s.seen+(practice?serial%5:0),level});if(candidate.signature!==previousTask&&!s.signatures.slice(-3).includes(candidate.signature))break}task=candidate;
  answer=C.freshAnswer(task);phase=!practice&&!s.intro?'intro':'answer';lessonStep=0;dirty=false;errorCode=null;feedback=null;activeSlot=0;save();screen('stage');
 }
 function next(){if(!free&&session.answered>=8){finishSession();return}makeTask(free?task.skill:P.choose(progress),{practice:free})}
@@ -56,25 +56,39 @@ function taskMarkup(t,a,readonly){
  }
  return {canvas,panel};
 }
+function feedbackSource(t,a){
+ const caption=text=>`<p class="source-caption">${esc(text)}</p>`,values=a.values.map(x=>esc(x||'?'));
+ if(t.skill==='fraction')return caption('Gegeven')+m(t.source)+caption('Jouw breuk')+`<math><mrow>${a.sign<0?'<mo>−</mo>':''}<mfrac><mtext>${values[0]}</mtext><mtext>${values[1]}</mtext></mfrac></mrow></math>`;
+ if(t.skill==='compare')return caption('Jouw vergelijking')+`<div class="feedback-comparison">${m(t.left)}<span>${esc(a.relation===null?'?':['<','=','>'][a.relation+1])}</span>${m(t.right)}</div>`;
+ if(t.skill==='group')return (feedback.pair||[0,1]).map(i=>caption(`Kaart ${i+1} · ${a.groups[i]?'groep '+a.groups[i]:'geen groep'}`)+m(t.tokens[i])).join('');
+ if(t.skill==='root')return caption('Jouw grenzen')+`<div class="feedback-comparison"><span>${values[0]}</span><span>&lt;</span>${a.stage?m(t.source):m(C.integer(t.n))}<span>&lt;</span><span>${values[1]}</span></div>`;
+ if(t.skill==='interval')return caption('Gevraagd')+`<div>${esc(intervalText(t.lo,t.hi,t.closedLo,t.closedHi))}</div>`+caption('Jouw interval')+`<div>${esc(intervalText(a.values[0]||'?',a.values[1]||'?',a.closedLo,a.closedHi))}</div>`;
+ if(t.skill==='classify')return m(t.source)+caption('Jouw selectie')+`<div class="selected-sets">${a.labels.map(id=>({N:'ℕ',Z:'ℤ',Q:'ℚ',R:'ℝ',irr:'irrationaal'})[id]).join(' · ')||'Nog niets gekozen'}</div>`;
+ if(t.skill==='period')return caption(t.rule)+caption(phase==='done'?'Exact genoteerd':'Jouw herhaalblok')+(phase==='done'?m({kind:'period',whole:t.whole,lead:t.lead,repeat:t.repeat}):`<div>${a.start!==null&&a.end!==null?esc(t.digits.slice(a.start,a.end+1)):'?'}</div>`);
+ return caption('Gevraagd')+m(t.source)+caption('Jouw punt')+`<div>${a.tick===null?'?':C.decimalOf(C.rational(t.min*t.step.d+a.tick*t.step.n,t.step.d))}</div>`;
+}
 function render(){
- if(!task)return;const t=preview?.task||task,isLesson=!!preview||phase==='intro',step=isLesson?L.build(t)[preview?preview.step:lessonStep]:null,a=step?.answer||answer;
+ if(!task&&!preview)return;
+ const focused=document.activeElement,focusKey=focused&&$('workspace').contains(focused)?['slot','key','token','set','selectGroup','digit','toggle','step'].find(k=>focused.dataset[k]!==undefined):null,focusValue=focusKey?focused.dataset[focusKey]:null,focusLine=focused?.id==='numberline';
+ const t=preview?.task||task,isLesson=!!preview||phase==='intro',step=isLesson?L.build(t)[preview?preview.step:lessonStep]:null,a=step?.answer||answer;
  document.body.dataset.preview=String(!!preview);$('xp').textContent=`${progress.xp} XP`;$('xp').title=`${progress.xp} XP totaal · ${session?.xp||0} XP deze reeks`;
  $('eyebrow').textContent=`${preview?'Uitlegcollectie':isLesson?'Nieuw begrip':free?'Vrij oefenen':progress.skills[t.skill].repair?'Opnieuw proberen':'Jouw leerroute'} · ${C.skills.find(s=>s.id===t.skill).short}`;
  $('prompt').textContent=t.skill==='root'&&a.stage===1?'Bouw nu de grenzen voor de wortel.':t.prompt;
- $('round').textContent=free?'Vrij oefenen':`Opgave ${Math.min(8,(session?.answered||0)+(phase==='done'?0:1))} / 8`;
+ $('round').hidden=!!preview;$('round').textContent=free?'Vrij oefenen':`Opgave ${Math.min(8,(session?.answered||0)+(phase==='done'?0:1))} / 8`;
  const feedbackMode=!isLesson&&['feedback','done'].includes(phase);
  $('workspace').className=`${isLesson?'readonly ':''}${feedbackMode?'feedback ':''}${t.skill}`;
  const parts=taskMarkup(t,a,isLesson);
  if(feedbackMode){
-  $('workspace').innerHTML=`<div class="feedback-picture" aria-hidden="true">${t.source?m(t.source):t.skill==='compare'?m(t.left):t.skill==='interval'?'○—●':'='}</div><div class="feedback-copy ${feedback.ok?'good':'repair'}" role="status" aria-live="polite"><h2>${feedback.partial?'Waarde juist · vorm nog aanpassen':feedback.ok?(phase==='done'?'Juist!':'Deze stap klopt'):'Bekijk dit verband'}</h2>${phase==='done'?`<strong class="xp-earned">${free?'Vrij oefenen · geen XP':`+${feedback.xp} XP · ${dirty?'met hulp of na verbetering':'zelfstandig opgelost'}`}</strong>`:''}<p>${esc(feedback.message)}</p>${feedback.detail?`<p>${esc(feedback.detail)}</p>`:''}${!feedback.ok?button('Bekijk een voorbeeld','data-example="'+t.skill+'"'):''}</div>`;
+  $('workspace').innerHTML=`<div class="feedback-picture">${feedbackSource(t,a)}</div><div class="feedback-copy ${feedback.ok?'good':'repair'}" role="status" aria-live="polite"><h2>${feedback.partial?'Waarde juist · vorm nog aanpassen':feedback.ok?(phase==='done'?'Juist!':'Deze stap klopt'):'Bekijk dit verband'}</h2>${phase==='done'?`<strong class="xp-earned">${free?'Vrij oefenen · geen XP':`+${feedback.xp} XP · ${dirty?'met hulp of na verbetering':'zelfstandig opgelost'}`}</strong>`:''}<p>${esc(feedback.message)}</p>${feedback.detail?`<p>${esc(feedback.detail)}</p>`:''}</div>`;
  }else{
   $('workspace').innerHTML=`<div class="canvas">${parts.canvas}</div>${isLesson?`<aside class="lesson-copy"><span class="eyebrow">Stap ${(preview?preview.step:lessonStep)+1} van ${L.build(t).length}</span><h2>${esc(step.title)}</h2><p>${esc(step.text)}</p></aside>`:parts.panel?`<aside class="answer-panel">${parts.panel}</aside>`:''}`;
   if(isLesson)$('workspace').querySelectorAll('button').forEach(b=>b.disabled=true);
  }
- $('skip').hidden=isLesson||feedbackMode;$('back').hidden=!isLesson;$('back').disabled=isLesson&&(preview?preview.step:lessonStep)===0;
- $('commit').textContent=isLesson?((preview?preview.step:lessonStep)<L.build(t).length-1?'Volgende stap →':preview?'Terug naar oefening':'Zelf proberen →'):phase==='done'?'Volgende →':phase==='feedback'?(feedback.ok?'Bouw de wortelgrenzen →':'Verbeter je antwoord'):'Controleer';
+ $('skip').hidden=isLesson||feedbackMode;$('back').hidden=!isLesson&&!(feedbackMode&&!feedback.ok);$('back').textContent=isLesson?'← Vorige':'Voorbeeld';$('back').disabled=isLesson&&(preview?preview.step:lessonStep)===0;
+ $('commit').textContent=isLesson?((preview?preview.step:lessonStep)<L.build(t).length-1?'Volgende stap →':preview?(task?'Terug naar oefening':'Naar uitlegcollectie'):'Zelf proberen →'):phase==='done'?'Volgende →':phase==='feedback'?(feedback.ok?'Bouw de wortelgrenzen →':'Verbeter je antwoord'):'Controleer';
  $('hint').textContent=isLesson?'Bekijk het voorbeeld op je eigen tempo.':feedbackMode?'Lees rustig. Je kiest zelf wanneer je verdergaat.':free?'Vrij oefenen telt niet mee voor je leerroute.':t.skill==='root'?'Beide stappen samen vormen één opgave.':'Je keuze wordt pas beoordeeld na Controleer.';
  drawLine(t,a);
+ if(focusLine)$('numberline')?.focus({preventScroll:true});else if(focusKey){const attr=focusKey.replace(/[A-Z]/g,c=>'-'+c.toLowerCase());$('workspace').querySelector(`[data-${attr}="${focusValue}"]`)?.focus({preventScroll:true});}
 }
 function drawLine(t=preview?.task||task,a=(preview||phase==='intro')?L.build(t)[preview?preview.step:lessonStep].answer:answer){
  const svg=$('numberline');if(!svg)return;const box=svg.getBoundingClientRect(),w=box.width,h=box.height;if(!w||!h)return;
@@ -91,7 +105,7 @@ function drawLine(t=preview?.task||task,a=(preview||phase==='intro')?L.build(t)[
  svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.innerHTML=html;
  if(preview||phase!=='answer'||!['line','interval'].includes(t.skill))return;
  const place=clientX=>{const r=svg.getBoundingClientRect(),v=min+Math.max(0,Math.min(1,(clientX-r.left-28)/(r.width-56)))*(max-min);if(t.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((max-min)/step),Math.round((v-min)/step)));else answer.values[activeSlot]=String(Math.round(v));drawLine(t,answer)};
- svg.onpointerdown=e=>{if(e.button>0)return;e.preventDefault();drag={answer:structuredClone(answer),id:e.pointerId};svg.setPointerCapture(e.pointerId);place(e.clientX)};
+ svg.onpointerdown=e=>{if(e.button>0)return;e.preventDefault();svg.focus({preventScroll:true});drag={answer:structuredClone(answer),id:e.pointerId};svg.setPointerCapture(e.pointerId);place(e.clientX)};
  svg.onpointermove=e=>{if(drag?.id===e.pointerId)place(e.clientX)};
  svg.onpointerup=e=>{if(drag?.id!==e.pointerId)return;const r=svg.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)answer=drag.answer;drag=null;save();render()};
  svg.onpointercancel=()=>{if(drag){answer=drag.answer;drag=null;save();render()}};
@@ -119,7 +133,7 @@ $('workspace').onclick=e=>{
 };
 document.addEventListener('keydown',e=>{if(document.body.dataset.screen!=='stage'||preview||phase!=='answer'||!['fraction','root'].includes(task.skill)||e.ctrlKey||e.metaKey||e.altKey)return;if(/^\d$/.test(e.key)){e.preventDefault();key(e.key)}else if(['Backspace','-'].includes(e.key)){e.preventDefault();key(e.key==='-'?'sign':'back')}});
 function commit(){
- if(preview){if(preview.step<L.build(preview.task).length-1){preview.step++;render()}else{preview=null;screen('stage')}return;}
+ if(preview){if(preview.step<L.build(preview.task).length-1){preview.step++;render()}else{preview=null;task?screen('stage'):showHelp()}return;}
  if(phase==='intro'){
   if(lessonStep<L.build(task).length-1){lessonStep++;save();render();return}
   progress.skills[task.skill].intro=true;makeTask(task.skill);return;
@@ -127,11 +141,11 @@ function commit(){
  if(phase==='done'){next();return}
  if(phase==='feedback'){if(feedback.ok&&task.skill==='root'){answer.stage=1;answer.values=['',''];activeSlot=0;}phase='answer';feedback=null;save();render();return}
  const r=C.validate(task,answer);feedback=r;
- if(!r.ok){if(!r.input){dirty=true;errorCode=r.code;}phase='feedback';save();render();return}
+ if(!r.ok){if(!r.input){dirty=true;errorCode=r.code;if(!free){progress.skills[task.skill].repair=r.code;progress.skills[task.skill].due=progress.total+3;}}phase='feedback';save();render();return}
  if(task.skill==='root'&&answer.stage===0){phase='feedback';save();render();return}
  phase='done';let xp=0;if(!free){xp=P.record(progress,task,{clean:!dirty,solved:true,code:errorCode||'practice'});session.answered++;session.xp+=xp;if(!dirty)session.clean++;}feedback={...r,xp};save();render();
 }
-$('commit').onclick=commit;$('back').onclick=()=>{if(preview)preview.step=Math.max(0,preview.step-1);else lessonStep=Math.max(0,lessonStep-1);save();render()};
+$('commit').onclick=commit;$('back').onclick=()=>{if(phase==='feedback'&&!feedback?.ok&&!preview){example(task.skill);return}if(preview)preview.step=Math.max(0,preview.step-1);else lessonStep=Math.max(0,lessonStep-1);save();render()};
 $('skip').onclick=()=>{if(preview||phase!=='answer')return;if(!free){P.record(progress,task,{clean:false,solved:false,code:errorCode||'practice'});session.answered++;}next()};
 function topicCards(root,help=false){
  root.replaceChildren();C.skills.forEach((s,i)=>{const card=document.createElement('article');card.className='topic-card'+(P.mastered(progress,s.id)?' solid':'');const status=P.mastered(progress,s.id)?'Stevig':progress.skills[s.id].seen?'In opbouw':P.unlocked(progress,s.id)?'Klaar om te ontdekken':'Later in je leerroute';card.innerHTML=`<span class="eyebrow">${String(i+1).padStart(2,'0')} · ${help?'Uitgewerkt voorbeeld':status}</span><h2>${esc(s.short)}</h2><p>${esc(s.concept)}</p><button>${help?'Bekijk het voorbeeld':'Vrij oefenen →'}</button>`;card.querySelector('button').onclick=()=>help?example(s.id):(session=null,makeTask(s.id,{practice:true}));root.append(card);});
@@ -139,13 +153,13 @@ function topicCards(root,help=false){
 function library(){preview=null;topicCards($('topics'));screen('library')}
 function showHelp(){preview=null;topicCards($('helpTopics'),true);screen('help')}
 function example(id){
- if(task&&phase==='answer'&&!free){dirty=true;errorCode=errorCode||'help';save();}
+ if(task&&phase==='answer'&&!free){dirty=true;errorCode=errorCode||'help';progress.skills[task.skill].repair=errorCode;progress.skills[task.skill].due=progress.total+3;save();}
  preview={task:C.generate(id,{seed:++serial,variant:task?.skill===id?task.variant:0,level:task?.skill===id?task.level:0}),step:0};screen('stage');
 }
 function showProgress(){previous=document.body.dataset.screen;preview=null;$('progressTitle').textContent=`${progress.xp} XP · ${C.skills.filter(s=>P.mastered(progress,s.id)).length} van 8 stevig`;$('progressRows').innerHTML=C.skills.map(s=>{const d=progress.skills[s.id];return `<div class="progress-row"><div><strong>${esc(s.short)}</strong><small>${d.clean} zelfstandig juist · ${d.seen} geoefend${d.repair?' · herhaling gepland':''}</small></div><span>${P.mastered(progress,s.id)?'★ Stevig':!P.unlocked(progress,s.id)?'Later in de route':d.seen?'In opbouw':'Nieuw'}</span></div>`}).join('');screen('progress')}
 function finishSession(){progress.sessions++;$('stats').innerHTML=[[session.answered,'geoefend'],[session.clean,'zelfstandig juist'],[session.xp,'XP verdiend']].map(([n,label])=>`<div><strong>${n}</strong><span>${label}</span></div>`).join('');$('summaryText').textContent='De volgende reeks haalt eerdere begrippen opnieuw op. Nieuwe waarden en andere voorstellingen laten zien wat zelfstandig blijft lukken.';task=null;answer=null;save();screen('summary')}
 AxiomaPlatform.bindTrainer({play:()=>{preview=null;task?screen('stage'):start()},help:showHelp,progress:showProgress});
-$('resume').onclick=$('closeHelp').onclick=()=>{preview=null;task?screen('stage'):start()};$('closeProgress').onclick=()=>screen(previous==='progress'?'stage':previous);
+$('resume').onclick=$('closeHelp').onclick=()=>{preview=null;task?screen('stage'):start()};$('closeProgress').onclick=()=>previous==='stage'&&!task?showHelp():screen(previous==='progress'?'stage':previous);
 $('newSession').onclick=$('again').onclick=start;$('browse').onclick=$('rotateLibrary').onclick=library;
 $('theme').onclick=()=>{document.documentElement.dataset.mode=document.documentElement.dataset.mode==='dark'?'light':'dark';save();if(document.body.dataset.screen==='stage')render()};
 new ResizeObserver(()=>{if(document.body.dataset.screen==='stage')drawLine()}).observe($('workspace'));

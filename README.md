@@ -302,3 +302,14 @@ Zeeslag en groepsdeelname sluiten elkaar uit. Een lopende groepswedstrijd is
 aan het deelnemende tabblad gebonden, herstelt bij vernieuwen en sluit na
 twee uur automatisch. De timer wordt server-side gecontroleerd; de aankomsttijd
 van het laatste antwoord bepaalt de winnaar, dus netwerkvertraging kan verschil maken.
+
+
+### Reële getallen — eerste trainerversie
+
+Open `games/reele-getallen/` of kies de tegel **Reële getallen** op de startpagina.
+Acht werkvormen verbinden breuken, decimalen, procenten, getallijnen, wortelgrenzen,
+intervallen, getalsoorten en periodes. De trainer start meteen, met uitleg tussen
+de oefeningen en een eigen uitlegcollectie. XP en voortgang gebruiken de gedeelde
+accountlaag. De registratie staat in `supabase_real_numbers.sql` en is op het
+gekoppelde project toegepast. De bouwopdracht is `node scripts/build-real-trainer.cjs`.
+Zie `PLATFORM_FRAMEWORK.md` voor de precieze scope en tests.

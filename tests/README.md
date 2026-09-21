@@ -112,3 +112,13 @@ XP voor zelfstandig oplossen, verbeteren, herstel en overslaan.
 leesbare feedback zonder automatisch doorgaan en herladen zonder dubbele XP.
 `node tests/account-progress-browser.cjs` controleert ook verdiende XP en het
 opgeloste antwoord op een tweede toestel met fictieve accounts.
+
+## Reële getallen
+
+`node tests/real-numbers.test.cjs` controleert exacte waarden, foutdiagnoses,
+1.440 gegenereerde opgaven met hun uitgewerkte voorbeelden en de leerroute.
+`node tests/real-numbers-browser.cjs` doorloopt de acht werkvormen op 640 en
+780 × 360, alle introductiestappen, bediening, context bij fouten, hervatten van
+invoer en XP, volledige reeksen en lichte/donkere weergave. De accountbrowsertest
+controleert ook deze trainer op een tweede toestel met fictieve accounts.
+Bouw na bronwijzigingen met `node scripts/build-real-trainer.cjs`.

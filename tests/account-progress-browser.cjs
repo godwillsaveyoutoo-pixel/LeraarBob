@@ -124,7 +124,7 @@ const mock=`(()=>{
    await guest.eval('AxiomaSimple.cloud([1,2,3],10);AxiomaGame.flush()');
    assert.equal(await guest.eval('testWrites.length'),0);assert.equal(await guest.eval('testReads.length'),0);
   }
-  for(const id of ['brandweer','kleiduifschieten','functies-rechten','rechten-zeeslag','rechten-trainer']){
+  for(const id of ['brandweer','kleiduifschieten','functies-rechten','rechten-zeeslag','rechten-trainer','reele-getallen-trainer']){
    // Zeeslag needs the separate multiplayer mock, covered by social-browser.cjs.
    if(id==='rechten-zeeslag')continue;
    const c=await open(game(id),{account:{id:'teacher',role:'teacher'}});assert.equal(await c.eval('testWrites.length'),0,id);

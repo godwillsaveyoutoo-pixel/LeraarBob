@@ -7,7 +7,7 @@ test('exact number model: decimal commas, signs, equivalent fractions, percentag
  assert.equal(C.compare(C.value(C.sqrt(2,-1)),C.value(C.sqrt(3,-1))),1);
  assert.deepEqual(C.value({kind:'period',whole:0,lead:'1',repeat:'6'}),C.rational(1,6));assert.deepEqual(C.value({kind:'period',whole:0,repeat:'9'}),C.rational(1));
  for(const input of ['', '-', '1,', 'NaN','1/0','1e3'])assert.equal(C.parse(input),null);
- assert.throws(()=>C.rational(1,0));
+ assert.throws(()=>C.rational(1,0));assert.throws(()=>C.value(C.sqrt(-1)));
 });
 test('every task and worked example has a mathematically correct answer',()=>{
  let n=0;for(const s of C.skills)for(let level=0;level<3;level++)for(let seed=1;seed<=60;seed++){
@@ -20,7 +20,7 @@ test('every task and worked example has a mathematically correct answer',()=>{
 });
 test('diagnoses distinguish equivalent form, wrong value, invalid input, interval inclusion and grouping labels',()=>{
  const t={skill:'fraction',target:C.rational(3,4)};
- assert(C.validate(t,{values:['6','8'],sign:1}).partial);assert(C.validate(t,{values:['3','0'],sign:1}).input);assert.equal(C.validate(t,{values:['3','5'],sign:1}).code,'value');
+ assert.match(C.validate(t,{values:['1','3'],sign:1}).message,/ongeveer/);assert(C.validate(t,{values:['6','8'],sign:1}).partial);assert(C.validate(t,{values:['3','0'],sign:1}).input);assert.equal(C.validate(t,{values:['3','5'],sign:1}).code,'value');
  const i=C.generate('interval',{seed:3,variant:3});const a=solution(i);a.closedHi=!i.closedHi;assert.equal(C.validate(i,a).code,'inclusion');
  const g=C.generate('group',{seed:4});const ga=solution(g);ga.groups=ga.groups.map(x=>x==='A'?'B':'A');assert(C.validate(g,ga).ok);
  const p=C.generate('period',{seed:5});const pa=solution(p);pa.end+=p.repeat.length;assert.equal(C.validate(p,pa).code,'period');
