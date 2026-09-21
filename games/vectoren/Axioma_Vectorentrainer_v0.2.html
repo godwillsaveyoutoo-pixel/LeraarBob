@@ -366,13 +366,16 @@ function generate(id,{seed=1,level=0,variant=0,repair=null}={}){
  }
  t.signature=JSON.stringify([id,t.representation,t.interaction,t.prompt,t.targetPoint||t.target,t.refs,t.points,t.source,t.factor,t.property,t.policy]);return t;
 }
+// A bounded record of processed exercises; old saves legitimately have no event history.
+function sanitizeActivity(items){return (Array.isArray(items)?items:[]).filter(e=>e&&skills.some(s=>s.id===e.skill)&&['independent','supported','skipped'].includes(e.outcome)).slice(-30).map(e=>({skill:e.skill,outcome:e.outcome,code:typeof e.code==='string'?e.code.slice(0,40):null,at:Number.isFinite(e.at)&&e.at>0&&e.at<1e14?e.at:0,seq:Number.isInteger(e.seq)&&e.seq>0?e.seq:0,xp:Number.isFinite(e.xp)?Math.max(0,Math.min(18,e.xp)):0}))}
 const freshSkill=()=>({intro:false,seen:0,clean:0,strength:0,lastAt:0,lastIndex:-10,representations:[],signatures:[],recent:[],variants:[],due:0});
-function freshState(){return {version:2,total:0,xp:0,sessions:0,skills:Object.fromEntries(skills.map(s=>[s.id,freshSkill()])),repairs:[],lastSkill:null,lastSignatures:[]}}
+function freshState(){return {version:2,total:0,xp:0,sessions:0,activity:[],skills:Object.fromEntries(skills.map(s=>[s.id,freshSkill()])),repairs:[],lastSkill:null,lastSignatures:[]}}
 function sanitize(raw){const p=freshState();if(!raw||raw.version!==2)return p;
  const number=(n,max=1e7)=>Number.isFinite(n)?Math.min(max,Math.max(0,n)):0;
  p.total=number(raw.total);p.xp=Math.floor(number(raw.xp));p.sessions=number(raw.sessions);p.lastSkill=skills.some(s=>s.id===raw.lastSkill)?raw.lastSkill:null;
  for(const s of skills){const v=raw.skills?.[s.id]||{},out=p.skills[s.id];out.intro=v.intro===true;for(const k of ['seen','clean','lastAt','due'])out[k]=number(v[k],1e14);out.lastIndex=Number.isFinite(v.lastIndex)?Math.max(-10,Math.min(1e14,v.lastIndex)):-10;out.strength=number(v.strength,1);for(const k of ['representations','signatures','variants'])out[k]=Array.isArray(v[k])?v[k].filter(x=>typeof x==='string').slice(-30):[];out.recent=Array.isArray(v.recent)?v.recent.filter(x=>typeof x==='boolean').slice(-6):[];}
  p.repairs=Array.isArray(raw.repairs)?raw.repairs.filter(r=>p.skills[r.skill]&&typeof r.code==='string').slice(-30).map(r=>({skill:r.skill,code:r.code,due:number(r.due),stage:number(r.stage,1)})):[];
+ p.activity=sanitizeActivity(raw.activity);
  p.lastSignatures=Array.isArray(raw.lastSignatures)?raw.lastSignatures.filter(x=>typeof x==='string').slice(-20):[];return p;
 }
 function unlocked(p){return skills.filter(s=>s.deps.every(id=>p.skills[id].clean>=2&&p.skills[id].strength>=.3)).map(s=>s.id)}
@@ -393,7 +396,8 @@ function record(p,t,{clean,solved=clean,code='practice',now=Date.now()}={}){
  if(clean){s.clean++;s.strength=Math.min(1,s.strength+(t.level===0?.13:.19));s.signatures=[...new Set([...s.signatures,t.signature])].slice(-30);s.representations=[...new Set([...s.representations,t.representation])];s.variants=[...new Set([...s.variants,`${t.level}:${t.variant%4}`])];s.due=p.total+Math.min(30,3+s.clean*3);
   const r=p.repairs.find(r=>r.skill===t.skill);if(r&&t.repair){if(r.stage===0){r.stage=1;r.due=p.total+6}else p.repairs=p.repairs.filter(x=>x!==r)}
  }else {s.strength=Math.max(0,s.strength-.14);let r=p.repairs.find(r=>r.skill===t.skill);if(!r){r={skill:t.skill};p.repairs.push(r)}Object.assign(r,{code,due:p.total+2,stage:0});}
- p.lastSignatures=[...p.lastSignatures,t.signature].slice(-20);return xp;
+ p.lastSignatures=[...p.lastSignatures,t.signature].slice(-20);
+ p.activity=[...sanitizeActivity(p.activity),{skill:t.skill,outcome:clean?'independent':solved?'supported':'skipped',code:clean?null:code,at:now,seq:p.total,xp}].slice(-30);return xp;
 }
 const api={VectorMath,TaskValidator:{validate,findChain},MisconceptionModel:{diagnose},TaskGenerator:{generate,skills,rng},TrainerScheduler:{freshState,sanitize,unlocked,phase,choose,record},parseNumber,format,coord};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;root.VectorTrainerCore=api;

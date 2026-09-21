@@ -9,8 +9,9 @@ const TRAINER_SKILLS={
   sign:'Tekenverloop',signchart:'Tekentabel'
 };
 
+const detailCache=new WeakMap();
 let sb=null,account=null,students=[],games=[],genericProgress=[];
-let classFilter='',themeFilter='',gameFilter='',query='',selectedStudent=null;
+let classFilter='',themeFilter='',gameFilter='',query='',selectedStudent=null,loadVersion=0;
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=v=>Number.isFinite(Number(v))?Number(v):0;
@@ -18,6 +19,34 @@ const trainerOf=row=>(Array.isArray(row.axioma_progress)?row.axioma_progress[0]:
 
 function genericFor(userId,gameId){
   return genericProgress.find(x=>x.user_id===userId&&x.game_id===gameId)||null;
+}
+
+function trainerDetails(gameId,saved){
+ if(!saved)return window.LeraarBobTrainerDetails.read(gameId,null);
+ if(!detailCache.has(saved))detailCache.set(saved,window.LeraarBobTrainerDetails.read(gameId,saved));
+ return detailCache.get(saved);
+}
+function dateText(value){const date=new Date(value||NaN);return Number.isFinite(date.getTime())?date.toLocaleString('nl-BE',{dateStyle:'medium',timeStyle:'short'}):'Tijdstip niet bewaard'}
+function skillLabel(label){return esc(label).replace(/(?<![\p{L}\p{M}])(?:e[ₓᵧ]|[abruv])(?![\p{L}\p{M}])/gu,name=>`<math aria-label="vector ${name}"><mover><mi>${name}</mi><mo>→</mo></mover></math>`)}
+function readableDetail(g,p,d){
+ const header=`<div class="gameDetailHead"><div><p class="eyebrow">${esc(g.theme)} · trainer</p><h3>${esc(g.title)}</h3></div>${d.available?`<strong>${d.solid}/${d.skillCount}<small>vaardigheden stevig</small></strong>`:''}</div>`;
+ if(!d.available)return `<article class="gameDetailCard trainerDetail" data-trainer="${esc(g.id)}">${header}<p class="summary">${esc(d.message)}</p></article>`;
+ const stats=[[d.total,'opgaven verwerkt'],[d.independent,'zelfstandig opgelost'],[d.xp,'XP'],[d.sessions,'reeksen afgerond']];
+ const activity=d.activities.length?`<ol class="activityList">${d.activities.map(e=>`<li><div><strong>${skillLabel(e.skillLabel)}</strong><span class="outcome ${e.outcome}">${esc(e.label)}</span></div><p>${esc(dateText(e.at))} · +${e.xp} XP${e.error?` · ${esc(e.error.label)}`:''}</p></li>`).join('')}</ol>`:`<p class="summary">Er is nog geen activiteitenlijst bewaard. Hieronder staan de laatst geoefende onderwerpen uit de bestaande voortgang.</p><ul class="activityList">${d.recentSkills.map(s=>`<li><strong>${skillLabel(s.label)}</strong><p>${s.lastAt?esc(dateText(s.lastAt)):'Volgorde bekend; tijdstip niet bewaard'}</p></li>`).join('')||'<li>Nog geen opgaven verwerkt.</li>'}</ul>`;
+ return `<article class="gameDetailCard trainerDetail" data-trainer="${esc(g.id)}">${header}
+  <p class="savedAt">Laatst opgeslagen: ${esc(dateText(d.updatedAt))}</p>
+  <dl class="trainerStats">${stats.map(([n,label])=>`<div><dt>${label}</dt><dd>${n}</dd></div>`).join('')}</dl>
+  ${d.current?`<p class="currentTask"><strong>${esc(d.current.status)}:</strong> ${skillLabel(d.current.skillLabel)}${d.current.free?' · vrij oefenen, buiten de leerroute':''}</p>`:''}
+  <div class="trainerColumns"><section class="trainerSkills"><h4>Vaardigheden</h4>
+   <p class="summary">Zelfstandig opgelost tegenover alle verwerkte opgaven. Recente resultaten staan van oud naar nieuw: ✓ zelfstandig; ↻ niet zelfstandig (hulp, verbetering of overslaan).</p>
+   <ul class="trainerSkillList">${d.skills.map(s=>`<li data-skill="${esc(s.id)}"><div class="skillHeading"><strong>${skillLabel(s.label)}</strong><span class="skillStatus ${s.phase}">${esc(s.status)}</span></div>
+    <div class="skillEvidence"><span>${s.clean} / ${s.seen} zelfstandig</span><span class="recentResults" aria-label="Recente resultaten">${s.recent.map(clean=>`<span class="resultDot ${clean?'independent':'supported'}" role="img" aria-label="${clean?'Zelfstandig opgelost':'Niet zelfstandig opgelost'}">${clean?'✓':'↻'}</span>`).join('')}</span></div>
+    ${s.strength!==null&&s.seen?`<div class="strength"><span>Beheersingsindicatie ${s.strength}%</span><meter min="0" max="100" value="${s.strength}" aria-label="Beheersingsindicatie ${esc(s.label)}">${s.strength}%</meter></div>`:''}
+    <p class="reviewPlan">${s.repair?'Herstel: ':'Herhaling: '}${esc(s.review)}</p></li>`).join('')}</ul>
+   <p class="summary">‘Stevig’ volgt de regels van deze trainer, waaronder zelfstandig oplossen, variatie en latere herhaling. Een beheersingsindicatie is geen toetscijfer.</p>
+  </section><aside class="trainerFollowup"><section><h4>Fouten en aandachtspunten</h4>${d.attention.length?`<ul class="attentionList">${d.attention.map(a=>`<li><strong>${skillLabel(a.skillLabel)}</strong><h5>${esc(a.label)}</h5><p>${esc(a.advice)}</p><p class="reviewPlan">${esc(a.review)}${a.stage?` · ${esc(a.stage)}`:''}</p></li>`).join('')}</ul>`:'<p class="summary">Geen open aandachtspunten geregistreerd.</p>'}</section>
+   <section class="recentActivity"><h4>Recente activiteit</h4>${activity}${d.activities.length?`<p class="summary">Laatste ${d.activities.length} verwerkte opgaven, nieuwste bovenaan.${d.historyIncomplete?' Oudere opgaven blijven in de totalen staan; hun afzonderlijke verloop is hier niet beschikbaar.':''}</p>`:''}</section>
+  </aside></div></article>`;
 }
 
 function trainerSummary(row){
@@ -60,6 +89,8 @@ function genericSummary(p,game){
 
 function summaryFor(row,game){
   if(game.id==='rechten-trainer') return trainerSummary(row);
+  const details=trainerDetails(game.id,genericFor(row.user_id,game.id));
+  if(details?.available)return {label:`${details.solid}/${details.skillCount}`,detail:`${details.total} opgaven · ${details.xp} XP`,value:details.solid/details.skillCount};
   return genericSummary(genericFor(row.user_id,game.id),game);
 }
 
@@ -153,7 +184,8 @@ function gameDetail(row,g){
       ${total?`<div class="skillList">${Object.entries(TRAINER_SKILLS).map(([key,label])=>{const x=skills[key]||{},pct=Math.max(0,Math.min(100,Math.round(num(x.strength)*100)));return `<div class="skill"><span>${esc(label)}</span><div class="meter"><i style="width:${pct}%"></i></div><em>${pct}%</em></div>`}).join('')}</div>`:`<p class="summary">Nog niet gestart.</p>`}
     </article>`;
   }
-  const p=genericFor(row.user_id,g.id);
+  const p=genericFor(row.user_id,g.id),details=trainerDetails(g.id,p);
+  if(details)return readableDetail(g,p,details);
   if(!p) return `<article class="gameDetailCard"><div class="gameDetailHead"><div><p class="eyebrow">${esc(g.theme)} · ${esc(g.progress_type)}</p><h3>${esc(g.title)}</h3></div><strong>—</strong></div><p class="summary">Nog geen cloudvoortgang voor dit onderdeel.</p></article>`;
   return `<article class="gameDetailCard">
     <div class="gameDetailHead"><div><p class="eyebrow">${esc(g.theme)} · ${esc(g.progress_type)}</p><h3>${esc(g.title)}</h3></div><strong>${esc(summaryFor(row,g).label)}</strong></div>
@@ -163,6 +195,8 @@ function gameDetail(row,g){
 }
 
 async function loadAll(){
+  const version=++loadVersion,owner=account?.id;
+  if(account?.role!=='teacher')return;
   if($('summary')) $('summary').textContent='Gegevens laden…';
   try{
     const [gameRes,profileRes,progressRes]=await Promise.all([
@@ -170,6 +204,7 @@ async function loadAll(){
       sb.from('axioma_profiles').select('user_id,alias,class_code,created_at,axioma_progress(state,revision,updated_at)').order('alias'),
       sb.from('axioma_game_progress').select('user_id,game_id,state,revision,updated_at').order('updated_at',{ascending:false})
     ]);
+    if(version!==loadVersion||account?.id!==owner||account?.role!=='teacher')return;
     if(gameRes.error) throw gameRes.error;
     if(profileRes.error) throw profileRes.error;
     if(progressRes.error) throw progressRes.error;
@@ -178,6 +213,7 @@ async function loadAll(){
     genericProgress=progressRes.data||[];
     renderShell();
   }catch(error){
+    if(version!==loadVersion)return;
     console.error(error);
     $('app').innerHTML='<div class="state"><h2>Overzicht kon niet worden geladen.</h2><p>Controleer je verbinding en probeer opnieuw.</p><button id="retry" class="btn primary">Opnieuw proberen</button></div>';
     $('retry').onclick=init;
@@ -195,8 +231,10 @@ function exportCSV(){
 }
 
 async function init(){
+  const version=++loadVersion;
   try{
-    const ready=await window.AxiomaAuth.ready();account=ready.account;sb=window.AxiomaAuth.client();
+    const nextAccount=await window.AxiomaAuth.getAccount();if(version!==loadVersion)return;
+    account=nextAccount;sb=window.AxiomaAuth.client();
     if(account?.role!=='teacher'){
       $('app').innerHTML='<div class="state"><h2>Leerkrachtlogin nodig.</h2><p>Meld je aan via de centrale leraarBob-login.</p><a class="btn primary" href="../?login=1&return=teacher/">Naar leraarBob-login</a></div>';
       $('teacherIdentity').textContent='';
@@ -205,11 +243,18 @@ async function init(){
     $('teacherIdentity').textContent=account.email||'Leerkracht';
     await loadAll();
   }catch(error){
+    if(version!==loadVersion)return;
     console.error(error);
     $('app').innerHTML='<div class="state"><h2>Accountverbinding niet beschikbaar.</h2><p>Controleer de verbinding met Supabase.</p></div>';
   }
 }
 
 $('logout').onclick=async()=>{try{await window.AxiomaAuth.signOut();location.href='../'}catch{}};
+window.AxiomaAuth.onChange(({account:next,pending})=>{
+  if(!pending&&next?.id===account?.id&&next?.role===account?.role)return;
+  loadVersion++;account=null;students=[];games=[];genericProgress=[];selectedStudent=null;
+  $('teacherIdentity').textContent='';$('app').innerHTML='<div class="state"><p>Account controleren…</p></div>';
+  if(!pending)init();
+});
 init();
 })();

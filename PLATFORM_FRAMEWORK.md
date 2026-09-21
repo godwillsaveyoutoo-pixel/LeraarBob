@@ -356,3 +356,33 @@ beste routes blijven behouden bij opnieuw spelen; compacte bouwacties maken
 hervatten met Undo mogelijk. De twee routes naar √6 tellen samen als één
 voltooide opgave. De catalogus en het lerarenoverzicht hergebruiken de bestaande
 voortgangsweergave. SQL-registratie: `supabase_wortelbouw.sql`.
+
+## Leesbare opvolging in Mijn klassen
+
+`teacher/trainer-details.js` interpreteert de accountopslag van Vectoren en Reële
+getallen. Het dashboard laadt de twee pure oefenkernen en gebruikt hun eigen
+vaardigheidsnamen, normalisatie en beheersingsregels. Er worden geen tweede
+beheersingsdrempels of percentages voor Reële getallen bijgehouden. Niet zelfstandig
+is niet gelijk aan fout: hulp, verbetering en overslaan blijven onderscheiden.
+
+Open herstelcodes en fouten uit de lopende opgave krijgen een leesbare diagnose
+en opvolgsuggestie. Herhaling wordt uitgedrukt in resterende verwerkte opgaven,
+met een aparte melding voor nog niet vrijgegeven voorafgaande vaardigheden.
+De getoonde planning is geen garantie dat precies die oefening als volgende komt.
+
+Beide kernen bewaren maximaal 30 activiteiten in `progress.activity`: vaardigheid,
+uitkomst (`independent`, `supported`, `skipped`), fout-/hulpcode, tijdstip, volgnummer
+en XP. Alleen verwerking van een opgave voegt een activiteit toe. De bestaande
+voortgangsversies en opslagkeys blijven gelijk. Oudere resultaten zonder log worden
+niet achteraf ingevuld; het dashboard toont dan de beschikbare recente onderwerpen,
+met uitsluitend een tijdstip wanneer dat werkelijk opgeslagen is. De datum van
+cloudopslag wordt apart gelabeld.
+
+De leraarsconsole blijft alleen de bestaande geautoriseerde gegevens lezen. Bij
+accountwissel verdwijnen details onmiddellijk; laat terugkerende verzoeken van
+de vorige login worden genegeerd. Er is geen nieuwe databasekolom of extra
+toegangsrecht nodig.
+
+Controles: `tests/teacher-details.test.cjs`, `tests/teacher-details-browser.cjs` en
+`tests/account-progress-browser.cjs`; de browser gebruikt uitsluitend fictieve
+leerlingen en onderschepte netwerkverzoeken.

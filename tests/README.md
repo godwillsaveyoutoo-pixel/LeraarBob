@@ -183,3 +183,14 @@ De uitbreiding controleert ook alle twaalf interval- en decimaalvarianten,
 negatieve vierkantswortelwaarden en positieve/negatieve derdemachtswortels,
 exacte vergelijkingen tussen wortels, echte sleepgebaren met muis en touch,
 onbegrensde kanten na herladen, oude concepten en nieuwe vaardigheden met XP.
+
+## Leesbare leraarsdetails
+
+`node --test tests/teacher-details.test.cjs` controleert de oorspronkelijke
+beheersingsregels, foutvertalingen, herhaling in aantallen opgaven, activiteit
+met echte uitkomsten en de veilige terugval voor oude of beschadigde opslag.
+`node tests/teacher-details-browser.cjs` controleert het leraarsdashboard op
+desktop en mobiel, filters en leerlingwissel, escaping en accountwissel tijdens
+een lopend verzoek. Alle leerlingen en database-antwoorden zijn fictief.
+De bestaande accountbrowsertest controleert het behoud van nieuwe activiteiten
+bij het hervatten op een tweede toestel.

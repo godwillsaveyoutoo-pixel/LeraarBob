@@ -109,9 +109,11 @@ teacher/
 
 Die pagina toont Rechtentrainer-resultaten en gedeelde voortgang van de andere
 geregistreerde, zichtbare onderdelen. De Rechtentrainer heeft vaardigheidsmeters;
-de andere onderdelen hebben een algemeen overzicht en tonen in het leerlingdetail
-nog de opgeslagen gegevens. Leesbare vaardigheidsdetails voor de andere trainers
-zijn een volgende uitbreiding.
+Vectoren en Reële getallen tonen vaardigheidsstatus, zelfstandig opgeloste opgaven,
+fouten en aandachtspunten, geplande herhaling en recente activiteit. De overige
+onderdelen behouden hun algemene voortgangsoverzicht. De laatste 30 verwerkte
+opgaven worden voortaan bij de twee trainers bewaard; oudere opslag toont alleen
+de beschikbare samenvattingen en laatst geoefende onderwerpen.
 
 ### Nieuw spel met leraarBob-login
 

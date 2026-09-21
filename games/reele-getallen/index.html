@@ -333,10 +333,12 @@ function validate(t,a){
  }
  throw Error('Onbekende beoordeling');
 }
+// A bounded record of processed exercises; old saves legitimately have no event history.
+function sanitizeActivity(items){return (Array.isArray(items)?items:[]).filter(e=>e&&skills.some(s=>s.id===e.skill)&&['independent','supported','skipped'].includes(e.outcome)).slice(-30).map(e=>({skill:e.skill,outcome:e.outcome,code:typeof e.code==='string'?e.code.slice(0,40):null,at:Number.isFinite(e.at)&&e.at>0&&e.at<1e14?e.at:0,seq:Number.isInteger(e.seq)&&e.seq>0?e.seq:0,xp:Number.isFinite(e.xp)?Math.max(0,Math.min(18,e.xp)):0}))}
 const freshSkill=()=>({intro:false,seen:0,clean:0,recent:[],signatures:[],representations:[],reviewClean:0,last:-1,repair:null,due:0});
-function fresh(){return {version:1,xp:0,total:0,sessions:0,lastSkill:null,skills:Object.fromEntries(skills.map(s=>[s.id,freshSkill()]))}}
+function fresh(){return {version:1,xp:0,total:0,sessions:0,activity:[],lastSkill:null,skills:Object.fromEntries(skills.map(s=>[s.id,freshSkill()]))}}
 const count=n=>Number.isFinite(n)?Math.floor(Math.max(0,Math.min(1e7,n))):0;
-function sanitize(raw){const p=fresh();if(raw?.version!==1)return p;for(const k of ['xp','total','sessions'])p[k]=count(raw[k]);p.lastSkill=skills.some(s=>s.id===raw.lastSkill)?raw.lastSkill:null;for(const {id} of skills){const d=raw.skills?.[id]||{},s=p.skills[id];s.intro=d.intro===true;for(const k of ['seen','clean','reviewClean','due'])s[k]=count(d[k]);s.last=Number.isInteger(d.last)?Math.max(-1,Math.min(p.total,d.last)):-1;s.repair=typeof d.repair==='string'?d.repair.slice(0,30):null;for(const k of ['signatures','representations'])s[k]=Array.isArray(d[k])?[...new Set(d[k].filter(x=>typeof x==='string'))].slice(-30):[];s.recent=Array.isArray(d.recent)?d.recent.filter(x=>typeof x==='boolean').slice(-4):[];}return p}
+function sanitize(raw){const p=fresh();if(raw?.version!==1)return p;p.activity=sanitizeActivity(raw.activity);for(const k of ['xp','total','sessions'])p[k]=count(raw[k]);p.lastSkill=skills.some(s=>s.id===raw.lastSkill)?raw.lastSkill:null;for(const {id} of skills){const d=raw.skills?.[id]||{},s=p.skills[id];s.intro=d.intro===true;for(const k of ['seen','clean','reviewClean','due'])s[k]=count(d[k]);s.last=Number.isInteger(d.last)?Math.max(-1,Math.min(p.total,d.last)):-1;s.repair=typeof d.repair==='string'?d.repair.slice(0,30):null;for(const k of ['signatures','representations'])s[k]=Array.isArray(d[k])?[...new Set(d[k].filter(x=>typeof x==='string'))].slice(-30):[];s.recent=Array.isArray(d.recent)?d.recent.filter(x=>typeof x==='boolean').slice(-4):[];}return p}
 function unlocked(p,id){return skills.find(s=>s.id===id).deps.every(d=>p.skills[d].clean>=2)}
 function mastered(p,id){const s=p.skills[id];return s.clean>=4&&s.reviewClean>=1&&s.signatures.length>=3&&s.representations.length>=2&&s.recent.length>=3&&s.recent.slice(-3).every(Boolean)&&!s.repair}
 function choose(p){
@@ -344,12 +346,13 @@ function choose(p){
  const fresh=available.find(s=>!p.skills[s.id].intro);if(fresh)return fresh.id;
  return available.map(s=>({id:s.id,score:(p.total-p.skills[s.id].last)+(mastered(p,s.id)?-5:3)+(s.id===p.lastSkill?-4:0)})).sort((a,b)=>b.score-a.score)[0].id;
 }
-function record(p,t,{clean=false,solved=false,code='practice'}={}){
+function record(p,t,{clean=false,solved=false,code='practice',now=Date.now()}={}){
  const s=p.skills[t.skill],repair=!!s.repair,age=p.total-s.last;
  const xp=clean?(repair?15:10+2*t.level):solved?5:0;p.xp+=xp;p.total++;p.lastSkill=t.skill;
  s.intro=true;s.seen++;s.last=p.total;s.recent=[...s.recent,!!clean].slice(-4);
  if(clean){s.clean++;if(age>=3)s.reviewClean++;s.signatures=[...new Set([...s.signatures,t.signature])].slice(-30);s.representations=[...new Set([...s.representations,t.representation])];s.repair=null;}
- else{s.repair=code;s.due=p.total+3;}return xp;
+ else{s.repair=code;s.due=p.total+3;}
+ p.activity=[...sanitizeActivity(p.activity),{skill:t.skill,outcome:clean?'independent':solved?'supported':'skipped',code:clean?null:code,at:now,seq:p.total,xp}].slice(-30);return xp;
 }
 const api={radical,parseExact,exactText,extractRoot,numberSets,decimalType,decimalNames,rootBounds,endpoint,intervalLabel,cbrt,orderInterval,shortestPeriod,rational,parse,value,compare,equal,number,format,decimalOf,label,integer,fraction,decimal,percent,sqrt,skills,generate,freshAnswer,validate,Progress:{fresh,sanitize,choose,unlocked,mastered,record}};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;root.RealNumbersCore=api;

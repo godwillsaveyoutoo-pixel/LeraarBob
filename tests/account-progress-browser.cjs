@@ -106,6 +106,7 @@ const mock=`(()=>{
   await v.eval('document.querySelector("#commit").click();AxiomaGame.flush()');
   const before=await v.eval('AxiomaVectorTrainer.inspect()'),saved=await v.eval('testRow.state');assert.equal(before.progress.xp,10,'earned XP saved with the learning model');
   assert(before.progress.total>0,'record an actual vector exercise');
+  assert(before.progress.activity.length>0,'vector exercise records recent activity');
   const v2=await open(game('vectoren-trainer'),{remote:saved});const after=await v2.eval('AxiomaVectorTrainer.inspect()');
   for(const key of ['progress','session','task','answer'])assert.deepEqual(after[key],before[key],'vector new device '+key);
   await v.eval(`document.querySelector('#freeBtn').click();document.querySelector('#skillList button').click();AxiomaGame.flush()`);
@@ -121,6 +122,7 @@ const mock=`(()=>{
   await real.eval(`(()=>{const t=AxiomaRealTrainer.inspect().task;for(const [i,value] of [Math.abs(t.target.n),t.target.d].entries()){document.querySelector('[data-slot="'+i+'"]').click();for(const digit of String(value))document.querySelector('[data-key="'+digit+'"]').click()}if(t.target.n<0)document.querySelector('[data-key="sign"]').click();document.querySelector('#commit').click()})()`);
   await real.eval('AxiomaGame.flush()');
   const realBefore=await real.eval('AxiomaRealTrainer.inspect()'),realSaved=await real.eval('testRow.state');assert.equal(realBefore.progress.xp,10);assert.equal(realBefore.phase,'done');
+  assert.equal(realBefore.progress.activity[0].outcome,'independent');
   const real2=await open(game('reele-getallen-trainer'),{remote:realSaved}),realAfter=await real2.eval('AxiomaRealTrainer.inspect()');
   for(const key of ['progress','session','task','answer','phase'])assert.deepEqual(realAfter[key],realBefore[key],'real numbers second device '+key);
   console.log('PASS real numbers: earned XP, learning route and completed answer restored on a second device');
