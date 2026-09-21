@@ -12,7 +12,7 @@ class CDP{
  const account={id:'teacher-test',email:'teacher@example.invalid',role:'teacher'};
  const session={user:account};
  const client={rpc:async(name)=>{testCalls.push(name);return {data:name==='axioma_is_teacher'}},from(table){testCalls.push(table);const q={select:()=>q,eq:()=>q,order:()=>q,range:()=>q,maybeSingle:async()=>({data:null}),then:fn=>Promise.resolve({data:[]}).then(fn)};return q}};
- window.AxiomaAuth={ready:async()=>({session,account}),client:()=>client,onChange:()=>()=>{}};`;
+ window.AxiomaAuth={ready:async()=>({session,account}),getAccount:async()=>account,client:()=>client,onChange:()=>()=>{}};`;
  c.paused=p=>c.send('Fetch.fulfillRequest',{requestId:p.requestId,responseCode:200,responseHeaders:[{name:'Content-Type',value:'application/javascript'}],body:Buffer.from(p.request.url.includes('axioma-auth.js')?mock:'').toString('base64')});
  await c.send('Network.enable');await c.send('Network.setCacheDisabled',{cacheDisabled:true});
  await c.send('Fetch.enable',{patterns:[{urlPattern:'*/shared/axioma-auth.js'},{urlPattern:'*/shared/axioma-social.js'}]});

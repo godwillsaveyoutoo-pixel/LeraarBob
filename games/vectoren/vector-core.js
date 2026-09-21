@@ -231,7 +231,7 @@ function freshState(){return {version:2,total:0,sessions:0,skills:Object.fromEnt
 function sanitize(raw){const p=freshState();if(!raw||raw.version!==2)return p;
  const number=(n,max=1e7)=>Number.isFinite(n)?Math.min(max,Math.max(0,n)):0;
  p.total=number(raw.total);p.sessions=number(raw.sessions);p.lastSkill=skills.some(s=>s.id===raw.lastSkill)?raw.lastSkill:null;
- for(const s of skills){const v=raw.skills?.[s.id]||{},out=p.skills[s.id];out.intro=v.intro===true;for(const k of ['seen','clean','lastAt','lastIndex','due'])out[k]=number(v[k],1e14);out.strength=number(v.strength,1);for(const k of ['representations','signatures','variants'])out[k]=Array.isArray(v[k])?v[k].filter(x=>typeof x==='string').slice(-30):[];out.recent=Array.isArray(v.recent)?v.recent.filter(x=>typeof x==='boolean').slice(-6):[];}
+ for(const s of skills){const v=raw.skills?.[s.id]||{},out=p.skills[s.id];out.intro=v.intro===true;for(const k of ['seen','clean','lastAt','due'])out[k]=number(v[k],1e14);out.lastIndex=Number.isFinite(v.lastIndex)?Math.max(-10,Math.min(1e14,v.lastIndex)):-10;out.strength=number(v.strength,1);for(const k of ['representations','signatures','variants'])out[k]=Array.isArray(v[k])?v[k].filter(x=>typeof x==='string').slice(-30):[];out.recent=Array.isArray(v.recent)?v.recent.filter(x=>typeof x==='boolean').slice(-6):[];}
  p.repairs=Array.isArray(raw.repairs)?raw.repairs.filter(r=>p.skills[r.skill]&&typeof r.code==='string').slice(-30).map(r=>({skill:r.skill,code:r.code,due:number(r.due),stage:number(r.stage,1)})):[];
  p.lastSignatures=Array.isArray(raw.lastSignatures)?raw.lastSignatures.filter(x=>typeof x==='string').slice(-20):[];return p;
 }

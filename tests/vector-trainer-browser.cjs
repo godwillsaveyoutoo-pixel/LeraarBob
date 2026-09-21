@@ -18,7 +18,7 @@ const BASE='http://127.0.0.1:8765/games/vectoren/Axioma_Vectorentrainer_v0.2.htm
  const ev=x=>c.eval(x),click=id=>ev(`document.getElementById(${JSON.stringify(id)}).click()`);
  async function fixture(id,opts={}){
   const draft={skill:id,level:1,variant:1,seed:51,free:true,intro:false,done:false,dirty:false,stage:0,session:null,answer:{strokes:[],values:['',''],point:null},...opts};
-  const {identifier}=await c.send('Page.addScriptToEvaluateOnNewDocument',{source:`localStorage.setItem('axioma-vectorentrainer-v020',${JSON.stringify(JSON.stringify({progress:Core.TrainerScheduler.freshState(),draft}))})`});
+  const {identifier}=await c.send('Page.addScriptToEvaluateOnNewDocument',{source:`Object.keys(localStorage).filter(k=>k.startsWith('axioma:progress:v2:')).forEach(k=>localStorage.removeItem(k));localStorage.setItem('axioma-vectorentrainer-v020',${JSON.stringify(JSON.stringify({progress:Core.TrainerScheduler.freshState(),draft}))})`});
   await c.send('Page.reload');await c.wait(`!!window.AxiomaVectorTrainer&&!document.getElementById('resumeBtn').hidden`);await c.send('Page.removeScriptToEvaluateOnNewDocument',{identifier});await click('resumeBtn');await c.wait(`!document.getElementById('play').hidden&&(AxiomaVectorTrainer.inspect().task.representation==='symbolic'||AxiomaVectorTrainer.inspect().view.unit>0)`);
  }
  async function layout(label){

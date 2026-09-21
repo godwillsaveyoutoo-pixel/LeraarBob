@@ -1293,7 +1293,7 @@ button{font:inherit;color:inherit;touch-action:manipulation}
 
   <div class="toast" id="toast"></div><div class="debug" id="debug"></div><div class="rotate"><b>Draai je telefoon</b><small>Signal Lab speelt liggend.</small></div>
 </div>
-<script>
+<script type="text/axioma-game">
 (()=>{
   'use strict';
   const levels=[
@@ -1313,7 +1313,7 @@ button{font:inherit;color:inherit;touch-action:manipulation}
   const STORAGE_KEY='signalLab.v0.4.1.progress';
   function loadProgress(){
     try{
-      const raw=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
+      const raw=JSON.parse(window.AxiomaGame.storage.getItem(STORAGE_KEY)||'{}');
       const bestProbes=raw.bestProbes&&typeof raw.bestProbes==='object'?raw.bestProbes:{};
       return {completed:Array.isArray(raw.completed)?raw.completed:[],lastLevel:Number.isInteger(raw.lastLevel)?raw.lastLevel:0,bestProbes};
     }catch(e){return {completed:[],lastLevel:0,bestProbes:{}}}
@@ -1321,7 +1321,7 @@ button{font:inherit;color:inherit;touch-action:manipulation}
   const saved=loadProgress();
   const state={screen:'levels',beforeMenu:'research',levelIndex:Math.max(0,Math.min(levels.length-1,saved.lastLevel)),menuLevelIndex:Math.max(0,Math.min(levels.length-1,saved.lastLevel)),selectedInput:5,probes:[],counterexamples:[],builderStep:'mul',mul:null,add:null,completed:new Set(saved.completed.filter(i=>Number.isInteger(i)&&i>=0&&i<levels.length)),bestProbes:{...saved.bestProbes},justAddedProbeX:null,graphActiveKey:null,graphPlaced:[],graphBuilt:false,graphMiss:null,graphMetrics:null,awaitingGraphProbe:false,pendingProbeScore:null,functionCheckDone:false,functionCheckAnswer:null};
   function saveProgress(){
-    try{localStorage.setItem(STORAGE_KEY,JSON.stringify({completed:[...state.completed].sort((a,b)=>a-b),lastLevel:state.levelIndex,bestProbes:state.bestProbes}))}catch(e){}
+    try{window.AxiomaGame.storage.setItem(STORAGE_KEY,JSON.stringify({completed:[...state.completed].sort((a,b)=>a-b),lastLevel:state.levelIndex,bestProbes:state.bestProbes}))}catch(e){}
   }
   const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const wait=ms=>new Promise(r=>setTimeout(r,reduceMotion?Math.min(ms,70):ms));
@@ -1681,7 +1681,7 @@ button{font:inherit;color:inherit;touch-action:manipulation}
 })();
 </script>
 
-<script id="signalShellScript">
+<script type="text/axioma-game" id="signalShellScript">
 (()=>{
   'use strict';
   const app=document.getElementById('app');
@@ -1698,7 +1698,7 @@ button{font:inherit;color:inherit;touch-action:manipulation}
   }
   function readProgress(){
     try{
-      const raw=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
+      const raw=JSON.parse(window.AxiomaGame.storage.getItem(STORAGE_KEY)||'{}');
       return {
         completed:Array.isArray(raw.completed)?raw.completed.filter(Number.isInteger):[],
         lastLevel:Number.isInteger(raw.lastLevel)?raw.lastLevel:0
@@ -1757,8 +1757,8 @@ button{font:inherit;color:inherit;touch-action:manipulation}
   function teachChromeOnce(){
     if(!compactLandscape())return;
     try{
-      if(localStorage.getItem('signalLab.shell.chromeSeen'))return;
-      localStorage.setItem('signalLab.shell.chromeSeen','1');
+      if(window.AxiomaGame.storage.getItem('signalLab.shell.chromeSeen'))return;
+      window.AxiomaGame.storage.setItem('signalLab.shell.chromeSeen','1');
     }catch(_){}
     setTimeout(()=>setChrome(true,{auto:true}),280);
   }
@@ -1819,48 +1819,19 @@ button{font:inherit;color:inherit;touch-action:manipulation}
 <script src="../shared/axioma-auth.js"></script>
 <script src="../shared/axioma-social.js"></script>
 <script src="../shared/axioma-progress.js"></script>
-<script id="axioma-simple-integration">
+<script type="text/axioma-game" id="axioma-simple-integration">
 (()=>{
 'use strict';
 const GAME_ID="signal-lab";
-const PROGRESS_KEY=`axioma:game:${GAME_ID}:progress`;
-const COMPLETE_KEY=`axioma:game:${GAME_ID}:complete`;
-function emit(completed,total,current=null){
-  completed=Math.max(0,Number(completed)||0); total=Math.max(0,Number(total)||0);
-  if(total)completed=Math.min(completed,total);
-  const payload={type:'axioma:game-progress',gameId:GAME_ID,completed,total,current:Number.isFinite(+current)?+current:null,complete:!!total&&completed>=total,updatedAt:new Date().toISOString()};
-  try{localStorage.setItem(PROGRESS_KEY,JSON.stringify(payload)); if(payload.complete)localStorage.setItem(COMPLETE_KEY,'1'); else localStorage.removeItem(COMPLETE_KEY)}catch(_){}
-  try{window.dispatchEvent(new CustomEvent('axioma:game-progress',{detail:payload}))}catch(_){}
-  try{if(parent&&parent!==window)parent.postMessage(payload,'*')}catch(_){}
-  return payload;
-}
-
-let cloudBusy=false,cloudAccount='',cloudKnown=new Set();
-async function cloudSync(units,total){
-  if(!window.AxiomaProgress||!window.AxiomaAuth||cloudBusy)return;
-  const normalized=[...new Set((Array.isArray(units)?units:[]).map(String).filter(Boolean))];
-  cloudBusy=true;
-  try{
-    const account=await window.AxiomaAuth.getAccount();
-    if(account?.role!=='student')return;
-    const uid=String(account.id||'');
-    if(uid!==cloudAccount){
-      cloudAccount=uid;cloudKnown.clear();
-      try{const remote=await window.AxiomaProgress.load(GAME_ID);for(const u of (remote?.state?.completed||[]))cloudKnown.add(String(u))}catch(_){}
-    }
-    for(const unit of normalized){
-      if(cloudKnown.has(unit))continue;
-      const result=await window.AxiomaProgress.completeUnit(GAME_ID,unit,total);
-      if(result?.status!=='conflict')cloudKnown.add(unit);
-    }
-  }catch(_){}finally{cloudBusy=false}
-}
+const emit=window.AxiomaGame.emit,cloudSync=window.AxiomaGame.report;
 const goHome=window.AxiomaPlatform.goHome,wire=window.AxiomaPlatform.wireHome;
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
 const strong=document.querySelector('.topbar .brandtext strong');if(strong&&!strong.querySelector('.axioma-platform-inline')){const old=strong.textContent.trim();strong.innerHTML='<span class="axioma-platform-inline">leraarBob</span> · '+old;wire(strong.querySelector('.axioma-platform-inline'))}
 
-function sync(){let d={};try{d=JSON.parse(localStorage.getItem('signalLab.v0.4.1.progress')||'{}')}catch(_){}const units=[...new Set(Array.isArray(d.completed)?d.completed:[])];const total=Number(document.getElementById('app')?.dataset.levelCount)||12;emit(units.length,total,(Number.isInteger(d.lastLevel)?d.lastLevel:0)+1);cloudSync(units,total)}sync();setInterval(sync,900);
+function sync(){let d={};try{d=JSON.parse(window.AxiomaGame.storage.getItem('signalLab.v0.4.1.progress')||'{}')}catch(_){}const units=[...new Set(Array.isArray(d.completed)?d.completed:[])];const total=Number(document.getElementById('app')?.dataset.levelCount)||12;emit(units.length,total,(Number.isInteger(d.lastLevel)?d.lastLevel:0)+1);cloudSync(units,total)}sync();setInterval(sync,900);
 
 })();
 </script>
+<script src="../shared/axioma-game-adapters.js"></script>
+<script src="../shared/axioma-game.js" data-game-id="signal-lab"></script>
 </body></html>

@@ -20,3 +20,6 @@ footer{display:flex;align-items:center;gap:10px;padding:8px 20px;border-top:1px 
 @media(max-height:500px) and (min-width:640px){#choiceWork{width:300px;padding:7px;gap:5px}.choice-answer{min-height:70px;font-size:20px}.choice-answer svg{height:72px}}
 @media(max-width:639px){.header-actions .icon{width:36px}.trainer-nav button{font-size:11px;padding:5px 6px}.brand{font-size:19px}.trainer-nav{margin-left:auto}}
 #choiceWork.arrow-choices{width:130px;grid-template-columns:1fr;gap:6px;padding:10px}.arrow-choices .choice-answer{min-height:44px;font-size:14px}
+
+/* Account and online controls remain available in the narrow home view. */
+@media(max-width:639px){#app{grid-template-rows:80px minmax(0,1fr)}header{flex-wrap:wrap}.trainer-nav{order:3;width:100%;justify-content:center}.header-actions{margin-left:auto}}

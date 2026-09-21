@@ -21,10 +21,13 @@ footer{display:flex;align-items:center;gap:10px;padding:8px 20px;border-top:1px 
 @media(max-height:500px) and (min-width:640px){#choiceWork{width:300px;padding:7px;gap:5px}.choice-answer{min-height:70px;font-size:20px}.choice-answer svg{height:72px}}
 @media(max-width:639px){.header-actions .icon{width:36px}.trainer-nav button{font-size:11px;padding:5px 6px}.brand{font-size:19px}.trainer-nav{margin-left:auto}}
 #choiceWork.arrow-choices{width:130px;grid-template-columns:1fr;gap:6px;padding:10px}.arrow-choices .choice-answer{min-height:44px;font-size:14px}
+
+/* Account and online controls remain available in the narrow home view. */
+@media(max-width:639px){#app{grid-template-rows:80px minmax(0,1fr)}header{flex-wrap:wrap}.trainer-nav{order:3;width:100%;justify-content:center}.header-actions{margin-left:auto}}
 </style></head>
 <body data-screen="home"><div id="app">
 <header><a id="homeBtn" class="brand quiet" href="../../index.html" data-platform-home aria-label="Naar de startpagina van leraarBob">leraarBob<span>Vectorentrainer</span></a><nav class="trainer-nav" aria-label="Trainernavigatie"><button id="playBtn" data-trainer-action="play" class="quiet">Oefenen</button><button id="helpBtn" data-trainer-action="help" class="quiet">Uitleg</button><button id="progressBtn" data-trainer-action="progress" class="quiet">Voortgang</button></nav><div class="header-actions"><span id="roundLabel">Jouw vectorroute</span><button id="themeBtn" class="icon quiet" aria-label="Kleurmodus wisselen">◐</button><button id="fullBtn" class="icon quiet" aria-label="Volledig scherm">⛶</button></div></header>
-<section id="home" aria-label="Startscherm"><div class="home-layout"><div class="hero"><svg class="hero-art" viewBox="0 0 350 155" aria-hidden="true"><defs><marker id="herohead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10" fill="currentColor"/></marker></defs><path d="M25 135H330M25 105H330M25 75H330M25 45H330M25 15H330M25 15V135M85 15V135M145 15V135M205 15V135M265 15V135M325 15V135" fill="none" stroke="currentColor" opacity=".12"/><path d="M25 135L145 105L265 15" fill="none" stroke="currentColor" stroke-width="3" marker-mid="url(#herohead)" marker-end="url(#herohead)"/><path d="M25 135L265 15" stroke="currentColor" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#herohead)"/><circle cx="25" cy="135" r="4" fill="currentColor"/></svg><div class="eyebrow">Kijken · construeren · begrijpen</div><h1>Geef richting<br>aan je denken.</h1><p>Maak vectoren zelf. Ontdek hun samenhang, reken met verplaatsingen en oefen wat nog aandacht nodig heeft.</p><div class="actions"><button id="startBtn" class="primary">Start een sessie →</button><button id="resumeBtn" hidden>Hervat oefening</button></div><p class="storage-note">12 korte oefeningen per sessie. Je voortgang blijft in deze browser. Vrij oefenen telt niet mee voor je leerroute.</p><p id="storageWarning" class="storage-note" role="status" hidden></p></div><div><div class="path-head"><h2>Jouw vectorroute</h2><span id="masteryCount" class="eyebrow"></span></div><p class="legend">Nieuwe begrippen komen vrij zodra de basis lukt. Via ‘Verkennen’ kun je elke familie alvast uitproberen.</p><div id="skillList" class="skill-list"></div></div></div></section>
+<section id="home" aria-label="Startscherm"><div class="home-layout"><div class="hero"><svg class="hero-art" viewBox="0 0 350 155" aria-hidden="true"><defs><marker id="herohead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10" fill="currentColor"/></marker></defs><path d="M25 135H330M25 105H330M25 75H330M25 45H330M25 15H330M25 15V135M85 15V135M145 15V135M205 15V135M265 15V135M325 15V135" fill="none" stroke="currentColor" opacity=".12"/><path d="M25 135L145 105L265 15" fill="none" stroke="currentColor" stroke-width="3" marker-mid="url(#herohead)" marker-end="url(#herohead)"/><path d="M25 135L265 15" stroke="currentColor" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#herohead)"/><circle cx="25" cy="135" r="4" fill="currentColor"/></svg><div class="eyebrow">Kijken · construeren · begrijpen</div><h1>Geef richting<br>aan je denken.</h1><p>Maak vectoren zelf. Ontdek hun samenhang, reken met verplaatsingen en oefen wat nog aandacht nodig heeft.</p><div class="actions"><button id="startBtn" class="primary">Start een sessie →</button><button id="resumeBtn" hidden>Hervat oefening</button></div><p class="storage-note">12 korte oefeningen per sessie. Met je leerlingaccount wordt je voortgang online bewaard. Als gast oefen je op dit toestel. Vrij oefenen telt niet mee voor je leerroute.</p><p id="storageWarning" class="storage-note" role="status" hidden></p></div><div><div class="path-head"><h2>Jouw vectorroute</h2><span id="masteryCount" class="eyebrow"></span></div><p class="legend">Nieuwe begrippen komen vrij zodra de basis lukt. Via ‘Verkennen’ kun je elke familie alvast uitproberen.</p><div id="skillList" class="skill-list"></div></div></div></section>
 <section id="play" hidden aria-label="Oefenruimte"><div class="questionbar"><div class="questiontext"><div id="modeLabel"></div><h1 id="prompt"></h1></div><p id="toolHint" class="toolhint"></p></div><div id="work" class="work"><div id="boardWrap"><svg id="board" tabindex="0" role="application" aria-label="Vectorenrooster. Sleep of tik begin en einde. Met pijltjestoetsen verplaats je de cursor; Enter kiest een punt."></svg><div id="introText" hidden></div></div><div id="choiceWork" role="group" aria-label="Kies je antwoord" hidden></div><div id="numberWork" hidden><div id="calculation"><div id="givens"></div><div id="scaffold"></div></div><div id="coordinateEditor" class="coordinate-editor" role="group" aria-label="Coördinaten invoeren"><div class="slots"><button class="slot" id="slotX" aria-pressed="true"><small id="labelX">x · horizontaal</small><strong id="valueX">?</strong></button><button class="slot" id="slotY" aria-pressed="false"><small id="labelY">y · verticaal</small><strong id="valueY">?</strong></button></div><div id="keypad" class="keypad"></div><p id="keyHint">± wisselt het teken · / maakt een breuk · → wisselt component</p></div></div></div><footer><div id="drawTools" class="draw-tools"><button id="vectorTool" aria-pressed="true">Pijl</button><button id="resultTool" aria-pressed="false">Resultante</button><button id="undoBtn" aria-label="Laatste tekening ongedaan maken">↶ Undo</button></div><p id="feedback" role="status" aria-live="polite"></p><button id="skip" class="quiet">Later oefenen</button><button id="commit" class="primary">Controleer</button></footer></section>
 <section id="helpScreen" hidden aria-label="Uitleg"><div class="screen-heading"><div><h1>Uitleg bij je oefening</h1><p>Je tekening en je antwoorden blijven staan terwijl je hier kijkt.</p></div><button id="closeHelp">Terug naar oefening</button></div><div class="help-content"><label for="helpTopic">Onderwerp</label><select id="helpTopic"></select><h2 id="helpTitle"></h2><p id="helpConcept"></p><div id="helpExample" class="help-example"></div><h2>Zo bedien je de trainer</h2><p>Tekenen: sleep, of tik beginpunt en eindpunt. Undo neemt de laatste stap terug. Controleer beoordeelt je constructie. Bij een keuzevraag tik je meteen je antwoord aan. Bij rekenen gebruik je de vaste x- en y-velden.</p><button id="libraryBtn">Vrij oefenen per onderwerp</button></div></section>
 <section id="progressScreen" hidden aria-label="Leerroute"><div class="screen-heading"><div><h1>Wat wordt al stevig?</h1><p>Een juiste herhaling na een fout telt pas als zelfstandig bewijs bij een nieuwe vraag.</p></div><button id="closeProgress">Terug</button></div><div id="progressRows"></div></section>
@@ -325,7 +328,7 @@ function freshState(){return {version:2,total:0,sessions:0,skills:Object.fromEnt
 function sanitize(raw){const p=freshState();if(!raw||raw.version!==2)return p;
  const number=(n,max=1e7)=>Number.isFinite(n)?Math.min(max,Math.max(0,n)):0;
  p.total=number(raw.total);p.sessions=number(raw.sessions);p.lastSkill=skills.some(s=>s.id===raw.lastSkill)?raw.lastSkill:null;
- for(const s of skills){const v=raw.skills?.[s.id]||{},out=p.skills[s.id];out.intro=v.intro===true;for(const k of ['seen','clean','lastAt','lastIndex','due'])out[k]=number(v[k],1e14);out.strength=number(v.strength,1);for(const k of ['representations','signatures','variants'])out[k]=Array.isArray(v[k])?v[k].filter(x=>typeof x==='string').slice(-30):[];out.recent=Array.isArray(v.recent)?v.recent.filter(x=>typeof x==='boolean').slice(-6):[];}
+ for(const s of skills){const v=raw.skills?.[s.id]||{},out=p.skills[s.id];out.intro=v.intro===true;for(const k of ['seen','clean','lastAt','due'])out[k]=number(v[k],1e14);out.lastIndex=Number.isFinite(v.lastIndex)?Math.max(-10,Math.min(1e14,v.lastIndex)):-10;out.strength=number(v.strength,1);for(const k of ['representations','signatures','variants'])out[k]=Array.isArray(v[k])?v[k].filter(x=>typeof x==='string').slice(-30):[];out.recent=Array.isArray(v.recent)?v.recent.filter(x=>typeof x==='boolean').slice(-6):[];}
  p.repairs=Array.isArray(raw.repairs)?raw.repairs.filter(r=>p.skills[r.skill]&&typeof r.code==='string').slice(-30).map(r=>({skill:r.skill,code:r.code,due:number(r.due),stage:number(r.stage,1)})):[];
  p.lastSignatures=Array.isArray(raw.lastSignatures)?raw.lastSignatures.filter(x=>typeof x==='string').slice(-20):[];return p;
 }
@@ -349,16 +352,16 @@ function record(p,t,{clean,code='practice',now=Date.now()}={}){
 const api={VectorMath,TaskValidator:{validate,findChain},MisconceptionModel:{diagnose},TaskGenerator:{generate,skills,rng},TrainerScheduler:{freshState,sanitize,unlocked,phase,choose,record},parseNumber,format,coord};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;root.VectorTrainerCore=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
-</script><script>(function(){
+</script><script type="text/axioma-game">(function(){
 'use strict';
 const {VectorMath:M,TaskValidator:Validator,TaskGenerator:Generator,TrainerScheduler:Scheduler,parseNumber,format,coord}=VectorTrainerCore;
 const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',KEY='axioma-vectorentrainer-v020';
 const titles={locked:'Nog te ontdekken',new:'Nieuw',guided:'Begeleid',learning:'In opbouw',solid:'Stevig'};
 let progress=Scheduler.freshState(),session=null,task=null,answer={strokes:[],values:['',''],point:null,choice:null},intro=false,done=false,dirty=false,errorCode=null,stage=0,role='vector',activeSlot=0,free=false,previousScreen='home',view={},anchor=null,drag=null,cursor=M.point(0,0),cursorVisible=false,seedSerial=Date.now()>>>0;
 let restored=null,advanceTimer=null,pendingAdvance=false;
-try{const raw=JSON.parse(localStorage.getItem(KEY)||'null');progress=Scheduler.sanitize(raw?.progress);if(raw?.mode==='dark')document.documentElement.dataset.mode='dark';if(raw?.draft&&Generator.skills.some(s=>s.id===raw.draft.skill))restored=raw.draft;}catch{storageError()}
+try{const raw=JSON.parse(window.AxiomaGame.storage.getItem(KEY)||'null');progress=Scheduler.sanitize(raw?.progress);if(raw?.mode==='dark')document.documentElement.dataset.mode='dark';if(raw?.draft&&Generator.skills.some(s=>s.id===raw.draft.skill))restored=raw.draft;}catch{storageError()}
 function storageError(){$('storageWarning').hidden=false;$('storageWarning').textContent='Deze browser kan je voortgang niet bewaren. Je kunt wel blijven oefenen.'}
-function save(){try{const draft=task?{skill:task.skill,seed:task.seed,variant:task.variant,level:task.level,repair:task.repair,intro,done,dirty,errorCode,stage,free,session,answer}:restored;localStorage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft}));}catch{storageError()}}
+function save(){try{const draft=task?{skill:task.skill,seed:task.seed,variant:task.variant,level:task.level,repair:task.repair,intro,done,dirty,errorCode,stage,free,session,answer}:restored;window.AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft}));window.AxiomaGame.report(Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').map(s=>s.id),Generator.skills.length);}catch{storageError()}}
 function screen(name){cancelGesture();clearTimeout(advanceTimer);document.body.dataset.screen=name;AxiomaPlatform.trainerScreen(({play:'play',helpScreen:'help',progressScreen:'progress'})[name]||'');for(const id of ['home','play','progressScreen','helpScreen','summary'])$(id).hidden=id!==name;if(name==='play'){requestAnimationFrame(renderBoard);if(pendingAdvance)scheduleAdvance();}if(name==='home')renderHome()}
 function message(text,kind=''){$('feedback').textContent=text;$('feedback').className=kind}
 function newSeed(){return (++seedSerial+Math.floor(Math.random()*1e8))>>>0}
@@ -553,5 +556,255 @@ window.addEventListener('pagehide',save);
 // Read-only geometry inspection for reproducible release checks. No answer data is shown in the UI.
 window.AxiomaVectorTrainer=Object.freeze({inspect:()=>structuredClone({task,answer,intro,done,dirty,stage,free,session,progress,view}),project:p=>project(p)});
 renderHome();if(restored)resume();else startSession();
+})();
+</script><script src="../../shared/vendor/supabase.js"></script><script src="../../shared/supabase-config.js"></script><script src="../../shared/axioma-auth.js"></script><script src="../../shared/axioma-social.js"></script><script src="../../shared/axioma-progress.js"></script><script>// Translates the existing completion records into each engine's native save format.
+// Once a full snapshot exists, the engine owns that format and it is restored verbatim.
+(() => {
+'use strict';
+const numbers=(state,first,total)=>(state.completed||[]).map(Number).filter(n=>Number.isInteger(n)&&n>=first&&n<first+total);
+const put=(state,key,value)=>{if(!Object.hasOwn(state.storage,key))state.storage[key]=JSON.stringify(value)};
+const next=(done,first,total)=>{for(let i=first;i<first+total;i++)if(!done.includes(i))return i;return first+total-1};
+function indexed(key,total,field='lastLevel'){
+ return {keys:[key],hydrate(state){const done=numbers(state,0,total);put(state,key,{completed:done,[field]:next(done,0,total)})}};
+}
+const adapters={
+ 'pythagoras':{keys:['axioma.pythagoras.completed.v1','axioma.pythagoras.current.v1'],hydrate(state){const done=numbers(state,1,10);put(state,this.keys[0],done);put(state,this.keys[1],next(done,1,10))}},
+ 'stelsels':{keys:['axioma.stelsels.completed.v1','axioma.stelsels.current.v1'],hydrate(state){const done=numbers(state,0,14);put(state,this.keys[0],done);put(state,this.keys[1],next(done,0,14))}},
+ 'algebra-smederij':{keys:['rf22_done','rf21_last','rf21_theme'],hydrate(state){put(state,'rf22_done',(state.completed||[]).map(String))}},
+ 'taartenwinkel':indexed('axioma.taartenwinkel.v05.progress',7,'lastService'),
+ 'kubusbouw':indexed('axioma.scaleAssembly.v0.5.progress',22),
+ 'verfwinkel':indexed('axioma.verfwinkel.progress.v1',16),
+ 'signal-lab':indexed('signalLab.v0.4.1.progress',12),
+ 'data-check':{keys:['evidenceDeskCompletedV06','evidenceDeskMetaV06'],hydrate(state){const done=numbers(state,1,22);put(state,this.keys[0],Array.from({length:22},(_,i)=>done.includes(i+1)));put(state,this.keys[1],{lastLevel:next(done,1,22)-1})}},
+ 'gravity-maze':{keys:['gravity-maze-human-v1-blind','gravity-maze-human-v1-assisted']},
+ 'vectoren-trainer':{keys:['axioma-vectorentrainer-v020']},
+ 'brandweer':{keys:['axioma.brandweer.current.v1'],hydrate(state){const done=numbers(state,1,16);put(state,this.keys[0],next(done,1,16)-1)}},
+ 'kleiduifschieten':{keys:['axioma.rechten.kleiduiven.standalone.v12']},
+ 'rechten-trainer':{tracking:false,external:true},
+ 'functies-rechten':{tracking:false},
+ 'rechten-zeeslag':{tracking:false,multiplayer:true}
+};
+const readers={
+ 'pythagoras':['axioma.pythagoras.completed.v1',10,value=>value],
+ 'stelsels':['axioma.stelsels.completed.v1',14,value=>value],
+ 'algebra-smederij':['rf22_done',()=>window.RF?.Challenges?.length||0,value=>value],
+ 'taartenwinkel':['axioma.taartenwinkel.v05.progress',7,value=>value.completed],
+ 'kubusbouw':['axioma.scaleAssembly.v0.5.progress',22,value=>value.completed],
+ 'verfwinkel':['axioma.verfwinkel.progress.v1',16,value=>value.completed],
+ 'signal-lab':['signalLab.v0.4.1.progress',12,value=>value.completed],
+ 'data-check':['evidenceDeskCompletedV06',22,value=>value.map((done,i)=>done?i+1:null).filter(Boolean)]
+};
+for(const [id,[key,total,read]] of Object.entries(readers))adapters[id].onWrite=(changed,value)=>{
+ if(changed!==key)return;
+ try{const units=read(JSON.parse(value));if(Array.isArray(units))return {completed:[...new Set(units.map(String))],total:typeof total==='function'?total():total}}catch(_){}
+};
+adapters['gravity-maze'].onWrite=(key,value,state)=>{
+ if(!adapters['gravity-maze'].keys.includes(key))return;
+ let best=[];for(const k of adapters['gravity-maze'].keys){try{const units=JSON.parse(state.storage[k]||'{}').completed;if(Array.isArray(units)&&units.length>best.length)best=units}catch(_){}}
+ return {completed:best.map(String),total:9};
+};
+window.AxiomaGameAdapters=Object.freeze(adapters);
+})();
+</script><script data-game-id="vectoren-trainer">// Account-bound lifecycle for games. Engines use storage below, never browser-wide progress.
+(() => {
+'use strict';
+const script=document.currentScript, gameId=script.dataset.gameId;
+const config=window.AxiomaGameAdapters?.[gameId] || {};
+const clone=v=>JSON.parse(JSON.stringify(v));
+let account=null, cacheKey='', record={state:{storage:{}},revision:0,dirty:false};
+let active=false, started=false, booting=false, busy=false, timer=null, edit=0, status='loading', storageFailed=false;
+let host, dock, panel, message, actions, readyResolve;
+const ready=new Promise(resolve=>readyResolve=resolve);
+const nativeStorage=()=>window.localStorage;
+function deadline(promise){
+ let timeout;
+ return Promise.race([promise,new Promise((_,reject)=>{timeout=setTimeout(()=>reject(Error('Verbinding duurt te lang')),12000)})]).finally(()=>clearTimeout(timeout));
+}
+const label=()=>account?.role==='student'?(account.alias||'Leerling'):account?.role==='teacher'?'Leerkracht':'Gast';
+const accountKey=a=>a ? a.role+':'+a.id : 'guest';
+const keyFor=a=>'axioma:progress:v2:'+encodeURIComponent(window.AXIOMA_CONFIG?.url||'offline')+':'+accountKey(a)+':'+gameId;
+
+function setStatus(value){
+ status=value;
+ if(dock)dock.textContent=label()+' · '+({loading:'Laden…',saved:'Opgeslagen',saving:'Opslaan…',pending:'Nog te bewaren',offline:'Alleen op dit toestel',guest:'Op dit toestel',teacher:'Oefenmodus',conflict:'Voortgang gewijzigd',error:'Controle nodig',changed:'Account gewijzigd',untracked:'Vrij verkennen',multiplayer:'Samen spelen'})[value];
+ if(dock){dock.title=dock.textContent;dock.setAttribute('aria-label','Account en opslag: '+dock.textContent);dock.dataset.status=value;}
+ if(storageFailed&&dock)dock.textContent=label()+' · Opslag niet beschikbaar';
+}
+function persist(){
+ try{nativeStorage().setItem(cacheKey,JSON.stringify(record));return true}
+ catch(_){storageFailed=true;setStatus(status);return false}
+}
+function notice(text,buttons,blocking=false){
+ message.textContent=text;actions.replaceChildren();
+ for(const [text,fn] of buttons){const b=document.createElement('button');b.type='button';b.textContent=text;b.onclick=fn;actions.append(b)}
+ panel.dataset.blocking=String(blocking);panel.hidden=false;
+ actions.querySelector('button')?.focus();
+}
+function home(){return window.AxiomaPlatform?.homeURL() || new URL('../',location.href).href}
+function login(){const url=new URL(home());url.searchParams.set('login','1');url.searchParams.set('return',location.href);location.href=url.href}
+function details(){
+ if(!active&&!started)return;
+ if(!active&&started){if(status==='conflict')conflict();else changed();return}
+ const explanation=storageFailed?'Bewaren op dit toestel lukt niet. Laat deze pagina open en probeer opnieuw.':({saved:'Je voortgang is gekoppeld aan '+label()+'. Je kunt op een ander toestel verdergaan.',saving:'Je wijzigingen worden bewaard.',pending:'Je laatste wijzigingen staan op dit toestel en worden nog online bewaard.',offline:'Online bewaren lukt momenteel niet. Je wijzigingen blijven apart voor jouw account op dit toestel staan. Probeer opnieuw voordat je op een ander toestel verdergaat.',guest:'Je oefent als gast. Deze voortgang blijft op dit toestel en wordt niet automatisch naar een leerlingaccount overgenomen.',teacher:'Je oefent als leerkracht. Dit telt niet als leerlingvoortgang.',untracked:'Dit is een vrije verkenning zonder persoonlijke voortgang.',multiplayer:'Partijen en ranglijsten worden door het samenspel bijgehouden.'})[status]||'Je account en voortgang worden gecontroleerd.';
+ notice(explanation,[...(['offline','pending','saving'].includes(status)?[['Opnieuw bewaren',async()=>{await flush();if(status==='saved')panel.hidden=true;else details()}]]:[]),[account?'Account op startpagina':'Inloggen',login],['Sluiten',()=>panel.hidden=true]]);
+}
+function mount(){
+ host=document.createElement('div');host.id='axioma-game-status';
+ // Shadow DOM keeps game button/layout rules out of the shared account controls.
+ const root=host.attachShadow({mode:'open'});
+ root.innerHTML='<style>:host{display:inline-flex;flex:0 1 auto;min-width:34px;vertical-align:middle;z-index:10000;font:12px/1.4 system-ui;color:#132d34}:host([data-floating]){position:fixed;top:6px;left:6px}button{font:inherit;cursor:pointer;border:1px solid #80989e;border-radius:7px;padding:7px 10px;background:#f5f8f9;color:#132d34;min-height:32px}button:focus-visible{outline:3px solid #cd9930;outline-offset:2px}.dock{max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 1px 5px #0003}.panel{position:fixed;inset:0;background:#102028a6;display:grid;place-items:center;padding:16px}.panel[hidden]{display:none}.box{background:#f5f8f9;color:#132d34;padding:20px;border-radius:12px;width:min(420px,calc(100vw - 48px));box-shadow:0 8px 36px #0005}p{margin:0 0 16px}.actions{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:1100px){.dock{font-size:0;width:34px;padding:4px;min-height:34px}.dock:before{content:"◉";font-size:20px}.dock[data-status="saved"]{color:#277457}.dock[data-status="offline"],.dock[data-status="conflict"],.dock[data-status="pending"]{color:#936615}}@media(prefers-color-scheme:dark){button,.box{background:#17343d;color:#e9f2f5}}</style><button class="dock" aria-label="Account en opslagstatus"></button><section class="panel" hidden role="dialog" aria-modal="true" aria-label="Account en voortgang"><div class="box"><p role="status"></p><div class="actions"></div></div></section>';
+ document.body.append(host);dock=root.querySelector('.dock');panel=root.querySelector('.panel');message=root.querySelector('p');actions=root.querySelector('.actions');dock.onclick=details;setStatus('loading');
+ new MutationObserver(placeDock).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','inert','class']});
+ window.addEventListener('resize',placeDock);placeDock();
+ root.addEventListener('keydown',event=>{
+  if(panel.hidden)return;
+  if(event.key==='Escape'&&panel.dataset.blocking!=='true'){event.preventDefault();panel.hidden=true;dock.focus()}
+  if(event.key==='Tab'){
+   const buttons=[...actions.querySelectorAll('button')];if(!buttons.length)return;
+   const index=buttons.indexOf(root.activeElement);event.preventDefault();buttons[(index+(event.shiftKey?-1:1)+buttons.length)%buttons.length].focus();
+  }
+ });
+ // Block input to the old engine immediately on logout or account replacement.
+ for(const type of ['click','pointerdown','keydown','touchstart'])document.addEventListener(type,event=>{
+  if((!active||!panel.hidden)&&!event.composedPath().includes(host)){
+   if(event.composedPath().some(node=>node.matches?.('a[data-platform-home]')))return;
+   event.preventDefault();event.stopImmediatePropagation();
+  }
+ },true);
+}
+function placeDock(){
+ if(!host)return;
+ const header=[...document.querySelectorAll('.header-actions'),...document.querySelectorAll('header')].find(el=>{const r=el.getBoundingClientRect();return r.width&&r.height&&r.top>=-5&&r.bottom<=innerHeight&&!el.closest('[inert]')&&getComputedStyle(el).visibility!=='hidden'});
+ const parent=header||document.body;if(host.parentNode!==parent)parent.append(host);
+ if(host.hasAttribute('data-floating')===!!header)host.toggleAttribute('data-floating',!header);
+}
+function changed(){
+ if(!started)return;
+ active=false;clearTimeout(timer);setStatus('changed');
+ notice('Je account is gewijzigd. Open het spel opnieuw om met de juiste voortgang verder te gaan.',[['Verder met mijn account',()=>location.reload()]],true);
+}
+function check(detail){
+ if(started&&(detail.pending||accountKey(detail.account)!==accountKey(account)))changed();
+}
+function dirty(){
+ if(!active)return;
+ record.dirty=true;edit++;persist();
+ if(account?.role==='student'){
+  setStatus(status==='offline'?'offline':'pending');clearTimeout(timer);timer=setTimeout(flush,700);
+ }
+}
+function getItem(key){
+ key=String(key);
+ if(Object.hasOwn(record.state.storage,key))return record.state.storage[key];
+ // Unassigned legacy browser progress is available only in guest mode.
+ if(!account){try{return nativeStorage().getItem(key)}catch(_){return null}}
+ return null;
+}
+function setItem(key,value){
+ if(!active)return;
+ key=String(key);value=String(value);
+ if(record.state.storage[key]===value)return;
+ record.state.storage[key]=value;
+ const summary=config.onWrite?.(key,value,record.state);
+ if(summary)Object.assign(record.state,summary,{finished:!!summary.total&&summary.completed.length>=summary.total});
+ dirty();
+}
+function removeItem(key){if(!active)return;record.state.storage[String(key)]=null;dirty()}
+function report(completed,total,current){
+ if(!active)return;
+ const units=[...new Set((Array.isArray(completed)?completed:[]).map(String))];
+ const next={completed:units,total:Math.max(0,Number(total)||0),finished:!!total&&units.length>=total};
+ if(current!=null)next.current=current;
+ if(Object.entries(next).some(([key,v])=>JSON.stringify(record.state[key])!==JSON.stringify(v))){Object.assign(record.state,next);dirty()}
+}
+function emit(completed,total,current){
+ window.dispatchEvent(new CustomEvent('axioma:game-progress',{detail:{gameId,accountId:account?.id||null,completed,total,current}}));
+}
+function snapshot(){
+ const state=clone(record.state);
+ // Only declared engine save keys go online (no device telemetry or incidental UI keys).
+ state.storage=Object.fromEntries(Object.entries(state.storage).filter(([key])=>(config.keys||[]).includes(key)));
+ state.schemaVersion=2;
+ return state;
+}
+function conflict(){
+ active=false;setStatus('conflict');
+ notice('Dit spel is ook op een ander tabblad of toestel gewijzigd. Je werk op dit toestel blijft apart bewaard. Laad de online versie om verder te gaan.',[['Laad online voortgang',()=>{
+  try{nativeStorage().setItem(cacheKey+':conflict:'+Date.now(),JSON.stringify(record));nativeStorage().removeItem(cacheKey)}catch(_){notice('De reservekopie kan niet worden bewaard. Maak ruimte vrij op dit toestel en probeer opnieuw.',[['Opnieuw proberen',conflict]],true);return}
+  location.reload();
+ }]],true);
+}
+async function flush(){
+ if(config.external){window.dispatchEvent(new Event('axioma:retry-save'));return}
+ if(!active||busy||!record.dirty||account?.role!=='student'||config.tracking===false)return;
+ busy=true;const version=edit,owner=account.id,state=snapshot();setStatus('saving');
+ try{
+  const result=await window.AxiomaProgress.save(gameId,state,record.revision,owner);
+  if(!active)return;
+  if(result?.status==='conflict'){conflict();return}
+  if(!result||result.status==='guest')throw Error('Niet bewaard');
+  record.revision=Number(result.revision)||record.revision+1;
+  record.dirty=edit!==version;persist();setStatus(record.dirty?'pending':'saved');
+ }catch(_){if(active)setStatus('offline')}
+ finally{busy=false;if(active&&record.dirty&&status==='pending'){clearTimeout(timer);timer=setTimeout(flush,700)}}
+}
+async function engines(){
+ for(const placeholder of document.querySelectorAll('script[type="text/axioma-game"]')){
+  if(!active)return;
+  const executable=document.createElement('script');
+  if(placeholder.dataset.src){
+   executable.src=placeholder.dataset.src;executable.async=false;
+   await new Promise((resolve,reject)=>{executable.onload=resolve;executable.onerror=()=>reject(Error('Spelbestand kon niet laden'));placeholder.after(executable)});
+  }else{executable.textContent=placeholder.textContent;placeholder.after(executable)}
+ }
+ placeDock();window.dispatchEvent(new Event('axioma:game-ready'));
+}
+async function boot(){
+ if(booting||started)return;booting=true;
+ notice('Je account en voortgang worden geladen…',[],true);
+ try{
+  if(!Object.hasOwn(window.AxiomaGameAdapters||{},gameId))throw Error('Spelkoppeling ontbreekt');
+  if(location.protocol!=='file:'){
+   await deadline(window.AxiomaAuth.ready());account=await deadline(window.AxiomaAuth.getAccount());
+   if(account&& !['student','teacher'].includes(account.role))throw Error('Account niet beschikbaar');
+  }
+  cacheKey=keyFor(account);
+  let cached=null;try{cached=JSON.parse(nativeStorage().getItem(cacheKey)||'null')}catch(_){}
+  record={state:{storage:{}},revision:0,dirty:false};
+  if(cached?.state?.storage&&typeof cached.state.storage==='object')record=cached;
+  if(account?.role==='student'&&config.tracking!==false){
+   let remote;
+   try{remote=await deadline(window.AxiomaProgress.load(gameId,account.id))}
+   catch(error){
+    if(!cached){throw error}
+    setStatus('offline');
+   }
+   if(remote){
+    if(record.dirty&&record.revision!==remote.revision){conflict();return}
+    if(!record.dirty){record={state:remote.state||{storage:{}},revision:remote.revision,dirty:false};record.state.storage ||= {}}
+    setStatus(record.dirty?'pending':'saved');
+   }
+  }else setStatus(config.external?(account?.role==='student'?'loading':account?'teacher':'guest'):config.tracking===false?(config.multiplayer?'multiplayer':'untracked'):account?'teacher':'guest');
+  // Recheck after network requests; never mount an old account's engine.
+  if(location.protocol!=='file:'&&accountKey(await window.AxiomaAuth.getAccount())!==accountKey(account))throw Error('Account gewijzigd');
+  if(account?.role==='student')config.hydrate?.(record.state);
+  active=true;started=true;panel.hidden=true;persist();
+  window.AxiomaAuth?.onChange(check);
+  readyResolve();await engines();
+  if(record.dirty)timer=setTimeout(flush,700);
+ }catch(_){
+  active=false;setStatus('error');
+  notice('Je account of opgeslagen voortgang kon niet worden geladen. Probeer opnieuw; je bestaande voortgang blijft behouden.',[['Opnieuw proberen',()=>{if(started)location.reload();else boot()}],['Naar startpagina',()=>location.href=home()]],true);
+ }finally{booting=false}
+}
+window.AxiomaGame=Object.freeze({ready,storage:Object.freeze({getItem,setItem,removeItem}),report,emit,flush,
+ get state(){return clone(record.state)},get account(){return account},get active(){return active},get status(){return status}
+});
+window.addEventListener('pagehide',()=>{if(active){persist();flush()}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)flush()});
+window.addEventListener('online',()=>{if(active)flush()});
+window.addEventListener('axioma:save-status',event=>{if(config.external&&active)setStatus(event.detail)});
+window.addEventListener('pageshow',event=>{if(event.persisted)window.AxiomaAuth?.getAccount().then(a=>check({account:a})).catch(changed)});
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{mount();boot()},{once:true});else{mount();boot()}
 })();
 </script></body></html>

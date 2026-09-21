@@ -61,7 +61,7 @@ test('all generated families/levels accept a mathematical solution and keep all 
  }
 });
 test('scheduler gates prerequisites, mixes skills, delays repair, needs fresh independent evidence and survives malformed storage',()=>{
- const state=S.freshState();assert.deepEqual(S.unlocked(state),['props']);
+ const state=S.freshState();assert.deepEqual(S.sanitize(state),state,'empty learning model survives reload');assert.deepEqual(S.unlocked(state),['props']);
  const task=G.generate('props');state.skills.props.intro=true;
  S.record(state,task,{clean:false,code:'direction',now:100});assert.equal(state.repairs[0].due,3);assert.notEqual(S.choose(state).mode,'repair');
  for(let i=0;i<2;i++)S.record(state,G.generate('props',{seed:i+2,variant:i+1,level:1}),{clean:true,now:200});

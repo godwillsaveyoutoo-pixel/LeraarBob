@@ -21,21 +21,24 @@ function validateState(state){
   return state;
 }
 
-async function ensureStudent(){
+async function ensureStudent(expectedId){
   const account=await window.AxiomaAuth.getAccount();
   if(account?.role!=='student') throw new Error('Leerlingaccount vereist.');
+  if(expectedId && account.id!==expectedId) throw new Error('Leerlingaccount gewijzigd.');
   return account;
 }
 
-async function load(gameId){
+async function load(gameId,expectedId){
   const id=validateGameId(gameId);
-  await ensureStudent();
+  const account=await ensureStudent(expectedId);
   const sb=client();
   const {data,error}=await sb.from('axioma_game_progress')
     .select('game_id,state,revision,updated_at')
     .eq('game_id',id)
+    .eq('user_id',account.id)
     .maybeSingle();
   if(error) throw error;
+  await ensureStudent(account.id);
   return data ? {
     gameId:data.game_id,
     state:data.state,
@@ -49,23 +52,26 @@ async function load(gameId){
   };
 }
 
-async function save(gameId,state,revision){
+async function save(gameId,state,revision,expectedId){
   const id=validateGameId(gameId);
   validateState(state);
-  await ensureStudent();
+  const account=await ensureStudent(expectedId);
   const sb=client();
-  const {data,error}=await sb.rpc('axioma_save_game_progress',{
+  const {data,error}=await sb.rpc('axioma_save_game_progress_for_account',{
     p_game_id:id,
     p_state:state,
-    p_revision:Number(revision)||0
+    p_revision:Number(revision)||0,
+    p_user_id:account.id
   });
   if(error) throw error;
+  await ensureStudent(account.id);
   return data;
 }
 
 async function saveLatest(gameId,state){
-  const current=await load(gameId);
-  const result=await save(gameId,state,current.revision);
+  const account=await ensureStudent();
+  const current=await load(gameId,account.id);
+  const result=await save(gameId,state,current.revision,account.id);
   if(result?.status==='conflict'){
     return {status:'conflict', remote:result};
   }
@@ -82,7 +88,7 @@ async function completeUnit(gameId,unitId,total){
   if(account?.role!=='student') return {status:'guest'};
 
   for(let attempt=0;attempt<2;attempt++){
-    const current=await load(id);
+    const current=await load(id,account.id);
     const oldState=(current.state && typeof current.state==='object') ? current.state : {};
     const completed=new Set(Array.isArray(oldState.completed) ? oldState.completed.map(String) : []);
     completed.add(unit);
@@ -94,7 +100,7 @@ async function completeUnit(gameId,unitId,total){
       finished:completed.size>=totalCount
     };
 
-    const result=await save(id,nextState,current.revision);
+    const result=await save(id,nextState,current.revision,account.id);
     if(result?.status!=='conflict') return result;
   }
   return {status:'conflict'};

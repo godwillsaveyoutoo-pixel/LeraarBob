@@ -201,7 +201,7 @@ body.mode-plan .workspace{grid-template-rows:auto minmax(0,1fr) auto auto}body.m
 </section>
 <section class="complete" id="complete"><div class="card"><div class="check">✓</div><div><p>leraarBob · KUBUSBOUW</p><h2>Ruimtelijk denken voltooid.</h2></div><div class="facts"><span><b>22</b><small>oefeningen</small></span><span><b>3D</b><small>modellen</small></span><span><b>3</b><small>aanzichten</small></span></div><div class="completeBtns"><button id="again">Speel opnieuw</button><button class="gold" id="backHome">Terug naar start</button></div></div></section>
 </main>
-<script id="scaleAssemblyV050ShellJS">
+<script type="text/axioma-game" id="scaleAssemblyV050ShellJS">
 (() => {
   'use strict';
   const LEVEL_META = [{"i":0,"id":"SA01","title":"Eén kubus","task":"build_unique"},{"i":1,"id":"SA02","title":"Eerste structuur","task":"build_unique"},{"i":2,"id":"SA03","title":"Diepte telt","task":"build_unique"},{"i":3,"id":"SA04","title":"Verplaats 1 van 5","task":"build_variant"},{"i":4,"id":"SA05","title":"Verplaats 2 van 6","task":"build_variant"},{"i":5,"id":"SA06","title":"Verplaats 2 van 7","task":"build_variant"},{"i":6,"id":"SA07","title":"Wat ziet ZIJ?","task":"predict_hidden_view"},{"i":7,"id":"SA08","title":"Wat ziet VOOR?","task":"predict_hidden_view"},{"i":8,"id":"SA09","title":"Lees het model: VOOR","task":"draw_view"},{"i":9,"id":"SA10","title":"Lees het model: BOVEN","task":"draw_view"},{"i":10,"id":"SA11","title":"Lees het model: ZIJ","task":"draw_view"},{"i":11,"id":"SA12","title":"Eén kubus ontbreekt","task":"repair"},{"i":12,"id":"SA13","title":"Eén kubus te veel","task":"repair"},{"i":13,"id":"SA14","title":"VOOR blijft hetzelfde","task":"preserve_change"},{"i":14,"id":"SA15","title":"BOVEN blijft hetzelfde","task":"preserve_change"},{"i":15,"id":"SA16","title":"ZIJ blijft hetzelfde","task":"preserve_change"},{"i":16,"id":"SA17","title":"Bouw zuiniger","task":"minimal"},{"i":17,"id":"SA18","title":"Vul verborgen ruimte","task":"maximal"},{"i":18,"id":"SA19","title":"Herstel de bouwtekening","task":"plan_repair"},{"i":19,"id":"SA20","title":"Bewijs het verschil","task":"build_variant_predict"},{"i":20,"id":"SA21","title":"Drie aanzichten","task":"build_unique"},{"i":21,"id":"SA22","title":"Volledige reconstructie","task":"build_unique"}];
@@ -241,7 +241,7 @@ body.mode-plan .workspace{grid-template-rows:auto minmax(0,1fr) auto auto}body.m
 
   function readProgress(){
     try{
-      const raw=JSON.parse(localStorage.getItem(PROGRESS_KEY)||'{}');
+      const raw=JSON.parse(window.AxiomaGame.storage.getItem(PROGRESS_KEY)||'{}');
       return {completed:Array.isArray(raw.completed)?raw.completed:[],lastLevel:Number.isInteger(raw.lastLevel)?raw.lastLevel:0,total:LEVEL_META.length};
     }catch{return {completed:[],lastLevel:0,total:LEVEL_META.length};}
   }
@@ -339,7 +339,7 @@ body.mode-plan .workspace{grid-template-rows:auto minmax(0,1fr) auto auto}body.m
 </script>
 
 
-<script id="scaleAssemblyBundledCore">(() => {
+<script type="text/axioma-game" id="scaleAssemblyBundledCore">(() => {
   window.AxiomaBridge = window.AxiomaBridge || {
     configure() {},
     complete() {},
@@ -1702,7 +1702,7 @@ const BUILD_TASKS = new Set(["build_unique", "build_variant", "build_variant_pre
 const PROGRESS_KEY = "axioma.scaleAssembly.v0.5.progress";
 function loadProgress() {
   try {
-    const raw = JSON.parse(localStorage.getItem(PROGRESS_KEY) || "{}");
+    const raw = JSON.parse(window.AxiomaGame.storage.getItem(PROGRESS_KEY) || "{}");
     const completed = Array.isArray(raw.completed)
       ? raw.completed.filter((i) => Number.isInteger(i) && i >= 0 && i < LEVELS.length)
       : [];
@@ -1718,7 +1718,7 @@ const savedProgress = loadProgress();
 function persistProgress(lastLevel = state?.levelIndex ?? savedProgress.lastLevel) {
   savedProgress.lastLevel = Math.max(0, Math.min(LEVELS.length - 1, lastLevel));
   try {
-    localStorage.setItem(PROGRESS_KEY, JSON.stringify({
+    window.AxiomaGame.storage.setItem(PROGRESS_KEY, JSON.stringify({
       completed: [...savedProgress.completed].sort((a, b) => a - b),
       lastLevel: savedProgress.lastLevel,
     }));
@@ -2824,48 +2824,19 @@ resetForLevel(LEVELS[state.levelIndex]);
 <script src="../shared/axioma-auth.js"></script>
 <script src="../shared/axioma-social.js"></script>
 <script src="../shared/axioma-progress.js"></script>
-<script id="axioma-simple-integration">
+<script type="text/axioma-game" id="axioma-simple-integration">
 (()=>{
 'use strict';
 const GAME_ID="kubusbouw";
-const PROGRESS_KEY=`axioma:game:${GAME_ID}:progress`;
-const COMPLETE_KEY=`axioma:game:${GAME_ID}:complete`;
-function emit(completed,total,current=null){
-  completed=Math.max(0,Number(completed)||0); total=Math.max(0,Number(total)||0);
-  if(total)completed=Math.min(completed,total);
-  const payload={type:'axioma:game-progress',gameId:GAME_ID,completed,total,current:Number.isFinite(+current)?+current:null,complete:!!total&&completed>=total,updatedAt:new Date().toISOString()};
-  try{localStorage.setItem(PROGRESS_KEY,JSON.stringify(payload)); if(payload.complete)localStorage.setItem(COMPLETE_KEY,'1'); else localStorage.removeItem(COMPLETE_KEY)}catch(_){}
-  try{window.dispatchEvent(new CustomEvent('axioma:game-progress',{detail:payload}))}catch(_){}
-  try{if(parent&&parent!==window)parent.postMessage(payload,'*')}catch(_){}
-  return payload;
-}
-
-let cloudBusy=false,cloudAccount='',cloudKnown=new Set();
-async function cloudSync(units,total){
-  if(!window.AxiomaProgress||!window.AxiomaAuth||cloudBusy)return;
-  const normalized=[...new Set((Array.isArray(units)?units:[]).map(String).filter(Boolean))];
-  cloudBusy=true;
-  try{
-    const account=await window.AxiomaAuth.getAccount();
-    if(account?.role!=='student')return;
-    const uid=String(account.id||'');
-    if(uid!==cloudAccount){
-      cloudAccount=uid;cloudKnown.clear();
-      try{const remote=await window.AxiomaProgress.load(GAME_ID);for(const u of (remote?.state?.completed||[]))cloudKnown.add(String(u))}catch(_){}
-    }
-    for(const unit of normalized){
-      if(cloudKnown.has(unit))continue;
-      const result=await window.AxiomaProgress.completeUnit(GAME_ID,unit,total);
-      if(result?.status!=='conflict')cloudKnown.add(unit);
-    }
-  }catch(_){}finally{cloudBusy=false}
-}
+const emit=window.AxiomaGame.emit,cloudSync=window.AxiomaGame.report;
 const goHome=window.AxiomaPlatform.goHome,wire=window.AxiomaPlatform.wireHome;
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
 const s=document.querySelector('.top .title small');if(s&&!s.querySelector('.axioma-platform-inline')){const old=s.textContent.trim();s.innerHTML='<span class="axioma-platform-inline">leraarBob</span> · '+old;wire(s.querySelector('.axioma-platform-inline'))}
 
-function sync(){let d={};try{d=JSON.parse(localStorage.getItem('axioma.scaleAssembly.v0.5.progress')||'{}')}catch(_){}const units=[...new Set(Array.isArray(d.completed)?d.completed:[])];emit(units.length,22,(Number.isInteger(d.lastLevel)?d.lastLevel:0)+1);cloudSync(units,22)}sync();addEventListener('scaleassembly:progress',sync);setInterval(sync,1200);
+function sync(){let d={};try{d=JSON.parse(window.AxiomaGame.storage.getItem('axioma.scaleAssembly.v0.5.progress')||'{}')}catch(_){}const units=[...new Set(Array.isArray(d.completed)?d.completed:[])];emit(units.length,22,(Number.isInteger(d.lastLevel)?d.lastLevel:0)+1);cloudSync(units,22)}sync();addEventListener('scaleassembly:progress',sync);setInterval(sync,1200);
 
 })();
 </script>
+<script src="../shared/axioma-game-adapters.js"></script>
+<script src="../shared/axioma-game.js" data-game-id="kubusbouw"></script>
 </body></html>

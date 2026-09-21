@@ -23,16 +23,16 @@
   const qaLabels = new URLSearchParams(location.search).get('qa') === '1';
   const displayName = l => l.id === 'mass-6' ? 'MASS-6' : `${l.id.toUpperCase()} — ${l.name}`;
   const signature = JSON.stringify(data.map(l => [l.id, l.grid, l.objective]));
-  let telemetryStorage; try { telemetryStorage = localStorage; } catch { telemetryStorage = { getItem() { throw Error('unavailable'); }, setItem() { throw Error('unavailable'); } }; }
+  let telemetryStorage; try { telemetryStorage = window.AxiomaGame.storage; } catch { telemetryStorage = { getItem() { throw Error('unavailable'); }, setItem() { throw Error('unavailable'); } }; }
   const logger = PlaytestTelemetry.create({ storage: telemetryStorage, signature, acceptHistorical: prior => SpatialMigration.compatible(prior, data) });
   let saved = { signature, active: 0, sessions: {}, completed: [], pace: 1 };
   try {
-    const v = JSON.parse(localStorage.getItem(storageKey));
+    const v = JSON.parse(window.AxiomaGame.storage.getItem(storageKey));
     if (v?.signature === signature) saved = { ...saved, ...v };
     else if (v?.signature && SpatialMigration.compatible(v.signature, data)) {
       const migrated = SpatialMigration.migrate(v, data, G.key);
       if (migrated) {
-        try { localStorage.setItem(storageKey + '-before-spatial-v1', JSON.stringify(v)); } catch {}
+        try { window.AxiomaGame.storage.setItem(storageKey + '-before-spatial-v1', JSON.stringify(v)); } catch {}
         saved = { ...saved, ...migrated };
       }
     } else if (v?.signature) {
@@ -44,6 +44,10 @@
       }
     }
   } catch {}
+  if(!window.AxiomaGame.state.storage?.[storageKey]){
+    saved.completed=(window.AxiomaGame.state.completed||[]).filter(id=>data.some(l=>l.id===id));
+    saved.active=Math.max(0,data.findIndex(l=>!saved.completed.includes(l.id)));
+  }
   let index = 0, level, analysis, state, visual, history = [], moves = 0, anim = null;
   let hintCount = 0, hintText = '', suggested = null, ghost = null, pace = [1, 2, .65].includes(saved.pace) ? saved.pace : 1;
   let viewport = { width: 1, height: 1, cell: 1, x: 0, y: 0 };
@@ -53,7 +57,7 @@
   function persist() {
     saved.active = index; saved.pace = pace;
     saved.sessions[level.id] = { state: G.clone(state), history: history.map(h => ({ state: G.clone(h.state), moves: h.moves })), moves };
-    try { localStorage.setItem(storageKey, JSON.stringify(saved)); } catch {}
+    try { window.AxiomaGame.storage.setItem(storageKey, JSON.stringify(saved)); } catch {}
   }
   function cancelInput() { activePointers.clear(); blockedGesture = false; }
   function valid(s) { return s && analysis.index.has(G.key(s)); }

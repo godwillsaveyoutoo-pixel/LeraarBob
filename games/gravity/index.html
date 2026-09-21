@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#e8e5dc"><title>Gravity Maze — basis + Tier 2</title>
   <link rel="icon" href="data:,"><link rel="stylesheet" href="style.css">
-  <script defer src="legacy-engine.js"></script><script defer src="engine.js"></script><script defer src="levels.js"></script><script defer src="save-migration.js"></script><script defer src="telemetry.js"></script><script defer src="game.js"></script>
+  <script type="text/axioma-game" data-src="legacy-engine.js"></script><script type="text/axioma-game" data-src="engine.js"></script><script type="text/axioma-game" data-src="levels.js"></script><script type="text/axioma-game" data-src="save-migration.js"></script><script type="text/axioma-game" data-src="telemetry.js"></script><script type="text/axioma-game" data-src="game.js"></script>
 <style>#axioma-home{min-width:76px;height:44px;border:1px solid rgba(255,255,255,.18);background:rgba(10,15,22,.72);color:#e7edf4;border-radius:8px;font:900 10px/1 system-ui;letter-spacing:.12em;cursor:pointer}#axioma-home:active{transform:translateY(1px)}</style><script src="../../shared/axioma-platform.js"></script>
 </head>
 <body>
@@ -40,47 +40,18 @@
 <script src="../../shared/axioma-auth.js"></script>
 <script src="../../shared/axioma-social.js"></script>
 <script src="../../shared/axioma-progress.js"></script>
-<script id="axioma-simple-integration">
+<script type="text/axioma-game" id="axioma-simple-integration">
 (()=>{
 'use strict';
 const GAME_ID="gravity-maze";
-const PROGRESS_KEY=`axioma:game:${GAME_ID}:progress`;
-const COMPLETE_KEY=`axioma:game:${GAME_ID}:complete`;
-function emit(completed,total,current=null){
-  completed=Math.max(0,Number(completed)||0); total=Math.max(0,Number(total)||0);
-  if(total)completed=Math.min(completed,total);
-  const payload={type:'axioma:game-progress',gameId:GAME_ID,completed,total,current:Number.isFinite(+current)?+current:null,complete:!!total&&completed>=total,updatedAt:new Date().toISOString()};
-  try{localStorage.setItem(PROGRESS_KEY,JSON.stringify(payload)); if(payload.complete)localStorage.setItem(COMPLETE_KEY,'1'); else localStorage.removeItem(COMPLETE_KEY)}catch(_){}
-  try{window.dispatchEvent(new CustomEvent('axioma:game-progress',{detail:payload}))}catch(_){}
-  try{if(parent&&parent!==window)parent.postMessage(payload,'*')}catch(_){}
-  return payload;
-}
-
-let cloudBusy=false,cloudAccount='',cloudKnown=new Set();
-async function cloudSync(units,total){
-  if(!window.AxiomaProgress||!window.AxiomaAuth||cloudBusy)return;
-  const normalized=[...new Set((Array.isArray(units)?units:[]).map(String).filter(Boolean))];
-  cloudBusy=true;
-  try{
-    const account=await window.AxiomaAuth.getAccount();
-    if(account?.role!=='student')return;
-    const uid=String(account.id||'');
-    if(uid!==cloudAccount){
-      cloudAccount=uid;cloudKnown.clear();
-      try{const remote=await window.AxiomaProgress.load(GAME_ID);for(const u of (remote?.state?.completed||[]))cloudKnown.add(String(u))}catch(_){}
-    }
-    for(const unit of normalized){
-      if(cloudKnown.has(unit))continue;
-      const result=await window.AxiomaProgress.completeUnit(GAME_ID,unit,total);
-      if(result?.status!=='conflict')cloudKnown.add(unit);
-    }
-  }catch(_){}finally{cloudBusy=false}
-}
+const emit=window.AxiomaGame.emit,cloudSync=window.AxiomaGame.report;
 const goHome=window.AxiomaPlatform.goHome,wire=window.AxiomaPlatform.wireHome;
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
 wire(document.getElementById('axioma-home'));
-function gravitySync(){let best={completed:[],active:0};for(const k of ['gravity-maze-human-v1-blind','gravity-maze-human-v1-assisted']){try{const d=JSON.parse(localStorage.getItem(k)||'{}');if(Array.isArray(d.completed)&&d.completed.length>best.completed.length)best=d}catch(_){}}const units=[...new Set(best.completed||[])];emit(units.length,9,(Number.isInteger(best.active)?best.active:0)+1);cloudSync(units,9)}gravitySync();setInterval(gravitySync,1200);
+function gravitySync(){let best={completed:[],active:0};for(const k of ['gravity-maze-human-v1-blind','gravity-maze-human-v1-assisted']){try{const d=JSON.parse(window.AxiomaGame.storage.getItem(k)||'{}');if(Array.isArray(d.completed)&&d.completed.length>best.completed.length)best=d}catch(_){}}const units=[...new Set(best.completed||[])];emit(units.length,9,(Number.isInteger(best.active)?best.active:0)+1);cloudSync(units,9)}gravitySync();setInterval(gravitySync,1200);
 })();
 </script>
+<script src="../../shared/axioma-game-adapters.js"></script>
+<script src="../../shared/axioma-game.js" data-game-id="gravity-maze"></script>
 </body>
 </html>

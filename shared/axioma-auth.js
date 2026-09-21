@@ -9,6 +9,8 @@
   let readyPromise = null;
   let currentSession = null;
   let currentAccount = null;
+  let subscribed = false;
+  let resolution = 0;
   const listeners = new Set();
 
   function config() {
@@ -50,10 +52,11 @@
     return `${normalizeAlias(alias)}@${STUDENT_DOMAIN}`;
   }
 
-  function emit() {
+  function emit(pending = false) {
     const detail = Object.freeze({
       session: currentSession,
-      account: currentAccount
+      account: currentAccount,
+      pending
     });
     listeners.forEach(fn => {
       try { fn(detail); } catch (error) { console.error(error); }
@@ -62,6 +65,12 @@
   }
 
   async function resolveAccount(session) {
+    const request = ++resolution;
+    if(currentAccount && currentAccount.id !== session?.user?.id){
+      currentAccount=null;
+      currentSession=session||null;
+      emit(!!session);
+    }
     currentSession = session || null;
 
     if (!session?.user?.id) {
@@ -86,7 +95,7 @@
     if (profileError) throw profileError;
 
     // Never let a late request restore an account after logout/session replacement.
-    if (currentSession?.user?.id !== userId) return currentAccount;
+    if (request !== resolution || currentSession?.user?.id !== userId) return currentAccount;
 
     if (isTeacher === true) {
       currentAccount = Object.freeze({
@@ -129,14 +138,23 @@
     readyPromise = (async () => {
       const sb = getClient();
 
-      sb.auth.onAuthStateChange((_event, session) => {
+      if(!subscribed){sb.auth.onAuthStateChange((_event, session) => {
+        if(_event==='INITIAL_SESSION')return; // refresh() below owns initial resolution.
+        // Invalidate old identity synchronously; database work stays outside this callback.
+        if(currentSession?.user?.id !== session?.user?.id){
+          resolution++;
+          currentSession=session||null;
+          currentAccount=null;
+          emit(!!session);
+        }
         // Do not perform follow-up Supabase calls synchronously inside the callback.
         setTimeout(() => {
+          if(currentSession?.user?.id!==session?.user?.id)return;
           resolveAccount(session).catch(error => {
             console.error('leraarBob auth refresh:', error);
           });
         }, 0);
-      });
+      });subscribed=true;}
 
       await refresh();
       return {
@@ -144,7 +162,7 @@
         session: currentSession,
         account: currentAccount
       };
-    })();
+    })().catch(error=>{readyPromise=null;throw error});
     return readyPromise;
   }
 
@@ -214,6 +232,7 @@
 
   async function getAccount() {
     await ready();
+    if(currentSession?.user?.id && currentAccount?.id!==currentSession.user.id) throw new Error('Je account wordt opnieuw gecontroleerd.');
     return currentAccount;
   }
 

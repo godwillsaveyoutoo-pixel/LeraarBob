@@ -1144,7 +1144,7 @@ button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
 
   <div class="rotate-gate"><div><strong>Draai je telefoon</strong><span>Algebrasmederij speelt liggend.</span></div></div>
 </div>
-<script>
+<script type="text/axioma-game">
 (function(root){
 'use strict';
 const RF=root.RF=root.RF||{};
@@ -1280,7 +1280,7 @@ RF.Math={Rational,N,V,Add,Mul,Div,Pow,Eq,Rel,isRelation,relationOp,relationLike,
 })(typeof window!=='undefined'?window:globalThis);
 
 </script>
-<script>
+<script type="text/axioma-game">
 (function(root){
 'use strict';
 const RF=root.RF=root.RF||{},M=RF.Math;
@@ -1489,7 +1489,7 @@ RF.Gestures={walk,gesturesForSource,allGestureSources,gestureTargets,givenSubsti
 })(typeof window!=='undefined'?window:globalThis);
 
 </script>
-<script>
+<script type="text/axioma-game">
 (function(root){
 'use strict';
 const RF=root.RF=root.RF||{},M=RF.Math,G=RF.Gestures;
@@ -1549,7 +1549,7 @@ RF.Rules={validate,ruleId,hasNonzeroCondition};
 })(typeof window!=='undefined'?window:globalThis);
 
 </script>
-<script>
+<script type="text/axioma-game">
 (function(root){
 'use strict';
 const RF=root.RF=root.RF||{},M=RF.Math;
@@ -1901,13 +1901,13 @@ RF.Campaigns=RF.Themes.map(t=>({id:t.id,label:t.label,subtitle:t.subtitle}));
 })(typeof window!=='undefined'?window:globalThis);
 
 </script>
-<script>
+<script type="text/axioma-game">
 (function(){
 'use strict';
 const RF=window.RF,M=RF.Math,G=RF.Gestures,R=RF.Rules,CH=RF.Challenges,THEMES=RF.Themes||RF.Campaigns||[],$=s=>document.querySelector(s);
 const {N,Pow}=M;
 const els={game:$('#gameScreen'),levels:$('#levelsScreen'),family:$('#familyLabel'),goal:$('#goalLabel'),assumption:$('#assumptionLabel'),badge:$('#levelBadge'),derivation:$('#derivation'),transition:$('#transitionRow'),status:$('#microStatus'),assignment:$('#assignmentText'),context:$('#gestureContext'),verb:$('#gestureVerb'),hint:$('#gestureHint'),undo:$('#undoBtn'),restart:$('#restartBtn'),dots:$('#progressDots'),grid:$('#levelGrid'),campaignSwitch:$('#campaignSwitch'),stageSwitch:$('#stageSwitch'),levelsFoot:$('#levelsFoot'),givens:$('#givenStrip'),bottom:$('#bottomBar'),solvedStrip:$('#solvedStrip'),solvedMeta:$('#solvedMeta'),review:$('#reviewBtn'),menuBack:$('#menuBackBtn'),menuEyebrow:$('#menuEyebrow'),menuTitle:$('#menuTitle'),menuSubtitle:$('#menuSubtitle')};
-const store={get(k,f=null){try{const v=localStorage.getItem(k);return v==null?f:v}catch(_){return f}},set(k,v){try{localStorage.setItem(k,v)}catch(_){}}};
+const store={get(k,f=null){try{const v=window.AxiomaGame.storage.getItem(k);return v==null?f:v}catch(_){return f}},set(k,v){try{window.AxiomaGame.storage.setItem(k,v)}catch(_){}}};
 const qp=new URLSearchParams(location.search);
 let lastRaw=qp.get('level')||store.get('rf21_last',null)||store.get('rf20_last',null)||store.get('rf19_last','0');
 let currentIndex=Math.max(0,Math.min(CH.length-1,+(lastRaw||0)));
@@ -2179,7 +2179,7 @@ startLevel(currentIndex);
 
 </script>
 
-<script id="rf-website-mobile-shell-js">
+<script type="text/axioma-game" id="rf-website-mobile-shell-js">
 (function(){
   'use strict';
   const app=document.getElementById('app');
@@ -2216,7 +2216,7 @@ startLevel(currentIndex);
 
   function readDone(){
     for(const k of ['rf22_done','rf21_done','rf20_done','rf19_done','rf18_done','rf17_done','rf16_done','rf15_done','rf14_done']){
-      try{const v=localStorage.getItem(k);if(v!=null){const a=JSON.parse(v);return Array.isArray(a)?a:[]}}catch(_){ }
+      try{const v=window.AxiomaGame.storage.getItem(k);if(v!=null){const a=JSON.parse(v);return Array.isArray(a)?a:[]}}catch(_){ }
     }
     return [];
   }
@@ -2265,50 +2265,21 @@ startLevel(currentIndex);
 <script src="../shared/axioma-auth.js"></script>
 <script src="../shared/axioma-social.js"></script>
 <script src="../shared/axioma-progress.js"></script>
-<script id="axioma-simple-integration">
+<script type="text/axioma-game" id="axioma-simple-integration">
 (()=>{
 'use strict';
 const GAME_ID="algebra-smederij";
-const PROGRESS_KEY=`axioma:game:${GAME_ID}:progress`;
-const COMPLETE_KEY=`axioma:game:${GAME_ID}:complete`;
-function emit(completed,total,current=null){
-  completed=Math.max(0,Number(completed)||0); total=Math.max(0,Number(total)||0);
-  if(total)completed=Math.min(completed,total);
-  const payload={type:'axioma:game-progress',gameId:GAME_ID,completed,total,current:Number.isFinite(+current)?+current:null,complete:!!total&&completed>=total,updatedAt:new Date().toISOString()};
-  try{localStorage.setItem(PROGRESS_KEY,JSON.stringify(payload)); if(payload.complete)localStorage.setItem(COMPLETE_KEY,'1'); else localStorage.removeItem(COMPLETE_KEY)}catch(_){}
-  try{window.dispatchEvent(new CustomEvent('axioma:game-progress',{detail:payload}))}catch(_){}
-  try{if(parent&&parent!==window)parent.postMessage(payload,'*')}catch(_){}
-  return payload;
-}
-
-let cloudBusy=false,cloudAccount='',cloudKnown=new Set();
-async function cloudSync(units,total){
-  if(!window.AxiomaProgress||!window.AxiomaAuth||cloudBusy)return;
-  const normalized=[...new Set((Array.isArray(units)?units:[]).map(String).filter(Boolean))];
-  cloudBusy=true;
-  try{
-    const account=await window.AxiomaAuth.getAccount();
-    if(account?.role!=='student')return;
-    const uid=String(account.id||'');
-    if(uid!==cloudAccount){
-      cloudAccount=uid;cloudKnown.clear();
-      try{const remote=await window.AxiomaProgress.load(GAME_ID);for(const u of (remote?.state?.completed||[]))cloudKnown.add(String(u))}catch(_){}
-    }
-    for(const unit of normalized){
-      if(cloudKnown.has(unit))continue;
-      const result=await window.AxiomaProgress.completeUnit(GAME_ID,unit,total);
-      if(result?.status!=='conflict')cloudKnown.add(unit);
-    }
-  }catch(_){}finally{cloudBusy=false}
-}
+const emit=window.AxiomaGame.emit,cloudSync=window.AxiomaGame.report;
 const goHome=window.AxiomaPlatform.goHome,wire=window.AxiomaPlatform.wireHome;
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
 document.querySelectorAll('.rf-game-brand .rf-brand-text,.rf-menu-brand .rf-brand-text').forEach(host=>{if(host.querySelector('.axioma-platform-inline'))return;const old=host.textContent.trim();host.innerHTML='<span class="axioma-platform-inline">leraarBob</span> · '+old;wire(host.querySelector('.axioma-platform-inline'))})
 
-function read(){for(const k of ['rf22_done','rf21_done','rf20_done','rf19_done','rf18_done','rf17_done','rf16_done','rf15_done','rf14_done']){try{const v=localStorage.getItem(k);if(v!=null){const a=JSON.parse(v);if(Array.isArray(a))return a}}catch(_){}}return []}
+function read(){for(const k of ['rf22_done','rf21_done','rf20_done','rf19_done','rf18_done','rf17_done','rf16_done','rf15_done','rf14_done']){try{const v=window.AxiomaGame.storage.getItem(k);if(v!=null){const a=JSON.parse(v);if(Array.isArray(a))return a}}catch(_){}}return []}
 function sync(){const a=[...new Set(read())],total=window.RF22?.challenges?.length||0;emit(a.length,total,null);cloudSync(a,total)} sync();setInterval(sync,900);
 
 })();
 </script>
+<script src="../shared/axioma-game-adapters.js"></script>
+<script src="../shared/axioma-game.js" data-game-id="algebra-smederij"></script>
 </body>
 </html>

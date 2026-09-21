@@ -849,7 +849,7 @@ button:focus-visible{outline:3px solid #2d72d2;outline-offset:-3px}
   <div id="debug" class="debug"></div>
   <div class="rotate" id="rotatePrompt"><div>↻</div><b>Draai je telefoon</b><span>Data Check speelt het best liggend.</span></div>
 </div>
-<script>
+<script type="text/axioma-game">
 (()=>{
 'use strict';
 const $=s=>document.querySelector(s);
@@ -879,8 +879,8 @@ const cases=[
  {grade:'second',type:'forensic2',icon:'🕵️',group:'Forensisch einddossier',menuTitle:'Vier rapporten onder de loep',menuHint:'Pas vier verschillende controles toe op nieuwe situaties.',title:'Red het schoolrapport',subtitle:'Vier korte rapporten bevatten telkens één zwakke plek.',claim:'Onderzoek eerst het bewijs en kies alleen de nodige ingreep.',chartTitle:'Forensische controle',successText:'Je combineerde vier ideeën: schaal, relatieve frequentie, centrummaat en volledig tijdvenster. Dat is de kern van kritisch data lezen.'}
 ];
 const safeParse=(raw,fallback)=>{try{return JSON.parse(raw)}catch(_){return fallback}};
-const safeGet=(k)=>{try{return localStorage.getItem(k)}catch(_){return null}};
-const safeSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(_){}};
+const safeGet=(k)=>{try{return window.AxiomaGame.storage.getItem(k)}catch(_){return null}};
+const safeSet=(k,v)=>{try{window.AxiomaGame.storage.setItem(k,v)}catch(_){}};
 const cloneState=v=>{try{return structuredClone(v)}catch(_){return safeParse(JSON.stringify(v),{})}};
 let meta=safeParse(safeGet('evidenceDeskMetaV06')||'{}',{});
 let completed=safeParse(safeGet('evidenceDeskCompletedV06')||'null',null);
@@ -1692,49 +1692,20 @@ updateHome();render();
 <script src="../shared/axioma-auth.js"></script>
 <script src="../shared/axioma-social.js"></script>
 <script src="../shared/axioma-progress.js"></script>
-<script id="axioma-simple-integration">
+<script type="text/axioma-game" id="axioma-simple-integration">
 (()=>{
 'use strict';
 const GAME_ID="data-check";
-const PROGRESS_KEY=`axioma:game:${GAME_ID}:progress`;
-const COMPLETE_KEY=`axioma:game:${GAME_ID}:complete`;
-function emit(completed,total,current=null){
-  completed=Math.max(0,Number(completed)||0); total=Math.max(0,Number(total)||0);
-  if(total)completed=Math.min(completed,total);
-  const payload={type:'axioma:game-progress',gameId:GAME_ID,completed,total,current:Number.isFinite(+current)?+current:null,complete:!!total&&completed>=total,updatedAt:new Date().toISOString()};
-  try{localStorage.setItem(PROGRESS_KEY,JSON.stringify(payload)); if(payload.complete)localStorage.setItem(COMPLETE_KEY,'1'); else localStorage.removeItem(COMPLETE_KEY)}catch(_){}
-  try{window.dispatchEvent(new CustomEvent('axioma:game-progress',{detail:payload}))}catch(_){}
-  try{if(parent&&parent!==window)parent.postMessage(payload,'*')}catch(_){}
-  return payload;
-}
-
-let cloudBusy=false,cloudAccount='',cloudKnown=new Set();
-async function cloudSync(units,total){
-  if(!window.AxiomaProgress||!window.AxiomaAuth||cloudBusy)return;
-  const normalized=[...new Set((Array.isArray(units)?units:[]).map(String).filter(Boolean))];
-  cloudBusy=true;
-  try{
-    const account=await window.AxiomaAuth.getAccount();
-    if(account?.role!=='student')return;
-    const uid=String(account.id||'');
-    if(uid!==cloudAccount){
-      cloudAccount=uid;cloudKnown.clear();
-      try{const remote=await window.AxiomaProgress.load(GAME_ID);for(const u of (remote?.state?.completed||[]))cloudKnown.add(String(u))}catch(_){}
-    }
-    for(const unit of normalized){
-      if(cloudKnown.has(unit))continue;
-      const result=await window.AxiomaProgress.completeUnit(GAME_ID,unit,total);
-      if(result?.status!=='conflict')cloudKnown.add(unit);
-    }
-  }catch(_){}finally{cloudBusy=false}
-}
+const emit=window.AxiomaGame.emit,cloudSync=window.AxiomaGame.report;
 const goHome=window.AxiomaPlatform.goHome,wire=window.AxiomaPlatform.wireHome;
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
 const bt=document.querySelector('.topbar .brand');if(bt){const txt=bt.querySelector('.brandText');if(txt&&!txt.querySelector('.axioma-platform-inline')){txt.innerHTML='<span class="axioma-platform-inline">leraarBob</span> · Data Check';wire(txt.querySelector('.axioma-platform-inline'))}}
 
-function sync(){let a=[];try{a=JSON.parse(localStorage.getItem('evidenceDeskCompletedV06')||'[]')}catch(_){}if(!Array.isArray(a))a=[];let m={};try{m=JSON.parse(localStorage.getItem('evidenceDeskMetaV06')||'{}')}catch(_){}const units=a.map((v,i)=>v?i+1:null).filter(Boolean);emit(units.length,22,(Number.isInteger(m.lastLevel)?m.lastLevel:0)+1);cloudSync(units,22)}sync();setInterval(sync,900);
+function sync(){let a=[];try{a=JSON.parse(window.AxiomaGame.storage.getItem('evidenceDeskCompletedV06')||'[]')}catch(_){}if(!Array.isArray(a))a=[];let m={};try{m=JSON.parse(window.AxiomaGame.storage.getItem('evidenceDeskMetaV06')||'{}')}catch(_){}const units=a.map((v,i)=>v?i+1:null).filter(Boolean);emit(units.length,22,(Number.isInteger(m.lastLevel)?m.lastLevel:0)+1);cloudSync(units,22)}sync();setInterval(sync,900);
 
 })();
 </script>
+<script src="../shared/axioma-game-adapters.js"></script>
+<script src="../shared/axioma-game.js" data-game-id="data-check"></script>
 </body>
 </html>

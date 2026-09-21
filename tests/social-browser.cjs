@@ -28,6 +28,7 @@ const playerList=()=>[...new Set([...sessions.values()].map(s=>s.id))].map(id=>(
 function rpc(c,name,args){
   if(fail)throw Error('Test: verbinding verbroken');
   if(name==='axioma_is_teacher')return false;
+  if(name==='axioma_save_game_progress_for_account'){assert.equal(args.p_user_id,c.account);const old=c.progress.get(args.p_game_id);if(args.p_revision!==(old?.revision||0))return {status:'conflict',revision:old?.revision};const row={game_id:args.p_game_id,state:args.p_state,revision:(old?.revision||0)+1};c.progress.set(args.p_game_id,row);return {status:'saved',revision:row.revision};}
   if(name==='axioma_register_multiplayer_match')return {};
   if(name==='axioma_report_multiplayer_result'){reportCount++;return {}}
   if(name==='axioma_multiplayer_ranking'||name==='axioma_naval_ranking')return [];
@@ -86,6 +87,7 @@ async function handle(c,req){
   let data,error;
   try{
     if(req.method==='rpc')data=rpc(c,...req.args);
+    else if(req.method==='progress'){const q=req.args[0];data=q.single?(c.progress.get(q.game_id)||null):[...c.progress.values()];}
     else {
       const [topic,value]=req.args;
       if(req.method==='subscribe'){c.channels.set(topic,null);data='ok'}
@@ -106,7 +108,7 @@ function mockAuth(uid){return `(()=>{
   window.__channelEvent=(topic,type,value)=>{const ch=channels.get(topic);if(!ch)return;if(type==='presence'){ch.state=value;ch.handlers.filter(h=>h.type==='presence').forEach(h=>h.fn())}else ch.handlers.filter(h=>h.type==='broadcast'&&h.filter.event===value.event).forEach(h=>h.fn({payload:value.payload}))};
   const client={
     rpc:(name,args)=>call('rpc',name,args||{}),realtime:{setAuth:async()=>{}},
-    from(){const q={select:()=>q,eq:()=>q,maybeSingle:()=>q,abortSignal:()=>q,then:resolve=>resolve({data:[]})};return q},
+    from(table){const filter={};const q={select:()=>q,eq:(k,v)=>{filter[k]=v;return q},maybeSingle:()=>{filter.single=true;return q},abortSignal:()=>q,then:resolve=>table==='axioma_game_progress'?call('progress',filter).then(resolve):resolve({data:[]})};return q},
     channel(topic){const ch={topic,state:{},handlers:[],on(type,filter,fn){ch.handlers.push({type,filter,fn});return ch},subscribe(fn){ch.subscription=fn;call('subscribe',topic).then(()=>fn('SUBSCRIBED'));return ch},track:value=>call('track',topic,value).then(r=>r.data),presenceState:()=>ch.state,send:value=>call('send',topic,value).then(r=>r.data)};channels.set(topic,ch);return ch},
     removeChannel:ch=>{channels.delete(ch.topic);return call('remove',ch.topic)},
   };
@@ -119,7 +121,7 @@ async function setup(browser,uid){
   const {browserContextId}=await browser.send('Target.createBrowserContext');
   const {targetId}=await browser.send('Target.createTarget',{url:'about:blank',browserContextId});
   const tabs=await(await fetch('http://127.0.0.1:9235/json')).json();const tab=tabs.find(t=>t.id===targetId);
-  const c=new CDP();await c.connect(tab.webSocketDebuggerUrl);c.account=uid;c.channels=new Map();clients.push(c);
+  const c=new CDP();await c.connect(tab.webSocketDebuggerUrl);c.account=uid;c.channels=new Map();c.progress=new Map();clients.push(c);
   await c.send('Page.enable');await c.send('Runtime.enable');await c.send('Runtime.addBinding',{name:'testBackend'});
   await c.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
   await c.send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});

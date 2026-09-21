@@ -706,7 +706,7 @@ body.is-dragging{user-select:none}
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script>
+<script type="text/axioma-game">
 (()=>{
 'use strict';
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
@@ -797,7 +797,7 @@ const EXERCISES=RAW_EXERCISES.map(raw=>{
   const eq=raw.eq.map(([x,y,c])=>({x:q(x),y:q(y),c:q(c)}));
   return {id:raw.id,eq,info:analyzeSystem(eq)}
 });
-let exerciseIndex=0,method='graphic',studyMode='beginner',state=null,history=[],graphObserver=null,tapMove=null;
+let exerciseIndex=Math.max(0,Math.min(13,Number(window.AxiomaGame.storage.getItem('axioma.stelsels.current.v1'))||0)),method='graphic',studyMode='beginner',state=null,history=[],graphObserver=null,tapMove=null;
 function axiomaStelselsSolved(){window.dispatchEvent(new CustomEvent('axioma:stelsels-solved',{detail:{exerciseIndex}}))}
 const ex=()=>EXERCISES[exerciseIndex],equations=()=>ex().eq,info=()=>ex().info,sol=()=>info().solution;
 
@@ -1526,7 +1526,7 @@ function renderCombPair(){
 
 /* ---------- events ---------- */
 exerciseSelect.innerHTML=EXERCISES.map((e,i)=>`<option value="${i}">${e.id}</option>`).join('');
-exerciseSelect.addEventListener('change',()=>{exerciseIndex=Number(exerciseSelect.value);reset()});
+exerciseSelect.addEventListener('change',()=>{exerciseIndex=Number(exerciseSelect.value);window.AxiomaGame.storage.setItem('axioma.stelsels.current.v1',String(exerciseIndex));reset()});
 $$('.method-tab').forEach(b=>b.addEventListener('click',()=>{if(method===b.dataset.method)return;method=b.dataset.method;reset()}));
 $$('.study-mode-btn').forEach(b=>b.addEventListener('click',()=>{if(studyMode===b.dataset.studyMode)return;studyMode=b.dataset.studyMode;reset()}));
 undoBtn.addEventListener('click',undo);$('#resetBtn').addEventListener('click',reset);reset();
@@ -1542,51 +1542,22 @@ undoBtn.addEventListener('click',undo);$('#resetBtn').addEventListener('click',r
 <script src="../shared/axioma-auth.js"></script>
 <script src="../shared/axioma-social.js"></script>
 <script src="../shared/axioma-progress.js"></script>
-<script id="axioma-simple-integration">
+<script type="text/axioma-game" id="axioma-simple-integration">
 (()=>{
 'use strict';
 const GAME_ID="stelsels";
-const PROGRESS_KEY=`axioma:game:${GAME_ID}:progress`;
-const COMPLETE_KEY=`axioma:game:${GAME_ID}:complete`;
-function emit(completed,total,current=null){
-  completed=Math.max(0,Number(completed)||0); total=Math.max(0,Number(total)||0);
-  if(total)completed=Math.min(completed,total);
-  const payload={type:'axioma:game-progress',gameId:GAME_ID,completed,total,current:Number.isFinite(+current)?+current:null,complete:!!total&&completed>=total,updatedAt:new Date().toISOString()};
-  try{localStorage.setItem(PROGRESS_KEY,JSON.stringify(payload)); if(payload.complete)localStorage.setItem(COMPLETE_KEY,'1'); else localStorage.removeItem(COMPLETE_KEY)}catch(_){}
-  try{window.dispatchEvent(new CustomEvent('axioma:game-progress',{detail:payload}))}catch(_){}
-  try{if(parent&&parent!==window)parent.postMessage(payload,'*')}catch(_){}
-  return payload;
-}
-
-let cloudBusy=false,cloudAccount='',cloudKnown=new Set();
-async function cloudSync(units,total){
-  if(!window.AxiomaProgress||!window.AxiomaAuth||cloudBusy)return;
-  const normalized=[...new Set((Array.isArray(units)?units:[]).map(String).filter(Boolean))];
-  cloudBusy=true;
-  try{
-    const account=await window.AxiomaAuth.getAccount();
-    if(account?.role!=='student')return;
-    const uid=String(account.id||'');
-    if(uid!==cloudAccount){
-      cloudAccount=uid;cloudKnown.clear();
-      try{const remote=await window.AxiomaProgress.load(GAME_ID);for(const u of (remote?.state?.completed||[]))cloudKnown.add(String(u))}catch(_){}
-    }
-    for(const unit of normalized){
-      if(cloudKnown.has(unit))continue;
-      const result=await window.AxiomaProgress.completeUnit(GAME_ID,unit,total);
-      if(result?.status!=='conflict')cloudKnown.add(unit);
-    }
-  }catch(_){}finally{cloudBusy=false}
-}
+const emit=window.AxiomaGame.emit,cloudSync=window.AxiomaGame.report;
 const goHome=window.AxiomaPlatform.goHome,wire=window.AxiomaPlatform.wireHome;
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
 const b=document.querySelector('.brand');if(b){b.textContent='leraarBob';wire(b)}
 
-const K='axioma.stelsels.completed.v1';let set=new Set();try{set=new Set(JSON.parse(localStorage.getItem(K)||'[]').filter(Number.isInteger))}catch(_){}
-function sync(){const units=[...set].sort((a,b)=>a-b);try{localStorage.setItem(K,JSON.stringify(units))}catch(_){} emit(set.size,14,null);cloudSync(units,14)}
+const K='axioma.stelsels.completed.v1';let set=new Set();try{set=new Set(JSON.parse(window.AxiomaGame.storage.getItem(K)||'[]').filter(Number.isInteger))}catch(_){}
+function sync(){const units=[...set].sort((a,b)=>a-b);try{window.AxiomaGame.storage.setItem(K,JSON.stringify(units))}catch(_){} emit(set.size,14,null);cloudSync(units,14)}
 addEventListener('axioma:stelsels-solved',e=>{set.add(Number(e.detail?.exerciseIndex));sync()});sync();
 
 })();
 </script>
+<script src="../shared/axioma-game-adapters.js"></script>
+<script src="../shared/axioma-game.js" data-game-id="stelsels"></script>
 </body>
 </html>

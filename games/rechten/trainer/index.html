@@ -113,10 +113,10 @@
 <script src="../../../shared/supabase-config.js"></script>
 <script src="../../../shared/axioma-auth.js"></script>
 <script src="../../../shared/axioma-social.js"></script>
-<script>
+<script type="text/axioma-game">
 const AXIOMA_CONFIG = window.AXIOMA_CONFIG;
 </script>
-<script>
+<script type="text/axioma-game">
 (()=>{
 'use strict';
 const KEY='axioma-trainer-rechten-v0700';
@@ -253,7 +253,7 @@ function storeCache(){if(account?.role!=='student')return true;try{localStorage.
 function saveLocalOnly(){if(calibrationMode||devMode)return true;if(account?.role==='student')return storeCache();if(account||!guestMode)return true;try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch{return false}}
 function save(){if(calibrationMode||devMode)return true;if(account?.role==='student'){progressDirty=true;localEdit++}const ok=saveLocalOnly();if(!ok)toast('Opslag op dit toestel is niet beschikbaar.');scheduleCloudSync();return ok}
 function cloudAvailable(){return !!sb&&account?.role==='student'&&accountReady}
-function cloudSetStatus(status,error=null){cloudCfg.status=status;cloudCfg.lastError=error;renderCloudStatus()}
+function cloudSetStatus(status,error=null){cloudCfg.status=status;cloudCfg.lastError=error;renderCloudStatus();window.dispatchEvent(new CustomEvent('axioma:save-status',{detail:account?.role==='student'?({synced:'saved',syncing:'saving',local:'pending',offline:'offline',conflict:'conflict'})[status]||'loading':account?'teacher':'guest'}))}
 function renderCloudStatus(){if(!E.cloudBtn)return;E.cloudBtn.classList.remove('local','syncing','synced','conflict','offline');E.cloudBtn.classList.add(cloudCfg.status);E.cloudBtn.title=({local:'Lokaal',syncing:'Voortgang opslaan…',synced:'Voortgang opgeslagen',conflict:'Kies welke voortgang je wilt behouden',offline:'Lokaal bewaard; verbinding nodig'})[cloudCfg.status]||'Cloud'}
 function scheduleCloudSync(){if(calibrationMode||devMode||!cloudAvailable()||remoteConflict)return;clearTimeout(cloudSyncTimer);cloudSyncTimer=setTimeout(()=>cloudSync(),850)}
 async function cloudSync(){
@@ -264,7 +264,7 @@ async function cloudSync(){
   cloudBusy=true;cloudSetStatus('syncing');
   syncPromise=(async()=>{
     try{
-      const {data,error}=await sb.rpc('axioma_save_progress',{p_state:snapshot,p_revision:revision});if(error)throw error;
+      const {data,error}=await sb.rpc('axioma_save_progress_for_account',{p_state:snapshot,p_revision:revision,p_user_id:id});if(error)throw error;
       if(epoch!==authEpoch||id!==account?.id)return false;
       if(data.status==='conflict'){remoteConflict=data;cloudRemoteConflict=data;cloudSetStatus('conflict');return false}
       progressRevision=data.revision;cloudCfg.lastSync=data.updated_at;progressDirty=localEdit!==edit;storeCache();cloudSetStatus('synced');return true;
@@ -290,7 +290,7 @@ async function attachSession(session){
   if(attaching&&attaching.id===id)return attaching.promise;
   const epoch=++authEpoch;stopAccountExercise();account=null;accountReady=false;guestMode=false;state=DEFAULT();progressDirty=false;progressRevision=0;remoteConflict=null;syncPromise=null;cloudBusy=false;cloudCfg={status:'local',lastSync:null,lastError:null};teacherRows=[];teacherSelected=null;
   updateAccountNav();renderTop();cloudSetStatus('local');
-  if(!id){openScreen('auth');return}
+  if(!id){guestMode=true;state=load();updateAccountNav();updateStart();renderTop();renderSessionCue();closeScreen('start');return}
   authMessage='Je voortgang wordt opgehaald…';openScreen('auth');
   const promise=(async()=>{
     try{
@@ -397,10 +397,11 @@ async function initCloudFoundation(){
       if(session&&account?.id!==session.user?.id)setTimeout(()=>attachSession(session),0);
       if(!session&&!guestMode&&account)setTimeout(()=>attachSession(null),0);
     });
-    if(foundation.session)await attachSession(foundation.session);else renderAuthPanel();
+    if(foundation.session)await attachSession(foundation.session);else await attachSession(null);
   }catch{authMessage='De accountverbinding kon niet worden gestart. Controleer je internetverbinding.';renderAuthPanel()}
 }
 window.addEventListener('online',()=>{if(account?.role==='student')cloudSync()});
+window.addEventListener('axioma:retry-save',()=>{if(account?.role==='student')cloudSync()});
 window.addEventListener('pagehide',saveLocalOnly);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&account?.role==='student'){saveLocalOnly();cloudSync()}});
 
@@ -1149,5 +1150,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&currentScreen!=='pl
 updateStart();renderTop();renderSessionCue();renderCloudStatus();initCloudFoundation();window.addEventListener('beforeunload',saveLocalOnly);
 })();
 </script>
+<script src="../../../shared/axioma-game-adapters.js"></script>
+<script src="../../../shared/axioma-game.js" data-game-id="rechten-trainer"></script>
 </body>
 </html>

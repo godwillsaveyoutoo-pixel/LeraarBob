@@ -598,7 +598,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipul
  <div class="rotate"><div><b>Draai je telefoon ↻</b><small>De patisserie werkt liggend.</small></div></div>
  <div class="unsupported"><div><b>Iets meer ruimte nodig</b><small>Minimaal 640 × 360</small></div></div>
 </main>
-<script>
+<script type="text/axioma-game">
 (()=>{'use strict';
 const NS='http://www.w3.org/2000/svg',gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a),lcm=(a,b)=>Math.abs(a*b)/gcd(a,b);
 class Fraction{constructor(n,d=1){if(!d)throw Error('noemer is nul');const g=gcd(n,d);this.n=n/g*(d<0?-1:1);this.d=Math.abs(d/g)}static from(v){if(v instanceof Fraction)return v;if(Number.isInteger(v))return new Fraction(v);const s=String(v).trim();if(s.includes(' ')){const[w,f]=s.split(/\s+/),[n,d]=f.split('/').map(Number);return new Fraction(Number(w)*d+n,d)}const[n,d=1]=s.split('/').map(Number);return new Fraction(n,d)}add(o){o=Fraction.from(o);return new Fraction(this.n*o.d+o.n*this.d,this.d*o.d)}sub(o){o=Fraction.from(o);return new Fraction(this.n*o.d-o.n*this.d,this.d*o.d)}mul(o){o=Fraction.from(o);return new Fraction(this.n*o.n,this.d*o.d)}div(o){o=Fraction.from(o);return new Fraction(this.n*o.d,this.d*o.n)}gt(o){o=Fraction.from(o);return this.n*o.d>o.n*this.d}eq(o){o=Fraction.from(o);return this.n*o.d===o.n*this.d}toString(){if(this.n>this.d){const w=Math.floor(this.n/this.d),r=this.n%this.d;return r?`${w} ${r}/${this.d}`:String(w)}return this.d===1?String(this.n):`${this.n}/${this.d}`}}
@@ -644,7 +644,7 @@ const PARTY_POOL=[
 const guideFor=values=>values.map(v=>Fraction.from(v).d).reduce(lcm,1);
 const ShiftGenerator={inventory(i=Math.floor(Math.random()*INVENTORY_POOL.length)){const p=INVENTORY_POOL[i%INVENTORY_POOL.length];return{type:'inventory',shape:p.shape,lessonLabel:p.lessonLabel,displayMode:p.displayMode,theme:pick(['chocolate','strawberry','pistachio']),guide:guideFor([...p.stock,p.target]),stock:[{fractions:p.stock,shape:p.shape}],order:{customer:pick(NAMES),target:p.target}}},partial(i=Math.floor(Math.random()*PARTIAL_POOL.length)){const p=PARTIAL_POOL[i%PARTIAL_POOL.length];return{type:'partial-box',shape:p.shape,lessonLabel:p.lessonLabel,displayMode:p.displayMode,theme:pick(['lemon','pistachio','strawberry']),guide:guideFor([...p.stock,p.target,p.existing]),stock:[{fractions:p.stock,shape:p.shape}],order:{customer:pick(NAMES),target:p.target,existing:[p.existing]}}},share(i=Math.floor(Math.random()*SHARE_POOL.length)){const p=SHARE_POOL[i%SHARE_POOL.length],available=p.available,boxes=p.boxes;return{type:'equal-share',shape:p.shape,lessonLabel:p.lessonLabel,theme:pick(['vanilla','lemon']),guide:Fraction.from(available).div(boxes).d,available,boxes,stock:[{available,shape:p.shape}],order:{customer:'Samen',target:available}}},party(i=Math.floor(Math.random()*PARTY_POOL.length)){const p=PARTY_POOL[i%PARTY_POOL.length],target=p.target,wholes=p.wholes,guide=p.guide;return{type:'party',shape:p.shape,lessonLabel:p.lessonLabel,theme:pick(['chocolate','strawberry']),guide,displayMode:'mixed',stock:Array.from({length:wholes},()=>({whole:true,shape:p.shape})),order:{customer:'Feest',target}}},morning(variant=0){const[n1,n2,n3]=sampleNames(3);return variant%2?{type:'normal',theme:'lemon',guide:6,stock:[{whole:true}],orders:[{customer:n1,target:'1/3'},{customer:n2,target:'1/6'},{customer:n3,target:'1/2'}]}:{type:'normal',shape:'bar',lessonLabel:'GEMEENSCHAPPELIJKE MAAT',theme:'vanilla',guide:8,stock:[{whole:true,shape:'bar'}],orders:[{customer:n1,target:'1/4'},{customer:n2,target:'3/8'},{customer:n3,target:'3/8'}]}},smart(i=0){const names=sampleNames(3);if(i%3===1)return{type:'normal',shape:'bar',lessonLabel:'ZELFDE PORTIE',theme:'strawberry',guide:4,stock:[{whole:true,shape:'bar'}],orders:[{customer:'Mila',target:'1/2',constraints:{exactPieceCount:1}},{customer:'Iris',target:'1/2',constraints:{exactPieceCount:2,equalPieces:true}}]};if(i%3===2)return{type:'normal',theme:'chocolate',guide:8,stock:[{whole:true}],orders:[{customer:names[0],target:'3/8',constraints:{exactPieceCount:2}},{customer:names[1],target:'5/8'}]};return{type:'normal',theme:'pistachio',guide:8,stock:[{whole:true}],orders:[{customer:names[0],target:'3/8'},{customer:names[1],target:'3/8'},{customer:'Chef',target:'1/4',constraints:{exactPieceCount:1}}]}},orderSort(i=0){const p=i%2?{shape:'round',theme:'lemon',stock:['3/10','1/10','2/5','1/5'],sequence:['1/10','1/5','3/10','2/5']}:{shape:'bar',theme:'vanilla',stock:['1/4','1/12','1/2','1/6'],sequence:['1/12','1/6','1/4','1/2']};return{type:'sort-order',shape:p.shape,lessonLabel:'KLEIN → GROOT',theme:p.theme,guide:guideFor(p.stock),noCut:true,stock:[{fractions:p.stock,shape:p.shape}],sequence:p.sequence,order:{customer:'Toonbank',target:'0'}}},combine(){return{type:'inventory',shape:'bar',lessonLabel:'SAMENSTELLEN',theme:'pistachio',guide:8,noCut:true,stock:[{fractions:['3/8','1/4','1/4','1/8'],shape:'bar'}],order:{customer:'Noor',target:'5/8',constraints:{exactPieceCount:2}}}}};
 function valid(s){ScenarioValidator.validate(s);return s}const makeSet=(fn,n)=>Array.from({length:n},(_,i)=>valid(fn(i)));const SERVICES=[{name:'Ochtenddienst',icon:'☀',make:()=>makeSet(ShiftGenerator.morning,2)},{name:'Restjesronde',icon:'♻',make:()=>[valid(ShiftGenerator.inventory(0)),valid(ShiftGenerator.orderSort(0)),valid(ShiftGenerator.inventory(1)),valid(ShiftGenerator.orderSort(1)),valid(ShiftGenerator.inventory(3))]},{name:'Dozen afwerken',icon:'▱',make:()=>makeSet(ShiftGenerator.partial,5)},{name:'Samen delen',icon:'=',make:()=>makeSet(ShiftGenerator.share,4)},{name:'Feestbestelling',icon:'♜',make:()=>makeSet(ShiftGenerator.party,4)},{name:'Slim bewaren',icon:'◆',make:()=>[valid(ShiftGenerator.smart(0)),valid(ShiftGenerator.smart(1)),valid(ShiftGenerator.combine()),valid(ShiftGenerator.smart(2))]},{name:'Meesterdienst',icon:'✦',master:true,make:()=>[valid(ShiftGenerator.morning(1)),valid(ShiftGenerator.orderSort(1)),valid(ShiftGenerator.partial(3)),valid(ShiftGenerator.combine()),valid(ShiftGenerator.smart(0)),valid(ShiftGenerator.share(2)),valid(ShiftGenerator.party(0)),valid(ShiftGenerator.inventory(1))]}];
-class ProgressStore{constructor(storage=null){if(!storage){try{storage=window.localStorage}catch(_){storage={getItem(){return null},setItem(){}}}}this.storage=storage;this.key='axioma.taartenwinkel.v05.progress';this.data=this.load()}load(){try{return{completed:[],lastService:0,attempts:{},...JSON.parse(this.storage.getItem(this.key)||'{}')}}catch(_){return{completed:[],lastService:0,attempts:{}}}}save(){try{this.storage.setItem(this.key,JSON.stringify(this.data))}catch(_){}}isCompleted(i){return this.data.completed.includes(i)}isUnlocked(i){return Number.isInteger(i)&&i>=0&&i<SERVICES.length}complete(i){if(!this.isCompleted(i))this.data.completed.push(i);this.data.lastService=Math.min(i+1,SERVICES.length-1);this.save()}attempt(i){this.data.lastService=i;this.data.attempts[i]=(this.data.attempts[i]||0)+1;this.save()}current(){const next=SERVICES.findIndex((_,i)=>this.isUnlocked(i)&&!this.isCompleted(i));return next<0?SERVICES.length-1:next}reset(){this.data={completed:[],lastService:0,attempts:{}};this.save()}}
+class ProgressStore{constructor(storage=null){if(!storage){try{storage=window.AxiomaGame.storage}catch(_){storage={getItem(){return null},setItem(){}}}}this.storage=storage;this.key='axioma.taartenwinkel.v05.progress';this.data=this.load()}load(){try{return{completed:[],lastService:0,attempts:{},...JSON.parse(this.storage.getItem(this.key)||'{}')}}catch(_){return{completed:[],lastService:0,attempts:{}}}}save(){try{this.storage.setItem(this.key,JSON.stringify(this.data))}catch(_){}}isCompleted(i){return this.data.completed.includes(i)}isUnlocked(i){return Number.isInteger(i)&&i>=0&&i<SERVICES.length}complete(i){if(!this.isCompleted(i))this.data.completed.push(i);this.data.lastService=Math.min(i+1,SERVICES.length-1);this.save()}attempt(i){this.data.lastService=i;this.data.attempts[i]=(this.data.attempts[i]||0)+1;this.save()}current(){const next=SERVICES.findIndex((_,i)=>this.isUnlocked(i)&&!this.isCompleted(i));return next<0?SERVICES.length-1:next}reset(){this.data={completed:[],lastService:0,attempts:{}};this.save()}}
 const ASSETS={background:null,plate:null,box:null,knife:null,ticket:null,cakeTop:{},cakeSide:{},toppings:{},stamp:null,audio:{}};
 class AudioManager{constructor(assetMap={}){this.assets=assetMap;this.enabled=true;this.ctx=null}play(name){if(!this.enabled)return;const src=this.assets[name];if(src){const a=new Audio(src);a.volume=.55;a.play().catch(()=>this.fallback(name));return}this.fallback(name)}fallback(name){try{const C=window.AudioContext||window.webkitAudioContext;this.ctx||=new C;const c=this.ctx,t=c.currentTime,o=c.createOscillator(),g=c.createGain(),m={cut:[175,.09,.035],cakeLand:[410,.07,.025],boxClose:[285,.13,.03],bell:[760,.17,.028],tray:[230,.08,.018],reject:[115,.08,.025],undo:[270,.05,.016],stamp:[145,.12,.035]},[f,d,v]=m[name]||m.cakeLand;o.connect(g);g.connect(c.destination);o.type=name==='bell'?'sine':'triangle';o.frequency.setValueAtTime(f,t);if(name==='bell')o.frequency.exponentialRampToValueAtTime(1080,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.start();o.stop(t+d)}catch(_){}}}
 class GameSession{constructor(s){this.scenario=s;this.res=RationalResolution.forScenario(s);this.stock=new StockInventory(this.res,s.stock||[{available:s.available}]);this.book=new OrderBook(s)}snapshot(){return{stock:this.stock.snapshot(),book:this.book.snapshot()}}restore(x){this.stock.restore(x.stock);this.book.restore(x.book,this.scenario)}}
@@ -750,7 +750,7 @@ window.AxiomaBridge=window.AxiomaBridge||{complete(){}};window.__PATISSERIE__={s
 })();
 </script>
 
-<script id="patisserieShellScript">
+<script type="text/axioma-game" id="patisserieShellScript">
 (()=>{
  'use strict';
  const game=document.getElementById('game');
@@ -766,7 +766,7 @@ window.AxiomaBridge=window.AxiomaBridge||{complete(){}};window.__PATISSERIE__={s
    try{
      const a=api();
      if(a?.progressStore?.data){const d=a.progressStore.data;return{completed:Array.isArray(d.completed)?d.completed:[],current:a.progressStore.current?.()??0}}
-     const d=JSON.parse(localStorage.getItem('axioma.taartenwinkel.v05.progress')||'{}');
+     const d=JSON.parse(window.AxiomaGame.storage.getItem('axioma.taartenwinkel.v05.progress')||'{}');
      const completed=Array.isArray(d.completed)?d.completed:[];let current=0;while(completed.includes(current)&&current<6)current++;
      return{completed,current}
    }catch(_){return{completed:[],current:0}}
@@ -803,7 +803,7 @@ window.AxiomaBridge=window.AxiomaBridge||{complete(){}};window.__PATISSERIE__={s
  function scheduleChromeHide(ms=2400){if(!compactLandscape()||!game.classList.contains('chrome-open'))return;clearTimeout(chromeTimer);chromeTimer=setTimeout(()=>setChrome(false),ms)}
  function teachChromeOnce(){
    if(!compactLandscape())return;
-   try{if(localStorage.getItem('taartenwinkel.shell.chromeSeen'))return;localStorage.setItem('taartenwinkel.shell.chromeSeen','1')}catch(_){}
+   try{if(window.AxiomaGame.storage.getItem('taartenwinkel.shell.chromeSeen'))return;window.AxiomaGame.storage.setItem('taartenwinkel.shell.chromeSeen','1')}catch(_){}
    setTimeout(()=>setChrome(true,{auto:true}),280)
  }
  revealBtn?.addEventListener('click',()=>setChrome(true,{auto:true}));
@@ -835,49 +835,20 @@ window.AxiomaBridge=window.AxiomaBridge||{complete(){}};window.__PATISSERIE__={s
 <script src="../shared/axioma-auth.js"></script>
 <script src="../shared/axioma-social.js"></script>
 <script src="../shared/axioma-progress.js"></script>
-<script id="axioma-simple-integration">
+<script type="text/axioma-game" id="axioma-simple-integration">
 (()=>{
 'use strict';
 const GAME_ID="taartenwinkel";
-const PROGRESS_KEY=`axioma:game:${GAME_ID}:progress`;
-const COMPLETE_KEY=`axioma:game:${GAME_ID}:complete`;
-function emit(completed,total,current=null){
-  completed=Math.max(0,Number(completed)||0); total=Math.max(0,Number(total)||0);
-  if(total)completed=Math.min(completed,total);
-  const payload={type:'axioma:game-progress',gameId:GAME_ID,completed,total,current:Number.isFinite(+current)?+current:null,complete:!!total&&completed>=total,updatedAt:new Date().toISOString()};
-  try{localStorage.setItem(PROGRESS_KEY,JSON.stringify(payload)); if(payload.complete)localStorage.setItem(COMPLETE_KEY,'1'); else localStorage.removeItem(COMPLETE_KEY)}catch(_){}
-  try{window.dispatchEvent(new CustomEvent('axioma:game-progress',{detail:payload}))}catch(_){}
-  try{if(parent&&parent!==window)parent.postMessage(payload,'*')}catch(_){}
-  return payload;
-}
-
-let cloudBusy=false,cloudAccount='',cloudKnown=new Set();
-async function cloudSync(units,total){
-  if(!window.AxiomaProgress||!window.AxiomaAuth||cloudBusy)return;
-  const normalized=[...new Set((Array.isArray(units)?units:[]).map(String).filter(Boolean))];
-  cloudBusy=true;
-  try{
-    const account=await window.AxiomaAuth.getAccount();
-    if(account?.role!=='student')return;
-    const uid=String(account.id||'');
-    if(uid!==cloudAccount){
-      cloudAccount=uid;cloudKnown.clear();
-      try{const remote=await window.AxiomaProgress.load(GAME_ID);for(const u of (remote?.state?.completed||[]))cloudKnown.add(String(u))}catch(_){}
-    }
-    for(const unit of normalized){
-      if(cloudKnown.has(unit))continue;
-      const result=await window.AxiomaProgress.completeUnit(GAME_ID,unit,total);
-      if(result?.status!=='conflict')cloudKnown.add(unit);
-    }
-  }catch(_){}finally{cloudBusy=false}
-}
+const emit=window.AxiomaGame.emit,cloudSync=window.AxiomaGame.report;
 const goHome=window.AxiomaPlatform.goHome,wire=window.AxiomaPlatform.wireHome;
 window.AxiomaSimple={gameId:GAME_ID,report:emit,cloud:cloudSync,home:goHome};
 const x=document.querySelector('.top .brand small');if(x){x.textContent='leraarBob';wire(x)}
 
-function sync(){let d={};try{d=JSON.parse(localStorage.getItem('axioma.taartenwinkel.v05.progress')||'{}')}catch(_){}const units=[...new Set(Array.isArray(d.completed)?d.completed:[])],total=window.__PATISSERIE__?.SERVICES?.length||7;emit(units.length,total,(Number.isInteger(d.lastService)?d.lastService:0)+1);cloudSync(units,total)}sync();setInterval(sync,900);
+function sync(){let d={};try{d=JSON.parse(window.AxiomaGame.storage.getItem('axioma.taartenwinkel.v05.progress')||'{}')}catch(_){}const units=[...new Set(Array.isArray(d.completed)?d.completed:[])],total=window.__PATISSERIE__?.SERVICES?.length||7;emit(units.length,total,(Number.isInteger(d.lastService)?d.lastService:0)+1);cloudSync(units,total)}sync();setInterval(sync,900);
 
 })();
 </script>
+<script src="../shared/axioma-game-adapters.js"></script>
+<script src="../shared/axioma-game.js" data-game-id="taartenwinkel"></script>
 </body>
 </html>

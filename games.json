@@ -121,12 +121,15 @@
     "theme": "Meetkunde",
     "art": "vectors",
     "cover": "assets/covers/vectoren.svg",
-    "detail": "Voortgang in deze browser",
+    "detail": "24 vaardigheden · leervoortgang bewaard",
     "id": "vectoren-trainer",
-    "progressType": "local",
-    "teacherVisible": false,
+    "progressType": "levels",
+    "teacherVisible": true,
     "gameType": "train",
-    "tracking": "local"
+    "tracking": "progress",
+    "progressTotal": 24,
+    "progressUnitSingular": "vaardigheid",
+    "progressUnitPlural": "vaardigheden"
   },
   {
     "title": "Stelsels",

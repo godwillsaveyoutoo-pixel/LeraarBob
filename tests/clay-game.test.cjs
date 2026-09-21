@@ -33,7 +33,7 @@ function game(){
     matchMedia:()=>({matches:true}),localStorage:{getItem:()=>null,setItem:()=>{}},location:{search:''},URLSearchParams,
     setTimeout:(fn,ms)=>{const id=++timerId;timers.set(id,{fn,at:now+ms});return id},clearTimeout:id=>timers.delete(id),
     requestAnimationFrame:fn=>{const id=++timerId;frames.set(id,fn);return id},cancelAnimationFrame:id=>frames.delete(id),
-    addEventListener:()=>{},AxiomaGroups:api,AxiomaProgress:{completeUnit:async()=>{}}};
+    addEventListener:()=>{},AxiomaGame:{state:{},storage:{getItem:()=>null,setItem:()=>{}},report:()=>{}},AxiomaGroups:api,AxiomaProgress:{completeUnit:async()=>{}}};
   ctx.window=ctx;vm.createContext(ctx);
   let script=fs.readFileSync('games/rechten/kleiduiven/kleiduiven.js','utf8');
   script=script.replace('initField();readHistory();',`window.testGame={updateGroup,startGame,stopGame,fire,fail,groupState:()=>({groupMode,groupVersion,state,streak:mastered.size,attempt:attempt?.id}),renderGroupMenu};initField();readHistory();`);

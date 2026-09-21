@@ -14,11 +14,11 @@ const STORE='axioma.rechten.kleiduiven.standalone.v12';
 const SHOT_MS=320,GAP_MS=400;
 let speed=5,duration=5,queue=[],retry=[],mastered=new Set(),attempt=null,roundNo=1,state='lobby';
 const AXIOMA_GAME_ID='kleiduifschieten';
-let axiomaSeriesTracked=false;
+let axiomaSeriesTracked=(window.AxiomaGame?.state.completed||[]).includes('reeks');
 function trackAxiomaSeries(){
   if(axiomaSeriesTracked)return;
   axiomaSeriesTracked=true;
-  window.AxiomaProgress?.completeUnit(AXIOMA_GAME_ID,'reeks',1).catch(()=>{axiomaSeriesTracked=false});
+  window.AxiomaGame?.report(['reeks'],1);
 }
 
 let misses=0,shots=0,started=0,elapsed=0,runId='',team='Duo 1',selected=null,busy=false;
@@ -157,14 +157,14 @@ function finish(){
   saveResult();trackAxiomaSeries();$('resultName').textContent=team+' · alles geraakt.';$('finalTime').textContent=clockText(elapsed);$('resultStats').textContent=`${shots} schoten · ${misses} ${misses===1?'misser':'missers'} · ${roundNo===1?'zonder herkansing':(roundNo-1)+' '+(roundNo===2?'herkansing':'herkansingen')}`;
   showTimes();$('results').hidden=false
 }
-function readHistory(){try{const x=JSON.parse(localStorage.getItem(STORE)||'[]');if(Array.isArray(x))history=x.filter(r=>r&&typeof r.name==='string'&&Number.isFinite(r.ms)&&[3,5,8].includes(r.tempo)).slice(-100)}catch{persistent=false}}
-function saveResult(){if(history.some(r=>r.id===runId))return;history.push({id:runId,name:team,ms:elapsed,tempo:duration,misses,shots});history=history.slice(-100);try{localStorage.setItem(STORE,JSON.stringify(history))}catch{persistent=false}}
+function readHistory(){try{const x=JSON.parse(window.AxiomaGame.storage.getItem(STORE)||'[]');if(Array.isArray(x))history=x.filter(r=>r&&typeof r.name==='string'&&Number.isFinite(r.ms)&&[3,5,8].includes(r.tempo)).slice(-100)}catch{persistent=false}}
+function saveResult(){if(history.some(r=>r.id===runId))return;history.push({id:runId,name:team,ms:elapsed,tempo:duration,misses,shots});history=history.slice(-100);try{window.AxiomaGame.storage.setItem(STORE,JSON.stringify(history))}catch{persistent=false}}
 function showTimes(){
   $('timesTitle').textContent=`Klastijden · ${speed} seconden`;$('timesList').replaceChildren();
   const rows=history.filter(r=>r.tempo===speed).sort((a,b)=>a.ms-b.ms);
   if(!rows.length){const li=document.createElement('li');li.innerHTML='<span>—</span><div>Nog geen tijden op dit tempo.</div><strong>—</strong>';$('timesList').append(li)}
   rows.forEach((r,i)=>{const li=document.createElement('li');const rank=document.createElement('span');rank.textContent=String(i+1).padStart(2,'0');const name=document.createElement('div');name.textContent=r.name;const note=document.createElement('small');note.textContent=`${r.misses} ${r.misses===1?'misser':'missers'}`;name.append(note);const time=document.createElement('strong');time.textContent=clockText(r.ms);li.append(rank,name,time);$('timesList').append(li)});
-  $('storageNote').textContent=persistent?'Tijden worden in deze browser bewaard.':'Tijden blijven alleen bewaard zolang deze pagina open is.'
+  $('storageNote').textContent=persistent?(window.AxiomaGame?.account?.role==='student'?'Je eigen tijden worden bij je account bewaard.':'Tijden worden op dit toestel bewaard.'):'Tijden blijven alleen bewaard zolang deze pagina open is.'
 }
 document.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>{if(state!=='lobby')return;speed=Number(b.dataset.speed);duration=speed;document.querySelectorAll('[data-speed]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));setTimer(speed)});
 $('start').onclick=startGame;
