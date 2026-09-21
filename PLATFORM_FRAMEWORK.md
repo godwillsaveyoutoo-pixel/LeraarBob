@@ -160,6 +160,33 @@ de online ranglijst. De computer kiest ongebruikte toegestane rechten zonder
 kennis van de verborgen leerlingvloot. Er worden geen fictieve online spelers
 of ranglijstresultaten meer getoond.
 
+### Wedstrijden afronden
+
+Zeeslag toont na winst, verlies of het vertrek van de tegenstander een eindscherm
+met **Opnieuw** en **Beëindigen**. De uitslag wordt eerst gemeld; daarna sluit de
+gedeelde service de partij af en zijn de spelers weer beschikbaar. Bij een
+opslagfout blijven de uitslag en een herstelmelding staan. Opnieuw nodigt dezelfde
+tegenstander uit voor een nieuwe partij, met opnieuw expliciete acceptatie.
+Solo begint rechtstreeks een nieuwe partij en schrijft geen online uitslag.
+
+Bij Kleiduifschieten opent de organisator met **Opnieuw** een nieuwe groep op
+hetzelfde tempo. De vorige uitslag blijft behouden. De andere deelnemers zien
+**Opnieuw meedoen** zodra die groep beschikbaar is, of kiezen **Verlaten**.
+De organisator kan de uitslag sluiten met **Beëindigen**. Een wachtende groep
+wordt gesloten wanneer de organisator vertrekt; een andere deelnemer verlaat
+alleen de eigen deelname. Tijdens een lopende race verlaten ook organisatoren
+alleen hun deelname, zodat de anderen verder kunnen spelen.
+
+Het Online-menu biedt rechtstreeks toegang tot de eigen groep en een knop om
+die te verlaten. Het tabblad waarin je deelnam blijft hiervoor verantwoordelijk.
+Een al geopende groep stuurt de leerling bij terugkeer naar de startpagina niet
+opnieuw automatisch naar het spel.
+
+`tests/social-browser.cjs` controleert deze afsluiting, een echte overwinning,
+herstellen van mislukte uitslagopslag, revanche vanaf het eindscherm, solo opnieuw,
+expliciet opnieuw deelnemen, verlaten en behoud van de vorige groepsuitslag.
+De twee leerlingen en het transport in deze test zijn fictief.
+
 ## Vectornotatie
 
 Punten krijgen hoofdletters zonder pijl; vectorsymbolen zoals a, u, AB en eₓ

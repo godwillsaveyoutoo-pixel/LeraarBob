@@ -48,6 +48,8 @@
         if (error) throw error;
         if (version !== epoch) return null;
         snapshot = { players: data.players || [], invitations: data.invitations || [] };
+        // A finished party must no longer block accepting a new invitation.
+        if (matchId && snapshot.invitations.some(i => i.id === matchId && i.status === 'finished')) matchId = null;
         connected = true;
         emit();
         if (action !== 'join' && action !== 'finish') snapshot.invitations.filter(i => i.status === 'accepted').forEach(route);
@@ -136,10 +138,13 @@
     const g=window.AxiomaGroups?.state();
     const inGroup=g?.member&&!g.member.left_at&&['waiting','running'].includes(g.current?.status);
     const groupDisabled=pending||g?.pending||!g?.connected||inGroup||active?'disabled':'';
+    const ownGroupTab = g?.member?.tab_id === tabId;
+    const groupExitLabel = g?.current?.host_id === account.id && g.current.status === 'waiting' ? 'Groep beëindigen' : 'Groep verlaten';
+    const groupExit = inGroup ? `<div class="actions"><a class="game-link" href="${esc(clayURL.href)}">Terug naar je sessie</a><button data-action="group-leave" ${pending||g.pending||!g.connected||!ownGroupTab?'disabled':''}>${groupExitLabel}</button></div>${!ownGroupTab?'<p class="result">Verlaat de sessie in het tabblad waarin je deelnam.</p>':''}` : '';
     const playersHTML = players.length ? players.map(p => `<div class="player"><div><strong>${esc(p.alias)}</strong><small>${esc(p.class_code)}${p.class_code ? ' · ' : ''}${p.status === 'playing' ? 'In spel' : 'Beschikbaar'}</small></div><button data-action="invite" data-id="${p.id}" ${disabled || active || inGroup || p.status === 'playing' ? 'disabled' : ''}>Uitnodigen</button></div>`).join('') : '<p class="empty">Nog niemand anders online. In Zeeslag kun je alvast tegen de computer oefenen.</p>';
     const naval = `<section class="game-card" aria-labelledby="naval-title"><span class="mode">1 tegen 1</span><h3 id="naval-title">Rechten Zeeslag</h3><p class="intro">Vind elkaars vloot met rechten. Nodig hieronder iemand uit, ook als die in een ander spel zit.</p><a class="game-link" href="${esc(gameURL.href)}">Open Zeeslag</a><h4>Online spelers · kies je tegenstander</h4>${playersHTML}<p class="foot">Uitnodigingen vervallen na 90 seconden.</p></section>`;
     const groups = `<section class="game-card" aria-labelledby="clay-title"><span class="mode">Groepsrace</span><h3 id="clay-title">Kleiduifschieten</h3><p class="intro">Start zelf een groep of sluit aan bij een open sessie. Wie het eerst zeven juiste antwoorden op rij geeft, wint.</p><div class="actions"><button data-action="group-create" ${groupDisabled}>Groep starten · 5 s</button><a class="game-link" href="${esc(clayURL.href)}">Open Kleiduifschieten</a></div>${inGroup?`<p class="result">Je doet mee met ${esc(g.current.host_alias)}.</p>`:''}<h4>Open groepen</h4>${g?.sessions.length ? g.sessions.map(s=>`<div class="player"><div><strong>${esc(s.host_alias)}</strong><small>${s.player_count} spelers · ${s.speed} s per doel</small></div><button data-action="group-join" data-id="${s.id}" ${groupDisabled}>Meedoen</button></div>`).join('') : `<p class="empty">${g?.connected ? 'Er staat nog geen groep open. Je kunt er zelf een starten.' : 'Groepen ophalen…'}</p>`}</section>`;
-    const html = `<p class="intro">Kies een spel om samen te spelen.</p>${!connected ? '<p class="error" role="status">Verbinding herstellen… <button data-action="retry">Opnieuw proberen</button></p>' : ''}${note ? `<p class="feedback" role="status">${esc(note)}</p>` : ''}${invites}${naval}${groups}`;
+    const html = `<p class="intro">Kies een spel om samen te spelen.</p>${!connected ? '<p class="error" role="status">Verbinding herstellen… <button data-action="retry">Opnieuw proberen</button></p>' : ''}${note ? `<p class="feedback" role="status">${esc(note)}</p>` : ''}${invites}${groupExit}${naval}${groups}`;
     if (content.innerHTML !== html) content.innerHTML = html;
   }
   function buildUI() {
@@ -173,7 +178,7 @@
       const b = e.target.closest('button[data-action]'); if (!b || b.disabled) return;
       if (b.dataset.action === 'retry') { refresh(); return; }
       if(b.dataset.action.startsWith('group-')){
-        const action=b.dataset.action==='group-create'?AxiomaGroups.create(5):AxiomaGroups.join(b.dataset.id);
+        const action=b.dataset.action==='group-leave'?AxiomaGroups.leave():b.dataset.action==='group-create'?AxiomaGroups.create(5):AxiomaGroups.join(b.dataset.id);
         action.catch(error=>{note=error.message;render()});return;
       }
       act(b.dataset.action, b.dataset.action === 'invite' ? {p_target_id:b.dataset.id} : {p_invite_id:b.dataset.id});

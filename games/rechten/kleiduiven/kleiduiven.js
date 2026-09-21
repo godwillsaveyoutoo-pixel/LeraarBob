@@ -205,8 +205,15 @@ function renderGroupMenu(){
       if(g.status==='waiting'&&g.host_id===d.account.id)html+=`<button class="primary" data-group-action="start" ${disabled||d.members.filter(m=>!m.left_at&&m.online).length<2?'disabled':''}>Start samen</button>`;
       else if(g.status==='waiting')html+='<span>De organisator start de wedstrijd.</span>';
       if(!groupOwnTab(d))html+='<p>Speel in het tabblad waarin je deelnam.</p>';
-      html+=`<button class="utilityBtn" data-group-action="leave" ${disabled||!groupOwnTab(d)?'disabled':''}>Sessie verlaten</button></div>`;
-    }else html+='<div class="groupActions"><button class="primary" data-group-action="new">Nieuwe groepswedstrijd</button></div>';
+      html+=`<button class="utilityBtn" data-group-action="leave" ${disabled||!groupOwnTab(d)?'disabled':''}>${g.host_id===d.account.id&&g.status==='waiting'?'Groep beëindigen':'Groep verlaten'}</button></div>`;
+    }else{
+      const host=g.host_id===d.account.id;
+      const next=d.sessions.find(s=>s.host_id===g.host_id&&s.id!==g.id);
+      html+=`<p>${g.status==='finished'?'Deze wedstrijd is afgerond. De uitslag blijft in de ranglijst. ':''}${host?'Opnieuw opent een nieuwe groep op hetzelfde tempo. De anderen kiezen zelf of ze weer meedoen.':next?'De organisator heeft een nieuwe groep geopend. Je kunt opnieuw meedoen.':'Je kunt wachten tot de organisator een nieuwe groep opent, of deze sessie verlaten.'}</p><div class="groupActions">`;
+      if(host)html+=`<button class="primary" data-group-action="again" ${disabled}>Opnieuw</button>`;
+      else html+=`<button class="primary" data-group-action="join" data-id="${groupEscape(next?.id)}" ${disabled||!next?'disabled':''}>Opnieuw meedoen</button>`;
+      html+=`<button class="utilityBtn" data-group-action="done">${host?'Beëindigen':'Verlaten'}</button><button class="utilityBtn" data-group-action="new">Andere groep kiezen</button></div>`;
+    }
   }else{
     html+='<h3>Open sessies</h3>';
     html+=d.sessions.length?d.sessions.map(s=>`<div class="groupRow"><div><strong>${groupEscape(s.host_alias)}</strong><small>${s.player_count} spelers · ${s.speed} s per doel</small></div><button class="utilityBtn" data-group-action="join" data-id="${s.id}" ${disabled}>Meedoen</button></div>`).join(''):'<p>Er wacht nog geen groep. Start er zelf één.</p>';
@@ -300,7 +307,8 @@ $('lobbyGroupList').onclick=$('groupContent').onclick=async e=>{
   const b=e.target.closest('[data-group-action]');if(!b||b.disabled||!window.AxiomaGroups)return;
   const action=b.dataset.groupAction;$('groupMessage').textContent='';
   try{
-    if(action==='new'){groupDismissed=groupData.current?.id;groupSessionId=null;groupMode=false;state='lobby';$('lobby').hidden=false;renderGroupMenu();return}
+    if(action==='new'||action==='done'){if(groupOwnTab())await AxiomaGroups.leave();stopGame();groupDismissed=groupData.current?.id;groupSessionId=null;groupMode=false;state='lobby';$('lobby').hidden=false;renderGroupMenu();if(action==='done')$('groupDialog').close();return}
+    if(action==='again')await AxiomaGroups.create(groupData.current.speed);
     if(action==='create')await AxiomaGroups.create(Number($('groupSpeed').value));
     if(action==='join')await AxiomaGroups.join(b.dataset.id);
     if(action==='start')await AxiomaGroups.start();

@@ -43,6 +43,17 @@
         <div class="matchTitle"><span id="meName">Jij</span> <span class="vs">tegen</span> <span id="opponentName">…</span><small class="soloNote" id="soloNote" hidden>Solo · geen online rangschikking</small></div>
         <div class="turnPill" id="turnPill">Vloot plaatsen</div>
       </div>
+      <section id="matchResult" class="matchResult" aria-labelledby="matchResultTitle" hidden>
+        <div class="matchResultCard">
+          <h2 id="matchResultTitle" tabindex="-1">Partij afgelopen</h2>
+          <p id="matchResultText"></p>
+          <p id="matchResultStatus" role="status"></p>
+          <div class="resultActions">
+            <button id="rematchBtn" class="rankBtn">Opnieuw</button>
+            <button id="endMatchBtn" class="rankBtn">Beëindigen</button>
+          </div>
+        </div>
+      </section>
       <div class="boards">
         <div class="boardSide">
           <div class="boardTitle"><strong id="leftBoardTitle">Jouw vloot</strong><span id="ownBoardSub">zichtbaar voor jou</span></div>

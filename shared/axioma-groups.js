@@ -13,10 +13,11 @@
   function route() {
     const s=data.current,m=data.member;
     if (!s || !m || m.left_at || m.tab_id!==AxiomaSocial.state().tabId || !['waiting','running'].includes(s.status)) return;
-    if (location.pathname===gameURL.pathname) return;
     if (routed.has(s.id)) return;
     try { if(sessionStorage.getItem(`axioma-clay-opened:${s.id}`))return;sessionStorage.setItem(`axioma-clay-opened:${s.id}`,'1'); } catch {}
-    routed.add(s.id);const url=new URL(gameURL);url.searchParams.set('group',s.id);location.assign(url.href);
+    routed.add(s.id);
+    if (location.pathname===gameURL.pathname) return;
+    const url=new URL(gameURL);url.searchParams.set('group',s.id);location.assign(url.href);
   }
   function request(action,args={}) {
     const version=epoch,id=account?.id;

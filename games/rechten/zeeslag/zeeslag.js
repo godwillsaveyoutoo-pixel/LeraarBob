@@ -20,6 +20,7 @@ const SHIP_DEFS=[
 const $=s=>document.querySelector(s);
 const supa = window.AxiomaAuth?.client() || null;
 
+let resultRequest=null, settlementRequest=null, resultActionBusy=false;
 const S={
   demo:false, me:null, profile:null, lobby:null, match:null, matchId:null, opponent:null, hostId:null,
   pendingOutgoing:null, incoming:null, players:new Map(), phase:'idle', ownFleet:[], demoEnemyFleet:[],
@@ -192,9 +193,10 @@ function renderHistories(){
   $('#enemyHistory').innerHTML=history(S.enemyShots,'Verdedigingszone · jouw schepen zijn alleen voor jou zichtbaar.');
 }
 
-function resetGameState(){resetVisuals();S.lastShot=null;S.phase='placing';S.ownFleet=[];S.demoEnemyFleet=[];S.placementStart=null;S.myShots=[];S.enemyShots=[];S.revealedEnemyShips=[];S.myReady=false;S.oppReady=false;S.myTurn=false;S.finished=false;S.resultReported=false;S.aimA={n:0,d:1};S.aimB={n:0,d:1};renderGameUI();renderBoards()}
+function resetGameState(){resetVisuals();S.lastShot=null;S.phase='placing';S.ownFleet=[];S.demoEnemyFleet=[];S.placementStart=null;S.myShots=[];S.enemyShots=[];S.revealedEnemyShips=[];S.myReady=false;S.oppReady=false;S.myTurn=false;S.finished=false;S.resultReported=false;S.winnerId=null;S.resultTitle='';S.resultMessage='';S.aimA={n:0,d:1};S.aimB={n:0,d:1};renderGameUI();renderBoards()}
 function renderGameUI(){
   saveMatch();
+  renderMatchResult();
   $('#meName').textContent=S.profile?.alias||'Jij'; $('#opponentName').textContent=S.opponent?.alias||'Tegenstander';
   const placed=S.ownFleet.length,def=SHIP_DEFS[placed];
   const attacking=S.phase==='battle'&&(S.myTurn||V.firing)&&!S.finished;
@@ -301,29 +303,80 @@ async function registerPersistentMatch(){
     if(error)throw error;S.persistentRegistered=true;return true;
   }catch(err){console.error('match registration failed',err);return false}
 }
-async function submitMatchResult(winnerId){
-  if(S.demo||S.unranked||S.resultReported||!winnerId||!supa||!S.matchId)return;
-  S.resultReported=true;
-  try{
-    if(!S.persistentRegistered)await registerPersistentMatch();
-    const {error}=await supa.rpc('axioma_report_multiplayer_result',{p_match_id:S.matchId,p_winner_id:winnerId});
-    if(error)throw error;
-  }catch(err){S.resultReported=false;console.error('result report failed',err)}
+function renderMatchResult(){
+  const over=S.phase==='over';
+  $('#matchResult').hidden=!over;
+  $('#leaveBtn').textContent=over?'← Beëindigen':S.phase==='battle'?'← Opgeven':'← Partij verlaten';
+  if(!over)return;
+  $('#matchResultTitle').textContent=S.resultTitle||'Partij afgelopen';
+  $('#matchResultText').textContent=S.demo?'Speel nog een keer tegen de computer, of beëindig de partij.':'Opnieuw stuurt een nieuwe uitnodiging naar '+(S.opponent?.alias||'je tegenstander')+'. De ander kiest of die de revanche accepteert.';
+  $('#matchResultStatus').textContent=S.resultMessage||'';
+  $('#rematchBtn').disabled=$('#endMatchBtn').disabled=!!settlementRequest||resultActionBusy;
 }
-function finishGame(won){V.busy=false;V.firing=false;document.querySelector('.turnNotice')?.remove();S.finished=true;S.phase='over';S.myTurn=false;const winnerId=won?S.me?.id:S.opponent?.id;if(winnerId)submitMatchResult(winnerId);setTurnPill(won?'Gewonnen!':'Verloren',won?'mine':'');renderGameUI();markLobbyStatus('playing');toast(won?'Je hebt de hele vloot gevonden.':'Je vloot is gezonken.');}
+async function submitMatchResult(winnerId){
+  if(resultRequest)return resultRequest;
+  if(S.demo||S.unranked||S.resultReported||!winnerId)return true;
+  if(!supa||!S.matchId)return false;
+  resultRequest=(async()=>{
+    try{
+      if(!S.persistentRegistered&&!await registerPersistentMatch()){
+        if(S.unranked)return true;
+        throw Error('Partij kon niet geregistreerd worden.');
+      }
+      const {error}=await supa.rpc('axioma_report_multiplayer_result',{p_match_id:S.matchId,p_winner_id:winnerId});
+      if(error)throw error;S.resultReported=true;saveMatch();return true;
+    }catch(err){console.error('result report failed',err);return false}
+    finally{resultRequest=null}
+  })();
+  return resultRequest;
+}
+async function settleMatch(){
+  if(settlementRequest)return settlementRequest;
+  if(S.demo)return true;
+  S.resultMessage='Partij afronden…';
+  settlementRequest=(async()=>{
+    try{
+      if(!await submitMatchResult(S.winnerId))throw Error('De uitslag kon nog niet worden opgeslagen.');
+      await AxiomaSocial.finish();
+      S.resultMessage='Partij afgerond. Je bent weer beschikbaar voor een nieuw spel.';
+      return true;
+    }catch(error){S.resultMessage=error.message+' Klik opnieuw op Opnieuw of Beëindigen om het nog eens te proberen.';return false}
+    finally{settlementRequest=null;renderMatchResult()}
+  })();
+  renderMatchResult();
+  return settlementRequest;
+}
+function finishGame(won,forfeit=false){
+  const wasBattle=S.phase==='battle';
+  resetVisuals();S.finished=true;S.phase='over';S.myTurn=false;
+  S.winnerId=forfeit&&!wasBattle?null:won?S.me?.id:S.opponent?.id;
+  S.resultTitle=forfeit?'Tegenstander heeft de partij verlaten':won?'Gewonnen!':'Verloren';
+  setTurnPill(S.resultTitle,won?'mine':'');renderGameUI();
+  $('#matchResultTitle').focus({preventScroll:true});
+  settleMatch();
+}
+async function resultAction(again){
+  if(resultActionBusy||S.phase!=='over')return;
+  resultActionBusy=true;renderMatchResult();
+  const solo=S.demo,opponentId=S.opponent?.id;
+  try{
+    if(!await leaveMatch(false))return;
+    if(again){if(solo)initSolo();else await AxiomaSocial.invite(opponentId)}
+  }finally{resultActionBusy=false;renderMatchResult()}
+}
 
 async function setupMatchChannel(){if(S.demo)return;await supa.realtime.setAuth(); if(S.match)try{await supa.removeChannel(S.match)}catch{}
   S.match=supa.channel(`axioma:rechten-zeeslag:match:${S.matchId}`,{config:{private:true,presence:{key:S.me.id},broadcast:{ack:true}}});
   S.match.on('presence',{event:'sync'},deriveOppReady)
     .on('broadcast',{event:'shot'},({payload})=>handleIncomingShot(payload))
     .on('broadcast',{event:'shot_result'},({payload})=>{if(payload.to!==S.me.id||payload.from!==S.opponent?.id||!validResult(payload.result))return;const shot=S.myShots.find(s=>s.id===payload.shot_id);if(shot)applyMyShotResult(shot,payload.result)})
-    .on('broadcast',{event:'forfeit'},({payload})=>{if(payload.from===S.opponent?.id&&!S.finished){if(S.phase==='battle')submitMatchResult(S.me.id);resetVisuals();S.finished=true;S.phase='over';setTurnPill('Tegenstander heeft de partij verlaten','mine');toast('Tegenstander gaf op.');renderGameUI()}})
+    .on('broadcast',{event:'forfeit'},({payload})=>{if(payload.from===S.opponent?.id&&!S.finished)finishGame(true,true)})
     .subscribe(async status=>{S.connected=status==='SUBSCRIBED';if(S.connected){setConnection('online','on');await updateMatchPresence();deriveOppReady()}else if(['CHANNEL_ERROR','TIMED_OUT','CLOSED'].includes(status)){setConnection('verbinding herstellen…','warn');toast('Verbinding onderbroken. Wacht tot beide spelers weer online zijn.')}renderGameUI()});
 }
 function storageKey(){return `axioma-naval:${S.me?.id}:${S.matchId}`}
 function saveMatch(){
   if(S.demo||!S.matchId||S.phase==='idle')return;
-  const keys=['phase','ownFleet','myShots','enemyShots','revealedEnemyShips','myReady','myTurn','finished','resultReported','aimA','aimB','lastShot'];
+  const keys=['phase','ownFleet','myShots','enemyShots','revealedEnemyShips','myReady','myTurn','finished','resultReported','aimA','aimB','lastShot','winnerId','resultTitle'];
   try{sessionStorage.setItem(storageKey(),JSON.stringify(Object.fromEntries(keys.map(k=>[k,S[k]])),(_,v)=>v instanceof Set?[...v]:v))}catch{}
 }
 function restoreMatch(){
@@ -337,7 +390,7 @@ function restoreMatch(){
     if(last?.result){
       S.myTurn=S.lastShot.incoming?!last.result.points.length:!!last.result.points.length;
       S.revealedEnemyShips=S.myShots.flatMap(s=>s.result?.sunk||[]);
-      if(last.result.allSunk){S.finished=true;S.phase='over';S.myTurn=false}
+      if(last.result.allSunk){S.finished=true;S.phase='over';S.myTurn=false;S.winnerId=S.lastShot.incoming?S.opponent.id:S.me.id;S.resultTitle=S.lastShot.incoming?'Verloren':'Gewonnen!'}
     }
     const pending=S.myShots.find(s=>!s.result);if(pending){V.busy=true;V.firing=true}
   }catch{toast('De vorige partij kon niet worden hersteld.')}
@@ -351,20 +404,21 @@ async function enterMatch({matchId,opponent,hostId}){
   await registerPersistentMatch();await setupMatchChannel();
 }
 async function leaveMatch(silent=false){
+  if(S.finished&&!await settleMatch())return false;
   resetVisuals();
   if(S.phase!=='idle'&&S.match&&!S.demo&&!silent){
-    if(S.phase==='battle'&&!S.finished&&S.opponent?.id)await submitMatchResult(S.opponent.id);
+    if(S.phase==='battle'&&!S.finished&&S.opponent?.id&&!await submitMatchResult(S.opponent.id)){toast('Uitslag opslaan lukt nog niet. Probeer opnieuw.');return false}
     try{await S.match.send({type:'broadcast',event:'forfeit',payload:{from:S.me.id}})}catch{}
   }
   if(!S.demo){
-    try{await AxiomaSocial.finish()}catch{toast('Partij afsluiten wordt opnieuw geprobeerd.');return}
+    try{await AxiomaSocial.finish()}catch{toast('Partij afsluiten lukt nog niet. Probeer opnieuw.');return false}
     try{sessionStorage.removeItem(storageKey())}catch{}
     if(S.match)try{await supa.removeChannel(S.match)}catch{}
     history.replaceState(null,'',location.pathname);
   }
   S.match=null;S.matchId=null;S.opponent=null;S.hostId=null;S.persistentRegistered=false;S.phase='idle';
-  if(S.demo){S.demo=false;$('#soloNote').hidden=true;const platform=window.AxiomaSocial?.state();if(platform)syncPlatform(platform);if(!window.AxiomaGame?.account){S.me=null;setConnection('Gast','warn');showScreen('gateScreen');return}}
-  showScreen('lobbyScreen');renderLobby();
+  if(S.demo){S.demo=false;$('#soloNote').hidden=true;const platform=window.AxiomaSocial?.state();if(platform)syncPlatform(platform);if(!window.AxiomaGame?.account){S.me=null;setConnection('Gast','warn');showScreen('gateScreen');return true}}
+  showScreen('lobbyScreen');renderLobby();return true;
 }
 // Re-send the same shot id: the opponent replays its cached result, never a new hit.
 setInterval(()=>{
@@ -442,6 +496,7 @@ function demoBotTurn(){
 }
 
 async function boot(){
+  $('#rematchBtn').onclick=()=>resultAction(true);$('#endMatchBtn').onclick=()=>resultAction(false);
   AxiomaPlatform.wireHome($('#homeBtn'),{beforeLeave:async()=>{if(S.matchId)await leaveMatch();return !S.matchId}}); $('#demoBtn').onclick=initSolo;$('#soloBtn').onclick=initSolo; $('#leaveBtn').onclick=()=>leaveMatch(false); $('#rankingBtn').onclick=openRanking; $('#rankingCloseBtn').onclick=()=>$('#rankingOverlay').hidden=true; $('#rankingOverlay').addEventListener('click',e=>{if(e.target.id==='rankingOverlay')$('#rankingOverlay').hidden=true});
   $('#playerList').onclick=e=>{const b=e.target.closest('[data-invite]');if(b)sendInvite(b.dataset.invite)};
   $('#ownBoard').addEventListener('click',e=>{const p=svgToGrid(e,$('#ownBoard'));if(p)placeAt(p)});

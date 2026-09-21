@@ -43,6 +43,11 @@ main{min-height:0;position:relative}
 
 /* game */
 #gameScreen{display:none;grid-template-rows:54px minmax(0,1fr) auto}.screen.active#gameScreen{display:grid}
+.matchResult{position:absolute;inset:54px 0 0;z-index:30;display:grid;place-items:safe center;overflow:auto;padding:20px;background:#fffef9ed}
+.matchResultCard{width:min(520px,100%);padding:clamp(18px,4vw,32px);border:1px solid var(--line);border-radius:16px;background:var(--paper);box-shadow:var(--shadow)}
+.matchResultCard h2{margin:0 0 12px;font-size:clamp(24px,4vw,34px)}.matchResultCard p{line-height:1.55;color:var(--muted)}
+.matchResultCard h2:focus{outline:none}
+.resultActions{display:flex;gap:12px;flex-wrap:wrap}.resultActions button{min-height:44px}.resultActions button:first-child{background:var(--green-soft)}
 .matchbar{display:flex;align-items:center;gap:18px;padding:0 22px;border-bottom:1px solid var(--line)}
 .backLobby{border:0;background:none;padding:8px 6px;color:var(--muted)}.matchTitle{font-weight:700;font-size:18px}.vs{color:var(--muted)}
 .turnPill{margin-left:auto;padding:7px 12px;border-radius:999px;background:#f1efe8;font-size:14px}.turnPill.mine{background:var(--green-soft);color:#315c3b}.turnPill.hit{background:var(--gold-soft);color:#6c541f}

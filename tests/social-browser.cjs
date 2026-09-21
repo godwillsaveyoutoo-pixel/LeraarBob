@@ -22,37 +22,47 @@ class CDP {
 }
 const A='11111111-1111-4111-8111-111111111111', B='22222222-2222-4222-8222-222222222222';
 const accounts = {[A]:{id:A,role:'student',alias:'Test-A',class_code:'3TMW'},[B]:{id:B,role:'student',alias:'Test-B',class_code:'3TMW'}};
-let invitations=[], sessions=new Map(), fail=false, reportCount=0;
-const clients=[];let groupSession=null;const groupMembers=new Map();
+let invitations=[], sessions=new Map(), fail=false, reportCount=0, failResultOnce=false;
+const clients=[];let groupSession=null;const groupSessions=new Map(),groupMemberships=new Map();
 const playerList=()=>[...new Set([...sessions.values()].map(s=>s.id))].map(id=>({...accounts[id],status:invitations.some(i=>i.status==='accepted'&&[i.sender_id,i.recipient_id].includes(id))?'playing':'available'}));
 function rpc(c,name,args){
   if(fail)throw Error('Test: verbinding verbroken');
   if(name==='axioma_is_teacher')return false;
   if(name==='axioma_save_game_progress_for_account'){assert.equal(args.p_user_id,c.account);const old=c.progress.get(args.p_game_id);if(args.p_revision!==(old?.revision||0))return {status:'conflict',revision:old?.revision};const row={game_id:args.p_game_id,state:args.p_state,revision:(old?.revision||0)+1};c.progress.set(args.p_game_id,row);return {status:'saved',revision:row.revision};}
   if(name==='axioma_register_multiplayer_match')return {};
-  if(name==='axioma_report_multiplayer_result'){reportCount++;return {}}
+  if(name==='axioma_report_multiplayer_result'){if(failResultOnce&&c.account===B){failResultOnce=false;throw Error('Test: uitslag tijdelijk niet opgeslagen')}reportCount++;return {}}
   if(name==='axioma_multiplayer_ranking'||name==='axioma_naval_ranking')return [];
   if(name==='axioma_clay'){
-    const uid=c.account,action=args.p_action,now=Date.now();let member=groupMembers.get(uid);
-    if(action==='create'){groupSession={id:randomUUID(),host_id:uid,host_alias:accounts[uid].alias,speed:args.p_speed,status:'waiting',created_at:new Date(now).toISOString()};groupMembers.clear()}
+    const uid=c.account,action=args.p_action,now=Date.now();
+    let current=groupSessions.get(args.p_session_id||groupMemberships.get(uid)),member=current?.members.get(uid);
+    if(action==='create'){
+      current={id:randomUUID(),host_id:uid,host_alias:accounts[uid].alias,speed:args.p_speed,status:'waiting',created_at:new Date(now).toISOString(),members:new Map()};
+      groupSession=current;groupSessions.set(current.id,current);
+    }
     if(action==='create'||action==='join'){
-      member={user_id:uid,alias:accounts[uid].alias,tab_id:args.p_tab_id,streak:0,misses:0,version:0,left_at:null,online:true};groupMembers.set(uid,member);
+      assert.equal(current.status,'waiting');
+      member={user_id:uid,alias:accounts[uid].alias,tab_id:args.p_tab_id,streak:0,misses:0,version:0,left_at:null,online:true};current.members.set(uid,member);groupMemberships.set(uid,current.id);
     }
     if(action==='start'){
-      assert.equal(uid,groupSession.host_id);assert(groupMembers.size>=2);groupSession.status='running';groupSession.starts_at=new Date(now+5000).toISOString();
-      for(const m of groupMembers.values()){m.next_at=groupSession.starts_at;m.participated=true}
+      assert.equal(uid,current.host_id);assert.equal(current.status,'waiting');assert([...current.members.values()].filter(m=>!m.left_at).length>=2);current.status='running';current.starts_at=new Date(now+5000).toISOString();
+      for(const m of current.members.values()){if(!m.left_at){m.next_at=current.starts_at;m.participated=true}}
     }
     if(action==='answer'){
-      assert.equal(groupSession.status,'running');assert.equal(member.version,args.p_version);
+      assert.equal(current.status,'running');assert.equal(member.version,args.p_version);
       const correct=args.p_answer===[1,-1,2,-.5,.5,-2,0][member.streak];
       member.streak=correct?member.streak+1:0;member.misses+=correct?0:1;member.version++;
       member.last_event_id=args.p_event_id;member.last_correct=correct;member.next_at=new Date(now+800).toISOString();
-      if(member.streak===7){groupSession.status='finished';groupSession.winner_id=uid;groupSession.winner_alias=accounts[uid].alias;groupSession.elapsed_ms=now-Date.parse(groupSession.starts_at)}
+      if(member.streak===7){current.status='finished';current.winner_id=uid;current.winner_alias=accounts[uid].alias;current.elapsed_ms=now-Date.parse(current.starts_at)}
     }
-    if(action==='leave'&&member)member.left_at=new Date(now).toISOString();
-    const sessions=groupSession?.status==='waiting'?[{...groupSession,player_count:groupMembers.size}]:[];
-    const ranking=action==='ranking'&&groupSession?.status==='finished'?[{rank:1,user_id:groupSession.winner_id,alias:groupSession.winner_alias,wins:1,best_ms:groupSession.elapsed_ms}]:null;
-    return {sessions,current:member?groupSession:null,member:member||null,members:member?[...groupMembers.values()]:[],ranking,server_time:new Date(now).toISOString()};
+    if(action==='leave'&&member){
+      assert.equal(member.tab_id,args.p_tab_id);member.left_at=new Date(now).toISOString();
+      if((uid===current.host_id&&current.status==='waiting')||[...current.members.values()].every(m=>m.left_at)){
+        if(['waiting','running'].includes(current.status))current.status='cancelled';
+      }
+    }
+    const sessions=[...groupSessions.values()].filter(g=>g.status==='waiting').map(g=>({...g,player_count:[...g.members.values()].filter(m=>!m.left_at).length}));
+    const ranking=action==='ranking'?[...groupSessions.values()].filter(g=>g.status==='finished').map(g=>({rank:1,user_id:g.winner_id,alias:g.winner_alias,wins:1,best_ms:g.elapsed_ms})):null;
+    return {sessions,current:member?current:null,member:member||null,members:member?[...current.members.values()]:[],ranking,server_time:new Date(now).toISOString()};
   }
   assert.equal(name,'axioma_social');
   const uid=c.account,tab=args.p_tab_id,action=args.p_action;
@@ -202,8 +212,45 @@ async function setup(browser,uid){
   console.log('PASS: ship placement, private transport, misses change turns, hits retain turns, duplicate shots, reload recovery');
   await a.eval(`document.querySelector('#leaveBtn').click()`);await a.wait(`__naval.S.phase==='idle'`);await b.wait(`__naval.S.phase==='over'`);
   assert.equal(reportCount,2);
-  await b.eval(`document.querySelector('#leaveBtn').click()`);await b.wait(`__naval.S.phase==='idle'`);
-  console.log('PASS: leave/forfeit and mutual result reporting');
+  await b.wait(`!document.querySelector('#matchResult').hidden&&!document.querySelector('#rematchBtn').disabled`);
+  await b.eval(`document.querySelector('#rematchBtn').click()`);
+  await b.wait(`AxiomaSocial.state().invitations[0]?.status==='pending'`);
+  await a.eval('AxiomaSocial.refresh();AxiomaSocial.open()');await a.wait(`${panel}.querySelector('[data-action="accept"]')`);
+  await click(a,'[data-action="accept"]');await b.eval('AxiomaSocial.refresh()');
+  for(const c of [a,b])await c.wait(`window.__naval?.S.phase==='placing'&&__naval.S.opponentConnected`);
+  assert.equal(await a.eval('AxiomaSocial.state().matchId'),await b.eval('AxiomaSocial.state().matchId'));
+  assert.equal(reportCount,2,'rematch does not report previous result again');
+  for(const c of [a,b]){
+    for(const [start,end] of [[[-4,-3],[-1,-3]],[[-4,-1],[-2,-1]],[[-4,1],[-3,1]]])await c.eval(`__naval.placeAt({x:${start[0]},y:${start[1]}});__naval.placeAt({x:${end[0]},y:${end[1]}});__naval.confirmPlacement()`);
+    await c.eval(`document.querySelector('#readyBtn').click()`);
+  }
+  await b.wait(`__naval.S.phase==='battle'&&__naval.S.myTurn`);failResultOnce=true;
+  for(const y of [-3,-1,1]){
+    await b.wait(`__naval.S.myTurn&&!__naval.V.busy`);
+    await b.eval(`__naval.S.aimA={n:0,d:1};__naval.S.aimB={n:${y},d:1};__naval.fire()`);
+    await b.wait(`__naval.S.finished||(!__naval.V.busy&&__naval.S.myShots.some(s=>s.b.n===${y}&&s.result))`);
+  }
+  for(const c of [a,b])await c.wait(`__naval.S.phase==='over'&&!document.querySelector('#endMatchBtn').disabled`);
+  assert.equal(await b.eval(`document.querySelector('#matchResultTitle').textContent`),'Gewonnen!');
+  assert.match(await b.eval(`document.querySelector('#matchResultStatus').textContent`),/niet worden opgeslagen/);
+  for(const [width,height] of [[390,844],[844,390]]){
+    await b.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:true});
+    await b.eval(`document.querySelector('#endMatchBtn').scrollIntoView({block:'nearest'})`);
+    assert.equal(await b.eval(`document.querySelector('#matchResult').scrollWidth>document.querySelector('#matchResult').clientWidth`),false,'result overflow '+width);
+    assert(await b.eval(`(()=>{const r=document.querySelector('#endMatchBtn').getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight})()`),'end button reachable '+width);
+    const shot=await b.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(`/tmp/leraarbob-naval-result-${width}.png`,Buffer.from(shot.data,'base64'));
+  }
+  await b.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
+  await b.eval(`document.querySelector('#rematchBtn').click()`);await b.wait(`AxiomaSocial.state().invitations[0]?.status==='pending'`);
+  assert.equal(reportCount,4,'retry saves only the missing report');
+  await a.eval('AxiomaSocial.refresh();AxiomaSocial.open()');await a.wait(`${panel}.querySelector('[data-action="accept"]')`);
+  await click(a,'[data-action="accept"]');await b.eval('AxiomaSocial.refresh()');
+  for(const c of [a,b])await c.wait(`window.__naval?.S.phase==='placing'&&__naval.S.opponentConnected`);
+  await a.eval(`document.querySelector('#leaveBtn').click()`);await a.wait(`__naval.S.phase==='idle'`);
+  await b.wait(`__naval.S.phase==='over'&&!document.querySelector('#endMatchBtn').disabled`);
+  await b.eval(`document.querySelector('#endMatchBtn').click()`);await b.wait(`__naval.S.phase==='idle'`);
+  assert.equal(reportCount,4,'leaving during placement is not a scored victory');
+  console.log('PASS: forfeit, victory/result screen, save retry, rematch from both result screens, end before battle, no duplicate results');
   // An authenticated pupil can start a solo match directly from the ordinary lobby.
   const reportsBeforeSolo=reportCount;
   await a.eval(`document.querySelector('#soloBtn').click()`);await a.wait('__naval.S.demo&&__naval.S.phase==="placing"');
@@ -219,6 +266,8 @@ async function setup(browser,uid){
     await a.wait('__naval.S.finished||(__naval.S.myTurn&&!__naval.V.busy)');
   }
   assert.equal(await a.eval('__naval.S.finished'),true);assert.equal(reportCount,reportsBeforeSolo,'solo never alters online ranking');
+  await a.eval(`document.querySelector('#rematchBtn').click()`);await a.wait('__naval.S.demo&&__naval.S.phase==="placing"');
+  assert.equal(await a.eval('__naval.S.ownFleet.length'),0,'solo rematch starts with a fresh fleet');
   await a.eval(`document.querySelector('#leaveBtn').click()`);await a.wait('!__naval.S.demo&&__naval.S.phase==="idle"');
   assert.equal(await a.eval('__naval.S.me.id'),A,'leaving solo retains actual platform account');
   console.log('PASS: solo entry, placement, miss/bot turn, victory, return to online lobby; no fabricated players or ranked results');
@@ -255,6 +304,23 @@ async function setup(browser,uid){
     fs.writeFileSync(`/tmp/leraarbob-clay-group-${width}.png`,Buffer.from(shot.data,'base64'));
   }
   console.log('PASS: student creates group in game, visible in lobby, join from another game, shared start, mistake resets all, seven correct wins and ranks');
+  const firstGroup=groupSession.id;
+  await a.eval(`document.querySelector('[data-group-action="again"]').click()`);await a.wait(`AxiomaGroups.state().current?.status==='waiting'`);
+  assert.notEqual(groupSession.id,firstGroup);assert.equal(groupSessions.get(firstGroup).status,'finished');
+  await b.eval('AxiomaGroups.refresh()');await b.wait(`!document.querySelector('#groupContent [data-group-action="join"]').disabled`);
+  await b.eval(`document.querySelector('#groupContent [data-group-action="join"]').click()`);await b.wait(`AxiomaGroups.state().current?.status==='waiting'`);
+  assert.equal(await b.eval('AxiomaGroups.state().current.id'),groupSession.id);
+  await b.eval(`document.querySelector('[data-group-action="leave"]').click()`);await b.wait(`!!AxiomaGroups.state().member.left_at`);
+  assert.equal(groupSession.status,'waiting','participant leaving keeps host lobby open');
+  await a.go('');await a.wait('window.AxiomaGroups?.state().connected');await a.eval('AxiomaSocial.open()');
+  await a.wait(`${panel}.querySelector('[data-action="group-leave"]')`);await click(a,'[data-action="group-leave"]');
+  await a.wait(`AxiomaGroups.state().current?.status==='cancelled'`);
+  assert.equal(groupSessions.get(firstGroup).winner_id,B,'previous winner retained after rematch and exit');
+  await a.go('games/rechten/kleiduiven/');await a.wait(`window.AxiomaGroups?.state().current?.status==='cancelled'`);
+  await a.eval(`document.querySelector('#openGroup').click()`);await a.wait(`document.querySelector('[data-group-action="done"]')`);
+  await a.eval(`document.querySelector('[data-group-action="done"]').click()`);await a.wait(`!document.querySelector('#groupDialog').open`);
+  await a.eval('AxiomaGroups.refresh()');assert.equal(await a.eval(`document.querySelector('#groupDialog').open`),false,'completed session stays dismissed after refresh');
+  console.log('PASS: host opens fresh round, participant opts in and leaves, host ends group from global Online menu; previous result retained');
   // Popover layout and keyboard dismissal on small screens.
   await a.go('');await a.wait('window.AxiomaSocial?.state().connected');
   for(const width of [320,390,768,1440]){
