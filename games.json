@@ -112,6 +112,23 @@
     "progressUnitPlural": "stappen"
   },
   {
+    "title": "Vectorentrainer",
+    "subtitle": "Construeer vectoren, reken met coördinaten en oefen gericht verder.",
+    "href": "games/vectoren/Axioma_Vectorentrainer_v0.2.html",
+    "category": "Vectoren",
+    "kind": "train",
+    "accent": "mint",
+    "theme": "Meetkunde",
+    "art": "vectors",
+    "cover": "assets/covers/vectoren.svg",
+    "detail": "Voortgang in deze browser",
+    "id": "vectoren-trainer",
+    "progressType": "local",
+    "teacherVisible": false,
+    "gameType": "train",
+    "tracking": "local"
+  },
+  {
     "title": "Stelsels",
     "subtitle": "Los stelsels grafisch, met substitutie en met combinatie op.",
     "href": "games/stelsels.html?v=20260920-2",

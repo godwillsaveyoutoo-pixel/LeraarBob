@@ -57,6 +57,12 @@
       card.classList.remove('is-complete');
       action.textContent = (kinds[game.kind] || kinds.learn)[1];
       detail.textContent = game.detail || 'Op jouw tempo';
+      if (game.progressType === 'local') {
+        root.hidden = true;
+        root.removeAttribute('aria-busy');
+        detail.textContent = game.detail || 'Voortgang in deze browser';
+        continue;
+      }
       if (game.progressType === 'multiplayer') {
         root.hidden = true;
         detail.textContent = account ? '2 spelers · nodig iemand online uit' : 'Log in om samen te spelen · demo beschikbaar';

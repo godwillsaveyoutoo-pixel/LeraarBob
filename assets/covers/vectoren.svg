@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" fill="none">
+  <defs>
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" stroke="#416a60" stroke-opacity=".09"/></pattern>
+    <marker id="blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="m0 0 10 5-10 5" fill="#467783"/></marker>
+    <marker id="green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="m0 0 10 5-10 5" fill="#66856a"/></marker>
+  </defs>
+  <rect width="600" height="300" fill="#e5efe6"/>
+  <circle cx="300" cy="145" r="126" fill="#d7e6d5"/>
+  <g transform="rotate(-4 300 150)">
+    <rect x="141" y="32" width="318" height="240" rx="10" fill="#f7f8ee"/>
+    <path d="M141 32h318v240H141z" fill="url(#grid)"/>
+    <path d="M185 225 330 195 405 85" stroke="#467783" stroke-width="5" marker-mid="url(#blue)" marker-end="url(#blue)"/>
+    <path d="M185 225 405 85" stroke="#66856a" stroke-width="4" stroke-dasharray="7 7" marker-end="url(#green)"/>
+    <circle cx="185" cy="225" r="5" fill="#467783"/>
+    <g fill="#41616a" font-family="Georgia,serif" font-style="italic" font-size="24"><text x="252" y="235">u</text><text x="385" y="160">v</text><text x="235" y="140">u + v</text></g>
+    <rect x="320" y="230" width="116" height="28" rx="5" fill="#e8eee0"/>
+    <text x="378" y="249" text-anchor="middle" fill="#5e7b62" font-family="Georgia,serif" font-size="16">(x, y)</text>
+  </g>
+</svg>
