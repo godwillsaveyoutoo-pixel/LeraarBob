@@ -49,3 +49,7 @@ footer{display:flex;align-items:center;gap:10px;padding:8px 24px;border-top:1px 
 @media(min-height:600px){#workspace.readonly.sets .set-region:has(>.set-region){padding-top:20px;padding-bottom:2px}#workspace.readonly.sets .set-map-board{min-height:130px}}
 
 #seriesReturn{flex-shrink:0;font-size:13px;padding:5px 10px;border-color:var(--blue);color:var(--blue)}
+
+.root-form-answer{display:flex;align-items:center;justify-content:center;gap:12px}.radical-input{display:flex;align-items:center}.radical-input>span{font-size:52px}.radical-input>.slot{border-top:2px solid var(--ink)}.root-calculation-answer .slot{min-width:160px}.rootcalc .canvas,.rootsimplify .canvas{gap:12px}.root-form-answer .slot{min-width:100px}.rootcalc .math-large,.rootsimplify .math-large{font-size:42px}
+
+.math-product{display:flex;align-items:center;justify-content:center;gap:3px}

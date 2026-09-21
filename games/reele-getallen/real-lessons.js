@@ -23,8 +23,28 @@ function build(t){
   const first=C.value(t.tokens[0]);a.groups=t.tokens.map(e=>C.equal(C.value(e),first)?'A':null);add('Verbind één waarde',`De kaartjes in A stellen allemaal ${C.decimalOf(first)} voor. Procent betekent per honderd.`);
   a.groups=a.groups.map(x=>x||'B');add('Controleer binnen én tussen groepen','Binnen elke groep zijn de waarden gelijk. De twee groepen hebben verschillende waarden. A en B omwisselen mag ook.');break;
  }
+ case 'rootcalc':{
+  const cube=t.source.degree===3,r=t.target;
+  add('Wat wordt er gevraagd?',`Bereken ${C.label(t.source)} exact. ${cube?'Een derdemachtswortel vraagt welk getal driemaal met zichzelf vermenigvuldigd de gegeven waarde oplevert.':'Een vierkantswortel vraagt naar het niet-negatieve getal waarvan het kwadraat de gegeven waarde is.'}`);
+  if(!r){add('Kan dit in ℝ?','Het kwadraat van een reëel getal is nooit negatief. Onder dit vierkantswortelteken staat een negatief getal.');a.noReal=true;add('Geen reële waarde','√(−9) bestaat niet in ℝ. Dat is iets anders dan −√9: daar neem je het tegengestelde van 3.');break;}
+  const exp=cube?'³':'²';
+  add('Gebruik de bijbehorende macht',t.representation==='square-of-negative'?`Bereken eerst (${C.format(t.source.radicand.base)})² = ${t.source.radicand.base**2}. De wortel daarvan is ${C.format(r.n)}, niet ${C.format(-r.n)}. √(a²) = |a|.`:r.d!==1?`Neem de wortel van teller en noemer: (${C.format(cube?r.n:Math.abs(r.n))})${exp} = ${(cube?r.n:Math.abs(r.n))**(cube?3:2)} en ${r.d}${exp} = ${r.d**(cube?3:2)}.`:`(${C.format(cube?r.n:Math.abs(r.n))})${exp} = ${(cube?r.n:Math.abs(r.n))**(cube?3:2)}. ${t.source.sign<0?'Het minteken vóór de wortel neem je daarna mee.':''}`);
+  a.values[0]=C.exactText(r);add('Schrijf de exacte waarde',`${C.label(t.source)} = ${C.exactText(r)}. ${cube&&r.n<0?'Een negatieve waarde tot de derde macht blijft negatief.':'Een breuk mag als exact antwoord blijven staan.'}`);break;
+ }
+ case 'rootsimplify':{
+  const r=t.target,degree=t.degree,den=t.radicand.d;
+  add('Zoek een volledige macht',`Vereenvoudig ${C.label(t.source)}. Zoek een ${degree===3?'derdemacht':'kwadraat'} als factor, zodat er zoveel mogelijk buiten de wortel komt.`);
+  add('Splits in factoren',`${Math.abs(t.radicand.n)} = ${t.factorPower} × ${r.inside}. ${degree===3?'∛':'√'}${t.factorPower} = ${Math.round(t.factorPower**(1/degree))}.${den!==1?` De noemer is ${Math.round(den**(1/degree))}${degree===3?'³':'²'} = ${den}.`:''}`);
+  a.values=[C.exactText(r.coefficient),String(r.inside)];add('Breng de factor naar buiten',`${C.label(t.source)} = ${r.coefficient.d===1?C.exactText(r.coefficient):`(${C.exactText(r.coefficient)})`}${degree===3?'∛':'√'}${r.inside}. ${r.coefficient.n<0?'Neem ook het minteken mee. ':''}Onder de wortel blijft geen ${degree===3?'derdemachtsfactor':'kwadraatfactor'} groter dan 1 over.`);break;
+ }
  case 'root':{
   const powers=C.rootBounds(t,0),bounds=C.rootBounds(t,1),cube=t.degree===3;
+  if(t.directBounds){
+   add('Schat eerst de wortelwaarde',`Tussen welke twee opeenvolgende gehele getallen ligt ${C.label(t.source)}? We zoeken gehele grenzen, geen wortels als antwoord.`);
+   add('Controleer met bekende machten',`(${C.format(t.k)})${cube?'³':'²'} = ${C.format(powers[0])} en (${C.format(t.k+1)})${cube?'³':'²'} = ${C.format(powers[1])}. ${C.format(t.n)} ligt ertussen.`);
+   a.values=bounds.map(String);add('Geef de grenzen voor de wortel',`${C.format(bounds[0])} < ${C.label(t.source)} < ${C.format(bounds[1])}. ${t.source.sign<0?'Bij het nemen van tegengestelden keert de volgorde om.':'De wortelwaarde ligt dus tussen deze twee gehele getallen.'}`);break;
+  }
+
   add(cube?'Van derde macht naar wortel':'Van kwadraat naar wortel',cube?`Zoek een getal waarvan de derde macht ${t.n} is. Negatieve getallen hebben ook een reële derdemachtswortel.`:t.source.sign<0?`Bij ${C.label(t.source)} staat het minteken vóór de wortel. Zoek eerst de positieve wortelwaarde en neem daarna het tegengestelde.`:`Een vierkant met oppervlakte ${t.n} heeft zijde √${t.n}. Vergelijk met gehele zijden.`);
   a.values=powers.map(String);add('Zoek de naburige machten',`${t.k}${cube?'³':'²'} = ${powers[0]} en ${t.k+1}${cube?'³':'²'} = ${powers[1]}. ${t.n} ligt ertussen.`);
   a.stage=1;a.values=['',''];add('Ga naar de wortelwaarde',t.source.sign<0?'Door het tegengestelde te nemen keert de volgorde om: het grootste positieve getal wordt het kleinste negatieve.':cube?'Derdemachtswortels behouden de volgorde, ook bij negatieve getallen.':'Neem de positieve zijden. √9 is 3; −√9 is −3. √(−9) is geen reëel getal.');
@@ -52,7 +72,8 @@ function build(t){
  case 'period':
   add('De voortzetting is gegeven',t.rule+' Met alleen een eindig rijtje cijfers zou je niet zeker weten hoe het getal verdergaat.');
   add('Laat de vaste aanloop staan',t.lead?`De aanloop ${t.lead} komt maar één keer. Het herhaalblok begint daarna.`:'Er is geen vaste aanloop. De herhaling begint meteen na de komma.');
-  a.start=t.target.start;a.end=t.target.end;add('Neem het kortste blok',`Het blok ${t.repeat} herhaalt zich onbeperkt. Extra herhalingen hoeven niet onder de overbar.`);break;
+  a.start=t.target.start;a.end=t.target.end;add('Neem het kortste blok',`Het blok ${t.repeat} herhaalt zich onbeperkt. We schrijven het drie keer en zetten er … achter: de herhaling gaat verder.`);
+  add('Een andere notatie die je kunt tegenkomen','Soms staat er een streep boven één periode. Dat betekent precies dezelfde onbeperkte herhaling. Hier gebruiken we drie herhalingen met … .');steps.at(-1).alternatePeriod=true;break;
  }
  return steps;
 }

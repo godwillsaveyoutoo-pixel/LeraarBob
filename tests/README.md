@@ -1,5 +1,17 @@
 # Browsercontrole Pythagoras
 
+Cataloguscontrole zonder browser:
+
+```sh
+node scripts/build-catalog.cjs --check
+node --test tests/catalog.test.cjs tests/catalog-progress.test.cjs
+```
+
+De eerste controle meldt een verouderde offlinekopie. Herstel die met
+`node scripts/build-catalog.cjs`. De tests vergelijken alle catalogusvelden,
+controleren dubbele spel-id's en vergelijken het aantal vaardigheden van Reële
+getallen met de daadwerkelijke trainer. GitHub voert deze controles ook uit.
+
 Benodigd: Node.js 22+ (ingebouwde WebSocket), Python 3 en Chromium.
 Start vanuit de projectmap een lokale server en een **apart, tijdelijk browserprofiel**:
 
@@ -150,8 +162,8 @@ opgeloste antwoord op een tweede toestel met fictieve accounts.
 ## Reële getallen
 
 `node tests/real-numbers.test.cjs` controleert exacte waarden, foutdiagnoses,
-1.800 gegenereerde opgaven met hun uitgewerkte voorbeelden en de leerroute.
-`node tests/real-numbers-browser.cjs` doorloopt de tien werkvormen op 640 en
+2.160 gegenereerde opgaven met hun uitgewerkte voorbeelden en de leerroute.
+`node tests/real-numbers-browser.cjs` doorloopt de twaalf werkvormen op 640 en
 780 × 360, alle introductiestappen, bediening, context bij fouten, hervatten van
 invoer en XP, volledige reeksen en lichte/donkere weergave. De accountbrowsertest
 controleert ook deze trainer op een tweede toestel met fictieve accounts.

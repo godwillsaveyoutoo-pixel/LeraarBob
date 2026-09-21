@@ -1,6 +1,6 @@
 const {test}=require('node:test'),assert=require('node:assert/strict');
 const C=require('../games/reele-getallen/real-core.js'),L=require('../games/reele-getallen/real-lessons.js'),P=C.Progress;
-function solution(t){const a=C.freshAnswer(t);switch(t.skill){case 'fraction':a.values=[String(Math.abs(t.target.n)),String(t.target.d)];a.sign=Math.sign(t.target.n)||1;break;case 'compare':a.relation=t.target;break;case 'line':a.tick=t.tick;break;case 'root':a.values=(t.source.sign<0?[-t.k-1,-t.k]:[t.k,t.k+1]).map(String);a.stage=1;break;case 'interval':a.values=[t.lo===null?'-inf':String(t.lo),t.hi===null?'inf':String(t.hi)];a.closedLo=t.closedLo;a.closedHi=t.closedHi;break;case 'sets':a.placements=[...t.target];break;case 'decimaltype':a.decimalType=t.target;break;case 'classify':a.labels=t.target;break;case 'period':Object.assign(a,t.target);break;case 'group':a.groups=t.tokens.map(e=>C.equal(C.value(e),C.value(t.tokens[0]))?'A':'B');break;}return a}
+function solution(t){const a=C.freshAnswer(t);switch(t.skill){case 'rootcalc':a.noReal=t.target===null;if(t.target)a.values[0]=C.exactText(t.target).replaceAll('−','-');break;case 'rootsimplify':a.values=[C.exactText(t.target.coefficient).replaceAll('−','-'),String(t.target.inside)];break;case 'fraction':a.values=[String(Math.abs(t.target.n)),String(t.target.d)];a.sign=Math.sign(t.target.n)||1;break;case 'compare':a.relation=t.target;break;case 'line':a.tick=t.tick;break;case 'root':a.values=(t.source.sign<0?[-t.k-1,-t.k]:[t.k,t.k+1]).map(String);a.stage=1;break;case 'interval':a.values=[t.lo===null?'-inf':String(t.lo),t.hi===null?'inf':String(t.hi)];a.closedLo=t.closedLo;a.closedHi=t.closedHi;break;case 'sets':a.placements=[...t.target];break;case 'decimaltype':a.decimalType=t.target;break;case 'classify':a.labels=t.target;break;case 'period':Object.assign(a,t.target);break;case 'group':a.groups=t.tokens.map(e=>C.equal(C.value(e),C.value(t.tokens[0]))?'A':'B');break;}return a}
 test('exact number model: decimal commas, signs, equivalent fractions, percentages and roots',()=>{
  assert.deepEqual(C.value(C.percent(75)),C.rational(3,4));assert.deepEqual(C.parse('−0,75'),C.rational(-3,4));assert(C.equal(C.value(C.sqrt(16)),C.rational(4)));
  assert(C.compare(C.value(C.sqrt(10)),C.parse('3,2'))<0);assert(C.compare(C.value(C.sqrt(2,-1)),C.parse('-1,5'))>0);
@@ -13,10 +13,10 @@ test('every task and worked example has a mathematically correct answer',()=>{
  let n=0;for(const s of C.skills)for(let level=0;level<3;level++)for(let seed=1;seed<=60;seed++){
   const t=C.generate(s.id,{seed,level,variant:seed%12}),a=solution(t);assert(C.validate(t,a).ok,s.id);n++;
   const steps=L.build(t);assert(steps.length>=3);assert(C.validate(t,steps.at(-1).answer).ok,'lesson '+s.id);
-  if(t.skill==='root'){const degree=t.degree||2;assert(t.k**degree<t.n&&t.n<(t.k+1)**degree);const first={...a,stage:0,values:[String(t.k**degree),String((t.k+1)**degree)]};assert(C.validate(t,first).ok)}
+  if(t.skill==='root'&&!t.directBounds){const degree=t.degree||2;assert(t.k**degree<t.n&&t.n<(t.k+1)**degree);const first={...a,stage:0,values:[String(t.k**degree),String((t.k+1)**degree)]};assert(C.validate(t,first).ok)}
   if(t.skill==='line')assert.equal(t.min+t.tick*C.number(t.step),C.number(t.target));
   assert(!/undefined|NaN/.test(JSON.stringify(steps)));
- }assert.equal(n,1800);
+ }assert.equal(n,2160);
 });
 test('diagnoses distinguish equivalent form, wrong value, invalid input, interval inclusion and grouping labels',()=>{
  const t={skill:'fraction',target:C.rational(3,4)};
@@ -36,6 +36,47 @@ test('adaptive route unlocks all families and needs varied, delayed evidence for
  const before=state.xp;assert.equal(P.record(state,task,{clean:false,solved:false}),0);assert.equal(state.xp,before);assert(state.skills.fraction.repair);
  assert.equal(P.record(state,task,{clean:false,solved:true}),5);assert.equal(P.record(state,task,{clean:true,solved:true}),15);
  assert.deepEqual(P.sanitize(JSON.parse(JSON.stringify(state))),state);
+});
+test('exact roots cover signs, powers, rational radicands, zero and non-real square roots',()=>{
+ const forms=new Set();
+ for(let variant=0;variant<12;variant++)for(let seed=1;seed<=40;seed++){
+  const t=C.generate('rootcalc',{level:2,variant,seed}),e=t.source,rad=e.radicand;
+  forms.add(t.representation);
+  const r=rad.kind==='power'?C.rational(rad.base**rad.degree):C.value(rad);
+  if(t.target===null){assert.equal(e.degree,2);assert(r.n<0);assert(C.validate(t,{...solution(t),noReal:true}).ok);continue;}
+  const target=t.target,degree=BigInt(e.degree),sign=BigInt(e.sign);
+  assert.equal((BigInt(target.n)*sign)**degree*BigInt(r.d),BigInt(r.n)*BigInt(target.d)**degree);
+  if(e.degree===2)assert(target.n*e.sign>=0,'square root is nonnegative before the outer minus');
+  assert(C.validate(t,solution(t)).ok);
+ }
+ assert.equal(forms.size,8);
+ const squared=C.generate('rootcalc',{level:1,variant:4});assert.equal(squared.target.n,4);assert.equal(C.validate(squared,{...solution(squared),values:['-4','']}).code,'root-value');
+ const fraction=C.generate('rootcalc',{level:1,variant:6});assert.deepEqual(fraction.target,C.rational(5,4));
+ assert.equal(C.parseExact('1/0'),null);assert.equal(C.parseExact('1//2'),null);assert.deepEqual(C.parseExact('−5/4'),C.rational(-5,4));
+});
+test('simplification extracts the largest power and diagnoses equivalent unfinished forms',()=>{
+ for(let variant=0;variant<6;variant++)for(let seed=1;seed<=40;seed++){
+  const t=C.generate('rootsimplify',{level:2,variant,seed}),a=solution(t),c=t.target.coefficient,d=BigInt(t.degree);
+  assert.equal(BigInt(Math.abs(c.n))**d*BigInt(t.target.inside)*BigInt(t.radicand.d),BigInt(Math.abs(t.radicand.n))*BigInt(c.d)**d);
+  for(let k=2;k**t.degree<=t.target.inside;k++)assert.notEqual(t.target.inside%(k**t.degree),0);
+  assert(C.validate(t,a).ok);
+  if(t.radicand.d===1){const unfinished={...a,values:[String(t.source.sign*Math.sign(t.radicand.n)),String(Math.abs(t.radicand.n))]};assert.equal(C.validate(t,unfinished).code,'root-simplify');}
+ }
+ const t=C.generate('rootsimplify',{level:2,variant:4});assert.deepEqual(t.target,{coefficient:C.rational(5,8),inside:5});
+ assert.equal(C.validate(t,{...solution(t),values:['10/16','5']}).code,'root-coefficient');
+ const cube=C.generate('rootsimplify',{level:2,variant:5});assert.deepEqual(cube.target,{coefficient:C.rational(3,5),inside:2});
+});
+test('new estimation asks for the root immediately; old drafts retain their two stages',()=>{
+ for(let variant=0;variant<3;variant++){
+  const t=C.generate('root',{level:1,variant});assert(t.directBounds);assert.equal(C.freshAnswer(t).stage,1);assert.match(t.prompt,/gehele getallen/);
+  assert(C.validate(t,solution(t)).ok);assert(L.build(t).every(step=>step.answer.stage===1));
+  assert.equal(C.freshAnswer(C.generate('root',{contentVersion:2,level:1,variant})).stage,0);
+ }
+});
+test('periods default to three repetitions and ellipsis, with an optional alternate notation lesson',()=>{
+ assert.equal(C.label({kind:'period',whole:0,lead:'1',repeat:'6'}),'0,1666…');
+ assert.equal(C.label({kind:'period',whole:0,repeat:'27'}),'0,272727…');
+ const t=C.generate('period'),steps=L.build(t);assert.equal(steps.filter(s=>s.alternatePeriod).length,1);assert(!steps[0].alternatePeriod);
 });
 module.exports={solution};
 test('interval endpoints retain their inclusion regardless of construction order',()=>{
@@ -79,7 +120,7 @@ test('decimal type and nested-set membership depend on value rather than notatio
  const t=C.generate('sets'),a=solution(t);assert.equal(new Set(t.target).size,4);const natural=t.target.indexOf('N');a.placements[natural]='R';assert.equal(C.validate(t,a).code,'sets','larger containing set is not the requested smallest');
 });
 test('old learning states retain XP and answers while newly introduced skills start fresh',()=>{
- const p=P.fresh();delete p.skills.sets;delete p.skills.decimaltype;p.xp=42;p.skills.root.clean=3;
- const restored=P.sanitize(p);assert.equal(restored.xp,42);assert.equal(restored.skills.root.clean,3);assert.equal(restored.skills.sets.seen,0);assert.equal(restored.skills.decimaltype.seen,0);
+ const p=P.fresh();delete p.skills.sets;delete p.skills.decimaltype;delete p.skills.rootcalc;delete p.skills.rootsimplify;p.xp=42;p.skills.root.clean=3;
+ const restored=P.sanitize(p);assert.equal(restored.xp,42);assert.equal(restored.skills.root.clean,3);assert.equal(restored.skills.sets.seen,0);assert.equal(restored.skills.decimaltype.seen,0);assert.equal(restored.skills.rootcalc.seen,0);assert.equal(restored.skills.rootsimplify.seen,0);
  const t=C.generate('root',{contentVersion:1,level:1,variant:2});assert.equal(t.source.sign,1);assert.equal(t.degree,undefined);
 });

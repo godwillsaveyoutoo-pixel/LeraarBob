@@ -4,6 +4,20 @@ LeraarBob heeft een gedeelde platformlaag en verschillende vakinhoudelijke
 spel- en trainermotoren. Nieuwe functies komen in de laag die verantwoordelijk
 is voor dat gedrag, zodat spellen geen kopieën van platformcode nodig hebben.
 
+## Catalogus en nieuwe spelmappen
+
+`games.json` is de enige bewerkbare bron voor de startpaginacatalogus.
+`node scripts/build-catalog.cjs` genereert `js/catalog.js`, zodat openen via
+`file://` en de offlinefallback dezelfde gegevens gebruiken. De controle met
+`--check` wijzigt niets en faalt wanneer de kopie achterloopt. De GitHub-workflow
+`catalog.yml` voert deze controle en de catalogustests uit bij push en pull request.
+De database-registratie voor leraarzichtbaarheid blijft een afzonderlijke
+serverregistratie; de generator schrijft niet naar Supabase.
+
+Nieuwe onderdelen gebruiken `games/<game-id>/index.html` met lokale modules en
+assets. Oudere paden worden alleen bij een gerichte migratie verplaatst, met
+behoud van bestaande links, spel-id's en accountopslag.
+
 ## Navigatie: één bestemming per bediening
 
 - **leraarBob-logo**: de startpagina van de website, ook op GitHub Pages onder
@@ -274,7 +288,7 @@ nummers op het rooster en op de knoppen. De menutegel gebruikt dezelfde conventi
 
 ## Trainer Reële Getallen
 
-`games/reele-getallen/` bevat tien werkvormen, met geneste verzamelingen en decimale classificatie.
+`games/reele-getallen/` bevat twaalf werkvormen, met geneste verzamelingen en decimale classificatie.
 De leerroute start met breuken bouwen, plaatsen, vergelijken en equivalenten
 groeperen. Wortelgrenzen verbinden dit met intervallen en getalsoorten; periodieke
 decimalen volgen na een eigen introductie. Elke familie heeft stapsgewijze uitleg
@@ -285,34 +299,34 @@ gebouwd met `node scripts/build-real-trainer.cjs`.
 
 Deze versie gebruikt rationele invoer, geijkte lijnen, eindige en onbegrensde
 intervallen, positieve en negatieve vierkantswortelwaarden, derdemachtswortels
-van positieve en negatieve getallen, en korte periodes. Intervallen worden uit
+van positieve en negatieve getallen, en korte periodes. Perioden worden standaard drie keer herhaald met …; alleen één uitlegstap toont de streepnotatie als alternatief. Intervallen worden uit
 ongelijkheden, natuurlijke taal of verzamelingsnotatie opgebouwd. De gebruikte
 conventie voor ℝ⁺/ℝ⁻ staat bij de opgave; een oneindige kant heeft een pijl en
 is altijd open. De geneste sleepgebieden tonen ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ en vragen om de
 kleinste passende verzameling. Decimale classificatie onderscheidt eindig,
 zuiver repeterend, gemengd repeterend en irrationaal, op grond van de waarde.
 
-Nieuwe concepten hebben `contentVersion: 2`; bestaande opgeslagen oefeningen
+Nieuwe concepten hebben `contentVersion: 3`; bestaande opgeslagen oefeningen
 zonder versie worden met de oude generatorvarianten hervat. De voortgangsversie
 en opslagkey blijven gelijk, met lege vaardigheidsvelden voor nieuwe onderdelen.
-Zoom, wortelalgebra en de overige werkvormen uit de 31-templatebank volgen later.
+Exact wortelrekenen en wortelvormen vereenvoudigen zijn aparte vaardigheden (`rootcalc` en `rootsimplify`), vóór schatten. De berekening bevat mintekens, machten, wortels van breuken en het onderscheid met geen reële waarde. Vereenvoudigen omvat kwadraat- en derdemachtsfactoren, ook in breuken. De overige werkvormen uit de 31-templatebank volgen later.
 De 155 vaste documentitems zijn niet als volledige bank overgenomen.
 
 Na twee zelfstandige antwoorden opent een volgend begrip. Stevig vereist vier
 zelfstandige antwoorden, drie verschillende opgaven, twee voorstellingen, een
 latere herhaling en drie recente juiste antwoorden zonder open herstelvraag.
 Dit is een toetsbare ontwerpregel, geen bewezen maat voor leerwinst. Een reeks
-heeft acht opgaven; beide stappen van wortelbegrenzing vormen één opgave.
+heeft acht opgaven. Nieuwe schatopgaven vragen meteen naar gehele grenzen voor de wortelwaarde; de naburige machten zijn een hulpmiddel in de uitleg. Opgeslagen v1/v2-opgaven behouden hun twee stappen.
 Zelfstandig oplossen levert 10–14 XP, een herstelvraag 15 XP, opgelost na hulp of
 verbetering 5 XP. Voorbeelden en overslaan leveren geen XP. Zelfgekozen onderwerpen gebruiken dezelfde beoordeling, XP en foutopvolging als de leerroute. `topic` bepaalt alleen de onderwerpkeuze; `suspendedSeries` bewaart de onderbroken routeopgave. Beide delen dezelfde sessieteller. Oude `free`-opgaven worden bij het hervatten omgezet naar een zelfgekozen onderwerp; reeds afgeronde antwoorden krijgen niet opnieuw XP.
 
-De registratie is `reele-getallen-trainer`, met tien vaardigheden en opslagkey
+De registratie is `reele-getallen-trainer`, met twaalf vaardigheden en opslagkey
 `axioma-real-numbers-v1`. De gedeelde accountlaag bewaart leerroute, XP, sessie,
 invoer, uitlegstap en feedback. De database gebruikt de bestaande tabellen en
 accountcontrole; `supabase_real_numbers.sql` registreert alleen het spel. Die
 registratie is uitgevoerd en teruggelezen. Leerlinggegevens zijn niet gewijzigd.
 
-Controles: `tests/real-numbers.test.cjs` (1.800 opgavevarianten en hun voorbeelden),
+Controles: `tests/real-numbers.test.cjs` (2.160 opgavevarianten en hun voorbeelden),
 `tests/real-numbers-browser.cjs` (640/780 × 360, touch/pointer, toetsenbord, uitleg,
 foutfeedback, XP, herladen, thema's, portretuitleg en offline HTML) en de uitgebreide
 `tests/account-progress-browser.cjs` (hervatten op een tweede toestel met fictieve

@@ -126,7 +126,7 @@ const mock=`(()=>{
   console.log('PASS real numbers: earned XP, learning route and completed answer restored on a second device');
   await real.eval(`document.querySelector('#topicsNav').click();document.querySelectorAll('#topics .topic-card button')[RealNumbersCore.skills.findIndex(s=>s.id==='sets')].click();while(AxiomaRealTrainer.inspect().phase==='intro')document.querySelector('#commit').click();document.querySelector('[data-sort-token="0"]').click();document.querySelector('[data-zone="R"]').click()`);
   await real.wait(`AxiomaGame.status==='saved'&&JSON.parse(testRow.state.storage['axioma-real-numbers-v1']).draft.answer.placements[0]==='R'`);
-  const sortedBefore=await real.eval('AxiomaRealTrainer.inspect()'),sortedRemote=await real.eval('testRow.state');assert.equal(sortedRemote.total,10);
+  const sortedBefore=await real.eval('AxiomaRealTrainer.inspect()'),sortedRemote=await real.eval('testRow.state');assert.equal(sortedRemote.total,12);
   const real3=await open(game('reele-getallen-trainer'),{remote:sortedRemote});assert.deepEqual(await real3.eval('AxiomaRealTrainer.inspect().answer'),sortedBefore.answer,'nested-set placement restored on another device');assert.equal(await real3.eval('AxiomaRealTrainer.inspect().progress.xp'),10);
   assert.equal(await real3.eval('AxiomaRealTrainer.inspect().topic'),'sets');
   await real3.eval(`AxiomaRealTrainer.inspect().task.target.forEach((zone,i)=>{document.querySelector('[data-sort-token="'+i+'"]').click();document.querySelector('[data-zone="'+zone+'"]').click()});document.querySelector('#commit').click()`);
@@ -135,6 +135,17 @@ const mock=`(()=>{
   await real3.eval(`document.querySelector('#seriesReturn').click()`);
   const routeBack=await real3.eval('AxiomaRealTrainer.inspect()');assert.equal(routeBack.topic,null);assert.deepEqual(routeBack.answer,realBefore.answer);assert.equal(routeBack.session.answered,2);assert.equal(routeBack.progress.xp,20);
   console.log('PASS real numbers: automatic account saves, chosen topic and partial sorting on a second device; shared XP, mastery and session count on return to route');
+  const realCore=require('../games/reele-getallen/real-core.js'),rootRemote=structuredClone(sortedRemote),rootData=JSON.parse(rootRemote.storage['axioma-real-numbers-v1']);
+  const rootTask=realCore.generate('rootcalc',{level:2,variant:6,seed:13});
+  rootData.draft={...rootTask,phase:'answer',topic:'rootcalc',session:{answered:1,clean:1,xp:10},answer:{...realCore.freshAnswer(rootTask),values:['5/','']}};
+  rootRemote.storage['axioma-real-numbers-v1']=JSON.stringify(rootData);
+  const real4=await open(game('reele-getallen-trainer'),{remote:rootRemote});
+  assert.equal(await real4.eval('AxiomaRealTrainer.inspect().answer.values[0]'),'5/','partial fraction restored');
+  assert.deepEqual(await real4.eval('AxiomaRealTrainer.inspect().task.source'),rootTask.source);
+  await real4.eval(`document.querySelector('[data-key="4"]').click();document.querySelector('#commit').click()`);
+  await real4.wait(`AxiomaGame.status==='saved'&&JSON.parse(testRow.state.storage['axioma-real-numbers-v1']).progress.skills.rootcalc.clean===1`);
+  assert.equal(await real4.eval('AxiomaRealTrainer.inspect().phase'),'done');assert.equal(await real4.eval('testRow.state.total'),12);
+  console.log('PASS real numbers: new rational cube-root task and partially entered fraction survive account restoration and earn saved XP');
 
 
   for(const role of [null,{id:'teacher',role:'teacher'}]){

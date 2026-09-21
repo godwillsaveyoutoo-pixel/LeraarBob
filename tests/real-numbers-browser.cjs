@@ -17,7 +17,7 @@ const BASE='http://127.0.0.1:8765/games/reele-getallen/';
  const ev=x=>c.eval(x),click=s=>ev(`document.querySelector(${JSON.stringify(s)}).click()`);
  const size=async(width,height)=>{await c.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:false});await new Promise(r=>setTimeout(r,60))};
  await size(640,360);await c.send('Page.navigate',{url:BASE});await c.wait('!!window.AxiomaRealTrainer');
- assert.equal(await ev('document.body.dataset.screen'),'stage');await click('#topicsNav');assert.equal(await ev('document.body.dataset.screen'),'library');assert.equal(await ev('document.querySelectorAll("#topics .topic-card").length'),10);await click('#resume');
+ assert.equal(await ev('document.body.dataset.screen'),'stage');await click('#topicsNav');assert.equal(await ev('document.body.dataset.screen'),'library');assert.equal(await ev('document.querySelectorAll("#topics .topic-card").length'),12);await click('#resume');
  const inspect=()=>ev('AxiomaRealTrainer.inspect()');
  async function fixture(skill,opts={}){
   const t=C.generate(skill,{seed:41,level:1,variant:1,...opts}),draft={...t,phase:'answer',answer:C.freshAnswer(t),free:true,session:{answered:0,clean:0,xp:0},...opts};
@@ -32,7 +32,10 @@ const BASE='http://127.0.0.1:8765/games/reele-getallen/';
   if(t.skill==='compare')await click(`[data-relation="${a.relation}"]`);
   if(t.skill==='line')await point(C.number(t.target),t);
   if(t.skill==='group')for(let i=0;i<6;i++){await click(`[data-select-group="${a.groups[i]}"]`);await click(`[data-token="${i}"]`)}
-  if(t.skill==='root'){await enter([String(t.k**(t.degree||2)),String((t.k+1)**(t.degree||2))]);await click('#commit');assert.equal((await inspect()).phase,'feedback');assert.equal((await inspect()).progress.xp,0);await click('#commit');await enter(a.values);}
+  if(t.skill==='root'&&!t.directBounds){await enter([String(t.k**(t.degree||2)),String((t.k+1)**(t.degree||2))]);await click('#commit');assert.equal((await inspect()).phase,'feedback');assert.equal((await inspect()).progress.xp,0);await click('#commit');await enter(a.values);}
+  if(t.skill==='root'&&t.directBounds)await enter(a.values);
+  if(t.skill==='rootcalc'){if(a.noReal)await click('[data-toggle="noReal"]');else {for(const digit of a.values[0])await click(`[data-key="${digit==='-'?'sign':digit==='/'?'slash':digit}"]`);}}
+  if(t.skill==='rootsimplify'){for(let i=0;i<2;i++){await click(`[data-slot="${i}"]`);for(const digit of a.values[i])await click(`[data-key="${digit==='-'?'sign':digit==='/'?'slash':digit}"]`);}}
   if(t.skill==='interval'){if(t.hi===null)await click('[data-infinity="inf"]');else {await point(t.hi,t);if(a.closedHi)await point(t.hi,t);}if(t.lo===null)await click('[data-infinity="-inf"]');else {await point(t.lo,t);if(a.closedLo)await point(t.lo,t);}}
   if(t.skill==='sets')for(let i=0;i<t.tokens.length;i++){await click(`[data-sort-token="${i}"]`);await click(`[data-zone="${a.placements[i]}"]`);}
   if(t.skill==='decimaltype')await click(`[data-decimal-type="${a.decimalType}"]`);
@@ -67,7 +70,7 @@ const BASE='http://127.0.0.1:8765/games/reele-getallen/';
  console.log('PASS: chosen topics earn XP, survive reload, preserve route answers and shared session totals; legacy free drafts migrate; help and resume preserve topic');
  for(const width of [640,780]){
   await size(width,360);
-  for(const sk of C.skills){await fixture(sk.id);await layout(sk.id+' '+width);await solve();await layout(sk.id+' feedback '+width);if(sk.id==='period')assert(await ev('!!document.querySelector(".feedback-picture mover")'),'exact period has a real overbar');assert((await inspect()).progress.xp>0,'chosen topics earn XP');
+  for(const sk of C.skills){await fixture(sk.id);await layout(sk.id+' '+width);await solve();await layout(sk.id+' feedback '+width);if(sk.id==='period')assert(!await ev('!!document.querySelector(".feedback-picture mover")'),'standard period uses three repetitions and ellipsis');assert((await inspect()).progress.xp>0,'chosen topics earn XP');
    await fixture(sk.id,{phase:'intro',free:false,level:0});const exampleSignature=(await inspect()).task.signature;while((await inspect()).phase==='intro'){await layout(sk.id+' intro '+width+' step '+(await inspect()).lessonStep);await click('#commit');}assert.equal((await inspect()).progress.xp,0);assert.notEqual((await inspect()).task.signature,exampleSignature,'independent task differs from worked example');
   }
  }
@@ -77,6 +80,13 @@ const BASE='http://127.0.0.1:8765/games/reele-getallen/';
   for(let variant=0;variant<12;variant++){
    await fixture('interval',{variant});await layout('interval '+variant+' at '+width);await solve();
    await fixture('decimaltype',{variant});await layout('decimal type '+variant);await solve();
+   await fixture('rootcalc',{variant,level:2});await layout('exact root '+variant);await solve();await layout('exact root feedback '+variant);
+   await fixture('rootcalc',{variant,level:2,phase:'intro'});while((await inspect()).phase==='intro'){await layout('exact root lesson '+variant);await click('#commit');}
+  }
+  for(let variant=0;variant<6;variant++){
+   await fixture('rootsimplify',{variant,level:2});await layout('simplify root '+variant);await solve();await layout('simplify feedback '+variant);
+   if(variant===4&&width===640){const shot=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/real-simplify-fraction.png',Buffer.from(shot.data,'base64'));}
+   await fixture('rootsimplify',{variant,level:2,phase:'intro'});while((await inspect()).phase==='intro'){await layout('simplify root lesson '+variant);await click('#commit');}
   }
   for(const variant of [1,2]){
    await fixture('root',{variant,level:1});await solve();
@@ -137,7 +147,7 @@ const BASE='http://127.0.0.1:8765/games/reele-getallen/';
  const lineRect=await ev('document.getElementById("numberline").getBoundingClientRect().toJSON()');await c.send('Input.dispatchMouseEvent',{type:'mousePressed',x:lineRect.x+30,y:lineRect.y+45,button:'left',clickCount:1});await ev('document.getElementById("numberline").dispatchEvent(new PointerEvent("pointercancel"))');await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',x:lineRect.x+30,y:lineRect.y+45,button:'left',clickCount:1});assert.equal((await inspect()).answer.tick,cursor,'cancel restores previous placement');
  await fixture('group');for(let i=0;i<6;i++)await click(`[data-token="${i}"]`);await click('#commit');assert.equal((await inspect()).phase,'feedback');assert.equal((await inspect()).progress.skills.group.repair,'equivalence','chosen-topic error recorded before task completion');await layout('group error context');assert.equal(await ev('document.querySelectorAll(".feedback-picture math").length'),2,'the incorrect pair stays visible');
  await fixture('fraction',{free:false});await click('[data-key="2"]');const partial=(await inspect()).answer;await c.send('Page.reload');await c.wait('!!window.AxiomaRealTrainer');assert.deepEqual((await inspect()).answer,partial,'unfinished draft survives reload');await click('#helpNav');await click('#helpTopics button');while((await inspect()).preview)await click('#commit');assert.deepEqual((await inspect()).answer,partial);assert.equal((await inspect()).progress.xp,0);
- console.log('PASS: ten exercise families and all lesson steps at 640 and 780 × 360; real controls solve every task');
+ console.log('PASS: twelve exercise families and all lesson steps at 640 and 780 × 360; real controls solve every task');
  await fixture('fraction',{free:false,level:0});let before=await inspect();await enter(['1','0']);await click('#commit');assert.equal((await inspect()).dirty,false,'invalid denominator is not a math error');await click('#commit');await click('[data-slot="0"]');await click('[data-key="clear"]');await click('[data-slot="1"]');await click('[data-key="clear"]');await solve();
  const won=await inspect();assert.equal(won.progress.xp,10);assert.equal(won.session.answered,1);await new Promise(r=>setTimeout(r,1700));assert.equal((await inspect()).task.seed,won.task.seed,'feedback does not auto-advance');
  await c.send('Page.reload');await c.wait('!!window.AxiomaRealTrainer');assert.equal((await inspect()).progress.xp,10);assert.equal((await inspect()).phase,'done');

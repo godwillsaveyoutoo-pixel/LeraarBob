@@ -7,7 +7,11 @@ blijven compatibel met bestaande accounts, integraties en opgeslagen voortgang.
 De catalogus gebruikt `kind` voor de werkvorm op de startpagina: `learn` = Verkennen,
 `train` = Oefenen, `game` / `arcade` = Spelen. Onderwerpfilters gebruiken `theme`.
 `gameType` en `progressType` beschrijven de bestaande registratie en voortgang.
-Werk zowel `games.json` als de offlinekopie `js/catalog.js` bij als de catalogus wijzigt.
+`games.json` is de enige bewerkbare catalogusbron. Genereer de offlinekopie met
+`node scripts/build-catalog.cjs` en neem `js/catalog.js` mee in dezelfde commit.
+Wijzig dat gegenereerde bestand niet met de hand. Controleer met
+`node scripts/build-catalog.cjs --check`; GitHub voert die controle bij elke push
+en pull request uit, zodra de workflow is gepusht.
 
 ## Actuele account- en spelkoppeling
 
@@ -22,14 +26,19 @@ tegenstanders als solo tegen de computer.
 - `index.html` = frontpage
 - `games.json` = tegels op de frontpage
 - `games/.../index.html` = zelfstandige spellen
-- `assets/covers/` = later echte coverbeelden
+- `assets/covers/` = coverillustraties voor de spelkaarten
 - `js/supabase-config.js` = gereserveerd voor gedeelde Supabase-config
 
 ## Nieuw spel toevoegen
-1. Maak bijvoorbeeld `games/pythagoras/`.
+1. Maak `games/<game-id>/` met een vaste, unieke spel-id.
 2. Zet je spel daarin als `index.html`.
 3. Voeg één item toe aan `games.json`.
-4. Push naar GitHub.
+4. Voer `node scripts/build-catalog.cjs` uit en controleer met `node scripts/build-catalog.cjs --check`.
+5. Neem bron en gegenereerde kopie samen mee in je commit en push naar GitHub.
+
+Nieuwe spellen gebruiken `games/<game-id>/index.html`, met hun eigen modules en
+assets in die map. Verplaats oudere spellen wanneer er toch inhoudelijk aan wordt
+gewerkt; behoud dan oude links en bestaande opslagkeys.
 
 Voorbeeld:
 ```json
@@ -98,8 +107,11 @@ De centrale leraarpagina staat op:
 teacher/
 ```
 
-Die pagina toont voorlopig de bestaande Rechtentrainer-resultaten. Nieuwe spellen
-kunnen later als extra databronnen aan hetzelfde leraarBob-dashboard worden toegevoegd.
+Die pagina toont Rechtentrainer-resultaten en gedeelde voortgang van de andere
+geregistreerde, zichtbare onderdelen. De Rechtentrainer heeft vaardigheidsmeters;
+de andere onderdelen hebben een algemeen overzicht en tonen in het leerlingdetail
+nog de opgeslagen gegevens. Leesbare vaardigheidsdetails voor de andere trainers
+zijn een volgende uitbreiding.
 
 ### Nieuw spel met leraarBob-login
 

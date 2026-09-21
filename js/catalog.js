@@ -1,3 +1,5 @@
+// Automatisch gegenereerd uit games.json. Wijzig de bron, niet dit bestand.
+// Opnieuw bouwen: node scripts/build-catalog.cjs
 window.AXIOMA_CATALOG = [
   {
     "title": "Rechtentrainer",
@@ -161,13 +163,13 @@ window.AXIOMA_CATALOG = [
     "theme": "Getallen",
     "art": "numbers",
     "cover": "assets/covers/reele-getallen.svg",
-    "detail": "8 vaardigheden · leervoortgang bewaard",
+    "detail": "12 vaardigheden · leervoortgang bewaard",
     "id": "reele-getallen-trainer",
     "progressType": "levels",
     "teacherVisible": true,
     "gameType": "train",
     "tracking": "progress",
-    "progressTotal": 8,
+    "progressTotal": 12,
     "progressUnitSingular": "vaardigheid",
     "progressUnitPlural": "vaardigheden"
   },
