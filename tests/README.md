@@ -16,6 +16,23 @@ De controle gebruikt echte muis-, toetsenbord- en touchgebeurtenissen: getaltege
 schaalfactor, formuletegels, klikken, verkeerde plaatsingen, dubbele rechthoekszijden,
 annuleren, Escape, herstarten, wisselen van stap en liggende/staande weergave.
 
+## Wortelbouw
+
+Met dezelfde server en geïsoleerde Chromium:
+
+```sh
+node tests/wortelbouw.test.cjs
+node tests/wortelbouw-browser.cjs
+```
+
+De geometriecontrole verifieert 840 maat/richting/spiegelcombinaties, exact
+grenscontact, echte overlap, verbondenheid, minimale routes en herstel per stuk.
+De browser plaatst alle stukken van alle zes puzzels met aanraakgebeurtenissen
+op 780×360 en 640×360, controleert voortijdige onthullingen ook in canvaslabels,
+undo tijdens de animatie, toetsenbord, schermrotatie, overlappende knoppen en
+tekenen in rust. Screenshots verschijnen in `/tmp/wortelbouw-*.png`.
+Zie [speelverslag en acceptatie](../docs/wortelbouw-playthrough.md).
+
 ## Zeeslag en platformuitnodigingen
 
 Met dezelfde lokale server en geïsoleerde Chromium:

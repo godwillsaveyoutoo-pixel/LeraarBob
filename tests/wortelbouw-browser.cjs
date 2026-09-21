@@ -1,0 +1,81 @@
+// Real touch/mouse/keyboard events in a fresh browser context. No account or cloud writes.
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+class CDP{
+  async connect(url){this.ws=new WebSocket(url);this.id=0;this.pending=new Map();this.errors=[];await new Promise(r=>this.ws.onopen=r);this.ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){const p=this.pending.get(m.id);this.pending.delete(m.id);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result)}else if(m.method==='Runtime.exceptionThrown')this.errors.push(m.params.exceptionDetails)}}
+  send(method,params={}){return new Promise((resolve,reject)=>{const id=++this.id;this.pending.set(id,{resolve,reject});this.ws.send(JSON.stringify({id,method,params}))})}
+  async eval(expression){const r=await this.send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value}
+  async wait(expression){for(let i=0;i<100;i++){if(await this.eval(expression))return;await delay(50)}throw Error('Timeout: '+expression)}
+}
+const routes=[{start:3,steps:[['sum',2,0]]},{start:4,steps:[['difference',2,2]]},{start:3,steps:[['sum',2,0],['sum',1,3]]},{start:4,steps:[['difference',3,0]]},{start:4,steps:[['difference',1,1]]},{start:5,steps:[['difference',2,1]]}];
+(async()=>{
+  const browser=new CDP();await browser.connect((await(await fetch('http://127.0.0.1:9235/json/version')).json()).webSocketDebuggerUrl);
+  const {browserContextId}=await browser.send('Target.createBrowserContext');
+  const {targetId}=await browser.send('Target.createTarget',{url:'about:blank',browserContextId});
+  const tab=(await(await fetch('http://127.0.0.1:9235/json')).json()).find(t=>t.id===targetId);
+  const c=new CDP();await c.connect(tab.webSocketDebuggerUrl);await c.send('Page.enable');await c.send('Runtime.enable');
+  // Capture actual text submitted to canvas, including labels absent from the DOM.
+  await c.send('Page.addScriptToEvaluateOnNewDocument',{source:`window.drawnText=[];const original=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(t,...args){drawnText.push(String(t));return original.call(this,t,...args)};`});
+  const inspect=()=>c.eval('Wortelbouw.inspect()');
+  async function tap(selector,touch=true){
+    const p=await c.eval(`(()=>{const b=document.querySelector(${JSON.stringify(selector)});if(!b||b.disabled)throw Error('Unavailable '+${JSON.stringify(selector)});const r=b.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2,width:r.width,height:r.height}})()`);
+    assert(p.width>=44&&p.height>=44,'semantic touch target >=44 px: '+selector);
+    if(touch){await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:p.x,y:p.y}]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]})}
+    else for(const type of ['mousePressed','mouseReleased'])await c.send('Input.dispatchMouseEvent',{type,x:p.x,y:p.y,button:'left',clickCount:1});
+  }
+  async function shot(name){const r=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(`/tmp/wortelbouw-${name}.png`,Buffer.from(r.data,'base64'))}
+  async function fits(){
+    assert(await c.eval('document.documentElement.scrollWidth<=innerWidth&&document.documentElement.scrollHeight<=innerHeight'),'no scrolling');
+    assert(await c.eval(`[...document.querySelectorAll('button:not([hidden])')].filter(b=>b.getClientRects().length).every(b=>{const r=b.getBoundingClientRect();return r.left>=0&&r.top>=0&&r.right<=innerWidth+.5&&r.bottom<=innerHeight+.5})`),'all controls inside the viewport');
+    assert(await c.eval(`(()=>{const r=[...document.querySelectorAll('footer button')].filter(b=>b.getClientRects().length).map(b=>b.getBoundingClientRect());return r.every((a,i)=>r.slice(i+1).every(b=>Math.min(a.right,b.right)-Math.max(a.left,b.left)<=0||Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)<=0))})()`),'footer controls do not overlap');
+    assert(await c.eval(`(()=>{const d=Wortelbouw.inspect(),r=document.querySelector('#stage').getBoundingClientRect();return d.state.objects.flatMap(o=>o.points).every(p=>{const x=d.camera.x+p.x*d.camera.unit,y=d.camera.y-p.y*d.camera.unit;return x>=0&&y>=0&&x<=r.width&&y<=r.height})})()`),'camera contains every placed piece');
+  }
+  for(const width of [780,640]){
+    await c.send('Emulation.setDeviceMetricsOverride',{width,height:360,deviceScaleFactor:1,mobile:true});await c.send('Emulation.setTouchEmulationEnabled',{enabled:true});
+    await c.send('Page.navigate',{url:'http://127.0.0.1:8765/games/wortelbouw/'});await c.wait('!!window.Wortelbouw');
+    await fits();await shot(`${width}-start`);
+    for(let level=0;level<routes.length;level++){
+      const route=routes[level];assert.equal((await inspect()).state.level,level);
+      await tap(`[data-length="${route.start}"]`);await tap('[data-target="start"]');
+      for(const [index,[mode,k,edgeIndex]] of route.steps.entries()){
+        await tap(`[data-mode="${mode}"]`);await tap(`[data-length="${k}"]`);await tap(`[data-target="edge-${edgeIndex}"]`);
+        assert((await inspect()).preview?.valid,'preview physically fits');await fits();
+        if(level===0&&index===0){await shot(`${width}-triangle`);await tap('#flip');assert.equal((await inspect()).flip,true);await tap('#flip')}
+        await c.eval('drawnText=[]');await tap('[data-target="triangle"]');assert.equal((await inspect()).state.phase,'helper');
+        assert.equal(await c.eval(`drawnText.some(t=>t==='√'+Wortelbouw.inspect().state.pending.result.area)`),false,'result hidden after triangle');
+        await tap('[data-target="helper"]');assert.equal((await inspect()).state.phase,'result');
+        if(level===1)await shot(`${width}-before-reveal`);
+        assert.equal(await c.eval(`drawnText.some(t=>t==='√'+Wortelbouw.inspect().state.pending.result.area)`),false,'result hidden after helper');
+        await tap('[data-target="result"]');await c.wait(`Wortelbouw.inspect().state.phase!=='reveal'`);
+        if(level===0){
+          // Undo removes the result and hides its exact label again, then re-place.
+          await tap('#undo');assert.equal((await inspect()).state.phase,'result');assert.equal(await c.eval(`document.querySelector('#cordLabel').hidden`),true);
+          await c.eval('drawnText=[]');await c.send('Emulation.setDeviceMetricsOverride',{width,height:360,deviceScaleFactor:1,mobile:true});
+          assert.equal(await c.eval(`drawnText.some(t=>t==='√13')`),false);
+          await tap('[data-target="result"]');await c.wait(`Wortelbouw.inspect().state.phase==='won'`);
+        }
+      }
+      const s=(await inspect()).state;assert.equal(s.phase,'won');assert.equal(s.steps,route.steps.length);
+      assert.equal(await c.eval(`document.querySelector('#cordLabel').textContent`),'√'+[13,12,14,7,15,21][level]);
+      await fits();await shot(`${width}-puzzle-${level+1}`);
+      console.log(`PASS ${width}×360: puzzle ${level+1}, ${s.steps} step(s), all pieces placed through touch`);
+      if(level<routes.length-1)await tap('#continue');
+    }
+  }
+  // Undo during the animation must cancel the pending reveal, without stale callbacks.
+  await tap('#next');await tap('[data-length="3"]');await tap('[data-target="start"]');await tap('[data-length="2"]');await tap('[data-target="edge-0"]');await tap('[data-target="triangle"]');await tap('[data-target="helper"]');await tap('[data-target="result"]');await tap('#undo');
+  await delay(800);assert.equal((await inspect()).state.phase,'result');assert.equal(await c.eval(`document.querySelector('#cordLabel').hidden`),true);
+  // Keyboard placement, pointer cancellation and rotation preserve the pending construction.
+  await c.eval(`document.querySelector('[data-target="result"]').focus()`);
+  await c.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',windowsVirtualKeyCode:13});await c.send('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});await c.wait(`Wortelbouw.inspect().state.phase==='won'`);
+  const snapshot=JSON.stringify((await inspect()).state);
+  await c.send('Emulation.setDeviceMetricsOverride',{width:360,height:640,deviceScaleFactor:1,mobile:true});await delay(100);assert.equal(await c.eval(`getComputedStyle(document.querySelector('#rotate')).display`),'flex');await shot('portrait');
+  await c.send('Emulation.setDeviceMetricsOverride',{width:640,height:360,deviceScaleFactor:1,mobile:true});await delay(100);assert.equal(JSON.stringify((await inspect()).state),snapshot);await fits();
+  // Idle canvas must stop drawing; emulate constrained CPU for a fresh interaction.
+  const count=(await inspect()).renderCount;await delay(450);assert.equal((await inspect()).renderCount,count,'no continuous idle rendering');
+  await c.send('Emulation.setCPUThrottlingRate',{rate:6});await tap('#restart',false);await tap('[data-target="start"]',false);await tap('[data-length="2"]',false);await tap('[data-target="edge-0"]',false);
+  const before=performance.now();await tap('[data-target="triangle"]',false);await c.wait(`Wortelbouw.inspect().state.phase==='helper'`);const elapsed=performance.now()-before;console.log(`6× CPU throttle: triangle touch and render ${Math.round(elapsed)} ms (includes CDP roundtrips)`);assert(elapsed<1500);
+  await c.send('Emulation.setCPUThrottlingRate',{rate:1});assert.deepEqual(c.errors,[]);
+  await browser.send('Target.disposeBrowserContext',{browserContextId});c.ws.close();browser.ws.close();
+  console.log('PASS: reveal gating, every undo phase, keyboard, rotation, viewport fit and idle rendering');
+})().then(()=>process.exit(0),e=>{console.error(e);process.exit(1)});

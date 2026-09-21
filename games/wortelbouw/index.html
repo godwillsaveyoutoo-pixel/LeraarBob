@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f3efe3">
+  <title>Wortelbouw · leraarBob</title>
+  <link rel="stylesheet" href="wortelbouw.css">
+  <script src="../../shared/axioma-platform.js" defer></script>
+  <script src="geometry.js" defer></script>
+  <script src="wortelbouw.js" defer></script>
+</head>
+<body>
+<div id="app">
+  <header>
+    <a href="../../" data-platform-home class="home" aria-label="Naar leraarBob">leraarBob</a>
+    <div class="title">WORTELBOUW <span id="levelCount">1 / 6</span></div>
+    <h1 id="goal">Lengte √13</h1>
+    <span id="steps">0 stappen</span>
+    <button id="previous" class="tool" aria-label="Vorige puzzel">‹</button>
+    <button id="next" class="tool" aria-label="Volgende puzzel">›</button>
+  </header>
+  <main id="stage" aria-label="Mozaïekvloer">
+    <canvas id="floor" aria-hidden="true"></canvas>
+    <div id="targets" aria-label="Stukken op de vloer"></div>
+    <div id="notice" role="status" hidden></div>
+    <div id="cordLabel" hidden></div>
+  </main>
+  <footer>
+    <div class="instructionRow">
+      <div id="instruction" role="status"><strong>Kies je eerste tegel</strong><span>Meet een zijde van 1 tot 5.</span></div>
+      <div class="tools">
+        <button id="overview" class="tool" aria-label="Hele mozaïek in beeld" title="Hele mozaïek in beeld">⛶</button>
+        <button id="undo" class="tool" aria-label="Ongedaan maken" title="Ongedaan maken" disabled>↶</button>
+        <button id="restart" class="tool" aria-label="Deze puzzel opnieuw" title="Deze puzzel opnieuw">⟲</button>
+      </div>
+    </div>
+    <div id="workTools" class="workTools">
+      <div class="ruler" role="group" aria-label="Liniaal: bekende zijde">
+        <span class="rulerIcon" aria-hidden="true">↔</span>
+        <button data-length="1" aria-pressed="false">1</button><button data-length="2" aria-pressed="false">2</button><button data-length="3" aria-pressed="true">3</button><button data-length="4" aria-pressed="false">4</button><button data-length="5" aria-pressed="false">5</button>
+      </div>
+      <div class="modes" role="group" aria-label="Bouw op een rechthoekszijde of op de schuine zijde">
+        <button data-mode="sum" aria-pressed="true" title="Som: bestaande zijde wordt een rechthoekszijde"><svg viewBox="0 0 36 30" aria-hidden="true"><path d="M5 25V5L31 25Z"/><path class="knownSide" d="M5 25V5"/><path class="angle" d="M5 19h6v6"/></svg><span>Rechthoekszijde</span></button>
+        <button data-mode="difference" aria-pressed="false" title="Verschil: bestaande zijde wordt de schuine zijde"><svg viewBox="0 0 36 30" aria-hidden="true"><path d="M5 25V5L31 25Z"/><path class="knownSide" d="M5 5L31 25"/><path class="angle" d="M5 19h6v6"/></svg><span>Schuine zijde</span></button>
+      </div>
+      <button id="flip" class="tool" aria-label="Spiegel de driehoek" title="Spiegel de driehoek" disabled>⇄</button>
+    </div>
+    <div id="achievement" hidden><span id="relationship"></span><button id="continue">Volgende puzzel →</button></div>
+  </footer>
+</div>
+<aside id="rotate"><strong>Draai je toestel</strong><p>Leg je mozaïek met je scherm in de breedte.</p><a href="../../">Terug naar leraarBob</a></aside>
+</body>
+</html>

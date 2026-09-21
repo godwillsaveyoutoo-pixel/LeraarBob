@@ -112,6 +112,23 @@
     "progressUnitPlural": "stappen"
   },
   {
+    "title": "Wortelbouw",
+    "subtitle": "Leg een marmeren mozaïek en construeer exacte wortellengtes.",
+    "href": "games/wortelbouw/",
+    "category": "Pythagoras & wortels",
+    "kind": "game",
+    "accent": "mint",
+    "theme": "Meetkunde",
+    "art": "wortelbouw",
+    "cover": "assets/covers/wortelbouw.svg",
+    "detail": "6 bouwpuzzels · prototype",
+    "id": "wortelbouw",
+    "progressType": "none",
+    "teacherVisible": false,
+    "gameType": "game",
+    "tracking": "none"
+  },
+  {
     "title": "Vectorentrainer",
     "subtitle": "Construeer vectoren, reken met coördinaten en oefen gericht verder.",
     "href": "games/vectoren/Axioma_Vectorentrainer_v0.2.html",
