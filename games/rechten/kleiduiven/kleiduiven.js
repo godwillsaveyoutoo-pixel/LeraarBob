@@ -182,11 +182,20 @@ function groupActive(d=groupData){return d?.current&&d.member&&!d.member.left_at
 function groupOwnTab(d=groupData){return d?.member?.tab_id===d?.tabId}
 function groupNow(){return Date.now()+(groupData?.clockOffset||0)}
 function openGroupMenu(){if(!$('groupDialog').open)$('groupDialog').showModal();renderGroupMenu();window.AxiomaGroups?.refresh()}
+function renderLobbyGroups(){
+  const d=groupData,root=$('lobbyGroupList');
+  let html;
+  if(!d?.account)html='<p>Log in op leraarBob om een groep te openen of mee te doen.</p>';
+  else if(!d.connected)html='<p>Verbinding met de groepen wordt hersteld…</p>';
+  else html=d.sessions.length?d.sessions.map(s=>`<div class="groupRow"><div><strong>Groep van ${groupEscape(s.host_alias)}</strong><small>${s.player_count} spelers · ${s.speed} s per doel</small></div><button class="utilityBtn" data-group-action="join" data-id="${groupEscape(s.id)}" ${d.pending?'disabled':''}>Meedoen</button></div>`).join(''):'<p>Er is nog geen open groep. Open zelf de eerste!</p>';
+  if(root.innerHTML!==html)root.innerHTML=html;
+}
 function renderGroupMenu(){
+  renderLobbyGroups();
   const d=groupData,g=d?.current,active=groupActive(d),disabled=d?.pending||!d?.connected?'disabled':'';
   $('groupRanking').disabled=!d?.account||d?.pending;
   if(!d?.account){$('groupContent').innerHTML='<p>Log in op leraarBob om samen te spelen en in de ranglijst te komen.</p><a class="axiomaHome" href="../../../">Naar leraarBob →</a>';return}
-  let html='<p>De eerste speler met <strong>7 juiste antwoorden achter elkaar</strong> wint. Bij een misser of een verlopen timer begin je opnieuw bij de eerste richting. Iedereen krijgt hetzelfde tempo.</p>';
+  let html=(!d.connected?'<p role="status">Geen verbinding met de groepen. We proberen opnieuw verbinding te maken.</p>':'')+'<p>De eerste speler met <strong>7 juiste antwoorden achter elkaar</strong> wint. Bij een misser of een verlopen timer begin je opnieuw bij de eerste richting. Iedereen krijgt hetzelfde tempo.</p>';
   if(g&&g.id!==groupDismissed&&(active||g.status==='finished'||g.status==='cancelled')){
     html+=`<h3>${g.status==='finished'?groupEscape(g.winner_alias)+' wint!':g.status==='cancelled'?'Sessie gesloten':g.status==='running'?'De wedstrijd loopt':'Wachtkamer van '+groupEscape(g.host_alias)}</h3>`;
     html+=`<p>${g.speed} seconden per doel${g.elapsed_ms?' · winnende tijd '+clockText(g.elapsed_ms):''}</p>`;
@@ -201,7 +210,7 @@ function renderGroupMenu(){
   }else{
     html+='<h3>Open sessies</h3>';
     html+=d.sessions.length?d.sessions.map(s=>`<div class="groupRow"><div><strong>${groupEscape(s.host_alias)}</strong><small>${s.player_count} spelers · ${s.speed} s per doel</small></div><button class="utilityBtn" data-group-action="join" data-id="${s.id}" ${disabled}>Meedoen</button></div>`).join(''):'<p>Er wacht nog geen groep. Start er zelf één.</p>';
-    html+=`<div class="groupActions"><label for="groupSpeed">Tijd per doel</label><select id="groupSpeed"><option value="3">3 s</option><option value="5" selected>5 s</option><option value="8">8 s</option></select><button class="primary" data-group-action="create" ${disabled}>Sessie openen</button></div>`;
+    html+=`<div class="groupActions"><label for="groupSpeed">Tijd per doel</label><select id="groupSpeed"><option value="3">3 s</option><option value="5" selected>5 s</option><option value="8">8 s</option></select><button class="primary" data-group-action="create" ${disabled}>Groep openen</button></div>`;
   }
   if($('groupContent').innerHTML!==html){
     const chosen=$('groupSpeed')?.value;$('groupContent').innerHTML=html;
@@ -287,7 +296,7 @@ function finishGroupVisual(correct){
   later(()=>{attempt=null;busy=false;state='groupwait';scheduleGroupRound()},correct?GAP_MS:650);
 }
 $('openGroup').onclick=openGroupMenu;$('groupMenu').onclick=openGroupMenu;$('groupClose').onclick=()=>$('groupDialog').close();
-$('groupContent').onclick=async e=>{
+$('lobbyGroupList').onclick=$('groupContent').onclick=async e=>{
   const b=e.target.closest('[data-group-action]');if(!b||b.disabled||!window.AxiomaGroups)return;
   const action=b.dataset.groupAction;$('groupMessage').textContent='';
   try{
@@ -296,7 +305,7 @@ $('groupContent').onclick=async e=>{
     if(action==='join')await AxiomaGroups.join(b.dataset.id);
     if(action==='start')await AxiomaGroups.start();
     if(action==='leave'){await AxiomaGroups.leave();stopGame();groupMode=false;groupSessionId=null;state='lobby';$('lobby').hidden=false;$('groupDialog').close()}
-  }catch(error){$('groupMessage').textContent=error.message}
+  }catch(error){openGroupMenu();$('groupMessage').textContent=error.message}
 };
 $('groupRanking').onclick=async()=>{
   $('groupRankingContent').textContent='Ranglijst laden…';

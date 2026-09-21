@@ -107,3 +107,21 @@ body.auth-open{overflow:hidden}
   .central-auth-form{grid-template-columns:1fr}
   .auth-message,.auth-submit{grid-column:1}
 }
+
+/* Shared subject colours; completion keeps the subject marker visible. */
+[data-topic]{--topic:#547eb6}
+[data-topic="Functies"]{--topic:#528bea}
+[data-topic="Meetkunde"]{--topic:#35a68b}
+[data-topic="Algebra"]{--topic:#a375dc}
+[data-topic="Breuken"]{--topic:#e19938}
+[data-topic="Ruimtelijk inzicht"]{--topic:#d579aa}
+[data-topic="Verhoudingen"]{--topic:#df7859}
+[data-topic="Statistiek"]{--topic:#3dabbc}
+[data-topic="Logica"]{--topic:#9aab48}
+.filter[data-topic]::before,.meta::before{content:"";display:inline-block;width:9px;height:9px;flex-shrink:0;border-radius:50%;background:var(--topic)}
+.card{border:2px solid color-mix(in srgb,var(--topic) 55%,var(--surface));border-top:5px solid var(--topic)}
+.meta{display:flex;align-items:center;gap:7px}
+.card.is-complete{border-color:#c99b32;box-shadow:0 0 0 1px #c99b3240,0 4px 15px #c99b3218}
+.card.is-complete:hover{box-shadow:0 0 0 1px #c99b3260,0 10px 25px #c99b3230}
+.is-complete .card-detail{color:#906712}
+[data-mode="dark"] .is-complete .card-detail{color:#efc864}

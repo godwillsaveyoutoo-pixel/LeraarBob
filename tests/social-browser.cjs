@@ -191,10 +191,13 @@ async function setup(browser,uid){
   assert.equal(reportCount,2);
   await b.eval(`document.querySelector('#leaveBtn').click()`);await b.wait(`__naval.S.phase==='idle'`);
   console.log('PASS: leave/forfeit and mutual result reporting');
-  await a.go('');await b.go('games/pythagoras.html');
+  await a.go('games/rechten/kleiduiven/');await b.go('games/rechten/kleiduiven/');
   for(const c of [a,b])await c.wait('window.AxiomaGroups?.state().connected');
-  await a.eval('AxiomaSocial.open()');await click(a,'[data-action="group-create"]');
+  await a.eval(`document.querySelector('#openGroup').click()`);await a.wait(`document.querySelector('[data-group-action="create"]')&&!document.querySelector('[data-group-action="create"]').disabled`);
+  await a.eval(`document.querySelector('[data-group-action="create"]').click()`);
   await a.wait(`location.pathname.includes('/kleiduiven/')&&document.querySelector('#groupDialog')?.open`);
+  await b.eval('AxiomaGroups.refresh()');await b.wait(`document.querySelector('#lobbyGroupList').textContent.includes('Groep van Test-A')`);
+  await b.go('games/pythagoras.html');await b.wait('window.AxiomaGroups?.state().connected');
   await b.eval('AxiomaGroups.refresh();AxiomaSocial.open()');await b.wait(`${panel}.querySelector('[data-action="group-join"]')`);
   await click(b,'[data-action="group-join"]');await b.wait(`location.pathname.includes('/kleiduiven/')&&document.querySelector('#groupDialog')?.open`);
   await a.eval('AxiomaGroups.refresh()');await a.wait(`!document.querySelector('[data-group-action="start"]').disabled`);
@@ -219,7 +222,7 @@ async function setup(browser,uid){
     const shot=await b.send('Page.captureScreenshot',{format:'png'});
     fs.writeFileSync(`/tmp/leraarbob-clay-group-${width}.png`,Buffer.from(shot.data,'base64'));
   }
-  console.log('PASS: create group from header, join from another game, shared start, mistake resets all, seven correct wins and ranks');
+  console.log('PASS: student creates group in game, visible in lobby, join from another game, shared start, mistake resets all, seven correct wins and ranks');
   // Popover layout and keyboard dismissal on small screens.
   await a.go('');await a.wait('window.AxiomaSocial?.state().connected');
   for(const width of [320,390,768,1440]){

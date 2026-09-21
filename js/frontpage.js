@@ -38,6 +38,7 @@
       const button = element('button', 'filter', category);
       button.type = 'button';
       button.dataset.filter = category;
+      if (category !== 'Alles') button.dataset.topic = category;
       button.setAttribute('aria-pressed', String(category === active));
       button.append(element('span', 'filter-count', String(allGames.filter(game => matchesCategory(game, category)).length)));
       filters.append(button);
@@ -151,6 +152,7 @@
     for (const game of list) {
       const card = element('a', 'card');
       card.dataset.gameId = game.id;
+      card.dataset.topic = game.theme || game.category;
       card.href = localUrl(game.href);
       const visual = element('div', 'visual');
       visual.setAttribute('aria-hidden', 'true');

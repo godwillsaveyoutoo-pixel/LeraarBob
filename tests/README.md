@@ -67,3 +67,11 @@ gedeelde starttijd, foute/te late antwoorden, idempotentie, één winnaar,
 ranglijsten per tempo en de eerste Zeeslag-overwinning. Synthetische accounts
 en uitslagen verdwijnen bij de rollback. Deze test is ook op de uitgerolde
 database uitgevoerd.
+
+`node tests/trainer-teacher-browser.cjs` controleert met vervangende auth dat een
+leerkracht de Rechtentrainer kan openen, een oefening kan starten en via Opvolging
+heen en terug kan, zonder leerlingvoortgang op te halen. Gebruik dezelfde lokale
+server en Chromium als bij de andere browsertests. Voer browsertests na elkaar uit.
+De catalogusbrowsertest controleert ook de gedeelde onderwerpkleur en gouden rand.
+De social-browsertest controleert groepsaanmaak door een leerling in het spel en
+de zichtbaarheid van die groep in het startscherm van een andere leerling.

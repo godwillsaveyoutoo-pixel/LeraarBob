@@ -51,6 +51,8 @@ const mockAuth = `(() => {
   assert.equal(await ev('document.documentElement.scrollWidth>innerWidth'),false,'page overflow '+width);
   const shot=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/leraarbob-progress-'+width+'.png',Buffer.from(shot.data,'base64'));
  }
+ assert.equal(await ev(`getComputedStyle(document.querySelector('[data-game-id="gravity-maze"]')).borderLeftColor`),'rgb(201, 155, 50)');
+ assert.equal(await ev(`new Set([...document.querySelectorAll('[data-topic="Functies"].card')].map(c=>getComputedStyle(c).getPropertyValue('--topic'))).size`),1);
  console.log('PASS: personal bars, trainer statistics, untracked and complete labels, responsive widths');
  await ev(`document.querySelector('[data-filter="Meetkunde"]').click()`);assert.match(await ev(label('pythagoras')),/3 van 10/);
  await ev(`document.querySelector('#resetFilters').click();document.querySelector('#search').value='gravity';document.querySelector('#search').dispatchEvent(new Event('input'))`);
