@@ -46,6 +46,25 @@ const mockAuth = `(() => {
  assert.match(await ev(label('functies-rechten')),/Vrij verkennen/);
  assert.match(await ev(label('stelsels')),/0 van 14 oefeningen/);
  assert(await ev(`testQueries.every(q=>q.user_id==='a')`));
+ // Account navigation must expose the whole catalog, even after filtering it down.
+ await ev(`document.querySelector('[data-filter="Meetkunde"]').click();document.querySelector('#search').value='pythagoras';document.querySelector('#search').dispatchEvent(new Event('input'));document.querySelector('#accountBtn').click()`);
+ assert.equal(await ev(`document.querySelectorAll('.card').length`),1);
+ assert.equal(await ev(`document.querySelector('#authTitle').textContent`),'Je leraarBob-account');
+ for(const [width,mode] of [[320,'light'],[1440,'dark']]){
+  await c.send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:width<700});
+  await ev(`document.documentElement.dataset.mode='${mode}'`);
+  assert.equal(await ev(`document.querySelector('.auth-sheet').scrollWidth>document.querySelector('.auth-sheet').clientWidth`),false,'account overflow '+width);
+  const shot=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(`/tmp/leraarbob-account-${width}-${mode}.png`,Buffer.from(shot.data,'base64'));
+ }
+ await ev(`document.querySelector('#browseGamesBtn').click()`);
+ assert.equal(await ev(`document.querySelector('#authOverlay').hidden`),true);
+ assert.equal(await ev(`document.querySelector('#search').value`),'');
+ assert.equal(await ev(`document.querySelectorAll('.card').length`),await ev('AXIOMA_CATALOG.length'));
+ for(const id of ['rechten-trainer','vectoren-trainer','reele-getallen-trainer'])assert(await ev(`!!document.querySelector('[data-game-id="${id}"]')`),id+' visible from account');
+ assert.equal(await ev('document.activeElement.id'),'ontdek');
+ assert.match(await ev(label('pythagoras')),/3 van 10/);
+ await ev(`document.documentElement.dataset.mode='light'`);
+ console.log('PASS: account opens all games and trainers, clears search and topic, retains progress; light/dark account layout');
  for(const width of [320,390,768,1440]){
   await c.send('Emulation.setDeviceMetricsOverride',{width,height:width<700?844:1000,deviceScaleFactor:1,mobile:width<700});await delay(80);
   assert.equal(await ev('document.documentElement.scrollWidth>innerWidth'),false,'page overflow '+width);
@@ -62,6 +81,10 @@ const mockAuth = `(() => {
  await ev(`testDelay=500;testAccount('a');testAccount(null)`);assert.equal(await ev(`document.querySelectorAll('.card-progress:not([hidden])').length`),0);
  await delay(600);assert.equal(await ev(`document.querySelectorAll('.card-progress:not([hidden])').length`),0);
  const before=await ev('testQueries.length');await ev(`testAccount('teacher','teacher')`);await delay(80);assert.equal(await ev('testQueries.length'),before);
+ await ev(`document.querySelector('#accountBtn').click()`);
+ assert.equal(await ev(`document.querySelector('#authContent a').getAttribute('href')`),'teacher/');
+ await ev(`document.querySelector('#browseGamesBtn').click()`);
+ assert.equal(await ev(`document.querySelector('#authOverlay').hidden`),true);
  await ev(`testDelay=0;testAccount('b')`);await wait(`${label('pythagoras')}.includes('1 van 10')`);
  console.log('PASS: account switching, logout, late response discarded, teacher excluded; filters retain progress');
  await ev(`testFailures={axioma_game_progress:true};testAccount('a')`);await wait(`document.querySelector('#progressNotice').hidden===false`);

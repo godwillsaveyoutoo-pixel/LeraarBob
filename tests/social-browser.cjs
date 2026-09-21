@@ -145,6 +145,17 @@ async function setup(browser,uid){
   await a.eval('AxiomaSocial.refresh()');
   assert.equal(await a.eval('AxiomaSocial.state().players.length'),2);
   assert.equal(await a.eval(`document.querySelectorAll('[data-game-id="rechten-zeeslag"]').length`),1);
+  // Both suggestions open the real lobby without creating an invitation or group.
+  for (const [title, path] of [['Rechten Zeeslag', '/zeeslag/'], ['Kleiduifschieten', '/kleiduiven/']]) {
+    await a.eval('AxiomaSocial.open()');
+    await a.eval(`${panel}.querySelector('a[href*="${path}"]').click()`);
+    await a.wait(`location.pathname.includes('${path}') && window.AxiomaSocial?.state().connected`);
+    assert.equal(invitations.length, 0, title + ' opens without inviting anyone');
+    assert.equal(groupSession, null, title + ' opens without creating a session');
+  }
+  await a.go('');await a.wait('window.AxiomaSocial?.state().connected');
+  await a.eval('AxiomaSocial.refresh()');
+  console.log('PASS: Online game suggestions open both lobbies without starting matches');
   await a.eval('AxiomaSocial.open()');await click(a,`[data-action="invite"][data-id="${B}"]`);
   await a.wait('AxiomaSocial.state().invitations.length===1');await b.eval('AxiomaSocial.refresh()');
   assert.match(await b.eval(`${dock}.querySelector('button').textContent`),/Uitnodiging/);
@@ -250,6 +261,7 @@ async function setup(browser,uid){
     await a.send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:width<700});
     await a.eval('AxiomaSocial.open()');
     assert.equal(await a.eval('document.documentElement.scrollWidth>innerWidth'),false,'overflow at '+width);
+    assert.equal(await a.eval(`${panel}.querySelector('#panel').scrollWidth > ${panel}.querySelector('#panel').clientWidth`),false,'Online panel overflow at '+width);
     const shot=await a.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(`/tmp/leraarbob-social-${width}.png`,Buffer.from(shot.data,'base64'));
     await a.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
     await a.wait(`${panel}.querySelector('#panel').matches(':popover-open')===false`);

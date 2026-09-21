@@ -83,6 +83,7 @@
         </div>
         <div class="auth-actions">
           <a class="auth-primary" href="teacher/">Open leraarmodus <span>→</span></a>
+          <button id="browseGamesBtn" class="auth-secondary" type="button">Alle spellen en trainers <span aria-hidden="true">→</span></button>
           <button id="logoutBtn" class="auth-secondary" type="button">Uitloggen</button>
         </div>`;
     }
@@ -91,10 +92,10 @@
         <div class="account-summary">
           <span class="account-role">${esc(account.class_code)}</span>
           <strong>${esc(account.alias)}</strong>
-          <p>Je bent aangemeld voor heel leraarBob. Ondersteunde onderdelen kunnen dezelfde sessie gebruiken.</p>
+          <p>Je gebruikt dit account voor alle spellen en trainers op leraarBob. Je voortgang zie je op de speltegels en in de trainers zelf.</p>
         </div>
         <div class="auth-actions">
-          <a class="auth-primary" href="games/rechten/trainer/">Open Rechtentrainer <span>→</span></a>
+          <button id="browseGamesBtn" class="auth-primary" type="button">Alle spellen en trainers <span aria-hidden="true">→</span></button>
           <button id="logoutBtn" class="auth-secondary" type="button">Uitloggen</button>
         </div>`;
     }
@@ -136,9 +137,16 @@
   }
 
   function render() {
+    $('authTitle').textContent = account ? 'Je leraarBob-account' : 'Neem je leerroute mee.';
     content.innerHTML = account ? accountView() : loginView();
 
     if (account) {
+      $('browseGamesBtn')?.addEventListener('click', () => {
+        close();
+        $('resetFilters').click();
+        $('ontdek').focus();
+        $('ontdek').scrollIntoView({ block: 'start' });
+      });
       $('logoutBtn')?.addEventListener('click', async () => {
         try {
           busy = true;
