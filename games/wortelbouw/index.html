@@ -21,7 +21,7 @@
     <button id="next" class="tool" aria-label="Volgende puzzel">›</button>
   </header>
   <main id="stage" aria-label="Mozaïekvloer">
-    <canvas id="floor" aria-hidden="true"></canvas>
+    <canvas id="floor" role="img" aria-label="Bouwvloer: sleep vanaf een zijde om te bouwen. Gebruik de potloodknop voor bediening met tikken of toetsenbord."></canvas>
     <div id="targets" aria-label="Stukken op de vloer"></div>
     <div id="notice" role="status" hidden></div>
     <div id="cordLabel" hidden></div>
@@ -36,6 +36,7 @@
       </div>
     </div>
     <div id="workTools" class="workTools">
+      <button id="manual" class="tool" aria-label="Handmatig bouwen" aria-pressed="true" title="Handmatig bouwen · klik voor tikbediening">✎</button>
       <div class="ruler" role="group" aria-label="Liniaal: bekende zijde">
         <span class="rulerIcon" aria-hidden="true">↔</span>
         <button data-length="1" aria-pressed="false">1</button><button data-length="2" aria-pressed="false">2</button><button data-length="3" aria-pressed="true">3</button><button data-length="4" aria-pressed="false">4</button><button data-length="5" aria-pressed="false">5</button>

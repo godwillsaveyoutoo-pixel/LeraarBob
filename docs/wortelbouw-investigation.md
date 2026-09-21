@@ -89,3 +89,10 @@ herstellen van iedere fase en schermrotatie. Speel alle puzzels via de zichtbare
 interface bij 780×360 én 640×360; inspecteer screenshots. CPU-vertraging is een
 proxy voor goedkope hardware, geen vervanging voor een fysieke Samsung A20.
 Leg bevindingen en concrete gespeelde routes vast in het eindverslag.
+
+## Latere bijsturing door de gebruiker
+
+De gebruiker verkiest het handmatige bouwen uit het prototype. De hierboven
+beschreven tikinterface is daarom een alternatief geworden; standaard worden
+stukken rechtstreeks uitgetrokken. Zie het actuele
+[speelverslag](wortelbouw-playthrough.md#handmatig-bouwen-na-gebruikersfeedback).

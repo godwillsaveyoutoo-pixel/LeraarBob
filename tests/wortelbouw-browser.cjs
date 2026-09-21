@@ -18,6 +18,7 @@ const routes=[{start:3,steps:[['sum',2,0]]},{start:4,steps:[['difference',2,2]]}
   await c.send('Page.addScriptToEvaluateOnNewDocument',{source:`window.drawnText=[];const original=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(t,...args){drawnText.push(String(t));return original.call(this,t,...args)};`});
   const inspect=()=>c.eval('Wortelbouw.inspect()');
   async function tap(selector,touch=true){
+    await c.eval("new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))");
     const p=await c.eval(`(()=>{const b=document.querySelector(${JSON.stringify(selector)});if(!b||b.disabled)throw Error('Unavailable '+${JSON.stringify(selector)});const r=b.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2,width:r.width,height:r.height}})()`);
     assert(p.width>=44&&p.height>=44,'semantic touch target >=44 px: '+selector);
     if(touch){await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:p.x,y:p.y}]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]})}
@@ -30,9 +31,53 @@ const routes=[{start:3,steps:[['sum',2,0]]},{start:4,steps:[['difference',2,2]]}
     assert(await c.eval(`(()=>{const r=[...document.querySelectorAll('footer button')].filter(b=>b.getClientRects().length).map(b=>b.getBoundingClientRect());return r.every((a,i)=>r.slice(i+1).every(b=>Math.min(a.right,b.right)-Math.max(a.left,b.left)<=0||Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)<=0))})()`),'footer controls do not overlap');
     assert(await c.eval(`(()=>{const d=Wortelbouw.inspect(),r=document.querySelector('#stage').getBoundingClientRect();return d.state.objects.flatMap(o=>o.points).every(p=>{const x=d.camera.x+p.x*d.camera.unit,y=d.camera.y-p.y*d.camera.unit;return x>=0&&y>=0&&x<=r.width&&y<=r.height})})()`),'camera contains every placed piece');
   }
+  async function drag(points,touch=true,cancel=false){
+    const first=points[0];
+    if(touch)await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[first]});
+    else await c.send('Input.dispatchMouseEvent',{type:'mousePressed',...first,button:'left',clickCount:1});
+    const sampled=[];
+    for(let i=1;i<points.length;i++)for(let n=1;n<=8;n++)sampled.push({x:points[i-1].x+(points[i].x-points[i-1].x)*n/8,y:points[i-1].y+(points[i].y-points[i-1].y)*n/8});
+    for(const p of sampled){
+      await delay(16);
+      if(touch)await c.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[p]});
+      else await c.send('Input.dispatchMouseEvent',{type:'mouseMoved',...p,button:'left',buttons:1});
+    }
+    await delay(80);
+    if(touch)await c.send('Input.dispatchTouchEvent',{type:cancel?'touchCancel':'touchEnd',touchPoints:[]});
+    else await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...points.at(-1),button:'left',clickCount:1});
+  }
+  async function gesturePoints(expression){return c.eval(`(()=>{const d=Wortelbouw.inspect(),s=d.state,G=WortelbouwGeometry,r=document.querySelector('#stage').getBoundingClientRect();return (${expression}).map(p=>({x:r.x+d.camera.x+p.x*d.camera.unit,y:r.y+d.camera.y-p.y*d.camera.unit}))})()`)}
   for(const width of [780,640]){
     await c.send('Emulation.setDeviceMetricsOverride',{width,height:360,deviceScaleFactor:1,mobile:true});await c.send('Emulation.setTouchEmulationEnabled',{enabled:true});
     await c.send('Page.navigate',{url:'http://127.0.0.1:8765/games/wortelbouw/'});await c.wait('!!window.Wortelbouw');
+    assert.equal((await inspect()).manual,true);assert.equal(await c.eval('document.querySelectorAll("#targets button").length'),0);
+    const touch=width===640;
+    await fits();await shot(`${width}-manual-start`);
+    const canceled=await gesturePoints('[{x:0,y:0},{x:3,y:3}]');await drag(canceled,true,true);assert.equal((await inspect()).state.phase,'start');
+    for(let level=0;level<routes.length;level++){
+      const route=routes[level];
+      await drag(await gesturePoints(`[{x:0,y:0},{x:${route.start},y:${route.start}}]`),touch);
+      assert.equal((await inspect()).state.objects[0].area,route.start**2);
+      for(const [index,[mode,k,edgeIndex]] of route.steps.entries()){
+        await tap(`[data-mode="${mode}"]`,touch);
+        const points=await gesturePoints(`(()=>{const p=G.plan(s,s.active,${edgeIndex},${k},${JSON.stringify(mode)},false),e=p.triangle.base;return [G.add(e.a,G.mul(G.sub(e.b,e.a),.08)),p.triangle.helper.b]})()`);
+        await c.eval('drawnText=[]');await drag(points,touch);
+        assert.equal((await inspect()).state.phase,'helper',`manual triangle ${width}/${level}/${index}`);
+        await fits();if(level===0)await shot(`${width}-manual-triangle`);
+        const squarePoints=async()=>gesturePoints(`(()=>{const e=s.pending.triangle[s.phase],mid=G.mul(G.add(e.a,e.b),.5),center=G.center(s.pending[s.phase].points);return [mid,G.add(mid,G.mul(G.sub(center,mid),1.8))]})()`);
+        await drag(await squarePoints(),touch);assert.equal((await inspect()).state.phase,'result');
+        assert.equal(await c.eval(`drawnText.includes('√'+Wortelbouw.inspect().state.pending.result.area)`),false,'manual result stays hidden');
+        await drag(await squarePoints(),touch);await c.wait(`!['result','reveal'].includes(Wortelbouw.inspect().state.phase)`);
+        if(level===0){await tap('#undo',touch);await c.wait(`Wortelbouw.inspect().state.phase==='result'`);assert.equal((await inspect()).state.phase,'result');await drag(await squarePoints(),touch);await c.wait(`Wortelbouw.inspect().state.phase==='won'`)}
+      }
+      assert.equal((await inspect()).state.phase,'won');await fits();await shot(`${width}-manual-puzzle-${level+1}`);
+      console.log(`PASS manual ${touch?'touch':'mouse'} ${width}×360: puzzle ${level+1}`);
+      if(level<routes.length-1)await tap('#continue',touch);
+    }
+  }
+  for(const width of [780,640]){
+    await c.send('Emulation.setDeviceMetricsOverride',{width,height:360,deviceScaleFactor:1,mobile:true});await c.send('Emulation.setTouchEmulationEnabled',{enabled:true});
+    await c.send('Page.navigate',{url:'http://127.0.0.1:8765/games/wortelbouw/'});await c.wait('!!window.Wortelbouw');await tap('#manual');
     await fits();await shot(`${width}-start`);
     for(let level=0;level<routes.length;level++){
       const route=routes[level];assert.equal((await inspect()).state.level,level);

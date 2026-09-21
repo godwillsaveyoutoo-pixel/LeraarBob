@@ -13,3 +13,7 @@ footer{border-top:1px solid var(--line);padding:4px 12px 6px;background:#ececde;
 @media(orientation:portrait){#rotate{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--floor);text-align:center;padding:24px}#rotate strong{font-size:25px}#rotate p{line-height:1.6}#rotate a{color:var(--teal);padding:14px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
 @media(max-width:700px){#app.compact{grid-template-rows:48px minmax(0,1fr) 60px}.finished #continue{right:8px}}
+
+/* Direct construction is the default. The pencil toggles the optional tap controls. */
+#floor{touch-action:none;cursor:crosshair}.manual .ruler,.manual #flip{display:none}.rulerIcon{display:none}
+#manual{flex-shrink:0;font-size:25px}#manual[aria-pressed=true]{background:#d1dfcc;color:#215951}.manual .modes{margin-left:0}.manual .workTools{justify-content:flex-start}
