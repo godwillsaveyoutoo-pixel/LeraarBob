@@ -14,7 +14,7 @@
 <div id="app">
   <header>
     <a href="../../" data-platform-home class="home" aria-label="Naar leraarBob">leraarBob</a>
-    <div class="title">WORTELBOUW <span id="levelCount">1 / 13</span></div>
+    <div class="title">WORTELBOUW <span id="levelCount">1 / 14</span></div>
     <h1 id="goal">Lengte √2</h1>
     <span id="steps">0 stappen</span>
     <button id="previous" class="tool" aria-label="Vorige puzzel">‹</button>
@@ -25,9 +25,9 @@
     <div id="targets" aria-label="Stukken op de vloer"></div>
     <div id="notice" role="status" hidden></div>
     <div id="cordLabel" hidden></div>
-    <div id="colorKey" aria-label="Kleuren van de vierkanten"><span class="base">Bestaand</span><span class="helper">Hulp</span><span class="result">Resultaat</span></div>
+    <div id="colorKey" aria-label="Kleuren van de vierkanten"><span class="base">Bestaand</span><span class="helper">Hulp</span><span class="result">Resultaat</span><span id="routeCount" hidden></span></div>
     <div id="lesson"><strong id="lessonTitle"></strong><span id="lessonHint"></span></div>
-    <section id="success" role="status" aria-live="polite" hidden><span class="successMark" aria-hidden="true">✓</span><h2>Doel bereikt!</h2><strong id="successRoot"></strong><div id="successEquation"></div><p id="successLesson"></p></section>
+    <section id="success" role="status" aria-live="polite" hidden><span class="successMark" aria-hidden="true">✓</span><h2 id="successTitle">Doel bereikt!</h2><strong id="successRoot"></strong><div id="successEquation"></div><div id="routeComparison" hidden></div><p id="successLesson"></p></section>
   </main>
   <footer>
     <div class="instructionRow">

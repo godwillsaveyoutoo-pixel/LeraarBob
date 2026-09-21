@@ -16,6 +16,7 @@
     {n:15,kind:'length',best:1,title:'Net geen vier',hint:'15 ligt vlak onder een kwadraat.',lesson:'16 − 1 = 15. De gevonden lengte √15 is iets kleiner dan 4.'},
     {n:21,kind:'length',best:1,title:'Kies je verschil',hint:'Zoek een kwadraat boven 21 en haal er een kleiner kwadraat af.',lesson:'25 − 4 = 21. Oppervlakten helpen je om een onbekende lengte te bouwen.'},
     {n:14,kind:'length',best:2,title:'Bouw verder',hint:'Niet alles lukt in één stap. Gebruik een gevonden zijde opnieuw.',lesson:'Het koord bewaart je nieuwe lengte, zodat je op het resultaat kunt verder bouwen.'},
+    {n:6,kind:'length',best:2,compareRoutes:true,title:'Eén wortel, twee manieren',hint:'Bouw √6 eerst op jouw manier. Zoek daarna een route die anders eindigt: met optellen of met aftrekken.',lesson:'Dezelfde lengte √6 kun je met een som én met een verschil van oppervlakten bouwen.'},
     {n:104,kind:'length',best:1,maxLength:10,title:'De grote verrassing',hint:'De liniaal gaat tot 10. Groot hoeft niet ingewikkeld te zijn.',lesson:'10² + 2² = 100 + 4 = 104. Ook deze grote wortel lukt in één bouwstap!'}
   ];
   const maxLength=s=>levels[s.level].maxLength||5;
@@ -51,7 +52,7 @@
     const offset=mul(normal,Math.sqrt(edge.area)*sign);
     return {id,type:'square',role,area:edge.area,points:ccw([edge.a,edge.b,add(edge.b,offset),add(edge.a,offset)])};
   }
-  function initial(level=0){return {level,objects:[],phase:'start',active:null,pending:null,steps:0}}
+  function initial(level=0){return {level,objects:[],phase:'start',active:null,pending:null,steps:0,solutions:[]}}
   function startSquare(k,x=0){
     if(!Number.isInteger(k)||k<1||k>10||!Number.isFinite(x))throw Error('Kies een liniaalmaat van 1 tot 10.');
     return {id:'s0',type:'square',role:'result',area:k*k,points:[{x:x-k/2,y:0},{x:x+k/2,y:0},{x:x+k/2,y:k},{x:x-k/2,y:k}],start:true};
@@ -78,6 +79,7 @@
   }
   function apply(s,action){
     const next=copy(s);
+    if(action.type==='nextRoute'&&s.phase==='routeDone')return {...initial(s.level),solutions:copy(s.solutions)};
     if(action.type==='start'&&s.phase==='start'){
       if(action.k>maxLength(s))throw Error(`De liniaal gaat hier tot ${maxLength(s)}.`);
       next.objects=[startSquare(action.k,action.x)];next.active='s0';next.phase='choose';return next;
@@ -95,7 +97,22 @@
     }
     if(action.type==='reveal'&&s.phase==='reveal'){
       next.objects.find(o=>o.id===s.pending.triangle.id).revealed=true;
-      next.phase=next.pending.result.area===levels[s.level].n?'won':'choose';next.pending=null;return next;
+      const goal=levels[s.level],reached=next.pending.result.area===goal.n;
+      next.phase=reached?'won':'choose';
+      if(reached&&goal.compareRoutes){
+        const mode=next.pending.mode;
+        if(!next.solutions.some(route=>route.mode===mode)){
+          const equations=[];let owner=next.pending.result.id;
+          while(true){
+            const t=next.objects.find(o=>o.type==='triangle'&&'s'+o.id.slice(1)===owner);
+            if(!t)break;
+            equations.unshift({base:t.base.area,helper:t.helper.area,result:t.result.area,mode:t.mode});owner=t.owner;
+          }
+          next.solutions.push({mode,equations});
+        }
+        next.phase=next.solutions.length===2?'won':'routeDone';
+      }
+      next.pending=null;return next;
     }
     throw Error('Leg eerst het aangegeven stuk.');
   }

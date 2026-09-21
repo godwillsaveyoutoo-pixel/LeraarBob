@@ -12,5 +12,6 @@ module.exports=[
  {n:15,start:4,steps:[['difference',1,1,false]]},
  {n:21,start:5,steps:[['difference',2,1,false]]},
  {n:14,start:3,steps:[['sum',2,0,false],['sum',1,3,false]]},
+ {n:6,start:2,steps:[['sum',1,0,false],['sum',1,3,false]],other:{start:3,steps:[['sum',1,0,false],['difference',2,3,false]]}},
  {n:104,start:10,steps:[['sum',2,0,false]]}
 ];

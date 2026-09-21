@@ -9,6 +9,7 @@
   const screen=p=>({x:camera.x+p.x*camera.unit,y:camera.y-p.y*camera.unit});
   const world=p=>({x:(p.x-camera.x)/camera.unit,y:(camera.y-p.y)/camera.unit});
   const pointBetween=(a,b,t)=>G.add(a,G.mul(G.sub(b,a),t));
+  const isSolved=()=>['won','routeDone'].includes(game.state.phase);
   const targetLevel=()=>G.levels[game.state.level];
   const activeSquare=()=>game.state.objects.find(o=>o.id===(active||game.state.active));
   const rootLabel=n=>Number.isInteger(Math.sqrt(n))?String(Math.sqrt(n)):`√${n}`;
@@ -37,7 +38,7 @@
     const b=G.bounds([...s.objects,...pending]);
     // Never clamp to a minimum world scale: off-screen geometry is not a collision.
     const room=manual&&s.phase==='choose'?2*Math.min(G.maxLength(s),Math.ceil(Math.sqrt(targetLevel().n/2))):0;
-    const availableWidth=s.phase==='won'?width-240:width;
+    const availableWidth=isSolved()?width-240:width;
     const top=s.phase==='start'?0:28;
     const unit=Math.min(64,(availableWidth-60)/Math.max(1,b.maxX-b.minX+room),(height-46-top)/Math.max(1,b.maxY-b.minY+room));
     camera={unit,x:availableWidth/2-(b.minX+b.maxX)*unit/2,y:(height+top)/2+(b.minY+b.maxY)*unit/2};
@@ -97,19 +98,36 @@
     for(let y=32;y<height;y+=64){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke()}
     const s=game.state;
     s.objects.forEach(o=>marble(o));
+    if(isSolved()){
+      const tile=s.objects.find(o=>o.id===s.active);ctx.save();path(tile.points);ctx.strokeStyle='#f5d77c';ctx.lineWidth=6;ctx.stroke();path(tile.points);ctx.strokeStyle='#9b712c';ctx.lineWidth=1.5;ctx.stroke();ctx.restore();
+    }
+
     const future=futurePieces();future.forEach(o=>marble(o,true,preview&&!preview.valid));
     if(!manual&&s.phase==='choose'&&preview)line(triangleTarget(),G.center(preview.triangle.points),'#a87c5377',1,[2,3]);
     for(const o of s.objects){
       if(o.type==='triangle'){
-        rightAngle(o);edgeText(String(o.known),o.helper,o,{size:12});
+        rightAngle(o);alignedLabel(String(o.known),o.helper,12);
         if(o.revealed)cord(o.result);
-        if(o.mode==='difference'&&o.id===(s.pending?.triangle.id||lastReveal?.id))alignedLabel(rootLabel(o.base.area),o.base,13);
+        if(o.mode==='difference'&&o.id===(s.pending?.triangle.id||lastReveal?.id))alignedLabel(rootLabel(o.base.area),o.base,13,o);
       }else{
         let center=G.center(o.points);
         const measured=[...s.objects].reverse().find(t=>t.type==='triangle'&&t.revealed&&t.id===lastReveal?.id);
         if(measured&&o.id==='s'+s.steps){
           const mid=pointBetween(measured.result.a,measured.result.b,.5),out=G.norm(G.sub(center,mid));
           center=G.add(center,G.mul(out,Math.min(Math.sqrt(o.area)*.22,Math.max(0,34/camera.unit-Math.sqrt(o.area)/2))));
+        }
+        if(measured?.mode==='difference'&&o.id===measured.owner&&Math.sqrt(o.area)*camera.unit<100){
+          const mid=pointBetween(measured.base.a,measured.base.b,.5),out=G.norm(G.sub(center,mid)),p=screen(G.add(mid,G.mul(out,(Math.sqrt(o.area)*camera.unit+15)/camera.unit)));
+          const note=world({x:Math.max(30,Math.min(width-30,p.x)),y:Math.max(42,Math.min(height-16,p.y))});
+          line(center,note,'#365f9c66',1,[2,3]);center=note;
+        }
+        if(o.role==='helper'&&Math.sqrt(o.area)*camera.unit<36){
+          const t=s.objects.find(t=>t.type==='triangle'&&t.id==='t'+o.id.slice(1));
+          if(t){
+            const mid=pointBetween(t.helper.a,t.helper.b,.5),out=G.norm(G.sub(center,mid)),p=screen(G.add(center,G.mul(out,32/camera.unit)));
+            const note=world({x:Math.max(30,Math.min(width-30,p.x)),y:Math.max(42,Math.min(height-16,p.y))});
+            line(center,note,'#995d4366',1,[2,3]);center=note;
+          }
         }
         const placingId=s.phase==='reveal'?s.pending.result.id:null;
         // DOM square buttons carry these labels while selecting; avoid double text.
@@ -145,9 +163,6 @@
       }
     }
     if(s.phase==='reveal')cord(s.pending.triangle.result,revealProgress);
-    if(s.phase==='won'){
-      const tile=s.objects.find(o=>o.id===s.active);ctx.save();path(tile.points);ctx.strokeStyle='#f5d77c';ctx.lineWidth=6;ctx.stroke();path(tile.points);ctx.strokeStyle='#9b712c';ctx.lineWidth=1.5;ctx.stroke();ctx.restore();
-    }
   }
   function buttonTarget(key,point,text,description,kind,action,disabled=false){
     const p=screen(point),button=document.createElement('button');button.className=`target ${kind}`;button.dataset.target=key;button.style.left=`${Math.max(24,Math.min(width-24,p.x))}px`;button.style.top=`${Math.max(24,Math.min(height-24,p.y))}px`;button.setAttribute('aria-label',description);button.title=description;button.disabled=disabled;
@@ -178,8 +193,22 @@
     $('levelCount').textContent=`${s.level+1} / ${G.levels.length}`;$('goal').textContent=level.kind==='area'?`Oppervlakte ${level.n}`:`Lengte ${G.goalLabel(level)}`;$('steps').textContent=`${s.steps} ${s.steps===1?'stap':'stappen'}`;
     $('colorKey').hidden=s.phase==='start';$('lesson').hidden=s.phase!=='start';
     $('lessonTitle').textContent=level.title;$('lessonHint').textContent=level.hint;
-    const won=s.phase==='won';$('success').hidden=!won;
-    if(won){$('successRoot').textContent=level.kind==='area'?`A = ${level.n}`:G.goalLabel(level);$('successEquation').textContent=level.label?`√${level.n} = ${level.label}`:`${s.pending?.k||''}`;$('successLesson').textContent=level.lesson}
+    if(level.compareRoutes&&s.solutions.length===1)$('lessonHint').textContent=s.solutions[0].mode==='sum'?'Je vond √6 met optellen. Bouw nu een route die eindigt met aftrekken. Hint: probeer eerst √10 te maken.':'Je vond √6 met aftrekken. Bouw nu een route die eindigt met optellen. Hint: probeer eerst √5 te maken.';
+    $('routeCount').hidden=!level.compareRoutes;$('routeCount').textContent=`${s.solutions.length} / 2 manieren`;
+    $('success').classList.toggle('compare',!!level.compareRoutes);
+    $('successTitle').textContent=s.phase==='routeDone'?'Eerste manier gevonden!':level.compareRoutes?'Beide manieren gevonden!':'Doel bereikt!';
+    $('continue').textContent=s.phase==='routeDone'?'Bouw de andere route →':'Volgende puzzel →';
+    $('routeComparison').hidden=!level.compareRoutes||!isSolved();
+    $('routeComparison').replaceChildren();
+    if(level.compareRoutes&&isSolved())for(const mode of ['sum','difference']){
+      const route=s.solutions.find(r=>r.mode===mode),card=document.createElement('div'),title=document.createElement('strong');
+      title.textContent=mode==='sum'?'Optellen':'Aftrekken';card.append(title);
+      if(route)for(const e of route.equations){const line=document.createElement('span');line.textContent=`${e.base} ${e.mode==='sum'?'+':'−'} ${e.helper} = ${e.result}`;card.append(line)}
+      else{const line=document.createElement('span');line.textContent='Nog te ontdekken';card.append(line);card.className='pending'}
+      $('routeComparison').append(card);
+    }
+    const won=isSolved();$('success').hidden=!won;
+    if(won){$('successRoot').textContent=level.kind==='area'?`A = ${level.n}`:G.goalLabel(level);$('successEquation').textContent=level.label?`√${level.n} = ${level.label}`:'';$('successLesson').textContent=s.phase==='routeDone'?'√6 klopt! Zoek nu een route met de andere eindbewerking. Je eerste oplossing blijft bewaard.':level.lesson}
     const extended=G.maxLength(s)>5;$('extendedRuler').hidden=manual||!extended;
     document.querySelector('.ruler').hidden=extended;
     if($('longMeasure').options.length!==G.maxLength(s))$('longMeasure').replaceChildren(...Array.from({length:G.maxLength(s)},(_,i)=>new Option(String(i+1),String(i+1))));
@@ -189,8 +218,8 @@
     document.querySelectorAll('[data-length]').forEach(b=>{const k=Number(b.dataset.length);b.setAttribute('aria-pressed',String(k===ruler));b.disabled=!canMeasure||(s.phase==='choose'&&mode==='difference'&&sq&&k*k>=sq.area)});
     document.querySelectorAll('[data-mode]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.mode===mode));b.disabled=s.phase!=='choose'||(b.dataset.mode==='difference'&&sq?.area<=1)});
     $('workTools').hidden=!canMeasure;
-    $('app').classList.toggle('manual',manual);$('manual').setAttribute('aria-pressed',String(manual));$('manual').title=manual?'Handmatig bouwen · klik voor tikbediening':'Tikbediening · klik voor handmatig bouwen';$('achievement').hidden=s.phase!=='won';
-    $('app').classList.toggle('compact',!canMeasure);$('app').classList.toggle('finished',s.phase==='won');
+    $('app').classList.toggle('manual',manual);$('manual').setAttribute('aria-pressed',String(manual));$('manual').title=manual?'Handmatig bouwen · klik voor tikbediening':'Tikbediening · klik voor handmatig bouwen';$('achievement').hidden=!isSolved();
+    $('app').classList.toggle('compact',!canMeasure);$('app').classList.toggle('finished',isSolved());
     if(s.phase==='start')instruction('Kies je eerste tegel','Kies een maat. Tik de tegel onderaan neer.');
     else if(s.phase==='choose'){
       if(preview&&!preview.valid)instruction('Hier past de hele stap niet',`Het ${preview.blocked} overlapt. Spiegel, wijzig de maat of ga terug met ↶.`);
@@ -199,9 +228,9 @@
     }else if(s.phase==='helper')instruction('Leg het koraalkleurige hulpvierkant',`De bekende zijde is ${s.pending.k}. Tik op + in de koraalkleurige tegel.`);
     else if(s.phase==='result')instruction('Leg het groene resultaatvierkant','Tik op +. Daarna meet het koord de nieuwe zijde.');
     else if(s.phase==='reveal')instruction('Het koord neemt de nieuwe maat over…','Driehoek en beide vierkanten liggen op hun plek.');
-    else if(s.phase==='won'){
+    else if(isSolved()){
       const t=[...s.objects].reverse().find(o=>o.type==='triangle');$('relationship').textContent=`${t.base.area} ${t.mode==='sum'?'+':'−'} ${t.helper.area} = ${t.result.area}`;
-      instruction('Mooi gebouwd!',`${$('relationship').textContent} · ${s.steps} ${s.steps===1?'bouwstap':'bouwstappen'}`);
+      instruction(s.phase==='routeDone'?'√6 gevonden · zoek nog een andere manier':level.compareRoutes?'Twee routes, dezelfde lengte!':'Mooi gebouwd!',`${$('relationship').textContent} · ${s.steps} ${s.steps===1?'bouwstap':'bouwstappen'}`);
       if(!level.label)$('successEquation').textContent=$('relationship').textContent;
     }
     if(manual){
@@ -216,8 +245,12 @@
     if(angle>90)angle-=180;if(angle<-90)angle+=180;
     return {x:(a.x+b.x)/2,y:(a.y+b.y)/2,angle};
   }
-  function alignedLabel(text,edge,size=16){
-    const p=edgePlacement(edge);ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle*Math.PI/180);
+  function alignedLabel(text,edge,size=16,triangle=null){
+    const p=edgePlacement(edge);
+    if(triangle){
+      const mid=pointBetween(edge.a,edge.b,.5),normal=G.perp(G.norm(G.sub(edge.b,edge.a))),sign=G.dot(normal,G.sub(G.center(triangle.points),mid))>0?-1:1;
+      Object.assign(p,screen(G.add(mid,G.mul(normal,sign*15/camera.unit))));
+    }ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle*Math.PI/180);
     ctx.font=`600 ${size}px system-ui`;const w=ctx.measureText(text).width;
     ctx.fillStyle='#fff7e6';ctx.fillRect(-w/2-5,-size/2-3,w+10,size+6);ctx.fillStyle='#654919';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,0,0);ctx.restore();
   }
@@ -262,7 +295,8 @@
   });
   $('longMeasure').onchange=()=>{ruler=Number($('longMeasure').value);dismissNotice();refresh()};
   $('flip').onclick=()=>{flip=!flip;refresh()};$('undo').onclick=undo;$('restart').onclick=()=>reset();$('overview').onclick=()=>{reframe();render()};
-  $('next').onclick=$('continue').onclick=()=>reset((game.state.level+1)%G.levels.length);$('previous').onclick=()=>reset((game.state.level+G.levels.length-1)%G.levels.length);
+  $('next').onclick=()=>reset((game.state.level+1)%G.levels.length);
+  $('continue').onclick=()=>{if(game.state.phase==='routeDone'){cancelReveal();game.commit({type:'nextRoute'});active=null;edgeIndex=null;preview=null;ruler=3;mode='sum';flip=false;refresh()}else $('next').onclick()};$('previous').onclick=()=>reset((game.state.level+G.levels.length-1)%G.levels.length);
   // A tap on a proposed piece works as well as its large semantic + button.
   function inside(p,poly){let sign=0;for(let i=0;i<poly.length;i++){const c=G.cross(G.sub(poly[(i+1)%poly.length],poly[i]),G.sub(p,poly[i]));if(Math.abs(c)<G.EPS)continue;const next=Math.sign(c);if(sign&&sign!==next)return false;sign=next}return true}
   canvas.addEventListener('click',e=>{

@@ -35,6 +35,10 @@ test('every diagnostic puzzle has a spatially legal shortest route',()=>{
   routes.forEach((route,index)=>{
     const g=new G.Game(index);g.commit({type:'start',k:route.start});
     for(const [mode,k,edgeIndex,flip] of route.steps)finishStep(g,{owner:g.state.active,mode,k,edgeIndex,flip});
+    if(route.other){
+      assert.equal(g.state.phase,'routeDone');g.commit({type:'nextRoute'});g.commit({type:'start',k:route.other.start});
+      for(const [mode,k,edgeIndex,flip] of route.other.steps)finishStep(g,{owner:g.state.active,mode,k,edgeIndex,flip});
+    }
     assert.equal(g.state.phase,'won');assert.equal(g.state.steps,G.levels[index].best);
     assert.equal(g.state.objects.find(o=>o.id===g.state.active).area,G.levels[index].n);
     if(route.n===14){const t=g.state.objects.find(o=>o.id==='t2');assert(Math.abs(t.base.b.x-t.base.a.x)>.1&&Math.abs(t.base.b.y-t.base.a.y)>.1,'second step is off the global grid')}
@@ -96,8 +100,21 @@ module.exports={routes};
 
 test('larger rulers are introduced by level and equivalent roots share the exact goal',()=>{
   const g=new G.Game();assert.throws(()=>g.commit({type:'start',k:6}),/liniaal/);
-  const large=new G.Game(12);large.commit({type:'start',k:10});assert.equal(large.state.objects[0].area,100);
+  const large=new G.Game(13);large.commit({type:'start',k:10});assert.equal(large.state.objects[0].area,100);
   assert.equal(G.plan(g.state,'s0',0,6),null);
   assert.equal(G.levels[1].n,3**2*2);assert.equal(G.goalLabel(G.levels[1]),'3√2');
   assert.equal(G.maxLength(new G.Game(7).state),6);assert.equal(G.maxLength(large.state),10);
+});
+
+test('two-route challenge preserves work, rejects duplicate methods and supports undo',()=>{
+  const index=G.levels.findIndex(l=>l.compareRoutes),g=new G.Game(index),route=routes[index];
+  function build(r){g.commit({type:'start',k:r.start});for(const [mode,k,edgeIndex,flip] of r.steps)finishStep(g,{owner:g.state.active,mode,k,edgeIndex,flip})}
+  build(route);assert.equal(g.state.phase,'routeDone');assert.equal(g.state.solutions.length,1);
+  const first=JSON.stringify(g.state.solutions);g.commit({type:'nextRoute'});g.undo();assert.equal(g.state.phase,'routeDone');assert.equal(JSON.stringify(g.state.solutions),first);
+  g.commit({type:'nextRoute'});build(route);assert.equal(g.state.phase,'routeDone');assert.equal(g.state.solutions.length,1,'same final method is not a second route');
+  g.commit({type:'nextRoute'});build(route.other);assert.equal(g.state.phase,'won');assert.deepEqual(g.state.solutions.map(r=>r.mode),['sum','difference']);
+  assert.deepEqual(g.state.solutions.map(r=>r.equations.at(-1).result),[6,6]);
+  g.undo();assert.equal(g.state.phase,'result');assert.equal(g.state.solutions.length,1,'undo also takes back the second achievement');
+  g.commit({type:'result'});g.commit({type:'reveal'});assert.equal(g.state.solutions.length,2);
+  g.reset();build(route.other);assert.equal(g.state.phase,'routeDone');g.commit({type:'nextRoute'});build(route);assert.equal(g.state.phase,'won','either order works');
 });

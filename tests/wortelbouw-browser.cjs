@@ -31,7 +31,7 @@ const routes=require('./fixtures/wortelbouw-routes.cjs');
       await c.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});await c.send('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
     }else await tap(`[data-length="${k}"]`);
   }
-  async function shot(name){if((await inspect()).state.phase==='won')await c.wait(`getComputedStyle(document.querySelector('#success')).opacity==='1'`);const r=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(`/tmp/wortelbouw-${name}.png`,Buffer.from(r.data,'base64'))}
+  async function shot(name){if(['won','routeDone'].includes((await inspect()).state.phase))await c.wait(`getComputedStyle(document.querySelector('#success')).opacity==='1'`);const r=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(`/tmp/wortelbouw-${name}.png`,Buffer.from(r.data,'base64'))}
   async function fits(){
     assert(await c.eval('document.documentElement.scrollWidth<=innerWidth&&document.documentElement.scrollHeight<=innerHeight'),'no scrolling');
     assert(await c.eval(`[...document.querySelectorAll('button:not([hidden])')].filter(b=>b.getClientRects().length).every(b=>{const r=b.getBoundingClientRect();return r.left>=0&&r.top>=0&&r.right<=innerWidth+.5&&r.bottom<=innerHeight+.5})`),'all controls inside the viewport');
@@ -40,9 +40,18 @@ const routes=require('./fixtures/wortelbouw-routes.cjs');
   }
   async function victory(){
     assert.equal(await c.eval(`document.querySelector('#success').hidden`),false,'goal is visibly celebrated');
+    if((await inspect()).state.solutions.length===2)assert(await c.eval(`document.querySelector('#routeComparison').textContent.includes('5 + 1 = 6')&&document.querySelector('#routeComparison').textContent.includes('10 − 4 = 6')`));
     assert.equal(await c.eval(`document.querySelector('#successRoot').textContent`),await c.eval(`(()=>{const l=WortelbouwGeometry.levels[Wortelbouw.inspect().state.level];return l.kind==='area'?'A = '+l.n:WortelbouwGeometry.goalLabel(l)})()`));
     assert(await c.eval(`(()=>{const d=Wortelbouw.inspect(),t=d.state.objects.filter(o=>o.type==='triangle').at(-1),e=t.result,b=document.querySelector('#cordLabel');return Math.abs(parseFloat(b.style.left)-(d.camera.x+(e.a.x+e.b.x)/2*d.camera.unit))<.1&&Math.abs(parseFloat(b.style.top)-(d.camera.y-(e.a.y+e.b.y)/2*d.camera.unit))<.1&&b.style.transform.includes('rotate(')})()`),'root is centered on its own edge');
     assert(await c.eval(`(()=>{const a=document.querySelector('#success').getBoundingClientRect(),b=document.querySelector('#stage').getBoundingClientRect();return a.top>=b.top&&a.bottom<=b.bottom&&a.right<=b.right})()`),'celebration stays within floor');
+  }
+  async function nextRoute(width,touch){
+    assert.equal((await inspect()).state.phase,'routeDone');assert.equal((await inspect()).state.solutions.length,1);
+    await victory();await fits();await shot(`${width}-first-route`);
+    assert.equal(await c.eval(`document.querySelector('#routeComparison').children.length`),2);
+    await tap('#continue',touch);assert.equal((await inspect()).state.phase,'start');assert.equal((await inspect()).state.solutions.length,1);
+    assert.equal(await c.eval(`document.querySelector('#success').hidden`),true);
+    assert(await c.eval(`document.querySelector('#lessonHint').textContent.includes('aftrekken')`));
   }
   async function drag(points,touch=true,cancel=false){
     const first=points[0];
@@ -68,7 +77,8 @@ const routes=require('./fixtures/wortelbouw-routes.cjs');
     await fits();await shot(`${width}-manual-start`);
     const canceled=await gesturePoints('[{x:0,y:0},{x:3,y:3}]');await drag(canceled,true,true);assert.equal((await inspect()).state.phase,'start');
     for(let level=0;level<routes.length;level++){
-      const route=routes[level];
+      const scenario=routes[level];
+      for(const route of scenario.other?[scenario,scenario.other]:[scenario]){
       await drag(await gesturePoints(`[{x:0,y:0},{x:${route.start},y:${route.start}}]`),touch);
       assert.equal((await inspect()).state.objects[0].area,route.start**2);
       for(const [index,[mode,k,edgeIndex]] of route.steps.entries()){
@@ -83,6 +93,8 @@ const routes=require('./fixtures/wortelbouw-routes.cjs');
         await drag(await squarePoints(),touch);await c.wait(`!['result','reveal'].includes(Wortelbouw.inspect().state.phase)`);
         if(level===0){await tap('#undo',touch);await c.wait(`Wortelbouw.inspect().state.phase==='result'`);assert.equal((await inspect()).state.phase,'result');await drag(await squarePoints(),touch);await c.wait(`Wortelbouw.inspect().state.phase==='won'`)}
       }
+      if(route.other)await nextRoute(width,touch);
+      }
       assert.equal((await inspect()).state.phase,'won');await victory();await fits();await shot(`${width}-manual-puzzle-${level+1}`);
       console.log(`PASS manual ${touch?'touch':'mouse'} ${width}×360: puzzle ${level+1}`);
       if(level<routes.length-1)await tap('#continue',touch);
@@ -93,7 +105,9 @@ const routes=require('./fixtures/wortelbouw-routes.cjs');
     await c.send('Page.navigate',{url:'http://127.0.0.1:8765/games/wortelbouw/'});await c.wait('!!window.Wortelbouw');await tap('#manual');
     await fits();await shot(`${width}-start`);
     for(let level=0;level<routes.length;level++){
-      const route=routes[level];assert.equal((await inspect()).state.level,level);
+      const scenario=routes[level];
+      for(const route of scenario.other?[scenario,scenario.other]:[scenario]){
+      assert.equal((await inspect()).state.level,level);
       await measure(route.start);await tap('[data-target="start"]');
       for(const [index,[mode,k,edgeIndex]] of route.steps.entries()){
         await tap(`[data-mode="${mode}"]`);await measure(k);await tap(`[data-target="edge-${edgeIndex}"]`);
@@ -113,7 +127,9 @@ const routes=require('./fixtures/wortelbouw-routes.cjs');
           await tap('[data-target="result"]');await c.wait(`Wortelbouw.inspect().state.phase==='won'`);
         }
       }
-      const s=(await inspect()).state;assert.equal(s.phase,'won');assert.equal(s.steps,route.steps.length);
+      if(route.other)await nextRoute(width,true);
+      }
+      const s=(await inspect()).state;assert.equal(s.phase,'won');assert.equal(s.steps,routes[level].steps.length);
       assert.equal(await c.eval(`document.querySelector('#cordLabel').textContent`),Number.isInteger(Math.sqrt(routes[level].n))?String(Math.sqrt(routes[level].n)):'√'+routes[level].n);
       await fits();await shot(`${width}-puzzle-${level+1}`);
       console.log(`PASS ${width}×360: puzzle ${level+1}, ${s.steps} step(s), all pieces placed through touch`);

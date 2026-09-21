@@ -27,3 +27,7 @@ footer{border-top:1px solid var(--line);padding:4px 12px 6px;background:#ececde;
 #extendedRuler{display:flex;align-items:center;gap:8px;font-size:12px}#longMeasure{height:44px;min-width:100px;border:1px solid #a18c64;background:#faf5e8;border-radius:3px;font:inherit;font-size:18px;color:var(--ink)}
 @keyframes goal-arrives{from{opacity:0;transform:translateY(-50%) scale(.86)}to{opacity:1;transform:translateY(-50%) scale(1)}}
 @media(prefers-reduced-motion:reduce){#success{animation:none}}
+
+#colorKey #routeCount{color:#805d23;font-weight:700}#colorKey #routeCount:before{display:none}
+#routeComparison{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px;text-align:left}#routeComparison>div{background:#fff9e7;border:1px solid #cfb97e;padding:5px;border-radius:4px}#routeComparison strong{display:block;font-size:11px;color:#745018;margin-bottom:4px}#routeComparison span{display:block;font-size:11px;line-height:1.5;white-space:nowrap}#routeComparison .pending{color:#776d52;border-style:dashed}#routeComparison .pending span{white-space:normal}
+#success.compare{padding:10px}#success.compare .successMark{display:none}#success.compare h2{font-size:16px}#success.compare #successRoot{font-size:34px}#success.compare #successEquation{display:none}#success.compare p{font-size:11px;line-height:1.35;margin-top:7px}

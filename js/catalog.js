@@ -121,7 +121,7 @@ window.AXIOMA_CATALOG = [
     "theme": "Meetkunde",
     "art": "wortelbouw",
     "cover": "assets/covers/wortelbouw.svg",
-    "detail": "13 bouwpuzzels · prototype",
+    "detail": "14 bouwpuzzels · prototype",
     "id": "wortelbouw",
     "progressType": "none",
     "teacherVisible": false,

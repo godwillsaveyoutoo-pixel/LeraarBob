@@ -52,7 +52,8 @@ constructie. De spelhint vraagt bij 5 en 10 om een schuine zijde te bouwen.
 | 10 | √15 | 16 − 1 = 15 | 1 | Net onder een geheel kwadraat |
 | 11 | √21 | 25 − 4 = 21 | 1 | Zelf een passend verschil kiezen |
 | 12 | √14 | 9 + 4 = 13; 13 + 1 = 14 | 2 | Verder bouwen op een gedraaide, irrationale zijde |
-| 13 | √104 | 100 + 4 = 104 | 1 | Een groot getal hoeft geen moeilijke constructie te zijn |
+| 13 | √6, twee manieren | 4 + 1 = 5; 5 + 1 = 6 én 9 + 1 = 10; 10 − 4 = 6 | 2 per route | Dezelfde wortel met een som of een verschil |
+| 14 | √104 | 100 + 4 = 104 | 1 | Een groot getal hoeft geen moeilijke constructie te zijn |
 
 De liniaal gaat normaal tot 5, bij √11 tot 6 en bij 10 en √104 tot 10. Deze
 limieten worden ook in de geometriekern afgedwongen. Bij de uitgebreide
@@ -72,8 +73,8 @@ echte leerlingen moet de moeilijkheidsvolgorde verder onderbouwen.
 - Meetkundig: 840 combinaties van maten, zijden, spiegelingen en rotaties;
   rechte hoeken, exacte kwadratische lengtes, gedeelde grenzen zonder overlap,
   verbondenheid en herstel per stuk. Aanvullend alle grotere nieuwe routes.
-- Browser: alle dertien routes handmatig met muis op 780×360 en aanraking op
-  640×360; daarnaast tikbediening op beide formaten: 52 volledige routes.
+- Browser: alle veertien opgaven handmatig met muis op 780×360 en aanraking op
+  640×360; daarnaast tikbediening op beide formaten: 60 volledige routes (twee routes bij √6).
 - Uitkomsten blijven verborgen tot de onthulling. Het doel verschijnt daarna
   in de beloningskaart; het lengtelabel ligt op het midden van zijn eigen zijde.
 - Undo, annuleren, opnieuw tekenen, toetsenbord, schermrotatie, alle knoppen
@@ -88,4 +89,20 @@ node tests/wortelbouw-browser.cjs
 ```
 
 Het prototype bewaart geen voortgang, accountgegevens of XP. De catalogus
-vermeldt dertien bouwpuzzels en `tracking: none`.
+vermeldt veertien bouwpuzzels en `tracking: none`.
+
+## Twee manieren voor √6
+
+Deze opgave staat na het leren doorbouwen bij √14. De eerste bereikte √6
+wordt gevierd als een eerste manier. De leerling bouwt daarna opnieuw;
+de voltooide berekeningen blijven in de huidige puzzel bewaard. Een route
+met optellen als laatste bewerking en een route met aftrekken als laatste
+bewerking zijn samen het einddoel. Alleen spiegelen of dezelfde eindbewerking
+opnieuw gebruiken telt niet als een tweede manier. Beide volgordes mogen.
+
+De vergelijking toont de werkelijk gebouwde ketens van oppervlakten, niet
+een vooraf ingevuld voorbeeld. Ook andere geldige routes naar √6 worden
+aangenomen. De verwijzingen volgen de gebruikte vierkanten: ongebruikte
+zijtakken komen niet in de berekening. Undo neemt ook de laatst verworven
+route terug; de knop om de puzzel opnieuw te starten wist beide routes.
+Dit is sessiestaat, geen nieuwe opslag op het account.
