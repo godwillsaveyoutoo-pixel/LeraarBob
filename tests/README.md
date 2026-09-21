@@ -29,7 +29,9 @@ De social-browsertest gebruikt twee gescheiden browsercontexten, fictieve
 leerlingen en een transport in het geheugen. Er worden geen echte accounts of
 cloudresultaten aangemaakt. Hij doorloopt uitnodigen vanaf Home, ontvangen in
 Pythagoras, weigeren, navigeren naar Verfwinkel met een open uitnodiging,
-accepteren, gezamenlijk Zeeslag openen, schepen plaatsen via muisklikken,
+accepteren, gezamenlijk Zeeslag openen, schepen plaatsen met twee muisklikken of
+aanrakingen, een schip verplaatsen van rechts naar links, een ongeldig eindpunt
+weigeren, verplaatsen/selecteren/wissen ongedaan maken,
 missen/raken, beurtwisseling, dubbele schotpakketten, vernieuwen, opgeven,
 verbindingsherstel, uitloggen en 320/390/768/1440px-schermen.
 

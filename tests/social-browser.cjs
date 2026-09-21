@@ -186,17 +186,41 @@ async function setup(browser,uid){
   await a.wait('__naval.S.opponentConnected');await b.wait('__naval.S.opponentConnected');
   console.log('PASS: invitation survives navigation; acceptance opens the same private match for both');
   // Real game placement logic, with grid clicks in the browser's coordinate system.
+  async function fleetClick(c,x,y,touch=false){
+    const point=await c.eval(`(()=>{const svg=document.querySelector('#ownBoard'),p=svg.createSVGPoint();p.x=48+(${x}+4)*53;p.y=48+(4-(${y}))*53;const q=p.matrixTransform(svg.getScreenCTM());return {x:q.x,y:q.y}})()`);
+    if(touch){await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[point]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]})}
+    else for(const type of ['mousePressed','mouseReleased'])await c.send('Input.dispatchMouseEvent',{type,...point,button:'left',clickCount:1});
+  }
+  await b.send('Emulation.setTouchEmulationEnabled',{enabled:true});
   for(const c of [a,b]){
+    let placed=0;
     for(const [start,end] of [[[-4,-3],[-1,-3]],[[-4,-1],[-2,-1]],[[-4,1],[-3,1]]]){
-      for(const [x,y] of [start,end]){
-        const point=await c.eval(`(()=>{const svg=document.querySelector('#ownBoard'),p=svg.createSVGPoint();p.x=48+(${x}+4)*53;p.y=48+(4-(${y}))*53;const q=p.matrixTransform(svg.getScreenCTM());return {x:q.x,y:q.y}})()`);
-        for(const type of ['mousePressed','mouseReleased'])await c.send('Input.dispatchMouseEvent',{type,...point,button:'left',clickCount:1});
-      }
-      await c.eval(`document.querySelector('#confirmShipBtn').click()`);
+      for(const [x,y] of [start,end])await fleetClick(c,x,y,c===b);
+      assert.equal(await c.eval('__naval.S.ownFleet.length'),++placed,'two clicks/taps place each ship immediately');
+      assert.equal(await c.eval('__naval.S.placementStart'),null,'next ship starts without another button');
     }
     assert.equal(await c.eval('__naval.S.ownFleet.length'),3);
+    if(c===a){
+      const original=await a.eval('JSON.stringify(__naval.S.ownFleet)');
+      await fleetClick(a,-3,-3);
+      assert.match(await a.eval(`document.querySelector('#placeTitle').textContent`),/Kruiser.*verplaatsen/);
+      assert.equal(await a.eval(`document.querySelector('#readyBtn').disabled`),true,'finish blocked until editing completes or is cancelled');
+      await fleetClick(a,3,3);await fleetClick(a,2,3);
+      assert.equal(await a.eval('JSON.stringify(__naval.S.ownFleet)'),original,'invalid endpoint leaves the old ship intact');
+      await fleetClick(a,0,3);
+      assert.deepEqual(await a.eval('__naval.S.ownFleet[0].cells'),[{x:3,y:3},{x:2,y:3},{x:1,y:3},{x:0,y:3}],'reverse direction relocation replaces only the selected ship');
+      assert.equal(await a.eval('__naval.S.ownFleet.length'),3);
+      await a.eval(`document.querySelector('#undoShipBtn').click()`);
+      assert.equal(await a.eval('JSON.stringify(__naval.S.ownFleet)'),original,'undo restores the former position');
+      await fleetClick(a,-3,-1);await a.eval(`document.querySelector('#undoShipBtn').click()`);
+      assert.equal(await a.eval('JSON.stringify(__naval.S.ownFleet)'),original,'undo cancels picking up a ship');
+      await a.eval(`document.querySelector('#clearFleetBtn').click()`);assert.equal(await a.eval('__naval.S.ownFleet.length'),0);
+      await a.eval(`document.querySelector('#undoShipBtn').click()`);
+      assert.equal(await a.eval('JSON.stringify(__naval.S.ownFleet)'),original,'clearing the fleet can also be undone');
+    }
     await c.eval(`document.querySelector('#readyBtn').click()`);
   }
+  await b.send('Emulation.setTouchEmulationEnabled',{enabled:false});
   await a.wait(`__naval.S.phase==='battle'&&__naval.S.myTurn`);await b.wait(`__naval.S.phase==='battle'&&!__naval.S.myTurn`);
   // Fire y=0: miss; recipient should get the next turn.
   await a.eval(`document.querySelector('#fireBtn').click()`);

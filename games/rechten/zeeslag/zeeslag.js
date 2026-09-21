@@ -30,6 +30,15 @@ const S={
 
 // Presentation state stays local: never add animation fields to multiplayer payloads.
 const V={epoch:0,busy:false,firing:false,ghost:null,drop:null,impact:null,revealing:new Set(),lastTurn:null,queue:Promise.resolve(),timers:new Set()};
+const placement={editing:null,history:[]};
+function placementDef(){return SHIP_DEFS.find(d=>placement.editing?d.name===placement.editing:!S.ownFleet.some(s=>s.name===d.name))}
+function rememberFleet(){placement.history.push(cloneFleet(S.ownFleet));if(placement.history.length>50)placement.history.shift()}
+function clearPlacement(){placement.editing=null;S.placementStart=null;V.ghost=null;V.drop=null}
+function undoPlacement(){
+  if(S.phase!=='placing'||S.myReady)return;
+  if(!placement.editing&&!S.placementStart){if(placement.history.length)S.ownFleet=placement.history.pop();else S.ownFleet.pop()}
+  clearPlacement();renderGameUI();renderBoards();
+}
 const motionReduced=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 function later(fn,ms){const epoch=V.epoch;const timer=setTimeout(()=>{V.timers.delete(timer);if(epoch===V.epoch)fn()},ms);V.timers.add(timer);return timer}
 function pause(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
@@ -68,14 +77,17 @@ async function presentShot(shot,result,incoming,epoch){
 }
 function chooseGhost(p){
   if(S.phase!=='placing'||S.myReady||!S.placementStart)return;
-  const candidate=p?placementCandidates(S.placementStart,SHIP_DEFS[S.ownFleet.length]).find(c=>cellKey(c.end)===cellKey(p)):null;
-  if(!candidate||cellKey(candidate.end)===cellKey(V.ghost?.end||{}))return;
-  V.ghost=candidate;renderGameUI();renderBoards();
+  const candidate=p?placementCandidates(S.placementStart,placementDef()).find(c=>cellKey(c.end)===cellKey(p)):null;
+  if(cellKey(candidate?.end||{})===cellKey(V.ghost?.end||{}))return;
+  V.ghost=candidate||null;renderGameUI();renderBoards();
 }
 function confirmPlacement(){
-  const def=SHIP_DEFS[S.ownFleet.length];if(S.phase!=='placing'||S.myReady||!def||!V.ghost)return;
+  const def=placementDef();if(S.phase!=='placing'||S.myReady||!def||!V.ghost)return;
   const candidate=placementCandidates(S.placementStart,def).find(c=>cellKey(c.end)===cellKey(V.ghost.end));if(!candidate)return;
-  const ship={name:def.name,length:def.length,cells:candidate.cells,hits:new Set()};S.ownFleet.push(ship);V.drop=ship;V.ghost=null;S.placementStart=null;sfxPlaceShip();renderGameUI();renderBoards();later(()=>{V.drop=null;$('#ownBoard .dropShip')?.classList.remove('dropShip')},350);
+  rememberFleet();
+  const ship={name:def.name,length:def.length,cells:candidate.cells,hits:new Set()},index=S.ownFleet.findIndex(s=>s.name===def.name);
+  if(index<0)S.ownFleet.push(ship);else S.ownFleet[index]=ship;
+  clearPlacement();V.drop=ship;sfxPlaceShip();renderGameUI();renderBoards();later(()=>{if(V.drop===ship){V.drop=null;$('#ownBoard .dropShip')?.classList.remove('dropShip')}},350);
 }
 
 function showScreen(id){document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x.id===id));}
@@ -132,7 +144,7 @@ function lineSegment(a,b){
 }
 function logicalToSvgFloat(p){const m=48,span=424,step=span/8;return {x:m+(p.x-GRID_MIN)*step,y:m+(GRID_MAX-p.y)*step}}
 
-function placementCandidates(start,def){if(!start||!def)return[];const occupied=new Set(S.ownFleet.flatMap(s=>s.cells.map(cellKey))),out=[];for(const sl of ALLOWED_SLOPES){if(!shootableIntercept(sl.a,start))continue;for(const sign of [-1,1]){const sx=sl.dx*sign,sy=sl.dy*sign;const cells=Array.from({length:def.length},(_,i)=>({x:start.x+i*sx,y:start.y+i*sy}));if(cells.some(p=>p.x<GRID_MIN||p.x>GRID_MAX||p.y<GRID_MIN||p.y>GRID_MAX||occupied.has(cellKey(p))))continue;out.push({end:cells[cells.length-1],cells,slope:sl.a})}}return out}
+function placementCandidates(start,def){if(!start||!def)return[];const occupied=new Set(S.ownFleet.filter(s=>s.name!==placement.editing).flatMap(s=>s.cells.map(cellKey))),out=[];for(const sl of ALLOWED_SLOPES){if(!shootableIntercept(sl.a,start))continue;for(const sign of [-1,1]){const sx=sl.dx*sign,sy=sl.dy*sign;const cells=Array.from({length:def.length},(_,i)=>({x:start.x+i*sx,y:start.y+i*sy}));if(cells.some(p=>p.x<GRID_MIN||p.x>GRID_MAX||p.y<GRID_MIN||p.y>GRID_MAX||occupied.has(cellKey(p))))continue;out.push({end:cells[cells.length-1],cells,slope:sl.a})}}return out}
 function baseGridSvg(interactive=false,radar=false){
   const id=radar?'radar':'fleet';
   let h=`<defs><pattern id="${id}Water" width="40" height="24" patternUnits="userSpaceOnUse"><path d="M0 12 Q10 8 20 12 T40 12" fill="none" stroke="#6f9a9c" stroke-opacity=".065"/></pattern></defs><rect x="2" y="2" width="516" height="516" rx="12" fill="${radar?'#e4eef0':'#e6efea'}" stroke="#627d82" stroke-width="2"/><rect x="10" y="10" width="500" height="500" rx="6" fill="url(#${id}Water)" stroke="#9fb8b5" stroke-opacity=".6"/>`;
@@ -163,7 +175,7 @@ function shipSvg(ship,enemy=false,mode=''){
     const step=length/(pts.length-1),id=`reveal${first.x}_${first.y}_${pts.length}`;
     body=pts.map((_,i)=>{const left=i===0?-15:(i-.5)*step,right=i===pts.length-1?length+15:(i+.5)*step;return `<defs><clipPath id="${id}_${i}"><rect x="${left}" y="-14" width="${right-left}" height="28"/></clipPath></defs><g clip-path="url(#${id}_${i})"><g class="revealHull" style="animation-delay:${i*85}ms">${hull}</g></g>`}).join('');
   }
-  let h=`<g class="ship ${enemy?'enemyShip':''} ${mode==='ghost'?'ghostShip':''} ${mode==='drop'?'dropShip':''}" data-ship="${escapeHtml(ship.name||'preview')}"><g transform="translate(${first.x} ${first.y}) rotate(${angle})">${body}</g>`;
+  let h=`<g class="ship ${enemy?'enemyShip':''} ${mode==='ghost'?'ghostShip':''} ${mode==='editing'?'editingShip':''} ${mode==='drop'?'dropShip':''}" data-ship="${escapeHtml(ship.name||'preview')}"><g transform="translate(${first.x} ${first.y}) rotate(${angle})">${body}</g>`;
   for(const [i,p] of pts.entries())h+=`<circle class="shipNode ${reveal?'revealNode':''}" style="--delay:${i*85}ms" cx="${p.x}" cy="${p.y}" r="5"/>`;
   return h+'</g>';
 }
@@ -178,11 +190,11 @@ function markersSvg(shots){
   }
   return [...misses].filter(([k])=>!hits.has(k)).map(([,v])=>missSvg(v.p,v.animate)).join('')+[...hits.values()].map(v=>hitSvg(v.p,false,v.animate)).join('');
 }
-function placementOptionsSvg(){if(S.phase!=='placing'||S.myReady||!S.placementStart)return '';return placementCandidates(S.placementStart,SHIP_DEFS[S.ownFleet.length]).map(c=>{const p=gridPointToSvg(c.end);return `<circle class="candidate ${cellKey(c.end)===cellKey(V.ghost?.end||{})?'selected':''}" cx="${p.x}" cy="${p.y}" r="12"/>`}).join('')}
+function placementOptionsSvg(){if(S.phase!=='placing'||S.myReady||!S.placementStart)return '';return placementCandidates(S.placementStart,placementDef()).map(c=>{const p=gridPointToSvg(c.end);return `<circle class="candidate ${cellKey(c.end)===cellKey(V.ghost?.end||{})?'selected':''}" cx="${p.x}" cy="${p.y}" r="12"/>`}).join('')}
 function aimPreviewSvg(){return ''} // Deliberately empty: geometry is disclosed only by VUUR.
 function renderBoards(){
   const own=$('#ownBoard'),atk=$('#attackBoard'),enemyShots=S.enemyShots.filter(s=>s.visual!=='queued'),myShots=S.myShots.filter(s=>s.visual!=='queued');
-  own.innerHTML=baseGridSvg(S.phase==='placing'&&!S.myReady)+enemyShots.map((s,i)=>shotSvg(s,true,enemyShots.length-1-i)).join('')+S.ownFleet.map(s=>shipSvg(s,false,V.drop===s?'drop':'')).join('')+(V.ghost?shipSvg(V.ghost,false,'ghost'):'')+placementOptionsSvg()+markersSvg(enemyShots);
+  own.innerHTML=baseGridSvg(S.phase==='placing'&&!S.myReady)+enemyShots.map((s,i)=>shotSvg(s,true,enemyShots.length-1-i)).join('')+S.ownFleet.map(s=>shipSvg(s,false,s.name===placement.editing?'editing':V.drop===s?'drop':'')).join('')+(V.ghost?shipSvg(V.ghost,false,'ghost'):'')+placementOptionsSvg()+markersSvg(enemyShots);
   if(S.phase==='placing'&&S.placementStart&&!S.myReady){const p=gridPointToSvg(S.placementStart);own.insertAdjacentHTML('beforeend',`<circle class="startPulse" cx="${p.x}" cy="${p.y}" r="16" fill="none" stroke="#987839" stroke-width="2.5"/><circle cx="${p.x}" cy="${p.y}" r="4" fill="#987839"/>`)}
   atk.innerHTML=baseGridSvg(false,true)+myShots.map((s,i)=>shotSvg(s,false,myShots.length-1-i)).join('')+S.revealedEnemyShips.map(s=>shipSvg(s,true,V.revealing.has(s.name)?'reveal':'')).join('')+markersSvg(myShots);
   renderHistories();
@@ -193,12 +205,12 @@ function renderHistories(){
   $('#enemyHistory').innerHTML=history(S.enemyShots,'Verdedigingszone · jouw schepen zijn alleen voor jou zichtbaar.');
 }
 
-function resetGameState(){resetVisuals();S.lastShot=null;S.phase='placing';S.ownFleet=[];S.demoEnemyFleet=[];S.placementStart=null;S.myShots=[];S.enemyShots=[];S.revealedEnemyShips=[];S.myReady=false;S.oppReady=false;S.myTurn=false;S.finished=false;S.resultReported=false;S.winnerId=null;S.resultTitle='';S.resultMessage='';S.aimA={n:0,d:1};S.aimB={n:0,d:1};renderGameUI();renderBoards()}
+function resetGameState(){clearPlacement();placement.history=[];resetVisuals();S.lastShot=null;S.phase='placing';S.ownFleet=[];S.demoEnemyFleet=[];S.placementStart=null;S.myShots=[];S.enemyShots=[];S.revealedEnemyShips=[];S.myReady=false;S.oppReady=false;S.myTurn=false;S.finished=false;S.resultReported=false;S.winnerId=null;S.resultTitle='';S.resultMessage='';S.aimA={n:0,d:1};S.aimB={n:0,d:1};renderGameUI();renderBoards()}
 function renderGameUI(){
   saveMatch();
   renderMatchResult();
   $('#meName').textContent=S.profile?.alias||'Jij'; $('#opponentName').textContent=S.opponent?.alias||'Tegenstander';
-  const placed=S.ownFleet.length,def=SHIP_DEFS[placed];
+  const placed=S.ownFleet.length,def=placementDef();
   const attacking=S.phase==='battle'&&(S.myTurn||V.firing)&&!S.finished;
   $('#ownBoard').toggleAttribute('hidden',attacking);
   $('#aimComposer').hidden=!attacking;
@@ -206,12 +218,11 @@ function renderGameUI(){
   $('#ownBoardSub').textContent=attacking?(V.firing?'schot vastgelegd':'jij bepaalt de koers'):'jouw verdedigingszone';
   $('#bottomBar')?.toggleAttribute('hidden',S.phase!=='placing');
   $('#fleetCount').innerHTML=`${placed} / 3<small>schepen geplaatst</small>`;
-  $('#confirmShipBtn').hidden=!V.ghost||S.phase!=='placing'||S.myReady;
   if(S.phase==='placing'){
     $('#placementBar').hidden=false;$('#attackBoardSub').textContent='vijandelijke vloot verborgen';
-    if(def){$('#placeTitle').textContent=`${def.name} · ${def.length} punten`;$('#placeHint').textContent=V.ghost?'Bekijk de doorschijnende romp. Bevestig met Plaats schip.':S.placementStart?`Beginpunt (${S.placementStart.x}, ${S.placementStart.y}). Kies een blauw eindpunt.`:'Kies een beginpunt en daarna een blauw eindpunt.'}
-    else{$('#placeTitle').textContent='Vloot geplaatst';$('#placeHint').textContent=S.myReady?(S.oppReady?'Beide vloten klaar.':'Wachten op tegenstander…'):'Controleer je vloot en klik Vloot klaar.'}
-    $('#undoShipBtn').disabled=placed===0||S.myReady;$('#clearFleetBtn').disabled=placed===0||S.myReady;$('#readyBtn').disabled=placed!==SHIP_DEFS.length||S.myReady;
+    if(def){$('#placeTitle').textContent=`${def.name} · ${def.length} punten${placement.editing?' · verplaatsen':''}`;$('#placeHint').textContent=S.placementStart?`Beginpunt (${S.placementStart.x}, ${S.placementStart.y}). Klik op een blauw eindpunt om te plaatsen.`:placement.editing?'Kies een nieuw beginpunt en eindpunt. Ongedaan maken zet je schip terug.':'Klik een beginpunt, daarna een blauw eindpunt. Volgend schip gaat automatisch.'}
+    else{$('#placeTitle').textContent='Vloot geplaatst';$('#placeHint').textContent=S.myReady?(S.oppReady?'Beide vloten klaar.':'Wachten op tegenstander…'):'Klik op een schip om het te verplaatsen, of kies Vloot klaar.'}
+    $('#undoShipBtn').disabled=(!placed&&!placement.history.length&&!S.placementStart&&!placement.editing)||S.myReady;$('#clearFleetBtn').disabled=placed===0||S.myReady;$('#readyBtn').disabled=placed!==SHIP_DEFS.length||!!placement.editing||S.myReady;
     $('#readyBtn').textContent=S.myReady?'KLAAR ✓':'VLOOT KLAAR';
     setTurnPill(S.myReady?(S.oppReady?'Starten…':'Wachten op tegenstander…'):'Vloot plaatsen','');
     $('#enemyHistory').textContent='Tegenstander heeft nog niet geschoten.';
@@ -227,13 +238,19 @@ function renderGameUI(){
   refreshAimUI();announceTurn();
 }
 function setTurnPill(text,cls=''){const e=$('#turnPill');e.textContent=text;e.className='turnPill '+cls}
-function placeAt(p){
-  if(S.phase!=='placing'||S.myReady||!SHIP_DEFS[S.ownFleet.length])return;
-  if(!S.placementStart){S.placementStart=p;V.ghost=null;renderGameUI();renderBoards();return}
+function placeAt(p,shipName){
+  if(S.phase!=='placing'||S.myReady)return;
+  const ship=S.ownFleet.find(s=>s.name!==placement.editing&&(s.name===shipName||s.cells.some(c=>cellKey(c)===cellKey(p))));
+  if(ship){clearPlacement();placement.editing=ship.name;renderGameUI();renderBoards();return}
+  const def=placementDef();if(!def)return;
+  if(!S.placementStart){
+    if(!placementCandidates(p,def).length){toast('Vanaf dit punt past dit schip niet. Kies een ander beginpunt.');return}
+    S.placementStart=p;V.ghost=null;renderGameUI();renderBoards();return;
+  }
   if(cellKey(p)===cellKey(S.placementStart)){S.placementStart=null;V.ghost=null;renderGameUI();renderBoards();return}
-  const candidate=placementCandidates(S.placementStart,SHIP_DEFS[S.ownFleet.length]).find(c=>cellKey(c.end)===cellKey(p));
+  const candidate=placementCandidates(S.placementStart,def).find(c=>cellKey(c.end)===cellKey(p));
   if(!candidate){toast('Kies een blauw eindpunt: helling −2, −1, −½, 0, ½, 1 of 2.');return}
-  V.ghost=candidate;renderGameUI();renderBoards();
+  V.ghost=candidate;confirmPlacement();
 }
 function updateMatchPresence(){if(S.demo||!S.match)return;return S.match.track({user_id:S.me.id,alias:S.profile.alias,ready:S.myReady,phase:S.phase,ts:Date.now()}).catch(()=>{})}
 function deriveOppReady(){if(S.demo)return;const st=S.match?.presenceState?.()||{};let ready=false;S.opponentConnected=false;Object.values(st).flat().forEach(x=>{if(x.user_id===S.opponent?.id){ready=!!x.ready;S.opponentConnected=true}});S.oppReady=ready;if(S.phase==='placing'&&S.myReady&&S.oppReady)startBattle();renderGameUI()}
@@ -499,12 +516,12 @@ async function boot(){
   $('#rematchBtn').onclick=()=>resultAction(true);$('#endMatchBtn').onclick=()=>resultAction(false);
   AxiomaPlatform.wireHome($('#homeBtn'),{beforeLeave:async()=>{if(S.matchId)await leaveMatch();return !S.matchId}}); $('#demoBtn').onclick=initSolo;$('#soloBtn').onclick=initSolo; $('#leaveBtn').onclick=()=>leaveMatch(false); $('#rankingBtn').onclick=openRanking; $('#rankingCloseBtn').onclick=()=>$('#rankingOverlay').hidden=true; $('#rankingOverlay').addEventListener('click',e=>{if(e.target.id==='rankingOverlay')$('#rankingOverlay').hidden=true});
   $('#playerList').onclick=e=>{const b=e.target.closest('[data-invite]');if(b)sendInvite(b.dataset.invite)};
-  $('#ownBoard').addEventListener('click',e=>{const p=svgToGrid(e,$('#ownBoard'));if(p)placeAt(p)});
-  $('#confirmShipBtn').onclick=confirmPlacement;
+  $('#ownBoard').addEventListener('click',e=>{const p=svgToGrid(e,$('#ownBoard'));if(p)placeAt(p,e.target.closest('[data-ship]')?.dataset.ship)});
   $('#ownBoard').addEventListener('pointermove',e=>{if(e.pointerType==='mouse'&&S.placementStart){const p=svgToGrid(e,$('#ownBoard'));chooseGhost(p)}});
-  $('#undoShipBtn').onclick=()=>{if(S.myReady)return;S.ownFleet.pop();S.placementStart=null;V.ghost=null;V.drop=null;renderGameUI();renderBoards()};
-  $('#clearFleetBtn').onclick=()=>{if(S.myReady)return;S.ownFleet=[];S.placementStart=null;V.ghost=null;V.drop=null;renderGameUI();renderBoards()};
-  $('#readyBtn').onclick=()=>{if(S.ownFleet.length!==SHIP_DEFS.length||S.myReady)return;S.myReady=true;if(S.demo){S.oppReady=true;startBattle()}else{updateMatchPresence();setTimeout(deriveOppReady,100)}renderGameUI()};
+  $('#ownBoard').addEventListener('pointerleave',()=>chooseGhost(null));
+  $('#undoShipBtn').onclick=undoPlacement;
+  $('#clearFleetBtn').onclick=()=>{if(S.phase!=='placing'||S.myReady)return;rememberFleet();S.ownFleet=[];clearPlacement();renderGameUI();renderBoards()};
+  $('#readyBtn').onclick=()=>{if(S.phase!=='placing'||placement.editing||S.ownFleet.length!==SHIP_DEFS.length||S.myReady)return;clearPlacement();S.myReady=true;if(S.demo){S.oppReady=true;startBattle()}else{updateMatchPresence();setTimeout(deriveOppReady,100)}renderGameUI()};
   $('#aUpBtn').onclick=()=>shiftAimA(1);$('#aDownBtn').onclick=()=>shiftAimA(-1);
   $('#bUpBtn').onclick=()=>shiftAimB(1);$('#bDownBtn').onclick=()=>shiftAimB(-1);$('#fireBtn').onclick=fire;
   window.addEventListener('pagehide',saveMatch);

@@ -200,6 +200,13 @@ daarna beste winnende tijd; de eigen rij is gemarkeerd. Solo-oefentijden blijven
 apart bij het soloresultaat. Een lopende wedstrijd pauzeert niet bij het bekijken
 van de ranglijst; bij de einduitslag sluit het ranglijstvenster automatisch.
 
+Bij Zeeslag plaats je elk schip met twee klikken of tikken: beginpunt en een
+gemarkeerd eindpunt. Daarna volgt automatisch het volgende schip. Een geplaatst
+schip aanklikken selecteert het voor verplaatsing; de oude positie blijft bewaard
+tot een geldig nieuw begin- en eindpunt gekozen zijn. **Ongedaan maken** annuleert
+een selectie of herstelt de vorige plaatsing, verplaatsing of gewiste vloot.
+Alleen **Vloot klaar** bevestigt de volledige vloot voor de wedstrijd.
+
 Zeeslag toont na winst, verlies of het vertrek van de tegenstander een eindscherm
 met **Opnieuw** en **Beëindigen**. De uitslag wordt eerst gemeld; daarna sluit de
 gedeelde service de partij af en zijn de spelers weer beschikbaar. Bij een
