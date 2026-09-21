@@ -56,6 +56,11 @@
       card.classList.remove('is-complete');
       action.textContent = (kinds[game.kind] || kinds.learn)[1];
       detail.textContent = game.detail || 'Op jouw tempo';
+      if (game.progressType === 'multiplayer') {
+        root.hidden = true;
+        detail.textContent = account ? '2 spelers · nodig iemand online uit' : 'Log in om samen te spelen · demo beschikbaar';
+        continue;
+      }
       if (!student) {
         if (!account && game.progressType !== 'none') detail.textContent = 'Log in voor je voortgang';
         continue;

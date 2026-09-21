@@ -24,8 +24,9 @@ const mockAuth = `(() => {
 })();`;
 (async()=>{
  const c=new CDP();await c.connect();const ev=s=>c.eval(s);
+ await c.send('Network.enable');await c.send('Network.setCacheDisabled',{cacheDisabled:true});
  const wait=async expr=>{for(let i=0;i<100;i++){if(await ev(expr))return;await delay(50)}throw Error('Timeout: '+expr)};
- const label=id=>`document.querySelector('[data-game-id="${id}"] .card-progress').textContent`;
+ const label=id=>`(document.querySelector('[data-game-id="${id}"] .card-progress')?.textContent || '')`;
  await c.send('Emulation.setTouchEmulationEnabled',{enabled:false});
  await c.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
  // Read the live exercise count without completing or modifying an exercise.

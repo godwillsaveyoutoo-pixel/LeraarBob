@@ -35,8 +35,8 @@ Voorbeeld:
 ```
 
 ## Supabase
-De huidige Rechtentrainer behoudt zijn bestaande Supabase-koppeling.
-De frontpage en de andere spellen hoeven Supabase voorlopig niet te gebruiken.
+Het platform en de spellen delen de Supabase-login via `shared/axioma-auth.js`.
+`shared/axioma-social.js` verzorgt de platformbrede onlinelijst en speluitnodigingen.
 
 
 ## Tegelillustraties
@@ -225,3 +225,41 @@ Die wrapper kon in bepaalde deployments een permissieprobleem geven nadat de wac
 
 Ook toont de login nu een specifiekere foutmelding wanneer de credentials zelf fout zijn
 of wanneer de rolcontrole faalt.
+
+## Rechten Zeeslag en platformbrede uitnodigingen
+
+`games/rechten/zeeslag/` integreert het aangeleverde Rechten Zeeslag v0.5.
+De startpagina bevat een eigen tegel onder Spelen / Functies. Zonder account is
+een demopartij mogelijk; online spelen gebruikt de bestaande leraarBob-sessie.
+
+Alle platformpagina's laden `shared/axioma-social.js` na de gedeelde auth.
+De knop **Online** in de bovenbalk toont ingelogde spelers op het hele platform.
+Een uitnodiging verschijnt als **Uitnodiging!**; de ontvanger kiest expliciet
+Accepteren of Weigeren. Acceptatie opent dezelfde partij in de tabbladen waarin
+de uitnodiging verstuurd en geaccepteerd werd. Andere tabbladen blijven staan.
+Catalogus-iframes en `?demo=1` nemen niet deel aan de onlinelijst.
+
+De backenddefinities staan in `supabase_platform_social.sql`. Deze zijn toegepast
+op het gekoppelde project via de migratie `platform_online_players_and_naval_invitations`
+en de aanvullende expliciete RLS-afscherming `platform_social_rpc_only_policies`.
+Dit bestand beschrijft de volledige eerste installatie; voer het niet opnieuw
+uit op een project waar deze tabellen al bestaan.
+
+- Privétabellen bewaren aanwezigheid per tabblad en uitnodigingen. De publieke
+  `axioma_social`-RPC controleert de ingelogde identiteit, deelnemers, vervaldatum
+  en toegestane statusovergangen; tabellen zijn niet rechtstreeks toegankelijk.
+- Aanwezigheid en uitnodigingen verversen elke 4 seconden (15 seconden in een
+  achtergrondtabblad). Afmelden/navigeren verwijdert de aanwezigheid van dat tabblad;
+  bij een weggevallen verbinding verdwijnt een speler uiterlijk na 75 seconden.
+- Uitnodigingen vervallen na 90 seconden. Eén lopende uitnodiging of partij per
+  speler voorkomt dubbele/gekruiste afspraken. Er worden alleen aliassen en
+  klassen getoond, geen e-mailadressen.
+- De twee deelnemers spelen via een privé-Realtime-kanaal met toegangscontrole.
+  Vloten blijven lokaal. Vernieuwen herstelt de partij uit de sessieopslag van
+  hetzelfde tabblad; herhaalde schotpakketten gebruiken hetzelfde resultaat.
+- De bestaande multiplayer-RPC's bewaren leerlingresultaten en klasrankings.
+  Partijen met een leerkracht zijn oefenpartijen zonder ranking. De speluitkomst
+  is zoals in het aangeleverde spel door de twee browsers bepaald, niet door
+  een server die alle zetten en vloten controleert.
+
+Zie `tests/README.md` voor de browser- en databasetests.

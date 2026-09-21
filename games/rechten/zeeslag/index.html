@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fffef9">
+<title>leraarBob · Rechten Zeeslag</title>
+<link rel="stylesheet" href="zeeslag.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <button class="brand" id="homeBtn">leraarBob <span>Rechten Zeeslag</span></button>
+    <div class="topSpacer"></div>
+    <div class="connection"><span class="dot" id="connDot"></span><span id="connText">verbinden…</span></div>
+    <button class="topBtn" id="whoBtn" hidden></button>
+  </header>
+  <main>
+    <section id="gateScreen" class="screen active">
+      <div class="gate">
+        <svg class="gateMark" viewBox="0 0 132 100" aria-hidden="true"><rect x="1" y="1" width="130" height="98" rx="14" fill="#e6efea" stroke="#9bb2ad"/><path d="M16 30H116 M16 50H116 M16 70H116 M36 14V86 M56 14V86 M76 14V86 M96 14V86" stroke="#b8cbc7"/><path d="M16 70H116 M56 14V86" stroke="#526f77" stroke-width="1.5"/><g transform="translate(32 70) rotate(-27)"><path d="M0 -6Q-8 0 0 6H65L79 0L65 -6Z" fill="#8eafa0" stroke="#436d61"/><path d="M8 0H62" stroke="#436d61"/><g fill="#f9f8ed"><circle cx="8" r="3"/><circle cx="32" r="3"/><circle cx="56" r="3"/></g></g></svg><h1>Rechten Zeeslag</h1><div class="gateMath">y = ax + b</div>
+        <p>Verdedig je vloot. Vind de schepen van je tegenstander met rechten op het assenstelsel. Log in op leraarBob om online tegen iemand te spelen. Je kunt ook zonder account een demopartij proberen.</p>
+        <p><a href="../../../">Naar leraarBob om in te loggen</a></p><button class="demoLink" id="demoBtn">Speel een demopartij</button>
+      </div>
+    </section>
+
+    <section id="lobbyScreen" class="screen">
+      <div class="lobbyWrap">
+        <div class="lobbyHead">
+          <div><h1>Wie is online?</h1><p>Daag iemand op leraarBob uit, ook vanuit een ander spel.</p></div>
+          <div class="lobbyTools"><p id="lobbyCount"></p><button class="rankBtn" id="rankingBtn">Ranking</button></div>
+        </div>
+        <div class="playerList" id="playerList"></div>
+        <div class="lobbyNote">Spelers die al in een partij zitten blijven zichtbaar als <b>In spel</b>, maar kunnen niet worden uitgenodigd. Een uitnodiging vervalt automatisch na 90 seconden.</div>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen">
+      <div class="matchbar">
+        <button class="backLobby" id="leaveBtn">← Lobby</button>
+        <div class="matchTitle"><span id="meName">Jij</span> <span class="vs">tegen</span> <span id="opponentName">…</span></div>
+        <div class="turnPill" id="turnPill">Vloot plaatsen</div>
+      </div>
+      <div class="boards">
+        <div class="boardSide">
+          <div class="boardTitle"><strong id="leftBoardTitle">Jouw vloot</strong><span id="ownBoardSub">zichtbaar voor jou</span></div>
+          <div class="boardFrame">
+            <svg class="boardSvg" id="ownBoard" viewBox="0 0 520 520" aria-label="Jouw vloot"></svg>
+            <div class="aimComposer" id="aimComposer" hidden>
+              <div class="aimCard">
+                <div class="aimEyebrow">Aanvalconsole · kies je rechte</div>
+                <div class="equationBuilder" aria-label="Kies de richtingscoëfficiënt en de startwaarde">
+                  <span>y =</span>
+                  <div>
+                    <div class="paramControl">
+                      <button class="paramBtn" id="aUpBtn" aria-label="Volgende coëfficiënt van x">↑</button>
+                      <div class="paramValue" id="aValue">0</div>
+                      <button class="paramBtn" id="aDownBtn" aria-label="Vorige coëfficiënt van x">↓</button>
+                    </div>
+                    <div class="paramCaption">coëfficiënt van x</div>
+                  </div>
+                  <span>x</span>
+                  <span id="bSign">+</span>
+                  <div>
+                    <div class="paramControl">
+                      <button class="paramBtn" id="bUpBtn" aria-label="Verhoog b">↑</button>
+                      <div class="paramValue" id="bValue">0</div>
+                      <button class="paramBtn" id="bDownBtn" aria-label="Verlaag b">↓</button>
+                    </div>
+                    <div class="paramCaption">b · van −4 tot 4</div>
+                  </div>
+                </div>
+                <button class="fireBtn" id="fireBtn" disabled>VUUR</button>
+                <div class="concealHint">Waar vaart jouw rechte? Denk vooruit en druk op VUUR.</div><div class="chartLegend"><span><i></i>treffer</span><span><i class="miss"></i>water</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="history" id="enemyHistory">Tegenstander heeft nog niet geschoten.</div>
+        </div>
+        <div class="boardSide">
+          <div class="boardTitle"><strong>Aanvalsbord</strong><span id="attackBoardSub">vijandelijke vloot verborgen</span></div>
+          <div class="boardFrame"><svg class="boardSvg" id="attackBoard" viewBox="0 0 520 520" aria-label="Aanvalsbord"></svg></div>
+          <div class="history" id="myHistory">Jij hebt nog niet geschoten.</div>
+        </div>
+      </div>
+      <div class="bottom" id="bottomBar">
+        <div class="placementBar" id="placementBar">
+          <div class="fleetCount" id="fleetCount" aria-live="polite">0 / 3<small>schepen geplaatst</small></div><div class="placementInfo"><strong id="placeTitle">Kruiser · 4 punten</strong><span id="placeHint">Kies beginpunt en eindpunt.</span></div>
+          <button class="previewConfirm" id="confirmShipBtn" hidden>Plaats schip ✓</button><button class="smallBtn" id="undoShipBtn" disabled>Undo</button>
+          <button class="smallBtn" id="clearFleetBtn" disabled>Wis</button>
+          <button class="readyBtn" id="readyBtn" disabled>VLOOT KLAAR</button>
+        </div>
+        <div aria-hidden="true"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="overlay" id="rankingOverlay" hidden>
+  <div class="dialog rankDialog">
+    <div class="rankHead">
+      <div><h2>Rechten Zeeslag · ranking</h2><p id="rankingSubtitle">Jouw klas</p></div>
+      <button class="rankClose" id="rankingCloseBtn" aria-label="Sluiten">×</button>
+    </div>
+    <div class="myStats" id="myStats"><strong>Nog geen partijen</strong><span>Speel vijf partijen om in de ranking te komen.</span></div>
+    <div id="rankingBody"><div class="rankEmpty">Ranking laden…</div></div>
+    <p class="rankNote">De ranking gebruikt winstpercentage vanaf 5 voltooide partijen. Daarvoor worden je resultaten wel al bijgehouden.</p>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="../../../shared/vendor/supabase.js"></script>
+<script src="../../../shared/supabase-config.js"></script>
+<script src="../../../shared/axioma-auth.js"></script>
+<script src="../../../shared/axioma-social.js"></script>
+<script src="zeeslag.js"></script>
+</body>
+</html>

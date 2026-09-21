@@ -74,6 +74,23 @@
     "progressUnitPlural": "reeksen"
   },
   {
+    "title": "Rechten Zeeslag",
+    "subtitle": "Daag een online speler uit. Vind de vloot met y = ax + b.",
+    "href": "games/rechten/zeeslag/",
+    "category": "Eerstegraadsfuncties",
+    "kind": "game",
+    "accent": "blue",
+    "theme": "Functies",
+    "art": "naval",
+    "cover": "assets/covers/zeeslag.svg",
+    "detail": "2 spelers · online uitnodigingen",
+    "id": "rechten-zeeslag",
+    "progressType": "multiplayer",
+    "teacherVisible": false,
+    "gameType": "game",
+    "tracking": "multiplayer"
+  },
+  {
     "title": "Pythagoras",
     "subtitle": "Ontdek de stelling, bouw de formule en pas ze toe.",
     "href": "games/pythagoras.html?v=20260920-3",
