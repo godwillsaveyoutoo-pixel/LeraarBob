@@ -19,6 +19,7 @@ const adapters={
  'data-check':{keys:['evidenceDeskCompletedV06','evidenceDeskMetaV06'],hydrate(state){const done=numbers(state,1,22);put(state,this.keys[0],Array.from({length:22},(_,i)=>done.includes(i+1)));put(state,this.keys[1],{lastLevel:next(done,1,22)-1})}},
  'gravity-maze':{keys:['gravity-maze-human-v1-blind','gravity-maze-human-v1-assisted']},
  'vectoren-trainer':{keys:['axioma-vectorentrainer-v020']},
+ 'reele-getallen-trainer':{keys:['axioma-real-numbers-v1']},
  'brandweer':{keys:['axioma.brandweer.current.v1'],hydrate(state){const done=numbers(state,1,16);put(state,this.keys[0],next(done,1,16)-1)}},
  'kleiduifschieten':{keys:['axioma.rechten.kleiduiven.standalone.v12']},
  'rechten-trainer':{tracking:false,external:true},

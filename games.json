@@ -132,6 +132,26 @@
     "progressUnitPlural": "vaardigheden"
   },
   {
+    "title": "Reële getallen",
+    "subtitle": "Bouw, vergelijk en verbind breuken, decimalen, wortels en intervallen.",
+    "href": "games/reele-getallen/",
+    "category": "Reële getallen",
+    "kind": "train",
+    "accent": "blue",
+    "theme": "Getallen",
+    "art": "numbers",
+    "cover": "assets/covers/reele-getallen.svg",
+    "detail": "8 vaardigheden · leervoortgang bewaard",
+    "id": "reele-getallen-trainer",
+    "progressType": "levels",
+    "teacherVisible": true,
+    "gameType": "train",
+    "tracking": "progress",
+    "progressTotal": 8,
+    "progressUnitSingular": "vaardigheid",
+    "progressUnitPlural": "vaardigheden"
+  },
+  {
     "title": "Stelsels",
     "subtitle": "Los stelsels grafisch, met substitutie en met combinatie op.",
     "href": "games/stelsels.html?v=20260920-2",

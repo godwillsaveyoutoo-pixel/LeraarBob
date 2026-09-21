@@ -16,6 +16,9 @@ footer{display:flex;align-items:center;gap:10px;padding:8px 24px;border-top:1px 
 @media(max-width:639px){header{padding:4px 8px;gap:4px}.brand{font-size:19px}nav{gap:0}nav button{font-size:11px;padding:4px 6px}.header-actions{gap:0}#xp{width:62px;font-size:12px}#theme{display:none}#app{grid-template-rows:90px minmax(0,1fr)}header{flex-wrap:wrap}nav{order:3;width:100%;justify-content:center}.header-actions{margin-left:auto}#rotate{inset:90px 0 0}.page-heading{flex-wrap:wrap}.page-heading h1{font-size:28px}.page-actions{flex-wrap:wrap}.summary-inner h1{font-size:34px}}
 @media(orientation:portrait),(max-width:639px),(max-height:340px){body[data-screen=stage] #rotate{display:grid}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* A long decimal is one expression: explanations follow it instead of squeezing it. */
+#workspace.readonly.period{flex-direction:column;gap:6px}#workspace.readonly.period .canvas{flex:1;gap:4px}#workspace.readonly.period .rule{display:none}#workspace.readonly.period .lesson-copy{width:100%;flex:0 0 auto;max-width:900px;align-self:center;padding:8px 16px;gap:3px}#workspace.readonly.period .lesson-copy h2{font-size:18px}#workspace.readonly.period .lesson-copy p{font-size:15px}#workspace.readonly.period .source-caption{display:none}
+@media(orientation:portrait),(max-width:639px){body[data-preview=true] #rotate{display:none}body[data-preview=true] #stage{display:block;overflow:auto}body[data-preview=true] #workspace{display:flex;flex-direction:column;overflow:visible;padding:16px}body[data-preview=true] .canvas{min-height:220px}body[data-preview=true] .lesson-copy{width:100%;flex-basis:auto}body[data-preview=true] footer{position:sticky;bottom:0;background:var(--paper)}body[data-preview=true] #skip{display:none}}
 </style></head>
 <body><div id="app"><header><a class="brand" data-platform-home href="../../index.html">leraarBob</a><nav aria-label="Trainer"><button data-trainer-action="play" id="playNav">Oefenen</button><button data-trainer-action="help" id="helpNav">Uitleg</button><button data-trainer-action="progress" id="progressNav">Voortgang</button></nav><div class="header-actions"><span id="xp" title="Ervaringspunten">0 XP</span><button id="theme" aria-label="Lichte of donkere modus">◐</button></div></header>
 <main id="stage"><div class="question"><div><p id="eyebrow"></p><h1 id="prompt"></h1></div><span id="round"></span></div><div id="workspace"></div><footer><p id="hint" role="status"></p><button id="back" hidden>← Vorige</button><button id="skip">Later</button><button id="commit" class="primary">Controleer</button></footer></main>
@@ -349,7 +352,7 @@ function render(){
  $('skip').hidden=isLesson||feedbackMode;$('back').hidden=!isLesson;$('back').disabled=isLesson&&(preview?preview.step:lessonStep)===0;
  $('commit').textContent=isLesson?((preview?preview.step:lessonStep)<L.build(t).length-1?'Volgende stap →':preview?'Terug naar oefening':'Zelf proberen →'):phase==='done'?'Volgende →':phase==='feedback'?(feedback.ok?'Bouw de wortelgrenzen →':'Verbeter je antwoord'):'Controleer';
  $('hint').textContent=isLesson?'Bekijk het voorbeeld op je eigen tempo.':feedbackMode?'Lees rustig. Je kiest zelf wanneer je verdergaat.':free?'Vrij oefenen telt niet mee voor je leerroute.':t.skill==='root'?'Beide stappen samen vormen één opgave.':'Je keuze wordt pas beoordeeld na Controleer.';
- requestAnimationFrame(()=>drawLine(t,a));
+ drawLine(t,a);
 }
 function drawLine(t=preview?.task||task,a=(preview||phase==='intro')?L.build(t)[preview?preview.step:lessonStep].answer:answer){
  const svg=$('numberline');if(!svg)return;const box=svg.getBoundingClientRect(),w=box.width,h=box.height;if(!w||!h)return;
@@ -368,7 +371,7 @@ function drawLine(t=preview?.task||task,a=(preview||phase==='intro')?L.build(t)[
  const place=clientX=>{const r=svg.getBoundingClientRect(),v=min+Math.max(0,Math.min(1,(clientX-r.left-28)/(r.width-56)))*(max-min);if(t.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((max-min)/step),Math.round((v-min)/step)));else answer.values[activeSlot]=String(Math.round(v));drawLine(t,answer)};
  svg.onpointerdown=e=>{if(e.button>0)return;e.preventDefault();drag={answer:structuredClone(answer),id:e.pointerId};svg.setPointerCapture(e.pointerId);place(e.clientX)};
  svg.onpointermove=e=>{if(drag?.id===e.pointerId)place(e.clientX)};
- svg.onpointerup=e=>{if(drag?.id!==e.pointerId)return;drag=null;save();render()};
+ svg.onpointerup=e=>{if(drag?.id!==e.pointerId)return;const r=svg.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)answer=drag.answer;drag=null;save();render()};
  svg.onpointercancel=()=>{if(drag){answer=drag.answer;drag=null;save();render()}};
  svg.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();stepValue(e.key==='ArrowLeft'?-1:1)}};
 }
@@ -450,6 +453,7 @@ const adapters={
  'data-check':{keys:['evidenceDeskCompletedV06','evidenceDeskMetaV06'],hydrate(state){const done=numbers(state,1,22);put(state,this.keys[0],Array.from({length:22},(_,i)=>done.includes(i+1)));put(state,this.keys[1],{lastLevel:next(done,1,22)-1})}},
  'gravity-maze':{keys:['gravity-maze-human-v1-blind','gravity-maze-human-v1-assisted']},
  'vectoren-trainer':{keys:['axioma-vectorentrainer-v020']},
+ 'reele-getallen-trainer':{keys:['axioma-real-numbers-v1']},
  'brandweer':{keys:['axioma.brandweer.current.v1'],hydrate(state){const done=numbers(state,1,16);put(state,this.keys[0],next(done,1,16)-1)}},
  'kleiduifschieten':{keys:['axioma.rechten.kleiduiven.standalone.v12']},
  'rechten-trainer':{tracking:false,external:true},

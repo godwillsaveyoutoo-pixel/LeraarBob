@@ -110,6 +110,15 @@ const mock=`(()=>{
   for(const key of ['progress','session','task','answer'])assert.deepEqual(after[key],before[key],'vector new device '+key);
   console.log('PASS vector trainer: complete learning model, repairs, session and draft restored on another device');
 
+  const real=await open(game('reele-getallen-trainer'));
+  await real.eval('while(AxiomaRealTrainer.inspect().phase==="intro")document.querySelector("#commit").click()');
+  await real.eval(`(()=>{const t=AxiomaRealTrainer.inspect().task;for(const [i,value] of [Math.abs(t.target.n),t.target.d].entries()){document.querySelector('[data-slot="'+i+'"]').click();for(const digit of String(value))document.querySelector('[data-key="'+digit+'"]').click()}if(t.target.n<0)document.querySelector('[data-key="sign"]').click();document.querySelector('#commit').click()})()`);
+  await real.eval('AxiomaGame.flush()');
+  const realBefore=await real.eval('AxiomaRealTrainer.inspect()'),realSaved=await real.eval('testRow.state');assert.equal(realBefore.progress.xp,10);assert.equal(realBefore.phase,'done');
+  const real2=await open(game('reele-getallen-trainer'),{remote:realSaved}),realAfter=await real2.eval('AxiomaRealTrainer.inspect()');
+  for(const key of ['progress','session','task','answer','phase'])assert.deepEqual(realAfter[key],realBefore[key],'real numbers second device '+key);
+  console.log('PASS real numbers: earned XP, learning route and completed answer restored on a second device');
+
   for(const role of [null,{id:'teacher',role:'teacher'}]){
    const guest=await open(game('pythagoras'),{account:role,local:{'axioma.pythagoras.completed.v1':[1,2]}});
    await guest.eval('AxiomaSimple.cloud([1,2,3],10);AxiomaGame.flush()');

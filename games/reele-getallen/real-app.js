@@ -74,7 +74,7 @@ function render(){
  $('skip').hidden=isLesson||feedbackMode;$('back').hidden=!isLesson;$('back').disabled=isLesson&&(preview?preview.step:lessonStep)===0;
  $('commit').textContent=isLesson?((preview?preview.step:lessonStep)<L.build(t).length-1?'Volgende stap →':preview?'Terug naar oefening':'Zelf proberen →'):phase==='done'?'Volgende →':phase==='feedback'?(feedback.ok?'Bouw de wortelgrenzen →':'Verbeter je antwoord'):'Controleer';
  $('hint').textContent=isLesson?'Bekijk het voorbeeld op je eigen tempo.':feedbackMode?'Lees rustig. Je kiest zelf wanneer je verdergaat.':free?'Vrij oefenen telt niet mee voor je leerroute.':t.skill==='root'?'Beide stappen samen vormen één opgave.':'Je keuze wordt pas beoordeeld na Controleer.';
- requestAnimationFrame(()=>drawLine(t,a));
+ drawLine(t,a);
 }
 function drawLine(t=preview?.task||task,a=(preview||phase==='intro')?L.build(t)[preview?preview.step:lessonStep].answer:answer){
  const svg=$('numberline');if(!svg)return;const box=svg.getBoundingClientRect(),w=box.width,h=box.height;if(!w||!h)return;
@@ -93,7 +93,7 @@ function drawLine(t=preview?.task||task,a=(preview||phase==='intro')?L.build(t)[
  const place=clientX=>{const r=svg.getBoundingClientRect(),v=min+Math.max(0,Math.min(1,(clientX-r.left-28)/(r.width-56)))*(max-min);if(t.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((max-min)/step),Math.round((v-min)/step)));else answer.values[activeSlot]=String(Math.round(v));drawLine(t,answer)};
  svg.onpointerdown=e=>{if(e.button>0)return;e.preventDefault();drag={answer:structuredClone(answer),id:e.pointerId};svg.setPointerCapture(e.pointerId);place(e.clientX)};
  svg.onpointermove=e=>{if(drag?.id===e.pointerId)place(e.clientX)};
- svg.onpointerup=e=>{if(drag?.id!==e.pointerId)return;drag=null;save();render()};
+ svg.onpointerup=e=>{if(drag?.id!==e.pointerId)return;const r=svg.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)answer=drag.answer;drag=null;save();render()};
  svg.onpointercancel=()=>{if(drag){answer=drag.answer;drag=null;save();render()}};
  svg.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();stepValue(e.key==='ArrowLeft'?-1:1)}};
 }
