@@ -2,7 +2,7 @@
 'use strict';
 const C=RealNumbersCore,P=C.Progress,L=RealNumbersLessons,$=id=>document.getElementById(id),KEY='axioma-real-numbers-v1';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let progress=P.fresh(),task=null,answer=null,session=null,phase='answer',free=false,dirty=false,errorCode=null,lessonStep=0,feedback=null,preview=null,activeSlot=0,activeGroup='A',serial=Date.now()>>>0,drag=null,previous='stage';
+let progress=P.fresh(),task=null,answer=null,session=null,phase='answer',free=false,dirty=false,errorCode=null,lessonStep=0,feedback=null,preview=null,activeSlot=0,activeGroup='A',serial=Date.now()>>>0,drag=null,digitDrag=null,previous='stage';
 function m(e){const num=n=>`<mn>${esc(C.format(n))}</mn>`;let body='';if(e.kind==='fraction')body=`${e.n<0?'<mo>−</mo>':''}<mfrac>${num(Math.abs(e.n))}${num(e.d)}</mfrac>`;else if(e.kind==='root')body=`${e.sign<0?'<mo>−</mo>':''}<msqrt>${num(e.n)}</msqrt>`;else if(e.kind==='period')body=`${num(e.whole||0)}<mo>,</mo><mn>${esc(e.lead||'')}</mn><mover accent="true"><mn>${esc(e.repeat)}</mn><mo>¯</mo></mover>`;else body=num(e.kind==='decimal'?e.text:e.n)+(e.kind==='percent'?'<mo>%</mo>':'');return `<math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="${esc(C.label(e))}"><mrow>${body}</mrow></math>`}
 const rationalMath=r=>m(C.fraction(r.n,r.d));
 const intervalText=(lo,hi,cl,ch)=>`${cl?'[':']'}${C.format(lo)}; ${C.format(hi)}${ch?']':'['}`;
@@ -12,6 +12,7 @@ function restore(){try{
  task=C.generate(d.skill,{seed:Number(d.seed)>>>0,variant:Math.max(0,Math.floor(Number(d.variant)||0)),level:Math.min(2,Math.max(0,Math.floor(Number(d.level)||0)))});answer=C.freshAnswer(task);const a=d.answer||{};
  answer.values=[0,1].map(i=>typeof a.values?.[i]==='string'?a.values[i].slice(0,8):'');answer.sign=a.sign===-1?-1:1;answer.relation=[-1,0,1].includes(a.relation)?a.relation:null;answer.groups=Array.from({length:6},(_,i)=>['A','B'].includes(a.groups?.[i])?a.groups[i]:null);answer.labels=[...new Set((Array.isArray(a.labels)?a.labels:[]).filter(x=>['N','Z','Q','irr','R'].includes(x)))];answer.tick=Number.isInteger(a.tick)&&a.tick>=0&&a.tick<=32?a.tick:null;answer.closedLo=a.closedLo===true;answer.closedHi=a.closedHi===true;answer.stage=a.stage===1?1:0;
  for(const key of ['start','end'])answer[key]=Number.isInteger(a[key])&&a[key]>=0&&a[key]<(task.digits?.length||0)?a[key]:null;
+ if(task.skill==='interval')C.orderInterval(answer);if(task.skill==='period'&&answer.start!==null&&answer.end===null)answer.end=answer.start;answer.periodAnchor=Number.isInteger(a.periodAnchor)&&a.periodAnchor===answer.start&&answer.start===answer.end?a.periodAnchor:null;
  phase=['intro','answer','feedback','done'].includes(d.phase)?d.phase:'answer';free=d.free===true;dirty=d.dirty===true;errorCode=typeof d.errorCode==='string'?d.errorCode:null;lessonStep=Math.max(0,Math.min(L.build(task).length-1,Math.floor(Number(d.lessonStep)||0)));
  session={answered:0,clean:0,xp:0};for(const k of ['answered','clean','xp'])session[k]=Math.min(k==='xp'?10000:8,Math.max(0,Number(d.session?.[k])||0));
  feedback=d.feedback&&typeof d.feedback.message==='string'?{...d.feedback,message:d.feedback.message.slice(0,600)}:null;if(phase==='feedback'&&!feedback)phase='answer';if(phase==='done'&&!feedback)feedback={ok:true,message:'Deze oefening is al verwerkt. Je kunt verdergaan.',xp:0};activeSlot=d.activeSlot===1?1:0;activeGroup=d.activeGroup==='B'?'B':'A';return true;
@@ -46,13 +47,14 @@ function taskMarkup(t,a,readonly){
  }else if(t.skill==='interval'){
   const source=t.sourceMode==='notation'?esc(intervalText(t.lo,t.hi,t.closedLo,t.closedHi)):`Van ${C.format(t.lo)} tot ${C.format(t.hi)}.<br>${C.format(t.lo)} telt ${t.closedLo?'wel':'niet'} mee; ${C.format(t.hi)} telt ${t.closedHi?'wel':'niet'} mee.`;
   canvas=`<div class="interval-source">${source}</div>${svgLine()}`;
-  panel=`<div class="interval-controls">${button(`Links ${esc(a.values[0]||'?')}`,`data-slot="0" aria-pressed="${activeSlot===0}"`)}${button(`Rechts ${esc(a.values[1]||'?')}`,`data-slot="1" aria-pressed="${activeSlot===1}"`)}${button(a.closedLo?'● Telt mee':'○ Telt niet mee','data-toggle="closedLo" aria-label="Linkergrens telt '+(a.closedLo?'wel':'niet')+' mee"')}${button(a.closedHi?'● Telt mee':'○ Telt niet mee','data-toggle="closedHi" aria-label="Rechtergrens telt '+(a.closedHi?'wel':'niet')+' mee"')}</div><div class="line-tools">${button('−','data-step="-1" aria-label="Actieve grens één naar links"')}<span class="muted">${activeSlot===0?'Linkergrens':'Rechtergrens'}</span>${button('+','data-step="1" aria-label="Actieve grens één naar rechts"')}</div><p class="muted">Kies een grens, tik de lijn en beslis of het punt meetelt.</p>`;
+  panel=`<div class="interval-controls">${[0,1].map(i=>button(`${a.values.every(Boolean)?i?'Rechts':'Links':'Punt'} ${esc(a.values[i]||'?')}`,`data-slot="${i}" aria-pressed="${activeSlot===i}"`)).join('')}</div><div class="line-tools">${button('−','data-step="-1" aria-label="Actief grenspunt één naar links"')}<span class="muted">Verplaats punt</span>${button('+','data-step="1" aria-label="Actief grenspunt één naar rechts"')}</div>${button('Opnieuw tekenen','data-reset="interval"')}<p class="muted">○ telt niet mee · ● telt mee</p>`;
  }else if(t.skill==='classify'){
   canvas=`<div class="math-large">${m(t.source)}</div><p class="source-caption">Meerdere namen kunnen tegelijk juist zijn.</p>`;
   panel=`<div class="sets">${[['N','ℕ'],['Z','ℤ'],['Q','ℚ'],['irr','irrationaal'],['R','ℝ']].map(([id,name])=>button(name,`data-set="${id}" aria-pressed="${a.labels.includes(id)}"`)).join('')}</div><p class="muted">ℕ bevat hier ook 0.</p>`;
   if(readonly&&a.labels.length)canvas+=`<div class="set-map">${a.labels.map(id=>({N:'ℕ',Z:'ℤ',Q:'ℚ',R:'ℝ',irr:'irrationaal'})[id]).join(' · ')}</div>`;
  }else if(t.skill==='period'){
-  canvas=`<p class="rule">${esc(t.rule)}</p><div class="digits"><span class="digits-prefix">${t.whole},</span>${[...t.digits].map((digit,i)=>button(digit,`class="digit ${a.start!==null&&i>=a.start&&i<=(a.end??a.start)?'selected':''}" data-digit="${i}" aria-pressed="${a.start!==null&&i>=a.start&&i<=(a.end??a.start)}" aria-label="Decimaal ${i+1}: ${digit}"`)).join('')}<span>…</span></div><p class="source-caption">${a.start===null?'Tik het eerste en daarna het laatste cijfer van je blok.':a.end===null?'Tik nu het laatste cijfer. Voor één cijfer tik je nogmaals hetzelfde.':`Jouw blok: ${esc(t.digits.slice(a.start,a.end+1))}. Een nieuwe tik begint een andere selectie.`}</p>`;
+  const selected=a.start!==null&&a.end!==null;
+  canvas=`<p class="rule">${esc(t.rule)}</p><div class="digits"><span class="digits-prefix">${t.whole},</span>${[...t.digits].map((digit,i)=>button(digit,`class="digit ${selected&&i>=a.start&&i<=a.end?'selected':''}" data-digit="${i}" aria-pressed="${selected&&i>=a.start&&i<=a.end}" aria-label="Decimaal ${i+1}: ${digit}"`)).join('')}<span>…</span></div><p class="source-caption" aria-live="polite">${selected?`Jouw blok: ${esc(t.digits.slice(a.start,a.end+1))}`:'Nog geen blok gekozen'}</p>${!readonly?`<div class="period-tools"><p class="muted">Eén cijfer? Tik één keer.<br>Meer cijfers? Sleep erover, of tik de twee uiteinden.</p>${button('Wis selectie','data-reset="period"')}</div>`:''}`;
  }
  return {canvas,panel};
 }
@@ -69,7 +71,7 @@ function feedbackSource(t,a){
 }
 function render(){
  if(!task&&!preview)return;
- const focused=document.activeElement,focusKey=focused&&$('workspace').contains(focused)?['slot','key','token','set','selectGroup','digit','toggle','step'].find(k=>focused.dataset[k]!==undefined):null,focusValue=focusKey?focused.dataset[focusKey]:null,focusLine=focused?.id==='numberline';
+ const focused=document.activeElement,focusKey=focused&&$('workspace').contains(focused)?['slot','key','token','set','selectGroup','digit','toggle','step','reset'].find(k=>focused.dataset[k]!==undefined):null,focusValue=focusKey?focused.dataset[focusKey]:null,focusLine=focused?.id==='numberline';
  const t=preview?.task||task,isLesson=!!preview||phase==='intro',step=isLesson?L.build(t)[preview?preview.step:lessonStep]:null,a=step?.answer||answer;
  document.body.dataset.preview=String(!!preview);$('xp').textContent=`${progress.xp} XP`;$('xp').title=`${progress.xp} XP totaal · ${session?.xp||0} XP deze reeks`;
  $('eyebrow').textContent=`${preview?'Uitlegcollectie':isLesson?'Nieuw begrip':free?'Vrij oefenen':progress.skills[t.skill].repair?'Opnieuw proberen':'Jouw leerroute'} · ${C.skills.find(s=>s.id===t.skill).short}`;
@@ -86,7 +88,7 @@ function render(){
  }
  $('skip').hidden=isLesson||feedbackMode;$('back').hidden=!isLesson&&!(feedbackMode&&!feedback.ok);$('back').textContent=isLesson?'← Vorige':'Voorbeeld';$('back').disabled=isLesson&&(preview?preview.step:lessonStep)===0;
  $('commit').textContent=isLesson?((preview?preview.step:lessonStep)<L.build(t).length-1?'Volgende stap →':preview?(task?'Terug naar oefening':'Naar uitlegcollectie'):'Zelf proberen →'):phase==='done'?'Volgende →':phase==='feedback'?(feedback.ok?'Bouw de wortelgrenzen →':'Verbeter je antwoord'):'Controleer';
- $('hint').textContent=isLesson?'Bekijk het voorbeeld op je eigen tempo.':feedbackMode?'Lees rustig. Je kiest zelf wanneer je verdergaat.':free?'Vrij oefenen telt niet mee voor je leerroute.':t.skill==='root'?'Beide stappen samen vormen één opgave.':'Je keuze wordt pas beoordeeld na Controleer.';
+ $('hint').textContent=isLesson?'Bekijk het voorbeeld op je eigen tempo.':feedbackMode?'Lees rustig. Je kiest zelf wanneer je verdergaat.':t.skill==='interval'?'Tik twee punten. Tik opnieuw: hol ↔ vol. Sleep om te verplaatsen.':free?'Vrij oefenen telt niet mee voor je leerroute.':t.skill==='root'?'Beide stappen samen vormen één opgave.':'Je keuze wordt pas beoordeeld na Controleer.';
  drawLine(t,a);
  if(focusLine)$('numberline')?.focus({preventScroll:true});else if(focusKey){const attr=focusKey.replace(/[A-Z]/g,c=>'-'+c.toLowerCase());$('workspace').querySelector(`[data-${attr}="${focusValue}"]`)?.focus({preventScroll:true});}
 }
@@ -100,17 +102,62 @@ function drawLine(t=preview?.task||task,a=(preview||phase==='intro')?L.build(t)[
  if(t.skill==='line'&&a.tick!==null){const v=min+a.tick*step;marker(v,true,C.format(Number(v.toFixed(4))));}
  if(t.skill==='interval'){
   const l=C.parse(a.values[0]),r=C.parse(a.values[1]);if(l&&r&&C.compare(l,r)<0)html+=`<line x1="${x(C.number(l))}" x2="${x(C.number(r))}" y1="${y}" y2="${y}" stroke="var(--blue)" stroke-width="7" opacity=".5"/>`;
-  if(l)marker(C.number(l),a.closedLo,'L');if(r)marker(C.number(r),a.closedHi,'R');
+  if(l)marker(C.number(l),a.closedLo,C.format(C.number(l)));if(r)marker(C.number(r),a.closedHi,C.format(C.number(r)));
+  if(!preview&&phase==='answer'&&a.values[activeSlot]!==''){const px=x(Number(a.values[activeSlot]));html+=`<circle cx="${px}" cy="${y}" r="14" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="3 3"/>`}
  }
+ if(t.skill==='interval')svg.setAttribute('aria-label','Interval. Tik twee grenspunten in willekeurige volgorde. Tik opnieuw voor hol of vol. Sleep om te verplaatsen. Pijltjestoetsen verplaatsen het actieve punt; Enter wisselt hol en vol.');
  svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.innerHTML=html;
  if(preview||phase!=='answer'||!['line','interval'].includes(t.skill))return;
- const place=clientX=>{const r=svg.getBoundingClientRect(),v=min+Math.max(0,Math.min(1,(clientX-r.left-28)/(r.width-56)))*(max-min);if(t.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((max-min)/step),Math.round((v-min)/step)));else answer.values[activeSlot]=String(Math.round(v));drawLine(t,answer)};
- svg.onpointerdown=e=>{if(e.button>0)return;e.preventDefault();svg.focus({preventScroll:true});drag={answer:structuredClone(answer),id:e.pointerId};svg.setPointerCapture(e.pointerId);place(e.clientX)};
- svg.onpointermove=e=>{if(drag?.id===e.pointerId)place(e.clientX)};
- svg.onpointerup=e=>{if(drag?.id!==e.pointerId)return;const r=svg.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)answer=drag.answer;drag=null;save();render()};
- svg.onpointercancel=()=>{if(drag){answer=drag.answer;drag=null;save();render()}};
- svg.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();stepValue(e.key==='ArrowLeft'?-1:1)}};
+ const at=clientX=>{const r=svg.getBoundingClientRect();return min+Math.max(0,Math.min(1,(clientX-r.left-28)/(r.width-56)))*(max-min)};
+ const place=clientX=>{const v=at(clientX);if(t.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((max-min)/step),Math.round((v-min)/step)));else moveEndpoint(Math.round(v));drawLine(t,answer)};
+ svg.onpointerdown=e=>{
+  if(e.button>0||drag)return;e.preventDefault();svg.focus({preventScroll:true});
+  const v=Math.round(at(e.clientX)),hit=t.skill==='interval'?answer.values.findIndex(s=>s!==''&&Number(s)===v):-1;
+  drag={answer:structuredClone(answer),slot:activeSlot,id:e.pointerId,x:e.clientX,y:e.clientY,hit,moved:false};svg.setPointerCapture(e.pointerId);
+  if(t.skill==='interval'){
+   activeSlot=hit>=0?hit:answer.values.indexOf('')>=0?answer.values.indexOf(''):[0,1].sort((i,j)=>Math.abs(Number(answer.values[i])-v)-Math.abs(Number(answer.values[j])-v))[0];
+   if(hit<0)place(e.clientX);else drawLine(t,answer);
+  }else place(e.clientX);
+ };
+ svg.onpointermove=e=>{if(drag?.id===e.pointerId&&Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>6){drag.moved=true;place(e.clientX)}};
+ svg.onpointerup=e=>{
+  if(drag?.id!==e.pointerId)return;const r=svg.getBoundingClientRect();
+  if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom){answer=drag.answer;activeSlot=drag.slot}
+  else if(t.skill==='interval'&&!drag.moved&&drag.hit>=0)toggleEndpoint();
+  drag=null;save();render();
+ };
+ svg.onpointercancel=()=>{if(drag){answer=drag.answer;activeSlot=drag.slot;drag=null;save();render()}};
+ svg.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();stepValue(e.key==='ArrowLeft'?-1:1)}else if(t.skill==='interval'&&['Enter',' '].includes(e.key)){e.preventDefault();if(answer.values[activeSlot]==='')moveEndpoint(0);else toggleEndpoint();save();render()}};
 }
+function moveEndpoint(value){
+ const other=1-activeSlot;
+ // Distinct endpoints cannot collapse; crossing them keeps each circle's inclusion.
+ if(answer.values[other]!==''&&Number(answer.values[other])===value)return;
+ answer.values[activeSlot]=String(value);if(C.orderInterval(answer))activeSlot=1-activeSlot;
+}
+function toggleEndpoint(){const key=activeSlot?'closedHi':'closedLo';answer[key]=!answer[key]}
+function selectDigit(i){
+ if(answer.periodAnchor!==null&&answer.periodAnchor!==i){answer.start=Math.min(answer.periodAnchor,i);answer.end=Math.max(answer.periodAnchor,i);answer.periodAnchor=null;}
+ else {answer.start=answer.end=i;answer.periodAnchor=i;}
+}
+// Pointer selection follows the finger, with one digit already a complete answer.
+$('workspace').addEventListener('pointerdown',e=>{
+ const b=e.target.closest('[data-digit]');if(!b||b.disabled||preview||phase!=='answer'||e.button>0||digitDrag)return;
+ e.preventDefault();b.focus({preventScroll:true});digitDrag={id:e.pointerId,start:Number(b.dataset.digit),last:Number(b.dataset.digit),answer:structuredClone(answer),moved:false};$('workspace').setPointerCapture(e.pointerId);
+});
+function paintDigitSelection(){for(const b of $('workspace').querySelectorAll('[data-digit]')){const selected=Number(b.dataset.digit)>=answer.start&&Number(b.dataset.digit)<=answer.end;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected))}}
+$('workspace').addEventListener('pointermove',e=>{
+ if(digitDrag?.id!==e.pointerId)return;const b=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-digit]');if(!b)return;
+ const i=Number(b.dataset.digit);if(i!==digitDrag.start)digitDrag.moved=true;digitDrag.last=i;
+ if(digitDrag.moved){answer.start=Math.min(i,digitDrag.start);answer.end=Math.max(i,digitDrag.start);answer.periodAnchor=null;paintDigitSelection()}
+});
+$('workspace').addEventListener('pointerup',e=>{
+ if(digitDrag?.id!==e.pointerId)return;const b=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-digit]');
+ if(!b)answer=digitDrag.answer;else {const end=Number(b.dataset.digit);if(digitDrag.moved||end!==digitDrag.start){answer.start=Math.min(digitDrag.start,end);answer.end=Math.max(digitDrag.start,end);answer.periodAnchor=null;}else selectDigit(digitDrag.start);}
+ digitDrag=null;save();render();
+});
+$('workspace').addEventListener('pointercancel',()=>{if(digitDrag){answer=digitDrag.answer;digitDrag=null;save();render()}});
+
 function key(k){
  if(phase!=='answer'||preview)return;
  if(k==='next')activeSlot=1-activeSlot;
@@ -118,7 +165,7 @@ function key(k){
  else if(k==='clear')answer.values[activeSlot]='';else if(k==='back')answer.values[activeSlot]=answer.values[activeSlot].slice(0,-1);else if(/^\d$/.test(k)&&answer.values[activeSlot].replace('-','').length<6)answer.values[activeSlot]+=k;
  save();render();
 }
-function stepValue(d){if(preview||phase!=='answer')return;if(task.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((task.max-task.min)/C.number(task.step)),(answer.tick??Math.round(-task.min/C.number(task.step)))+d));else if(task.skill==='interval')answer.values[activeSlot]=String(Math.max(task.min,Math.min(task.max,(Number(answer.values[activeSlot])||0)+d)));save();render()}
+function stepValue(d){if(preview||phase!=='answer')return;if(task.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((task.max-task.min)/C.number(task.step)),(answer.tick??Math.round(-task.min/C.number(task.step)))+d));else if(task.skill==='interval'){let v=Math.max(task.min,Math.min(task.max,(Number(answer.values[activeSlot])||0)+d));if(answer.values[1-activeSlot]!==''&&Number(answer.values[1-activeSlot])===v)v=Math.max(task.min,Math.min(task.max,v+d));moveEndpoint(v);}save();render()}
 $('workspace').onclick=e=>{
  const b=e.target.closest('button');if(!b||b.disabled)return;const d=b.dataset;
  if(d.example){example(d.example);return}if(preview||phase!=='answer')return;
@@ -128,7 +175,9 @@ $('workspace').onclick=e=>{
  if(d.token!==undefined){const i=Number(d.token);answer.groups[i]=answer.groups[i]===activeGroup?null:activeGroup;}
  if(d.set)answer.labels=answer.labels.includes(d.set)?answer.labels.filter(x=>x!==d.set):[...answer.labels,d.set];
  if(d.toggle)answer[d.toggle]=!answer[d.toggle];
- if(d.digit!==undefined){const i=Number(d.digit);if(answer.start===null||answer.end!==null){answer.start=i;answer.end=null}else{answer.end=Math.max(i,answer.start);answer.start=Math.min(i,answer.start)}}
+ if(d.digit!==undefined){if(e.detail>0)return;selectDigit(Number(d.digit))}
+ if(d.reset==='interval'){answer.values=['',''];answer.closedLo=answer.closedHi=false;activeSlot=0;}
+ if(d.reset==='period')answer.start=answer.end=answer.periodAnchor=null;
  if(d.step){stepValue(Number(d.step));return}save();render();
 };
 document.addEventListener('keydown',e=>{if(document.body.dataset.screen!=='stage'||preview||phase!=='answer'||!['fraction','root'].includes(task.skill)||e.ctrlKey||e.metaKey||e.altKey)return;if(/^\d$/.test(e.key)){e.preventDefault();key(e.key)}else if(['Backspace','-'].includes(e.key)){e.preventDefault();key(e.key==='-'?'sign':'back')}});

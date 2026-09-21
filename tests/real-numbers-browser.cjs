@@ -33,9 +33,9 @@ const BASE='http://127.0.0.1:8765/games/reele-getallen/';
   if(t.skill==='line')await point(C.number(t.target),t);
   if(t.skill==='group')for(let i=0;i<6;i++){await click(`[data-select-group="${a.groups[i]}"]`);await click(`[data-token="${i}"]`)}
   if(t.skill==='root'){await enter([String(t.k*t.k),String((t.k+1)**2)]);await click('#commit');assert.equal((await inspect()).phase,'feedback');assert.equal((await inspect()).progress.xp,0);await click('#commit');await enter(a.values);}
-  if(t.skill==='interval'){for(let i=0;i<2;i++){await click(`[data-slot="${i}"]`);await point(Number(a.values[i]),t)}if(a.closedLo)await click('[data-toggle="closedLo"]');if(a.closedHi)await click('[data-toggle="closedHi"]');}
+  if(t.skill==='interval'){await point(t.hi,t);if(a.closedHi)await point(t.hi,t);await point(t.lo,t);if(a.closedLo)await point(t.lo,t);}
   if(t.skill==='classify')for(const id of a.labels)await click(`[data-set="${id}"]`);
-  if(t.skill==='period'){await click(`[data-digit="${a.start}"]`);await click(`[data-digit="${a.end}"]`);}
+  if(t.skill==='period'){await click(`[data-digit="${a.start}"]`);if(a.end!==a.start)await click(`[data-digit="${a.end}"]`);}
   await click('#commit');assert.equal((await inspect()).phase,'done',t.skill+' solved '+JSON.stringify((await inspect()).answer)+' '+JSON.stringify((await inspect()).feedback));
  }
  for(const width of [640,780]){
@@ -44,6 +44,40 @@ const BASE='http://127.0.0.1:8765/games/reele-getallen/';
    await fixture(sk.id,{phase:'intro',free:false,level:0});const exampleSignature=(await inspect()).task.signature;while((await inspect()).phase==='intro'){await layout(sk.id+' intro '+width+' step '+(await inspect()).lessonStep);await click('#commit');}assert.equal((await inspect()).progress.xp,0);assert.notEqual((await inspect()).task.signature,exampleSignature,'independent task differs from worked example');
   }
  }
+ // Direct interval construction, with both orders and all four endpoint combinations.
+ for(const variant of [0,1,2,3])for(const reverse of [false,true]){
+  await fixture('interval',{variant});const t=(await inspect()).task;
+  for(const v of reverse?[t.hi,t.lo]:[t.lo,t.hi]){await point(v,t);if(v===t.lo?t.closedLo:t.closedHi)await point(v,t);}
+  assert.deepEqual((await inspect()).answer.values,[String(t.lo),String(t.hi)]);
+  await click('#commit');assert.equal((await inspect()).phase,'done','both interval orders '+variant);
+ }
+ await fixture('interval');let t=(await inspect()).task;
+ await point(2,t);await point(2,t);const lone=(await inspect()).answer;
+ await c.send('Page.reload');await c.wait('!!window.AxiomaRealTrainer');assert.deepEqual((await inspect()).answer,lone,'first closed endpoint survives reload');
+ await point(-2,t);assert.deepEqual((await inspect()).answer.values,['-2','2']);assert.equal((await inspect()).answer.closedHi,true);
+ const lineXY=async v=>ev(`(()=>{const r=document.getElementById('numberline').getBoundingClientRect();return {x:r.x+28+(${v}+4)/10*(r.width-56),y:r.y+r.height*.52}})()`);
+ const from=await lineXY(2),to=await lineXY(-3);
+ await c.send('Input.dispatchMouseEvent',{type:'mousePressed',...from,button:'left',clickCount:1});await c.send('Input.dispatchMouseEvent',{type:'mouseMoved',...to,buttons:1});await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...to,button:'left',clickCount:1});
+ assert.deepEqual((await inspect()).answer.values,['-3','-2']);assert.equal((await inspect()).answer.closedLo,true,'closed circle travels with dragged endpoint');assert.equal((await inspect()).answer.closedHi,false);
+ const savedInterval=(await inspect()).answer;await c.send('Input.dispatchMouseEvent',{type:'mousePressed',...await lineXY(-3),button:'left',clickCount:1});await c.send('Input.dispatchMouseEvent',{type:'mouseMoved',...await lineXY(4),buttons:1});await ev('document.getElementById("numberline").dispatchEvent(new PointerEvent("pointercancel"))');await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...await lineXY(4),button:'left',clickCount:1});assert.deepEqual((await inspect()).answer,savedInterval);
+ await click('[data-reset="interval"]');assert.deepEqual((await inspect()).answer.values,['','']);
+ // Actual pointer/touch input, not programmatic clicks: one digit is already complete.
+ const seedFor=repeat=>Array.from({length:100},(_,i)=>i+1).find(seed=>C.generate('period',{seed,level:1}).repeat===repeat);
+ const digitXY=async i=>ev(`(()=>{const r=document.querySelector('[data-digit="${i}"]').getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`);
+ await fixture('period',{seed:seedFor('3')});const q=await digitXY(0);
+ await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[q]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+ assert.equal((await inspect()).answer.start,0);assert.equal((await inspect()).answer.end,0);await click('#commit');assert.equal((await inspect()).phase,'done','one touch selects the period 3');
+ await fixture('period',{seed:seedFor('27')});t=(await inspect()).task;
+ const last=await digitXY(t.target.end),first=await digitXY(t.target.start);
+ await c.send('Input.dispatchMouseEvent',{type:'mousePressed',...last,button:'left',clickCount:1});await c.send('Input.dispatchMouseEvent',{type:'mouseMoved',...first,buttons:1});await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...first,button:'left',clickCount:1});
+ assert.equal((await inspect()).answer.start,t.target.start);assert.equal((await inspect()).answer.end,t.target.end);
+ await c.send('Page.reload');await c.wait('!!window.AxiomaRealTrainer');assert.equal((await inspect()).answer.end,t.target.end);await click('#commit');assert.equal((await inspect()).phase,'done','reverse drag selects a period');
+ await fixture('period',{seed:seedFor('27')});t=(await inspect()).task;
+ for(const i of [t.target.end,t.target.start]){const pos=await digitXY(i);await c.send('Input.dispatchMouseEvent',{type:'mousePressed',...pos,button:'left',clickCount:1});await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...pos,button:'left',clickCount:1});}
+ assert.equal((await inspect()).answer.start,t.target.start);assert.equal((await inspect()).answer.end,t.target.end);await layout('period reverse taps');
+ const periodShot=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/real-period-direct.png',Buffer.from(periodShot.data,'base64'));
+ await click('[data-reset="period"]');assert.equal((await inspect()).answer.start,null);
+ console.log('PASS: interval taps in either order, open/closed toggles, crossing drag, cancel and reload; single-touch period, reverse drag and reverse taps');
  await fixture('line');await ev('document.getElementById("numberline").focus()');for(let i=0;i<2;i++)await c.send('Input.dispatchKeyEvent',{type:'keyDown',key:'ArrowRight',code:'ArrowRight'});assert.equal(await ev('document.activeElement.id'),'numberline','keyboard focus stays on the replacement line');const cursor=(await inspect()).answer.tick;assert(cursor!==null);
  const lineRect=await ev('document.getElementById("numberline").getBoundingClientRect().toJSON()');await c.send('Input.dispatchMouseEvent',{type:'mousePressed',x:lineRect.x+30,y:lineRect.y+45,button:'left',clickCount:1});await ev('document.getElementById("numberline").dispatchEvent(new PointerEvent("pointercancel"))');await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',x:lineRect.x+30,y:lineRect.y+45,button:'left',clickCount:1});assert.equal((await inspect()).answer.tick,cursor,'cancel restores previous placement');
  await fixture('group',{free:false});for(let i=0;i<6;i++)await click(`[data-token="${i}"]`);await click('#commit');assert.equal((await inspect()).phase,'feedback');assert.equal((await inspect()).progress.skills.group.repair,'equivalence','error recorded before task completion');await layout('group error context');assert.equal(await ev('document.querySelectorAll(".feedback-picture math").length'),2,'the incorrect pair stays visible');

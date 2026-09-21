@@ -108,7 +108,13 @@ const mock=`(()=>{
   assert(before.progress.total>0,'record an actual vector exercise');
   const v2=await open(game('vectoren-trainer'),{remote:saved});const after=await v2.eval('AxiomaVectorTrainer.inspect()');
   for(const key of ['progress','session','task','answer'])assert.deepEqual(after[key],before[key],'vector new device '+key);
-  console.log('PASS vector trainer: complete learning model, repairs, session and draft restored on another device');
+  await v.eval(`document.querySelector('#freeBtn').click();document.querySelector('#skillList button').click();AxiomaGame.flush()`);
+  const practiceSaved=await v.eval('testRow.state'),v3=await open(game('vectoren-trainer'),{remote:practiceSaved});
+  assert.equal(await v3.eval('AxiomaVectorTrainer.inspect().free'),true);
+  await v3.eval(`document.querySelector('#playBtn').click();AxiomaGame.flush()`);
+  const returned=await v3.eval('AxiomaVectorTrainer.inspect()');
+  for(const key of ['progress','session','task','answer'])assert.deepEqual(returned[key],before[key],'suspended route on second device '+key);
+  console.log('PASS vector trainer: XP and suspended learning route restored on another device after free practice');
 
   const real=await open(game('reele-getallen-trainer'));
   await real.eval('while(AxiomaRealTrainer.inspect().phase==="intro")document.querySelector("#commit").click()');

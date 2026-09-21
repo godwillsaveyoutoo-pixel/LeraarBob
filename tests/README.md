@@ -110,6 +110,9 @@ controleert of de planningsmelding geen knoppen afdekt op 780 × 360 en desktop.
 XP voor zelfstandig oplossen, verbeteren, herstel en overslaan.
 `node tests/vector-trainer-browser.cjs` doorloopt alle uitlegstappen, controleert
 leesbare feedback zonder automatisch doorgaan en herladen zonder dubbele XP.
+De tests controleren ook de afzonderlijke modi, terugkeren vanuit oude vrije
+concepten en het bewaren van een reeks tijdens vrij oefenen en herladen.
+De accounttest controleert die terugkeer ook op een tweede toestel.
 `node tests/account-progress-browser.cjs` controleert ook verdiende XP en het
 opgeloste antwoord op een tweede toestel met fictieve accounts.
 
@@ -122,3 +125,9 @@ opgeloste antwoord op een tweede toestel met fictieve accounts.
 invoer en XP, volledige reeksen en lichte/donkere weergave. De accountbrowsertest
 controleert ook deze trainer op een tweede toestel met fictieve accounts.
 Bouw na bronwijzigingen met `node scripts/build-real-trainer.cjs`.
+
+De Reële Getallen-tests controleren ook intervalconstructies in beide
+richtingen, alle open/gesloten combinaties, het kruisen en annuleren van
+versleepte eindpunten, één tik voor een eencijferige periode, selectie in
+omgekeerde richting, en behouden invoer na herladen. De kerncontrole controleert
+bovendien dat de voortzettingsregel het kleinste herhaalblok noemt.

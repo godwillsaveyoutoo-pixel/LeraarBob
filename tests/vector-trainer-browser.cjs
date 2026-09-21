@@ -73,7 +73,22 @@ const BASE='http://127.0.0.1:8765/games/vectoren/Axioma_Vectorentrainer_v0.2.htm
  await c.send('Page.reload');await c.wait('!!window.AxiomaVectorTrainer');assert.equal(await ev('AxiomaVectorTrainer.inspect().progress.xp'),awarded);assert(await ev('AxiomaVectorTrainer.inspect().done'));assert(await ev(`!document.getElementById('feedbackPanel').hidden`));
  await click('helpBtn');await click('closeHelp');assert.equal(await ev('AxiomaVectorTrainer.inspect().progress.xp'),awarded,'help and resume do not award again');
  console.log('PASS: visible learner-paced feedback; XP and completed answer survive reload without duplicate awards');
- await click('libraryBtn');await click('startBtn');
+ // Leaving the route must preserve the exact task, feedback and session across reload.
+ const scored=await ev('AxiomaVectorTrainer.inspect()');
+ await click('freeBtn');await ev("document.querySelector('#skillList button').click()");
+ assert.equal(await ev('AxiomaVectorTrainer.inspect().free'),true);
+ assert.match(await ev("document.getElementById('practiceMode').textContent"),/geen XP/);
+ assert.equal(await ev("document.getElementById('seriesReturn').hidden"),false);
+ await c.send('Page.reload');await c.wait('!!window.AxiomaVectorTrainer');
+ await click('seriesReturn');
+ assert.equal(await ev('AxiomaVectorTrainer.inspect().free'),false);
+ for(const key of ['task','answer','session','progress','done'])assert.deepEqual(await ev(`AxiomaVectorTrainer.inspect().${key}`),scored[key],key+' retained through free practice and reload');
+ await click('freeBtn');await ev("document.querySelector('#skillList button').click()");await click('playBtn');
+ assert.equal(await ev('AxiomaVectorTrainer.inspect().free'),false,'route navigation never resumes free practice');
+ await fixture('coordscale');assert.equal(await ev("document.getElementById('toolHint').hidden"),true,'no redundant numeric input hint');
+ await click('playBtn');assert.equal(await ev('AxiomaVectorTrainer.inspect().free'),false,'older free-only drafts can start a scored route');
+ console.log('PASS: explicit XP modes; scored route survives practice detour and reload; old free drafts can leave practice');
+ await click('again');
  for(let i=0;i<12;i++){
   while(await ev('AxiomaVectorTrainer.inspect().intro'))await click('commit');
   t=await ev('AxiomaVectorTrainer.inspect().task');
@@ -95,11 +110,16 @@ const BASE='http://127.0.0.1:8765/games/vectoren/Axioma_Vectorentrainer_v0.2.htm
   const draft=await ev('AxiomaVectorTrainer.inspect().answer');await click('helpBtn');
   while(!await ev(`document.getElementById('helpNext').disabled`))await click('helpNext');
   assert(await ev(`document.getElementById('helpConcept').textContent.length>0`));
-  if(sk.id==='headtail'){const shot=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/vector-help-780.png',Buffer.from(shot.data,'base64'))}
+  assert(await ev(`['closeHelp','helpPrevious','helpNext'].every(id=>{const r=document.getElementById(id).getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth})`),sk.id+' help controls stay visible');
+  assert(await ev(`document.documentElement.scrollWidth<=innerWidth&&document.documentElement.scrollHeight<=innerHeight`),sk.id+' help fits viewport');
+  if(['headtail','coords','ab','coordadd'].includes(sk.id)){const shot=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/vector-help-'+sk.id+'-780.png',Buffer.from(shot.data,'base64'))}
   await click('closeHelp');assert.deepEqual(await ev('AxiomaVectorTrainer.inspect().answer'),draft);
  }
  await fixture('coordcombo');await click('themeBtn');const dark=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/vector-v02-arithmetic-dark-780.png',Buffer.from(dark.data,'base64'));
  await fixture('headtail');const grid=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/vector-v02-grid-780.png',Buffer.from(grid.data,'base64'));
+ await size(640,360);
+ for(const sk of Core.TaskGenerator.skills){await fixture(sk.id);await layout(sk.id+' 640px');}
+ console.log('PASS: all free-practice families at 640×360, including the return-to-route button');
  await size(390,844);assert.equal(await ev(`getComputedStyle(document.getElementById('rotate')).display`),'grid');await click('rotateHome');assert.equal(await ev(`getComputedStyle(document.getElementById('rotate')).display`),'none');assert.equal(await ev('document.documentElement.scrollWidth>innerWidth'),false);
  await size(1440,900);await fixture('decompose');const desktop=await c.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/vector-v02-desktop.png',Buffer.from(desktop.data,'base64'));
  await c.send('Page.navigate',{url:'file:///home/johan/Documenten/GitHub/LeraarBob/games/vectoren/Axioma_Vectorentrainer_v0.2.html'});await c.wait(`location.protocol==='file:'&&!!window.AxiomaVectorTrainer`);assert.equal(await ev('document.body.dataset.screen'),'play');

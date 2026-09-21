@@ -58,6 +58,13 @@ representatie, zelfstandig/ondersteund, resultaat, methode, foutcode en herhalin
 
 ### Vectoren: uitgewerkte voorbeelden en XP
 
+De navigatie onderscheidt **Oefeningenreeks** (XP en adaptieve voortgang) en
+**Vrij oefenen** (losse onderwerpen, zonder XP). De reeks blijft als
+`suspendedSeries` in dezelfde accountgebonden opslag bewaard tijdens vrij oefenen.
+Zowel de navigatieknop als de terugkeerknop bij de losse oefening hervatten die
+exacte reeks, inclusief deelantwoord, feedback en verdiende XP. Oude vrije
+concepten zonder bewaarde reeks kunnen rechtstreeks een nieuwe reeks starten.
+
 `vector-lessons.js` levert stapsgewijze voorbeelden voor alle 24 vaardigheden.
 Dezelfde voorbeelden verschijnen bij een nieuw begrip in de leerroute en in de
 uitlegcollectie. Ze gebruiken de taakgenerator, het bestaande rooster en dezelfde
@@ -220,3 +227,17 @@ Controles: `tests/real-numbers.test.cjs` (1.440 opgavevarianten en hun voorbeeld
 foutfeedback, XP, herladen, thema's, portretuitleg en offline HTML) en de uitgebreide
 `tests/account-progress-browser.cjs` (hervatten op een tweede toestel met fictieve
 accounts). De fysieke Samsung A20 en leertransfer zijn nog niet met leerlingen getest.
+
+### Rechtstreeks intervallen en periodes aanduiden
+
+Bij Reële Getallen plaatst een tik op de lijn een open grenspunt; nogmaals
+op hetzelfde punt tikken wisselt open/gesloten. Beide tekenrichtingen werken.
+Verslepen en de stapknoppen verplaatsen een punt met behoud van zijn inclusie;
+bij het kruisen worden waarden én inclusies samen geordend. Annuleren herstelt
+het vorige antwoord. De validator accepteert beide invoervolgordes.
+
+Eén tik op een decimaal selecteert meteen een blok van één cijfer. Twee tikken
+of een sleepbeweging selecteren een langer blok, in beide richtingen. Een
+aparte wisknop maakt opnieuw kiezen expliciet. Selectie en eventueel eerste
+selectiepunt blijven in het bestaande concept bewaard. De voortzettingsregel
+noemt het kleinste herhaalblok (bijvoorbeeld 3, niet 33).

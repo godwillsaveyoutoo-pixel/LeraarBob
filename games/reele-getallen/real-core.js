@@ -62,13 +62,22 @@ function generate(skill,{seed=1,variant=0,level=0}={}){
   t.prompt='Kies alle verzamelingen waartoe dit getal behoort.';t.representation=t.source.kind;
  }else if(skill==='period'){
   const pairs=level?[['1','6'],['03','27'],['','125'],['','27'],['','3'],['2','45']]:[['','3'],['','27'],['1','6'],['','12'],['','09']];
-  [t.lead,t.repeat]=pick(pairs);t.whole=pick([0,1,2]);t.digits=t.lead+t.repeat.repeat(t.repeat.length>3?2:3);t.target={start:t.lead.length,end:t.lead.length+t.repeat.length-1};
-  t.rule=`${t.lead?'Eerst '+t.lead+', daarna':'Na de komma'} blijft het blok ${t.repeat.repeat(t.repeat.length>3?1:2)} zich onbeperkt herhalen.`;
+  [t.lead,t.repeat]=pick(pairs);t.repeat=shortestPeriod(t.repeat);t.whole=pick([0,1,2]);t.digits=t.lead+t.repeat.repeat(t.repeat.length>3?2:3);t.target={start:t.lead.length,end:t.lead.length+t.repeat.length-1};
+  t.rule=`${t.lead?'Eerst '+t.lead+', daarna':'Na de komma'} blijft het blok ${t.repeat} zich onbeperkt herhalen.`;
   t.prompt='Duid één kortste herhaalblok aan, zo vroeg mogelijk.';t.representation=t.lead?'with-prefix':'pure-period';
  }
  t.signature=JSON.stringify({...t,seed:0,variant:0,level:0});return t;
 }
-function freshAnswer(t){return {values:t.skill==='interval'?['','']:['',''],sign:1,relation:null,groups:Array(6).fill(null),labels:[],tick:null,closedLo:false,closedHi:false,start:null,end:null,stage:0}}
+// Keep inclusion attached to its endpoint when the learner works right-to-left.
+function orderInterval(a){
+ const lo=parse(a.values[0]),hi=parse(a.values[1]);
+ if(lo&&hi&&compare(lo,hi)>0){a.values.reverse();[a.closedLo,a.closedHi]=[a.closedHi,a.closedLo];return true}return false;
+}
+function shortestPeriod(block){
+ for(let n=1;n<=block.length;n++)if(block.length%n===0&&block.slice(0,n).repeat(block.length/n)===block)return block.slice(0,n);
+ return block;
+}
+function freshAnswer(t){return {values:t.skill==='interval'?['','']:['',''],sign:1,relation:null,groups:Array(6).fill(null),labels:[],tick:null,closedLo:false,closedHi:false,start:null,end:null,stage:0,periodAnchor:null}}
 const result=(ok,code,message,extra={})=>({ok,code,message,...extra});
 function validate(t,a){
  const good=message=>result(true,'ok',message),bad=(code,message)=>result(false,code,message),empty=()=>result(false,'input','Maak eerst je antwoord af.',{input:true});
@@ -96,6 +105,7 @@ function validate(t,a){
   return bad(a.stage===0?'squares':'root-bounds',a.stage===0?'Zoek de grootste gehele kwadraatwaarde onder het gegeven getal en het eerstvolgende kwadraat.':`Controleer je grenzen door ze te kwadrateren: ${decimalOf(l)}² = ${format(number(l)**2)} en ${decimalOf(u)}² = ${format(number(u)**2)}.`);
  }
  if(t.skill==='interval'){
+  a={...a,values:[...a.values]};orderInterval(a);
   const l=parse(a.values[0]),u=parse(a.values[1]);if(!l||!u)return empty();if(compare(l,u)>=0)return bad('bounds-order','De linkergrens moet kleiner zijn dan de rechtergrens.');
   if(!equal(l,rational(t.lo))||!equal(u,rational(t.hi)))return bad('bounds','Controleer de twee grenswaarden. Open of gesloten verandert de waarde van de grens niet.');
   if(a.closedLo!==t.closedLo)return bad('inclusion',`${format(t.lo)} ${t.closedLo?'hoort wel':'hoort niet'} bij het gevraagde interval. Pas de linkergrens aan.`);
@@ -133,6 +143,6 @@ function record(p,t,{clean=false,solved=false,code='practice'}={}){
  if(clean){s.clean++;if(age>=3)s.reviewClean++;s.signatures=[...new Set([...s.signatures,t.signature])].slice(-30);s.representations=[...new Set([...s.representations,t.representation])];s.repair=null;}
  else{s.repair=code;s.due=p.total+3;}return xp;
 }
-const api={rational,parse,value,compare,equal,number,format,decimalOf,label,integer,fraction,decimal,percent,sqrt,skills,generate,freshAnswer,validate,Progress:{fresh,sanitize,choose,unlocked,mastered,record}};
+const api={orderInterval,shortestPeriod,rational,parse,value,compare,equal,number,format,decimalOf,label,integer,fraction,decimal,percent,sqrt,skills,generate,freshAnswer,validate,Progress:{fresh,sanitize,choose,unlocked,mastered,record}};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;root.RealNumbersCore=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

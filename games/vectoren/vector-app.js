@@ -4,9 +4,9 @@ const {VectorMath:M,TaskValidator:Validator,TaskGenerator:Generator,TrainerSched
 const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',KEY='axioma-vectorentrainer-v020';
 const titles={locked:'Nog te ontdekken',new:'Nieuw',guided:'Begeleid',learning:'In opbouw',solid:'Stevig'};
 let progress=Scheduler.freshState(),session=null,task=null,answer={strokes:[],values:['',''],point:null,choice:null},intro=false,done=false,dirty=false,errorCode=null,stage=0,role='vector',activeSlot=0,free=false,previousScreen='home',view={},anchor=null,drag=null,cursor=M.point(0,0),cursorVisible=false,seedSerial=Date.now()>>>0;
-let restored=null,lessonStep=0,helpStep=0,helpTask=null,feedbackState=null,lastXP=0,paintRoot=null;
+let suspendedSeries=null,restored=null,lessonStep=0,helpStep=0,helpTask=null,feedbackState=null,lastXP=0,paintRoot=null;
 const lesson=t=>VectorTrainerLessons.build(t);
-try{const raw=JSON.parse(window.AxiomaGame.storage.getItem(KEY)||'null');progress=Scheduler.sanitize(raw?.progress);if(raw?.mode==='dark')document.documentElement.dataset.mode='dark';if(raw?.draft&&Generator.skills.some(s=>s.id===raw.draft.skill))restored=raw.draft;}catch{storageError()}
+try{const raw=JSON.parse(window.AxiomaGame.storage.getItem(KEY)||'null');progress=Scheduler.sanitize(raw?.progress);if(raw?.suspendedSeries&&!raw.suspendedSeries.free&&Generator.skills.some(s=>s.id===raw.suspendedSeries.skill))suspendedSeries=raw.suspendedSeries;if(raw?.mode==='dark')document.documentElement.dataset.mode='dark';if(raw?.draft&&Generator.skills.some(s=>s.id===raw.draft.skill))restored=raw.draft;}catch{storageError()}
 // Vector symbols have an arrow; point names and choice numbers deliberately do not.
 const vectorPattern=()=>/(?<![\p{L}\p{M}])(?:[A-Z]{2}|e[ₓᵧ]|[abcruv])(?![\p{L}\p{M}])/gu;
 function mathText(element,text){
@@ -22,8 +22,9 @@ function mathText(element,text){
 }
 function optionText(text){return text.replace(vectorPattern(),name=>name.length===1?name+'⃗':name.startsWith('e')?'e⃗'+name.slice(1):name+'⃗')}
 function storageError(){$('storageWarning').hidden=false;$('storageWarning').textContent='Deze browser kan je voortgang niet bewaren. Je kunt wel blijven oefenen.'}
-function save(){try{const draft=task?{skill:task.skill,seed:task.seed,variant:task.variant,level:task.level,repair:task.repair,intro,done,dirty,errorCode,stage,free,session,answer,lessonStep,feedbackState,lastXP}:restored;window.AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft}));window.AxiomaGame.report(Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').map(s=>s.id),Generator.skills.length);}catch{storageError()}}
-function screen(name){cancelGesture();document.body.dataset.screen=name;AxiomaPlatform.trainerScreen(({play:'play',helpScreen:'help',progressScreen:'progress'})[name]||'');for(const id of ['home','play','progressScreen','helpScreen','summary'])$(id).hidden=id!==name;if(name==='play')requestAnimationFrame(()=>renderBoard());if(name==='helpScreen')requestAnimationFrame(paintHelp);if(name==='home')renderHome()}
+function snapshot(){return task?structuredClone({skill:task.skill,seed:task.seed,variant:task.variant,level:task.level,repair:task.repair,intro,done,dirty,errorCode,stage,free,session,answer,lessonStep,feedbackState,lastXP}):restored}
+function save(){try{const draft=snapshot();window.AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft,suspendedSeries}));window.AxiomaGame.report(Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').map(s=>s.id),Generator.skills.length);}catch{storageError()}}
+function screen(name){cancelGesture();document.body.dataset.screen=name;AxiomaPlatform.trainerScreen(({play:'play',helpScreen:'help',progressScreen:'progress'})[name]||'');for(const id of ['home','play','progressScreen','helpScreen','summary'])$(id).hidden=id!==name;if(name==='play')requestAnimationFrame(()=>renderBoard());if(name==='helpScreen')requestAnimationFrame(paintHelp);if(name==='home')renderHome();$('freeBtn').setAttribute('aria-current',name==='home'||name==='play'&&free?'page':'false');if(name==='play'&&free)$('playBtn').removeAttribute('aria-current')}
 function renderXP(){const xp=progress.xp||0;$('xpLabel').textContent=`${xp} XP`;$('xpLabel').title=`${xp} XP totaal · ${session?.xp||0} XP deze sessie`;}
 function displayFeedback(){
  const visible=!!feedbackState?.kind&&!intro;$('feedbackPanel').hidden=!visible;$('work').classList.toggle('has-feedback',visible);
@@ -39,13 +40,14 @@ function message(text,kind=''){
 }
 $('dismissFeedback').onclick=()=>{feedbackState=null;displayFeedback();save();requestAnimationFrame(()=>renderBoard())};
 function renderLesson(){
- $('lessonPanel').hidden=!intro;$('work').classList.toggle('is-lesson',intro);
+ $('lessonBack').hidden=!intro;$('lessonVisualKey').hidden=!intro||task.representation==='symbolic';$('lessonPanel').hidden=!intro;$('work').classList.toggle('is-lesson',intro);
  if(!intro)return;
  const steps=lesson(task).steps;lessonStep=Math.min(lessonStep,steps.length-1);const step=steps[lessonStep];
- $('lessonCount').textContent=`Voorbeeld · stap ${lessonStep+1} van ${steps.length}`;mathText($('lessonTitle'),step.title);mathText($('lessonText'),step.text);mathText($('lessonCalculation'),step.calculation);
+ $('lessonCount').textContent=`Voorbeeld · stap ${lessonStep+1} van ${steps.length}`;mathText($('lessonTitle'),step.title);mathText($('lessonText'),step.text);mathText($('lessonCalculation'),step.calculation);renderStepTrack($('lessonTrack'),steps,lessonStep);$('lessonVisualKey').hidden=task.representation==='symbolic';
  $('lessonBack').disabled=lessonStep===0;$('lessonBack').hidden=false;
 }
 $('lessonBack').onclick=()=>{lessonStep=Math.max(0,lessonStep-1);updateUI();save()};
+function renderStepTrack(root,steps,current){root.replaceChildren();steps.forEach((s,i)=>{const dot=document.createElement('span');dot.className=i===current?'current':i<current?'complete':'';dot.textContent=i+1;dot.title=s.title;dot.setAttribute('aria-label',`Stap ${i+1}: ${s.title}${i===current?' (huidig)':''}`);root.append(dot)})}
 function newSeed(){return (++seedSerial+Math.floor(Math.random()*1e8))>>>0}
 function taskLevel(id){const s=progress.skills[id];return s.seen<2?0:s.seen<5?1:2}
 function nextTask(){
@@ -58,8 +60,13 @@ function nextTask(){
  task=t;intro=!free&&choice.mode==='intro';resetAnswer();updateUI();screen('play');save();
 }
 function resetAnswer(){lessonStep=0;feedbackState=null;lastXP=0;answer={strokes:[],values:['',''],point:null,choice:null};done=false;dirty=false;errorCode=null;stage=0;role='vector';activeSlot=0;cursor=M.point(0,0);cursorVisible=false;cancelGesture()}
-function startSession(){free=false;session={answered:0,clean:0,repairs:0,xp:0};nextTask()}
-function explore(id){free=true;session=null;task=Generator.generate(id,{seed:newSeed(),level:1,variant:0});intro=false;resetAnswer();updateUI();screen('play');save()}
+function startSession(){suspendedSeries=null;restored=null;free=false;session={answered:0,clean:0,repairs:0,xp:0};nextTask()}
+function resumeSeries(){
+ if((task&&!free)||(restored&&!restored.free))return resume();
+ if(suspendedSeries){restored=suspendedSeries;suspendedSeries=null;task=null;resume();save();return}
+ startSession();
+}
+function explore(id){if(task&&!free)suspendedSeries=snapshot();free=true;session=null;task=Generator.generate(id,{seed:newSeed(),level:1,variant:0});intro=false;resetAnswer();updateUI();screen('play');save()}
 function finish(clean,solved=true){
  if(done)return;
  done=true;if(!free){lastXP=Scheduler.record(progress,task,{clean,solved,code:errorCode||'practice'});session.xp=(session.xp||0)+lastXP;session.answered++;if(clean)session.clean++;if(task.repair&&clean)session.repairs++;}
@@ -71,11 +78,12 @@ function updateUI(resetFeedback=true){
  if(!task)return;
  mathText($('prompt'),intro?task.prompt:guidedPrompt());
  $('modeLabel').textContent=`${free?'Vrij oefenen':intro?'Nieuw begrip':task.repair?'Herstel · nieuwe voorstelling':task.level===0?'Begeleid':task.level===1?'Zelf proberen':'Gemengd oefenen'} · ${Generator.skills.find(s=>s.id===task.skill).label}`;mathText($('modeLabel'),$('modeLabel').textContent);
+ $('seriesReturn').hidden=!free;$('seriesReturn').textContent=suspendedSeries?'Hervat reeks · XP →':'Start reeks · XP →';$('practiceMode').textContent=free?'Vrij oefenen · geen XP':'Oefeningenreeks · met XP';
  $('roundLabel').textContent=free?'Vrij oefenen':`Oefening ${Math.min(12,(session?.answered||0)+(done?0:1))} / 12`;
  const choice=task.interaction==='choice',numeric=task.interaction==='number',symbolic=task.representation==='symbolic';
  $('work').className='work '+(numeric?symbolic?'symbolic':'grid-number':choice?'choice-grid':'');$('numberWork').hidden=!numeric;$('choiceWork').hidden=!choice;renderChoices();
  mathText($('givens'),task.givens||task.prompt);mathText($('scaffold'),intro?'Volg de uitwerking stap voor stap.':(task.scaffold||''));
- $('toolHint').textContent=intro?'Bekijk het voorbeeld. Daarna probeer je andere getallen.':choice?'Tik je antwoord. Elk roostervakje stelt één stap voor.':numeric?'x eerst, y daarna. ± voor negatief; / voor een breuk.':task.interaction==='point'?(task.givens||'Tik een roosterpunt en controleer.'):'Sleep, of tik begin → einde. Niets wordt beoordeeld vóór Controleer.';
+ $('toolHint').textContent=task.interaction==='point'?(task.givens||''):'';$('toolHint').hidden=!$('toolHint').textContent;
  mathText($('toolHint'),$('toolHint').textContent);
  $('drawTools').hidden=intro||numeric||choice;
  $('vectorTool').hidden=task.interaction==='point';
@@ -86,7 +94,7 @@ function updateUI(resetFeedback=true){
  $('commit').textContent=intro?(lessonStep<lesson(task).steps.length-1?'Volgende stap →':'Zelf proberen →'):done?'Verder →':'Controleer';$('skip').hidden=intro||done;
  mathText($('labelX'),task.slotLabels?.[0]||'x · horizontaal');mathText($('labelY'),task.slotLabels?.[1]||'y · verticaal');
  $('coordinateEditor').setAttribute('aria-label',task.slotLabels?'Coëfficiënten van eenheidsvectoren':'Coördinaten invoeren');
- if(resetFeedback)message(intro?'Dit is een uitgewerkt voorbeeld.':free?'Vrij oefenen telt niet mee voor je leerroute.':task.repair?repairHint(task.repair):'Je kiest zelf waar je tekent. Je kunt altijd een stap terug.');
+ if(resetFeedback)message(intro?'Bekijk de constructie stap voor stap.':task.repair?repairHint(task.repair):task.interaction==='sketch'?'Sleep een pijl, of tik begin en einde.':'');
  renderLesson();renderSlots();displayFeedback();renderXP();renderBoard();
 }
 
@@ -114,8 +122,9 @@ function renderHelp(){
  if(!helpTask)return;
  const skill=Generator.skills.find(s=>s.id===helpTask.skill),steps=lesson(helpTask).steps,step=steps[helpStep];
  mathText($('helpTitle'),skill.label);mathText($('helpPrompt'),helpTask.prompt);mathText($('helpGivens'),helpTask.givens||'');
+ renderStepTrack($('helpTrack'),steps,helpStep);$('helpVisualKey').hidden=helpTask.representation==='symbolic';
  $('helpCount').textContent=`Voorbeeld · stap ${helpStep+1} van ${steps.length}`;mathText($('helpStepTitle'),step.title);mathText($('helpConcept'),step.text);mathText($('helpExample'),step.calculation);$('helpExample').hidden=!step.calculation;
- $('helpBoard').hidden=helpTask.representation==='symbolic';$('helpPrevious').disabled=helpStep===0;$('helpNext').disabled=helpStep===steps.length-1;
+ $('helpGivens').hidden=helpTask.representation!=='symbolic';$('helpBoard').hidden=helpTask.representation==='symbolic';$('helpPrevious').disabled=helpStep===0;$('helpNext').disabled=helpStep===steps.length-1;
  requestAnimationFrame(paintHelp);
 }
 function paintHelp(){if(helpTask&&!$('helpScreen').hidden)renderBoard(helpTask,$('helpBoard'),true,helpStep,{strokes:[],point:null},false)}
@@ -153,7 +162,7 @@ function key(value){
  renderSlots();save();
 }
 const keyDefs=[['7','7'],['8','8'],['9','9'],['back','⌫'],['sign','±'],['4','4'],['5','5'],['6','6'],['/','/'],['next','→'],['1','1'],['2','2'],['3','3'],['0','0'],['.',' , ']];
-for(const [value,label] of keyDefs){const b=document.createElement('button');b.textContent=label;b.dataset.key=value;b.setAttribute('aria-label',({back:'Laatste teken wissen',sign:'Teken omkeren',next:'Andere component','/':'Breukstreep','.':'Decimaalteken'})[value]||label);b.onclick=()=>key(value);$('keypad').append(b)}
+for(const [value,label] of keyDefs){const b=document.createElement('button');b.textContent=label;b.dataset.key=value;b.setAttribute('aria-label',({back:'Laatste teken wissen',sign:'Teken omkeren',next:'Andere component','/':'Breukstreep','.':'Decimaalteken'})[value]||label);b.title=b.getAttribute('aria-label');b.onclick=()=>key(value);$('keypad').append(b)}
 $('slotX').onclick=()=>{activeSlot=0;renderSlots()};$('slotY').onclick=()=>{activeSlot=1;renderSlots()};
 $('coordinateEditor').addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;if(/^\d$/.test(e.key)){e.preventDefault();key(e.key)}else if(['Backspace','-','/',',','.'].includes(e.key)){e.preventDefault();key(({Backspace:'back','-':'sign',',':'.'})[e.key]||e.key)}});
 function node(tag,attrs={},text){const el=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,v);if(text!==undefined)el.textContent=text;return el}
@@ -176,11 +185,21 @@ function arrow(start,v,name='',kind='given',dashed=false){
 }
 function drawPoint(p,name='',selected=false){const q=project(p);put('circle',{cx:q.x,cy:q.y,r:selected?6:4,fill:'var(--paper)',stroke:selected?'var(--selection)':'var(--ink)','stroke-width':2});if(name)put('text',{x:Math.max(8,Math.min(view.w-20,q.x+9)),y:Math.max(15,Math.min(view.h-8,q.y+18)),fill:'var(--ink)',class:'vector-label'},name)}
 function modelBounds(task,example){
- const b={...task.bounds};if(example){
-  const points=lesson(task).steps.flatMap(step=>[...step.strokes.flatMap(s=>[s.start,s.end]),step.point].filter(Boolean));
-  b.minX=Math.min(b.minX,...points.map(p=>p.x))-1;b.maxX=Math.max(b.maxX,...points.map(p=>p.x))+1;
-  b.minY=Math.min(b.minY,...points.map(p=>p.y))-1;b.maxY=Math.max(b.maxY,...points.map(p=>p.y))+1;
- }return b;
+ if(!example)return {...task.bounds};
+ // Frame the whole construction once, so the scale stays constant between steps.
+ const points=[task.start,...task.refs.flatMap(r=>[r.start,M.endPointFromVector(r.start,r.v)]),...task.points.map(p=>p.p),...lesson(task).steps.flatMap(step=>[...step.strokes.flatMap(s=>[s.start,s.end]),step.point].filter(Boolean))];
+ if(task.choicePositions)task.options.forEach((v,i)=>points.push(task.choicePositions[i],M.endPointFromVector(task.choicePositions[i],v)));
+ if(task.axes)points.push(M.point(0,0));
+ const xs=points.map(p=>p.x),ys=points.map(p=>p.y);
+ return {minX:Math.min(...xs)-.8,maxX:Math.max(...xs)+.8,minY:Math.min(...ys)-.8,maxY:Math.max(...ys)+.8};
+}
+function measure(start,v,label,vertical=false){
+ if(M.isZero(v))return;
+ const end=M.endPointFromVector(start,v),p=project(start),q=project(end),offset=vertical?18:22;
+ const a=vertical?{x:p.x+offset,y:p.y}:{x:p.x,y:p.y+offset},b=vertical?{x:q.x+offset,y:q.y}:{x:q.x,y:q.y+offset};
+ put('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'var(--teal)','stroke-width':1.5});
+ for(const r of [a,b])put('line',{x1:r.x-(vertical?4:0),y1:r.y-(vertical?0:4),x2:r.x+(vertical?4:0),y2:r.y+(vertical?0:4),stroke:'var(--teal)','stroke-width':1.5});
+ put('text',{x:(a.x+b.x)/2+(vertical?8:0),y:(a.y+b.y)/2+(vertical?5:16),'text-anchor':vertical?'start':'middle',class:'measurement'},label);
 }
 function renderBoard(drawTask=task,svg=$('board'),example=intro,step=lessonStep,drawingAnswer=answer,interactive=true,drawingDone=done){
  if(!drawTask||(interactive&&$('play').hidden))return;
@@ -201,7 +220,11 @@ function renderBoard(drawTask=task,svg=$('board'),example=intro,step=lessonStep,
  if(task.choicePositions)task.options.forEach((v,i)=>arrow(task.choicePositions[i],v,String(i+1),'given'));
  for(const s of answer.strokes)arrow(s.start,s,s.role==='result'?'r':'',s.role==='result'?'result':'student');
  if(answer.point)drawPoint(answer.point,task.pointName||'?',true);
- if(intro){const frame=lesson(task).steps[step];if(frame.point)drawPoint(frame.point,task.pointName||'P',true);for(const s of frame.strokes)arrow(s.start,s,s.name||'',s.role==='result'?'result':'example',true);}
+ if(intro){const frames=lesson(task).steps,frame=frames[step],previous=step?frames[step-1].strokes.length:0;
+  if(frame.point)drawPoint(frame.point,task.pointName||'P',true);
+  frame.strokes.forEach((s,i)=>{const g=arrow(s.start,s,s.name||'',s.role==='result'?'result':'example');if(i<previous&&frame.strokes.length>previous)g.classList.add('construction-previous')});
+  for(const m of frame.measurements||[])measure(m.start,m.v,m.label,m.vertical);
+ }
  if(done&&task.policy==='commute'){
   arrow(task.start,task.target,'u+v','result');arrow(task.secondStart,task.target,'v+u','result');
  }
@@ -230,9 +253,9 @@ $('commit').onclick=commit;
 $('skip').onclick=()=>{if(!task||done||intro)return;dirty=true;errorCode=errorCode||'practice';finish(false,false);nextTask()};
 function renderHome(){
  renderXP();
- $('resumeBtn').hidden=!task&&!restored;$('startBtn').textContent=progress.total?'Start een nieuwe sessie →':'Start een sessie →';
+ $('resumeBtn').hidden=!task&&!restored;$('resumeBtn').textContent=free?'Hervat losse oefening':'Terug naar huidige oefening';$('startBtn').textContent=suspendedSeries||task&&!free||restored&&!restored.free?'Hervat oefeningenreeks · XP →':'Start oefeningenreeks · XP →';
  const solid=Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').length;$('masteryCount').textContent=`${solid} / ${Generator.skills.length} stevig`;
- $('skillList').replaceChildren();Generator.skills.forEach((s,i)=>{const phase=Scheduler.phase(progress,s.id),row=document.createElement('div');row.className='skill-row '+phase;const n=document.createElement('span');n.className='number';n.textContent=String(i+1).padStart(2,'0');const name=document.createElement('div'),title=document.createElement('strong'),small=document.createElement('small');mathText(title,s.label);small.textContent=titles[phase];name.append(title,document.createElement('br'),small);const b=document.createElement('button');b.textContent='Verkennen';b.setAttribute('aria-label',`${s.label} vrij verkennen`);b.onclick=()=>explore(s.id);row.append(n,name,b);$('skillList').append(row)});
+ $('skillList').replaceChildren();Generator.skills.forEach((s,i)=>{const phase=Scheduler.phase(progress,s.id),row=document.createElement('div');row.className='skill-row '+phase;const n=document.createElement('span');n.className='number';n.textContent=String(i+1).padStart(2,'0');const name=document.createElement('div'),title=document.createElement('strong'),small=document.createElement('small');mathText(title,s.label);small.textContent=titles[phase];name.append(title,document.createElement('br'),small);const b=document.createElement('button');b.textContent='Vrij oefenen';b.setAttribute('aria-label',`${s.label} vrij verkennen`);b.onclick=()=>explore(s.id);row.append(n,name,b);$('skillList').append(row)});
 }
 function showProgress(){previousScreen=document.body.dataset.screen;$('progressRows').replaceChildren();
  for(const s of Generator.skills){const data=progress.skills[s.id],phase=Scheduler.phase(progress,s.id),row=document.createElement('div');row.className='skill-row';const label=document.createElement('span');label.textContent=phase==='solid'?'✓':'·';const detail=document.createElement('div'),strong=document.createElement('strong'),small=document.createElement('small');mathText(strong,s.label);small.textContent=`${data.clean} zelfstandig juist · ${data.seen} geoefend${progress.repairs.some(r=>r.skill===s.id)?' · herstel gepland':''}`;detail.append(strong,document.createElement('br'),small);const status=document.createElement('div');status.textContent=titles[phase];status.style.fontSize='12px';const meter=document.createElement('div');meter.className='meter';const fill=document.createElement('i');fill.style.width=Math.round(data.strength*100)+'%';meter.append(fill);status.append(meter);row.append(label,detail,status);$('progressRows').append(row)}screen('progressScreen');
@@ -248,8 +271,8 @@ function resume(){
  }catch{task=null;startSession();return}}
  if(task){screen('play');updateUI(!feedbackState);if(done&&!feedbackState)message('Deze oefening is al verwerkt. Ga verder naar een nieuwe vraag.','good')}
 }
-$('libraryBtn').onclick=$('summaryHome').onclick=$('rotateHome').onclick=()=>{save();screen('home')};
- AxiomaPlatform.bindTrainer({play:()=>task||restored?resume():startSession(),help:showHelp,progress:showProgress});$('closeProgress').onclick=()=>screen(previousScreen);$('startBtn').onclick=$('again').onclick=startSession;$('resumeBtn').onclick=resume;
+$('freeBtn').onclick=$('libraryBtn').onclick=$('summaryHome').onclick=$('rotateHome').onclick=()=>{save();screen('home')};
+ AxiomaPlatform.bindTrainer({play:resumeSeries,help:showHelp,progress:showProgress});$('closeProgress').onclick=()=>screen(previousScreen);$('startBtn').onclick=$('seriesReturn').onclick=resumeSeries;$('again').onclick=startSession;$('resumeBtn').onclick=resume;
 $('themeBtn').onclick=()=>{document.documentElement.dataset.mode=document.documentElement.dataset.mode==='dark'?'light':'dark';save();renderBoard();paintHelp()};
 $('fullBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{if(task)message('Volledig scherm is hier niet beschikbaar. De oefening blijft bruikbaar.')}};
 new ResizeObserver(entries=>{const r=entries[0].contentRect;if(Math.abs(r.width-(view.w||0))>1||Math.abs(r.height-(view.h||0))>1)cancelGesture();renderBoard()}).observe($('boardWrap'));

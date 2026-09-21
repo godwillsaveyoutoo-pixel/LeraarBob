@@ -38,3 +38,22 @@ test('adaptive route unlocks all families and needs varied, delayed evidence for
  assert.deepEqual(P.sanitize(JSON.parse(JSON.stringify(state))),state);
 });
 module.exports={solution};
+test('interval endpoints retain their inclusion regardless of construction order',()=>{
+ for(let variant=0;variant<4;variant++){
+  const t=C.generate('interval',{seed:7,variant}),a=solution(t);
+  a.values.reverse();[a.closedLo,a.closedHi]=[a.closedHi,a.closedLo];
+  assert(C.validate(t,a).ok,'right-to-left with inclusion attached');
+  assert.equal(C.orderInterval(a),true);assert.deepEqual(a,solution(t));
+ }
+ const a=C.freshAnswer({skill:'interval'});a.values=['4',''];a.closedLo=true;
+ assert.equal(C.orderInterval(a),false,'unfinished right endpoint is retained');
+ a.values[1]='-2';C.orderInterval(a);assert.deepEqual(a.values,['-2','4']);assert.equal(a.closedHi,true);assert.equal(a.closedLo,false);
+});
+test('period instructions name the shortest repeating block, including single digits',()=>{
+ for(const [input,expected] of [['33','3'],['272727','27'],['0909','09'],['125125','125'],['001001','001']])assert.equal(C.shortestPeriod(input),expected);
+ for(let seed=1;seed<100;seed++){
+  const t=C.generate('period',{seed,level:1});assert.equal(C.shortestPeriod(t.repeat),t.repeat);
+  assert(t.rule.includes('het blok '+t.repeat+' zich'));
+  assert.equal(t.digits.slice(t.target.start,t.target.end+1),t.repeat);
+ }
+});
