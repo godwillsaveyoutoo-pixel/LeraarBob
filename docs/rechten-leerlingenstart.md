@@ -27,7 +27,8 @@ en de bestaande DEV-ingang blijven beschikbaar voor hun bestaande doelgroep.
 | Situatie | Reactie |
 | --- | --- |
 | Eerste bezoek | Punten lezen en plaatsen wordt aanbevolen; latere doelen blijven bekijkbaar |
-| Een ronde staat nog open | **Hervat opdracht** krijgt voorrang; de gekozen opgave en deelantwoorden blijven staan |
+| Een ronde staat nog open | **Hervat opdracht** krijgt voorrang; de gekozen opgave en deelantwoorden blijven staan. De kaart toont hoeveel van de 12 opgaven beantwoord zijn |
+| Je wilt een testronde verlaten | **Kaart → Ronde stoppen en opnieuw kiezen** beëindigt de ronde. Behaalde XP, resultaten, toegang en herhaling blijven bewaard; de onafgewerkte opgave vervalt. Een afgebroken ronde krijgt geen voltooiingsster of rondebonus |
 | Een volgende vaardigheid is beschikbaar | De kaart benoemt die concrete vaardigheid, ook binnen dezelfde stopplaats; geplande herhaling komt mee |
 | Alleen herstel of onderhoud is nodig | Start een nieuwe ronde met gerichte herhaling en andere opgaven; eerdere rondes blijven afgerond |
 | Alle beschikbare doelen zijn voorbereid | Aanbeveling voor onderhoud met nieuwe varianten bij eerder geoefende inhoud |

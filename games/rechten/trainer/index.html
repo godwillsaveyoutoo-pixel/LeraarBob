@@ -272,12 +272,29 @@ function renderJourney(){
   onSelect:id=>{j.selected=id;save();renderJourney();$('#journeyPanel [aria-pressed="true"]')?.focus({preventScroll:true})},
   onRegion:id=>{j.region=id;j.view='area';const region=J.regions.find(r=>r.id===id),rec=journeyRecommendation();j.selected=rec.place.region===id?rec.place.id:region.places[0].id;save();renderJourney();$('#journeyPanel').scrollTop=0;$('#journeyPanel h2')?.focus({preventScroll:true})},
   onAtlas:()=>{j.view='atlas';save();renderJourney();$('#journeyPanel').scrollTop=0;$('#journeyPanel h2')?.focus({preventScroll:true})},
-  onRecommend:selectJourneyRecommendation,onStart:startJourney,onResume:resumeJourney,onClose:()=>closeScreen()});
+  onRecommend:selectJourneyRecommendation,onStart:startJourney,onResume:resumeJourney,onStop:stopTrainingRound,onClose:()=>closeScreen()});
 }
 function resumeJourney(){
  if(current&&!state.session.completed){closeScreen('play');return}
  if(state.session.completed){closeScreen('done');return}
  closeScreen('start');start();
+}
+function stopTrainingRound(){
+ if(devMode||(!accountReady&&!guestMode)||state.session.completed||!state.journey?.active&&!journeyBusy())return;
+ // An answered last question still earns the normal completion, exactly once.
+ if(state.session.answered>=SESSION_LENGTH){endSession();selectJourneyRecommendation();return}
+ cancelAdvance();clearTimer();clearInteractionTimers();
+ const j=J.data(state);j.active=null;
+ // Scores, diagnostic history, access and review dates belong to the learner,
+ // not to the disposable round. An unfinished round earns no completion bonus.
+ state.session=emptySession();state.waveDraft=null;
+ current=null;locked=false;pendingNext=false;screenTimerWasActive=false;screenPausedAt=0;returnFocus=null;
+ taskStartedAt=0;flowChain=0;E.flowBadge.classList.remove('show');
+ E.visual.inert=false;E.answers.inert=false;E.stage.hidden=true;E.sessionDone.hidden=true;E.start.hidden=true;
+ screenReturn='start';renderTop();renderSessionCue();selectJourneyRecommendation();
+ const note=document.createElement('p');note.className='journey-stop-note';note.setAttribute('role','status');
+ note.textContent='Ronde gestopt. Je behaalde resultaten en geplande herhaling blijven bewaard.';
+ $('#journeyPanel .journey-detail-main').append(note);
 }
 function startJourney(place,mode){
  if(!accountReady&&!guestMode)return;
