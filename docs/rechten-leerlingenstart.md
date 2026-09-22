@@ -118,3 +118,26 @@ punten lezen en reeds beschikbare oefening in punten plaatsen. Ze controleert
 een nieuwe ronde vanaf nul, gelijkblijvende XP bij starten, behoud van de ster,
 werkelijke puntplaatsingsopgaven, ingeplande eerdere herstelvragen en vervolgens
 toegang tot Verschillen en helling. Accountgegevens worden niet gereset.
+
+## Afwerking: indeling, hoofdactie en voortgangsreacties
+
+De kaart staat direct onder de compacte titel. De aanbevolen of geselecteerde
+activiteit staat in één detailpaneel rechts. Per kaartscherm is er precies één
+primaire knop: de eerste/volgende ronde starten, een open opgave hervatten of
+teruggaan naar een beschikbare stap. Op de deelkaart start die knop de gekozen
+stopplaats; tijdens een open ronde hervat ze altijd de bestaande opgave.
+Gemengd herhalen, toetsen en terugnavigatie blijven secundaire acties.
+
+Vaardigheidsdetails en het laatste rondresultaat zijn uitklapbaar. Een ster staat
+als klein teken bij de locatie, naast een afzonderlijke leerstatus. Nieuwe toegang
+heeft een zichtbaar label en een korte highlight. De ster verschijnt met een korte
+animatie, eenmaal per nieuw resultaat en kaartweergave in deze sessie. Selecteren
+speelt dezelfde reactie niet telkens opnieuw af. De visuele administratie is
+alleen tijdelijk in het scherm aanwezig en verandert geen opgeslagen voortgang.
+Bij verminderde beweging blijven alle tekens en labels staan zonder animatie.
+
+Het afrondingsscherm zet resultaat en vervolg bovenaan; XP is een kleinere
+vermelding. De kaart en hoofdactie passen op 1366×768, 1100×700 en 1024×768 zonder
+scrollen in beeld. Smalle schermen mogen blijven scrollen. De browserregressie
+controleert één primaire actie, de plaats van de kaart, de zichtbaarheid van de
+startknop, behoud van werk bij andere selecties en de voortgangsreacties.

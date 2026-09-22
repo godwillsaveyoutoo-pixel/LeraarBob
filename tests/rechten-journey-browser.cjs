@@ -54,7 +54,7 @@ class CDP{
  // Regression: a completed 10/12 round must offer a NEW round and advance within the stop.
  await reset();await c.run(`state.routeStep=1;state.total=12;state.xp=123;state.access=['point','point_plot'];Object.assign(state.skills.point,{intro:true,seen:10,correct:8,strength:.8,recent:[true,true,true,true]});Object.assign(state.skills.point_plot,{intro:true,seen:2,correct:2,strength:.5,recent:[true,true]});state.review=[{id:'earlier-point',kind:'repair',skill:'point',due:0,stage:0,misses:1,difficulty:0}];state.session={...emptySession(),answered:12,completed:true,journeyRound:true};const j=J.data(state);j.visits.tower=1;j.last={place:'tower',mode:'discover',answered:12,independent:10,practice:['point'],newSkills:['point_plot']};save();renderJourney()`);
  assert.equal(await c.run('journeyRecommendation().skill'),'point_plot');assert(!(await c.run('unlockedSkills()')).includes('delta'));
- assert(await c.eval('document.querySelector(".journey-recommend").textContent.includes("ronde 2")'));
+ assert(await c.eval('document.querySelector(".journey-context").textContent.includes("Ronde 2")'));
  assert(await c.eval('document.querySelector("[data-start=discover]").textContent.includes("Start volgende ronde")'));
  await tap('[data-next-round]');assert.equal(await c.run('state.session.answered'),0);assert.equal(await c.run('state.session.completed||false'),false);assert.equal(await c.run('current.skill'),'point_plot');assert.equal(await c.run('state.xp'),123);assert.equal(await c.run('state.journey.visits.tower'),1);
  await solveCurrent();await onward();assert.equal(await c.run('current.reviewId'),'earlier-point');

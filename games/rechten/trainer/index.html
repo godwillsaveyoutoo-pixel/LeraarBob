@@ -114,7 +114,7 @@
       <svg class="startArt" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><pattern id="welcome-grid" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1.3" fill="#c8d7cd"/></pattern></defs><rect width="500" height="500" fill="url(#welcome-grid)"/><path d="M20 350H480M140 470V30" stroke="#b4c7bd" stroke-width="1.5"/><path d="M20 440L440 20" fill="none" stroke="#4d8070" stroke-width="3"/><path d="M30 130L470 350" fill="none" stroke="#a196c1" stroke-width="2"/><path d="M180 280H300V160" fill="none" stroke="#bd9048" stroke-width="2" stroke-dasharray="4 6"/><circle cx="180" cy="280" r="7" fill="#4d8070"/><circle cx="300" cy="160" r="7" fill="#bd9048"/><circle cx="240" cy="220" r="22" fill="#e9eee6"/><circle cx="240" cy="220" r="7" fill="#4d8070"/></svg>
     </section>
     <section id="sessionDone" class="sessionDone" hidden>
-      <div class="doneCard">
+      <div class="doneCard"><span class="done-mark" aria-hidden="true">★</span>
         <div id="doneEyebrow" class="eyebrow">korte trainingsronde afgerond</div>
         <h2 id="doneTitle">Route +1</h2>
         <div id="doneXP" class="doneXP">+0 XP</div>
@@ -758,7 +758,7 @@ function record(ok,errorCode='generic'){
 }
 function endSession(){
   if(state.session.completed){if(state.session.journeyRound)openScreen('journey');return}
-  const wasJourney=!!state.journey?.active;if(wasJourney)J.finish(state,unlockedSkills());state.session.completed=true;state.session.journeyRound=wasJourney;
+  const wasJourney=!!state.journey?.active;E.sessionDone.classList.toggle('journey-done',wasJourney);if(wasJourney)J.finish(state,unlockedSkills());state.session.completed=true;state.session.journeyRound=wasJourney;
   clearTimer();clearInteractionTimers();locked=true;const checkpoint=isCheckpointSession();state.routeStep++;
   const completionBonus=checkpoint?30:20;state.xp+=completionBonus;state.session.xp+=completionBonus;if(checkpoint)state.checkpointWins=(state.checkpointWins||0)+1;save();
   E.continueBtn.textContent=wasJourney?'Bekijk volgende ronde →':'Verder oefenen →';

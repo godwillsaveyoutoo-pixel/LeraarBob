@@ -22,19 +22,31 @@ class CDP{
  for(const [width,height] of [[1366,768],[1100,700],[1024,768],[780,360],[640,360],[390,844]]){
   await c.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:false});
   await c.run("stopAccountExercise();state=DEFAULT();guestMode=true;currentScreen='play';save();openScreen('journey')");await frames();assert.equal(await c.run('state.journey.view'),'atlas');assert.equal(await c.eval('document.querySelectorAll("[data-region]").length'),5);await layout();
+  assert.equal(await c.eval('document.querySelectorAll("#journeyPanel button.primary").length'),1,'one primary action on the atlas');
+  if(width>=1024){assert(await c.eval('document.querySelector(".journey-map").getBoundingClientRect().top<200'),'map above fold');assert(await c.eval('document.querySelector("[data-primary]").getBoundingClientRect().bottom<innerHeight'),'start visible without scrolling');assert(await c.eval('document.querySelector(".journey-map").getBoundingClientRect().bottom<=innerHeight'),'whole map visible')}
   if(width===1366){const shot=await c.send('Page.captureScreenshot');fs.writeFileSync('/tmp/rechten-startkaart.png',Buffer.from(shot.data,'base64'))}
   await click('[data-recommend]');assert.equal(await c.eval('document.querySelector(".journey-details h3").textContent'),'Coördinaten lezen en plaatsen','recommendation at '+width);await layout();
   await click('[data-place="bridge"]');assert(!await c.eval('document.querySelector("[data-start=discover]")'));await click('[data-atlas]');
-  for(const id of ['points','properties','equations','representations','zeros']){await click('[data-region="'+id+'"]');await layout();await click('[data-atlas]')}
+  for(const id of ['points','properties','equations','representations','zeros']){await click('[data-region="'+id+'"]');await layout();assert.equal(await c.eval('document.querySelectorAll("#journeyPanel button.primary").length'),1,'one primary on each area');await click('[data-atlas]')}
   for(const id of ['progressBtn','groupBtn','profileBtn']){await click('#'+id);await layout()}
   assert(await c.eval('document.querySelector("#profilePanel").textContent.includes("Alleen op dit toestel")'));
   await click('#journeyBtn');assert.equal(await c.run('currentScreen'),'journey');await click('[data-recommend]');await click('[data-start="discover"]');assert.equal(await c.run('current.skill'),'point');
+  if(width>=1024){await click('#journeyBtn');await click('[data-place="bridge"]');assert.equal(await c.eval('document.querySelector(".journey-details h3").textContent'),'Helling uit twee punten');assert.equal(await c.eval('document.querySelectorAll("#journeyPanel button.primary").length'),1);assert(await c.eval('!!document.querySelector("[data-primary][data-resume]")'));await click('#journeyPanel [data-resume]')}
   if(width>=640){const id=await c.run('current.id');for(const tab of ['journeyBtn','progressBtn','groupBtn','profileBtn']){await click('#'+tab);await click('#playBtn');assert.equal(await c.run('current.id'),id);assert.equal(await c.run('currentScreen'),'play')};await click('#helpBtn');await click('#playBtn');assert(await c.run('current.journeyHelp'))}
  }
  // Mature learner: previous completions, global repair, real new area tasks, and alias escaping.
  await c.send('Emulation.setDeviceMetricsOverride',{width:1366,height:768,deviceScaleFactor:1,mobile:false});
  await c.run("stopAccountExercise();state=DEFAULT();for(const k of W.order){Object.assign(state.skills[k],{intro:true,seen:8,correct:8,strength:.85,recent:[true,true,true,true]})}state.access=[...W.order];const j=J.data(state);j.visits.bridge=1;state.review=[{id:'repair',kind:'repair',skill:'slope_from_two_points',due:0}];openScreen('journey')");await click('[data-recommend]');
- assert(await c.eval('document.querySelector("[data-place=bridge]").textContent.includes("★ Ronde afgerond")'));assert(await c.eval('document.querySelector("[data-place=bridge]").textContent.includes("Herhaling gepland")'));await layout();
+ assert(await c.eval('document.querySelector("[data-place=bridge] .journey-earned")?.getAttribute("aria-label")==="Ronde afgerond"'));assert(await c.eval('document.querySelector(".journey-status").textContent.includes("Herhaling gepland")'));await layout();
+ // Completion is permanent; the visual reaction plays once per result and view.
+ await c.run("state.routeStep=1;state.journey.last={place:'bridge',mode:'discover',answered:12,independent:10,newSkills:['line_behavior'],practice:['point']};renderJourney()");
+ assert(await c.eval('document.querySelector("[data-place=bridge]").classList.contains("just-completed")'));
+ await click('[data-place="trail"]');assert(!await c.eval('document.querySelector(".just-completed")'));assert(await c.eval('!!document.querySelector("[data-place=bridge] .journey-earned")'));
+ await click('[data-atlas]');assert(await c.eval('document.querySelector("[data-region=properties]").classList.contains("just-unlocked")'));
+ await c.send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});assert.equal(await c.eval('getComputedStyle(document.querySelector(".just-unlocked .journey-landmark")).animationName'),'none');await c.send('Emulation.setEmulatedMedia',{features:[]});
+ const shot=await c.send('Page.captureScreenshot');fs.writeFileSync('/tmp/rechten-voortgang-reactie.png',Buffer.from(shot.data,'base64'));
+ await click('[data-region="properties"]');await click('[data-atlas]');assert(!await c.eval('!!document.querySelector(".just-unlocked")'),'atlas reaction does not replay after another area');
+ await click('[data-region="points"]');
  await click('[data-atlas]');await click('[data-region="representations"]');await click('[data-place="formula-context"]');await click('[data-start="discover"]');assert.equal(await c.run('current.skill'),'equation_from_context');const task=await c.run('JSON.stringify(current)');
  await click('#profileBtn');await c.run("account={id:'synthetic',role:'student',alias:'<img src=x onerror=alert(1)>',class_code:'Testklas'};guestMode=false;accountReady=true;renderProfile()");assert.equal(await c.eval('document.querySelectorAll("#profilePanel img").length'),0);await click('#playBtn');assert.equal(await c.run('JSON.stringify(current)'),task);
  assert.deepEqual(c.errors,[]);console.log('PASS student shell: default atlas, five areas, literal goals, recommendations, persistent stars and review, four tabs, task retention, real context task, escaped alias; 1366/1100/1024/780/640/390 layouts');
