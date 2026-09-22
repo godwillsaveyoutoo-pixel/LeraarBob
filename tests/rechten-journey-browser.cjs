@@ -51,11 +51,24 @@ class CDP{
  for(let i=0;i<12;i++){await solveCurrent();await onward()}
  assert.equal(await c.run('state.session.answered'),12);assert.equal(await c.run('state.journey.active'),null);assert.equal(await c.run('state.journey.visits.tower'),1);
  const finished=await c.run('({xp:state.xp,total:state.total,route:state.routeStep})');await navigate();assert.deepEqual(await c.run('({xp:state.xp,total:state.total,route:state.routeStep})'),finished);await c.run('endSession()');assert.deepEqual(await c.run('({xp:state.xp,total:state.total,route:state.routeStep})'),finished);
+ // Regression: a completed 10/12 round must offer a NEW round and advance within the stop.
+ await reset();await c.run(`state.routeStep=1;state.total=12;state.xp=123;state.access=['point','point_plot'];Object.assign(state.skills.point,{intro:true,seen:10,correct:8,strength:.8,recent:[true,true,true,true]});Object.assign(state.skills.point_plot,{intro:true,seen:2,correct:2,strength:.5,recent:[true,true]});state.review=[{id:'earlier-point',kind:'repair',skill:'point',due:0,stage:0,misses:1,difficulty:0}];state.session={...emptySession(),answered:12,completed:true,journeyRound:true};const j=J.data(state);j.visits.tower=1;j.last={place:'tower',mode:'discover',answered:12,independent:10,practice:['point'],newSkills:['point_plot']};save();renderJourney()`);
+ assert.equal(await c.run('journeyRecommendation().skill'),'point_plot');assert(!(await c.run('unlockedSkills()')).includes('delta'));
+ assert(await c.eval('document.querySelector(".journey-recommend").textContent.includes("ronde 2")'));
+ assert(await c.eval('document.querySelector("[data-start=discover]").textContent.includes("Start volgende ronde")'));
+ await tap('[data-next-round]');assert.equal(await c.run('state.session.answered'),0);assert.equal(await c.run('state.session.completed||false'),false);assert.equal(await c.run('current.skill'),'point_plot');assert.equal(await c.run('state.xp'),123);assert.equal(await c.run('state.journey.visits.tower'),1);
+ await solveCurrent();await onward();assert.equal(await c.run('current.reviewId'),'earlier-point');
+ for(let i=1;i<12;i++){await solveCurrent();await onward()}
+ assert.equal(await c.run('state.routeStep'),2);assert.equal(await c.run('state.journey.visits.tower'),2);assert((await c.run('unlockedSkills()')).includes('delta'));
+ assert.equal(await c.run('journeyRecommendation().place.id'),'trail');await tap('#continueBtn');assert.equal(await c.run('state.journey.selected'),'trail');
+ await tap('[data-next-round]');assert.equal(await c.run('state.session.answered'),0);assert.equal(await c.run('state.journey.active.place'),'trail');
  // A world project has explicit coverage. Assistance with the first objective requires a retake.
  await reset(true);await tap('[data-start="challenge"]');await tap('#helpBtn');await tap('#playBtn');
  for(let i=0;i<12;i++){await solveCurrent();await onward()}
  assert.equal(await c.run('Object.keys(state.journey.proof).length'),4);assert.equal(await c.run('state.journey.proof.point||false'),false);
  await tap('#continueBtn');await layout('map');const challengeShot=await c.send('Page.captureScreenshot');fs.writeFileSync('/tmp/rechten-journey-challenge.png',Buffer.from(challengeShot.data,'base64'));
+ // The next-round action may advance to another area; explicitly return for a retake.
+ await tap('[data-atlas]');await tap('[data-region="points"]');
  // Finish the engine's targeted repair before another independent world attempt.
  await c.run(`state.review=[];for(const k of J.skills){const s=state.skills[k];s.intro=true;s.seen=8;s.strength=.85;s.recent=[true,true,true,true]}renderJourney()`);
  await tap('[data-start="challenge"]');assert.deepEqual(await c.run('state.journey.active.targets'),['point']);

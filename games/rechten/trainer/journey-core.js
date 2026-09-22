@@ -258,7 +258,11 @@ function begin(state,place,mode,id,unlocked,ready){
  j.active={id,place,mode,results:[],accessBefore:[...unlocked],targets:targets.length?targets:[...skills],draft:null};
  j.selected=places.some(p=>p.id===place)?place:j.selected;j.last=null;j.region=places.find(p=>p.id===j.selected)?.region||'points';j.view='area';return true;
 }
-function choice(state,unlocked){
+function learningSkill(state,pool,ready){
+ // Keep moving within available content; scheduled reviews have their own slots.
+ return pool.find(k=>!state.skills[k].intro)||pool.find(k=>!ready(state,k)&&!state.review.some(r=>r.skill===k&&r.kind==='repair'));
+}
+function choice(state,unlocked,ready=()=>true){
  const j=data(state),a=j.active;if(!a)return null;
  const ix=state.session.answered;
  // Explicit independent coverage; a retake concentrates on missing evidence.
@@ -274,7 +278,7 @@ function choice(state,unlocked){
  const place=places.find(p=>p.id===a.place);
  if(a.mode==='discover'&&[0,3,5,8,10].includes(ix)){
   const pool=(place?.skills||[]).filter(k=>unlocked.includes(k));
-  const skill=pool.find(k=>!state.skills[k].intro)||pool.sort((a,b)=>state.skills[a].strength-state.skills[b].strength||state.skills[a].lastSeen-state.skills[b].lastSeen)[0];
+  const skill=learningSkill(state,pool,ready)||pool.sort((a,b)=>state.skills[a].strength-state.skills[b].strength||state.skills[a].lastSeen-state.skills[b].lastSeen)[0];
   if(skill)return {skill,kind:'learning-edge',intro:!state.skills[skill].intro};
  }
  if(ix===2&&a.mode!=='challenge'){
@@ -310,12 +314,13 @@ function due(state,unlocked){
 function recommend(state,unlocked,ready,order=allSkills){
  const active=state.journey?.active;
  if(active)return {place:places.find(p=>p.id===active.place)||places[0],kind:'resume',reason:'Je hebt nog een ronde open. Je antwoorden blijven bewaard.'};
- const review=due(state,unlocked)[0];
- let skill=review?.skill,kind=review?'review':'learn';
- if(!skill)skill=order.find(k=>unlocked.includes(k)&&!ready(state,k));
- if(!skill){kind='maintain';skill=[...unlocked].sort((a,b)=>(state.skills[a]?.lastSeen??-999)-(state.skills[b]?.lastSeen??-999))[0]}
+ const pool=order.filter(k=>unlocked.includes(k)),review=due(state,unlocked)[0];
+ let skill=learningSkill(state,pool,ready),kind='learn';
+ if(!skill&&review){skill=review.skill;kind='review'}
+ if(!skill)skill=pool.find(k=>!ready(state,k));
+ if(!skill){kind='maintain';skill=[...pool].sort((a,b)=>(state.skills[a]?.lastSeen??-999)-(state.skills[b]?.lastSeen??-999))[0]}
  const place=places.find(p=>p.skills.includes(skill))||places[0];
- const reason=kind==='review'?'Dit leerdoel krijgt opnieuw aandacht. Eerdere resultaten blijven staan.':kind==='maintain'?'Je bent klaar voor herhaling met nieuwe varianten.':!state.skills[skill]?.intro?'Hier bouw je verder met een nieuw leerdoel.':'Oefen dit leerdoel verder voordat je de volgende stap zet.';
+ const reason=kind==='review'?'Je start een nieuwe ronde met gerichte herhaling en nieuwe opgaven. Je vorige ronde blijft afgerond.':kind==='maintain'?'Je start een nieuwe ronde met andere varianten en herhaling.':!state.skills[skill]?.intro?'Dit leerdoel is nu beschikbaar. Herhaling van eerdere leerdoelen komt mee in de ronde.':'Je bouwt verder aan dit leerdoel met nieuwe opgaven. De nodige herhaling komt mee.';
  return {place,skill,kind,reason};
 }
 function status(state,place,unlocked,phase){

@@ -28,16 +28,19 @@ en de bestaande DEV-ingang blijven beschikbaar voor hun bestaande doelgroep.
 | --- | --- |
 | Eerste bezoek | Punten lezen en plaatsen wordt aanbevolen; latere doelen blijven bekijkbaar |
 | Een ronde staat nog open | **Hervat opdracht** krijgt voorrang; de gekozen opgave en deelantwoorden blijven staan |
-| Herstel of herhaling is aan de beurt | De kaart wijst naar het bijbehorende leerdoel en legt de herhaalreden uit |
-| Geen verschuldigde herhaling | Eerste beschikbare doel dat nog voorbereiding vraagt, volgens de bestaande skillvolgorde |
+| Een volgende vaardigheid is beschikbaar | De kaart benoemt die concrete vaardigheid, ook binnen dezelfde stopplaats; geplande herhaling komt mee |
+| Alleen herstel of onderhoud is nodig | Start een nieuwe ronde met gerichte herhaling en andere opgaven; eerdere rondes blijven afgerond |
 | Alle beschikbare doelen zijn voorbereid | Aanbeveling voor onderhoud met nieuwe varianten bij eerder geoefende inhoud |
 | Een ronde is afgerond | Ster bij de bezochte stopplaats, aantal zelfstandig gelukt, eventueel nieuwe toegang en een volgende stap |
 | Een fout na eerdere voltooiing | Ster blijft; de actuele leerstatus kan ‘Opnieuw oefenen’ worden |
 | Een deelstap is fout | De bestaande diagnostiek blijft gelden; bijvoorbeeld een correcte a behouden als alleen b fout is |
 
-De prioriteit voor herstel is een ontwerpkeuze voor deze eerste versie. De
-voorkeur beïnvloedt de ronde, maar bestaande introductie-, herstel- en
-herhaalregels blijven leidend. Herhaling uit andere deelkaarten blijft terugkomen.
+De aanbeveling geeft beschikbare nieuwe introducties en verdere opbouw zonder open
+herstel voorrang op het opnieuw aanwijzen van een oud herhaaldoel. De concrete
+vaardigheid staat in beeld, niet alleen de naam van de stopplaats. **Start volgende
+ronde** begint een nieuwe reeks; de vorige ronde wordt niet opnieuw geopend.
+Dezelfde voorkeur geldt voor de eerste focusopgave van de ronde. Gereserveerde
+herhaalmomenten blijven eerdere vragen bedienen. Prerequisites worden niet versoepeld.
 
 Een **ster** betekent een afgeronde ronde. **Stevig** komt uitsluitend uit de
 bestaande `skillPhase`, inclusief variantdekking en later zelfstandig bewijs waar
@@ -79,7 +82,7 @@ voor de oefening verschijnt de bestaande melding om het toestel te draaien.
 
 ## Validatie en publicatie
 
-- 104 unit-/regressietests slagen, waaronder generators, migratie, toegang,
+- 105 unit-/regressietests slagen, waaronder generators, migratie, toegang,
   aanbevelingen, herhaling, behoud van sterren en alle veertien stopplaatsen.
 - `rechten-shell-browser.cjs`: echte kaartklikken, alle vijf deelkaarten, vier
   navigatieschermen, behoud van een lopende opgave, een echte contextopgave,
@@ -99,3 +102,19 @@ onderwerpen, een eerlijk vergelijkbare ranglijst, gezamenlijke leerdoelen en
 meer onderscheid tussen de getekende landschappen. De herkenbaarheid van de
 labels, de aanbeveling en het verschil tussen ster en beheersing moet nog met
 leerlingen worden beoordeeld.
+
+## Correctie: na afronden leek dezelfde ronde verplicht terug te komen
+
+De eerdere aanbeveling koos altijd eerst een verschuldigde herhaalvraag. Bij een
+stopplaats met meerdere skills kon dat de volgende beschikbare vaardigheid aan
+het zicht onttrekken. ‘Oefen opnieuw’ maakte bovendien niet duidelijk dat de knop
+een nieuwe ronde begon. De kaart noemt nu de concrete vaardigheid, het volgende
+rondenummer en de aparte actie **Start volgende ronde**. Na afronden wordt de
+aanbevolen stopplaats geselecteerd. De status **Herhaling gepland** betekent
+niet dat de vorige ronde mislukt of onvoltooid is.
+
+Een browserregressie begint bij een fictieve 10/12-ronde, met open herstel voor
+punten lezen en reeds beschikbare oefening in punten plaatsen. Ze controleert
+een nieuwe ronde vanaf nul, gelijkblijvende XP bij starten, behoud van de ster,
+werkelijke puntplaatsingsopgaven, ingeplande eerdere herstelvragen en vervolgens
+toegang tot Verschillen en helling. Accountgegevens worden niet gereset.

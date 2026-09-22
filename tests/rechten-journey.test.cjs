@@ -60,3 +60,19 @@ test('existing journey drafts and proof survive additions; mixed rounds do not i
  J.finish(s,W.order);assert.deepEqual(s.journey.last.newSkills,[],'old rounds do not invent newly unlocked skills');
  s.session.answered=0;assert(J.begin(s,'trail','camp','mixed',['point'],W.ready));J.result(s,J.tag(s,{id:1,skill:'point'}),true);J.finish(s,['point','point_plot']);assert.equal(s.journey.visits.trail,undefined);assert.deepEqual(s.journey.last.newSkills,['point_plot']);
 });
+test('an available next skill advances the route while earlier repair remains scheduled',()=>{
+ const s=fixture();s.access=['point','point_plot'];
+ for(const v of Object.values(s.skills))Object.assign(v,{intro:false,seen:0,strength:0,recent:[]});
+ Object.assign(s.skills.point,{intro:true,seen:10,strength:.8,recent:[true,true,true,true]});
+ Object.assign(s.skills.point_plot,{intro:true,seen:2,strength:.5,recent:[true,true]});
+ s.review=[{id:'old-point',skill:'point',kind:'repair',due:0,stage:0,misses:1}];
+ J.data(s).visits.tower=1;const before=structuredClone(s);
+ const available=W.unlock(s);assert(!available.includes('delta'),'preparation is not bypassed');
+ const rec=J.recommend(s,available,W.ready,W.order);assert.equal(rec.skill,'point_plot');assert.equal(rec.kind,'learn');
+ assert(J.begin(s,rec.place.id,'discover','next-round',available,W.ready));
+ assert.equal(J.choice(s,available,W.ready).skill,'point_plot','the promised next skill is actually served');
+ s.session.answered=1;assert.equal(J.choice(s,available,W.ready).reviewId,'old-point','old repair is included in the new round');
+ assert.equal(s.journey.visits.tower,1);assert.equal(s.xp,before.xp);assert.deepEqual(s.review,before.review);
+ Object.assign(s.skills.point_plot,{intro:false,seen:0});s.journey.active=null;
+ assert.equal(J.recommend(s,available,W.ready,W.order).skill,'point_plot','a new introduction also precedes an old repair recommendation');
+});

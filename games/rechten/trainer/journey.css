@@ -13,3 +13,5 @@
 .appNav .navButton{min-width:48px}.student-actions a.primary,.student-card>a.primary{display:inline-flex;align-items:center;min-height:48px;text-decoration:none;padding:10px 16px;border-radius:9px}
 
 #journeyPanel h2:focus{outline:none}
+
+.journey-recommend-actions{display:flex;flex-direction:column;gap:8px;flex-shrink:0}.journey-recommend-actions>button:not(.primary){font-size:12px;background:transparent;border-color:#b7c8b2}.journey-skill-state{display:block;font-size:12px;color:#53695c;margin:2px 0 7px 12px}
