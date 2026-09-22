@@ -1,5 +1,9 @@
 # Rechtenreis — eerste framework en proefkaart
 
+Vervolg: de [eerste echte Kaartvallei-etappe](rechten-kaartvallei-etappe.md) is nu
+gekoppeld aan de trainer. De beschrijving hieronder documenteert de eerdere,
+geïsoleerde vormproef; die blijft afzonderlijk beschikbaar.
+
 Dit is een ontwerpvoorstel met een geïsoleerd klikbaar prototype, geen wijziging van de leerlijn of leerlingvoortgang. Visuele richting: sober getekend, lichte papierkleur, dunne lijnen; gerichte highlights voor selectie, aanbevolen missie en sterren.
 
 ## Eerste speelbare lus
@@ -55,3 +59,7 @@ Prototype: `games/rechten/wereld-prototype/index.html`. Het staat bewust nog nie
 ## Controle van het prototype
 
 Kaartselectie, proefmissie, voltooiing, volgende locatie en het bekijken van een gesloten plek zijn in Chromium gecontroleerd op 1100×700, 780×360 en 640×360. Bediening blijft binnen de viewport en knoppen zijn minstens 48 px. Desktop- en mobiele screenshots zijn visueel nagekeken. De proefmissies zijn illustraties van de navigatielus; echte constructie-opgaven en accountopslag moeten nog via de bestaande trainer worden aangesloten.
+
+## Uitwerking van de leerroute
+
+Het vervolgvoorstel [gebieden en doorlopende leerweg](rechten-wereld-leerroute.md) groepeert alle 27 huidige skills in vijf gebieden met dertien stopplaatsen. Het werkt gebeurtenissen, herhaling over gebiedsgrenzen, optionele routes en cumulatieve werelduitdagingen uit. Dit is een inhoudelijke verfijning van de vier illustratieve gebieden in het huidige proefscherm; de kaart is nog niet naar dit voorstel omgebouwd.

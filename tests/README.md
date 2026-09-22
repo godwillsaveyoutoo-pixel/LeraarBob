@@ -270,3 +270,17 @@ inclusief JSONB-scheidingstekens getoetst aan de serverlimiet van 256 KiB.
 De catalogus telt nu 27 skills. Voer browsertests na elkaar uit.
 SQL wordt alleen op tijdelijke objecten met fictieve data getest.
 Zie [Wave 4-verslag](../docs/rechten-wave-4.md) voor bestanden en uitrolvolgorde.
+
+## Rechtentrainer — Kaartvallei
+
+```sh
+node tests/rechten-journey.test.cjs
+node tests/rechten-journey-browser.cjs
+```
+
+De policytest controleert toegang, globale herhaling, vijf zelfstandige einddoelen
+en herkansingen. De browsertest gebruikt de bestaande lokale server/Chromium,
+met onderschepte externe aanvragen en uitsluitend fictieve accounts. Ze speelt
+echte rondes, opent de kaart tijdens opgaven en controleert hulp, herladen,
+deelantwoorden, eenmalige scoring, accountwisseling en drie schermmaten.
+Voer browsertests na elkaar uit. Zie [implementatieverslag](../docs/rechten-kaartvallei-etappe.md).
