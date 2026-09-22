@@ -284,3 +284,18 @@ met onderschepte externe aanvragen en uitsluitend fictieve accounts. Ze speelt
 echte rondes, opent de kaart tijdens opgaven en controleert hulp, herladen,
 deelantwoorden, eenmalige scoring, accountwisseling en drie schermmaten.
 Voer browsertests na elkaar uit. Zie [implementatieverslag](../docs/rechten-kaartvallei-etappe.md).
+
+## Rechtentrainer — leerlingenschermen
+
+```sh
+node tests/rechten-shell-browser.cjs
+```
+
+Controleert de standaard hoofdkaart, vijf deelkaarten, letterlijke leerdoelen,
+persoonlijke aanbeveling, blijvende sterren bij herhaling en de vier hoofdtabs.
+Behoud van de actieve opgave en veilige aliasweergave worden met fictieve data
+getest op 1366×768, 1100×700, 1024×768, 780×360, 640×360 en 390×844.
+De bestaande Wave-testopstellingen sluiten de nieuwe standaardkaart voordat
+ze hun vaste inhoudstestvraag tonen. Alle inhoudelijke assertions blijven gelden.
+Voer de browsersuites na elkaar uit op de geïsoleerde testbrowser.
+Zie [eerste leerlingversie](../docs/rechten-leerlingenstart.md).

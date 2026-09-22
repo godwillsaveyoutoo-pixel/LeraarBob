@@ -1,5 +1,7 @@
 # Kaartvallei — eerste echte reisetappe
 
+Actuele implementatie: [eerste leerlingversie met de kaart als start](rechten-leerlingenstart.md). Die vervangt de beperkte Kaartvallei-ingang door de vijf deelkaarten en letterlijke leerdoelen.
+
 Open `games/rechten/trainer/?reis=kaartvallei`, of kies **Kaart** in de trainer.
 De eerdere vormproef linkt met **Speel de Kaartvallei** naar deze ingang.
 Dit werk staat op `feat/rechten-world-prototype`; publiceren is een aparte stap.

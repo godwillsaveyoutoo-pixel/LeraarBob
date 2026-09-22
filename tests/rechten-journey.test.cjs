@@ -1,10 +1,10 @@
 const {test}=require('node:test'),assert=require('node:assert/strict');
 const J=require('../games/rechten/trainer/journey-core.js'),W=require('../games/rechten/trainer/wave-core.js');
 function fixture(){return {version:704,xp:123,total:80,access:[...W.order],review:[],session:{answered:0},skills:Object.fromEntries(W.order.map(k=>[k,{intro:true,seen:8,strength:.8,recent:[true,true,true,true],lastSeen:0,refreshDue:null}]))}}
-test('five skills are grouped without introducing new prerequisites or removing access',()=>{
+test('all skills are grouped without introducing new prerequisites or removing access',()=>{
  const s=fixture(),before=structuredClone(s);assert(J.begin(s,'bridge','discover','run',W.unlock(s),W.ready));
  assert.deepEqual(s.skills,before.skills);assert.equal(s.xp,123);assert.deepEqual(s.access,before.access);
- assert.deepEqual(J.places.flatMap(p=>p.skills),J.skills);
+ assert.deepEqual(J.regions[0].places.flatMap(p=>p.skills),J.skills);assert.deepEqual([...J.allSkills].sort(),[...W.order].sort());assert.equal(new Set(J.allSkills).size,27);assert.equal(J.places.length,14);
  const old=W.migrate(s);assert.deepEqual(old.journey,s.journey);
  const fresh=fixture();fresh.access=['point'];Object.values(fresh.skills).forEach(v=>{v.intro=false;v.seen=0;v.strength=0;v.recent=[]});
  assert(!J.begin(fresh,'bridge','discover','bad',W.unlock(fresh),W.ready));assert(!J.begin(fresh,'bridge','challenge','bad',W.unlock(fresh),W.ready));
@@ -39,4 +39,24 @@ test('active rounds and missing preparation cannot be bypassed; completion is se
  assert(J.begin(s,'tower','discover','ok',W.order,W.ready));assert(!J.begin(s,'trail','discover','bad',W.order,W.ready));
  const t=J.tag(s,{id:'wrong',skill:'point'});J.result(s,t,false);J.finish(s);assert.equal(s.journey.visits.tower,1);assert.deepEqual(s.journey.proof,{});
  const old={id:'late',skill:'point',journey:{id:'ok',objective:true}};assert(!J.result(s,old,true));
+});
+test('recommendations explain the next action and preserve completed stars during review',()=>{
+ const s=fixture();J.data(s).visits.bridge=2;
+ s.review=[{id:'r',kind:'repair',skill:'slope_from_two_points',due:0}];
+ let rec=J.recommend(s,W.order,W.ready,W.order);assert.equal(rec.place.id,'bridge');assert.equal(rec.kind,'review');
+ const status=J.status(s,J.places.find(p=>p.id==='bridge'),W.order,()=> 'herstel');assert(status.completed);assert(status.review);assert(!status.strong);
+ assert(J.begin(s,'tower','discover','active',W.order,W.ready));rec=J.recommend(s,W.order,W.ready,W.order);assert.equal(rec.kind,'resume');assert.equal(rec.place.id,'tower');
+ s.journey.active=null;s.review=[];s.skills.equation_from_context.intro=false;
+ rec=J.recommend(s,W.order,W.ready,W.order);assert.equal(rec.skill,'equation_from_context');assert.equal(rec.place.region,'representations');
+ s.skills.equation_from_context.intro=true;rec=J.recommend(s,W.order,W.ready,W.order);assert.equal(rec.kind,'maintain');
+});
+test('all fourteen stops start available content, keep earlier reviews and reject unimplemented tests',()=>{
+ for(const p of J.places){const s=fixture();assert(J.begin(s,p.id,'discover','round',W.order,W.ready));const c=J.choice(s,W.order);assert(p.skills.includes(c.skill));assert.equal(s.journey.region,p.region);s.session.answered=1;s.review=[{id:'old',skill:'point',due:0,kind:'repair'}];assert.equal(J.choice(s,W.order).reviewId,'old')}
+ const s=fixture();assert(!J.begin(s,'formula-context','challenge','invalid',W.order,W.ready));assert(!J.begin(s,'tower','other','invalid',W.order,W.ready));
+});
+test('existing journey drafts and proof survive additions; mixed rounds do not invent place completion',()=>{
+ const s=fixture();s.journey={version:1,selected:'bridge',visits:{tower:2},proof:{point:true},active:{id:'old',place:'bridge',mode:'discover',targets:['point'],results:[],draft:{id:'draft',answer:2}},last:null};
+ const before=structuredClone(s.journey);J.data(s);assert.deepEqual(s.journey.active,before.active);assert.deepEqual(s.journey.proof,before.proof);assert.deepEqual(s.journey.visits,before.visits);
+ J.finish(s,W.order);assert.deepEqual(s.journey.last.newSkills,[],'old rounds do not invent newly unlocked skills');
+ s.session.answered=0;assert(J.begin(s,'trail','camp','mixed',['point'],W.ready));J.result(s,J.tag(s,{id:1,skill:'point'}),true);J.finish(s,['point','point_plot']);assert.equal(s.journey.visits.trail,undefined);assert.deepEqual(s.journey.last.newSkills,['point_plot']);
 });

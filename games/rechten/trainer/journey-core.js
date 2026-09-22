@@ -2,25 +2,261 @@
 (function(root,factory){const api=factory();if(typeof module==='object')module.exports=api;else root.RechtenJourney=api})(globalThis,()=>{
 'use strict';
 const skills=['point','point_plot','delta','slope','slope_from_two_points'];
-const places=[
- {id:'tower',name:'Uitkijktoren',skills:['point','point_plot'],type:'Ontdekking',story:'Breng de vallei in kaart. Lees coördinaten en plaats herkenningspunten.',icon:'M18 48V18h24v30M15 18l15-12 15 12M25 48V35h10v13M25 23h10v7'},
- {id:'trail',name:'Meetpad',skills:['delta','slope'],type:'Onderzoek',story:'Vergelijk routes: hoeveel ga je opzij en hoeveel omhoog of omlaag?',icon:'M8 46h18V32h16V18h10M8 46l44-28M14 40v-9m0 0-4 5m4-5 4 5'},
- {id:'bridge',name:'Verbindingsbrug',skills:['slope_from_two_points'],type:'Constructie',story:'Verbind twee meetpunten. Gebruik hun verschillen om de helling te bepalen.',icon:'M5 42h50M10 42V22m40 20V22M10 25q20 24 40 0M20 33v9m10-6v6m10-9v9'}
+const regions=[
+ {
+  "id": "points",
+  "name": "Punten en helling",
+  "tag": "coördinaten, verschillen en helling",
+  "at": [
+   18,
+   68
+  ],
+  "icon": "tower",
+  "goal": "Lees en plaats punten. Gebruik verschillen om een helling te bepalen.",
+  "places": [
+   {
+    "name": "Coördinaten lezen en plaatsen",
+    "skills": [
+     "point",
+     "point_plot"
+    ],
+    "id": "tower",
+    "region": "points",
+    "story": "Lees de x- en y-coördinaat en plaats een punt in het assenstelsel.",
+    "type": "Leerdoel",
+    "icon": "M18 48V18h24v30M15 18l15-12 15 12M25 48V35h10v13M25 23h10v7"
+   },
+   {
+    "name": "Verschillen en helling",
+    "skills": [
+     "delta",
+     "slope"
+    ],
+    "id": "trail",
+    "region": "points",
+    "story": "Bepaal Δx en Δy en verbind hun verhouding met de helling.",
+    "type": "Leerdoel",
+    "icon": "M8 46h18V32h16V18h10M8 46l44-28"
+   },
+   {
+    "name": "Helling uit twee punten",
+    "skills": [
+     "slope_from_two_points"
+    ],
+    "id": "bridge",
+    "region": "points",
+    "story": "Bereken de helling uit twee punten. Gebruik één consistente aftrekvolgorde.",
+    "type": "Leerdoel",
+    "icon": "M5 42h50M10 42V22m40 20V22M10 25q20 24 40 0M20 33v9m10-6v6m10-9v9"
+   }
+  ]
+ },
+ {
+  "id": "properties",
+  "name": "Eigenschappen van rechten",
+  "tag": "richting, bijzondere rechten, a en b",
+  "at": [
+   35,
+   25
+  ],
+  "icon": "trail",
+  "goal": "Verbind het gedrag van een rechte met haar helling en herken a en b.",
+  "places": [
+   {
+    "name": "Stijgen, dalen en bijzondere rechten",
+    "skills": [
+     "line_behavior",
+     "special_lines"
+    ],
+    "id": "behavior",
+    "region": "properties",
+    "story": "Onderscheid stijgend, dalend, horizontaal, verticaal en twee identieke punten.",
+    "type": "Leerdoel",
+    "icon": "M18 48V18h24v30M15 18l15-12 15 12M25 48V35h10v13M25 23h10v7"
+   },
+   {
+    "name": "a en b herkennen",
+    "skills": [
+     "intercept",
+     "ab"
+    ],
+    "id": "parameters",
+    "region": "properties",
+    "story": "Herken het snijpunt met de y-as en de betekenis van a en b.",
+    "type": "Leerdoel",
+    "icon": "M8 46h18V32h16V18h10M8 46l44-28"
+   }
+  ]
+ },
+ {
+  "id": "equations",
+  "name": "Voorschriften opstellen",
+  "tag": "uit a en b, uit punten, door herleiden",
+  "at": [
+   51,
+   68
+  ],
+  "icon": "scale",
+  "goal": "Stel een voorschrift op uit de beschikbare gegevens en controleer het.",
+  "places": [
+   {
+    "name": "Voorschrift uit a en b",
+    "skills": [
+     "equation_from_ab"
+    ],
+    "id": "formula-ab",
+    "region": "equations",
+    "story": "Stel y = ax + b op met een gegeven a en b.",
+    "type": "Leerdoel",
+    "icon": "M18 48V18h24v30M15 18l15-12 15 12M25 48V35h10v13M25 23h10v7"
+   },
+   {
+    "name": "Voorschrift uit punten",
+    "skills": [
+     "intercept_from_point",
+     "equation_from_point_slope",
+     "equation_from_two_points"
+    ],
+    "id": "formula-points",
+    "region": "equations",
+    "story": "Bepaal b uit a en een punt, bouw het voorschrift en controleer de oorspronkelijke punten.",
+    "type": "Leerdoel",
+    "icon": "M8 46h18V32h16V18h10M8 46l44-28"
+   },
+   {
+    "name": "Vergelijking herleiden",
+    "skills": [
+     "rewrite_linear_equation"
+    ],
+    "id": "rewrite",
+    "region": "equations",
+    "story": "Herleid een vergelijking naar y = ax + b. Dit is een aparte route; ze blokkeert b bepalen niet.",
+    "type": "Leerdoel",
+    "icon": "M5 42h50M10 42V22m40 20V22M10 25q20 24 40 0M20 33v9m10-6v6m10-9v9"
+   }
+  ]
+ },
+ {
+  "id": "representations",
+  "name": "Tabellen, grafieken en toepassingen",
+  "tag": "rekenen, tekenen en gegevens gebruiken",
+  "at": [
+   72,
+   25
+  ],
+  "icon": "house",
+  "goal": "Wissel tussen waarden, tabellen, grafieken en situaties.",
+  "places": [
+   {
+    "name": "Waarden berekenen en tabellen invullen",
+    "skills": [
+     "fx",
+     "table",
+     "input_from_output"
+    ],
+    "id": "values",
+    "region": "representations",
+    "story": "Bereken functiewaarden, vul een tabel in en zoek een invoer bij een gegeven uitvoer.",
+    "type": "Leerdoel",
+    "icon": "M18 48V18h24v30M15 18l15-12 15 12M25 48V35h10v13M25 23h10v7"
+   },
+   {
+    "name": "Grafieken tekenen en punten controleren",
+    "skills": [
+     "graph_from_equation",
+     "graph_from_table",
+     "point_on_line"
+    ],
+    "id": "draw-graphs",
+    "region": "representations",
+    "story": "Teken een grafiek uit een voorschrift of tabel en controleer of een punt op de rechte ligt.",
+    "type": "Leerdoel",
+    "icon": "M8 46h18V32h16V18h10M8 46l44-28"
+   },
+   {
+    "name": "Voorschrift uit tabel of grafiek",
+    "skills": [
+     "equation_from_table",
+     "equation_from_graph"
+    ],
+    "id": "formula-data",
+    "region": "representations",
+    "story": "Bepaal a en b uit een tabel of grafiek en controleer de gegevens.",
+    "type": "Leerdoel",
+    "icon": "M5 42h50M10 42V22m40 20V22M10 25q20 24 40 0M20 33v9m10-6v6m10-9v9"
+   },
+   {
+    "name": "Voorschrift uit een situatie",
+    "skills": [
+     "equation_from_context"
+    ],
+    "id": "formula-context",
+    "region": "representations",
+    "story": "Vertaal startwaarde en verandering naar een voorschrift. Controleer eenheden en domein.",
+    "type": "Leerdoel",
+    "icon": "M18 48V18h24v30M15 18l15-12 15 12M25 48V35h10v13M25 23h10v7"
+   }
+  ]
+ },
+ {
+  "id": "zeros",
+  "name": "Nulwaarden en tekens",
+  "tag": "nul, positief en negatief",
+  "at": [
+   82,
+   72
+  ],
+  "icon": "flag",
+  "goal": "Bepaal waar de functiewaarde nul, positief of negatief is.",
+  "places": [
+   {
+    "name": "Nulwaarde bepalen",
+    "skills": [
+     "zeroRead",
+     "zero"
+    ],
+    "id": "zeros",
+    "region": "zeros",
+    "story": "Lees of bereken voor welke x de functiewaarde nul is.",
+    "type": "Leerdoel",
+    "icon": "M18 48V18h24v30M15 18l15-12 15 12M25 48V35h10v13M25 23h10v7"
+   },
+   {
+    "name": "Teken en tekenschema",
+    "skills": [
+     "sign",
+     "signchart"
+    ],
+    "id": "signs",
+    "region": "zeros",
+    "story": "Onderzoek positieve en negatieve functiewaarden en stel een tekenschema op.",
+    "type": "Leerdoel",
+    "icon": "M8 46h18V32h16V18h10M8 46l44-28"
+   }
+  ]
+ }
 ];
+const places=regions.flatMap(r=>r.places);
+const allSkills=places.flatMap(p=>p.skills);
 function data(state){
  if(!state.journey||state.journey.version!==1)state.journey={version:1,selected:'tower',visits:{},proof:{},active:null,last:null};
- return state.journey;
+ const j=state.journey;
+ j.visits ||= {};j.proof ||= {};
+ if(!regions.some(r=>r.id===j.region))j.region=places.find(p=>p.id===j.selected)?.region||'points';
+ if(!['atlas','area'].includes(j.view))j.view='atlas';
+ return j;
 }
 function available(place,unlocked){return place.skills.some(k=>unlocked.includes(k))}
 function missing(state,ready){return skills.filter(k=>!ready(state,k))}
 function begin(state,place,mode,id,unlocked,ready){
  const j=data(state);
  if(j.active||state.session.answered!==0)return false;
- if(mode==='challenge'&&missing(state,ready).length)return false;
+ if(!['discover','camp','challenge'].includes(mode))return false;
+ if(mode==='challenge'&&(missing(state,ready).length||!regions[0].places.some(p=>p.id===place)))return false;
  if(mode!=='challenge'&&mode!=='camp'&&!places.some(p=>p.id===place&&available(p,unlocked)))return false;
  const targets=skills.filter(k=>!j.proof[k]);
- j.active={id,place,mode,results:[],targets:targets.length?targets:[...skills],draft:null};
- j.selected=places.some(p=>p.id===place)?place:j.selected;j.last=null;return true;
+ j.active={id,place,mode,results:[],accessBefore:[...unlocked],targets:targets.length?targets:[...skills],draft:null};
+ j.selected=places.some(p=>p.id===place)?place:j.selected;j.last=null;j.region=places.find(p=>p.id===j.selected)?.region||'points';j.view='area';return true;
 }
 function choice(state,unlocked){
  const j=data(state),a=j.active;if(!a)return null;
@@ -37,7 +273,7 @@ function choice(state,unlocked){
  }
  const place=places.find(p=>p.id===a.place);
  if(a.mode==='discover'&&[0,3,5,8,10].includes(ix)){
-  const pool=place.skills.filter(k=>unlocked.includes(k));
+  const pool=(place?.skills||[]).filter(k=>unlocked.includes(k));
   const skill=pool.find(k=>!state.skills[k].intro)||pool.sort((a,b)=>state.skills[a].strength-state.skills[b].strength||state.skills[a].lastSeen-state.skills[b].lastSeen)[0];
   if(skill)return {skill,kind:'learning-edge',intro:!state.skills[skill].intro};
  }
@@ -59,11 +295,32 @@ function result(state,task,ok){
  if(a.mode==='challenge'&&task.journey.objective&&independent)j.proof[task.skill]=true;
  return true;
 }
-function finish(state){
+function finish(state,unlocked=[]){
  const j=data(state),a=j.active;if(!a)return;
- j.visits[a.place]=(j.visits[a.place]||0)+1;
- j.last={place:a.place,mode:a.mode,answered:a.results.length,independent:a.results.filter(r=>r.independent).length,passed:skills.every(k=>j.proof[k])};
+ if(a.mode!=='camp')j.visits[a.place]=(j.visits[a.place]||0)+1;
+ j.last={place:a.place,mode:a.mode,answered:a.results.length,independent:a.results.filter(r=>r.independent).length,passed:skills.every(k=>j.proof[k]),newSkills:a.accessBefore?unlocked.filter(k=>!a.accessBefore.includes(k)):[],practice:[...new Set(a.results.filter(r=>!r.independent).map(r=>r.skill))],independentSkills:[...new Set(a.results.filter(r=>r.independent).map(r=>r.skill))]};
  j.active=null;
 }
-return {skills,places,data,available,missing,begin,choice,tag,result,finish};
+// Presentation is derived from learning state, never from a second mastery score.
+function due(state,unlocked){
+ const items=(state.review||[]).filter(r=>unlocked.includes(r.skill)&&r.due<=state.total).map(r=>({...r}));
+ for(const k of unlocked){const at=state.skills[k]?.refreshDue;if(at!=null&&at<=state.total&&!items.some(r=>r.skill===k))items.push({skill:k,kind:'refresh',due:at})}
+ return items.sort((a,b)=>(a.kind==='repair'?0:1)-(b.kind==='repair'?0:1)||a.due-b.due);
+}
+function recommend(state,unlocked,ready,order=allSkills){
+ const active=state.journey?.active;
+ if(active)return {place:places.find(p=>p.id===active.place)||places[0],kind:'resume',reason:'Je hebt nog een ronde open. Je antwoorden blijven bewaard.'};
+ const review=due(state,unlocked)[0];
+ let skill=review?.skill,kind=review?'review':'learn';
+ if(!skill)skill=order.find(k=>unlocked.includes(k)&&!ready(state,k));
+ if(!skill){kind='maintain';skill=[...unlocked].sort((a,b)=>(state.skills[a]?.lastSeen??-999)-(state.skills[b]?.lastSeen??-999))[0]}
+ const place=places.find(p=>p.skills.includes(skill))||places[0];
+ const reason=kind==='review'?'Dit leerdoel krijgt opnieuw aandacht. Eerdere resultaten blijven staan.':kind==='maintain'?'Je bent klaar voor herhaling met nieuwe varianten.':!state.skills[skill]?.intro?'Hier bouw je verder met een nieuw leerdoel.':'Oefen dit leerdoel verder voordat je de volgende stap zet.';
+ return {place,skill,kind,reason};
+}
+function status(state,place,unlocked,phase){
+ const introduced=place.skills.some(k=>state.skills[k]?.intro),review=due(state,unlocked).some(r=>place.skills.includes(r.skill));
+ return {open:available(place,unlocked),completed:!!state.journey?.visits?.[place.id],strong:place.skills.every(k=>phase(k)==='stevig'),introduced,review};
+}
+return {skills,allSkills,regions,places,data,available,missing,begin,choice,tag,result,finish,due,recommend,status};
 });

@@ -1,113 +1,99 @@
-# Rechtenreis — gebieden, stopplaatsen en een doorlopende leerweg
+# Rechten — hoofdkaart, deelkaarten en stopplaatsen
 
-Ontwerpvoorstel op basis van de huidige 27 skills en `chooseTask`, `sessionPhase`, `scheduleRepair`, `progressRepair` en `scheduleRefresh` in de Rechtentrainer. Dit document verandert de scheduler, prerequisites, scores of prototypekaart niet.
+Actuele implementatie: [eerste leerlingversie met de kaart als start](rechten-leerlingenstart.md). Die vervangt de beperkte Kaartvallei-ingang door de vijf deelkaarten en letterlijke leerdoelen.
 
-De eerste beperkte implementatie staat beschreven in [Kaartvallei — echte reisetappe](rechten-kaartvallei-etappe.md). De overige gebieden hieronder blijven een voorstel.
+Herzien structuurvoorstel · 22 september 2026. Dit document legt de voorgestelde inhoudsindeling vast voor het [spelraamwerk](rechten-spelraamwerk.md) en [klikbare schermmodel](rechten-gameframe/index.html). De indeling is bespreekbaar; dit is geen wijziging van de bestaande leerengine of opgeslagen voortgang.
 
-## Kernbesluit
+Het vervangt de eerdere indeling met namen zoals Kaartvallei, Meetpad en Markt. De [eerdere Kaartvallei-integratie](rechten-kaartvallei-etappe.md) is een technische proef en gebruikt nog die oude namen.
 
-Een gebied geeft een nieuw begrip een herkenbare thuisplek. Een stopplaats biedt terugkerende gebeurtenissen en kan meerdere samenhangende vaardigheden gebruiken. De bestaande leerengine blijft vragen kiezen over de grenzen van gebieden heen. Bezoek, voltooiing en huidige beheersing zijn afzonderlijke dingen.
+## 1. Eén duidelijke hiërarchie
 
-Voorstel: vijf gebieden, dertien inhoudelijke stopplaatsen. Per gebied staan slechts twee of drie belangrijke plaatsen op de kaart. Herhaling verschijnt vooral binnen missies en onderweg; een kamp biedt daarnaast bewust gemengd oefenen. Geen route van 27 losse afvinkpunten.
+**Hoofdkaart Rechten → deelkaart van een onderwerp → stopplaats met een leerdoel → activiteit.**
 
-## Concrete verdeling van alle huidige skills
-
-| Gebied | Stopplaats | Eerste kennismaking / eigen leerdoelen | Wat later terugkeert |
+| Niveau | Wat staat erop? | Voorbeeld | Wat doet selecteren? |
 | --- | --- | --- | --- |
-| 1. De kaartvallei | Uitkijktoren en kamp | `point`, `point_plot` | Punten lezen/plaatsen bij tabellen, grafieken en reconstructie |
-| 1. De kaartvallei | Meetpad | `delta`, `slope` | Verschillen in beide richtingen; gehele, negatieve en fractionele hellingen |
-| 1. De kaartvallei | Verbindingsbrug | `slope_from_two_points` | Helling bepalen bij nieuwe datasets en grafieken |
-| 2. Het landschap | Wegenpost | `line_behavior`, `special_lines` | Stijgen/dalen/constant, verticaal en identieke punten als verschillende situaties |
-| 2. Het landschap | Peilstation | `intercept`, `ab` | a en b herkennen vóór en na zelfstandige modelbouw |
-| 3. De werkplaats | Ontwerptafel | `equation_from_ab`, `graph_from_equation` | Formule ↔ grafiek; alternatieve geldige punten kiezen |
-| 3. De werkplaats | Constructiehuis | `intercept_from_point`, `equation_from_point_slope`, `equation_from_two_points` | Gegevens reconstrueren; juiste deelstappen behouden bij herstel |
-| 3. De werkplaats | Weegschaal | `rewrite_linear_equation` | Een andere vergelijking als hetzelfde model herkennen; voorbereiding op onbekende x |
-| 4. De handelsplaats | Rekenbalie | `fx`, `table`, `input_from_output` | Vooruit en achteruit rekenen, tabelwaarden en contextcontroles |
-| 4. De handelsplaats | Kaartbureau | `point_on_line`, `graph_from_table`, `equation_from_graph`, `equation_from_table` | Tussen representaties wisselen; ook de derde rij controleren |
-| 4. De handelsplaats | Markt | `equation_from_context` | Startwaarde, verandering, eenheden en domein betekenis geven |
-| 5. Het grensgebied | Nulpunt | `zeroRead`, `zero` | Waar bereikt een model nul? Koppeling met formule, grafiek en onbekende x |
-| 5. Het grensgebied | Grenspost | `sign`, `signchart` | Waar is de uitvoer positief/negatief? Verband leggen met nulwaarde en helling |
+| Hoofdkaart | Vijf onderwerpen, aanbeveling en persoonlijke voortgang | Punten en helling | Toont de inhoud; **Open deelkaart** opent het onderwerp |
+| Deelkaart | Twee tot vier stopplaatsen met letterlijke leerdoelen | Helling uit twee punten | Toont het doel en passende activiteiten in een detailpaneel |
+| Stopplaats | Eén samenhangend leerdoel, soms met meerdere skills | Voorschrift uit punten | **Oefenen**, **Extra variatie** of een beschikbare uitleg; geen derde kaartniveau |
+| Activiteit | De concrete oefenreeks met uitleg, feedback en herhaling | Oefenen: helling uit twee punten | **Start** opent het werkvlak; pauzeren behoudt de deelstappen |
 
-Dit is een groepering van inhoud, geen nieuwe verplichte volgorde. Gebieden kunnen tegelijk toegankelijk zijn. De goedgekeurde conceptuele keten en voorschriftketen blijven leidend voor introducties. De bestaande prerequisites bepalen welke gebeurtenis een leerling kan krijgen. Zo kan de Rekenbalie beschikbaar worden zodra `fx` toegankelijk is, zonder eerst elk gebouw in de Werkplaats af te werken. Herleiden blijft een aparte route en blokkeert b uit een punt niet.
+**Gemengd herhalen** en **Onderwerptoets** zijn activiteiten met een ruimer bereik. Ze staan bij de deelkaart, maar gemengd herhalen gebruikt alle geschikte eerdere onderwerpen. De onderwerptoets combineert doelen van de deelkaart met eerdere kennis. Ze krijgen geen extra gebouw dat de leerling moet bezoeken om noodzakelijke herhaling te krijgen. In het schermmodel staan deze keuzes naast de stopplaatsactiviteiten; hun toelichting benoemt hun bereik.
 
-Het Kaartbureau heeft meerdere soorten afspraken: een punt controleren is een korte gebeurtenis; een voorschrift uit een onregelmatige tabel reconstrueren is een langere opdracht. Die horen niet allemaal in één verplicht bezoek.
+De hoofdkaart is het vertrekpunt. Een lopende opdracht heeft overal een directe hervatknop. Na afronding keer je terug naar dezelfde deelkaart; niet na elke afzonderlijke vraag terug naar de hoofdkaart.
 
-`information_sufficiency` is nog niet geïmplementeerd. Later kan die als niet-blokkerende onderzoeksmissie op verschillende plekken opduiken. Zelfstandiger nulwaarden/tekenschema's en hun constante randgevallen blijven eveneens op de inhoudelijke afrondingslijst; deze kaart claimt die uitbreiding niet al te leveren.
+**Kaart · Voortgang · Groep · Profiel** zijn de vaste navigatieknoppen. Ranglijsten staan onder **Groep**. Voortgang en ranglijsten zijn schermen, geen gebieden op de leerkaart. Een toekomstige keuze tussen wiskundethema's komt buiten deze hoofdkaart; voorlopig bouwen we geen extra wereldniveau erboven.
 
-## Gebeurtenissen met verschillende functies
+## 2. Vijf deelkaarten, veertien stopplaatsen
 
-| Type | Zichtbare vorm | Leerfunctie | Verplicht? |
-| --- | --- | --- | --- |
-| Ontdekking | Een nieuwe plek of nieuw gereedschap | Eén nieuwe vaardigheid met uitleg en begeleide eerste toepassing | Benodigde voorbereiding moet worden aangetoond; exact deze plek bezoeken hoeft niet als dat al elders gebeurde |
-| Opdracht | Een persoon, bouwplan of onderzoek | Nieuw werk verbinden met reeds gekende vaardigheden | De leerengine biedt een passende opdracht; soms zijn twee gelijkwaardige keuzes mogelijk |
-| Ontmoeting onderweg | Kleine gebeurtenis op een verbinding of in de huidige missie | Korte herhaling of gerichte herstelvraag uit een vorig gebied | Kan deel van de aanbevolen route zijn; overslaan wist de herhaalbehoefte niet |
-| Kamp | Een terugkerend vast symbool | Bewust een gemengde oefenreeks starten of hervatten | Extra ingang; noodzakelijke herhaling hangt niet af van vrijwillig kampbezoek |
-| Zijpad | Een briefje of zijtak | Extra variant, verdieping of andere representatie | Optioneel; noodzakelijke basiskennis krijgt ook een ingang op de hoofdroute |
-| Werelduitdaging | Een project of oversteek met meerdere opdrachten | Zelfstandig verbinden en toepassen van inhoud uit meerdere gebieden | Een mijlpaal; bestaande toegang verdwijnt niet bij een minder goede poging |
+De namen zeggen wat je leert. Landschappen en illustraties mogen verschillen zonder een tweede naam te krijgen die leerlingen moeten onthouden.
 
-Een plaats is persistent; de actuele gebeurtenis verandert. Bij het eerste brugbezoek bepaalt de leerling een helling. Later verschijnt daar een negatieve helling, een breuk, een andere schaal of een toepassing met twee gegevens. Een specifieke afgeronde gebeurtenis krijgt een bewijs, zonder te suggereren dat het begrip nooit meer terugkomt.
+| Deelkaart | Stopplaats | Bestaande skill-IDs |
+| --- | --- | --- |
+| **1. Punten en helling** | Coördinaten lezen en plaatsen | `point`, `point_plot` |
+| | Verschillen en helling | `delta`, `slope` |
+| | Helling uit twee punten | `slope_from_two_points` |
+| **2. Eigenschappen van rechten** | Stijgen, dalen en bijzondere rechten | `line_behavior`, `special_lines` |
+| | a en b herkennen | `intercept`, `ab` |
+| **3. Voorschriften opstellen** | Voorschrift uit a en b | `equation_from_ab` |
+| | Voorschrift uit punten | `intercept_from_point`, `equation_from_point_slope`, `equation_from_two_points` |
+| | Vergelijking herleiden | `rewrite_linear_equation` |
+| **4. Tabellen, grafieken en toepassingen** | Waarden berekenen en tabellen invullen | `fx`, `table`, `input_from_output` |
+| | Grafieken tekenen en punten controleren | `graph_from_equation`, `graph_from_table`, `point_on_line` |
+| | Voorschrift uit tabel of grafiek | `equation_from_table`, `equation_from_graph` |
+| | Voorschrift uit een situatie | `equation_from_context` |
+| **5. Nulwaarden en tekens** | Nulwaarde bepalen | `zeroRead`, `zero` |
+| | Teken en tekenschema | `sign`, `signchart` |
 
-## De bestaande sessie als reisetappe
+Alle 27 huidige skills hebben precies één inhoudelijke thuisplek. Dat is geen whitelist voor de oefeningen op die plek. De elf oorspronkelijke IDs en hun historische betekenis blijven ongewijzigd.
 
-De trainer gebruikt momenteel twaalf primaire opgaven per ronde. Een gewone ronde heeft drie opwarmmomenten, twee leergrensmomenten, focus, toepassing, twee gemengde momenten, herstel en twee uitdagingen. Gerichte herstelvragen kunnen op verschillende geschikte momenten tussendoor komen. Iedere vierde ronde is een checkpoint.
+De vierde deelkaart heeft vier stopplaatsen omdat berekenen, tekenen, reconstrueren en context interpreteren verschillende handelingen zijn. In het vorige voorstel zaten te veel van die handelingen bij één Kaartbureau. Grafiekconstructie staat nu bij de andere grafiekactiviteiten. Voorschrift uit punten blijft één stopplaats met een opbouw in drie bestaande skills; die drie skills worden niet in één keer als beheerst aangemerkt.
 
-Die etappe kan op de kaart als een kleine reis worden getoond. De speler kiest een bestemming en ziet een concreet doel; de leerengine vult de route onderweg. Niet na ieder antwoord verplicht terug naar de grote kaart. Een korte voortgangslijn in de missie en terugkeer op betekenisvolle tussenpunten voorkomt navigatiewerk.
+Dit is een concreet voorstel om te beoordelen, geen bewezen optimale groepering. Vooral de breedte van deelkaart 4 en de duidelijkheid van de twee samengevoegde stopplaatsen in deelkaart 2 moeten met leerlingen worden getoetst. Bij onduidelijkheid eerst de labels of deeldoelen verbeteren; niet automatisch extra kaartniveaus toevoegen.
 
-Een gewenste verdeling bij een bezoek aan het Kaartbureau kan bijvoorbeeld zijn: twee eerdere basisvragen, vier opgaven rond het actuele doel, twee representatievarianten, twee geplande herhaal/herstelvragen en twee verbindende uitdagingen. Dit is een illustratief evenwicht, geen extra hard script boven op het bestaande script. Bij veel herstelbehoefte komt minder nieuwe inhoud aan bod. Bij een nieuwe leerling is nog geen uitgebreide oude inhoud beschikbaar.
+## 3. Een inhoudsindeling is geen nieuwe blokkade
 
-Meerstappenconstructies tellen nu net als korte herkenningsvragen als één primaire opgave, maar duren langer. Behoud eerst de bestaande twaalf-opgavenadministratie en maak een etappe tussentijds hervatbaar. Beslis pas na gebruikstests of een tijd-/werklastbudget beter past; maak niet onbedoeld twaalf lange reconstructies tot één verplichte speelsessie.
+De nummers ordenen het overzicht; ze zijn geen sloten. Je hoeft deelkaart 3 niet af te maken om een beschikbare tabelvraag op deelkaart 4 te krijgen. Toegang volgt bestaande voorbereiding en eerder verkregen toegang. Op de kaart kan daarom meer dan één onderwerp tegelijk beschikbaar zijn.
 
-## Voorbeeld van verweven leren
+De goedgekeurde introductieketen blijft:
 
-De leerling bezoekt de Markt voor een tariefmodel:
+`point → point_plot → delta → slope → slope_from_two_points → line_behavior → special_lines → intercept → ab`
 
-1. Een eerdere puntvraag helpt een gegeven situatie als coördinatenpaar lezen.
-2. De huidige opdracht koppelt startbedrag en verandering aan b en a.
-3. De leerling bouwt en controleert het model binnen het gegeven domein.
-4. Later komt een geplande hellingsvraag terug met andere, eventueel negatieve gegevens.
-5. Bij een fout in b blijft de correcte a bewaard; de planner zet gerichte b-oefening klaar.
-6. In een volgende etappe volgt die oefening op een andere plek, met andere getallen.
+Daarna volgt de voorschriftketen:
 
-Dezelfde kennis reist mee. De Markt hoeft geen formule-identieke herhaling van de eerdere brugopgave te bevatten: de mathematische handeling blijft herkenbaar, terwijl gegevens, representatie en context wisselen.
+`equation_from_ab → intercept_from_point → equation_from_point_slope → equation_from_two_points`
 
-## Technisch contract met de scheduler
+`rewrite_linear_equation` is een aparte representatieroute, nooit een prerequisite voor `intercept_from_point`. Binnen de deelkaart mag de tekening dus niet suggereren dat de leerling eerst langs Vergelijking herleiden moet. `information_sufficiency` blijft een latere, niet-blokkerende transfer/mastery-skill en staat niet tussen de 27 huidige skills.
 
-Een gekozen stopplaats levert een voorkeur en verhaalcontext aan, geen gesloten whitelist van skills. De wereldlaag vraagt een geschikte volgende gebeurtenis aan de bestaande leerengine. Die weegt leergrens, introductie, herstel, herhaling, variatie en recente belasting mee.
+Slechts enkele passende vervolgstappen worden nadrukkelijk aanbevolen. Overige doelen blijven inspecteerbaar. Een ontbrekende voorbereiding wordt letterlijk benoemd, bijvoorbeeld ‘Oefen eerst helling uit twee punten’. Bij bestaande leerlingen blijft eerder verkregen toegang bestaan.
 
-Voor integratie zijn drie afgebakende wijzigingen nodig:
+## 4. Activiteiten en herhaling
 
-- Voeg een optionele missievoorkeur toe aan `chooseTask`, met een begrensd aandeel actuele missiedoelen. Vervallen herhaling uit eerdere gebieden blijft in aanmerking komen.
-- Maak herhaalachterstand zichtbaar in de planning en geef oude verschuldigde items op termijn een gegarandeerd moment. Nu zijn sommige keuzes probabilistisch; alleen een extra kamppictogram voorkomt langdurig uitstel niet.
-- Laat de wereld na één verwerkt resultaat reageren op dezelfde poging-ID. De wereld kent geen extra XP toe en berekent mastery niet opnieuw.
+| Activiteit | Bereik en functie | Wanneer nodig? |
+| --- | --- | --- |
+| Uitleg en eerste oefening | Een nog nieuw leerdoel, met begeleide eerste toepassing | Als benodigde voorbereiding nog ontbreekt; eerder geldig bewijs blijft tellen |
+| Oefenen | Gekozen leerdoel, passende varianten en geplande eerdere inhoud | Hoofdactie bij een stopplaats |
+| Extra variatie | Andere getallen, voorstelling of verdieping | Optioneel; noodzakelijke basiskennis blijft in de hoofdroute |
+| Gemengd herhalen | Eerdere beschikbare leerdoelen, ook uit andere deelkaarten | Vrijwillige extra ingang; herhaling zit ook automatisch in Oefenen |
+| Onderwerptoets | Expliciete dekking van dit onderwerp met eerdere kennis | Persoonlijke mijlpaal; geen blokkade voor bestaande toegang |
 
-De huidige herhaalafstanden zijn aantallen opgaven, geen kalenderdagen. De kaart mag daarom niet suggereren dat al een volledig dagschema voor gespreide herhaling bestaat. Kalenderherhaling is een eventuele latere ontwerpkeuze.
+Een stopplaats blijft bestaan nadat een reeks is afgerond. ‘Helling uit twee punten’ kan later een negatieve helling, breuk of andere voorstelling aanbieden. Een voltooiingsster zegt dat een bepaalde reeks is afgerond. Zelfstandigheid en later aangetoonde beheersing zijn afzonderlijke labels, afkomstig van de leerengine.
 
-Een samengestelde opdracht behoudt één primaire skill. Correcte deelstappen zijn diagnostiek en mogen niet automatisch alle onderliggende skills opwaarderen. Als zelfstandig bewijs voor een basisvaardigheid ontbreekt, plant de engine een opgave waarin die vaardigheid zelf het primaire doel is.
+Voorbeeld: bij **Voorschrift uit een situatie** leest de leerling eerst gegevens als punten, bepaalt a en b, controleert het model en krijgt een geplande eerdere hellingsvraag. Als alleen b fout is, blijft de juiste a staan. De leerplanner plant later gerichte b-oefening met andere gegevens. Hiervoor hoeft de leerling niet eerst fysiek naar een oude deelkaart terug te klikken.
 
-## Werelduitdagingen: examen als project
+## 5. Contract met de bestaande trainer
 
-Een werelduitdaging kan aanvoelen als een examen, met een zichtbaar doel zoals een routeplan opleveren, een installatie afstellen of een tarief onderzoeken. De inhoud is cumulatief: het huidige gebied domineert, maar eerdere concepten en minstens één verbindende toepassing blijven aanwezig.
+De huidige twaalf primaire opgaven per ronde blijven het uitgangspunt. Een lange constructie heeft meer deelstappen dan een korte herkenningsvraag; de werkelijke duur moet worden gemeten voordat een tijdsbelofte of nieuwe rondelengte wordt vastgelegd. Tussentijds hervatten blijft nodig.
 
-Het huidige checkpoint kiest vooral zwakke beschikbare skills. Dat is bruikbaar voor oefenen, maar garandeert geen brede inhoudsdekking. Voor een werelduitdaging is een aparte blueprint nodig: welke vaardigheden/representaties zijn verplicht aanwezig, welk zelfstandig bewijs telt en welke varianten worden gebruikt? Een totaalpercentage alleen is onvoldoende om een belangrijk ontbrekend concept te herkennen.
+Een gekozen stopplaats geeft de planner een begrensde inhoudelijke voorkeur. Introducties, herstel, herhaling, variatie en bestaande toegang blijven bij de leerengine. Verschuldigde eerdere herhaling moet gegarandeerd aan bod blijven komen; een extra herhaalknop alleen is onvoldoende. De huidige herhaalafstanden zijn aantallen opgaven, geen kalenderdagen.
 
-Voorgestelde voorbeelden:
+Een samengestelde opgave heeft één primaire skill. Diagnostische deelstappen waarderen niet automatisch alle onderliggende skills op. De kaart verwerkt één bevestigd pogingresultaat en kent geen tweede XP toe. Taakstate, leerstate en kaartstate blijven gescheiden. Nieuwe zichtbare namen zijn geen reden om skill-IDs, accountgegevens of bestaande voortgang te hernoemen.
 
-- Kaartvallei: lees en plaats punten, bepaal verschillen, reconstrueer een helling.
-- Landschap: vergelijk richtingen en bijzondere rechten; interpreteer a en b met eerdere coördinatenkennis.
-- Werkplaats: reconstrueer een voorschrift uit gegevens en controleer of het aan de punten voldoet; teken een passend model als afzonderlijke opdracht.
-- Handelsplaats: onderzoek of een tabel en een context hetzelfde model beschrijven; controleer alle gegevens en het domein.
-- Grensgebied: verbind formule, nulwaarde en teken in een toepassing.
+Een onderwerptoets vereist een eigen dekkingsplan; het huidige checkpoint met vooral zwakke skills garandeert die dekking niet. Reeds zelfstandig aangetoonde onderdelen blijven bewaard. Een herkansing toetst ontbrekend bewijs met nieuwe gegevens; hulp blijft beschikbaar, maar telt niet als zelfstandig bewijs. De ranglijst gebruikt een aparte vergelijkbare uitdaging, niet de persoonlijke adaptieve oefenscore.
 
-Start wanneer er voldoende voorbereiding is. Een minder goede poging maakt een concreet herstelpad zichtbaar. Reeds behaalde onderdelen, sterren en bestaande toegang blijven staan; een herkansing richt zich op ontbrekend bewijs met nieuwe gegevens. Hulp blijft beschikbaar, maar die poging telt dan niet als zelfstandig examenbewijs. De precieze aantallen en criteria moeten vóór integratie worden vastgelegd en met leerlingen worden gekalibreerd.
+## 6. Visueel ontwerp en volgende stap
 
-## Wat is werkelijk optioneel?
+Behoud de sobere getekende stijl: rustige landschappen, donkere leesbare labels, groen voor selectie en goud voor een behaalde mijlpaal. Verschil tussen gebieden mag in reliëf, begroeiing of architectuur zitten. Het landschap bepaalt geen verborgen wiskundige betekenis. Decoratieve wegen zijn geen verplicht af te werken skillvolgorde.
 
-Een specifieke stopplaats of gebeurtenis kan optioneel zijn terwijl het leerdoel verplicht blijft. Een al beheerste introductie kan worden overgeslagen op basis van geldig bestaand bewijs. Een extra variant of decoratieve ontdekking kan volledig optioneel zijn. Een nog niet gekend basisconcept dat een volgende opdracht nodig heeft, verdwijnt niet uit de route doordat de leerling zijn bijbehorende gebouw overslaat.
+Toon boven het werkvlak bijvoorbeeld **Rechten / Punten en helling / Helling uit twee punten**, met **Oefenen** als activiteit. Knoppen heten **Open deelkaart**, **Start oefening**, **Hervat opdracht** en **Bekijk resultaat**. Geen leerling hoeft ‘kamp’, ‘baken’ of ‘constructiehuis’ te vertalen om te weten wat een knop doet.
 
-Laat per moment hoogstens twee of drie betekenisvolle keuzes zien: verder met de aanbevolen opdracht, een beschikbaar alternatief, of gemengd oefenen. De rest van de kaart blijft bekijkbaar. Dat houdt dertien plaatsen overzichtelijk en laat keuze bestaan zonder dat de leerling zelf zijn volledige didactische planning moet verzorgen.
-
-## Gevolg voor het huidige prototype
-
-De proefkaart gebruikt nog een eenvoudige lineaire voorbeeldroute. Vervang die bij de echte koppeling door bovenstaande scheiding tussen plaats, gebeurtenis, prerequisites en planner. Bouw eerst één gebied met een terugkerende ontmoeting uit een eerder leerdoel en een kleine cumulatieve einduitdaging. Test juist ook de leerling die herhaling uitstelt, hulp gebruikt, een zijpad overslaat of terugkomt na een pauze.
-
-Pas daarna de overige gebieden vullen. Het succescriterium is dat de leerling de kaart begrijpt én dat de inhoudsplanning ten minste dezelfde leergrens-, herstel- en variatiedekking behoudt als de huidige trainer.
+Het klikbare schermmodel toont deze hele indeling en één vaste voorbeeldopgave bij Helling uit twee punten. Andere stopplaatsen tonen hun eigen doel, maar bieden nog geen speelbare inhoud. Eerst beoordelen we de indeling en navigatie; daarna koppelen we één volledige cyclus aan de echte leerengine. De oude trainer en Kaartvallei-proef zijn hiermee niet automatisch hernoemd of gemigreerd.
