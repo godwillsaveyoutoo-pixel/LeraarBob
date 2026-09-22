@@ -8,8 +8,8 @@ const rows=[
   },
   {
     "skill": "point_plot",
-    "priority": "P3",
-    "note": "Rasterselectie is al direct. Cursor, gekozen punt en bevestiging duidelijker onderscheiden."
+    "priority": "Aangepast",
+    "note": "Rechtstreeks klikken, tikken of slepen; geen x/y-stapknoppen. Assenschaal en bevestiging blijven expliciet."
   },
   {
     "skill": "delta",
@@ -24,17 +24,17 @@ const rows=[
   {
     "skill": "slope_from_two_points",
     "priority": "Aangepast",
-    "note": "Coördinaten slepen of aanklikken en in teller/noemer plaatsen. Daarna blijft de losse breukinvoer nog te verbeteren."
+    "note": "Sobere sleepbreuk zonder vraagtekens of aslabels per getal. De volgende rekenstappen kunnen nog in hetzelfde werkblad worden samengebracht."
   },
   {
     "skill": "line_behavior",
-    "priority": "P3",
-    "note": "Richting in de grafiek zichtbaar laten reageren op een gekozen antwoord."
+    "priority": "Aangepast",
+    "note": "Grafiek, hellingsgetal en punten hebben een passende schaal. Ronde keuzes; grafiek verschijnt bij de puntenvariant pas na het antwoord."
   },
   {
     "skill": "special_lines",
-    "priority": "P2",
-    "note": "Gelijke x of y in de punten laten markeren; classificatie, formule en functiebegrip verbinden."
+    "priority": "Aangepast",
+    "note": "Grafiek, vaste coördinaat, x = c of y = b en functiebegrip blijven verbonden. Identieke punten tonen meerdere mogelijke rechten."
   },
   {
     "skill": "intercept",
@@ -79,7 +79,7 @@ const rows=[
   {
     "skill": "rewrite_linear_equation",
     "priority": "P1",
-    "note": "Bewerking op beide leden naast de vergelijking tonen, met zichtbare vorige regel."
+    "note": "Vorige regel en bewerking zijn nu zichtbaar. Bewerkingen nog directer naast beide leden aanbieden; de losse invoerstappen blijven omslachtig."
   },
   {
     "skill": "input_from_output",

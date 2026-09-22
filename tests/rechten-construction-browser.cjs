@@ -43,7 +43,7 @@ class CDP{
   // All special formula cases work with tokens and with alternative graph points.
   for(const variant of [0,3,4,5,6])for(const skill of ['equation_from_ab','graph_from_equation']){await setup(skill,2,variant,2);await solve(skill,touch,true)}
   await setup('point_plot');const initial=await c.run('JSON.stringify(current.work)');await pick({x:4,y:-3},true,true,true);assert.equal(await c.run('JSON.stringify(current.work)'),initial,'pointercancel places nothing');await pick({x:3,y:2},touch,true);assert.deepEqual(await c.run('current.work.construction.cursor'),{x:3,y:2});await c.click('Undo',touch);assert.deepEqual(await c.run('current.work.construction.cursor'),{x:0,y:0});
-  await c.click('x +',touch);await c.click('y −',touch);assert.deepEqual(await c.run('current.work.construction.cursor'),{x:1,y:-1});
+  await pick({x:1,y:-1},touch);assert.deepEqual(await c.run('current.work.construction.cursor'),{x:1,y:-1});
   await setup('equation_from_ab');const m=await c.run('current.params.model'),beforeCancel=await c.run('JSON.stringify(current.work)');await placeToken('a',m.a,true,true,true);assert.equal(await c.run('JSON.stringify(current.work)'),beforeCancel,'cancelled token drag changes nothing');await placeToken('a',m.a,touch);await placeToken('variable','x',touch);const partial=await c.run('JSON.stringify(current.work)');await c.run("openScreen('help');closeScreen('play');openScreen('progress');closeScreen('play');devMode=false;launchDev('slope',0);exitDev()");assert.equal(await c.run('JSON.stringify(current.work)'),partial,'navigation and DEV preserve tokens');
  }
  // Wrong b keeps a, explicit undo, reload and exactly-once recording with genuine UI actions.

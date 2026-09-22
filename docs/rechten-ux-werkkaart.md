@@ -43,12 +43,12 @@ beperkt tot de bestaande ontwikkel-/leerkrachttoegang, niet leerlingaccounts.
 | Skill-ID | Prioriteit | Volgende verbetering / huidige beperking |
 | --- | --- | --- |
 | `point` | P2 | Coördinaten dichter bij het rooster kiezen; x en y afzonderlijk laten aanwijzen. |
-| `point_plot` | P3 | Rasterselectie is al direct. Cursor, gekozen punt en bevestiging duidelijker onderscheiden. |
+| `point_plot` | Aangepast | Rechtstreeks klikken, tikken of slepen; geen x/y-stapknoppen. Assenschaal en bevestiging blijven expliciet. |
 | `delta` | P2 | De horizontale en verticale verplaatsing rechtstreeks laten markeren. |
 | `slope` | P2 | Δy en Δx vanuit de stapdriehoek naar een grote breuk laten plaatsen. |
-| `slope_from_two_points` | Aangepast | Coördinaten slepen of aanklikken en in teller/noemer plaatsen. Daarna blijft de losse breukinvoer nog te verbeteren. |
-| `line_behavior` | P3 | Richting in de grafiek zichtbaar laten reageren op een gekozen antwoord. |
-| `special_lines` | P2 | Gelijke x of y in de punten laten markeren; classificatie, formule en functiebegrip verbinden. |
+| `slope_from_two_points` | Aangepast | Sobere sleepbreuk zonder vraagtekens of aslabels per getal. De volgende rekenstappen kunnen nog in hetzelfde werkblad worden samengebracht. |
+| `line_behavior` | Aangepast | Grafiek, hellingsgetal en punten hebben een passende schaal. Ronde keuzes; grafiek verschijnt bij de puntenvariant pas na het antwoord. |
+| `special_lines` | Aangepast | Grafiek, vaste coördinaat, x = c of y = b en functiebegrip blijven verbonden. Identieke punten tonen meerdere mogelijke rechten. |
 | `intercept` | P3 | Het snijpunt met de y-as rechtstreeks laten aanwijzen. |
 | `ab` | P1 | Afzonderlijke vaste invulplaatsen voor a en b; huidige gemengde antwoordkeuzes zijn moeilijk te overzien. |
 | `equation_from_ab` | P2 | Tekens en negatieve coëfficiënten in de formuletokens verduidelijken. |
@@ -57,7 +57,7 @@ beperkt tot de bestaande ontwikkel-/leerkrachttoegang, niet leerlingaccounts.
 | `equation_from_two_points` | P1 | Coördinatenplaatsing is aangepast; puntkeuze, b en beide controles nog in hetzelfde rekenblad samenbrengen. |
 | `graph_from_equation` | P2 | Actief punt en bevestiging verduidelijken; fout bij één punt lokaal markeren. |
 | `fx` | P1 | x rechtstreeks in de formule plaatsen; berekening verbinden met het punt op de grafiek. |
-| `rewrite_linear_equation` | P1 | Bewerking op beide leden naast de vergelijking tonen, met zichtbare vorige regel. |
+| `rewrite_linear_equation` | P1 | Vorige regel en bewerking zijn nu zichtbaar. Bewerkingen nog directer naast beide leden aanbieden; de losse invoerstappen blijven omslachtig. |
 | `input_from_output` | P1 | Gegeven uitvoer in de formule plaatsen en onbekende x zichtbaar houden tijdens herleiding. |
 | `point_on_line` | P2 | Substitutie en vergelijking met de gegeven y in één controlekaart tonen. |
 | `table` | P2 | Ontbrekende tabelcel als invoervak gebruiken in plaats van losse antwoordbollen. |
@@ -86,3 +86,33 @@ beperkt tot de bestaande ontwikkel-/leerkrachttoegang, niet leerlingaccounts.
 
 De overige verbeterpunten in de tabel zijn voorstellen voor volgende stappen;
 deze wijziging herontwerpt die vraagvormen nog niet volledig.
+
+## Tweede controle — schermverhouding en leerwaarde (23 september 2026)
+
+De zestien toegevoegde vraagvormen zijn opnieuw bekeken op alle drie de niveaus.
+De grootste gedeelde fout zat in vaste telefoonmaten: grafieken, getallen,
+tabellen en antwoordbediening bleven op laptops klein. De inhoud schaalt nu mee;
+voor kleine schermen blijft een compacte indeling bestaan.
+
+| Vraagvormen | Aanpassing en inhoudelijke beoordeling |
+| --- | --- |
+| `point_plot` | Geen x/y-stapknoppen. Selectie gebeurt op het rooster met klik, touch of slepen; daarna bevestigen. Pijltjestoetsen blijven als toegankelijke bediening beschikbaar. Hogere niveaus blijven kwadranten en assenschalen oefenen. |
+| `slope_from_two_points` | Eén rustige getallenschaal, lege invulvakken zonder vraagtekens of herhaalde aslabels. Coördinaatidentiteit blijft intern behouden, zodat gelijke getallen uit verschillende punten niet worden verward. Beide aftrekvolgordes blijven geldig. |
+| `line_behavior` | Grote grafiek, hellingsgetal of puntenpaar, met ronde antwoordknoppen. Niveau 1 gebruikt een grafiek, niveau 2 het teken van a en niveau 3 punten. De puntenvariant krijgt pas na het antwoord een grafiek: vooraf tonen zou de redenering uit coördinaten omzeilen. |
+| `special_lines` | Na classificatie blijven grafiek en gelijke coördinaat zichtbaar. `x = c`, `y = b`, het functiebegrip en geen unieke rechte zijn expliciet verbonden. De afleider “Δy = 1” is verwijderd: die toetste hier geen zinvol alternatief. Identieke punten krijgen na classificatie twee mogelijke rechten ter illustratie. |
+| `intercept_from_point`, `equation_from_point_slope`, `equation_from_two_points` | Formules, gegevens en numerieke controls schalen mee. Negatieve getallen in aftrekkingen krijgen haakjes. De juiste a blijft bewaard. De reeks losse substitutie- en invulstappen blijft een P1-verbeterpunt; een doorlopend rekenblad is nog wenselijk. |
+| `equation_from_ab`, `graph_from_equation` | Formuletokens en gegevens hebben een passende laptopschaal. Vrije geldige puntenparen, nulhellingen en breuken blijven behouden. Tekenkeuze en het benoemen van het actieve punt verdienen verdere verfijning. |
+| `rewrite_linear_equation`, `input_from_output` | De vorige rekenregel en uitgevoerde bewerking blijven zichtbaar. Alternatieve geldige oplossingsroutes, verticale relaties en alle/geen oplossingen blijven behouden. De keuze van bewerking, term en getal verloopt nog via meerdere schermstappen. |
+| `point_on_line` | Grafiek, vergelijking en tabel zijn groter. Substitutie gevolgd door vergelijking met de gegeven y blijft het leerdoel. De koppeling van die twee stappen kan nog directer. |
+| `graph_from_table`, `equation_from_graph`, `equation_from_table`, `equation_from_context` | Tabellen, context en bediening schalen mee. Eigen puntenkeuze, de derde kolom controleren, eenheden en het geldige domein zijn zinvolle onderdelen en blijven bestaan. De context/grafiek verdwijnt nog tijdens sommige rekenstappen: dit blijft een inhoudelijk UX-verbeterpunt. |
+
+Deze controle maakt onderscheid tussen verbeterde presentatie en een volledig
+herontwerp van een vraagvorm. De P1-punten in de catalogus blijven daarom staan
+waar losse deelstappen of mechanisch overschrijven nog de leerervaring beperken.
+De bestaande skill-IDs, niveaus, toegang en leerlingvoortgang zijn behouden.
+
+Validatie van deze tweede controle: alle 18 unit-testbestanden en negen
+browsersuites geslaagd (scherm/leerwaarde, Wave 1, constructie, algebra, transfer,
+DEV/UX, antwoordflow, ronde stoppen en volledige leerroute). Screenshots van de
+invulbreuk, richting vanuit een grafiek en de verticale functievraag zijn
+visueel nagekeken. Geen wijziging aan opgeslagen versies of masteryregels.

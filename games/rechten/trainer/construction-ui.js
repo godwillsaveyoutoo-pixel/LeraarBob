@@ -13,7 +13,7 @@ function snapshot(g){return {cursor:{...g.cursor},points:structuredClone(g.point
 function remember(g){g.edits.push(snapshot(g));g.edits=g.edits.slice(-24);g.checked=null}
 function grid(t,g,done){
  const sx=t.params.scaleX,sy=t.params.scaleY,X=x=>110+18*x,Y=y=>110-18*y;
- let svg='<svg class="construct-grid" viewBox="0 0 220 220" role="application" aria-label="Rooster. Tik of sleep om een punt te kiezen; bevestig met Plaats. Gebruik ook de x- en y-knoppen." tabindex="0">';
+ let svg='<svg class="construct-grid" viewBox="0 0 220 220" role="application" aria-label="Rooster. Tik of sleep om een punt te kiezen; bevestig met Plaats. Pijltjestoetsen verplaatsen de selectie." tabindex="0">';
  for(let i=-5;i<=5;i++){
   svg+=`<path d="M${X(i)} 20V200 M20 ${Y(i)}H200" stroke="${i?'#dbe5df':'#59747a'}" fill="none"/>`;
   if(i&&i%2===0)svg+=`<text x="${X(i)}" y="123" text-anchor="middle">${C.text(C.mul(i,sx))}</text><text x="105" y="${Y(i)-3}" text-anchor="end">${C.text(C.mul(i,sy))}</text>`;
@@ -35,7 +35,7 @@ function grid(t,g,done){
  return svg;
 }
 function explanation(skill){
- const data={point_plot:['Plaats P(2; 3)','Lees de assenschaal. Kies eerst x, daarna y. Tik of sleep op het rooster, verfijn met de stapknoppen en bevestig.'],equation_from_ab:['a = −1, b = 2 → y = −x + 2','Kies een token en tik zijn plaats in de formule, of sleep het erheen. Het getal vóór x is a; teken en constante vormen samen b.'],graph_from_equation:['y = −x + 2','Plaats eerst (0; 2), daarna bijvoorbeeld (1; 1). Trek en controleer de rechte. Later mag je twee eigen, verschillende punten kiezen.']};
+ const data={point_plot:['Plaats P(2; 3)','Lees de assenschaal. Kies eerst x, daarna y. Klik of tik op het rooster en bevestig je punt. Je kunt het punt ook verslepen.'],equation_from_ab:['a = −1, b = 2 → y = −x + 2','Kies een token en tik zijn plaats in de formule, of sleep het erheen. Het getal vóór x is a; teken en constante vormen samen b.'],graph_from_equation:['y = −x + 2','Plaats eerst (0; 2), daarna bijvoorbeeld (1; 1). Trek en controleer de rechte. Later mag je twee eigen, verschillende punten kiezen.']};
  const [big,sub]=data[skill];return {title:C.catalog[skill].label,big,sub,visual:'<div class="construction-example">x →<br>↑ y<br><small>Tik · verplaats · bevestig</small></div>'};
 }
 function mount(t,opts){
@@ -83,15 +83,15 @@ function mount(t,opts){
  }else{
   question.innerHTML=t.skill==='point_plot'?`Plaats P${coord(t.params.target)}`:`Teken ${C.formula(t.params.model.a,t.params.model.b)}`;
   visual.innerHTML=grid(t,g,w.done);
-  const readout=document.createElement('div');readout.className='construct-readout';readout.innerHTML=`Cursor ${coord(C.gridPoint(t,g.cursor))}`;answers.append(readout);
+  const readout=document.createElement('div');readout.className='construct-readout';readout.innerHTML=`${t.skill==='point_plot'?'P':g.active?'B':'A'}${coord(C.gridPoint(t,g.cursor))}`;answers.append(readout);
   if(w.done)answers.innerHTML+=`<div class="wave-result">${t.skill==='point_plot'?'Punt klopt.':'Beide punten passen.'}</div>`;
   else {
    if(t.skill==='graph_from_equation'){
     const row=document.createElement('div');row.className='construct-point-tabs';answers.append(row);
     for(let i=0;i<2;i++){const b=button((i?'B':'A')+(g.points[i]?' •':''),()=>{g.active=i;if(g.points[i])g.cursor={...g.points[i]};redraw()},row);b.classList.toggle('selected',g.active===i)}
    }
-   const nudges=document.createElement('div');nudges.className='construct-nudges';answers.append(nudges);
-   for(const [axis,delta,label] of [['x',-1,'x −'],['x',1,'x +'],['y',-1,'y −'],['y',1,'y +']])button(label,()=>{remember(g);g.cursor[axis]=Math.max(-5,Math.min(5,g.cursor[axis]+delta));redraw()},nudges);
+   if(t.skill!=='point_plot'){const nudges=document.createElement('div');nudges.className='construct-nudges';answers.append(nudges);
+   for(const [axis,delta,label] of [['x',-1,'x −'],['x',1,'x +'],['y',-1,'y −'],['y',1,'y +']])button(label,()=>{remember(g);g.cursor[axis]=Math.max(-5,Math.min(5,g.cursor[axis]+delta));redraw()},nudges);}
    button(t.skill==='point_plot'?'Plaats':'Plaats '+(g.active?'B':'A'),()=>{
     if(t.skill==='point_plot'){remember(g);assess(C.gridPoint(t,g.cursor))}
     else{remember(g);g.points[g.active]={...g.cursor};if(g.active===0&&!g.points[1])g.active=1;redraw()}
@@ -99,7 +99,7 @@ function mount(t,opts){
    if(t.skill==='graph_from_equation')button('Trek rechte',()=>assess(g.points.map(p=>p&&C.gridPoint(t,p))),footer);
    const svg=visual.querySelector('svg');let dragging=null;
    const snapped=e=>{const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(svg.getScreenCTM().inverse());return {x:Math.max(-5,Math.min(5,Math.round((p.x-110)/18))),y:Math.max(-5,Math.min(5,Math.round((110-p.y)/18)))}};
-   const preview=tick=>{svg.querySelector('.construct-cursor').setAttribute('cx',110+18*tick.x);svg.querySelector('.construct-cursor').setAttribute('cy',110-18*tick.y);readout.innerHTML=`Cursor ${coord(C.gridPoint(t,tick))}`};
+   const preview=tick=>{svg.querySelector('.construct-cursor').setAttribute('cx',110+18*tick.x);svg.querySelector('.construct-cursor').setAttribute('cy',110-18*tick.y);readout.innerHTML=`${t.skill==='point_plot'?'P':g.active?'B':'A'}${coord(C.gridPoint(t,tick))}`};
    svg.onpointerdown=e=>{if(!e.isPrimary)return;dragging={tick:snapped(e),point:e.target.dataset.point};svg.setPointerCapture(e.pointerId);preview(dragging.tick);e.preventDefault()};
    svg.onpointermove=e=>{if(dragging){dragging.tick=snapped(e);preview(dragging.tick)}};
    svg.onpointercancel=()=>{dragging=null;preview(g.cursor)};

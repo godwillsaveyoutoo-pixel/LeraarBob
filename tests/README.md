@@ -333,3 +333,13 @@ rechtstreekse deelstappen, en controleert dat leerlingvoortgang behouden blijft.
 Gebruik dezelfde lokale server en geïsoleerde Chromium op poort 9235 als bij
 de andere browsertests; voer deze tests na elkaar uit omdat ze één tab delen.
 De inhoudelijke optimalisatielijst staat in `docs/rechten-ux-werkkaart.md`.
+
+`node tests/rechten-polish-browser.cjs` doorloopt alle zestien toegevoegde skills
+op drie niveaus en hun deelstappen bij 1920×1080, 1366×768, 1024×600 en 640×360.
+Controleert inhoudsschaling, bedieningsgrootte, overlap, algebra met vorige regel,
+de sobere coördinatenbreuk en de drie bijzondere puntengevallen. De grafiek mag
+bij de puntenvariant niet vooraf het antwoord prijsgeven. Horizontaal/verticaal
+behouden hun formule en functiebetekenis; identieke punten krijgen meerdere
+voorbeeldrechten. De bestaande constructie- en UX-suites testen echte pointer-,
+touch- en toetsenbordinteractie. Gebruik dezelfde geïsoleerde browser en voer
+browsersuites na elkaar uit.
