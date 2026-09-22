@@ -37,7 +37,7 @@ class CDP{
   for(const id of ['progressBtn','groupBtn','profileBtn']){await click('#'+id);await layout()}
   assert(await c.eval('document.querySelector("#profilePanel").textContent.includes("Alleen op dit toestel")'));
   await click('#journeyBtn');assert.equal(await c.run('currentScreen'),'journey');await click('[data-recommend]');await click('[data-start="discover"]');assert.equal(await c.run('current.skill'),'point');
-  if(width>=1024){await click('#journeyBtn');await click('[data-place="bridge"]');assert.equal(await c.eval('document.querySelector(".journey-details h3").textContent'),'Helling uit twee punten');assert.equal(await c.eval('document.querySelectorAll("#journeyPanel button.primary").length'),1);assert(await c.eval('!!document.querySelector("[data-primary][data-resume]")'));await click('#journeyPanel [data-resume]')}
+  if(width>=1024){await click('#journeyBtn');await click('[data-place="bridge"]');assert.equal(await c.eval('document.querySelector(".journey-details h3").textContent'),'Helling uit twee punten');assert.equal(await c.eval('document.querySelectorAll("#journeyPanel button.primary").length'),1);assert(await c.eval('!!document.querySelector("[data-primary][data-recommend]")'));await click('#journeyPanel [data-resume]')}
   if(width>=640){const id=await c.run('current.id');for(const tab of ['journeyBtn','progressBtn','groupBtn','profileBtn']){await click('#'+tab);await click('#playBtn');assert.equal(await c.run('current.id'),id);assert.equal(await c.run('currentScreen'),'play')};await click('#helpBtn');await click('#playBtn');assert(await c.run('current.journeyHelp'))}
  }
  // A prepared learner can inspect and explicitly start a test; an active round stays intact.

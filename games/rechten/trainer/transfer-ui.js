@@ -68,7 +68,7 @@ function mount(t,opts){
  else if(stage==='contextDomain'){for(const [value,x] of [['negative',C.q(-1)],['inside',p.context.testX],['outside',C.add(p.context.domain.max,1)]])button('x = '+H(x)+' '+p.context.xUnit,()=>submit(value))}
  else if(stage==='point'){const points=T.points(t,w);for(const [i,P] of points.entries())button((i?'B':'A')+coord(P),()=>submit(i?'B':'A'))}
  else if(stage==='subY'||stage==='subX'){const P=T.points(t,w)[w.values.point==='B'?1:0];for(const axis of ['x','y'])button(axis+' = '+H(P[axis]),()=>submit(axis))}
- else if(stage==='ys'||stage==='xs'){const points=T.points(t,w),axis=stage==='ys'?'y':'x';for(let i=0;i<2;i++){const name=i?'B':'A';button(name+': '+H(points[i][axis]),()=>{w.tokens.push(name);redraw()}).disabled=w.tokens.includes(name)}button('Wis keuze',()=>{w.tokens=[];redraw()});button('Controleer',()=>submit(w.tokens.slice()),footer).disabled=w.tokens.length!==2}
+ else if(stage==='ys'||stage==='xs'){const [A,B]=T.points(t,w);root.RechtenCoordinateBuilder.mount({A,B},w,stage,{visual,answers,question,status,footer,redraw,submit,undo:()=>C.undo(w)});return}
  else {
   answers.classList.add('wave-keypad');
   if(gridStage){answers.classList.add('transfer-read-b');const note=document.createElement('div');note.className='transfer-grid-entry';visual.append(note)}

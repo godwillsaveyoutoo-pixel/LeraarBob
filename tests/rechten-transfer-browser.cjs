@@ -29,7 +29,7 @@ class CDP{
   const {stage,value}=await c.run(`({stage:W.transfer.stages(current,current.work)[current.work.index],value:nextTransferAnswer(W,current,current.work,${JSON.stringify(opt)})})`);
   if(stage==='colA'||stage==='colB'){await gesture(await center('[data-column="'+value+'"]'),undefined,touch)}
   else if(['pickA','pickB','plotA','plotB','plotRest'].includes(stage)){await pick(value,touch,!!opt.drag);await c.click('Plaats punt',touch)}
-  else if(stage==='ys'||stage==='xs'){for(const name of value){const label=await c.eval(`([...document.querySelectorAll('#answers button')].find(b=>b.textContent.startsWith(${JSON.stringify(name+':')}))).textContent`);await c.click(label,touch)}await c.click('Controleer',touch)}
+  else if(stage==='ys'||stage==='xs'){for(const [i,name] of value.entries()){await gesture(await center(`[data-coord-point="${name}"][data-coord-axis="${stage==='ys'?'y':'x'}"]`),undefined,touch);await gesture(await center(`[data-coord-row="${stage}"][data-coord-slot="${i}"]`),undefined,touch)}await c.click('Controleer',touch)}
   else if(stage==='subX'||stage==='subY'){const label=await c.eval(`([...document.querySelectorAll('#answers button')].find(b=>b.textContent.startsWith(${JSON.stringify((stage==='subX'?'x':'y')+' =')}))).textContent`);await c.click(label,touch)}
   else if(stage==='point'){const label=await c.eval(`([...document.querySelectorAll('#answers button')].find(b=>b.textContent.startsWith(${JSON.stringify(value+'(')}))).textContent`);await c.click(label,touch)}
   else if(stage==='contextDomain'){const label=await c.eval(`document.querySelectorAll('#answers button')[1].textContent`);await c.click(label,touch)}

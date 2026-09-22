@@ -27,8 +27,8 @@ en de bestaande DEV-ingang blijven beschikbaar voor hun bestaande doelgroep.
 | Situatie | Reactie |
 | --- | --- |
 | Eerste bezoek | Punten lezen en plaatsen wordt aanbevolen; latere doelen blijven bekijkbaar |
-| Een ronde staat nog open | **Hervat opdracht** krijgt voorrang; de gekozen opgave en deelantwoorden blijven staan. De kaart toont hoeveel van de 12 opgaven beantwoord zijn |
-| Je wilt een testronde verlaten | **Kaart → Ronde stoppen en opnieuw kiezen** beëindigt de ronde. Behaalde XP, resultaten, toegang en herhaling blijven bewaard; de onafgewerkte opgave vervalt. Een afgebroken ronde krijgt geen voltooiingsster of rondebonus |
+| Een ronde staat nog open | Een aparte balk toont de lopende ronde met **Hervatten** en **Stoppen**. De hoofdactie hoort bij de geselecteerde stopplaats; dezelfde plaats hervat, een andere beschikbare plaats start een nieuwe ronde. Alleen selecteren bewaart de opgave |
+| Je wilt een testronde verlaten | **Pauze → Ronde stoppen** beëindigt de ronde. Je kunt ook via **Pauze → Ander leerdoel kiezen** een andere beschikbare stopplaats starten. Behaalde XP, resultaten, toegang en herhaling blijven bewaard; de onafgewerkte opgave vervalt. Een afgebroken ronde krijgt geen voltooiingsster of rondebonus |
 | Herhaling | Komt automatisch mee in de gewone leerroute; er is geen aparte ingang voor gemengd herhalen |
 | Onderwerptoets | Eigen eindpunt op de deelkaart **Punten en helling**. Selecteren toont uitleg, voorbereiding en zelfstandig bewijs; pas de hoofdknop start de toets. Ontbreekt voorbereiding, dan leidt die knop naar een benodigd leerdoel |
 | Een volgende vaardigheid is beschikbaar | De kaart benoemt die concrete vaardigheid, ook binnen dezelfde stopplaats; geplande herhaling komt mee |
@@ -51,7 +51,7 @@ richtingskeuze worden eenmaal geregistreerd, zonder een voltooide constructie
 of zelfstandige beheersing te claimen. Bij langere berekeningen wordt de opgave
 zoals voorheen eenmaal bij voltooiing geregistreerd; fouten plannen dan herstel.
 
-Kaart, uitleg, DEV en een verborgen browsertab pauzeren de automatische overgang.
+Pauze, kaart, uitleg, DEV en een verborgen browsertab pauzeren de automatische overgang.
 Bij terugkeer is de bevestiging opnieuw kort zichtbaar. Herladen bewaart de
 antwoordstatus en telt de poging niet opnieuw. Introducties houden **Probeer**;
 na de laatste vraag volgt het rondeoverzicht. DEV houdt handmatige varianten.
@@ -146,8 +146,10 @@ De kaart staat direct onder de compacte titel. De aanbevolen of geselecteerde
 activiteit staat in één detailpaneel rechts. Per kaartscherm is er precies één
 primaire knop: de eerste/volgende ronde starten, een open opgave hervatten of
 teruggaan naar een beschikbare stap. Op de deelkaart start die knop de gekozen
-stopplaats; tijdens een open ronde hervat ze altijd de bestaande opgave.
-Gemengd herhalen, toetsen en terugnavigatie blijven secundaire acties.
+stopplaats; bij de plaats van de lopende ronde hervat ze de bestaande opgave.
+Een andere beschikbare plaats starten beëindigt de oude ronde met behoud van
+behaalde resultaten. De lopende ronde blijft afzonderlijk bereikbaar.
+De onderwerptoets is een selecteerbare kaartplaats; terugnavigatie is secundair.
 
 Vaardigheidsdetails en het laatste rondresultaat zijn uitklapbaar. Een ster staat
 als klein teken bij de locatie, naast een afzonderlijke leerstatus. Nieuwe toegang

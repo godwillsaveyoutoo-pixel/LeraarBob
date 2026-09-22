@@ -321,3 +321,15 @@ kaarteindpunt: voorbereiding bekijken zonder te starten, naar een benodigd
 leerdoel gaan, bewust een voorbereide toets starten en een lopende ronde behouden.
 Er staat geen aparte ingang voor gemengd herhalen meer op de kaart; de bestaande
 reis- en stoptests controleren wel het hervatten van oude herhaalrondes.
+
+`node tests/rechten-ux-browser.cjs` controleert de geselecteerde hoofdactie op de
+kaart, rechtstreeks wisselen van ronde zonder resultaten te verliezen,
+pauzeren/hervatten/stoppen en herladen met een gedeeltelijk ingevulde breuk.
+De test gebruikt echte muis-, touch- en toetsenbordacties voor coördinatenplaatsing:
+negatieve breuken, beide aftrekvolgordes, een verkeerde as, afgebroken sleepactie,
+een half ingevulde rij en herstel van een verkeerde noemervolgorde. Hij opent
+ook alle 27 vraagvormen op drie niveaus via de DEV-catalogus, varianten en
+rechtstreekse deelstappen, en controleert dat leerlingvoortgang behouden blijft.
+Gebruik dezelfde lokale server en geïsoleerde Chromium op poort 9235 als bij
+de andere browsertests; voer deze tests na elkaar uit omdat ze één tab delen.
+De inhoudelijke optimalisatielijst staat in `docs/rechten-ux-werkkaart.md`.
