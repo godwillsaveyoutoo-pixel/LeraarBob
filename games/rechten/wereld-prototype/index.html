@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rechtenreis · wereldkaart</title>
+<link rel="stylesheet" href="world.css"><script src="world.js" defer></script>
+</head>
+<body>
+<div class="app">
+<header><a class="brand" href="../../../index.html">leraarBob<span> / Rechtenreis</span></a><span class="demo">Prototype · voorbeeldvoortgang</span><a class="trainer" href="../trainer/">Naar trainer ↗</a></header>
+<nav id="regions" aria-label="Gebieden"></nav>
+<main>
+<section class="map" aria-label="Wereldkaart">
+<svg class="landscape" viewBox="0 0 800 480" preserveAspectRatio="none" aria-hidden="true">
+<defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".8" fill="#7e9685" opacity=".2"/></pattern></defs>
+<rect width="800" height="480" fill="#e8edda"/><rect width="800" height="480" fill="url(#dots)"/>
+<path d="M-60 390Q120 220 280 390T620 380T890 180V510H-60" fill="#d6e1c3"/>
+<path d="M-20 55Q150 195 245 80T520 110T840 40" fill="none" stroke="#d2dcc1" stroke-width="70"/>
+<path d="M460 -40C340 90 620 130 480 260S650 430 560 520" fill="none" stroke="#9dcbc7" stroke-width="48"/>
+<path d="M460 -40C340 90 620 130 480 260S650 430 560 520" fill="none" stroke="#c5e0d6" stroke-width="3"/>
+<g fill="none" stroke="#c6d1b7" stroke-width="2"><path d="M35 120Q120 70 205 130M25 140Q120 90 210 150M580 115Q680 70 765 140M575 135Q680 90 775 160M50 395Q140 335 270 410"/></g>
+<g fill="#afc49b" stroke="#8ba780" stroke-width="2"><path d="M70 235l18-36 18 36zM97 251l17-35 17 35zM655 336l20-42 20 42zM689 320l17-35 17 35z"/></g>
+<path id="route" d="M144 322C230 322 265 235 392 235S535 322 656 322" fill="none" stroke="#fbf8eb" stroke-width="17" stroke-linecap="round"/>
+<path d="M144 322C230 322 265 235 392 235S535 322 656 322" fill="none" stroke="#9f9478" stroke-width="2" stroke-dasharray="5 9"/>
+<g transform="translate(490 277) rotate(-22)"><rect x="-30" y="-13" width="60" height="26" rx="3" fill="#b9a07b"/><path d="M-25-13v26M-15-13v26M-5-13v26M5-13v26M15-13v26M25-13v26" stroke="#8b775e"/></g>
+</svg>
+<div class="map-caption"><span id="chapter"></span><h1 id="mapTitle"></h1><p id="mapSubtitle"></p></div>
+<div id="locations"></div>
+<div class="map-legend"><span>● ontdekt</span><span>◉ jouw volgende stap</span><span>◇ later</span></div>
+<span class="compass" aria-hidden="true">N<br>✧</span>
+</section>
+<aside id="mission" aria-label="Geselecteerde missie"></aside>
+</main>
+<footer><span id="journey">Een kleine stap. Een nieuwe ontdekking.</span><button id="reset">Herstart voorbeeld</button></footer>
+</div>
+<div class="rotate"><strong>Draai je scherm</strong><p>Deze proefkaart is ontworpen voor liggend gebruik, vanaf 640 × 360.</p></div>
+</body>
+</html>
