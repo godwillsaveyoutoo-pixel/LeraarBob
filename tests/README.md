@@ -194,3 +194,79 @@ desktop en mobiel, filters en leerlingwissel, escaping en accountwissel tijdens
 een lopend verzoek. Alle leerlingen en database-antwoorden zijn fictief.
 De bestaande accountbrowsertest controleert het behoud van nieuwe activiteiten
 bij het hervatten op een tweede toestel.
+
+## Rechtentrainer — Wave 1
+
+```sh
+node tests/rechten-wave.test.cjs
+node tests/rechten-wave-browser.cjs
+node tests/trainer-teacher-browser.cjs
+node scripts/build-rechten-db-test.cjs > /tmp/rechten-wave-database-test.sql
+```
+
+De browsertest gebruikt dezelfde lokale server/Chromium als hierboven en alleen
+fictieve voortgang. Hij injecteert een testhook in de geserveerde pagina; de
+productiepagina heeft geen test-API. De test omvat 640×360/780×360, echte touch en
+muis, alle zes nieuwe skills, bijzondere rechten, herladen, hulp, foutcorrectie,
+eenmalige scoring, DEV, 6.600 bestaande taken, oude lokale versies, accounts,
+dirty cache, offline writes, revisies en de opslaglimiet.
+
+De gegenereerde SQL-transactie test de kandidaat-RPC uitsluitend met tijdelijke
+tabellen en een tijdelijke functie; BEGIN/ROLLBACK is inbegrepen. Hij leest geen
+echte leerlingvoortgang en wijzigt geen productiefunctie. Het afzonderlijke
+`supabase_rechten_wave1.sql` is een uitrolscript en is geen onderdeel van de
+automatische tests. Zie [verslag en uitrolvolgorde](../docs/rechten-wave-1.md).
+
+## Rechtentrainer — Wave 2
+
+```sh
+node tests/rechten-construction.test.cjs
+node tests/rechten-construction-browser.cjs
+node scripts/build-rechten-db-test.cjs --wave2 > /tmp/rechten-wave2-database-test.sql
+```
+
+De constructietests dekken puntplaatsing, formuletokens en grafiekconstructie,
+alle drie niveaus, schalen, breuken, alternatieve puntenparen, pointercancel,
+tik én sleepbediening, undo, deelherstel, navigatie/DEV, herladen en v701→v702.
+De Wave 1-tests blijven afzonderlijk de zes bestaande nieuwe werkvormen testen;
+de bereikbaarheidstest dekt nu alle twintig skills. De database-test gebruikt
+weer alleen tijdelijke objecten en fictieve gegevens binnen BEGIN/ROLLBACK.
+Het nieuwe zelfstandige uitrolscript omvat beide waves en is niet automatisch
+toegepast. Zie [Wave 2-verslag](../docs/rechten-wave-2.md).
+
+## Rechtentrainer — Wave 3
+
+```sh
+node tests/rechten-algebra.test.cjs
+node tests/rechten-algebra-browser.cjs
+node scripts/build-rechten-db-test.cjs --wave3 > /tmp/rechten-wave3-database-test.sql
+```
+
+De nieuwe tests dekken algemene herleiding, onbekende x en puntcontrole: 1.800
+exacte opgaven, verschillende geldige bewerkingsroutes, verticale rechten,
+constante functies met geen/alle oplossingen en diagnose per stap. De browser
+test op beide mobiele maten undo, pointercancel, breukbediening, navigatie,
+herladen, eenmalige scoring, v702→703 en een duurtest van 450 opgaven.
+De eerdere suites blijven hun eigen waves testen tegen de huidige versie;
+de bereikbaarheidstest omvat nu 23 skills. Voer browsertests na elkaar uit.
+De SQL-transactie gebruikt uitsluitend tijdelijke objecten en fictieve data.
+Zie [Wave 3-verslag](../docs/rechten-wave-3.md) voor uitrolvolgorde en open checks.
+
+## Rechtentrainer — Wave 4
+
+```sh
+node tests/rechten-transfer.test.cjs
+node tests/rechten-transfer-browser.cjs
+node scripts/build-rechten-db-test.cjs --wave4 > /tmp/rechten-wave4-database-test.sql
+```
+
+De transfertests dekken grafiek uit tabel en voorschrift uit grafiek/tabel/context:
+2.400 taken, alle gekozen kolomparen, alternatieve roosterpunten, beide
+b-routes, inconsistentie van de derde rij, exacte breuken, constanten, eenheden
+en contextdomeinen. De browser test beide mobiele maten, muis/touch,
+annuleren, undo, navigatie/herladen, diagnose zonder dubbeltelling en v703→704.
+De duurtests omvatten 450 transfer- en 640 gemengde opgaven; de omvang wordt
+inclusief JSONB-scheidingstekens getoetst aan de serverlimiet van 256 KiB.
+De catalogus telt nu 27 skills. Voer browsertests na elkaar uit.
+SQL wordt alleen op tijdelijke objecten met fictieve data getest.
+Zie [Wave 4-verslag](../docs/rechten-wave-4.md) voor bestanden en uitrolvolgorde.
