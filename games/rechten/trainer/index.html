@@ -52,6 +52,7 @@
 <script src="../../../shared/axioma-platform.js"></script>
 <link rel="stylesheet" href="wave.css">
 <script src="wave-core.js"></script>
+<script src="construction-ui.js"></script>
 <script src="wave-ui.js"></script>
 </head>
 <body>
@@ -123,8 +124,9 @@ const AXIOMA_CONFIG = window.AXIOMA_CONFIG;
 (()=>{
 'use strict';
 const KEY='axioma-trainer-rechten-v0700';
-// Separate local slot: an already-open v700 tab cannot overwrite unsynced Wave 1 work.
-const WAVE_KEY=KEY+':wave1';
+// Separate local slots prevent older tabs from overwriting unsynced construction work.
+const PREVIOUS_WAVE_KEY=KEY+':wave1';
+const WAVE_KEY=KEY+':wave2';
 const LEGACY_KEY_611='axioma-trainer-rechten-v0611';
 const LEGACY_KEY_610='axioma-trainer-rechten-v0610';
 const LEGACY_KEY='axioma-trainer-rechten-v069';
@@ -139,12 +141,15 @@ const REFRESH_GAPS=[12,20,32];
 const W=window.RechtenWave;
 const SKILLS={
   point:{label:'punt (x, y)'},
+  point_plot:W.catalog.point_plot,
   delta:{label:'Δx en Δy lezen'},
   slope:{label:'helling a = Δy / Δx'},
   ...Object.fromEntries(['slope_from_two_points','line_behavior','special_lines'].map(k=>[k,W.catalog[k]])),
   intercept:{label:'b uit de grafiek'},
   ab:{label:'a en b samen'},
+  equation_from_ab:W.catalog.equation_from_ab,
   ...Object.fromEntries(['intercept_from_point','equation_from_point_slope','equation_from_two_points'].map(k=>[k,W.catalog[k]])),
+  graph_from_equation:W.catalog.graph_from_equation,
   fx:{label:'functiewaarde f(x)'},
   table:{label:'tabel aanvullen'},
   zeroRead:{label:'nulwaarde aflezen'},
@@ -153,7 +158,7 @@ const SKILLS={
   signchart:{label:'tekenschema opstellen'}
 };
 const DEFAULT=()=>({
-  version:701,catalogVersion:1,access:['point'],scoredAttempts:[],waveDraft:null,started:false,xp:0,streak:0,lastActiveDay:null,total:0,correct:0,routeStep:0,checkpointWins:0,
+  version:702,catalogVersion:2,access:['point'],scoredAttempts:[],waveDraft:null,started:false,xp:0,streak:0,lastActiveDay:null,total:0,correct:0,routeStep:0,checkpointWins:0,
   session:{answered:0,correct:0,xp:0,repaired:0,refreshes:0,newMistakes:0,challengeCorrect:0,timedOut:0,fluencyRecovered:0},
   timer:true,timerSeconds:8,review:[],recentSignatures:[],misconceptions:{},telemetry:[],lastSkill:null,
   skills:Object.fromEntries(Object.keys(SKILLS).map(k=>[k,{seen:0,correct:0,strength:0,intro:false,lastSeen:-999,recent:[],refreshDue:null,reviewsSolved:0}]))
@@ -220,7 +225,7 @@ function bindScreenClose(root){root?.querySelector('[data-screen-close]')?.addEv
 function freshSkill(){return {seen:0,correct:0,strength:0,intro:false,lastSeen:-999,recent:[],refreshDue:null,reviewsSolved:0}}
 function load(){
   try{
-    const sources=[[WAVE_KEY,701],[KEY,700],[LEGACY_KEY_611,611],[LEGACY_KEY_610,610],[LEGACY_KEY,69],[LEGACY_KEY_OLD,68],[LEGACY_KEY_OLDER,67],[LEGACY_KEY_OLDEST,66]];
+    const sources=[[WAVE_KEY,702],[PREVIOUS_WAVE_KEY,701],[KEY,700],[LEGACY_KEY_611,611],[LEGACY_KEY_610,610],[LEGACY_KEY,69],[LEGACY_KEY_OLD,68],[LEGACY_KEY_OLDER,67],[LEGACY_KEY_OLDEST,66]];
     for(const [key,version] of sources){
       const v=JSON.parse(localStorage.getItem(key));
       if(!v||!(v.version===version||key===KEY&&v.version===701))continue;
@@ -247,8 +252,8 @@ function mergeState(base,saved){
   out.session=Object.assign(DEFAULT().session,out.session||{});
   return out;
 }
-function backupMigration(saved,key){if(!saved||saved.version>=701)return;try{const backupKey=key+':pre-wave-1';if(!localStorage.getItem(backupKey))localStorage.setItem(backupKey,JSON.stringify(saved))}catch{console.warn('De migratiebackup kon niet worden bewaard.')}}
-// Specialized account/storage integration; Wave 1 retains the existing RPC and revision protocol.
+function backupMigration(saved,key){if(!saved||saved.version>=702)return;try{const backupKey=key+':pre-wave-2';if(!localStorage.getItem(backupKey))localStorage.setItem(backupKey,JSON.stringify(saved))}catch{console.warn('De migratiebackup kon niet worden bewaard.')}}
+// Specialized account/storage integration retains the existing RPC and revision protocol.
 const CLASSES=['3TBO','3TMW','3TMWW','4TMWW','4TMW'];
 const ALIAS_RE=/^[a-z0-9][a-z0-9_-]{2,23}$/;
 const STUDENT_DOMAIN='students.axioma.invalid';
@@ -259,8 +264,8 @@ let authMode='login',authMessage='',teacherRows=[],teacherFilter='',teacherQuery
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function configured(){return /^https:\/\/[a-z0-9.-]+(?::\d+)?$/i.test(AXIOMA_CONFIG.url)&&!!AXIOMA_CONFIG.publicKey}
 function learnerKey(id=account?.id){return KEY+':'+AXIOMA_CONFIG.url+':'+id}
-function readCache(id){try{const c=JSON.parse(localStorage.getItem(learnerKey(id)+':wave1')||localStorage.getItem(learnerKey(id)));if(c?.state)backupMigration(c.state,learnerKey(id));return c?.state&&Number.isInteger(c.revision)&&c.revision>=0?c:null}catch{return null}}
-function storeCache(){if(account?.role!=='student')return true;try{localStorage.setItem(learnerKey()+':wave1',JSON.stringify({state,revision:progressRevision,dirty:progressDirty,edit:localEdit,updated_at:cloudCfg.lastSync}));return true}catch{return false}}
+function readCache(id){try{const c=JSON.parse(localStorage.getItem(learnerKey(id)+':wave2')||localStorage.getItem(learnerKey(id)+':wave1')||localStorage.getItem(learnerKey(id)));if(c?.state)backupMigration(c.state,learnerKey(id));return c?.state&&Number.isInteger(c.revision)&&c.revision>=0?c:null}catch{return null}}
+function storeCache(){if(account?.role!=='student')return true;try{localStorage.setItem(learnerKey()+':wave2',JSON.stringify({state,revision:progressRevision,dirty:progressDirty,edit:localEdit,updated_at:cloudCfg.lastSync}));return true}catch{return false}}
 function saveLocalOnly(){if(calibrationMode||devMode)return true;if(account?.role==='student')return storeCache();if(account||!guestMode)return true;try{localStorage.setItem(WAVE_KEY,JSON.stringify(state));return true}catch{return false}}
 function save(){if(calibrationMode||devMode)return true;if(account?.role==='student'){progressDirty=true;localEdit++}const ok=saveLocalOnly();if(!ok)toast('Opslag op dit toestel is niet beschikbaar.');scheduleCloudSync();return ok}
 function cloudAvailable(){return !!sb&&account?.role==='student'&&accountReady}
@@ -507,7 +512,7 @@ function updateStart(){
 function start(){if(!accountReady&&!guestMode){openScreen('auth');return}state.started=true;E.start.hidden=true;if(state.waveDraft&&W.catalog[state.waveDraft.skill]){current=structuredClone(state.waveDraft);locked=false;E.stage.hidden=false;taskStartedAt=Date.now();render(current);renderTop();renderSessionCue();return}save();next()}
 function taskSignature(t){if(W.catalog[t.skill])return W.signature(t);const p=t.params||{};return [t.skill,p.dx,p.dy,p.a,p.b,p.x,p.y,p.root,p.ask,t.difficulty].join('|')}
 function rememberSignature(t){const s=taskSignature(t);state.recentSignatures.push(s);state.recentSignatures=state.recentSignatures.slice(-8)}
-function makeTask(skill,params={},opt={}){return {id:Date.now()+Math.random(),skill,type:skill,params,kind:opt.kind||'practice',difficulty:opt.difficulty??skillDifficulty(skill),reviewId:opt.reviewId||null,scaffold:!!opt.scaffold}}
+function makeTask(skill,params={},opt={}){return {id:W.catalog[skill]?crypto.randomUUID():Date.now()+Math.random(),skill,type:skill,params,kind:opt.kind||'practice',difficulty:opt.difficulty??skillDifficulty(skill),reviewId:opt.reviewId||null,scaffold:!!opt.scaffold}}
 function makeIntro(skill){return {id:'intro-'+skill,skill,type:'intro',params:{introSkill:skill},kind:'intro',difficulty:0}}
 function generate(skill,opt={}){
   const d=opt.difficulty??skillDifficulty(skill);let t;
@@ -920,6 +925,7 @@ function abChoices(a,b){
   const av=choiceValues(a,[b],3),bv=choiceValues(b,[a],3);av.forEach(v=>{const btn=bubble(mathHTML(v),'a',x=>{if(locked)return;all.filter(o=>o.kind==='a').forEach(o=>o.btn.classList.remove('selected'));x.classList.add('selected');pickA=v;tryDone()});all.push({btn,val:v,kind:'a'})});bv.forEach(v=>{const btn=bubble(mathHTML(v),'b',x=>{if(locked)return;all.filter(o=>o.kind==='b').forEach(o=>o.btn.classList.remove('selected'));x.classList.add('selected');pickB=v;tryDone()});all.push({btn,val:v,kind:'b'})});
 }
 function devAnswerKey(t){
+  if(t?.skill==='point_plot'&&t.type!=='intro')return 'P('+W.text(t.params.target.x)+'; '+W.text(t.params.target.y)+')';
   if(W.catalog[t?.skill]&&t.type!=='intro'){const m=t.params.model;return m.kind==='identical'?'geen unieke rechte':m.kind==='vertical'?'x = '+W.text(m.c):'a = '+W.text(m.a)+' · b = '+W.text(m.b)}
   if(!t)return '—';if(t.type==='intro'||t.kind==='devIntro')return 'uitlegbeeld · geen antwoord';const p=t.params||{};
   switch(t.skill){
@@ -1016,7 +1022,7 @@ function runGeneratorAudit(perCombo=100){
       const r={skill,d,n:0,aPos:0,aNeg:0,aZero:0,aFrac:0,bPos:0,bNeg:0,bZero:0,askDx:0,askDy:0,graph:0,noGraph:0,askPoint:0,askValue:0,askPositive:0,askNegative:0,fillRoot:0,fillSigns:0,rootPos:0,rootNeg:0,rootZero:0};
       for(let i=0;i<perCombo;i++){
         const t=generate(skill,{kind:'audit',difficulty:d,variant:i}),p=t.params||{};r.n++;
-        if(W.catalog[skill]){const m=p.model;if(m.kind==='affine'){p.a=W.num(m.a);p.b=W.num(m.b)}}
+        if(W.catalog[skill]){const m=p.model;if(m?.kind==='affine'){p.a=W.num(m.a);p.b=W.num(m.b)}}
         if(typeof p.a==='number'){p.a>0?r.aPos++:p.a<0?r.aNeg++:r.aZero++;if(!Number.isInteger(p.a))r.aFrac++}
         if(typeof p.b==='number'){p.b>0?r.bPos++:p.b<0?r.bNeg++:r.bZero++}
         if(p.ask==='dx')r.askDx++;if(p.ask==='dy')r.askDy++;
@@ -1101,7 +1107,10 @@ function contentCoverageHTML(){
     ['zeroRead','nulwaarde aflezen','rechte + x-snijpunt','single orb','0 verwarren, teken','waarde + nulpuntvariant'],
     ['zero','nulwaarde berekenen','f(x)-voorschrift; grafiek gemengd','single orb','teken, coefficient','grafiek ±72% / 48% / 30%'],
     ['sign','f(x)>0 / <0','rood onder, blauw boven bij steun','keuzepillen','zijde nulwaarde','positief/negatief prompt 50/50'],
-    ...Object.keys(W.catalog).map(k=>[k,W.catalog[k].label,'punten / exacte breuken','contextuele deelstappen','richting, substitutie, a/b, puntcontrole','L1–L3; ±a, breuken, horizontaal; bijzondere rechten waar toepasselijk']),
+    ['point_plot','punt plaatsen','rooster met assenschaal','tik/sleep + stapknoppen','verwisselde of verkeerde as','L1 positief; L2 kwadranten/assen; L3 schaal'],
+    ['equation_from_ab','voorschrift construeren','a/b + formulevakken','tokens tikken/slepen','helling, teken, constante','L1–L3; equivalentie, ±1, 0, breuken'],
+    ['graph_from_equation','rechte construeren','voorschrift + leeg rooster','twee eigen punten + controle','beginpunt, helling, identieke punten','L1 b-start; L2–L3 alle geldige puntenparen'],
+    ...Object.keys(W.catalog).filter(k=>!W.constructionSkills.includes(k)).map(k=>[k,W.catalog[k].label,'punten / exacte breuken','contextuele deelstappen','richting, substitutie, a/b, puntcontrole','L1–L3; ±a, breuken, horizontaal; bijzondere rechten waar toepasselijk']),
     ['signchart','tekenschema','schema + grafiek/formule','sequence / single','richting, nulpositie','grafiek ±78% / 52% / 32%; tekens óf nulwaarde']
   ];
   return `<div class="calScroll"><table class="calTable"><thead><tr><th>skill</th><th>claim</th><th>visual</th><th>interactie</th><th>diagnose</th><th>huidige dekking</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${SKILLS[r[0]].label}</td>${r.slice(1).map(x=>`<td class="coverageCell">${x}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;

@@ -216,3 +216,20 @@ tabellen en een tijdelijke functie; BEGIN/ROLLBACK is inbegrepen. Hij leest geen
 echte leerlingvoortgang en wijzigt geen productiefunctie. Het afzonderlijke
 `supabase_rechten_wave1.sql` is een uitrolscript en is geen onderdeel van de
 automatische tests. Zie [verslag en uitrolvolgorde](../docs/rechten-wave-1.md).
+
+## Rechtentrainer — Wave 2
+
+```sh
+node tests/rechten-construction.test.cjs
+node tests/rechten-construction-browser.cjs
+node scripts/build-rechten-db-test.cjs --wave2 > /tmp/rechten-wave2-database-test.sql
+```
+
+De constructietests dekken puntplaatsing, formuletokens en grafiekconstructie,
+alle drie niveaus, schalen, breuken, alternatieve puntenparen, pointercancel,
+tik én sleepbediening, undo, deelherstel, navigatie/DEV, herladen en v701→v702.
+De Wave 1-tests blijven afzonderlijk de zes bestaande nieuwe werkvormen testen;
+de bereikbaarheidstest dekt nu alle twintig skills. De database-test gebruikt
+weer alleen tijdelijke objecten en fictieve gegevens binnen BEGIN/ROLLBACK.
+Het nieuwe zelfstandige uitrolscript omvat beide waves en is niet automatisch
+toegepast. Zie [Wave 2-verslag](../docs/rechten-wave-2.md).
