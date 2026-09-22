@@ -33,7 +33,21 @@ en de bestaande DEV-ingang blijven beschikbaar voor hun bestaande doelgroep.
 | Alle beschikbare doelen zijn voorbereid | Aanbeveling voor onderhoud met nieuwe varianten bij eerder geoefende inhoud |
 | Een ronde is afgerond | Ster bij de bezochte stopplaats, aantal zelfstandig gelukt, eventueel nieuwe toegang en een volgende stap |
 | Een fout na eerdere voltooiing | Ster blijft; de actuele leerstatus kan ‘Opnieuw oefenen’ worden |
-| Een deelstap is fout | De bestaande diagnostiek blijft gelden; bijvoorbeeld een correcte a behouden als alleen b fout is |
+| Een antwoord is juist | Korte bevestiging (650 ms), daarna automatisch de volgende vraag; geen extra Verder-knop |
+| Een enkelvoudige vraag is fout | Diagnose blijft staan; **Verder** opent de volgende vraag. De bestaande planner plant herhaling met nieuwe varianten |
+| Een deelstap in een langere opgave is fout | Diagnose blijft staan; **Verder** hervat die stap. Eerdere juiste deelstappen blijven behouden, bijvoorbeeld a bij een fout in b |
+
+Dit geldt standaard, zowel vanuit de kaart als in gewone training. Het gaat om
+het daadwerkelijk gegeven antwoord: juist na hulp gaat ook automatisch verder,
+maar telt nog steeds niet als zelfstandig beheerst. Foute puntplaatsing en
+richtingskeuze worden eenmaal geregistreerd, zonder een voltooide constructie
+of zelfstandige beheersing te claimen. Bij langere berekeningen wordt de opgave
+zoals voorheen eenmaal bij voltooiing geregistreerd; fouten plannen dan herstel.
+
+Kaart, uitleg, DEV en een verborgen browsertab pauzeren de automatische overgang.
+Bij terugkeer is de bevestiging opnieuw kort zichtbaar. Herladen bewaart de
+antwoordstatus en telt de poging niet opnieuw. Introducties houden **Probeer**;
+na de laatste vraag volgt het rondeoverzicht. DEV houdt handmatige varianten.
 
 De aanbeveling geeft beschikbare nieuwe introducties en verdere opbouw zonder open
 herstel voorrang op het opnieuw aanwijzen van een oud herhaaldoel. De concrete

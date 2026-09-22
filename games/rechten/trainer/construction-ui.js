@@ -53,9 +53,9 @@ function mount(t,opts){
   b.onclick=e=>{if(e.detail===0||!handled)action();handled=false};
   parent.append(b);return b;
  };
- const redraw=()=>{onChange();mount(t,opts)};
+ const redraw=()=>{onChange();mount(t,opts);opts.onRendered?.()};
  const setStatus=(message,ok=false)=>{status.className='status '+(ok?'good':'bad');status.textContent=message};
- const assess=value=>{const result=C.submit(t,w,value);g.checked=result;setStatus(result.message,result.ok);if(w.done){onDone();setStatus(w.errors.length||w.help?'Hersteld. Je juiste deelwerk is behouden.':'Goed gecontroleerd.',true)}redraw()};
+ const assess=value=>{const result=C.submit(t,w,value);opts.onResult?.(result);g.checked=result;setStatus(result.message,result.ok);if(w.done){onDone();setStatus(w.errors.length||w.help?'Hersteld. Je juiste deelwerk is behouden.':'Goed gecontroleerd.',true)}redraw()};
  if(formulaTask){
   question.textContent='Bouw het voorschrift met de tokens';
   visual.innerHTML=`<div class="construct-formula"><div class="construct-given"><span class="wave-a">a = ${H(t.params.model.a)}</span> · <span class="wave-b">b = ${H(t.params.model.b)}</span></div><div class="construct-slots"><span>y =</span></div><small>Kies een token, tik daarna een vak.</small></div>`;
@@ -103,7 +103,7 @@ function mount(t,opts){
    svg.onpointerdown=e=>{if(!e.isPrimary)return;dragging={tick:snapped(e),point:e.target.dataset.point};svg.setPointerCapture(e.pointerId);preview(dragging.tick);e.preventDefault()};
    svg.onpointermove=e=>{if(dragging){dragging.tick=snapped(e);preview(dragging.tick)}};
    svg.onpointercancel=()=>{dragging=null;preview(g.cursor)};
-   svg.onpointerup=e=>{if(!dragging)return;handledPointer=true;if(svg.hasPointerCapture(e.pointerId))svg.releasePointerCapture(e.pointerId);remember(g);g.cursor=dragging.tick;if(dragging.point!==undefined)g.active=Number(dragging.point);dragging=null;onChange();requestAnimationFrame(()=>{if(svg.isConnected)mount(t,opts)})};
+   svg.onpointerup=e=>{if(!dragging)return;handledPointer=true;if(svg.hasPointerCapture(e.pointerId))svg.releasePointerCapture(e.pointerId);remember(g);g.cursor=dragging.tick;if(dragging.point!==undefined)g.active=Number(dragging.point);dragging=null;onChange();requestAnimationFrame(()=>{if(svg.isConnected){mount(t,opts);opts.onRendered?.()}})};
    svg.onkeydown=e=>{const moves={ArrowLeft:['x',-1],ArrowRight:['x',1],ArrowUp:['y',1],ArrowDown:['y',-1]};if(moves[e.key]){e.preventDefault();const [axis,n]=moves[e.key];remember(g);g.cursor[axis]=Math.max(-5,Math.min(5,g.cursor[axis]+n));redraw();visual.querySelector('svg').focus()}};
    if(t.skill==='graph_from_equation'&&t.difficulty===0&&!g.points[0]&&!g.checked)status.textContent='Begin met A op de y-as: (0; b).';
   }

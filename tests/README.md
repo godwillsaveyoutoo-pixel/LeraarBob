@@ -299,3 +299,13 @@ De bestaande Wave-testopstellingen sluiten de nieuwe standaardkaart voordat
 ze hun vaste inhoudstestvraag tonen. Alle inhoudelijke assertions blijven gelden.
 Voer de browsersuites na elkaar uit op de geïsoleerde testbrowser.
 Zie [eerste leerlingversie](../docs/rechten-leerlingenstart.md).
+
+## Rechtentrainer — automatisch doorgaan
+
+`node tests/rechten-answer-flow-browser.cjs` controleert de standaardflow met
+fictieve voortgang: juist → automatisch verder, fout → diagnose en handmatig
+verder, latere herhaling, b verbeteren met behoud van a, juist na hulp zonder
+zelfstandige score, kaart/DEV pauzeren, herladen en eenmalige rondebeloning.
+De controles gebruiken echte knoppen op laptopformaat en 640×360; opgaven en
+voortgang worden alleen in het geïsoleerde browserprofiel klaargezet.
+Voer deze suite na de andere browsersuites uit, op dezelfde lokale server.

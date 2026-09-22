@@ -185,7 +185,23 @@ let state=load(),current=null,locked=false,timerId=null,timeLeft=0,devMode=false
 let currentScreen='play',screenReturn='play',screenTimerWasActive=false;
 let journeyEntry=true;
 let questionAdvanceTimer=null;
-function advanceAfter(delay){clearTimeout(questionAdvanceTimer);questionAdvanceTimer=setTimeout(()=>{questionAdvanceTimer=null;next()},delay)}
+function cancelAdvance(){clearTimeout(questionAdvanceTimer);questionAdvanceTimer=null}
+function advanceAfter(delay=650){
+ cancelAdvance();const task=current;
+ if(devMode||currentScreen!=='play'||document.hidden)return;
+ questionAdvanceTimer=setTimeout(()=>{questionAdvanceTimer=null;if(current===task&&!devMode&&currentScreen==='play'&&!document.hidden)next()},delay);
+}
+function outcomeControls(ok,container=E.stage.querySelector('.playFooter')){
+ E.stage.querySelectorAll('.journey-next').forEach(b=>b.remove());
+ if(ok){advanceAfter();return}
+ cancelAdvance();const task=current,b=document.createElement('button');b.type='button';b.className='journey-next';b.textContent='Verder →';
+ b.onclick=()=>{if(current===task&&!devMode)next()};container.append(b);
+}
+function resumeAnswerFlow(){
+ if(devMode||!current||state.session.completed||currentScreen!=='play'||document.hidden)return;
+ if(current.work?.done||current.answerCorrect===true||current.journeyRecorded&&current.answerCorrect===undefined&&current.journeyCorrect)advanceAfter();
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelAdvance();else resumeAnswerFlow()});
 let screenPausedAt=0,pendingNext=false,learnerExercise=null,returnFocus=null;
 const $=s=>document.querySelector(s);
 const E={
@@ -203,7 +219,7 @@ function setTopScreenActive(name){
   [[$('#groupBtn'),'group'],[$('#profileBtn'),'profile'],[E.teacherBtn,'teacher'],[E.playBtn,'play'],[E.helpBtn,'help'],[E.progressBtn,'progress'],[E.cloudBtn,'cloud'],[E.settingsBtn,'settings'],[E.devBtn,'dev']].forEach(([b,k])=>{const on=(name||'play')===k;b.classList.toggle('screen-active',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
 }
 function pauseForScreen(){
-  clearInteractionTimers();screenTimerWasActive=!!timerId;screenPausedAt=Date.now();returnFocus=document.activeElement;
+  cancelAdvance();clearInteractionTimers();screenTimerWasActive=!!timerId;screenPausedAt=Date.now();returnFocus=document.activeElement;
   if(timerId){clearInterval(timerId);timerId=null;renderTop();if(timeLeft>0)E.timerBtn.textContent=String(timeLeft)}
 }
 function resumeAfterScreen(){
@@ -212,7 +228,7 @@ function resumeAfterScreen(){
   if(screenTimerWasActive&&current&&timeLeft>0&&state.timer&&!locked){
     timerId=setInterval(()=>{timeLeft--;setTimerText();if(timeLeft<=0){clearTimer();timeout()}},1000);setTimerText();renderTop();
   }else if(current&&!locked){scheduleIdleCue()}
-  screenTimerWasActive=false;
+  screenTimerWasActive=false;resumeAnswerFlow();
 }
 function openScreen(name){
   if(!accountReady&&!guestMode&&name!=='auth')name='auth';
@@ -276,12 +292,12 @@ function persistJourney(){
  if(!devMode&&!calibrationMode&&a&&current?.journey?.id===a.id){a.draft=W.catalog[current.skill]&&current.type!=='intro'?null:structuredClone(current);save()}
 }
 function journeyNext(){
- if(!current?.journeyRecorded||W.catalog[current.skill])return;
- E.stage.querySelectorAll('.journey-next').forEach(b=>b.remove());
+ if(W.catalog[current?.skill]||!current?.journeyRecorded&&current?.answerCorrect===undefined)return;
  locked=true;E.answers.querySelectorAll('button').forEach(b=>b.disabled=true);
- E.status.className='status '+(current.journeyCorrect?'good':'bad');
- E.status.textContent=current.journeyCorrect?'Juist. Neem je inzicht mee naar de volgende stap.':current.journeyFeedback||'Deze vraag komt later terug. Bekijk zo nodig de uitleg.';
- const b=document.createElement('button');b.className='journey-next';b.textContent='Verder →';b.onclick=()=>next();E.stage.querySelector('.playFooter').append(b);
+ const ok=current.answerCorrect??current.journeyCorrect;
+ E.status.className='status '+(ok?'good':'bad');
+ E.status.textContent=current.answerFeedback||current.journeyFeedback||(ok?'Juist.':'Deze vraag komt later terug.');
+ outcomeControls(ok);
 }
 function journeyTask(){
  if(devMode||calibrationMode||!state.journey?.active)return null;
@@ -692,6 +708,7 @@ function chooseTask(){
   return generateUnique(chooseWeightedSkill(unlocked),{kind:'practice'});
 }
 function next(){
+  cancelAdvance();
   if(devMode&&learnerExercise){learnerExercise.pendingNext=true;return}
   if(currentScreen!=='play'){pendingNext=true;return}
   E.stage.hidden=false;state.waveDraft=null;
@@ -721,7 +738,7 @@ function clearTimer(){if(timerId){clearInterval(timerId);timerId=null}E.timerBtn
 function recordTimeout(){
   const st=state.skills[current.skill],before=st.strength;st.lastSeen=state.total;state.total++;state.session.answered++;state.session.timedOut=(state.session.timedOut||0)+1;touchStreak();scheduleFluency(current.skill,current.difficulty);telemetryEvent(false,'timeout-fluency',before,before);save();renderTop();renderSessionCue();
 }
-function timeout(){if(locked)return;locked=true;playCausalFeedback(false);E.status.className='status bad';E.status.textContent='Tijd. Geen leerstraf — deze bekende vaardigheid komt later nog eens vlot terug.';recordTimeout();advanceAfter(1150)}
+function timeout(){if(locked)return;locked=true;playCausalFeedback(false);E.status.className='status bad';E.status.textContent='Tijd. Geen leerstraf — deze bekende vaardigheid komt later nog eens vlot terug.';current.answerCorrect=false;current.answerFeedback=E.status.textContent;recordTimeout();journeyNext()}
 function findReview(id){return state.review.find(r=>r.id===id)}
 function addMisconception(code){if(!code||code==='generic')return;state.misconceptions[code]=(state.misconceptions[code]||0)+1}
 function scheduleRepair(skill,code,difficulty,existingId=null){
@@ -759,7 +776,7 @@ function record(ok,errorCode='generic'){
 function endSession(){
   if(state.session.completed){if(state.session.journeyRound)openScreen('journey');return}
   const wasJourney=!!state.journey?.active;E.sessionDone.classList.toggle('journey-done',wasJourney);if(wasJourney)J.finish(state,unlockedSkills());state.session.completed=true;state.session.journeyRound=wasJourney;
-  clearTimer();clearInteractionTimers();locked=true;const checkpoint=isCheckpointSession();state.routeStep++;
+  cancelAdvance();clearTimer();clearInteractionTimers();locked=true;const checkpoint=isCheckpointSession();state.routeStep++;
   const completionBonus=checkpoint?30:20;state.xp+=completionBonus;state.session.xp+=completionBonus;if(checkpoint)state.checkpointWins=(state.checkpointWins||0)+1;save();
   E.continueBtn.textContent=wasJourney?'Bekijk volgende ronde →':'Verder oefenen →';
   E.doneEyebrow.textContent=checkpoint?'checkpoint afgerond':'korte trainingsronde afgerond';E.doneTitle.textContent=checkpoint?'Checkpoint voltooid':'Ronde afgerond';
@@ -785,20 +802,41 @@ function finishWave(){
  state.scoredAttempts||=[];if(state.scoredAttempts.includes(current.id))return;
  state.scoredAttempts.push(current.id);state.scoredAttempts=state.scoredAttempts.slice(-360);
  const w=current.work,clean=!w.errors.length&&!w.help&&!current.scaffold;
- W.evidence(state.skills[current.skill],current,state.total,clean);
+ if(w.done)W.evidence(state.skills[current.skill],current,state.total,clean);
  record(clean,w.errors[0]||(w.help?'wave.supported':'generic'));
- const evt=state.telemetry.at(-1);if(evt)Object.assign(evt,{attemptId:current.id,representation:current.params.representation,variant:current.params.variant,support:clean?'independent':'assisted',steps:structuredClone(w.steps),completed:true});
+ const evt=state.telemetry.at(-1);if(evt)Object.assign(evt,{attemptId:current.id,representation:current.params.representation,variant:current.params.variant,support:clean?'independent':'assisted',steps:structuredClone(w.steps),completed:!!w.done});
  // Keep recent diagnostic detail within the server's 256 KiB payload limit.
  for(const event of state.telemetry.slice(0,-24))if(event.attemptId)delete event.steps;
  if(w.errors.some(e=>e==='wave.b')&&['equation_from_two_points','equation_from_graph','equation_from_table','equation_from_context'].includes(current.skill))scheduleRepair('intercept_from_point','wave.b',current.difficulty);
  persistWave();
 }
+function waveResult(t,result){
+ if(devMode||result.ok)return;
+ // One-answer tasks can be reviewed later. Longer calculations retain their
+ // correct prefix and resume at the mistaken step after reading the diagnosis.
+ const nextQuestion=['point_plot','line_behavior'].includes(t.skill)||W.stages(t).length===1&&!W.constructionSkills.includes(t.skill);
+ t.work.feedbackPause={message:result.message,nextQuestion};
+ if(nextQuestion)finishWave();
+}
+function waveFlow(t){
+ if(current!==t)return;
+ const w=t.work,footer=document.querySelector('.wave-actions');
+ E.visual.inert=false;E.answers.inert=false;
+ if(devMode)return;
+ if(w.feedbackPause){
+  cancelAdvance();E.visual.inert=true;E.answers.inert=true;
+  E.visual.querySelectorAll('button').forEach(b=>b.disabled=true);E.answers.querySelectorAll('button').forEach(b=>b.disabled=true);
+  E.status.className='status bad';E.status.textContent=w.feedbackPause.message+(w.feedbackPause.nextQuestion?' Dit oefenen we later opnieuw.':' Kies Verder om deze stap te verbeteren.');
+  footer.replaceChildren();const b=document.createElement('button');b.type='button';b.textContent='Verder →';footer.append(b);
+  b.onclick=()=>{if(current!==t||devMode)return;if(w.feedbackPause.nextQuestion){next();return}delete w.feedbackPause;E.status.textContent='Verbeter deze stap. Je juiste deelstappen blijven staan.';renderWave(t)};
+ }else if(w.done){E.status.className='status good';E.status.textContent=w.errors.length||w.help?'Gecontroleerd na herstel of hulp.':'Goed gecontroleerd.';footer.replaceChildren();advanceAfter()}
+}
 function renderWave(t){
  let footer=document.querySelector('.wave-actions');if(!footer){footer=document.createElement('div');footer.className='wave-actions';E.stage.querySelector('.playFooter').append(footer)}
- window.RechtenWaveUI.mount(t,{visual:E.visual,answers:E.answers,question:E.question,status:E.status,footer,dev:devMode,onChange:persistWave,onDone:finishWave,onNext:()=>{if(devMode){launchDev(t.skill,t.difficulty,false);return}state.waveDraft=null;save();next()}});persistWave();
+ window.RechtenWaveUI.mount(t,{visual:E.visual,answers:E.answers,question:E.question,status:E.status,footer,dev:devMode,onChange:persistWave,onDone:finishWave,onResult:r=>waveResult(t,r),onRendered:()=>waveFlow(t),onNext:()=>{if(devMode){launchDev(t.skill,t.difficulty,false);return}state.waveDraft=null;save();next()}});waveFlow(t);persistWave();
 }
 
-function render(t){E.stage.querySelectorAll('.journey-next').forEach(b=>b.remove());E.stage.classList.toggle('journey-legacy',!!t.journey&&!W.catalog[t.skill]&&t.type!=='intro');E.stage.classList.toggle('wave',!!W.catalog[t.skill]&&t.type!=='intro');document.querySelector('.wave-actions')?.replaceChildren();E.stage.dataset.task=t.type;E.answers.className='answers';E.question.innerHTML='';E.visual.innerHTML='';E.answers.innerHTML='';if(t.type==='intro')return renderIntro(t.params.introSkill);if(W.catalog[t.skill])return renderWave(t);if(t.type==='delta')renderDelta(t);if(t.type==='slope')renderSlope(t);if(t.type==='point')renderPoint(t);if(t.type==='intercept')renderIntercept(t);if(t.type==='ab')renderAB(t);if(t.type==='fx')renderFx(t);if(t.type==='table')renderTable(t);if(t.type==='zeroRead')renderZeroRead(t);if(t.type==='zero')renderZero(t);if(t.type==='sign')renderSign(t);if(t.type==='signchart')renderSignChart(t);journeyNext()}
+function render(t){cancelAdvance();E.visual.inert=false;E.answers.inert=false;E.stage.querySelectorAll('.journey-next').forEach(b=>b.remove());E.stage.classList.toggle('journey-legacy',!!t.journey&&!W.catalog[t.skill]&&t.type!=='intro');E.stage.classList.toggle('wave',!!W.catalog[t.skill]&&t.type!=='intro');document.querySelector('.wave-actions')?.replaceChildren();E.stage.dataset.task=t.type;E.answers.className='answers';E.question.innerHTML='';E.visual.innerHTML='';E.answers.innerHTML='';if(t.type==='intro')return renderIntro(t.params.introSkill);if(W.catalog[t.skill])return renderWave(t);if(t.type==='delta')renderDelta(t);if(t.type==='slope')renderSlope(t);if(t.type==='point')renderPoint(t);if(t.type==='intercept')renderIntercept(t);if(t.type==='ab')renderAB(t);if(t.type==='fx')renderFx(t);if(t.type==='table')renderTable(t);if(t.type==='zeroRead')renderZeroRead(t);if(t.type==='zero')renderZero(t);if(t.type==='sign')renderSign(t);if(t.type==='signchart')renderSignChart(t);journeyNext()}
 function explanationData(skill){
   if(W.catalog[skill])return window.RechtenWaveUI.explanation(skill);
   if(skill==='delta')return{title:'Δx en Δy',visual:graphMarkup({a:2,b:0,step:{x:0,y:0,dx:1,dy:2},showIntercept:false}),big:'Δx = 1 &nbsp;&nbsp; Δy = 2',sub:'Lees eerst de horizontale stap: Δx. Daarna de verticale stap: Δy.'};
@@ -905,7 +943,7 @@ function renderSignChart(t){
   const row=document.createElement('div');row.className='signTokenRow';E.answers.appendChild(row);
   ['−','0','+'].forEach(sym=>{const btn=bubble(sym,'signToken',()=>pickSign(sym,btn),row)});
   function redraw(){table.innerHTML=signChartHTML(root,picks,true)}
-  function pickSign(sym,btn){if(locked||used.has(sym))return;const i=picks.indexOf('?');if(i<0)return;picks[i]=sym;used.add(sym);btn.classList.add('used');redraw();if(!picks.includes('?')){locked=true;clearTimer();const ok=picks.every((v,i)=>v===signs[i]);let err='signchart.direction';if(picks[1]!=='0')err='signchart.zero';else if(picks[0]===signs[2]&&picks[2]===signs[0])err='signchart.direction';playCausalFeedback(ok);E.status.className='status '+(ok?'good':'bad');E.status.textContent=ok?feedbackCorrect():(devMode?`DEV · Fout. Sleutel: ${signs.join('  ')}`:`Nog niet. Het schema is ${signs.join('  ')}. Ik laat dit later terugkomen.`);finishOutcome(ok,signs.join('  '),ok?'generic':err,700,1200)}}
+  function pickSign(sym,btn){if(locked||used.has(sym))return;const i=picks.indexOf('?');if(i<0)return;picks[i]=sym;used.add(sym);btn.classList.add('used');redraw();if(!picks.includes('?')){locked=true;clearTimer();const ok=picks.every((v,i)=>v===signs[i]);let err='signchart.direction';if(picks[1]!=='0')err='signchart.zero';else if(picks[0]===signs[2]&&picks[2]===signs[0])err='signchart.direction';playCausalFeedback(ok);E.status.className='status '+(ok?'good':'bad');E.status.textContent=ok?feedbackCorrect():(devMode?`DEV · Fout. Sleutel: ${signs.join('  ')}`:`Nog niet. Het schema is ${signs.join('  ')}. Ik laat dit later terugkomen.`);finishOutcome(ok,signs.join('  '),ok?'generic':err)}}
 }
 function choicePill(label,cb,container=E.answers){const b=document.createElement('button');b.type='button';b.className='choicePill';b.innerHTML=label;b.addEventListener('click',()=>cb(b));container.appendChild(b);return b}
 let graphUid=0;
@@ -988,15 +1026,20 @@ function choiceValues(correct,extras=[],count=4){
 function distractors(correct,extras=[]){return choiceValues(correct,extras,4)}
 function numericChoices(correct,opt={}){const vals=choiceValues(correct,opt.extras||[],opt.count||4),container=opt.container||E.answers;vals.forEach(v=>bubble(mathHTML(v),opt.kind||'',btn=>answer(btn,Math.abs(v-correct)<1e-9,fmt(correct),Math.abs(v-correct)<1e-9?'generic':(opt.errorFor?opt.errorFor(v):'generic')),container))}
 function feedbackCorrect(){if(devMode||current?.kind==='dev')return'DEV · Juist.';if(current.kind==='repair'){const r=findReview(current.reviewId);return r&&r.stage>=1?'Juist. Nog één latere controle. +15 XP':'Juist. +15 XP'}if(current.kind==='refresh')return'Juist — nog stevig. +12 XP';if(current.kind==='fluency')return'Juist — weer vlot. +12 XP';return`Juist. +${10+2*current.difficulty} XP`}
-function finishOutcome(ok,correctText,errorCode='generic',delayOk=600,delayBad=1100){
+function finishOutcome(ok,correctText,errorCode='generic'){
   if(devMode||current?.kind==='dev'){E.status.className='status '+(ok?'good':'bad');E.status.textContent=ok?'DEV · Juist. Gebruik Nieuwe variant of kies een ander vraagtype.':`DEV · Fout. Sleutel: ${correctText}`;renderDevPanel();return}
-  if(current?.journey){current.journeyFeedback=ok&&current.journeyHelp?'Juist na uitleg. Je krijgt later een zelfstandige controle.':ok?'Juist.':`Nog niet. Antwoord: ${correctText}. Dit komt later terug.`;record(ok&&!current.journeyHelp,ok&&current.journeyHelp?'journey.supported':errorCode);journeyNext();persistJourney();return}
-  record(ok,errorCode);advanceAfter(ok?delayOk:delayBad)
+  if(current.answerCorrect!==undefined)return;
+  current.answerCorrect=!!ok;
+  current.answerFeedback=ok&&current.journeyHelp?'Juist na uitleg. Je krijgt later een zelfstandige controle.':ok?'Juist.':`Nog niet. Antwoord: ${correctText}. Dit oefenen we later opnieuw.`;
+  if(current.journey)current.journeyFeedback=current.answerFeedback;
+  record(ok&&!current.journeyHelp,ok&&current.journeyHelp?'journey.supported':errorCode);
+  journeyNext();persistJourney();
 }
+
 function answer(btn,ok,correctText,errorCode='generic'){if(locked)return;locked=true;clearTimer();playCausalFeedback(ok);if(ok){btn.classList.add('good');E.status.className='status good';E.status.textContent=feedbackCorrect()}else{btn.classList.add('bad');E.status.className='status bad';E.status.textContent=devMode?`DEV · Fout. Sleutel: ${correctText}`:`Nog niet. Antwoord: ${correctText}. Ik laat dit later terugkomen.`}finishOutcome(ok,correctText,errorCode)}
 function abChoices(a,b){
   const legend=document.createElement('div');legend.className='legend';legend.innerHTML='<span><i class="swatch a"></i>blauw = a</span><span><i class="swatch b"></i>oranje = b</span>';E.answers.appendChild(legend);let pickA=null,pickB=null;const all=[];
-  const tryDone=()=>{if(locked||pickA===null||pickB===null)return;locked=true;clearTimer();const ok=Math.abs(pickA-a)<1e-9&&Math.abs(pickB-b)<1e-9;let err='generic';if(!ok){if(Math.abs(pickA-b)<1e-9&&Math.abs(pickB-a)<1e-9)err='ab.swapped';else if(Math.abs(pickA-a)<1e-9)err='ab.intercept';else if(Math.abs(pickB-b)<1e-9)err='ab.slope';else err='ab.both'}all.forEach(o=>{if((o.kind==='a'&&o.val===pickA)||(o.kind==='b'&&o.val===pickB))o.btn.classList.add(ok?'good':'bad')});playCausalFeedback(ok);E.status.className='status '+(ok?'good':'bad');E.status.textContent=ok?feedbackCorrect():(devMode?`DEV · Fout. Sleutel: a = ${fmt(a)}, b = ${fmt(b)}`:`Nog niet. a = ${fmt(a)} en b = ${fmt(b)}. Ik laat dit later terugkomen.`);finishOutcome(ok,`a = ${fmt(a)}, b = ${fmt(b)}`,err,680,1150)};
+  const tryDone=()=>{if(locked||pickA===null||pickB===null)return;locked=true;clearTimer();const ok=Math.abs(pickA-a)<1e-9&&Math.abs(pickB-b)<1e-9;let err='generic';if(!ok){if(Math.abs(pickA-b)<1e-9&&Math.abs(pickB-a)<1e-9)err='ab.swapped';else if(Math.abs(pickA-a)<1e-9)err='ab.intercept';else if(Math.abs(pickB-b)<1e-9)err='ab.slope';else err='ab.both'}all.forEach(o=>{if((o.kind==='a'&&o.val===pickA)||(o.kind==='b'&&o.val===pickB))o.btn.classList.add(ok?'good':'bad')});playCausalFeedback(ok);E.status.className='status '+(ok?'good':'bad');E.status.textContent=ok?feedbackCorrect():(devMode?`DEV · Fout. Sleutel: a = ${fmt(a)}, b = ${fmt(b)}`:`Nog niet. a = ${fmt(a)} en b = ${fmt(b)}. Ik laat dit later terugkomen.`);finishOutcome(ok,`a = ${fmt(a)}, b = ${fmt(b)}`,err)};
   const av=choiceValues(a,[b],3),bv=choiceValues(b,[a],3);av.forEach(v=>{const btn=bubble(mathHTML(v),'a',x=>{if(locked)return;all.filter(o=>o.kind==='a').forEach(o=>o.btn.classList.remove('selected'));x.classList.add('selected');pickA=v;tryDone()});all.push({btn,val:v,kind:'a'})});bv.forEach(v=>{const btn=bubble(mathHTML(v),'b',x=>{if(locked)return;all.filter(o=>o.kind==='b').forEach(o=>o.btn.classList.remove('selected'));x.classList.add('selected');pickB=v;tryDone()});all.push({btn,val:v,kind:'b'})});
 }
 function devAnswerKey(t){
@@ -1021,6 +1064,7 @@ function devAnswerKey(t){
   }
 }
 function launchDev(skill=devSkill,difficulty=devDifficulty,intro=false){
+  cancelAdvance();
   if(!devMode){
     learnerExercise={current,locked,timeLeft,pendingNext,screenTimerWasActive:screenTimerWasActive||!!timerId,surface:currentScreen==='play'?baseSurface():screenReturn,taskStartedAt,pausedAt:screenPausedAt||Date.now(),question:[...E.question.childNodes],visual:[...E.visual.childNodes],answers:[...E.answers.childNodes],answersClass:E.answers.className,status:E.status.textContent,statusClass:E.status.className};
   }

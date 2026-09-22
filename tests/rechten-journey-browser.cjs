@@ -31,7 +31,7 @@ class CDP{
    const label=await c.run('`(${fmt(current.params.x)}, ${fmt(current.params.y)})`');await c.click(label,true);
   }else await c.run(`locked=true;finishOutcome(true,'test answer')`);
  }
- async function onward(){if(await c.run('!!W.catalog[current.skill]'))await c.click('Verder →',true);else await tap('.journey-next')}
+ async function onward(){const id=await c.run('current.id');await c.wait('__R.run('+JSON.stringify(`current.id!==${JSON.stringify(id)}||state.session.completed===true`)+')')}
  try{
  for(const [width,height] of [[1100,700],[780,360],[640,360]]){
   await c.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:false});await c.send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
@@ -39,9 +39,9 @@ class CDP{
   await tap('[data-place="tower"]');await tap('[data-start="discover"]');assert.equal(await c.run('current.type'),'intro');await c.wait('document.querySelector("#introGo")&&!document.querySelector("#introGo").disabled');await tap('#introGo');await layout('play');
   const before=await c.run('JSON.stringify(current)');await tap('#journeyBtn');await layout('map');await tap('[data-resume]');assert.equal(await c.run('JSON.stringify(current)'),before);
   await solveCurrent();await layout('play');const scored=await c.run('({xp:state.xp,total:state.total,id:current.id})');assert.equal(scored.total,1);await c.run('record(true)');assert.deepEqual(await c.run('({xp:state.xp,total:state.total,id:current.id})'),scored);
-  await c.run(`launchDev('point_plot',0,false);exitDev()`);assert.equal(await c.eval('document.querySelectorAll(".journey-next").length'),1);await layout('play');assert.deepEqual(await c.run('({xp:state.xp,total:state.total,id:current.id})'),scored);
+  await c.run(`launchDev('point_plot',0,false);exitDev()`);assert.equal(await c.eval('document.querySelectorAll(".journey-next").length'),0);await layout('play');assert.deepEqual(await c.run('({xp:state.xp,total:state.total,id:current.id})'),scored);
   const shot=await c.send('Page.captureScreenshot');fs.writeFileSync(`/tmp/rechten-journey-${width}-task.png`,Buffer.from(shot.data,'base64'));
-  await navigate();await tap('[data-resume]');assert.equal(await c.run('current.id'),scored.id);assert.equal(await c.run('state.total'),1);assert(await c.eval('!!document.querySelector(".journey-next")'));
+  await navigate();await tap('[data-resume]');assert.equal(await c.run('current.id'),scored.id);assert.equal(await c.run('state.total'),1);assert.equal(await c.eval('document.querySelectorAll(".journey-next").length'),0);
   await onward();assert.notEqual(await c.run('current.id'),scored.id);
   await tap('#helpBtn');await tap('#playBtn');await solveCurrent();assert.equal(await c.run('state.journey.active.results.at(-1).independent'),false);
   await tap('#journeyBtn');await layout('map');const map=await c.send('Page.captureScreenshot');fs.writeFileSync(`/tmp/rechten-journey-${width}-map.png`,Buffer.from(map.data,'base64'));

@@ -41,9 +41,10 @@ Herhaalafstanden blijven aantallen opgaven, niet kalenderdagen.
 De bestaande generators, constructiecontrols, exacte breuken, diagnostiek,
 moeilijkheidskeuze en scoring blijven verantwoordelijk voor de leerinhoud.
 De wereld voegt geen XP of mastery toe. In een etappe staat de automatische
-vlotheidstimer uit. Ook de oorspronkelijke meerkeuzevragen houden hun feedback
-zichtbaar tot **Verder**, zodat kaartbezoek en hervatten niet doorlopen tijdens
-het lezen. Hulpgebruik wordt voor deze vragen eveneens opgeslagen en vraagt
+vlotheidstimer uit. De actuele standaardflow toont een juist antwoord kort en
+gaat automatisch verder. Foute antwoorden blijven zichtbaar tot **Verder**;
+kaartbezoek en uitleg pauzeren de overgang. Zie de
+[actuele antwoordflow](rechten-leerlingenstart.md#hoe-het-spel-reageert). Hulpgebruik wordt voor deze vragen eveneens opgeslagen en vraagt
 een latere zelfstandige controle, zoals bij de constructievragen.
 
 ## Einduitdaging
