@@ -233,3 +233,21 @@ de bereikbaarheidstest dekt nu alle twintig skills. De database-test gebruikt
 weer alleen tijdelijke objecten en fictieve gegevens binnen BEGIN/ROLLBACK.
 Het nieuwe zelfstandige uitrolscript omvat beide waves en is niet automatisch
 toegepast. Zie [Wave 2-verslag](../docs/rechten-wave-2.md).
+
+## Rechtentrainer — Wave 3
+
+```sh
+node tests/rechten-algebra.test.cjs
+node tests/rechten-algebra-browser.cjs
+node scripts/build-rechten-db-test.cjs --wave3 > /tmp/rechten-wave3-database-test.sql
+```
+
+De nieuwe tests dekken algemene herleiding, onbekende x en puntcontrole: 1.800
+exacte opgaven, verschillende geldige bewerkingsroutes, verticale rechten,
+constante functies met geen/alle oplossingen en diagnose per stap. De browser
+test op beide mobiele maten undo, pointercancel, breukbediening, navigatie,
+herladen, eenmalige scoring, v702→703 en een duurtest van 450 opgaven.
+De eerdere suites blijven hun eigen waves testen tegen de huidige versie;
+de bereikbaarheidstest omvat nu 23 skills. Voer browsertests na elkaar uit.
+De SQL-transactie gebruikt uitsluitend tijdelijke objecten en fictieve data.
+Zie [Wave 3-verslag](../docs/rechten-wave-3.md) voor uitrolvolgorde en open checks.
