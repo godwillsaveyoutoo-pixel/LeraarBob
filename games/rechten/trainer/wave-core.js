@@ -1,5 +1,5 @@
-/* Exact mathematics, controlled tasks and pure step validation for Waves 1–3. */
-(function(root,factory){const api=factory();if(typeof module==='object')module.exports=api;else root.RechtenWave=api})(globalThis,()=>{
+/* Exact mathematics, controlled tasks and pure step validation for Waves 1–4. */
+(function(root,factory){const api=factory();if(typeof module==='object'){require('./transfer-core.js')(api);module.exports=api}else{root.RechtenTransferInstall(api);root.RechtenWave=api}})(globalThis,()=>{
 'use strict';
 function q(n,d=1){if(n&&typeof n==='object')return q(n.n,n.d);if(!Number.isSafeInteger(n)||!Number.isSafeInteger(d)||!d)throw Error('Ongeldige breuk');if(d<0){n=-n;d=-d}let a=Math.abs(n),b=d;while(b)[a,b]=[b,a%b];return {n:n/(a||1)||0,d:d/(a||1)}}
 const add=(a,b)=>{a=q(a);b=q(b);return q(a.n*b.d+b.n*a.d,a.d*b.d)},neg=a=>{a=q(a);return q(-a.n,a.d)},sub=(a,b)=>add(a,neg(b)),mul=(a,b)=>{a=q(a);b=q(b);return q(a.n*b.n,a.d*b.d)},div=(a,b)=>{a=q(a);b=q(b);return q(a.n*b.d,a.d*b.n)},eq=(a,b)=>{a=q(a);b=q(b);return a.n===b.n&&a.d===b.d},num=a=>{a=q(a);return a.n/a.d};
@@ -33,7 +33,8 @@ function migrate(saved){
   for(const [k,rs] of Object.entries(oldRequirements))if(rs.every(r=>ready({...s,skills:s.skills||{},review:s.review||[]},r)))s.access.push(k);
   s.access=[...new Set([...s.access,...legacyAccess(s.skills).filter(k=>['fx','table','zeroRead','zero','sign','signchart'].includes(k))])];
  }
- s.version=703;s.catalogVersion=3;
+ for(const [k,v] of Object.entries(s.skills||{}))if(catalog[k]&&Array.isArray(v.independent))v.independent=v.independent.map(e=>typeof e.signature==='string'?{...e,signature:compactSignature(e.signature)}:e);
+ s.version=704;s.catalogVersion=4;
  return s;
 }
 function ready(s,k){const v=s.skills[k];return v?.intro&&v.seen>=4&&v.strength>=.42&&v.recent?.slice(-4).length===4&&v.recent.slice(-4).filter(Boolean).length>=3&&!s.review.some(r=>r.skill===k&&r.kind==='repair')}
@@ -191,10 +192,13 @@ function check(t,w,value){if(algebraSkills.includes(t.skill))return algebraCheck
  return {ok,code:'wave.'+code,message};
 }
 function submit(t,w,value){if(algebraSkills.includes(t.skill))return algebraSubmit(t,w,value);if(w.done)return {ok:false,code:'done'};const stage=stages(t)[w.index],r=check(t,w,value);w.steps.push({stage,value,ok:r.ok,code:r.ok?null:r.code});w.steps=w.steps.slice(-32);if(!r.ok){if(!w.errors.includes(r.code))w.errors.push(r.code);return r}w.history.push({index:w.index,values:structuredClone(w.values)});w.values[stage]=value;w.index++;w.tokens=[];w.entry=['','1'];w.part=0;w.done=w.index===stages(t).length;return r}
-function undo(w){const prev=w.history.pop();if(prev){w.index=prev.index;w.values=prev.values;if(Object.hasOwn(prev,'equation')){w.equation=prev.equation;w.lastOperation='';w.operation=null}w.done=false;w.tokens=[];w.entry=['','1'];w.part=0}}
+function undo(w){const prev=w.history.pop();if(prev){w.index=prev.index;w.values=prev.values;if(prev.cursor){w.cursor=prev.cursor;w.gridEdits=[]}if(Object.hasOwn(prev,'equation')){w.equation=prev.equation;w.lastOperation='';w.operation=null}w.done=false;w.tokens=[];w.entry=['','1'];w.part=0}}
 function signature(t){return JSON.stringify([t.skill,t.difficulty,t.params])}
 const required={rewrite_linear_equation:['one-step','multiple','fraction','horizontal','vertical'],input_from_output:['integer','negative','fraction','all','none'],point_on_line:['on','off','constant-on','constant-off'],point_plot:['positive','signed','axis','scale'],equation_from_ab:['positive','negative','positive-fraction','negative-fraction','horizontal'],graph_from_equation:['positive','negative','positive-fraction','negative-fraction','horizontal'],slope_from_two_points:['positive','negative','positive-fraction','negative-fraction','horizontal','vertical','identical'],line_behavior:['positive','negative','horizontal'],special_lines:['horizontal','vertical','identical'],intercept_from_point:['positive','negative','negative-fraction','horizontal'],equation_from_point_slope:['positive','negative','negative-fraction','horizontal'],equation_from_two_points:['positive','negative','negative-fraction','horizontal','vertical','identical']};
-function evidence(st,t,total,clean){if(!clean)return;st.coverage||={};st.coverage[t.params.variant]=true;st.independent||=[];if(!st.independent.some(e=>e.signature===signature(t)))st.independent.push({at:total,signature:signature(t)});st.independent=st.independent.slice(-16)}
+// Two 32-bit hashes plus source length bound evidence size; full recent task data
+// remains in telemetry and drafts. Accept the versioned key unchanged on reload.
+function compactSignature(source){if(/^sig1:[0-9a-f]{16}:\d+$/.test(source))return source;let a=2166136261,b=0x9e3779b9;for(let i=0;i<source.length;i++){const c=source.charCodeAt(i);a=Math.imul(a^c,16777619);b=Math.imul(b^c,2246822507)}return 'sig1:'+(a>>>0).toString(16).padStart(8,'0')+(b>>>0).toString(16).padStart(8,'0')+':'+source.length}
+function evidence(st,t,total,clean){if(!clean)return;st.coverage||={};st.coverage[t.params.variant]=true;st.independent||=[];const key=compactSignature(signature(t));if(!st.independent.some(e=>compactSignature(e.signature)===key))st.independent.push({at:total,signature:key});st.independent=st.independent.slice(-16)}
 function mastered(st,skill){const e=st.independent||[];return required[skill].every(v=>st.coverage?.[v])&&e.some((a,i)=>e.slice(i+1).some(b=>b.at-a.at>=3))}
-return {algebraSkills,expr,equationHTML,equivalent,operate,isolated,algebraEquation,constructionSkills,gridPoint,onLine,constructionCheck,q,fromNumber,add,sub,mul,div,eq,num,parse,text,html,formula,catalog,order,requirements,legacyAccess,migrate,unlock,model,generate,stages,fresh,expected,check,submit,undo,signature,evidence,mastered};
+return {compactSignature,required,algebraSkills,expr,equationHTML,equivalent,operate,isolated,algebraEquation,constructionSkills,gridPoint,onLine,constructionCheck,q,fromNumber,add,sub,mul,div,eq,num,parse,text,html,formula,catalog,order,requirements,legacyAccess,migrate,unlock,model,generate,stages,fresh,expected,check,submit,undo,signature,evidence,mastered};
 });

@@ -251,3 +251,22 @@ De eerdere suites blijven hun eigen waves testen tegen de huidige versie;
 de bereikbaarheidstest omvat nu 23 skills. Voer browsertests na elkaar uit.
 De SQL-transactie gebruikt uitsluitend tijdelijke objecten en fictieve data.
 Zie [Wave 3-verslag](../docs/rechten-wave-3.md) voor uitrolvolgorde en open checks.
+
+## Rechtentrainer — Wave 4
+
+```sh
+node tests/rechten-transfer.test.cjs
+node tests/rechten-transfer-browser.cjs
+node scripts/build-rechten-db-test.cjs --wave4 > /tmp/rechten-wave4-database-test.sql
+```
+
+De transfertests dekken grafiek uit tabel en voorschrift uit grafiek/tabel/context:
+2.400 taken, alle gekozen kolomparen, alternatieve roosterpunten, beide
+b-routes, inconsistentie van de derde rij, exacte breuken, constanten, eenheden
+en contextdomeinen. De browser test beide mobiele maten, muis/touch,
+annuleren, undo, navigatie/herladen, diagnose zonder dubbeltelling en v703→704.
+De duurtests omvatten 450 transfer- en 640 gemengde opgaven; de omvang wordt
+inclusief JSONB-scheidingstekens getoetst aan de serverlimiet van 256 KiB.
+De catalogus telt nu 27 skills. Voer browsertests na elkaar uit.
+SQL wordt alleen op tijdelijke objecten met fictieve data getest.
+Zie [Wave 4-verslag](../docs/rechten-wave-4.md) voor bestanden en uitrolvolgorde.

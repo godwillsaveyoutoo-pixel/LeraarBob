@@ -41,8 +41,8 @@ test('point decision requires computed output, preserves it on wrong verdict, de
  assert(!C.submit(t,w,y===5?'off':'on').ok);assert(C.eq(w.values.pointValue,5));assert(C.submit(t,w,y===5?'on':'off').ok);assert(w.done);
  }
 });
-test('703 migration is pure, retains old access and pending work, does not invent new scores',()=>{
+test('704 migration is pure, retains old access and pending work, does not invent new scores',()=>{
  const old={version:702,catalogVersion:2,xp:19,skills:{ab:{seen:5,strength:.8},future:{opaque:true}},review:[{skill:'zero',kind:'repair'}],access:['equation_from_two_points','fx'],waveDraft:{id:'prior',work:{entry:['-3','2'],index:4}}},copy=structuredClone(old),up=C.migrate(old);
- assert.deepEqual(old,copy);assert.equal(up.version,703);assert.equal(up.catalogVersion,3);assert.deepEqual(up.waveDraft,old.waveDraft);assert.deepEqual(up.skills,old.skills);assert(!up.skills.rewrite_linear_equation);assert(up.access.includes('equation_from_two_points'));assert.deepEqual(C.migrate(up),up);
+ assert.deepEqual(old,copy);assert.equal(up.version,704);assert.equal(up.catalogVersion,4);assert.deepEqual(up.waveDraft,old.waveDraft);assert.deepEqual(up.skills,old.skills);assert(!up.skills.rewrite_linear_equation);assert(up.access.includes('equation_from_two_points'));assert.deepEqual(C.migrate(up),up);
  assert.deepEqual(C.requirements.intercept_from_point,['equation_from_ab']);assert.deepEqual(C.requirements.input_from_output,['fx','rewrite_linear_equation']);
 });
