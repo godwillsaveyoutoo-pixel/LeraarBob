@@ -18,7 +18,7 @@ class CDP{
  await navigate();
  async function tap(selector){const p=await c.eval(`(()=>{const b=document.querySelector(${JSON.stringify(selector)});if(!b||b.disabled)throw Error('Cannot tap '+${JSON.stringify(selector)});b.scrollIntoView({block:'nearest'});const r=b.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`);await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...p,radiusX:3,radiusY:3}]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await c.eval('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))')}
  const reset=async(ready=false)=>c.run(`stopAccountExercise();state=DEFAULT();guestMode=true;currentScreen='play';${ready?`for(const k of J.skills){const s=state.skills[k];s.intro=true;s.seen=8;s.correct=8;s.strength=.85;s.recent=[true,true,true,true]}state.access=[...J.skills];`:''}J.data(state).view='area';save();openScreen('journey')`);
- async function layout(where){const bad=await c.eval(`(()=>{const bad=[];for(const e of document.querySelectorAll(${JSON.stringify(where==='map'?'#journeyPanel button,#journeyPanel h2,#journeyPanel h3,.journey-status,.journey-footer,.topbar':'#stage button,#question,#status,.topbar')})){if(!e.getClientRects().length)continue;const r=e.getBoundingClientRect();if(r.left<-.5||r.right>innerWidth+.5||(${JSON.stringify(where)}!=='map'&&(r.top<0||r.bottom>innerHeight+.5)))bad.push(e.textContent+' outside '+JSON.stringify(r.toJSON()));if(e.tagName==='BUTTON'&&(r.width<47.5||r.height<47.5))bad.push('small '+e.textContent)}if(document.documentElement.scrollHeight>innerHeight||document.documentElement.scrollWidth>innerWidth)bad.push('page overflow');return bad})()`);assert.deepEqual(bad,[],where)}
+ async function layout(where){const bad=await c.eval(`(()=>{const bad=[];for(const e of document.querySelectorAll(${JSON.stringify(where==='map'?'#journeyPanel button,#journeyPanel h2,#journeyPanel h3,.journey-status,.topbar':'#stage button,#question,#status,.topbar')})){if(!e.getClientRects().length)continue;const r=e.getBoundingClientRect();if(r.left<-.5||r.right>innerWidth+.5||(${JSON.stringify(where)}!=='map'&&(r.top<0||r.bottom>innerHeight+.5)))bad.push(e.textContent+' outside '+JSON.stringify(r.toJSON()));if(e.tagName==='BUTTON'&&(r.width<47.5||r.height<47.5))bad.push('small '+e.textContent)}if(document.documentElement.scrollHeight>innerHeight||document.documentElement.scrollWidth>innerWidth)bad.push('page overflow');return bad})()`);assert.deepEqual(bad,[],where)}
  async function solveCurrent(){
   await c.run(`if(current.type==='intro')introDone()`);
   const type=await c.run('current.skill');
@@ -63,7 +63,7 @@ class CDP{
  assert.equal(await c.run('journeyRecommendation().place.id'),'trail');await tap('#continueBtn');assert.equal(await c.run('state.journey.selected'),'trail');
  await tap('[data-next-round]');assert.equal(await c.run('state.session.answered'),0);assert.equal(await c.run('state.journey.active.place'),'trail');
  // A world project has explicit coverage. Assistance with the first objective requires a retake.
- await reset(true);await tap('[data-start="challenge"]');await tap('#helpBtn');await tap('#playBtn');
+ await reset(true);await tap('[data-activity="challenge"]');await tap('[data-start="challenge"]');await tap('#helpBtn');await tap('#playBtn');
  for(let i=0;i<12;i++){await solveCurrent();await onward()}
  assert.equal(await c.run('Object.keys(state.journey.proof).length'),4);assert.equal(await c.run('state.journey.proof.point||false'),false);
  await tap('#continueBtn');await layout('map');const challengeShot=await c.send('Page.captureScreenshot');fs.writeFileSync('/tmp/rechten-journey-challenge.png',Buffer.from(challengeShot.data,'base64'));
@@ -71,7 +71,7 @@ class CDP{
  await tap('[data-atlas]');await tap('[data-region="points"]');
  // Finish the engine's targeted repair before another independent world attempt.
  await c.run(`state.review=[];for(const k of J.skills){const s=state.skills[k];s.intro=true;s.seen=8;s.strength=.85;s.recent=[true,true,true,true]}renderJourney()`);
- await tap('[data-start="challenge"]');assert.deepEqual(await c.run('state.journey.active.targets'),['point']);
+ await tap('[data-activity="challenge"]');await tap('[data-start="challenge"]');assert.deepEqual(await c.run('state.journey.active.targets'),['point']);
  for(let i=0;i<12;i++){await solveCurrent();await onward()}
  assert.equal(await c.run('state.journey.last.passed'),true);assert.equal(await c.run('Object.keys(state.journey.proof).length'),5);
  // Persist actual construction input and resume it, without introducing a second score.

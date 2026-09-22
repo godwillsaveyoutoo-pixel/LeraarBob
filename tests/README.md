@@ -310,8 +310,14 @@ De controles gebruiken echte knoppen op laptopformaat en 640×360; opgaven en
 voortgang worden alleen in het geïsoleerde browserprofiel klaargezet.
 Voer deze suite na de andere browsersuites uit, op dezelfde lokale server.
 
-`node tests/rechten-leave-round-browser.cjs` test het stoppen van gemengde en
+`node tests/rechten-leave-round-browser.cjs` test het stoppen van eerder opgeslagen gemengde en
 gewone rondes via de kaart, starten van een nieuwe ronde, behoud van scores,
 herhaling en sterren, annuleren van een geplande automatische overgang en
 herladen na het stoppen van een gedeeltelijk ingevulde constructie.
 Alle voortgang is fictief; de test gebruikt dezelfde geïsoleerde browser.
+
+De leerlingenschermtest controleert ook de onderwerptoets als selecteerbaar
+kaarteindpunt: voorbereiding bekijken zonder te starten, naar een benodigd
+leerdoel gaan, bewust een voorbereide toets starten en een lopende ronde behouden.
+Er staat geen aparte ingang voor gemengd herhalen meer op de kaart; de bestaande
+reis- en stoptests controleren wel het hervatten van oude herhaalrondes.

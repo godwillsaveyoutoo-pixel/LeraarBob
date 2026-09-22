@@ -183,7 +183,7 @@ const DEFAULT=()=>({
 let calibrationMode=false,calibrationResults={audit:null,simulation:null};
 let state=load(),current=null,locked=false,timerId=null,timeLeft=0,devMode=false,devSkill='delta',devDifficulty=0,devFocusOverride='auto',idleTimer=null,focusTimers=[],flowChain=0,taskStartedAt=0,lastPhase='warmup',helpTopic='delta',recentASigns=[];
 let currentScreen='play',screenReturn='play',screenTimerWasActive=false;
-let journeyEntry=true;
+let journeyEntry=true,journeyActivity='learn';
 let questionAdvanceTimer=null;
 function cancelAdvance(){clearTimeout(questionAdvanceTimer);questionAdvanceTimer=null}
 function advanceAfter(delay=650){
@@ -265,13 +265,15 @@ function screenHeader(title,sub=''){return `<div class="screenHead"><div class="
 function bindScreenClose(root){root?.querySelector('[data-screen-close]')?.addEventListener('click',()=>{if(current||state.journey?.active)closeScreen();else openScreen('journey')})}
 function journeyBusy(){return !state.journey?.active&&(!!current||!!state.waveDraft||state.session.answered>0)&&!state.session.completed}
 function journeyRecommendation(){return J.recommend(state,unlockedSkills(),W.ready,W.order)}
-function selectJourneyRecommendation(){const j=J.data(state),rec=journeyRecommendation();j.selected=rec.place.id;j.region=rec.place.region;j.view='area';save();openScreen('journey');$('#journeyPanel').scrollTop=0}
+function selectJourneyRecommendation(){journeyActivity='learn';const j=J.data(state),rec=journeyRecommendation();j.selected=rec.place.id;j.region=rec.place.region;j.view='area';save();openScreen('journey');$('#journeyPanel').scrollTop=0}
 function renderJourney(){
  const j=J.data(state);
- window.RechtenJourneyUI.render($('#journeyPanel'),{state,unlocked:unlockedSkills(),ready:W.ready,phase:skillPhase,order:W.order,requirements:W.requirements,labels:SKILLS,busy:journeyBusy(),
-  onSelect:id=>{j.selected=id;save();renderJourney();$('#journeyPanel [aria-pressed="true"]')?.focus({preventScroll:true})},
-  onRegion:id=>{j.region=id;j.view='area';const region=J.regions.find(r=>r.id===id),rec=journeyRecommendation();j.selected=rec.place.region===id?rec.place.id:region.places[0].id;save();renderJourney();$('#journeyPanel').scrollTop=0;$('#journeyPanel h2')?.focus({preventScroll:true})},
-  onAtlas:()=>{j.view='atlas';save();renderJourney();$('#journeyPanel').scrollTop=0;$('#journeyPanel h2')?.focus({preventScroll:true})},
+ window.RechtenJourneyUI.render($('#journeyPanel'),{state,unlocked:unlockedSkills(),ready:W.ready,phase:skillPhase,order:W.order,requirements:W.requirements,labels:SKILLS,busy:journeyBusy(),activity:journeyActivity,
+  onActivity:mode=>{journeyActivity=mode;renderJourney();$('#journeyPanel .journey-details h3')?.focus({preventScroll:innerWidth>800})},
+  onPrepare:skill=>{const p=J.places.find(p=>p.skills.includes(skill));if(p){journeyActivity='learn';j.selected=p.id;j.region=p.region;j.view='area';save();renderJourney();$('#journeyPanel .journey-details h3')?.focus({preventScroll:true})}},
+  onSelect:id=>{journeyActivity='learn';j.selected=id;save();renderJourney();$('#journeyPanel [aria-pressed="true"]')?.focus({preventScroll:true})},
+  onRegion:id=>{journeyActivity='learn';j.region=id;j.view='area';const region=J.regions.find(r=>r.id===id),rec=journeyRecommendation();j.selected=rec.place.region===id?rec.place.id:region.places[0].id;save();renderJourney();$('#journeyPanel').scrollTop=0;$('#journeyPanel h2')?.focus({preventScroll:true})},
+  onAtlas:()=>{journeyActivity='learn';j.view='atlas';save();renderJourney();$('#journeyPanel').scrollTop=0;$('#journeyPanel h2')?.focus({preventScroll:true})},
   onRecommend:selectJourneyRecommendation,onStart:startJourney,onResume:resumeJourney,onStop:stopTrainingRound,onClose:()=>closeScreen()});
 }
 function resumeJourney(){
@@ -392,6 +394,7 @@ async function cloudSync(){
 }
 async function flushProgress(){clearTimeout(cloudSyncTimer);if(syncPromise)await syncPromise;if(progressDirty&&!remoteConflict)await cloudSync();return !progressDirty&&!remoteConflict}
 function stopAccountExercise(){
+  journeyActivity='learn';
   clearTimer();clearInteractionTimers();clearTimeout(questionAdvanceTimer);questionAdvanceTimer=null;clearTimeout(cloudSyncTimer);
   current=null;locked=false;devMode=false;learnerExercise=null;pendingNext=false;screenTimerWasActive=false;screenPausedAt=0;
   flowChain=0;recentASigns=[];lastPhase='warmup';E.question.replaceChildren();E.visual.replaceChildren();E.answers.replaceChildren();E.status.textContent='';
@@ -799,7 +802,7 @@ function endSession(){
   E.doneEyebrow.textContent=checkpoint?'checkpoint afgerond':'korte trainingsronde afgerond';E.doneTitle.textContent=checkpoint?'Checkpoint voltooid':'Ronde afgerond';
   E.doneXP.textContent=`+${state.session.xp} XP`;const contentAttempts=Math.max(0,state.session.answered-(state.session.timedOut||0)),pct=contentAttempts?Math.round(100*state.session.correct/contentAttempts):0;
   const challenge=state.session.challengeCorrect||0;E.doneStats.innerHTML=`<span>${state.session.correct}/${contentAttempts} inhoudelijk juist</span><span>${pct}%</span>${state.session.timedOut?`<span>${state.session.timedOut}× tijd</span>`:''}<span>${challenge} challenge juist</span><span>${state.session.repaired} fout${state.session.repaired===1?'':'en'} hersteld</span><span>${openRepairs().length} open herstel${openRepairs().length===1?'':'taken'}</span>`;
-  const rec=journeyRecommendation(),last=state.journey?.last;$('#doneNext').hidden=false;$('#doneNext').innerHTML=`${wasJourney?`<strong>★ ${last.mode==='camp'?'Gemengd herhalen':J.places.find(p=>p.id===last.place)?.name||'Oefenronde'}</strong><p>${last.independent}/${last.answered} opgaven zelfstandig gelukt. ${last.practice?.length?'Wat nog hulp vroeg, komt later opnieuw terug.':'Eerdere kennis blijft terugkomen.'}</p>`:''}${last?.newSkills?.length&&wasJourney?`<p>Nieuw beschikbaar: ${last.newSkills.map(k=>SKILLS[k]?.label||k).join(' · ')}</p>`:''}<p><strong>Volgende ronde: ${SKILLS[rec.skill]?.label||rec.place.name}</strong><br>${rec.reason}</p>`;
+  const rec=journeyRecommendation(),last=state.journey?.last;$('#doneNext').hidden=false;$('#doneNext').innerHTML=`${wasJourney?`<strong>★ ${last.mode==='camp'?'Herhaalronde':J.places.find(p=>p.id===last.place)?.name||'Oefenronde'}</strong><p>${last.independent}/${last.answered} opgaven zelfstandig gelukt. ${last.practice?.length?'Wat nog hulp vroeg, komt later opnieuw terug.':'Eerdere kennis blijft terugkomen.'}</p>`:''}${last?.newSkills?.length&&wasJourney?`<p>Nieuw beschikbaar: ${last.newSkills.map(k=>SKILLS[k]?.label||k).join(' · ')}</p>`:''}<p><strong>Volgende ronde: ${SKILLS[rec.skill]?.label||rec.place.name}</strong><br>${rec.reason}</p>`;
   E.stage.hidden=true;E.sessionDone.hidden=false;renderTop();renderSessionCue();E.routeFill.classList.remove('routeKick');void E.routeFill.offsetWidth;E.routeFill.classList.add('routeKick');showMilestone(checkpoint?`Checkpoint · +${completionBonus} XP`:`Ronde klaar · +${completionBonus} XP`);
 }
 function continueTraining(){if(state.session.completed&&state.session.journeyRound){current=null;selectJourneyRecommendation();return}state.session={answered:0,correct:0,xp:0,repaired:0,refreshes:0,newMistakes:0,challengeCorrect:0,timedOut:0,fluencyRecovered:0};save();E.sessionDone.hidden=true;locked=false;next()}

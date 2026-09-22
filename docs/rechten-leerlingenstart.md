@@ -29,6 +29,8 @@ en de bestaande DEV-ingang blijven beschikbaar voor hun bestaande doelgroep.
 | Eerste bezoek | Punten lezen en plaatsen wordt aanbevolen; latere doelen blijven bekijkbaar |
 | Een ronde staat nog open | **Hervat opdracht** krijgt voorrang; de gekozen opgave en deelantwoorden blijven staan. De kaart toont hoeveel van de 12 opgaven beantwoord zijn |
 | Je wilt een testronde verlaten | **Kaart → Ronde stoppen en opnieuw kiezen** beëindigt de ronde. Behaalde XP, resultaten, toegang en herhaling blijven bewaard; de onafgewerkte opgave vervalt. Een afgebroken ronde krijgt geen voltooiingsster of rondebonus |
+| Herhaling | Komt automatisch mee in de gewone leerroute; er is geen aparte ingang voor gemengd herhalen |
+| Onderwerptoets | Eigen eindpunt op de deelkaart **Punten en helling**. Selecteren toont uitleg, voorbereiding en zelfstandig bewijs; pas de hoofdknop start de toets. Ontbreekt voorbereiding, dan leidt die knop naar een benodigd leerdoel |
 | Een volgende vaardigheid is beschikbaar | De kaart benoemt die concrete vaardigheid, ook binnen dezelfde stopplaats; geplande herhaling komt mee |
 | Alleen herstel of onderhoud is nodig | Start een nieuwe ronde met gerichte herhaling en andere opgaven; eerdere rondes blijven afgerond |
 | Alle beschikbare doelen zijn voorbereid | Aanbeveling voor onderhoud met nieuwe varianten bij eerder geoefende inhoud |
@@ -38,7 +40,11 @@ en de bestaande DEV-ingang blijven beschikbaar voor hun bestaande doelgroep.
 | Een enkelvoudige vraag is fout | Diagnose blijft staan; **Verder** opent de volgende vraag. De bestaande planner plant herhaling met nieuwe varianten |
 | Een deelstap in een langere opgave is fout | Diagnose blijft staan; **Verder** hervat die stap. Eerdere juiste deelstappen blijven behouden, bijvoorbeeld a bij een fout in b |
 
-Dit geldt standaard, zowel vanuit de kaart als in gewone training. Het gaat om
+Eerder opgeslagen gemengde herhaalrondes kunnen nog worden hervat of gestopt.
+De aparte startknop en de losse activiteitenbalk onder de kaart zijn verwijderd.
+Alleen de bestaande toets voor Punten en helling wordt aangeboden.
+
+De antwoordflow geldt standaard, zowel vanuit de kaart als in gewone training. Het gaat om
 het daadwerkelijk gegeven antwoord: juist na hulp gaat ook automatisch verder,
 maar telt nog steeds niet als zelfstandig beheerst. Foute puntplaatsing en
 richtingskeuze worden eenmaal geregistreerd, zonder een voltooide constructie
