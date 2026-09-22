@@ -53,6 +53,7 @@
 <link rel="stylesheet" href="wave.css">
 <script src="wave-core.js"></script>
 <script src="construction-ui.js"></script>
+<script src="algebra-ui.js"></script>
 <script src="wave-ui.js"></script>
 </head>
 <body>
@@ -125,8 +126,9 @@ const AXIOMA_CONFIG = window.AXIOMA_CONFIG;
 'use strict';
 const KEY='axioma-trainer-rechten-v0700';
 // Separate local slots prevent older tabs from overwriting unsynced construction work.
-const PREVIOUS_WAVE_KEY=KEY+':wave1';
-const WAVE_KEY=KEY+':wave2';
+const FIRST_WAVE_KEY=KEY+':wave1';
+const PREVIOUS_WAVE_KEY=KEY+':wave2';
+const WAVE_KEY=KEY+':wave3';
 const LEGACY_KEY_611='axioma-trainer-rechten-v0611';
 const LEGACY_KEY_610='axioma-trainer-rechten-v0610';
 const LEGACY_KEY='axioma-trainer-rechten-v069';
@@ -151,6 +153,7 @@ const SKILLS={
   ...Object.fromEntries(['intercept_from_point','equation_from_point_slope','equation_from_two_points'].map(k=>[k,W.catalog[k]])),
   graph_from_equation:W.catalog.graph_from_equation,
   fx:{label:'functiewaarde f(x)'},
+  ...Object.fromEntries(W.algebraSkills.map(k=>[k,W.catalog[k]])),
   table:{label:'tabel aanvullen'},
   zeroRead:{label:'nulwaarde aflezen'},
   zero:{label:'nulwaarde berekenen'},
@@ -158,7 +161,7 @@ const SKILLS={
   signchart:{label:'tekenschema opstellen'}
 };
 const DEFAULT=()=>({
-  version:702,catalogVersion:2,access:['point'],scoredAttempts:[],waveDraft:null,started:false,xp:0,streak:0,lastActiveDay:null,total:0,correct:0,routeStep:0,checkpointWins:0,
+  version:703,catalogVersion:3,access:['point'],scoredAttempts:[],waveDraft:null,started:false,xp:0,streak:0,lastActiveDay:null,total:0,correct:0,routeStep:0,checkpointWins:0,
   session:{answered:0,correct:0,xp:0,repaired:0,refreshes:0,newMistakes:0,challengeCorrect:0,timedOut:0,fluencyRecovered:0},
   timer:true,timerSeconds:8,review:[],recentSignatures:[],misconceptions:{},telemetry:[],lastSkill:null,
   skills:Object.fromEntries(Object.keys(SKILLS).map(k=>[k,{seen:0,correct:0,strength:0,intro:false,lastSeen:-999,recent:[],refreshDue:null,reviewsSolved:0}]))
@@ -225,7 +228,7 @@ function bindScreenClose(root){root?.querySelector('[data-screen-close]')?.addEv
 function freshSkill(){return {seen:0,correct:0,strength:0,intro:false,lastSeen:-999,recent:[],refreshDue:null,reviewsSolved:0}}
 function load(){
   try{
-    const sources=[[WAVE_KEY,702],[PREVIOUS_WAVE_KEY,701],[KEY,700],[LEGACY_KEY_611,611],[LEGACY_KEY_610,610],[LEGACY_KEY,69],[LEGACY_KEY_OLD,68],[LEGACY_KEY_OLDER,67],[LEGACY_KEY_OLDEST,66]];
+    const sources=[[WAVE_KEY,703],[PREVIOUS_WAVE_KEY,702],[FIRST_WAVE_KEY,701],[KEY,700],[LEGACY_KEY_611,611],[LEGACY_KEY_610,610],[LEGACY_KEY,69],[LEGACY_KEY_OLD,68],[LEGACY_KEY_OLDER,67],[LEGACY_KEY_OLDEST,66]];
     for(const [key,version] of sources){
       const v=JSON.parse(localStorage.getItem(key));
       if(!v||!(v.version===version||key===KEY&&v.version===701))continue;
@@ -252,7 +255,7 @@ function mergeState(base,saved){
   out.session=Object.assign(DEFAULT().session,out.session||{});
   return out;
 }
-function backupMigration(saved,key){if(!saved||saved.version>=702)return;try{const backupKey=key+':pre-wave-2';if(!localStorage.getItem(backupKey))localStorage.setItem(backupKey,JSON.stringify(saved))}catch{console.warn('De migratiebackup kon niet worden bewaard.')}}
+function backupMigration(saved,key){if(!saved||saved.version>=703)return;try{const backupKey=key+':pre-wave-3';if(!localStorage.getItem(backupKey))localStorage.setItem(backupKey,JSON.stringify(saved))}catch{console.warn('De migratiebackup kon niet worden bewaard.')}}
 // Specialized account/storage integration retains the existing RPC and revision protocol.
 const CLASSES=['3TBO','3TMW','3TMWW','4TMWW','4TMW'];
 const ALIAS_RE=/^[a-z0-9][a-z0-9_-]{2,23}$/;
@@ -264,8 +267,8 @@ let authMode='login',authMessage='',teacherRows=[],teacherFilter='',teacherQuery
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function configured(){return /^https:\/\/[a-z0-9.-]+(?::\d+)?$/i.test(AXIOMA_CONFIG.url)&&!!AXIOMA_CONFIG.publicKey}
 function learnerKey(id=account?.id){return KEY+':'+AXIOMA_CONFIG.url+':'+id}
-function readCache(id){try{const c=JSON.parse(localStorage.getItem(learnerKey(id)+':wave2')||localStorage.getItem(learnerKey(id)+':wave1')||localStorage.getItem(learnerKey(id)));if(c?.state)backupMigration(c.state,learnerKey(id));return c?.state&&Number.isInteger(c.revision)&&c.revision>=0?c:null}catch{return null}}
-function storeCache(){if(account?.role!=='student')return true;try{localStorage.setItem(learnerKey()+':wave2',JSON.stringify({state,revision:progressRevision,dirty:progressDirty,edit:localEdit,updated_at:cloudCfg.lastSync}));return true}catch{return false}}
+function readCache(id){try{const c=JSON.parse(localStorage.getItem(learnerKey(id)+':wave3')||localStorage.getItem(learnerKey(id)+':wave2')||localStorage.getItem(learnerKey(id)+':wave1')||localStorage.getItem(learnerKey(id)));if(c?.state)backupMigration(c.state,learnerKey(id));return c?.state&&Number.isInteger(c.revision)&&c.revision>=0?c:null}catch{return null}}
+function storeCache(){if(account?.role!=='student')return true;try{localStorage.setItem(learnerKey()+':wave3',JSON.stringify({state,revision:progressRevision,dirty:progressDirty,edit:localEdit,updated_at:cloudCfg.lastSync}));return true}catch{return false}}
 function saveLocalOnly(){if(calibrationMode||devMode)return true;if(account?.role==='student')return storeCache();if(account||!guestMode)return true;try{localStorage.setItem(WAVE_KEY,JSON.stringify(state));return true}catch{return false}}
 function save(){if(calibrationMode||devMode)return true;if(account?.role==='student'){progressDirty=true;localEdit++}const ok=saveLocalOnly();if(!ok)toast('Opslag op dit toestel is niet beschikbaar.');scheduleCloudSync();return ok}
 function cloudAvailable(){return !!sb&&account?.role==='student'&&accountReady}
@@ -925,6 +928,7 @@ function abChoices(a,b){
   const av=choiceValues(a,[b],3),bv=choiceValues(b,[a],3);av.forEach(v=>{const btn=bubble(mathHTML(v),'a',x=>{if(locked)return;all.filter(o=>o.kind==='a').forEach(o=>o.btn.classList.remove('selected'));x.classList.add('selected');pickA=v;tryDone()});all.push({btn,val:v,kind:'a'})});bv.forEach(v=>{const btn=bubble(mathHTML(v),'b',x=>{if(locked)return;all.filter(o=>o.kind==='b').forEach(o=>o.btn.classList.remove('selected'));x.classList.add('selected');pickB=v;tryDone()});all.push({btn,val:v,kind:'b'})});
 }
 function devAnswerKey(t){
+  if(W.algebraSkills.includes(t?.skill)&&t.type!=='intro'){const p=t.params;if(t.skill==='point_on_line')return 'f(x) = '+W.text(p.value)+' · '+(W.eq(p.value,p.P.y)?'ligt erop':'ligt ernaast');if(t.skill==='input_from_output')return p.model.a.n?'x = '+W.text(p.solution):W.eq(p.target,p.model.b)?'alle x':'geen x'}
   if(t?.skill==='point_plot'&&t.type!=='intro')return 'P('+W.text(t.params.target.x)+'; '+W.text(t.params.target.y)+')';
   if(W.catalog[t?.skill]&&t.type!=='intro'){const m=t.params.model;return m.kind==='identical'?'geen unieke rechte':m.kind==='vertical'?'x = '+W.text(m.c):'a = '+W.text(m.a)+' · b = '+W.text(m.b)}
   if(!t)return '—';if(t.type==='intro'||t.kind==='devIntro')return 'uitlegbeeld · geen antwoord';const p=t.params||{};
@@ -1110,7 +1114,8 @@ function contentCoverageHTML(){
     ['point_plot','punt plaatsen','rooster met assenschaal','tik/sleep + stapknoppen','verwisselde of verkeerde as','L1 positief; L2 kwadranten/assen; L3 schaal'],
     ['equation_from_ab','voorschrift construeren','a/b + formulevakken','tokens tikken/slepen','helling, teken, constante','L1–L3; equivalentie, ±1, 0, breuken'],
     ['graph_from_equation','rechte construeren','voorschrift + leeg rooster','twee eigen punten + controle','beginpunt, helling, identieke punten','L1 b-start; L2–L3 alle geldige puntenparen'],
-    ...Object.keys(W.catalog).filter(k=>!W.constructionSkills.includes(k)).map(k=>[k,W.catalog[k].label,'punten / exacte breuken','contextuele deelstappen','richting, substitutie, a/b, puntcontrole','L1–L3; ±a, breuken, horizontaal; bijzondere rechten waar toepasselijk']),
+    ...W.algebraSkills.map(k=>[k,W.catalog[k].label,'vergelijking / punt / tabel / grafiek','bewerkingen op beide leden of substitutie','equivalentie, uitvoer en conclusie','L1–L3; exacte breuken, verticaal, geen/alle x']),
+    ...Object.keys(W.catalog).filter(k=>!W.constructionSkills.includes(k)&&!W.algebraSkills.includes(k)).map(k=>[k,W.catalog[k].label,'punten / exacte breuken','contextuele deelstappen','richting, substitutie, a/b, puntcontrole','L1–L3; ±a, breuken, horizontaal; bijzondere rechten waar toepasselijk']),
     ['signchart','tekenschema','schema + grafiek/formule','sequence / single','richting, nulpositie','grafiek ±78% / 52% / 32%; tekens óf nulwaarde']
   ];
   return `<div class="calScroll"><table class="calTable"><thead><tr><th>skill</th><th>claim</th><th>visual</th><th>interactie</th><th>diagnose</th><th>huidige dekking</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${SKILLS[r[0]].label}</td>${r.slice(1).map(x=>`<td class="coverageCell">${x}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;

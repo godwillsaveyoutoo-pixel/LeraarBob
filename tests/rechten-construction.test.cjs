@@ -43,7 +43,7 @@ test('point feedback identifies swap or only the wrong axis and honours independ
 });
 test('v701 migration keeps existing access, draft, unknown fields and zero new mastery',()=>{
  const skill={intro:true,seen:4,strength:.5,recent:[true,true,true,true]},old={version:701,catalogVersion:1,skills:{point:skill,ab:skill,future:{custom:42}},review:[],access:['point','slope_from_two_points'],waveDraft:{id:'untouched',work:{index:4,values:{a:C.q(-3,2)}}},xp:123};
- const before=structuredClone(old),up=C.migrate(old);assert.deepEqual(old,before);assert.equal(up.version,702);assert.equal(up.catalogVersion,2);assert.deepEqual(up.waveDraft,old.waveDraft);assert.deepEqual(up.skills,old.skills);assert.equal(up.xp,123);assert(up.access.includes('delta'));assert(up.access.includes('intercept_from_point'));assert(up.access.includes('slope_from_two_points'));assert(!up.skills.point_plot);assert.deepEqual(C.migrate(up),up);
+ const before=structuredClone(old),up=C.migrate(old);assert.deepEqual(old,before);assert.equal(up.version,703);assert.equal(up.catalogVersion,3);assert.deepEqual(up.waveDraft,old.waveDraft);assert.deepEqual(up.skills,old.skills);assert.equal(up.xp,123);assert(up.access.includes('delta'));assert(up.access.includes('intercept_from_point'));assert(up.access.includes('slope_from_two_points'));assert(!up.skills.point_plot);assert.deepEqual(C.migrate(up),up);
 });
 test('guided graph construction diagnoses the intercept without imposing a fixed second point',()=>{
  const t={skill:'graph_from_equation',difficulty:0,params:{model:{a:C.q(1),b:C.q(2)}}};
