@@ -67,6 +67,8 @@
 <script src="journey-core.js"></script>
 <script src="journey-ui.js"></script>
 <script src="ux-review.js"></script>
+<link rel="stylesheet" href="training-proof.css">
+<script src="training-proof.js"></script>
 </head>
 <body>
 <div id="app">
@@ -128,6 +130,7 @@
         <div id="doneXP" class="doneXP">+0 XP</div>
         <div id="doneStats" class="doneStats"></div>
         <div id="doneNext" class="done-next" hidden></div><button id="continueBtn" class="primary">Verder trainen</button>
+        <div class="done-proof"><button id="downloadTrainingProof" type="button">Download bewijsje (PDF)</button></div>
       </div>
     </section>
   </main>
@@ -305,15 +308,25 @@ function clearRound(){
  taskStartedAt=0;flowChain=0;E.flowBadge.classList.remove('show');
  E.visual.inert=false;E.answers.inert=false;E.question.inert=false;E.stage.hidden=true;E.sessionDone.hidden=true;E.start.hidden=true;
 }
+function trainingPlace(){const id=state.journey?.active?.place||(state.session.journeyRound?state.journey?.last?.place:null);return J.places.find(p=>p.id===id)?.name||'Oefenronde'}
+function rememberTrainingRound(status){state.lastTrainingRound=window.RechtenTrainingProof.round(state,{status,place:trainingPlace()})}
+function downloadTrainingProof(){
+ if(devMode||calibrationMode||(!guestMode&&!accountReady))return;
+ const region=J.regions.find(r=>r.id===state.journey?.chapter);
+ const chapter=region?`Hoofdstuk ${J.regions.indexOf(region)+1} · ${region.name}`:'';
+ const report=window.RechtenTrainingProof.snapshot(state,{skills:SKILLS,phase:skillPhase,place:trainingPlace(),chapter});
+ window.RechtenTrainingProof.open(report,{account});
+}
 function stopTrainingRound(){
  if(devMode||(!accountReady&&!guestMode)||state.session.completed||!state.journey?.active&&!journeyBusy())return;
  // An answered last question still earns the normal completion, exactly once.
- if(state.session.answered>=SESSION_LENGTH){endSession();selectJourneyRecommendation();return}
- clearRound();
+ if(state.session.answered>=SESSION_LENGTH){endSession();selectJourneyRecommendation();downloadTrainingProof();return}
+ rememberTrainingRound('stopped');clearRound();
  screenReturn='start';renderTop();renderSessionCue();selectJourneyRecommendation();
  const note=document.createElement('p');note.className='journey-stop-note';note.setAttribute('role','status');
  note.textContent='Ronde gestopt. Je behaalde resultaten en geplande herhaling blijven bewaard.';
- $('#journeyPanel .journey-detail-main').append(note);
+ const proof=document.createElement('button');proof.type='button';proof.textContent='Download bewijsje (PDF)';proof.onclick=downloadTrainingProof;note.append(proof);
+ $('#journeyPanel .journey-detail-main').append(note);downloadTrainingProof();
 }
 function startJourney(place,mode){
  if(!accountReady&&!guestMode)return;
@@ -418,6 +431,7 @@ async function cloudSync(){
 }
 async function flushProgress(){clearTimeout(cloudSyncTimer);if(syncPromise)await syncPromise;if(progressDirty&&!remoteConflict)await cloudSync();return !progressDirty&&!remoteConflict}
 function stopAccountExercise(){
+ window.RechtenTrainingProof.close({reset:true});
   journeyActivity='learn';
   clearTimer();clearInteractionTimers();clearTimeout(questionAdvanceTimer);questionAdvanceTimer=null;clearTimeout(cloudSyncTimer);
   current=null;locked=false;devMode=false;learnerExercise=null;pendingNext=false;screenTimerWasActive=false;screenPausedAt=0;
@@ -831,7 +845,7 @@ function endSession(){
   if(state.session.completed){if(state.session.journeyRound)openScreen('journey');return}
   const wasJourney=!!state.journey?.active;E.sessionDone.classList.toggle('journey-done',wasJourney);if(wasJourney)J.finish(state,unlockedSkills());state.session.completed=true;state.session.journeyRound=wasJourney;
   cancelAdvance();clearTimer();clearInteractionTimers();locked=true;const checkpoint=isCheckpointSession();state.routeStep++;
-  const completionBonus=checkpoint?30:20;state.xp+=completionBonus;state.session.xp+=completionBonus;if(checkpoint)state.checkpointWins=(state.checkpointWins||0)+1;save();
+  const completionBonus=checkpoint?30:20;state.xp+=completionBonus;state.session.xp+=completionBonus;if(checkpoint)state.checkpointWins=(state.checkpointWins||0)+1;rememberTrainingRound('completed');save();
   E.continueBtn.textContent=wasJourney?'Bekijk volgende ronde →':'Verder oefenen →';
   E.doneEyebrow.textContent=checkpoint?'checkpoint afgerond':'korte trainingsronde afgerond';E.doneTitle.textContent=checkpoint?'Checkpoint voltooid':'Ronde afgerond';
   E.doneXP.textContent=`+${state.session.xp} XP`;const contentAttempts=Math.max(0,state.session.answered-(state.session.timedOut||0)),pct=contentAttempts?Math.round(100*state.session.correct/contentAttempts):0;
@@ -1370,7 +1384,8 @@ function renderSheet(){
   const q=openRepairs();const misc=topMisconceptions();const qtxt=q.length?q.map(r=>`${SKILLS[r.skill]?.label||r.skill}: over ${Math.max(0,r.due-state.total)} vraag${Math.max(0,r.due-state.total)===1?'':'en'}${r.misconception&&r.misconception!=='generic'?` · ${r.misconception}`:''}`).join('<br>'):'geen open herstelitems';
   const mtxt=misc.length?misc.map(([k,n])=>`${k} × ${n}`).join(' · '):'nog geen patroonfouten geregistreerd';
   const recommendation=journeyRecommendation(),completed=J.places.filter(p=>state.journey?.visits?.[p.id]);
-  E.sheet.innerHTML=`${screenHeader('Jouw voortgang','Afgerond werk blijft staan. Kennis komt later opnieuw terug.')}<div class="screenScroll integratedProgress"><div class="journey-recommend student-next"><div><span>Jouw volgende stap</span><strong>${SKILLS[recommendation.skill]?.label||recommendation.place.name}</strong><p>${recommendation.reason}</p></div><button data-next-place>Bekijk op de kaart →</button></div><p>✓ ${completed.length} stopplaatsen met een afgeronde ronde · ${Object.keys(SKILLS).filter(k=>skillPhase(k)==='stevig').length} vaardigheden stevig</p><div class="progressSummary"><div><span class="metricLabel">Verdiende XP</span><strong class="metricValue">${state.xp}</strong></div><div><span class="metricLabel">Dagreeks</span><strong class="metricValue">${state.streak} <small>${state.streak===1?'dag':'dagen'}</small></strong></div><div class="routeMetric"><span class="metricLabel">Jouw route</span><strong class="metricValue">${state.routeStep}<small> rondes voltooid</small></strong><div class="dashboardRoute"><i style="width:${100*state.session.answered/SESSION_LENGTH}%"></i></div><p>${state.session.answered} van ${SESSION_LENGTH} vragen in deze ronde</p></div></div><div class="progressColumns"><div><h3 class="sectionLabel">Je vaardigheden</h3>${rows}</div><div class="progressAside"><div class="queueBox"><strong>Waar je nu aan werkt</strong>${SKILLS[frontierSkill()].label}<br>${isCheckpointSession()?'Je volgende ronde is een checkpoint.':'Korte rondes met een nieuw inzicht, oefening en herhaling.'}</div><div class="queueBox"><strong>Opnieuw oefenen</strong>${q.length?q.map(r=>`${SKILLS[r.skill]?.label||r.skill} · over ${Math.max(0,r.due-state.total)} vragen`).join('<br>'):'Geen open herstelvragen. Nieuwe inzichten krijgen later opnieuw aandacht.'}</div><div class="queueBox"><strong>Je volgende stap</strong>${Object.values(state.skills).filter(x=>x.refreshDue!==null).length} vaardigheden klaar voor latere opfrissing.<br>De route houdt rekening met wat je al beheerst en wat nog oefening vraagt.</div><button class="primary" data-resume>Verder oefenen →</button></div></div></div>`;
+  E.sheet.innerHTML=`${screenHeader('Jouw voortgang','Afgerond werk blijft staan. Kennis komt later opnieuw terug.')}<div class="screenScroll integratedProgress"><button class="proof-progress-button" data-training-proof>Download bewijsje (PDF)</button><div class="journey-recommend student-next"><div><span>Jouw volgende stap</span><strong>${SKILLS[recommendation.skill]?.label||recommendation.place.name}</strong><p>${recommendation.reason}</p></div><button data-next-place>Bekijk op de kaart →</button></div><p>✓ ${completed.length} stopplaatsen met een afgeronde ronde · ${Object.keys(SKILLS).filter(k=>skillPhase(k)==='stevig').length} vaardigheden stevig</p><div class="progressSummary"><div><span class="metricLabel">Verdiende XP</span><strong class="metricValue">${state.xp}</strong></div><div><span class="metricLabel">Dagreeks</span><strong class="metricValue">${state.streak} <small>${state.streak===1?'dag':'dagen'}</small></strong></div><div class="routeMetric"><span class="metricLabel">Jouw route</span><strong class="metricValue">${state.routeStep}<small> rondes voltooid</small></strong><div class="dashboardRoute"><i style="width:${100*state.session.answered/SESSION_LENGTH}%"></i></div><p>${state.session.answered} van ${SESSION_LENGTH} vragen in deze ronde</p></div></div><div class="progressColumns"><div><h3 class="sectionLabel">Je vaardigheden</h3>${rows}</div><div class="progressAside"><div class="queueBox"><strong>Waar je nu aan werkt</strong>${SKILLS[frontierSkill()].label}<br>${isCheckpointSession()?'Je volgende ronde is een checkpoint.':'Korte rondes met een nieuw inzicht, oefening en herhaling.'}</div><div class="queueBox"><strong>Opnieuw oefenen</strong>${q.length?q.map(r=>`${SKILLS[r.skill]?.label||r.skill} · over ${Math.max(0,r.due-state.total)} vragen`).join('<br>'):'Geen open herstelvragen. Nieuwe inzichten krijgen later opnieuw aandacht.'}</div><div class="queueBox"><strong>Je volgende stap</strong>${Object.values(state.skills).filter(x=>x.refreshDue!==null).length} vaardigheden klaar voor latere opfrissing.<br>De route houdt rekening met wat je al beheerst en wat nog oefening vraagt.</div><button class="primary" data-resume>Verder oefenen →</button></div></div></div>`;
+  E.sheet.querySelector('[data-training-proof]').onclick=downloadTrainingProof;
   bindScreenClose(E.sheet);E.sheet.querySelector('[data-next-place]').onclick=selectJourneyRecommendation;E.sheet.querySelector('[data-resume]').addEventListener('click',()=>{if(current||state.journey?.active||journeyBusy())resumeJourney();else selectJourneyRecommendation()});
 }
 function storageLabel(){return guestMode?'Alleen op dit toestel':({synced:'Voortgang opgeslagen',syncing:'Bezig met opslaan',offline:'Lokaal bewaard; wacht op verbinding',conflict:'Er zijn twee versies van je voortgang',local:'Nog niet online opgeslagen'})[cloudCfg.status]||'Opslag bekijken'}
@@ -1399,6 +1414,7 @@ $('#pauseExercise').addEventListener('click',()=>openScreen(devMode?'dev':'pause
 E.startBtn.addEventListener('click',()=>openScreen('journey'));
 $('#groupBtn').addEventListener('click',()=>openScreen('group'));
 $('#profileBtn').addEventListener('click',()=>openScreen('profile'));
+$('#downloadTrainingProof').addEventListener('click',downloadTrainingProof);
 $('#journeyBtn').addEventListener('click',()=>{if(devMode){toast('Keer eerst terug naar je oefening.');return}openScreen('journey')});
 E.continueBtn.addEventListener('click',continueTraining);
 AxiomaPlatform.bindTrainer({play:()=>{if(current||state.journey?.active||state.waveDraft||state.session.answered&&!state.session.completed)resumeJourney();else openScreen('journey')},help:()=>currentScreen==='help'?closeScreen():openHelp(),progress:()=>currentScreen==='progress'?closeScreen():openScreen('progress')});
