@@ -43,8 +43,8 @@ function mount(t,opts){
  const w=t.work||(t.work=C.fresh(t)),g=w.construction||(w.construction=initial());
  const formulaTask=t.skill==='equation_from_ab';
  visual.classList.add('construction-visual');answers.className='answers construction-controls';answers.replaceChildren();footer.replaceChildren();
- const button=(label,action,parent=answers)=>{
-  const b=document.createElement('button');b.type='button';b.innerHTML=label;
+ const button=(label,action,parent=answers,role)=>{
+  const b=document.createElement('button');b.type='button';b.innerHTML=label;if(role)b.dataset.footerAction=role;
   // Use the completed pointer gesture directly; retain native keyboard activation.
   let down=null,handled=false;
   b.onpointerdown=e=>{down={x:e.clientX,y:e.clientY};handled=false};
@@ -81,7 +81,7 @@ function mount(t,opts){
 
  }
  if(w.done)button(dev?'Nieuwe variant':'Verder →',onNext,footer);
- else if(!formulaTask)button('Terug',()=>{const prev=g.edits.pop();if(prev){Object.assign(g,prev);g.checked=null;g.selected=null;redraw()}},footer).disabled=!g.edits.length;
+ else if(!formulaTask)button('Terug',()=>{const prev=g.edits.pop();if(prev){Object.assign(g,prev);g.checked=null;g.selected=null;redraw()}},footer,'back').disabled=!g.edits.length;
 }
 // One active slot, immediate placement, and assessment only when the whole formula is filled.
 function formulaBuilder(model,g,{host,answers,onChange,onComplete,remember=()=>{}}){

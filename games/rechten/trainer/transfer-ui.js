@@ -36,7 +36,7 @@ function mount(t,opts){
  if(C.transferWorkbench.modern(t))return root.RechtenTransferWorkbenchUI.mount(t,opts);
  const {visual,answers,question,status,footer,onChange,onDone,onNext,dev=false}=opts,w=t.work||(t.work=C.fresh(t)),p=t.params,stage=T.stages(t,w)[w.index]||'done';
  visual.classList.remove('transfer-grid-visual');visual.classList.add('transfer-visual');answers.className='answers wave-controls transfer-controls';answers.replaceChildren();footer.replaceChildren();question.textContent=w.done?'Controle afgerond':labels[stage]||root.RechtenWaveUI.labels[stage];
- const button=(label,action,parent=answers)=>{const b=document.createElement('button');b.type='button';b.innerHTML=label;let down=null,handled=false;b.onpointerdown=e=>{down={x:e.clientX,y:e.clientY};handled=false};b.onpointercancel=()=>{down=null};b.onpointerup=e=>{if(down&&Math.hypot(e.clientX-down.x,e.clientY-down.y)<8){handled=true;gridGesture=true;e.preventDefault();action()}down=null};b.onclick=e=>{if(e.detail===0||!handled)action();handled=false};parent.append(b);return b};
+ const button=(label,action,parent=answers,role)=>{const b=document.createElement('button');b.type='button';b.innerHTML=label;if(role)b.dataset.footerAction=role;let down=null,handled=false;b.onpointerdown=e=>{down={x:e.clientX,y:e.clientY};handled=false};b.onpointercancel=()=>{down=null};b.onpointerup=e=>{if(down&&Math.hypot(e.clientX-down.x,e.clientY-down.y)<8){handled=true;gridGesture=true;e.preventDefault();action()}down=null};b.onclick=e=>{if(e.detail===0||!handled)action();handled=false};parent.append(b);return b};
  const redraw=()=>{onChange();mount(t,opts);opts.onRendered?.()},submit=value=>{const r=C.submit(t,w,value);opts.onResult?.(r);status.className='status '+(r.ok?'good':'bad');status.textContent=r.ok?'Stap klopt.':r.message;if(w.done){onDone();status.textContent=w.errors.length||w.help?'Gecontroleerd na herstel of hulp.':'Zelfstandig gecontroleerd.'}redraw()};
  const tableSkill=t.skill==='graph_from_table'||t.skill==='equation_from_table';
  const gridStage=['pickA','pickB','plotA','plotB','plotRest','draw','readB'].includes(stage)||(t.skill==='graph_from_table'&&(w.done||stage==='tableVerdict'));
@@ -79,7 +79,7 @@ function mount(t,opts){
   for(const key of ['7','8','9','teller','noemer','4','5','6','±','⌫','1','2','3','0','wis'])button(key,()=>{if(key==='teller'||key==='noemer'){w.part=key==='teller'?0:1;w.replace=true}else if(key==='wis'){w.entry=['','1'];w.part=0;w.replace=false}else if(key==='⌫')w.entry[w.part]=w.entry[w.part].slice(0,-1);else if(key==='±')w.entry[w.part]=w.entry[w.part].startsWith('-')?w.entry[w.part].slice(1):'-'+w.entry[w.part];else if(w.entry[w.part].length<5){w.entry[w.part]=w.replace?key:w.entry[w.part]+key;w.replace=false}redraw()});
   button('Controleer',()=>{const value=C.parse(w.entry.join('/'));if(!value){status.textContent='Gebruik een teller en een noemer ongelijk aan nul.';return}submit(value)},footer);
  }
- button('Terug',()=>{if(w.gridEdits?.length)w.cursor=w.gridEdits.pop();else C.undo(w);redraw()},footer).disabled=!w.history.length&&!w.gridEdits?.length;
+ button('Terug',()=>{if(w.gridEdits?.length)w.cursor=w.gridEdits.pop();else C.undo(w);redraw()},footer,'back').disabled=!w.history.length&&!w.gridEdits?.length;
  if(tableSkill&&!status.textContent)status.textContent='Controleer alle kolommen; een passend voorschrift kan ontbreken.';
 }
 root.RechtenTransferUI={mount,explanation,grid,story};

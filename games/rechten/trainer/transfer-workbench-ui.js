@@ -23,7 +23,7 @@ function linePath(points){if(!points[0]||!points[1])return '';const [a,b]=points
 function mount(t,opts){
  const {visual,answers,question,status,footer,onChange,onDone,onNext,dev=false}=opts,w=t.work||(t.work=C.fresh(t)),p=t.params,stage=C.stages(t)[w.index]||'done';
  const ui=w.transferUI||(w.transferUI={});visual.className='visual transfer-visual';answers.className='answers transfer-data';answers.replaceChildren();footer.replaceChildren();
- const button=(label,action,parent=footer)=>{const b=document.createElement('button');b.type='button';b.innerHTML=label;E.activate(b,action);parent.append(b);return b};
+ const button=(label,action,parent=footer,role)=>{const b=document.createElement('button');b.type='button';b.innerHTML=label;if(role)b.dataset.footerAction=role;E.activate(b,action);parent.append(b);return b};
  const redraw=()=>{onChange();mount(t,opts);opts.onRendered?.()};
  const submit=value=>{const r=C.submit(t,w,value);opts.onResult?.(r);status.className='status '+(r.ok?'good':'bad');status.textContent=r.message||'Stap klopt.';if(w.done)onDone();redraw()};
  visual.innerHTML='<div class="transfer-workbench"><div class="transfer-working"></div></div>';const work=visual.querySelector('.transfer-working');
@@ -54,7 +54,7 @@ function mount(t,opts){
     svg.onpointermove=e=>{if(pending){pending.tick=snap(e);preview(pending.tick,pending.index)}};
     svg.onpointercancel=()=>{pending=null;redraw()};svg.onpointerup=e=>{if(!pending)return;const d=pending;pending=null;e.preventDefault();if(svg.hasPointerCapture(e.pointerId))svg.releasePointerCapture(e.pointerId);place(d.tick,d.index)};
     svg.onkeydown=e=>{const moves={ArrowLeft:['x',-1],ArrowRight:['x',1],ArrowUp:['y',1],ArrowDown:['y',-1]};if(moves[e.key]){e.preventDefault();const [key,n]=moves[e.key];ui.cursor[key]=Math.max(-5,Math.min(5,ui.cursor[key]+n));preview(ui.cursor,ui.active);onChange()}else if(e.key==='Enter'||e.key===' '){e.preventDefault();place({...ui.cursor},ui.active);work.querySelector('svg')?.focus()}};
-    button('Terug',()=>{const edit=ui.edits?.pop();if(edit){Object.assign(ui,edit);redraw()}}).disabled=!ui.edits?.length;
+    button('Terug',()=>{const edit=ui.edits?.pop();if(edit){Object.assign(ui,edit);redraw()}},footer,'back').disabled=!ui.edits?.length;
    }
   }else{
    question.innerHTML=header(w,stage,w.done);
@@ -89,7 +89,7 @@ function mount(t,opts){
    }else if(stage==='solveB'){
     E.mount(T.equation(t,w),w,{host:work,answers:document.createElement('div'),axis:'y',symbol:'b',submit,redraw});
    }else if(w.done){work.innerHTML=`<div class="transfer-clue">${C.formula(w.values.a,w.values.b).replace('y =','f(x) =')}</div>`}
-   if(!w.done)button('Terug',()=>{C.undo(w);delete ui.fraction;delete ui.slot;redraw()}).disabled=!w.history.length;
+   if(!w.done)button('Terug',()=>{C.undo(w);delete ui.fraction;delete ui.slot;redraw()},footer,'back').disabled=!w.history.length;
   }
  }
  if(w.done)button(dev?'Nieuwe variant':'Verder →',onNext);

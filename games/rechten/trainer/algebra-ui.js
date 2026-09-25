@@ -9,7 +9,7 @@ function pointGraph(p){const range=Math.max(5,Math.ceil(Math.abs(C.num(p.P.y)))+
 function mount(t,opts){
  const {visual,answers,question,status,footer,onChange,onDone,onNext,dev=false}=opts,w=t.work||(t.work=C.fresh(t)),p=t.params,stage=C.stages(t)[w.index]||'done';
  visual.classList.add('algebra-visual');question.textContent=w.done?'Controle afgerond':stage==='algebra'?`Maak ${t.skill==='input_from_output'||p.model.kind==='vertical'?'x':'y'} vrij met dezelfde bewerking op beide leden`:labels[stage];answers.className='answers wave-controls algebra-controls';answers.replaceChildren();footer.replaceChildren();
- const button=(label,action,where=answers)=>{const b=document.createElement('button');b.type='button';b.innerHTML=label;root.RechtenEquationEditor.activate(b,action);where.append(b);return b};
+ const button=(label,action,where=answers,role)=>{const b=document.createElement('button');b.type='button';b.innerHTML=label;if(role)b.dataset.footerAction=role;root.RechtenEquationEditor.activate(b,action);where.append(b);return b};
  const redraw=()=>{onChange();mount(t,opts);opts.onRendered?.()};
  const submit=value=>{const r=C.submit(t,w,value);opts.onResult?.(r);status.className='status '+(r.ok?'good':'bad');status.textContent=r.ok?r.message||'Stap klopt.':r.message;if(w.done){onDone();status.textContent=w.errors.length||w.help?'Gecontroleerd na herstel of hulp.':'Zelfstandig gecontroleerd.'}redraw()};
  let givens=t.skill==='rewrite_linear_equation'?C.equationHTML(p.equation):C.formula(p.model.a,p.model.b).replace('y =','f(x) =');
@@ -43,12 +43,12 @@ function mount(t,opts){
    question.textContent=`Maak ${axis} vrij`;
    root.RechtenEquationEditor.mount(e,w,{host:visual.querySelector('.wave-equation'),answers,axis,submit,redraw});
    if(C.isolated(e,axis))button('Verder →',()=>{delete w.selectedTerm;submit({kind:'finish'})},footer);
-   else button('Andere bewerking',()=>{w.operation={kind:'subtract',term:null};redraw()},footer);
+   else button('Andere bewerking',()=>{w.operation={kind:'subtract',term:null};redraw()},footer,'tools');
   }
 
  }else {const choices={subPoint:[['x','x = '+H(p.P?.x||C.q(0))],['y','y = '+H(p.P?.y||C.q(0))]],subOutput:[['output','Vul f(x) in →']],pointVerdict:[['on','ligt erop'],['off','ligt ernaast']],modelKind:[['function','functie y = f(x)'],['vertical','verticale rechte']],constantSolutions:[['all','alle x ∈ ℝ'],['none','geen x'],['one','één x']]};for(const [value,label] of choices[stage])button(label,()=>submit(value))}
- if(w.operation)button('Annuleer',()=>{w.operation=null;w.entry=['','1'];w.part=0;redraw()},footer);
- else button('Terug',()=>{C.undo(w);redraw()},footer).disabled=!w.history.length;
+ if(w.operation)button('Annuleer',()=>{w.operation=null;w.entry=['','1'];w.part=0;redraw()},footer,'back');
+ else button('Terug',()=>{C.undo(w);redraw()},footer,'back').disabled=!w.history.length;
 }
 root.RechtenAlgebraUI={mount,explanation};
 })(globalThis);
