@@ -166,3 +166,22 @@
 .exercise-feedback{min-width:0;display:flex;flex-direction:column;gap:3px}
 .journey-task-context{margin:0;color:#466b53;font-size:11px;font-weight:650;line-height:1.25}
 @media(max-height:550px){.journey-task-context{font-size:10px}.exercise-feedback{gap:2px}}
+
+/* One confirmation corner; navigation and correction never share its target area. */
+#pauseExercise{display:none}
+#app:has(#stage:not([hidden])) #pauseExercise{display:inline-flex;align-items:center;justify-content:center;min-height:48px;margin-left:8px;padding-inline:12px;border-left:1px solid var(--line);color:var(--muted)}
+#stage .playFooter{grid-template-columns:max-content max-content minmax(0,1fr) max-content;column-gap:clamp(12px,2vw,24px);align-items:center}
+#stage .exercise-actions,#stage.wave .wave-actions{display:contents}
+#stage .exercise-feedback{grid-column:3;grid-row:1}
+#stage .playFooter .status{max-width:none}
+#stage .playFooter button{grid-row:1;min-height:48px;margin:0;touch-action:manipulation}
+#stage .playFooter button[data-footer-action]{min-width:64px;background:transparent;border-color:transparent;color:var(--muted);font-size:13px;padding:6px 10px}
+#stage .playFooter button[data-footer-action="back"]{grid-column:1}
+#stage .playFooter button[data-footer-action="reset"],#stage .playFooter button[data-footer-action="tools"]{grid-column:2}
+#stage .playFooter button:not([data-footer-action]){grid-column:4;justify-self:end;min-width:140px;padding:8px 20px;background:var(--accent);border-color:var(--accent);color:#fff;font-size:15px;font-weight:700}
+@media(max-width:800px){
+ #app:has(#stage:not([hidden])) #pauseExercise{margin-left:0;padding-inline:8px;font-size:12px}
+ #stage .playFooter{column-gap:12px}
+ #stage .playFooter button[data-footer-action]{padding-inline:6px;font-size:12px}
+ #stage .playFooter button:not([data-footer-action]){min-width:128px;padding-inline:14px;font-size:14px}
+}

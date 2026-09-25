@@ -26,7 +26,7 @@ function mount(points,w,stage,{visual,answers,question,status,footer,redraw,subm
   if(!w.slopeEntry){if(!w.entry[0]){w.entry=['',''];w.part=0}w.slopeEntry=true}
   visual.querySelectorAll('[data-coord-point]').forEach(b=>b.disabled=true);
   root.RechtenNumberEntry.mount(w,{host:visual.querySelector('.coordinate-equation'),answers,footer,inline:true,fixedFraction:true,submit,redraw,status});
-  const back=document.createElement('button');back.type='button';back.textContent='Terug';activate(back,()=>{delete w.slopeEntry;undo();redraw()});footer.append(back);return;
+  const back=document.createElement('button');back.type='button';back.dataset.footerAction='back';back.textContent='Terug';activate(back,()=>{delete w.slopeEntry;undo();redraw()});footer.append(back);return;
  }
  delete w.slopeEntry;
  function place(point,a,i,keyboard=false){
@@ -46,10 +46,10 @@ function mount(points,w,stage,{visual,answers,question,status,footer,redraw,subm
   b.onpointerup=e=>{if(!drag)return;const moved=drag.moved,target=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-coord-slot]');drag=null;clean();if(b.hasPointerCapture(e.pointerId))b.releasePointerCapture(e.pointerId);if(moved){dragged=true;handledPointer=true;if(target&&visual.contains(target)&&!target.disabled){const i=Number(target.dataset.coordSlot);setTimeout(()=>{if(b.isConnected)place(point,a,i)},0)}}else{dragged=true;handledPointer=true;e.preventDefault();select(e)}};
   b.onpointercancel=()=>{drag=null;clean()};b.onlostpointercapture=()=>{drag=null;clean()};b.onkeydown=e=>{if(e.key==='Escape'){drag=null;clean();delete w.coordinateSelected;redraw()}};
  });
- const button=(text,fn)=>{const b=document.createElement('button');b.type='button';b.textContent=text;activate(b,fn);footer.append(b);return b};
- button('Wis keuze',()=>{w.tokens=[];delete w.coordinateSlot;delete w.coordinateSelected;redraw()});
+ const button=(text,fn,role)=>{const b=document.createElement('button');b.type='button';b.textContent=text;if(role)b.dataset.footerAction=role;activate(b,fn);footer.append(b);return b};
+ button('Wis keuze',()=>{w.tokens=[];delete w.coordinateSlot;delete w.coordinateSelected;redraw()},'reset');
 
- button('Terug',()=>{delete w.coordinateSelected;undo();redraw()}).disabled=!w.history.length;
+ button('Terug',()=>{delete w.coordinateSelected;undo();redraw()},'back').disabled=!w.history.length;
 }
 root.RechtenCoordinateBuilder={mount};
 })(globalThis);
