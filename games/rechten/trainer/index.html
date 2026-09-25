@@ -51,21 +51,34 @@
 </style>
 <script src="../../../shared/axioma-platform.js"></script>
 <link rel="stylesheet" href="wave.css">
+<script src="transfer-workbench-core.js"></script>
 <script src="transfer-core.js"></script>
 <script src="wave-core.js"></script>
 <script src="construction-ui.js"></script>
+<script src="number-entry.js"></script>
+<script src="equation-editor.js"></script>
 <script src="algebra-ui.js"></script>
+<script src="coordinate-builder.js"></script>
+<script src="concept-ui.js"></script>
 <script src="wave-ui.js"></script>
+<script src="transfer-workbench-ui.js"></script>
 <script src="transfer-ui.js"></script>
+<link rel="stylesheet" href="journey.css">
+<script src="journey-core.js"></script>
+<script src="journey-ui.js"></script>
+<script src="ux-review.js"></script>
 </head>
 <body>
 <div id="app">
   <header class="topbar">
     <a class="brand axiomaHome" href="../../../" aria-label="Naar leraarBob startpagina"><i class="brandMark" aria-hidden="true"></i>leraarBob <span>Trainer</span></a>
     <nav class="appNav" aria-label="Hoofdnavigatie">
-      <button id="playBtn" data-trainer-action="play" class="navButton screen-active" aria-current="page">Oefenen</button>
-      <button id="helpBtn" data-trainer-action="help" class="navButton">Uitleg</button>
+      <button id="journeyBtn" class="navButton">Kaart</button>
       <button id="progressBtn" data-trainer-action="progress" class="navButton">Voortgang</button>
+      <button id="groupBtn" class="navButton">Groep</button>
+      <button id="profileBtn" class="navButton">Profiel</button>
+      <button id="playBtn" data-trainer-action="play" class="navButton">Oefenen</button>
+      <button id="helpBtn" data-trainer-action="help" class="navButton">Uitleg</button>
       <button id="teacherBtn" class="navButton" hidden>Opvolging</button>
       <button id="cloudBtn" class="navButton cloudstate local">Cloud</button>
       <button id="settingsBtn" class="navButton">Instellingen</button>
@@ -82,18 +95,22 @@
       </div>
       <div id="question" class="question"></div>
       <div class="play"><div id="visual" class="visual"></div><div id="answers" class="answers" role="group" aria-label="Antwoorden"></div></div>
-      <div class="playFooter"><div id="status" class="status" role="status"></div><div id="flowBadge" class="flowBadge"></div></div>
+      <div class="playFooter"><div class="exercise-feedback"><p id="journeyTaskContext" class="journey-task-context" hidden></p><div id="status" class="status" role="status"></div></div><div class="exercise-actions"><button id="pauseExercise" type="button" aria-label="Oefening pauzeren of stoppen">Pauze</button><div id="flowBadge" class="flowBadge"></div></div></div>
     </section>
     <div id="toast" class="toast" aria-live="polite"></div>
     <div id="rewardFx" class="rewardFx" aria-live="polite"></div>
     <div id="milestoneFx" class="milestoneFx" aria-live="polite"></div>
     <section id="helpPanel" class="appScreen helpPanel" aria-label="Uitleg" hidden></section>
     <section id="sheet" class="appScreen sheet" aria-label="Voortgang" hidden></section>
+    <section id="pausePanel" class="appScreen" aria-label="Oefening gepauzeerd" hidden></section>
     <section id="devPanel" class="appScreen devPanel" aria-label="DEV" hidden></section>
     <section id="cloudPanel" class="appScreen cloudPanel" aria-label="Cloud" hidden></section>
     <section id="authPanel" class="appScreen" aria-label="Inloggen" hidden></section>
     <section id="teacherPanel" class="appScreen" aria-label="Leerkrachtoverzicht" hidden></section>
     <section id="settingsPanel" class="appScreen" aria-label="Instellingen" hidden></section>
+    <section id="journeyPanel" class="appScreen" aria-label="Leerkaart Rechten" hidden></section>
+    <section id="groupPanel" class="appScreen" aria-label="Groep" hidden></section>
+    <section id="profilePanel" class="appScreen" aria-label="Profiel" hidden></section>
     <section id="start" class="start">
       <div class="startCard">
         <div class="eyebrow">Wiskunde in beweging</div>
@@ -105,12 +122,12 @@
       <svg class="startArt" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><pattern id="welcome-grid" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1.3" fill="#c8d7cd"/></pattern></defs><rect width="500" height="500" fill="url(#welcome-grid)"/><path d="M20 350H480M140 470V30" stroke="#b4c7bd" stroke-width="1.5"/><path d="M20 440L440 20" fill="none" stroke="#4d8070" stroke-width="3"/><path d="M30 130L470 350" fill="none" stroke="#a196c1" stroke-width="2"/><path d="M180 280H300V160" fill="none" stroke="#bd9048" stroke-width="2" stroke-dasharray="4 6"/><circle cx="180" cy="280" r="7" fill="#4d8070"/><circle cx="300" cy="160" r="7" fill="#bd9048"/><circle cx="240" cy="220" r="22" fill="#e9eee6"/><circle cx="240" cy="220" r="7" fill="#4d8070"/></svg>
     </section>
     <section id="sessionDone" class="sessionDone" hidden>
-      <div class="doneCard">
+      <div class="doneCard"><span class="done-mark" aria-hidden="true">✓</span>
         <div id="doneEyebrow" class="eyebrow">korte trainingsronde afgerond</div>
         <h2 id="doneTitle">Route +1</h2>
         <div id="doneXP" class="doneXP">+0 XP</div>
         <div id="doneStats" class="doneStats"></div>
-        <button id="continueBtn" class="primary">Verder trainen</button>
+        <div id="doneNext" class="done-next" hidden></div><button id="continueBtn" class="primary">Verder trainen</button>
       </div>
     </section>
   </main>
@@ -144,6 +161,7 @@ const TELEMETRY_MAX=360;
 const REVIEW_GAPS=[4,9,20];
 const REFRESH_GAPS=[12,20,32];
 const W=window.RechtenWave;
+const J=window.RechtenJourney;
 const SKILLS={
   point:{label:'punt (x, y)'},
   point_plot:W.catalog.point_plot,
@@ -158,7 +176,7 @@ const SKILLS={
   fx:{label:'functiewaarde f(x)'},
   ...Object.fromEntries(W.algebraSkills.map(k=>[k,W.catalog[k]])),
   table:{label:'tabel aanvullen'},
-  ...Object.fromEntries(W.transferSkills.map(k=>[k,W.catalog[k]])),
+  ...Object.fromEntries(W.activeTransferSkills.map(k=>[k,W.catalog[k]])),
   zeroRead:{label:'nulwaarde aflezen'},
   zero:{label:'nulwaarde berekenen'},
   sign:{label:'teken van f(x) herkennen'},
@@ -173,8 +191,26 @@ const DEFAULT=()=>({
 let calibrationMode=false,calibrationResults={audit:null,simulation:null};
 let state=load(),current=null,locked=false,timerId=null,timeLeft=0,devMode=false,devSkill='delta',devDifficulty=0,devFocusOverride='auto',idleTimer=null,focusTimers=[],flowChain=0,taskStartedAt=0,lastPhase='warmup',helpTopic='delta',recentASigns=[];
 let currentScreen='play',screenReturn='play',screenTimerWasActive=false;
+let journeyEntry=true,journeyActivity='learn';
 let questionAdvanceTimer=null;
-function advanceAfter(delay){clearTimeout(questionAdvanceTimer);questionAdvanceTimer=setTimeout(()=>{questionAdvanceTimer=null;next()},delay)}
+function cancelAdvance(){clearTimeout(questionAdvanceTimer);questionAdvanceTimer=null}
+function reviewResult(t){return t?.work?.done&&['slope_from_two_points','special_lines'].includes(t.skill)}
+function advanceAfter(delay=650){
+ cancelAdvance();const task=current;
+ if(devMode||currentScreen!=='play'||document.hidden||reviewResult(current))return;
+ questionAdvanceTimer=setTimeout(()=>{questionAdvanceTimer=null;if(current===task&&!devMode&&currentScreen==='play'&&!document.hidden)next()},delay);
+}
+function outcomeControls(ok,container=E.stage.querySelector('.exercise-actions')){
+ E.stage.querySelectorAll('.journey-next').forEach(b=>b.remove());
+ if(ok){advanceAfter();return}
+ cancelAdvance();const task=current,b=document.createElement('button');b.type='button';b.className='journey-next';b.textContent='Verder →';
+ b.onclick=()=>{if(current===task&&!devMode)next()};container.append(b);
+}
+function resumeAnswerFlow(){
+ if(devMode||!current||state.session.completed||currentScreen!=='play'||document.hidden)return;
+ if(current.work?.done||current.answerCorrect===true||current.journeyRecorded&&current.answerCorrect===undefined&&current.journeyCorrect)advanceAfter();
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelAdvance();else resumeAnswerFlow()});
 let screenPausedAt=0,pendingNext=false,learnerExercise=null,returnFocus=null;
 const $=s=>document.querySelector(s);
 const E={
@@ -184,13 +220,15 @@ const E={
   sessionDone:$('#sessionDone'),doneEyebrow:$('#doneEyebrow'),doneTitle:$('#doneTitle'),doneXP:$('#doneXP'),doneStats:$('#doneStats'),continueBtn:$('#continueBtn'),startDevBtn:$('#startDevBtn')
 };
 function baseSurface(){if(!E.start.hidden)return 'start';if(!E.sessionDone.hidden)return 'done';return 'play'}
-function hideScreenViews(){[E.helpPanel,E.sheet,E.devPanel,E.cloudPanel,E.settingsPanel,E.authPanel,E.teacherPanel].forEach(el=>el.hidden=true)}
+function hideScreenViews(){[E.helpPanel,E.sheet,E.devPanel,E.cloudPanel,E.settingsPanel,E.authPanel,E.teacherPanel,$('#journeyPanel'),$('#groupPanel'),$('#profilePanel'),$('#pausePanel')].forEach(el=>el.hidden=true)}
 function setTopScreenActive(name){
   E.app.dataset.screen=name||'play';
-  [[E.teacherBtn,'teacher'],[E.playBtn,'play'],[E.helpBtn,'help'],[E.progressBtn,'progress'],[E.cloudBtn,'cloud'],[E.settingsBtn,'settings'],[E.devBtn,'dev']].forEach(([b,k])=>{const on=(name||'play')===k;b.classList.toggle('screen-active',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+  $('#journeyBtn').classList.toggle('screen-active',name==='journey');
+  $('#journeyBtn').setAttribute('aria-current',name==='journey'?'page':'false');
+  [[$('#groupBtn'),'group'],[$('#profileBtn'),'profile'],[E.teacherBtn,'teacher'],[E.playBtn,'play'],[E.helpBtn,'help'],[E.progressBtn,'progress'],[E.cloudBtn,'cloud'],[E.settingsBtn,'settings'],[E.devBtn,'dev']].forEach(([b,k])=>{const on=(name||'play')===k;b.classList.toggle('screen-active',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
 }
 function pauseForScreen(){
-  clearInteractionTimers();screenTimerWasActive=!!timerId;screenPausedAt=Date.now();returnFocus=document.activeElement;
+  cancelAdvance();clearInteractionTimers();screenTimerWasActive=!!timerId;screenPausedAt=Date.now();returnFocus=document.activeElement;
   if(timerId){clearInterval(timerId);timerId=null;renderTop();if(timeLeft>0)E.timerBtn.textContent=String(timeLeft)}
 }
 function resumeAfterScreen(){
@@ -199,7 +237,7 @@ function resumeAfterScreen(){
   if(screenTimerWasActive&&current&&timeLeft>0&&state.timer&&!locked){
     timerId=setInterval(()=>{timeLeft--;setTimerText();if(timeLeft<=0){clearTimer();timeout()}},1000);setTimerText();renderTop();
   }else if(current&&!locked){scheduleIdleCue()}
-  screenTimerWasActive=false;
+  screenTimerWasActive=false;resumeAnswerFlow();
 }
 function openScreen(name){
   if(!accountReady&&!guestMode&&name!=='auth')name='auth';
@@ -209,17 +247,23 @@ function openScreen(name){
   E.stage.hidden=true;E.start.hidden=true;E.sessionDone.hidden=true;E.world.classList.add('screen-open');setTopScreenActive(name);
   if(name==='auth'){renderAuthPanel();E.authPanel.hidden=false}
   if(name==='teacher'){renderTeacherPanel();E.teacherPanel.hidden=false}
-  if(name==='help'){if(current?.work&&!current.work.done&&!devMode){current.work.help=true;persistWave()}renderHelpPanel(helpTopic);E.helpPanel.hidden=false}
+  if(name==='help'){if(current?.journey&&!current.journeyRecorded&&!devMode){current.journeyHelp=true;persistJourney()}if(current?.work&&!current.work.done&&!devMode){current.work.help=true;persistWave()}renderHelpPanel(helpTopic);E.helpPanel.hidden=false}
+  if(name==='journey'){renderJourney();$('#journeyPanel').hidden=false}
   if(name==='progress'){renderSheet();E.sheet.hidden=false}
+  if(name==='pause'){renderPause();$('#pausePanel').hidden=false}
   if(name==='dev'){renderDevPanel();E.devPanel.hidden=false}
   if(name==='cloud'){renderCloudPanel();E.cloudPanel.hidden=false}
   if(name==='settings'){renderSettings();E.settingsPanel.hidden=false}
+  if(name==='group'){renderGroup();$('#groupPanel').hidden=false}
+  if(name==='profile'){renderProfile();$('#profilePanel').hidden=false}
+  E.playBtn.hidden=!(current||state.journey?.active||state.waveDraft||state.session.answered&&!state.session.completed);E.helpBtn.hidden=E.playBtn.hidden;
   const panel=E.world.querySelector('.appScreen:not([hidden])');panel?.querySelector('h2')?.focus({preventScroll:true});
 }
 function closeScreen(forceSurface=null){
   if(!accountReady&&!guestMode){openScreen('auth');return}
+  if(journeyEntry){journeyEntry=false;const j=J.data(state);if(new URLSearchParams(location.search).get('reis')==='kaartvallei'){j.view='area';j.region='points'}openScreen('journey');return}
   if(!current&&(!forceSurface||forceSurface==='play'))forceSurface='start';
-  hideScreenViews();currentScreen='play';E.world.classList.remove('screen-open');setTopScreenActive(null);
+  E.playBtn.hidden=false;E.helpBtn.hidden=false;hideScreenViews();currentScreen='play';E.world.classList.remove('screen-open');setTopScreenActive(null);
   const target=forceSurface||screenReturn||'play';
   E.stage.hidden=target!=='play';E.start.hidden=target!=='start';E.sessionDone.hidden=target!=='done';
   if(target==='play')resumeAfterScreen();else screenTimerWasActive=false;
@@ -228,7 +272,82 @@ function closeScreen(forceSurface=null){
   requestAnimationFrame(refitVisibleBubbles);
 }
 function screenHeader(title,sub=''){return `<div class="screenHead"><div class="screenTitle"><h2 tabindex="-1">${title}</h2>${sub?`<p>${sub}</p>`:''}</div><button type="button" class="screenClose" data-screen-close aria-label="Terug naar spel">×</button></div>`}
-function bindScreenClose(root){root?.querySelector('[data-screen-close]')?.addEventListener('click',()=>closeScreen())}
+function bindScreenClose(root){root?.querySelector('[data-screen-close]')?.addEventListener('click',()=>{if(current||state.journey?.active)closeScreen();else openScreen('journey')})}
+function journeyBusy(){return !state.journey?.active&&(!!current||!!state.waveDraft||state.session.answered>0)&&!state.session.completed}
+function journeyRecommendation(){return J.recommend(state,unlockedSkills(),W.ready,W.order)}
+function selectJourneyRecommendation(){journeyActivity='learn';const j=J.data(state),rec=journeyRecommendation();j.selected=rec.place.id;j.region=rec.place.region;j.view='area';save();openScreen('journey');$('#journeyPanel').scrollTop=0}
+function renderJourney(){
+ const j=J.data(state);
+ window.RechtenJourneyUI.render($('#journeyPanel'),{state,unlocked:unlockedSkills(),ready:W.ready,phase:skillPhase,order:W.order,requirements:W.requirements,labels:SKILLS,busy:journeyBusy(),activity:journeyActivity,
+  onActivity:mode=>{journeyActivity=mode;renderJourney();$('#journeyPanel .journey-details h3')?.focus({preventScroll:innerWidth>800})},
+  onPrepare:skill=>{const p=J.places.find(p=>p.skills.includes(skill));if(p){journeyActivity='learn';j.selected=p.id;j.region=p.region;j.view='area';save();renderJourney();$('#journeyPanel .journey-details h3')?.focus({preventScroll:true})}},
+  onSelect:id=>{journeyActivity='learn';j.selected=id;save();renderJourney();$('#journeyPanel [aria-pressed="true"]')?.focus({preventScroll:true})},
+  onRegion:id=>{journeyActivity='learn';j.region=id;j.view='area';const region=J.regions.find(r=>r.id===id),rec=journeyRecommendation();j.selected=rec.place.region===id?rec.place.id:region.places[0].id;save();renderJourney();$('#journeyPanel').scrollTop=0;$('#journeyPanel h2')?.focus({preventScroll:true})},
+  onAtlas:()=>{journeyActivity='learn';j.view='atlas';save();renderJourney();$('#journeyPanel').scrollTop=0;$('#journeyPanel h2')?.focus({preventScroll:true})},
+  onRecommend:selectJourneyRecommendation,onStart:startJourney,onResume:resumeJourney,onStop:stopTrainingRound,onClose:()=>closeScreen()});
+}
+function resumeJourney(){
+ if(current&&!state.session.completed){closeScreen('play');return}
+ if(state.session.completed){closeScreen('done');return}
+ closeScreen('start');start();
+}
+function renderPause(){
+ const panel=$('#pausePanel');
+ panel.innerHTML=`${screenHeader('Oefening gepauzeerd','Je opgave en deelantwoorden blijven staan.')}<div class="pause-content"><p>${SKILLS[current?.skill]?.label||'Je oefenronde'} · ${state.session.answered} van ${SESSION_LENGTH} opgaven beantwoord</p><button class="primary" data-pause-resume>Hervat oefening →</button><button data-pause-map>Ander leerdoel kiezen</button><div class="pause-stop"><button data-pause-stop>Ronde stoppen</button><p>Je behaalde resultaten blijven bewaard. De onafgewerkte opgave vervalt.</p></div></div>`;
+ bindScreenClose(panel);panel.querySelector('[data-pause-resume]').onclick=resumeJourney;
+ panel.querySelector('[data-pause-map]').onclick=()=>openScreen('journey');
+ panel.querySelector('[data-pause-stop]').onclick=stopTrainingRound;
+}
+function clearRound(){
+ cancelAdvance();clearTimer();clearInteractionTimers();
+ J.data(state).active=null;state.session=emptySession();state.waveDraft=null;
+ current=null;locked=false;pendingNext=false;screenTimerWasActive=false;screenPausedAt=0;returnFocus=null;
+ taskStartedAt=0;flowChain=0;E.flowBadge.classList.remove('show');
+ E.visual.inert=false;E.answers.inert=false;E.question.inert=false;E.stage.hidden=true;E.sessionDone.hidden=true;E.start.hidden=true;
+}
+function stopTrainingRound(){
+ if(devMode||(!accountReady&&!guestMode)||state.session.completed||!state.journey?.active&&!journeyBusy())return;
+ // An answered last question still earns the normal completion, exactly once.
+ if(state.session.answered>=SESSION_LENGTH){endSession();selectJourneyRecommendation();return}
+ clearRound();
+ screenReturn='start';renderTop();renderSessionCue();selectJourneyRecommendation();
+ const note=document.createElement('p');note.className='journey-stop-note';note.setAttribute('role','status');
+ note.textContent='Ronde gestopt. Je behaalde resultaten en geplande herhaling blijven bewaard.';
+ $('#journeyPanel .journey-detail-main').append(note);
+}
+function startJourney(place,mode){
+ if(!accountReady&&!guestMode)return;
+ if(devMode){toast('Keer eerst terug naar je oefening.');return}
+ const active=state.journey?.active;
+ if(active&&active.place===place&&active.mode===mode){resumeJourney();return}
+ const access=unlockedSkills(),id=crypto.randomUUID();
+ // Validate the selected destination before replacing an unfinished round.
+ const probe={...state,session:emptySession(),journey:{...J.data(state),active:null}};
+ if(!J.begin(probe,place,mode,id,access,W.ready))return;
+ if(state.session.answered>=SESSION_LENGTH&&!state.session.completed)endSession();
+ clearRound();if(!J.begin(state,place,mode,id,access,W.ready))return;
+ state.started=true;save();hideScreenViews();currentScreen='play';screenReturn='play';pendingNext=false;screenTimerWasActive=false;screenPausedAt=0;
+ E.playBtn.hidden=false;E.helpBtn.hidden=false;E.world.classList.remove('screen-open');setTopScreenActive(null);E.start.hidden=true;E.sessionDone.hidden=true;next();
+}
+function persistJourney(){
+ const a=state.journey?.active;
+ if(!devMode&&!calibrationMode&&a&&current?.journey?.id===a.id){a.draft=W.catalog[current.skill]&&current.type!=='intro'?null:structuredClone(current);save()}
+}
+function journeyNext(){
+ if(W.catalog[current?.skill]||!current?.journeyRecorded&&current?.answerCorrect===undefined)return;
+ locked=true;E.answers.querySelectorAll('button').forEach(b=>b.disabled=true);
+ const ok=current.answerCorrect??current.journeyCorrect;
+ E.status.className='status '+(ok?'good':'bad');
+ E.status.textContent=current.answerFeedback||current.journeyFeedback||(ok?'Juist.':'Deze vraag komt later terug.');
+ outcomeControls(ok);
+}
+function journeyTask(){
+ if(devMode||calibrationMode||!state.journey?.active)return null;
+ const choice=J.choice(state,unlockedSkills(),W.ready);if(!choice)return null;
+ const {skill,intro,objective,...opt}=choice;
+ if(opt.kind==='repair')opt.difficulty=Math.max(0,Math.min(skillDifficulty(skill),opt.difficulty??1)-(opt.scaffold?1:0));
+ return J.tag(state,intro?makeIntro(skill):generateUnique(skill,opt),objective);
+}
 function freshSkill(){return {seen:0,correct:0,strength:0,intro:false,lastSeen:-999,recent:[],refreshDue:null,reviewsSolved:0}}
 function load(){
   try{
@@ -257,6 +376,7 @@ function mergeState(base,saved){
   out.misconceptions=saved?.misconceptions&&typeof saved.misconceptions==='object'?saved.misconceptions:{};
   out.telemetry=Array.isArray(saved?.telemetry)?saved.telemetry.slice(-TELEMETRY_MAX):[];
   out.session=Object.assign(DEFAULT().session,out.session||{});
+  if(W.disabledSkills.includes(out.waveDraft?.skill))out.waveDraft=null;
   return out;
 }
 function backupMigration(saved,key){if(!saved||saved.version>=704)return;try{const backupKey=key+':pre-wave-4';if(!localStorage.getItem(backupKey))localStorage.setItem(backupKey,JSON.stringify(saved))}catch{console.warn('De migratiebackup kon niet worden bewaard.')}}
@@ -277,7 +397,7 @@ function saveLocalOnly(){if(calibrationMode||devMode)return true;if(account?.rol
 function save(){if(calibrationMode||devMode)return true;if(account?.role==='student'){progressDirty=true;localEdit++}const ok=saveLocalOnly();if(!ok)toast('Opslag op dit toestel is niet beschikbaar.');scheduleCloudSync();return ok}
 function cloudAvailable(){return !!sb&&account?.role==='student'&&accountReady}
 function cloudSetStatus(status,error=null){cloudCfg.status=status;cloudCfg.lastError=error;renderCloudStatus();window.dispatchEvent(new CustomEvent('axioma:save-status',{detail:account?.role==='student'?({synced:'saved',syncing:'saving',local:'pending',offline:'offline',conflict:'conflict'})[status]||'loading':account?'teacher':'guest'}))}
-function renderCloudStatus(){if(!E.cloudBtn)return;E.cloudBtn.classList.remove('local','syncing','synced','conflict','offline');E.cloudBtn.classList.add(cloudCfg.status);E.cloudBtn.title=({local:'Lokaal',syncing:'Voortgang opslaan…',synced:'Voortgang opgeslagen',conflict:'Kies welke voortgang je wilt behouden',offline:'Lokaal bewaard; verbinding nodig'})[cloudCfg.status]||'Cloud'}
+function renderCloudStatus(){const storage=$('[data-profile-storage]');if(storage)storage.textContent=storageLabel();if(!E.cloudBtn)return;E.cloudBtn.classList.remove('local','syncing','synced','conflict','offline');E.cloudBtn.classList.add(cloudCfg.status);E.cloudBtn.title=({local:'Lokaal',syncing:'Voortgang opslaan…',synced:'Voortgang opgeslagen',conflict:'Kies welke voortgang je wilt behouden',offline:'Lokaal bewaard; verbinding nodig'})[cloudCfg.status]||'Cloud'}
 function scheduleCloudSync(){if(calibrationMode||devMode||!cloudAvailable()||remoteConflict)return;clearTimeout(cloudSyncTimer);cloudSyncTimer=setTimeout(()=>cloudSync(),850)}
 async function cloudSync(){
   if(!cloudAvailable()||remoteConflict)return false;
@@ -298,6 +418,7 @@ async function cloudSync(){
 }
 async function flushProgress(){clearTimeout(cloudSyncTimer);if(syncPromise)await syncPromise;if(progressDirty&&!remoteConflict)await cloudSync();return !progressDirty&&!remoteConflict}
 function stopAccountExercise(){
+  journeyActivity='learn';
   clearTimer();clearInteractionTimers();clearTimeout(questionAdvanceTimer);questionAdvanceTimer=null;clearTimeout(cloudSyncTimer);
   current=null;locked=false;devMode=false;learnerExercise=null;pendingNext=false;screenTimerWasActive=false;screenPausedAt=0;
   flowChain=0;recentASigns=[];lastPhase='warmup';E.question.replaceChildren();E.visual.replaceChildren();E.answers.replaceChildren();E.status.textContent='';
@@ -311,7 +432,7 @@ async function attachSession(session){
   const id=session?.user?.id;
   if(id&&account?.id===id&&accountReady)return;
   if(attaching&&attaching.id===id)return attaching.promise;
-  const epoch=++authEpoch;stopAccountExercise();account=null;accountReady=false;guestMode=false;state=DEFAULT();progressDirty=false;progressRevision=0;remoteConflict=null;syncPromise=null;cloudBusy=false;cloudCfg={status:'local',lastSync:null,lastError:null};teacherRows=[];teacherSelected=null;
+  const epoch=++authEpoch;stopAccountExercise();journeyEntry=true;account=null;accountReady=false;guestMode=false;state=DEFAULT();progressDirty=false;progressRevision=0;remoteConflict=null;syncPromise=null;cloudBusy=false;cloudCfg={status:'local',lastSync:null,lastError:null};teacherRows=[];teacherSelected=null;
   updateAccountNav();renderTop();cloudSetStatus('local');
   if(!id){guestMode=true;state=load();updateAccountNav();updateStart();renderTop();renderSessionCue();closeScreen('start');return}
   authMessage='Je voortgang wordt opgehaald…';openScreen('auth');
@@ -471,8 +592,10 @@ function runFocusSequence(skill){
   sels.forEach((sel,i)=>focusTimers.push(setTimeout(()=>pulseElements(sel,'causal-hit',760),280+i*520)));
 }
 function scheduleIdleCue(){
-  if(!current||W.catalog[current.skill])return;idleTimer=setTimeout(()=>{
-    if(locked)return;
+  if(idleTimer){clearTimeout(idleTimer);idleTimer=null}
+  if(!current||W.catalog[current.skill]||currentScreen!=='play')return;
+  const task=current;idleTimer=setTimeout(()=>{
+    idleTimer=null;if(locked||current!==task||currentScreen!=='play')return;
     if(current.type==='intro'){const go=$('#introGo');if(go){go.classList.add('ready');setTimeout(()=>go.classList.remove('ready'),1200)}return}
     E.visual.classList.add('idle-nudge');pulseElements(focusSelector(current.skill),'causal-hit',900);if(!E.status.textContent){E.status.className='status';E.status.textContent='Kijk naar wat in de figuur opvalt.'}setTimeout(()=>E.visual.classList.remove('idle-nudge'),2100)
   },5600)
@@ -480,7 +603,7 @@ function scheduleIdleCue(){
 function previewXP(){if(!current||devMode)return 0;if(current.kind==='repair'){const r=findReview(current.reviewId);return r&&r.stage>=1?18:15}if(current.kind==='refresh'||current.kind==='fluency')return 12;return 10+2*(current.difficulty||0)}
 function showReward(ok){
   if(devMode)return;flowChain=ok?flowChain+1:0;E.flowBadge.classList.toggle('show',flowChain>=2);E.flowBadge.textContent=flowChain>=2?`flow ×${flowChain}`:'';
-  if(!ok)return;const xp=previewXP();if(flowChain===3)showMilestone('FLOW ×3');E.rewardFx.innerHTML=`+${xp}<small>${flowChain>=3?`flow ×${flowChain}`:'goed'}</small>`;E.rewardFx.classList.remove('show');void E.rewardFx.offsetWidth;E.rewardFx.classList.add('show')
+  if(!ok||current?.journeyHelp)return;const xp=previewXP();if(flowChain===3)showMilestone('FLOW ×3');E.rewardFx.innerHTML=`+${xp}<small>${flowChain>=3?`flow ×${flowChain}`:'goed'}</small>`;E.rewardFx.classList.remove('show');void E.rewardFx.offsetWidth;E.rewardFx.classList.add('show')
 }
 function playCausalFeedback(ok){
   clearInteractionTimers();E.stage.classList.remove('correctPulse','wrongPulse');E.stage.classList.add(ok?'correctPulse':'wrongPulse');pulseElements(focusSelector(current?.skill),ok?'causal-hit':'causal-warn',760);showReward(ok);setTimeout(()=>E.stage.classList.remove('correctPulse','wrongPulse'),850)
@@ -489,7 +612,7 @@ function previewInteraction(ok=true){locked=false;playCausalFeedback(ok);E.statu
 function forceIdleCue(){if(idleTimer){clearTimeout(idleTimer);idleTimer=null}E.visual.classList.add('idle-nudge');pulseElements(focusSelector(current?.skill),'causal-hit',900);setTimeout(()=>E.visual.classList.remove('idle-nudge'),2100)}
 function recentAccuracy(st,n=6){const a=st.recent.slice(-n);return a.length?a.filter(Boolean).length/a.length:0}
 function recentMisses(st,n=4){return st.recent.slice(-n).filter(v=>!v).length}
-function openRepairs(skill){return state.review.filter(r=>r.kind==='repair'&&(!skill||r.skill===skill))}
+function openRepairs(skill){return state.review.filter(r=>!W.disabledSkills.includes(r.skill)&&r.kind==='repair'&&(!skill||r.skill===skill))}
 function dueRepairs(){return state.review.filter(r=>r.kind==='repair'&&SKILLS[r.skill]&&r.due<=state.total).sort((a,b)=>a.due-b.due)}
 function openFluency(skill){return state.review.filter(r=>r.kind==='fluency'&&(!skill||r.skill===skill))}
 function dueFluency(){return state.review.filter(r=>r.kind==='fluency'&&SKILLS[r.skill]&&r.due<=state.total).sort((a,b)=>a.due-b.due)}
@@ -516,7 +639,7 @@ function updateStart(){
   else{E.startBtn.textContent='Start de route →';E.resume.textContent='12 vragen per ronde · jouw voortgang wordt automatisch bewaard.'}
   if(account?.role==='teacher')E.resume.textContent='Zelf oefenen als leerkracht · via Opvolging bekijk je je leerlingen.'
 }
-function start(){if(!accountReady&&!guestMode){openScreen('auth');return}state.started=true;E.start.hidden=true;if(state.waveDraft&&W.catalog[state.waveDraft.skill]){current=structuredClone(state.waveDraft);locked=false;E.stage.hidden=false;taskStartedAt=Date.now();render(current);renderTop();renderSessionCue();return}save();next()}
+function start(){if(W.disabledSkills.includes(state.waveDraft?.skill))state.waveDraft=null;if(W.disabledSkills.includes(state.journey?.active?.draft?.skill))state.journey.active.draft=null;if(!accountReady&&!guestMode){openScreen('auth');return}if(currentScreen!=='play'){closeScreen('start')}if(state.session.completed){if(state.session.journeyRound)openScreen('journey');else continueTraining();return}state.started=true;E.start.hidden=true;const draft=state.journey?.active?.draft;if(draft){current=structuredClone(draft);locked=!!current.journeyRecorded;E.stage.hidden=false;taskStartedAt=Date.now();render(current);renderTop();renderSessionCue();return}if(state.waveDraft&&W.catalog[state.waveDraft.skill]){current=structuredClone(state.waveDraft);locked=false;E.stage.hidden=false;taskStartedAt=Date.now();render(current);renderTop();renderSessionCue();return}save();next()}
 function taskSignature(t){if(W.catalog[t.skill])return W.signature(t);const p=t.params||{};return [t.skill,p.dx,p.dy,p.a,p.b,p.x,p.y,p.root,p.ask,t.difficulty].join('|')}
 function rememberSignature(t){const s=taskSignature(t);state.recentSignatures.push(s);state.recentSignatures=state.recentSignatures.slice(-8)}
 function makeTask(skill,params={},opt={}){return {id:W.catalog[skill]?crypto.randomUUID():Date.now()+Math.random(),skill,type:skill,params,kind:opt.kind||'practice',difficulty:opt.difficulty??skillDifficulty(skill),reviewId:opt.reviewId||null,scaffold:!!opt.scaffold}}
@@ -592,9 +715,17 @@ function sessionPhase(ix=state.session.answered){
 }
 function phaseLabel(p){return ({warmup:'opwarmen',edge:'leergrens',focus:'focus',reinforce:'meteen toepassen',flow:'flow',repair:'herstel',challenge:'mini-challenge',checkpoint:'checkpoint'})[p]||p}
 function renderSessionCue(){
+  const context=$('#journeyTaskContext'),active=state.journey?.active;
+  context.hidden=devMode||!active||!current?.journey;
+  if(!context.hidden){
+    const home=J.places.find(p=>p.id===active.place),source=J.places.find(p=>p.skills.includes(current.skill));
+    const chapter=J.regions.findIndex(r=>r.id===home?.region)+1,origin=J.regions.findIndex(r=>r.id===source?.region)+1;
+    const review=origin!==chapter||['repair','refresh','journey-recall','fluency'].includes(current.kind);
+    context.textContent=`Hoofdstuk ${chapter} · ${review?origin!==chapter?`Herhaling uit hoofdstuk ${origin}`:'Herhaling onderweg':active.mode==='challenge'?'Onderwerptoets':`Opgave ${Math.min(12,state.session.answered+(current.journeyRecorded?0:1))} van 12`}`;
+  }
   if(!E.sessionCue)return;const p=sessionPhase(),cp=isCheckpointSession();
   const dots=Array.from({length:SESSION_LENGTH},(_,i)=>`<i class="sessionDot ${i<state.session.answered?'done':i===state.session.answered?'now':''}"></i>`).join('');
-  E.sessionCue.classList.toggle('checkpoint',cp);E.sessionCue.innerHTML=`<b>${cp?'checkpoint · ':''}${phaseLabel(p)}</b><span class="sessionDots">${dots}</span>`;
+  E.sessionCue.classList.toggle('checkpoint',cp);if(current?.journey){const title=current.type==='intro'?'Ontdekking':current.journey.objective?'Routeplan':current.kind==='repair'?'Herstel onderweg':['refresh','journey-recall','fluency','warmup'].includes(current.kind)?'Herhaling onderweg':'Op ontdekking';E.sessionCue.innerHTML=`<b>${title}</b><span class="sessionDots">${dots}</span>`;return}E.sessionCue.innerHTML=`<b>${cp?'checkpoint · ':''}${phaseLabel(p)}</b><span class="sessionDots">${dots}</span>`;
 }
 function showMilestone(text){if(!E.milestoneFx)return;E.milestoneFx.textContent=text;E.milestoneFx.classList.remove('show');void E.milestoneFx.offsetWidth;E.milestoneFx.classList.add('show');setTimeout(()=>E.milestoneFx.classList.remove('show'),1100)}
 function telemetryEvent(ok,errorCode,before,after){
@@ -620,7 +751,7 @@ function chooseTask(){
     return generateUnique(frontier,{kind:'learning-edge',difficulty:skillDifficulty(frontier)});
   }
   if(phase==='reinforce'){
-    if(allIntroduced){const k=state.lastSkill&&state.skills[state.lastSkill]?.intro?state.lastSkill:pickWeakSkill(unlocked);return generateUnique(k,{kind:'reinforce',difficulty:Math.max(0,skillDifficulty(k)-1),scaffold:true});}
+    if(allIntroduced){const k=unlocked.includes(state.lastSkill)&&state.skills[state.lastSkill]?.intro?state.lastSkill:pickWeakSkill(unlocked);return generateUnique(k,{kind:'reinforce',difficulty:Math.max(0,skillDifficulty(k)-1),scaffold:true});}
     return generateUnique(frontier,{kind:'reinforce',difficulty:Math.max(0,skillDifficulty(frontier)-1),scaffold:true});
   }
   if(phase==='challenge'||phase==='checkpoint'){
@@ -631,13 +762,15 @@ function chooseTask(){
   return generateUnique(chooseWeightedSkill(unlocked),{kind:'practice'});
 }
 function next(){
+  cancelAdvance();
   if(devMode&&learnerExercise){learnerExercise.pendingNext=true;return}
   if(currentScreen!=='play'){pendingNext=true;return}
   E.stage.hidden=false;state.waveDraft=null;
-  if(state.session.answered>=SESSION_LENGTH)return endSession();locked=false;clearTimer();current=chooseTask();state.lastSkill=current.skill;taskStartedAt=Date.now();current.autoTimed=decideAutoTimer(current);
-  E.status.className='status';E.status.textContent='';E.answers.className='answers';render(current);applyInteractionState(current);renderTop();renderSessionCue();if(current.autoTimed)startTimer();save();
+  if(state.session.answered>=SESSION_LENGTH)return endSession();locked=false;clearTimer();lastPhase=sessionPhase();current=journeyTask()||chooseTask();if(state.journey?.active&&!devMode&&!calibrationMode&&!current.journey)J.tag(state,current);if(current.journey?.objective)lastPhase='challenge';state.lastSkill=current.skill;taskStartedAt=Date.now();current.autoTimed=decideAutoTimer(current);
+  E.status.className='status';E.status.textContent='';E.answers.className='answers';render(current);applyInteractionState(current);renderTop();renderSessionCue();if(current.autoTimed)startTimer();persistJourney();save();
 }
 function decideAutoTimer(t){
+  if(t?.journey)return false;
   if(W.catalog[t?.skill])return false;
   if(!state.timer||devMode||!t||t.type==='intro')return false;
   if(['repair','learning-edge','reinforce'].includes(t.kind))return false;
@@ -659,7 +792,7 @@ function clearTimer(){if(timerId){clearInterval(timerId);timerId=null}E.timerBtn
 function recordTimeout(){
   const st=state.skills[current.skill],before=st.strength;st.lastSeen=state.total;state.total++;state.session.answered++;state.session.timedOut=(state.session.timedOut||0)+1;touchStreak();scheduleFluency(current.skill,current.difficulty);telemetryEvent(false,'timeout-fluency',before,before);save();renderTop();renderSessionCue();
 }
-function timeout(){if(locked)return;locked=true;playCausalFeedback(false);E.status.className='status bad';E.status.textContent='Tijd. Geen leerstraf — deze bekende vaardigheid komt later nog eens vlot terug.';recordTimeout();advanceAfter(1150)}
+function timeout(){if(locked)return;locked=true;playCausalFeedback(false);E.status.className='status bad';E.status.textContent='Tijd. Geen leerstraf — deze bekende vaardigheid komt later nog eens vlot terug.';current.answerCorrect=false;current.answerFeedback=E.status.textContent;recordTimeout();journeyNext()}
 function findReview(id){return state.review.find(r=>r.id===id)}
 function addMisconception(code){if(!code||code==='generic')return;state.misconceptions[code]=(state.misconceptions[code]||0)+1}
 function scheduleRepair(skill,code,difficulty,existingId=null){
@@ -676,6 +809,7 @@ function progressRepair(r){
 }
 function scheduleRefresh(skill){const s=state.skills[skill];if(s.strength<.68||recentAccuracy(s)<.75||openRepairs(skill).length)return;const ix=Math.min(REFRESH_GAPS.length-1,s.reviewsSolved);s.refreshDue=state.total+REFRESH_GAPS[ix]+ri(0,4)}
 function record(ok,errorCode='generic'){
+  if(!calibrationMode&&!devMode&&current?.journey&&!J.result(state,current,ok))return;
   const st=state.skills[current.skill],beforeStrength=st.strength;st.seen++;st.lastSeen=state.total;state.total++;state.session.answered++;touchStreak();st.recent.push(!!ok);st.recent=st.recent.slice(-8);
   if(ok){
     if(lastPhase==='challenge'||lastPhase==='checkpoint')state.session.challengeCorrect=(state.session.challengeCorrect||0)+1;
@@ -691,17 +825,21 @@ function record(ok,errorCode='generic'){
   }else{
     st.strength=clamp(st.strength*(current.kind==='refresh'?.80:.82),0,1);addMisconception(errorCode);st.refreshDue=null;if(current.kind==='fluency')state.review=state.review.filter(r=>r.id!==current.reviewId);scheduleRepair(current.skill,errorCode,current.difficulty,current.kind==='repair'?current.reviewId:null);
   }
-  if(!calibrationMode){telemetryEvent(ok,errorCode,beforeStrength,st.strength);save();renderTop();renderSessionCue()}
+  if(!calibrationMode){telemetryEvent(ok,errorCode,beforeStrength,st.strength);persistJourney();save();renderTop();renderSessionCue()}
 }
 function endSession(){
-  clearTimer();clearInteractionTimers();locked=true;const checkpoint=isCheckpointSession();state.routeStep++;
+  if(state.session.completed){if(state.session.journeyRound)openScreen('journey');return}
+  const wasJourney=!!state.journey?.active;E.sessionDone.classList.toggle('journey-done',wasJourney);if(wasJourney)J.finish(state,unlockedSkills());state.session.completed=true;state.session.journeyRound=wasJourney;
+  cancelAdvance();clearTimer();clearInteractionTimers();locked=true;const checkpoint=isCheckpointSession();state.routeStep++;
   const completionBonus=checkpoint?30:20;state.xp+=completionBonus;state.session.xp+=completionBonus;if(checkpoint)state.checkpointWins=(state.checkpointWins||0)+1;save();
-  E.doneEyebrow.textContent=checkpoint?'checkpoint afgerond':'korte trainingsronde afgerond';E.doneTitle.textContent=checkpoint?'Checkpoint voltooid':'Route +1';
+  E.continueBtn.textContent=wasJourney?'Bekijk volgende ronde →':'Verder oefenen →';
+  E.doneEyebrow.textContent=checkpoint?'checkpoint afgerond':'korte trainingsronde afgerond';E.doneTitle.textContent=checkpoint?'Checkpoint voltooid':'Ronde afgerond';
   E.doneXP.textContent=`+${state.session.xp} XP`;const contentAttempts=Math.max(0,state.session.answered-(state.session.timedOut||0)),pct=contentAttempts?Math.round(100*state.session.correct/contentAttempts):0;
   const challenge=state.session.challengeCorrect||0;E.doneStats.innerHTML=`<span>${state.session.correct}/${contentAttempts} inhoudelijk juist</span><span>${pct}%</span>${state.session.timedOut?`<span>${state.session.timedOut}× tijd</span>`:''}<span>${challenge} challenge juist</span><span>${state.session.repaired} fout${state.session.repaired===1?'':'en'} hersteld</span><span>${openRepairs().length} open herstel${openRepairs().length===1?'':'taken'}</span>`;
+  const rec=journeyRecommendation(),last=state.journey?.last;$('#doneNext').hidden=false;$('#doneNext').innerHTML=`${wasJourney?`<strong>✓ ${last.mode==='camp'?'Herhaalronde':J.places.find(p=>p.id===last.place)?.name||'Oefenronde'}</strong><p>${last.independent}/${last.answered} opgaven zelfstandig gelukt. ${last.practice?.length?'Wat nog hulp vroeg, komt later opnieuw terug.':'Eerdere kennis blijft terugkomen.'}</p>`:''}${last?.newSkills?.length&&wasJourney?`<p>Nieuw beschikbaar: ${last.newSkills.map(k=>SKILLS[k]?.label||k).join(' · ')}</p>`:''}<p><strong>Volgende ronde: ${SKILLS[rec.skill]?.label||rec.place.name}</strong><br>${rec.reason}</p>`;
   E.stage.hidden=true;E.sessionDone.hidden=false;renderTop();renderSessionCue();E.routeFill.classList.remove('routeKick');void E.routeFill.offsetWidth;E.routeFill.classList.add('routeKick');showMilestone(checkpoint?`Checkpoint · +${completionBonus} XP`:`Ronde klaar · +${completionBonus} XP`);
 }
-function continueTraining(){state.session={answered:0,correct:0,xp:0,repaired:0,refreshes:0,newMistakes:0,challengeCorrect:0,timedOut:0,fluencyRecovered:0};save();E.sessionDone.hidden=true;locked=false;next()}
+function continueTraining(){if(state.session.completed&&state.session.journeyRound){current=null;selectJourneyRecommendation();return}state.session={answered:0,correct:0,xp:0,repaired:0,refreshes:0,newMistakes:0,challengeCorrect:0,timedOut:0,fluencyRecovered:0};save();E.sessionDone.hidden=true;locked=false;next()}
 function introDone(){
   clearInteractionTimers();
   if(devMode){launchDev(devSkill,devDifficulty,false);return}
@@ -712,26 +850,47 @@ function questionLabel(html){
   if(!devMode&&(lastPhase==='challenge'||lastPhase==='checkpoint'))chip+=`<span class="checkpointMark">${lastPhase==='checkpoint'?'checkpoint':'challenge'}</span> `;E.question.innerHTML=chip+html;
 }
 
-function persistWave(){if(devMode||calibrationMode||!current?.work)return;state.waveDraft=structuredClone(current);save()}
+function persistWave(){if(devMode||calibrationMode||!current?.work)return;state.waveDraft=structuredClone(current);persistJourney();save()}
 function finishWave(){
  if(devMode||calibrationMode)return;
  state.scoredAttempts||=[];if(state.scoredAttempts.includes(current.id))return;
  state.scoredAttempts.push(current.id);state.scoredAttempts=state.scoredAttempts.slice(-360);
  const w=current.work,clean=!w.errors.length&&!w.help&&!current.scaffold;
- W.evidence(state.skills[current.skill],current,state.total,clean);
+ if(w.done)W.evidence(state.skills[current.skill],current,state.total,clean);
  record(clean,w.errors[0]||(w.help?'wave.supported':'generic'));
- const evt=state.telemetry.at(-1);if(evt)Object.assign(evt,{attemptId:current.id,representation:current.params.representation,variant:current.params.variant,support:clean?'independent':'assisted',steps:structuredClone(w.steps),completed:true});
+ const evt=state.telemetry.at(-1);if(evt)Object.assign(evt,{attemptId:current.id,representation:current.params.representation,variant:current.params.variant,support:clean?'independent':'assisted',steps:structuredClone(w.steps),completed:!!w.done});
  // Keep recent diagnostic detail within the server's 256 KiB payload limit.
  for(const event of state.telemetry.slice(0,-24))if(event.attemptId)delete event.steps;
  if(w.errors.some(e=>e==='wave.b')&&['equation_from_two_points','equation_from_graph','equation_from_table','equation_from_context'].includes(current.skill))scheduleRepair('intercept_from_point','wave.b',current.difficulty);
  persistWave();
 }
+function waveResult(t,result){
+ if(devMode||result.ok)return;
+ // One-answer tasks can be reviewed later. Longer calculations retain their
+ // correct prefix and resume at the mistaken step after reading the diagnosis.
+ const nextQuestion=['point_plot','line_behavior'].includes(t.skill)||W.stages(t).length===1&&!W.constructionSkills.includes(t.skill)&&!W.transferSkills.includes(t.skill);
+ t.work.feedbackPause={message:result.message,nextQuestion};
+ if(nextQuestion)finishWave();
+}
+function waveFlow(t){
+ if(current!==t)return;
+ const w=t.work,footer=document.querySelector('.wave-actions');
+ E.visual.inert=false;E.answers.inert=false;E.question.inert=false;
+ if(devMode)return;
+ if(w.feedbackPause){
+  cancelAdvance();E.visual.inert=true;E.answers.inert=true;E.question.inert=true;
+  E.visual.querySelectorAll('button').forEach(b=>b.disabled=true);E.answers.querySelectorAll('button').forEach(b=>b.disabled=true);
+  E.status.className='status bad';E.status.textContent=w.feedbackPause.message+(w.feedbackPause.nextQuestion?' Dit oefenen we later opnieuw.':' Kies Verder om deze stap te verbeteren.');
+  footer.replaceChildren();const b=document.createElement('button');b.type='button';b.textContent='Verder →';footer.append(b);
+  b.onclick=()=>{if(current!==t||devMode)return;if(w.feedbackPause.nextQuestion){next();return}delete w.feedbackPause;E.status.textContent='Verbeter deze stap. Je juiste deelstappen blijven staan.';renderWave(t)};
+ }else if(w.done){E.status.className='status good';E.status.textContent=w.errors.length||w.help?'Gecontroleerd na herstel of hulp.':'Goed gecontroleerd.';if(!reviewResult(t)){footer.replaceChildren();advanceAfter()}}
+}
 function renderWave(t){
- let footer=document.querySelector('.wave-actions');if(!footer){footer=document.createElement('div');footer.className='wave-actions';E.stage.querySelector('.playFooter').append(footer)}
- window.RechtenWaveUI.mount(t,{visual:E.visual,answers:E.answers,question:E.question,status:E.status,footer,dev:devMode,onChange:persistWave,onDone:finishWave,onNext:()=>{if(devMode){launchDev(t.skill,t.difficulty,false);return}state.waveDraft=null;save();next()}});persistWave();
+ let footer=document.querySelector('.wave-actions');if(!footer){footer=document.createElement('div');footer.className='wave-actions';E.stage.querySelector('.exercise-actions').append(footer)}
+ window.RechtenWaveUI.mount(t,{visual:E.visual,answers:E.answers,question:E.question,status:E.status,footer,dev:devMode,onChange:persistWave,onDone:finishWave,onResult:r=>waveResult(t,r),onRendered:()=>waveFlow(t),onNext:()=>{if(devMode){launchDev(t.skill,t.difficulty,false);return}state.waveDraft=null;save();next()}});waveFlow(t);persistWave();
 }
 
-function render(t){E.stage.classList.toggle('wave',!!W.catalog[t.skill]&&t.type!=='intro');document.querySelector('.wave-actions')?.replaceChildren();E.stage.dataset.task=t.type;E.answers.className='answers';E.question.innerHTML='';E.visual.innerHTML='';E.answers.innerHTML='';if(t.type==='intro')return renderIntro(t.params.introSkill);if(W.catalog[t.skill])return renderWave(t);if(t.type==='delta')renderDelta(t);if(t.type==='slope')renderSlope(t);if(t.type==='point')renderPoint(t);if(t.type==='intercept')renderIntercept(t);if(t.type==='ab')renderAB(t);if(t.type==='fx')renderFx(t);if(t.type==='table')renderTable(t);if(t.type==='zeroRead')renderZeroRead(t);if(t.type==='zero')renderZero(t);if(t.type==='sign')renderSign(t);if(t.type==='signchart')renderSignChart(t)}
+function render(t){$('#pauseExercise').textContent=devMode?'Vraagoverzicht':'Pauze';$('#pauseExercise').setAttribute('aria-label',devMode?'Alle vraagvormen bekijken':'Oefening pauzeren of stoppen');cancelAdvance();E.visual.inert=false;E.answers.inert=false;E.question.inert=false;E.stage.querySelectorAll('.journey-next').forEach(b=>b.remove());E.stage.classList.toggle('journey-legacy',!!t.journey&&!W.catalog[t.skill]&&t.type!=='intro');E.stage.classList.toggle('wave',!!W.catalog[t.skill]&&t.type!=='intro');document.querySelector('.wave-actions')?.replaceChildren();E.stage.dataset.task=t.type;E.answers.className='answers';E.question.innerHTML='';E.visual.innerHTML='';E.answers.innerHTML='';if(t.type==='intro')return renderIntro(t.params.introSkill);if(W.catalog[t.skill])return renderWave(t);if(t.type==='delta')renderDelta(t);if(t.type==='slope')renderSlope(t);if(t.type==='point')renderPoint(t);if(t.type==='intercept')renderIntercept(t);if(t.type==='ab')renderAB(t);if(t.type==='fx')renderFx(t);if(t.type==='table')renderTable(t);if(t.type==='zeroRead')renderZeroRead(t);if(t.type==='zero')renderZero(t);if(t.type==='sign')renderSign(t);if(t.type==='signchart')renderSignChart(t);journeyNext()}
 function explanationData(skill){
   if(W.catalog[skill])return window.RechtenWaveUI.explanation(skill);
   if(skill==='delta')return{title:'Δx en Δy',visual:graphMarkup({a:2,b:0,step:{x:0,y:0,dx:1,dy:2},showIntercept:false}),big:'Δx = 1 &nbsp;&nbsp; Δy = 2',sub:'Lees eerst de horizontale stap: Δx. Daarna de verticale stap: Δy.'};
@@ -838,7 +997,7 @@ function renderSignChart(t){
   const row=document.createElement('div');row.className='signTokenRow';E.answers.appendChild(row);
   ['−','0','+'].forEach(sym=>{const btn=bubble(sym,'signToken',()=>pickSign(sym,btn),row)});
   function redraw(){table.innerHTML=signChartHTML(root,picks,true)}
-  function pickSign(sym,btn){if(locked||used.has(sym))return;const i=picks.indexOf('?');if(i<0)return;picks[i]=sym;used.add(sym);btn.classList.add('used');redraw();if(!picks.includes('?')){locked=true;clearTimer();const ok=picks.every((v,i)=>v===signs[i]);let err='signchart.direction';if(picks[1]!=='0')err='signchart.zero';else if(picks[0]===signs[2]&&picks[2]===signs[0])err='signchart.direction';playCausalFeedback(ok);E.status.className='status '+(ok?'good':'bad');E.status.textContent=ok?feedbackCorrect():(devMode?`DEV · Fout. Sleutel: ${signs.join('  ')}`:`Nog niet. Het schema is ${signs.join('  ')}. Ik laat dit later terugkomen.`);finishOutcome(ok,signs.join('  '),ok?'generic':err,700,1200)}}
+  function pickSign(sym,btn){if(locked||used.has(sym))return;const i=picks.indexOf('?');if(i<0)return;picks[i]=sym;used.add(sym);btn.classList.add('used');redraw();if(!picks.includes('?')){locked=true;clearTimer();const ok=picks.every((v,i)=>v===signs[i]);let err='signchart.direction';if(picks[1]!=='0')err='signchart.zero';else if(picks[0]===signs[2]&&picks[2]===signs[0])err='signchart.direction';playCausalFeedback(ok);E.status.className='status '+(ok?'good':'bad');E.status.textContent=ok?feedbackCorrect():(devMode?`DEV · Fout. Sleutel: ${signs.join('  ')}`:`Nog niet. Het schema is ${signs.join('  ')}. Ik laat dit later terugkomen.`);finishOutcome(ok,signs.join('  '),ok?'generic':err)}}
 }
 function choicePill(label,cb,container=E.answers){const b=document.createElement('button');b.type='button';b.className='choicePill';b.innerHTML=label;b.addEventListener('click',()=>cb(b));container.appendChild(b);return b}
 let graphUid=0;
@@ -860,7 +1019,7 @@ function graphMarkup(o){
     const root=clamp(o.zero,min,max),segments=[[x1,root],[root,x2]].filter(([xa,xb])=>xb-xa>.001);
     lineMarkup=segments.map(([xa,xb])=>{const mid=(xa+xb)/2,positive=o.a*mid+o.b>0,cls=positive?'sign-positive':'sign-negative';return `<line class="main-line ${cls}" clip-path="url(#${clipId})" x1="${X(xa)}" y1="${Y(o.a*xa+o.b)}" x2="${X(xb)}" y2="${Y(o.a*xb+o.b)}"/>`}).join('');
   }else lineMarkup=`<line class="main-line main-line-glow" clip-path="url(#${clipId})" x1="${X(x1)}" y1="${Y(y1)}" x2="${X(x2)}" y2="${Y(y2)}"/><line class="main-line" clip-path="url(#${clipId})" x1="${X(x1)}" y1="${Y(y1)}" x2="${X(x2)}" y2="${Y(y2)}"/>`;
-  return `<div class="graphWrap"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Grafiek van een rechte"><defs><clipPath id="${clipId}"><rect x="${pad-10}" y="${pad-10}" width="${W-2*pad+20}" height="${H-2*pad+20}" rx="24"/></clipPath><filter id="${glowId}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g class="coordinate-world">${grid}</g>${lineMarkup}${extra}<text class="axis-letter" x="${W-pad+15}" y="${Y(0)+6}">x</text><text class="axis-letter" x="${X(0)+9}" y="${pad-16}">y</text></svg></div>`;
+  return `<div class="graphWrap"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Grafiek van een rechte"><defs><clipPath id="${clipId}"><rect x="${pad-10}" y="${pad-10}" width="${W-2*pad+20}" height="${H-2*pad+20}" rx="24"/></clipPath><filter id="${glowId}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g class="coordinate-world">${grid}<path class="axis-arrow" d="M${W-pad+1} ${Y(0)-6}l9 6-9 6 M${X(0)-6} ${pad-1}l6-9 6 9" fill="none" stroke="#55768a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></g>${lineMarkup}${extra}<text class="axis-letter" x="${W-pad+15}" y="${Y(0)+6}">x</text><text class="axis-letter" x="${X(0)+9}" y="${pad-16}">y</text></svg></div>`;
 }
 function graph(o){E.visual.innerHTML=graphMarkup(o)}
 function pointGraphMarkup(x,y,showLabel){
@@ -870,7 +1029,7 @@ function pointGraphMarkup(x,y,showLabel){
     grid+=`<line class="${axis?'axis-line':'grid-line'}" x1="${X(i)}" y1="${pad-8}" x2="${X(i)}" y2="${H-pad+8}" stroke="${c}" stroke-width="${sw}" ${axis?'':'stroke-dasharray="2 8"'}/><line class="${axis?'axis-line':'grid-line'}" x1="${pad-8}" y1="${Y(i)}" x2="${W-pad+8}" y2="${Y(i)}" stroke="${c}" stroke-width="${sw}" ${axis?'':'stroke-dasharray="2 8"'}/>`;
     if(i!==0)grid+=`<text class="axis-number" x="${X(i)}" y="${Y(0)+22}" text-anchor="middle">${i}</text><text class="axis-number" x="${X(0)-13}" y="${Y(i)+5}" text-anchor="end">${i}</text>`;
   }
-  return `<div class="graphWrap"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Punt in een assenstelsel"><g class="coordinate-world">${grid}</g><line class="guide-line" x1="${X(x)}" y1="${Y(0)}" x2="${X(x)}" y2="${Y(y)}"/><line class="guide-line" x1="${X(0)}" y1="${Y(y)}" x2="${X(x)}" y2="${Y(y)}"/><g class="target-point world-math-node"><circle class="node-halo" cx="${X(x)}" cy="${Y(y)}" r="20"/><circle cx="${X(x)}" cy="${Y(y)}" r="10"/></g>${showLabel?`<text class="point-label" x="${X(x)+16}" y="${Y(y)-17}">P(${fmt(x)}, ${fmt(y)})</text>`:''}<text class="axis-letter" x="${W-pad+15}" y="${Y(0)+6}">x</text><text class="axis-letter" x="${X(0)+9}" y="${pad-16}">y</text></svg></div>`;
+  return `<div class="graphWrap"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Punt in een assenstelsel"><g class="coordinate-world">${grid}<path class="axis-arrow" d="M${W-pad+1} ${Y(0)-6}l9 6-9 6 M${X(0)-6} ${pad-1}l6-9 6 9" fill="none" stroke="#55768a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></g><line class="guide-line" x1="${X(x)}" y1="${Y(0)}" x2="${X(x)}" y2="${Y(y)}"/><line class="guide-line" x1="${X(0)}" y1="${Y(y)}" x2="${X(x)}" y2="${Y(y)}"/><g class="target-point world-math-node"><circle class="node-halo" cx="${X(x)}" cy="${Y(y)}" r="20"/><circle cx="${X(x)}" cy="${Y(y)}" r="10"/></g>${showLabel?`<text class="point-label" x="${X(x)+16}" y="${Y(y)-17}">P(${fmt(x)}, ${fmt(y)})</text>`:''}<text class="axis-letter" x="${W-pad+15}" y="${Y(0)+6}">x</text><text class="axis-letter" x="${X(0)+9}" y="${pad-16}">y</text></svg></div>`;
 }
 function pointGraph(x,y,showLabel){E.visual.innerHTML=pointGraphMarkup(x,y,showLabel)}
 function fitBubble(b){
@@ -921,14 +1080,20 @@ function choiceValues(correct,extras=[],count=4){
 function distractors(correct,extras=[]){return choiceValues(correct,extras,4)}
 function numericChoices(correct,opt={}){const vals=choiceValues(correct,opt.extras||[],opt.count||4),container=opt.container||E.answers;vals.forEach(v=>bubble(mathHTML(v),opt.kind||'',btn=>answer(btn,Math.abs(v-correct)<1e-9,fmt(correct),Math.abs(v-correct)<1e-9?'generic':(opt.errorFor?opt.errorFor(v):'generic')),container))}
 function feedbackCorrect(){if(devMode||current?.kind==='dev')return'DEV · Juist.';if(current.kind==='repair'){const r=findReview(current.reviewId);return r&&r.stage>=1?'Juist. Nog één latere controle. +15 XP':'Juist. +15 XP'}if(current.kind==='refresh')return'Juist — nog stevig. +12 XP';if(current.kind==='fluency')return'Juist — weer vlot. +12 XP';return`Juist. +${10+2*current.difficulty} XP`}
-function finishOutcome(ok,correctText,errorCode='generic',delayOk=600,delayBad=1100){
+function finishOutcome(ok,correctText,errorCode='generic'){
   if(devMode||current?.kind==='dev'){E.status.className='status '+(ok?'good':'bad');E.status.textContent=ok?'DEV · Juist. Gebruik Nieuwe variant of kies een ander vraagtype.':`DEV · Fout. Sleutel: ${correctText}`;renderDevPanel();return}
-  record(ok,errorCode);advanceAfter(ok?delayOk:delayBad)
+  if(current.answerCorrect!==undefined)return;
+  current.answerCorrect=!!ok;
+  current.answerFeedback=ok&&current.journeyHelp?'Juist na uitleg. Je krijgt later een zelfstandige controle.':ok?'Juist.':`Nog niet. Antwoord: ${correctText}. Dit oefenen we later opnieuw.`;
+  if(current.journey)current.journeyFeedback=current.answerFeedback;
+  record(ok&&!current.journeyHelp,ok&&current.journeyHelp?'journey.supported':errorCode);
+  journeyNext();persistJourney();
 }
+
 function answer(btn,ok,correctText,errorCode='generic'){if(locked)return;locked=true;clearTimer();playCausalFeedback(ok);if(ok){btn.classList.add('good');E.status.className='status good';E.status.textContent=feedbackCorrect()}else{btn.classList.add('bad');E.status.className='status bad';E.status.textContent=devMode?`DEV · Fout. Sleutel: ${correctText}`:`Nog niet. Antwoord: ${correctText}. Ik laat dit later terugkomen.`}finishOutcome(ok,correctText,errorCode)}
 function abChoices(a,b){
   const legend=document.createElement('div');legend.className='legend';legend.innerHTML='<span><i class="swatch a"></i>blauw = a</span><span><i class="swatch b"></i>oranje = b</span>';E.answers.appendChild(legend);let pickA=null,pickB=null;const all=[];
-  const tryDone=()=>{if(locked||pickA===null||pickB===null)return;locked=true;clearTimer();const ok=Math.abs(pickA-a)<1e-9&&Math.abs(pickB-b)<1e-9;let err='generic';if(!ok){if(Math.abs(pickA-b)<1e-9&&Math.abs(pickB-a)<1e-9)err='ab.swapped';else if(Math.abs(pickA-a)<1e-9)err='ab.intercept';else if(Math.abs(pickB-b)<1e-9)err='ab.slope';else err='ab.both'}all.forEach(o=>{if((o.kind==='a'&&o.val===pickA)||(o.kind==='b'&&o.val===pickB))o.btn.classList.add(ok?'good':'bad')});playCausalFeedback(ok);E.status.className='status '+(ok?'good':'bad');E.status.textContent=ok?feedbackCorrect():(devMode?`DEV · Fout. Sleutel: a = ${fmt(a)}, b = ${fmt(b)}`:`Nog niet. a = ${fmt(a)} en b = ${fmt(b)}. Ik laat dit later terugkomen.`);finishOutcome(ok,`a = ${fmt(a)}, b = ${fmt(b)}`,err,680,1150)};
+  const tryDone=()=>{if(locked||pickA===null||pickB===null)return;locked=true;clearTimer();const ok=Math.abs(pickA-a)<1e-9&&Math.abs(pickB-b)<1e-9;let err='generic';if(!ok){if(Math.abs(pickA-b)<1e-9&&Math.abs(pickB-a)<1e-9)err='ab.swapped';else if(Math.abs(pickA-a)<1e-9)err='ab.intercept';else if(Math.abs(pickB-b)<1e-9)err='ab.slope';else err='ab.both'}all.forEach(o=>{if((o.kind==='a'&&o.val===pickA)||(o.kind==='b'&&o.val===pickB))o.btn.classList.add(ok?'good':'bad')});playCausalFeedback(ok);E.status.className='status '+(ok?'good':'bad');E.status.textContent=ok?feedbackCorrect():(devMode?`DEV · Fout. Sleutel: a = ${fmt(a)}, b = ${fmt(b)}`:`Nog niet. a = ${fmt(a)} en b = ${fmt(b)}. Ik laat dit later terugkomen.`);finishOutcome(ok,`a = ${fmt(a)}, b = ${fmt(b)}`,err)};
   const av=choiceValues(a,[b],3),bv=choiceValues(b,[a],3);av.forEach(v=>{const btn=bubble(mathHTML(v),'a',x=>{if(locked)return;all.filter(o=>o.kind==='a').forEach(o=>o.btn.classList.remove('selected'));x.classList.add('selected');pickA=v;tryDone()});all.push({btn,val:v,kind:'a'})});bv.forEach(v=>{const btn=bubble(mathHTML(v),'b',x=>{if(locked)return;all.filter(o=>o.kind==='b').forEach(o=>o.btn.classList.remove('selected'));x.classList.add('selected');pickB=v;tryDone()});all.push({btn,val:v,kind:'b'})});
 }
 function devAnswerKey(t){
@@ -952,13 +1117,15 @@ function devAnswerKey(t){
     default:return '—';
   }
 }
-function launchDev(skill=devSkill,difficulty=devDifficulty,intro=false){
+function launchDev(skill=devSkill,difficulty=devDifficulty,intro=false,options={}){
+  if(W.disabledSkills.includes(skill))return;
+  cancelAdvance();
   if(!devMode){
     learnerExercise={current,locked,timeLeft,pendingNext,screenTimerWasActive:screenTimerWasActive||!!timerId,surface:currentScreen==='play'?baseSurface():screenReturn,taskStartedAt,pausedAt:screenPausedAt||Date.now(),question:[...E.question.childNodes],visual:[...E.visual.childNodes],answers:[...E.answers.childNodes],answersClass:E.answers.className,status:E.status.textContent,statusClass:E.status.className};
   }
   pendingNext=false;screenTimerWasActive=false;screenPausedAt=0;
   devMode=true;devSkill=skill;devDifficulty=clamp(Number(difficulty)||0,0,2);clearTimer();locked=false;
-  current=intro?makeIntro(skill):generate(skill,{kind:'dev',difficulty:devDifficulty});
+  current=intro?makeIntro(skill):generate(skill,{kind:'dev',difficulty:devDifficulty,...options});
   if(intro)current.kind='devIntro';else current.kind='dev';
   E.start.hidden=true;E.sessionDone.hidden=true;E.status.textContent='';render(current);applyInteractionState(current);renderTop();
   closeScreen('play');
@@ -970,7 +1137,8 @@ function exitDev(){
   if(saved){
     current=saved.current;locked=saved.locked;timeLeft=saved.timeLeft;pendingNext=saved.pendingNext;taskStartedAt=saved.taskStartedAt;
     E.question.replaceChildren(...saved.question);E.visual.replaceChildren(...saved.visual);E.answers.replaceChildren(...saved.answers);E.answers.className=saved.answersClass;
-    E.status.textContent=saved.status;E.status.className=saved.statusClass;E.stage.dataset.task=current?.type||'';E.stage.classList.toggle('wave',!!W.catalog[current?.skill]&&current?.type!=='intro');if(W.catalog[current?.skill]&&current?.type!=='intro')renderWave(current);
+    $('#pauseExercise').textContent='Pauze';$('#pauseExercise').setAttribute('aria-label','Oefening pauzeren of stoppen');
+    E.status.textContent=saved.status;E.status.className=saved.statusClass;E.stage.dataset.task=current?.type||'';E.stage.classList.toggle('wave',!!W.catalog[current?.skill]&&current?.type!=='intro');E.stage.classList.toggle('journey-legacy',!!current?.journey&&!W.catalog[current.skill]&&current.type!=='intro');if(W.catalog[current?.skill]&&current?.type!=='intro')renderWave(current);else{document.querySelector('.wave-actions')?.replaceChildren();journeyNext()}
     screenTimerWasActive=saved.screenTimerWasActive;screenPausedAt=saved.pausedAt;closeScreen(saved.surface);
     applyInteractionState(current);renderTop();renderSessionCue();return;
   }
@@ -1119,7 +1287,7 @@ function contentCoverageHTML(){
     ['point_plot','punt plaatsen','rooster met assenschaal','tik/sleep + stapknoppen','verwisselde of verkeerde as','L1 positief; L2 kwadranten/assen; L3 schaal'],
     ['equation_from_ab','voorschrift construeren','a/b + formulevakken','tokens tikken/slepen','helling, teken, constante','L1–L3; equivalentie, ±1, 0, breuken'],
     ['graph_from_equation','rechte construeren','voorschrift + leeg rooster','twee eigen punten + controle','beginpunt, helling, identieke punten','L1 b-start; L2–L3 alle geldige puntenparen'],
-    ...W.transferSkills.map(k=>[k,W.catalog[k].label,'grafiek / tabel / context','eigen punten, rekenen en controleren','deelstappen, overblijvende kolom, eenheden/domein','L1–L3; ±a, breuken, constant, inconsistent']),
+    ...W.activeTransferSkills.map(k=>[k,W.catalog[k].label,'functie bovenaan; tabel of grafiek','tabelwaarden slepen, a/b scrollen, twee punten plaatsen','helling, y-snijpunt, kolomvolgorde, rechte door tabelpunten','L1–L3; ±a, breuken, constante functies; twee routes voor b']),
     ...W.algebraSkills.map(k=>[k,W.catalog[k].label,'vergelijking / punt / tabel / grafiek','bewerkingen op beide leden of substitutie','equivalentie, uitvoer en conclusie','L1–L3; exacte breuken, verticaal, geen/alle x']),
     ...Object.keys(W.catalog).filter(k=>!W.constructionSkills.includes(k)&&!W.algebraSkills.includes(k)&&!W.transferSkills.includes(k)).map(k=>[k,W.catalog[k].label,'punten / exacte breuken','contextuele deelstappen','richting, substitutie, a/b, puntcontrole','L1–L3; ±a, breuken, horizontaal; bijzondere rechten waar toepasselijk']),
     ['signchart','tekenschema','schema + grafiek/formule','sequence / single','richting, nulpositie','grafiek ±78% / 52% / 32%; tekens óf nulwaarde']
@@ -1138,12 +1306,37 @@ function bindCalibrationLab(){
   $('#sim90')?.addEventListener('click',()=>simulateLearner(.90,180));$('#sim70')?.addEventListener('click',()=>simulateLearner(.70,180));$('#sim50')?.addEventListener('click',()=>simulateLearner(.50,180));$('#sim70long')?.addEventListener('click',()=>simulateLearner(.70,360));
 }
 
+let devReviewFilter='all';
+function devPreviewStep(stage){
+ if(!devMode||current.type==='intro'||!W.catalog[current?.skill]||[...W.constructionSkills,...W.algebraSkills,...W.transferSkills].includes(current.skill))return;
+ current.work=W.fresh(current);const w=current.work;
+ for(let i=0;i<30&&!w.done&&W.stages(current)[w.index]!==stage;i++){
+  const s=W.stages(current)[w.index],value=['ys','xs'].includes(s)?['B','A']:s==='point'?'A':s==='subX'?'x':s==='subY'?'y':W.expected(current,w);
+  if(!W.submit(current,w,value).ok)return;
+ }
+ E.status.textContent='DEV · voorgaande deelstappen zijn ingevuld.';render(current);closeScreen('play');
+}
+function devCatalogueHTML(){
+ const rows=window.RechtenUXReview.filter(r=>SKILLS[r.skill]&&(devReviewFilter==='all'||r.priority===devReviewFilter));
+ return `<section class="dev-catalogue"><div class="dev-catalogue-head"><h3>Alle vraagvormen · ${rows.length}/${Object.keys(SKILLS).length}</h3><label>UX-prioriteit <select id="devReviewFilter">${['all','P1','P2','P3','Aangepast'].map(p=>`<option value="${p}" ${devReviewFilter===p?'selected':''}>${p==='all'?'Alles':p}</option>`).join('')}</select></label></div><p class="devHint">P1: eerst verbeteren · P2: interactie verfijnen · P3: afwerken. Kies een niveau om de echte oefening te bekijken.</p><div class="dev-review-grid">${rows.map(r=>`<article class="dev-review-card" data-review-skill="${r.skill}"><span>${r.priority}</span><h4>${SKILLS[r.skill].label}</h4><code>${r.skill}</code><p>${r.note}</p><div>${[0,1,2].map(d=>`<button data-preview-skill="${r.skill}" data-preview-level="${d}">Niveau ${d+1}</button>`).join('')}</div></article>`).join('')}</div></section>`;
+}
 function renderDevPanel(){
   const skillButtons=Object.entries(SKILLS).map(([k,v])=>`<button type="button" class="devSkill ${k===devSkill?'active':''}" data-dev-skill="${k}">${v.label}</button>`).join('');
   const levels=[0,1,2].map(d=>`<button type="button" class="${d===devDifficulty?'active':''}" data-dev-level="${d}">niveau ${d+1}</button>`).join('');
   const focusButtons=['auto','new','guided','flow'].map(m=>`<button type="button" class="${m===devFocusOverride?'active':''}" data-dev-focus="${m}">${m==='auto'?'auto':m==='new'?'NIEUW':m==='guided'?'BEGELEID':'FLOW'}</button>`).join('');
-  E.devPanel.innerHTML=`${screenHeader('Ontwikkelomgeving','Vraagbrowser, diagnose en kalibratie · los van je leerroute.')}<div class="devInner screenScroll"><div class="devHint">Vrij testen zonder XP of mastery te wijzigen. “Terug naar mijn oefening” herstelt je oorspronkelijke vraag, inclusief deelantwoorden.</div><div class="devGrid">${skillButtons}</div><div class="devLevels">${levels}</div><div class="devStateRow"><strong style="width:100%;font-size:12px;color:var(--muted)">INTERACTIESTATE</strong>${focusButtons}</div><div class="devActions"><button id="devIntro">Voorbeeld</button><button id="devNew">Nieuwe variant</button><button id="devGoodFx">Juist-effect</button><button id="devBadFx">Fout-effect</button><button id="devIdleFx">Idle cue</button><button id="devBubbleTest">Bubble-test</button><button id="devExit">Terug naar mijn oefening</button><button id="testFeatures">Testdata laden</button><button id="devClose">Paneel sluiten</button></div><div class="devKey"><strong>Antwoordsleutel:</strong> <code>${devAnswerKey(current)}</code><br><span>type: ${current?.skill||'—'} · niveau ${(current?.difficulty??devDifficulty)+1} · state: ${interactionState(current)} · sessiefase: ${sessionPhase()}</span></div>${telemetryHTML()}${cloudFoundationHTML()}${calibrationLabHTML()}</div>`;
+  E.devPanel.innerHTML=`${screenHeader('Ontwikkelomgeving','Vraagbrowser, diagnose en kalibratie · los van je leerroute.')}<div class="devInner screenScroll"><div class="devHint">Vrij testen zonder XP of mastery te wijzigen. “Terug naar mijn oefening” herstelt je oorspronkelijke vraag, inclusief deelantwoorden.</div>${devMode?'<button data-dev-return>Terug naar mijn oefening</button>':''}${devCatalogueHTML()}<details class="dev-tools"><summary>Vraaginstellingen, diagnose en tests</summary><div class="devGrid">${skillButtons}</div><div class="devLevels">${levels}</div><div class="devStateRow"><strong style="width:100%;font-size:12px;color:var(--muted)">INTERACTIESTATE</strong>${focusButtons}</div><div class="devActions"><button id="devIntro">Voorbeeld</button><button id="devNew">Nieuwe variant</button><button id="devGoodFx">Juist-effect</button><button id="devBadFx">Fout-effect</button><button id="devIdleFx">Idle cue</button><button id="devBubbleTest">Bubble-test</button><button id="devExit">Terug naar mijn oefening</button><button id="testFeatures">Testdata laden</button><button id="devClose">Paneel sluiten</button></div><div class="devKey"><strong>Antwoordsleutel:</strong> <code>${devAnswerKey(current)}</code><br><span>type: ${current?.skill||'—'} · niveau ${(current?.difficulty??devDifficulty)+1} · state: ${interactionState(current)} · sessiefase: ${sessionPhase()}</span></div>${telemetryHTML()}${cloudFoundationHTML()}${calibrationLabHTML()}</details></div>`;
   bindScreenClose(E.devPanel);
+  E.devPanel.querySelector('[data-dev-return]')?.addEventListener('click',exitDev);
+  $('#devReviewFilter').onchange=e=>{devReviewFilter=e.target.value;renderDevPanel()};
+  E.devPanel.querySelectorAll('[data-preview-skill]').forEach(b=>b.onclick=()=>launchDev(b.dataset.previewSkill,Number(b.dataset.previewLevel),false,{variant:3}));
+  if(devMode&&W.catalog[current?.skill]&&current.type!=='intro'){
+   const controls=document.createElement('div');controls.className='dev-variants';
+   controls.innerHTML=`<strong>${SKILLS[current.skill].label} · ${current.params.variant}</strong><label>Generatorvariant <select data-dev-variant>${Array.from({length:12},(_,i)=>`<option value="${i}">Variant ${i+1}</option>`).join('')}</select></label><button data-dev-variant-go>Bekijk variant</button>`;
+   controls.querySelector('[data-dev-variant-go]').onclick=()=>launchDev(devSkill,devDifficulty,false,{variant:Number(controls.querySelector('select').value)});
+   if(![...W.constructionSkills,...W.algebraSkills,...W.transferSkills].includes(current.skill))for(const stage of W.stages(current)){const b=document.createElement('button');b.textContent=window.RechtenWaveUI.labels[stage]||stage;b.dataset.devStep=stage;b.onclick=()=>devPreviewStep(stage);controls.append(b)}
+   E.devPanel.querySelector('.dev-catalogue').before(controls);
+  }
+
   E.devPanel.querySelectorAll('[data-dev-skill]').forEach(b=>b.addEventListener('click',()=>launchDev(b.dataset.devSkill,devDifficulty,false)));
   E.devPanel.querySelectorAll('[data-dev-level]').forEach(b=>b.addEventListener('click',()=>launchDev(devSkill,Number(b.dataset.devLevel),false)));
   E.devPanel.querySelectorAll('[data-dev-focus]').forEach(b=>b.addEventListener('click',()=>{devFocusOverride=b.dataset.devFocus;applyInteractionState(current);renderDevPanel()}));
@@ -1167,8 +1360,20 @@ function renderSheet(){
   const rows=Object.entries(SKILLS).map(([k,v])=>{const s=state.skills[k],pct=Math.round(s.strength*100),acc=s.seen?Math.round(100*s.correct/s.seen):0,un=unlocked.includes(k),d=skillDifficulty(k),rep=openRepairs(k).length,phase=skillPhase(k),cls=phase==='stevig'?'good':rep?'warn':'';return `<div class="skill ${un?'':'locked'}"><div><strong>${v.label}</strong><div class="skillMeta">${un?`${phase} · niveau ${d+1} · ${s.seen} gezien · ${acc}% juist${rep?` · ${rep} herstel`:''}`:'nog niet vrijgegeven'}</div></div><div class="meter"><i class="${cls}" style="width:${un?pct:0}%"></i></div><span class="skillPct">${un?pct+'%':'—'}</span></div>`}).join('');
   const q=openRepairs();const misc=topMisconceptions();const qtxt=q.length?q.map(r=>`${SKILLS[r.skill]?.label||r.skill}: over ${Math.max(0,r.due-state.total)} vraag${Math.max(0,r.due-state.total)===1?'':'en'}${r.misconception&&r.misconception!=='generic'?` · ${r.misconception}`:''}`).join('<br>'):'geen open herstelitems';
   const mtxt=misc.length?misc.map(([k,n])=>`${k} × ${n}`).join(' · '):'nog geen patroonfouten geregistreerd';
-  E.sheet.innerHTML=`${screenHeader('Jouw voortgang','Elke stap maakt het verband een beetje helderder.')}<div class="screenScroll integratedProgress"><div class="progressSummary"><div><span class="metricLabel">Verdiende XP</span><strong class="metricValue">${state.xp}</strong></div><div><span class="metricLabel">Dagreeks</span><strong class="metricValue">${state.streak} <small>${state.streak===1?'dag':'dagen'}</small></strong></div><div class="routeMetric"><span class="metricLabel">Jouw route</span><strong class="metricValue">${state.routeStep}<small> rondes voltooid</small></strong><div class="dashboardRoute"><i style="width:${100*state.session.answered/SESSION_LENGTH}%"></i></div><p>${state.session.answered} van ${SESSION_LENGTH} vragen in deze ronde</p></div></div><div class="progressColumns"><div><h3 class="sectionLabel">Je vaardigheden</h3>${rows}</div><div class="progressAside"><div class="queueBox"><strong>Waar je nu aan werkt</strong>${SKILLS[frontierSkill()].label}<br>${isCheckpointSession()?'Je volgende ronde is een checkpoint.':'Korte rondes met een nieuw inzicht, oefening en herhaling.'}</div><div class="queueBox"><strong>Opnieuw oefenen</strong>${q.length?q.map(r=>`${SKILLS[r.skill]?.label||r.skill} · over ${Math.max(0,r.due-state.total)} vragen`).join('<br>'):'Geen open herstelvragen. Nieuwe inzichten krijgen later opnieuw aandacht.'}</div><div class="queueBox"><strong>Je volgende stap</strong>${Object.values(state.skills).filter(x=>x.refreshDue!==null).length} vaardigheden klaar voor latere opfrissing.<br>De route houdt rekening met wat je al beheerst en wat nog oefening vraagt.</div><button class="primary" data-resume>Verder oefenen →</button></div></div></div>`;
-  bindScreenClose(E.sheet);E.sheet.querySelector('[data-resume]').addEventListener('click',()=>closeScreen());
+  const recommendation=journeyRecommendation(),completed=J.places.filter(p=>state.journey?.visits?.[p.id]);
+  E.sheet.innerHTML=`${screenHeader('Jouw voortgang','Afgerond werk blijft staan. Kennis komt later opnieuw terug.')}<div class="screenScroll integratedProgress"><div class="journey-recommend student-next"><div><span>Jouw volgende stap</span><strong>${SKILLS[recommendation.skill]?.label||recommendation.place.name}</strong><p>${recommendation.reason}</p></div><button data-next-place>Bekijk op de kaart →</button></div><p>✓ ${completed.length} stopplaatsen met een afgeronde ronde · ${Object.keys(SKILLS).filter(k=>skillPhase(k)==='stevig').length} vaardigheden stevig</p><div class="progressSummary"><div><span class="metricLabel">Verdiende XP</span><strong class="metricValue">${state.xp}</strong></div><div><span class="metricLabel">Dagreeks</span><strong class="metricValue">${state.streak} <small>${state.streak===1?'dag':'dagen'}</small></strong></div><div class="routeMetric"><span class="metricLabel">Jouw route</span><strong class="metricValue">${state.routeStep}<small> rondes voltooid</small></strong><div class="dashboardRoute"><i style="width:${100*state.session.answered/SESSION_LENGTH}%"></i></div><p>${state.session.answered} van ${SESSION_LENGTH} vragen in deze ronde</p></div></div><div class="progressColumns"><div><h3 class="sectionLabel">Je vaardigheden</h3>${rows}</div><div class="progressAside"><div class="queueBox"><strong>Waar je nu aan werkt</strong>${SKILLS[frontierSkill()].label}<br>${isCheckpointSession()?'Je volgende ronde is een checkpoint.':'Korte rondes met een nieuw inzicht, oefening en herhaling.'}</div><div class="queueBox"><strong>Opnieuw oefenen</strong>${q.length?q.map(r=>`${SKILLS[r.skill]?.label||r.skill} · over ${Math.max(0,r.due-state.total)} vragen`).join('<br>'):'Geen open herstelvragen. Nieuwe inzichten krijgen later opnieuw aandacht.'}</div><div class="queueBox"><strong>Je volgende stap</strong>${Object.values(state.skills).filter(x=>x.refreshDue!==null).length} vaardigheden klaar voor latere opfrissing.<br>De route houdt rekening met wat je al beheerst en wat nog oefening vraagt.</div><button class="primary" data-resume>Verder oefenen →</button></div></div></div>`;
+  bindScreenClose(E.sheet);E.sheet.querySelector('[data-next-place]').onclick=selectJourneyRecommendation;E.sheet.querySelector('[data-resume]').addEventListener('click',()=>{if(current||state.journey?.active||journeyBusy())resumeJourney();else selectJourneyRecommendation()});
+}
+function storageLabel(){return guestMode?'Alleen op dit toestel':({synced:'Voortgang opgeslagen',syncing:'Bezig met opslaan',offline:'Lokaal bewaard; wacht op verbinding',conflict:'Er zijn twee versies van je voortgang',local:'Nog niet online opgeslagen'})[cloudCfg.status]||'Opslag bekijken'}
+function renderProfile(){
+ const root=$('#profilePanel');
+ root.innerHTML=`${screenHeader('Jouw profiel','Je alias, opslag en instellingen.')}<div class="screenScroll"><div class="student-cards"><article class="student-card"><h3>${esc(account?.alias||account?.email||'Gast')}</h3><p>${guestMode?'Je oefent zonder account. Gebruik hetzelfde toestel om je voortgang terug te vinden.':account?.class_code?'Klas: '+esc(account.class_code):'Je bent aangemeld bij leraarBob.'}</p><p><strong data-profile-storage>${esc(storageLabel())}</strong></p><div class="student-actions"><button data-storage>Opslag bekijken</button><a class="primary" href="../../../">${guestMode?'Aanmelden bij leraarBob':'Account bij leraarBob'}</a></div></article><article class="student-card"><h3>Oefenen op jouw tempo</h3><p>Je kunt pauzeren, uitleg bekijken en verdergaan met dezelfde opgave. Tijdens een kaartronde staat de vlotheidstimer uit.</p><button data-settings>Instellingen</button></article></div></div>`;
+ bindScreenClose(root);root.querySelector('[data-storage]').onclick=()=>openScreen('cloud');root.querySelector('[data-settings]').onclick=()=>openScreen('settings');
+}
+function renderGroup(){
+ const root=$('#groupPanel'),social=!!window.AxiomaSocial&&!!account;
+ root.innerHTML=`${screenHeader('Jouw groep','Samen in de klas, ieder met een eigen leerroute.')}<div class="screenScroll"><div class="student-cards"><article class="student-card"><h3>${account?.class_code?'Klas '+esc(account.class_code):'Samen oefenen'}</h3><p>${guestMode?'Meld je aan bij leraarBob om je alias en klas te gebruiken.':`Je speelt als <strong>${esc(account?.alias||'leerling')}</strong>. Je oefenroute past zich aan jouw antwoorden aan.`}</p>${social?'<button data-social>Open samen spelen bij leraarBob</button><p class="learn-status">Hier vind je de bestaande uitnodigingen voor andere spellen.</p>':'<a class="primary" href="../../../">Naar leraarBob</a>'}</article><article class="student-card"><h3>Je eigen vooruitgang telt</h3><p>Er is nog geen ranglijst voor deze leerroute. Leerlingen krijgen verschillende oefenvragen; hun XP is daarom geen vergelijkbare toetsscore.</p><p>Je resultaten en volgende stap vind je bij Voortgang.</p><button data-own-progress>Bekijk mijn voortgang</button></article></div></div>`;
+ bindScreenClose(root);root.querySelector('[data-social]')?.addEventListener('click',()=>window.AxiomaSocial.open());root.querySelector('[data-own-progress]').onclick=()=>openScreen('progress');
 }
 function renderSettings(){
   E.settingsPanel.innerHTML=`${screenHeader('Instellingen','Oefenen op jouw tempo.')}<div class="screenScroll"><div class="settingsBody"><div class="settingsRow"><div><h3>Automatische vlotheidstimer</h3><p>Alleen bij vaardigheden die je al kent. Als de tijd om is, daalt je beheersing niet.</p></div><button id="timerToggle" class="toggle" role="switch" aria-checked="${state.timer}" aria-label="Automatische vlotheidstimer">${state.timer?'Aan':'Uit'}</button></div><div class="settingsRow"><div><h3>Je voortgang wordt bewaard</h3><p>Dit toestel onthoudt je leerroute, XP en vaardigheden automatisch.</p></div><button id="settingsCloud">Opslag bekijken</button></div><div class="settingsRow"><div><h3>Een nieuwe start</h3><p>Wis je lokale leerroute en begin opnieuw.</p></div><button id="resetAll" class="dangerLite">Voortgang wissen</button></div></div></div>`;
@@ -1181,9 +1386,13 @@ function seedFeatureTest(){
   ['delta','slope','point','intercept','ab','fx','table'].forEach(k=>{const s=state.skills[k];s.intro=true;s.seen=Math.max(s.seen,6);s.correct=Math.max(s.correct,5);s.strength=Math.max(s.strength,.62);s.recent=[true,true,true,true]});
   state.review=[];state.skills.zeroRead.intro=false;state.skills.zeroRead.seen=0;state.skills.zeroRead.correct=0;state.skills.zeroRead.strength=0;state.skills.zeroRead.recent=[];state.skills.zero.intro=false;state.skills.sign.intro=false;state.skills.signchart.intro=false;state.session={answered:0,correct:0,xp:0,repaired:0,refreshes:0,newMistakes:0,challengeCorrect:0,timedOut:0,fluencyRecovered:0};state.lastSkill=null;state.started=true;save();clearTimer();E.start.hidden=true;E.sessionDone.hidden=true;locked=false;closeScreen('play');next();
 }
-E.startBtn.addEventListener('click',start);
+$('#pauseExercise').addEventListener('click',()=>openScreen(devMode?'dev':'pause'));
+E.startBtn.addEventListener('click',()=>openScreen('journey'));
+$('#groupBtn').addEventListener('click',()=>openScreen('group'));
+$('#profileBtn').addEventListener('click',()=>openScreen('profile'));
+$('#journeyBtn').addEventListener('click',()=>{if(devMode){toast('Keer eerst terug naar je oefening.');return}openScreen('journey')});
 E.continueBtn.addEventListener('click',continueTraining);
-AxiomaPlatform.bindTrainer({play:()=>closeScreen(),help:()=>currentScreen==='help'?closeScreen():openHelp(),progress:()=>currentScreen==='progress'?closeScreen():openScreen('progress')});
+AxiomaPlatform.bindTrainer({play:()=>{if(current||state.journey?.active||state.waveDraft||state.session.answered&&!state.session.completed)resumeJourney();else openScreen('journey')},help:()=>currentScreen==='help'?closeScreen():openHelp(),progress:()=>currentScreen==='progress'?closeScreen():openScreen('progress')});
 
 E.cloudBtn?.addEventListener('click',()=>currentScreen==='cloud'?closeScreen():openScreen('cloud'));
 E.devBtn.addEventListener('click',()=>currentScreen==='dev'?closeScreen():openScreen('dev'));
@@ -1191,7 +1400,7 @@ E.startDevBtn.addEventListener('click',()=>openScreen('dev'));
 
 E.teacherBtn.addEventListener('click',()=>openScreen('teacher'));
 E.settingsBtn.addEventListener('click',()=>currentScreen==='settings'?closeScreen():openScreen('settings'));
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&currentScreen!=='play'){e.preventDefault();closeScreen()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&currentScreen!=='play'){e.preventDefault();if(currentScreen==='journey'){const j=J.data(state);if(j.view==='area'){j.view='atlas';save();renderJourney()}else if(current||j.active)resumeJourney()}else if(current||state.journey?.active)closeScreen();else openScreen('journey')}});
 updateStart();renderTop();renderSessionCue();renderCloudStatus();initCloudFoundation();window.addEventListener('beforeunload',saveLocalOnly);
 })();
 </script>

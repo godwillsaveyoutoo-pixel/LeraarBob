@@ -20,5 +20,66 @@ test('b error retains a and selected point; repair, undo and JSON roundtrip pres
 const skill=()=>({intro:false,seen:0,correct:0,strength:0,recent:[]});
 const state=()=>({version:704,skills:Object.fromEntries(C.order.map(k=>[k,skill()])),review:[],access:[]});
 test('pure migration preserves historical data, unknown IDs, reviews, XP and old access',()=>{const s=state();s.version=700;s.xp=97;s.telemetry=[{skill:'ab',ok:true}];s.review=[{skill:'future',kind:'repair',due:8}];s.skills.ab={...skill(),intro:true,seen:8,strength:.8};s.skills.future={custom:7};const before=structuredClone(s),m=C.migrate(s);assert.deepEqual(s,before);assert.deepEqual(m.skills,s.skills);assert.equal(m.xp,97);assert.deepEqual(m.review,s.review);assert.deepEqual(m.telemetry,s.telemetry);assert(m.access.includes('fx'));assert(m.access.includes('ab'));assert(m.access.includes('delta'));assert.equal(m.version,704);assert.deepEqual(C.migrate(m),m)});
-test('all 27 skills reachable; unlocks permanent; no deferred prerequisite',()=>{const s=state();assert.deepEqual(C.unlock(s),['point']);for(const k of C.order){assert(C.unlock(s).includes(k),'reachable '+k);Object.assign(s.skills[k],{intro:true,seen:4,strength:.5,recent:[true,true,true,true]})}assert.equal(C.unlock(s).length,27);for(const v of Object.values(s.skills))v.strength=0;assert.equal(C.unlock(s).length,27);assert(!C.requirements.intercept_from_point.includes('rewrite_linear_equation'));assert(!Object.values(C.requirements).flat().includes('information_sufficiency'))});
+test('all 26 skills reachable; unlocks permanent; no deferred prerequisite',()=>{const s=state();assert.deepEqual(C.unlock(s),['point']);for(const k of C.order){assert(C.unlock(s).includes(k),'reachable '+k);Object.assign(s.skills[k],{intro:true,seen:4,strength:.5,recent:[true,true,true,true]})}assert.equal(C.unlock(s).length,26);for(const v of Object.values(s.skills))v.strength=0;assert.equal(C.unlock(s).length,26);assert(!C.requirements.intercept_from_point.includes('rewrite_linear_equation'));assert(!Object.values(C.requirements).flat().includes('information_sufficiency'))});
 test('mastery needs variant coverage and later different independent tasks, assisted repair supplies none',()=>{const st=skill(),t=task('line_behavior');C.evidence(st,t,0,false);assert(!st.coverage);C.evidence(st,t,0,true);assert(!C.mastered(st,t.skill));for(const [i,variant] of [0,1,4].entries())C.evidence(st,task('line_behavior',{variant,seed:i+3}),i+4,true);assert(C.mastered(st,t.skill))});
+test('short slope route and point substitution lead to a complete formula',()=>{
+ for(const skill of ['slope_from_two_points','equation_from_two_points']){
+  const t=task(skill,{difficulty:1,variant:1});assert.deepEqual(C.stages(t).slice(0,3),['ys','xs','a']);assert(!C.stages(t).includes('dy'));assert(!C.stages(t).includes('dx'));
+ }
+ for(const skill of ['intercept_from_point','equation_from_point_slope']){
+  const t=task(skill,{difficulty:1,variant:1});assert.deepEqual(C.stages(t),['subA','subPoint','ax','b','formulaA','formulaB']);assert(C.stages(t).includes('formulaA'));assert(C.stages(t).includes('formulaB'));
+ }
+});
+test('b uses equivalent operations on both members and restores the previous equation on undo',()=>{
+ for(const seed of [1,2,3,4,5,6]){
+  const t=task('intercept_from_point',{difficulty:2,variant:3,seed}),w=C.fresh(t);
+  while(C.stages(t)[w.index]!=='b')assert(C.submit(t,w,answer(t,w)).ok);
+  const before=structuredClone(C.pointEquation(t,w));
+  assert.equal(C.submit(t,w,{kind:'divide',value:C.q(0)}).ok,false);assert.deepEqual(C.pointEquation(t,w),before);
+  const value=before.left.c;
+  if(!value.n){assert(C.isolated(before,'y'));continue}
+  const r=C.submit(t,w,{kind:'subtract',term:'c',value});assert(r.ok);assert(C.equivalent(before,C.pointEquation(t,w)));assert(C.eq(w.values.b,t.params.model.b));assert.equal(C.stages(t)[w.index],'formulaA');
+  C.undo(w);assert.equal(C.stages(t)[w.index],'b');assert.deepEqual(C.pointEquation(t,w),before);assert.equal(w.values.b,undefined);
+ }
+});
+test('old drafts keep their actual stage, completed work and error evidence',()=>{
+ const t=task('equation_from_two_points',{difficulty:1,variant:1}),w=C.fresh(t);delete w.routeVersion;
+ w.index=4;w.values={ys:['B','A'],xs:['B','A'],dy:C.q(2),dx:C.q(1)};w.errors=['wave.direction'];w.history=[{index:2,values:{ys:['B','A'],xs:['B','A']}}];t.work=w;
+ C.resumeWork(t);assert.equal(C.stages(t)[w.index],'a');assert.deepEqual(w.errors,['wave.direction']);assert.deepEqual(w.values.dy,C.q(2));C.undo(w);assert.equal(C.stages(t)[w.index],'a');
+ const b=task('intercept_from_point');b.work={...C.fresh(b),index:3};delete b.work.routeVersion;C.resumeWork(b);assert.equal(C.stages(b)[b.work.index],'b');
+});
+
+test('version 2 point drafts resume on the compact worksheet without losing answers',()=>{
+ for(const skill of ['intercept_from_point','equation_from_point_slope']){
+  for(const [index,stage] of [[0,'subA'],[1,'subPoint'],[2,'subPoint'],[3,'ax'],[4,'b'],[5,'formulaA'],[6,'formulaB'],[7,'formulaB']]){
+   const t=task(skill),values={subA:t.params.model.a,subY:'y',subX:'x'};
+   t.work={...C.fresh(t),routeVersion:2,index,values,errors:['wave.b'],history:[{index:3,values:structuredClone(values)}]};
+   C.resumeWork(t);assert.equal(C.stages(t)[t.work.index],stage);assert.deepEqual(t.work.values,values);assert.deepEqual(t.work.errors,['wave.b']);
+   C.undo(t.work);assert.equal(C.stages(t)[t.work.index],'ax');
+  }
+  const t=task(skill);t.work={...C.fresh(t),routeVersion:2,index:8,done:true};C.resumeWork(t);assert(t.work.done);assert.equal(t.work.index,C.stages(t).length);
+ }
+});
+
+test('dragging arithmetic keeps multiplication, transposition and addition separate, including undo and resume',()=>{
+ for(const skill of ['intercept_from_point','equation_from_point_slope','equation_from_two_points'])for(let variant=0;variant<10;variant++){
+  const t=task(skill,{difficulty:2,variant,seed:4}),w=C.fresh(t);
+  while(C.stages(t)[w.index]!=='ax')assert(C.submit(t,w,answer(t,w)).ok);
+  const chosen=t.params[w.values.point],a=t.params.model.a;
+  assert.equal(w.values.ax,undefined);assert.equal(w.values.b,undefined);
+  assert(C.submit(t,w,C.mul(a,chosen.x)).ok);assert.equal(C.stages(t)[w.index],'b');
+  assert.equal(C.submit(t,w,{kind:'combineConstants'}).ok,false);
+  assert(C.submit(t,w,{kind:'moveConstant'}).ok);assert.equal(C.stages(t)[w.index],'b');assert.equal(w.values.b,undefined);
+  t.work=JSON.parse(JSON.stringify(w));C.resumeWork(t);assert(t.work.bArithmetic.moved);
+  C.undo(t.work);assert(!t.work.bArithmetic);assert.equal(C.stages(t)[t.work.index],'b');
+  assert(C.submit(t,t.work,{kind:'moveConstant'}).ok);assert(C.submit(t,t.work,{kind:'combineConstants'}).ok);
+  assert(C.eq(t.work.values.b,C.sub(chosen.y,C.mul(a,chosen.x))));assert.equal(C.stages(t)[t.work.index],'formulaA');
+  C.undo(t.work);assert.equal(t.work.values.b,undefined);assert(t.work.bArithmetic.moved);
+ }
+});
+test('version 3 drafts preserve their mathematics and selected point on the new worksheet',()=>{
+ for(const [skill,oldIndex,next] of [['equation_from_point_slope',1,'subPoint'],['equation_from_point_slope',3,'b'],['equation_from_two_points',4,'point'],['equation_from_two_points',7,'ax']]){
+  const t=task(skill);t.work={...C.fresh(t),routeVersion:3,index:oldIndex,values:{point:'B',a:t.params.model.a},history:[]};
+  C.resumeWork(t);assert.equal(C.stages(t)[t.work.index],next);assert.equal(t.work.values.point,'B');
+ }
+});
