@@ -886,6 +886,7 @@ function waveFlow(t){
  }else if(w.done){E.status.className='status good';E.status.textContent=w.errors.length||w.help?'Gecontroleerd na herstel of hulp.':'Goed gecontroleerd.';if(!reviewResult(t)){footer.replaceChildren();advanceAfter()}}
 }
 function renderWave(t){
+ if(t.skill==='slope_from_two_points')t.coordinateGuidance??=devMode?t.difficulty===0:state.skills[t.skill].seen===0;
  let footer=document.querySelector('.wave-actions');if(!footer){footer=document.createElement('div');footer.className='wave-actions';E.stage.querySelector('.exercise-actions').append(footer)}
  window.RechtenWaveUI.mount(t,{visual:E.visual,answers:E.answers,question:E.question,status:E.status,footer,dev:devMode,onChange:persistWave,onDone:finishWave,onResult:r=>waveResult(t,r),onRendered:()=>waveFlow(t),onNext:()=>{if(devMode){launchDev(t.skill,t.difficulty,false);return}state.waveDraft=null;save();next()}});waveFlow(t);persistWave();
 }
@@ -912,27 +913,30 @@ function renderIntro(skill){
 }
 function renderDelta(t){
   const {dx,dy,a,b,ask}=t.params;questionLabel(ask==='dx'?'Hoe groot is Δx?':'Hoe groot is Δy?');graph({a,b,step:{x:0,y:b,dx,dy},showIntercept:false});const correct=ask==='dx'?dx:dy;
-  numericChoices(correct,{extras:[ask==='dx'?dy:dx,-correct,Math.abs(correct)+1],errorFor:v=>deltaError(v,t.params)});
+  numericChoices(t,correct,{extras:[ask==='dx'?dy:dx,-correct,Math.abs(correct)+1],errorFor:v=>deltaError(v,t.params)});
 }
 function deltaError(v,p){const c=p.ask==='dx'?p.dx:p.dy,o=p.ask==='dx'?p.dy:p.dx;if(Math.abs(v-o)<1e-9)return'delta.swap';if(Math.abs(v+c)<1e-9)return'delta.sign';return'delta.other'}
 function renderSlope(t){
   const {dx,dy,a,b}=t.params;questionLabel(`Hoeveel is <i>a</i>? <span class="tiny">gebruik Δy / Δx</span>`);graph({a,b,step:{x:0,y:b,dx,dy},showIntercept:false});
-  numericChoices(a,{extras:[dy,dx,dx/dy,-a],errorFor:v=>slopeError(v,t.params)});
+  numericChoices(t,a,{extras:[dy,dx,dx/dy,-a],errorFor:v=>slopeError(v,t.params)});
 }
 function slopeError(v,p){if(Math.abs(v-p.dx/p.dy)<1e-9)return'slope.inverse';if(Math.abs(v+p.a)<1e-9)return'slope.sign';if(Math.abs(v-p.dy)<1e-9)return'slope.deltaYOnly';if(Math.abs(v-p.dx)<1e-9)return'slope.deltaXOnly';return'slope.other'}
 function renderPoint(t){
   const {x,y}=t.params;questionLabel('Welke coördinaten heeft dit punt?');pointGraph(x,y,false);
   const correct=`(${fmt(x)}, ${fmt(y)})`,raw=[{p:[x,y],e:null},{p:[y,x],e:'point.xySwap'},{p:[-x,y],e:'point.xSign'},{p:[x,-y],e:'point.ySign'}];
-  const opts=[];for(const o of raw){const label=`(${fmt(o.p[0])}, ${fmt(o.p[1])})`;if(!opts.some(q=>q.label===label))opts.push({label,error:o.e})}
-  while(opts.length<4){const label=`(${fmt(x+ri(-2,2))}, ${fmt(y+ri(-2,2))})`;if(!opts.some(q=>q.label===label))opts.push({label,error:'point.other'})}
-  shuffle(opts).forEach(o=>bubble(o.label,'',btn=>answer(btn,o.label===correct,correct,o.error||'generic')));
+  const opts=taskChoices(t,'point',()=>{
+    const values=[];for(const o of raw){const label=`(${fmt(o.p[0])}, ${fmt(o.p[1])})`;if(!values.some(q=>q.label===label))values.push({label,error:o.e})}
+    while(values.length<4){const label=`(${fmt(x+ri(-2,2))}, ${fmt(y+ri(-2,2))})`;if(!values.some(q=>q.label===label))values.push({label,error:'point.other'})}
+    return shuffle(values);
+  });
+  opts.forEach(o=>bubble(o.label,'',btn=>answer(btn,o.label===correct,correct,o.error||'generic')));
 }
 function renderIntercept(t){
-  const {a,b}=t.params;questionLabel('Hoeveel is <span style="color:var(--b)">b</span>?');graph({a,b,showIntercept:true});numericChoices(b,{kind:'b',extras:[a,-b,0,b+1],errorFor:v=>interceptError(v,t.params)});
+  const {a,b}=t.params;questionLabel('Hoeveel is <span style="color:var(--b)">b</span>?');graph({a,b,showIntercept:true});numericChoices(t,b,{kind:'b',extras:[a,-b,0,b+1],errorFor:v=>interceptError(v,t.params)});
 }
 function interceptError(v,p){if(Math.abs(v-p.a)<1e-9)return'intercept.aInstead';if(Math.abs(v+p.b)<1e-9)return'intercept.sign';if(Math.abs(v)<1e-9)return'intercept.origin';return'intercept.other'}
 function renderFx(t){
-  const {a,b,x,y}=t.params;questionLabel(`Hoeveel is f(${fmt(x)})?`);graph({a,b,fx:t.difficulty===0?{x,y}:null});const card=document.createElement('div');card.className='formulaStrip';card.innerHTML=`<strong>${formula(a,b)}</strong><span>x = ${fmt(x)}</span>`;E.answers.appendChild(card);numericChoices(y,{extras:[a*x,b,x,a+b,-y],errorFor:v=>fxError(v,t.params)});
+  const {a,b,x,y}=t.params;questionLabel(`Hoeveel is f(${fmt(x)})?`);graph({a,b,fx:t.difficulty===0?{x,y}:null});const card=document.createElement('div');card.className='formulaStrip';card.innerHTML=`<strong>${formula(a,b)}</strong><span>x = ${fmt(x)}</span>`;E.answers.appendChild(card);numericChoices(t,y,{extras:[a*x,b,x,a+b,-y],errorFor:v=>fxError(v,t.params)});
 }
 function fxError(v,p){if(Math.abs(v-p.x)<1e-9)return'fx.returnsX';if(Math.abs(v-p.b)<1e-9)return'fx.interceptOnly';if(Math.abs(v-p.a*p.x)<1e-9)return'fx.forgetB';if(Math.abs(v+p.y)<1e-9)return'fx.sign';return'fx.other'}
 function tableHTML(xs,ys,targetIndex,replacement='?'){
@@ -940,20 +944,23 @@ function tableHTML(xs,ys,targetIndex,replacement='?'){
   return `<div class="tableStage"><table class="mathTable"><tr><th>x</th>${xcells}</tr><tr><th>f(x)</th>${ycells}</tr></table></div>`;
 }
 function renderTable(t){
-  const {a,b,xs,ys,targetIndex,target}=t.params;questionLabel('Welke waarde ontbreekt in de tabel?');E.visual.innerHTML=tableHTML(xs,ys,targetIndex,'?');const card=document.createElement('div');card.className='formulaStrip';card.innerHTML=`<strong>${formula(a,b)}</strong><span>x = ${fmt(xs[targetIndex])}</span>`;E.answers.appendChild(card);numericChoices(target,{extras:[xs[targetIndex],b,a*xs[targetIndex],-target],errorFor:v=>tableError(v,t.params)});
+  const {a,b,xs,ys,targetIndex,target}=t.params;questionLabel('Welke waarde ontbreekt in de tabel?');E.visual.innerHTML=tableHTML(xs,ys,targetIndex,'?');const card=document.createElement('div');card.className='formulaStrip';card.innerHTML=`<strong>${formula(a,b)}</strong><span>x = ${fmt(xs[targetIndex])}</span>`;E.answers.appendChild(card);numericChoices(t,target,{extras:[xs[targetIndex],b,a*xs[targetIndex],-target],errorFor:v=>tableError(v,t.params)});
 }
 function tableError(v,p){const x=p.xs[p.targetIndex];if(Math.abs(v-x)<1e-9)return'table.usesX';if(Math.abs(v-p.b)<1e-9)return'table.interceptOnly';if(Math.abs(v-p.a*x)<1e-9)return'table.forgetB';return'table.other'}
-function renderAB(t){const {a,b,stepDx,stepDy}=t.params;questionLabel('Kies <span style="color:var(--a)">a</span> én <span style="color:var(--b)">b</span>');graph({a,b,step:{x:0,y:b,dx:stepDx,dy:stepDy},showIntercept:true});abChoices(a,b)}
+function renderAB(t){const {a,b,stepDx,stepDy}=t.params;questionLabel('Kies <span style="color:var(--a)">a</span> én <span style="color:var(--b)">b</span>');graph({a,b,step:{x:0,y:b,dx:stepDx,dy:stepDy},showIntercept:true});abChoices(t,a,b)}
 function renderZeroRead(t){
   const {a,b,root,ask}=t.params;graph({a,b,zero:root,showZero:true,showZeroLabel:false});
   if(ask==='point'){
     questionLabel('Welk nulpunt hoort bij deze rechte?');const correct=`(${fmt(root)}, 0)`;
     const raw=[{label:correct,e:null},{label:`(0, ${fmt(root)})`,e:'zeroRead.xySwap'},{label:`(${fmt(-root)}, 0)`,e:'zeroRead.sign'},{label:`(${fmt(root)}, ${fmt(b)})`,e:'zeroRead.usesB'}];
-    const opts=[];for(const o of raw)if(!opts.some(q=>q.label===o.label))opts.push(o);
-    let guard=0;while(opts.length<4&&guard++<30){const xx=ri(-4,4),yy=rand([0,1,-1,2,-2]);const label=`(${fmt(xx)}, ${fmt(yy)})`;if(label!==correct&&!opts.some(q=>q.label===label))opts.push({label,e:'zeroRead.other'})}
-    shuffle(opts.slice(0,4)).forEach(o=>bubble(o.label,'',btn=>answer(btn,o.label===correct,correct,o.e||'generic')));
+    const opts=taskChoices(t,'zeroRead',()=>{
+      const values=[];for(const o of raw)if(!values.some(q=>q.label===o.label))values.push(o);
+      let guard=0;while(values.length<4&&guard++<30){const xx=ri(-4,4),yy=rand([0,1,-1,2,-2]);const label=`(${fmt(xx)}, ${fmt(yy)})`;if(label!==correct&&!values.some(q=>q.label===label))values.push({label,e:'zeroRead.other'})}
+      return shuffle(values.slice(0,4));
+    });
+    opts.forEach(o=>bubble(o.label,'',btn=>answer(btn,o.label===correct,correct,o.e||'generic')));
   }else{
-    questionLabel('Lees de nulwaarde af.');numericChoices(root,{extras:[0,b,-root,a],errorFor:v=>zeroReadError(v,t.params)});
+    questionLabel('Lees de nulwaarde af.');numericChoices(t,root,{extras:[0,b,-root,a],errorFor:v=>zeroReadError(v,t.params)});
   }
 }
 function zeroReadError(v,p){if(Math.abs(v)<1e-9)return'zeroRead.yIsZero';if(Math.abs(v+p.root)<1e-9)return'zeroRead.sign';if(Math.abs(v-p.b)<1e-9)return'zeroRead.usesB';return'zeroRead.other'}
@@ -962,7 +969,7 @@ function renderZero(t){
   if(showGraph)graph({a,b,zero:root,showZero:false});else E.visual.innerHTML=`<div class="equationStage"><div class="formulaBig">${formula(a,b)}</div><div class="zeroCue">nulwaarde ⇒ <strong>f(x) = 0</strong></div></div>`;
   const card=document.createElement('div');card.className='exampleCard';card.innerHTML=`<div class="big">${formula(a,b)}</div><div class="sub">Voor welke x wordt f(x) = 0?</div>`;E.answers.appendChild(card);
   const holder=document.createElement('div');holder.style.display='flex';holder.style.flexWrap='wrap';holder.style.justifyContent='center';holder.style.gap='clamp(9px,1.6vw,20px)';holder.style.width='100%';E.answers.appendChild(holder);
-  numericChoices(root,{container:holder,extras:[0,b,a,-root],errorFor:v=>zeroError(v,t.params)});
+  numericChoices(t,root,{container:holder,extras:[0,b,a,-root],errorFor:v=>zeroError(v,t.params)});
 }
 function zeroError(v,p){if(Math.abs(v+p.root)<1e-9)return'zero.sign';if(Math.abs(v)<1e-9)return'zero.definition';if(Math.abs(v-p.b)<1e-9||Math.abs(v-p.a)<1e-9)return'zero.coefficient';return'zero.other'}
 function renderSign(t){
@@ -971,7 +978,7 @@ function renderSign(t){
   const correct=(wantsPositive?(a>0?'gt':'lt'):(a>0?'lt':'gt'));
   const row=document.createElement('div');row.className='choiceRow';E.answers.appendChild(row);
   const opts=[{op:'lt',label:`x &lt; ${fmt(root)}`},{op:'gt',label:`x &gt; ${fmt(root)}`},{op:'eq',label:`x = ${fmt(root)}`}];
-  shuffle(opts).forEach(o=>choicePill(o.label,btn=>{const ok=o.op===correct;let err='sign.wrongSide';if(o.op==='eq')err='sign.zeroOnly';answer(btn,ok,correct==='lt'?`x < ${fmt(root)}`:`x > ${fmt(root)}`,ok?'generic':err)},row));
+  taskChoices(t,'sign',()=>shuffle(opts)).forEach(o=>choicePill(o.label,btn=>{const ok=o.op===correct;let err='sign.wrongSide';if(o.op==='eq')err='sign.zeroOnly';answer(btn,ok,correct==='lt'?`x < ${fmt(root)}`:`x > ${fmt(root)}`,ok?'generic':err)},row));
 }
 function signChartHTML(root,values=['?','?','?'],active=true,rootActive=false){
   const rootText=root==='?'?'?':fmt(root),rootClass=root==='?'?'signSlot rootSlot '+(rootActive?'active':''):'';
@@ -988,7 +995,7 @@ function renderSignChart(t){
     // E.answers staat voor het tekenschema bewust in column-modus; zonder aparte rij
     // werden de numerieke answer-orbs daardoor verticaal onder elkaar gezet.
     const row=document.createElement('div');row.className='choiceRow signRootChoices';E.answers.appendChild(row);
-    numericChoices(root,{container:row,count:4,extras:[0,b,a,-root],errorFor:v=>Math.abs(v+root)<1e-9?'signchart.rootSign':Math.abs(v-b)<1e-9?'signchart.usesB':'signchart.rootOther'});return;
+    numericChoices(t,root,{container:row,count:4,extras:[0,b,a,-root],errorFor:v=>Math.abs(v+root)<1e-9?'signchart.rootSign':Math.abs(v-b)<1e-9?'signchart.usesB':'signchart.rootOther'});return;
   }
   questionLabel('Vul de tekens in het tekenschema.');
   if(showGraph)graph({a,b,zero:root,showZero:true,showZeroLabel:false,signColors:true});else E.visual.innerHTML=`<div class="signStage"><div class="signFormula">${formula(a,b)}</div><div class="miniHint">nulwaarde: ${fmt(root)}</div></div>`;
@@ -1068,6 +1075,8 @@ function showBubbleStressTest(){
   E.status.className='status';E.status.textContent='DEV · controleer leesbaarheid en ronde vorm op dit scherm.';
   applyInteractionState(current);renderTop();
 }
+// Keep the same values and positions when returning from help or resuming a saved task.
+function taskChoices(t,key,create){t.answerChoices??={};return t.answerChoices[key]??=create()}
 function choiceValues(correct,extras=[],count=4){
   const eq=(a,b)=>Math.abs(a-b)<1e-9;
   const pool=uniq([...extras,correct-1,correct+1,-correct,0,correct-2,correct+2,correct-3,correct+3])
@@ -1078,7 +1087,7 @@ function choiceValues(correct,extras=[],count=4){
   return shuffle([correct,...picked.slice(0,count-1)]);
 }
 function distractors(correct,extras=[]){return choiceValues(correct,extras,4)}
-function numericChoices(correct,opt={}){const vals=choiceValues(correct,opt.extras||[],opt.count||4),container=opt.container||E.answers;vals.forEach(v=>bubble(mathHTML(v),opt.kind||'',btn=>answer(btn,Math.abs(v-correct)<1e-9,fmt(correct),Math.abs(v-correct)<1e-9?'generic':(opt.errorFor?opt.errorFor(v):'generic')),container))}
+function numericChoices(t,correct,opt={}){const vals=taskChoices(t,'numeric',()=>choiceValues(correct,opt.extras||[],opt.count||4)),container=opt.container||E.answers;vals.forEach(v=>bubble(mathHTML(v),opt.kind||'',btn=>answer(btn,Math.abs(v-correct)<1e-9,fmt(correct),Math.abs(v-correct)<1e-9?'generic':(opt.errorFor?opt.errorFor(v):'generic')),container))}
 function feedbackCorrect(){if(devMode||current?.kind==='dev')return'DEV · Juist.';if(current.kind==='repair'){const r=findReview(current.reviewId);return r&&r.stage>=1?'Juist. Nog één latere controle. +15 XP':'Juist. +15 XP'}if(current.kind==='refresh')return'Juist — nog stevig. +12 XP';if(current.kind==='fluency')return'Juist — weer vlot. +12 XP';return`Juist. +${10+2*current.difficulty} XP`}
 function finishOutcome(ok,correctText,errorCode='generic'){
   if(devMode||current?.kind==='dev'){E.status.className='status '+(ok?'good':'bad');E.status.textContent=ok?'DEV · Juist. Gebruik Nieuwe variant of kies een ander vraagtype.':`DEV · Fout. Sleutel: ${correctText}`;renderDevPanel();return}
@@ -1091,10 +1100,10 @@ function finishOutcome(ok,correctText,errorCode='generic'){
 }
 
 function answer(btn,ok,correctText,errorCode='generic'){if(locked)return;locked=true;clearTimer();playCausalFeedback(ok);if(ok){btn.classList.add('good');E.status.className='status good';E.status.textContent=feedbackCorrect()}else{btn.classList.add('bad');E.status.className='status bad';E.status.textContent=devMode?`DEV · Fout. Sleutel: ${correctText}`:`Nog niet. Antwoord: ${correctText}. Ik laat dit later terugkomen.`}finishOutcome(ok,correctText,errorCode)}
-function abChoices(a,b){
+function abChoices(t,a,b){
   const legend=document.createElement('div');legend.className='legend';legend.innerHTML='<span><i class="swatch a"></i>blauw = a</span><span><i class="swatch b"></i>oranje = b</span>';E.answers.appendChild(legend);let pickA=null,pickB=null;const all=[];
   const tryDone=()=>{if(locked||pickA===null||pickB===null)return;locked=true;clearTimer();const ok=Math.abs(pickA-a)<1e-9&&Math.abs(pickB-b)<1e-9;let err='generic';if(!ok){if(Math.abs(pickA-b)<1e-9&&Math.abs(pickB-a)<1e-9)err='ab.swapped';else if(Math.abs(pickA-a)<1e-9)err='ab.intercept';else if(Math.abs(pickB-b)<1e-9)err='ab.slope';else err='ab.both'}all.forEach(o=>{if((o.kind==='a'&&o.val===pickA)||(o.kind==='b'&&o.val===pickB))o.btn.classList.add(ok?'good':'bad')});playCausalFeedback(ok);E.status.className='status '+(ok?'good':'bad');E.status.textContent=ok?feedbackCorrect():(devMode?`DEV · Fout. Sleutel: a = ${fmt(a)}, b = ${fmt(b)}`:`Nog niet. a = ${fmt(a)} en b = ${fmt(b)}. Ik laat dit later terugkomen.`);finishOutcome(ok,`a = ${fmt(a)}, b = ${fmt(b)}`,err)};
-  const av=choiceValues(a,[b],3),bv=choiceValues(b,[a],3);av.forEach(v=>{const btn=bubble(mathHTML(v),'a',x=>{if(locked)return;all.filter(o=>o.kind==='a').forEach(o=>o.btn.classList.remove('selected'));x.classList.add('selected');pickA=v;tryDone()});all.push({btn,val:v,kind:'a'})});bv.forEach(v=>{const btn=bubble(mathHTML(v),'b',x=>{if(locked)return;all.filter(o=>o.kind==='b').forEach(o=>o.btn.classList.remove('selected'));x.classList.add('selected');pickB=v;tryDone()});all.push({btn,val:v,kind:'b'})});
+  const av=taskChoices(t,'a',()=>choiceValues(a,[b],3)),bv=taskChoices(t,'b',()=>choiceValues(b,[a],3));av.forEach(v=>{const btn=bubble(mathHTML(v),'a',x=>{if(locked)return;all.filter(o=>o.kind==='a').forEach(o=>o.btn.classList.remove('selected'));x.classList.add('selected');pickA=v;tryDone()});all.push({btn,val:v,kind:'a'})});bv.forEach(v=>{const btn=bubble(mathHTML(v),'b',x=>{if(locked)return;all.filter(o=>o.kind==='b').forEach(o=>o.btn.classList.remove('selected'));x.classList.add('selected');pickB=v;tryDone()});all.push({btn,val:v,kind:'b'})});
 }
 function devAnswerKey(t){
   if(W.transferSkills.includes(t?.skill)&&t.type!=='intro'&&t.params.variant==='inconsistent')return 'geen passend affine voorschrift voor alle tabelpunten';

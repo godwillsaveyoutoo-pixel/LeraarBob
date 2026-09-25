@@ -38,6 +38,12 @@ class CDP{
   await reset();await layout('map');await tap('[data-place="bridge"]');assert(await c.eval('document.querySelector(".journey-details").textContent.includes("Bereid eerst")'));assert(!await c.eval('document.querySelector("[data-start=discover]")'));
   await tap('[data-place="tower"]');await tap('[data-start="discover"]');assert.equal(await c.run('current.type'),'intro');await c.wait('document.querySelector("#introGo")&&!document.querySelector("#introGo").disabled');await tap('#introGo');await layout('play');
   const before=await c.run('JSON.stringify(current)');await tap('#journeyBtn');await layout('map');await tap('[data-resume]');assert.equal(await c.run('JSON.stringify(current)'),before);
+  const options=await c.eval('[...document.querySelectorAll("#answers .bubble")].map(b=>b.textContent)');
+  const params=await c.run('current.params');
+  await tap('#helpBtn');await tap('#playBtn');assert.deepEqual(await c.eval('[...document.querySelectorAll("#answers .bubble")].map(b=>b.textContent)'),options,'help preserves answer choices');
+  await c.eval('window.__oldChoicesPage=true');await navigate();await c.wait('!window.__oldChoicesPage&&window.__R&&!!document.querySelector("[data-resume]")');await tap('[data-resume]');
+  assert.deepEqual(await c.run('current.params'),params,'resume preserves the point');
+  assert.deepEqual(await c.eval('[...document.querySelectorAll("#answers .bubble")].map(b=>b.textContent)'),options,'reload preserves answer values and order');
   await solveCurrent();await layout('play');const scored=await c.run('({xp:state.xp,total:state.total,id:current.id})');assert.equal(scored.total,1);await c.run('record(true)');assert.deepEqual(await c.run('({xp:state.xp,total:state.total,id:current.id})'),scored);
   await c.run(`launchDev('point_plot',0,false);exitDev()`);assert.equal(await c.eval('document.querySelectorAll(".journey-next").length'),0);await layout('play');assert.deepEqual(await c.run('({xp:state.xp,total:state.total,id:current.id})'),scored);
   const shot=await c.send('Page.captureScreenshot');fs.writeFileSync(`/tmp/rechten-journey-${width}-task.png`,Buffer.from(shot.data,'base64'));
@@ -45,6 +51,18 @@ class CDP{
   await onward();assert.notEqual(await c.run('current.id'),scored.id);
   await tap('#helpBtn');await tap('#playBtn');await solveCurrent();assert.equal(await c.run('state.journey.active.results.at(-1).independent'),false);
   await tap('#journeyBtn');await layout('map');const map=await c.send('Page.captureScreenshot');fs.writeFileSync(`/tmp/rechten-journey-${width}-map.png`,Buffer.from(map.data,'base64'));
+ }
+ // Every legacy choice type keeps its options, including duplicate distractors at the origin.
+ await reset(true);
+ for(const skill of ['point','delta','slope','intercept','ab','fx','table','zeroRead','zero','sign','signchart']){
+  await c.run(`current=generate(${JSON.stringify(skill)},{difficulty:1});if(current.skill==='point')current.params={x:0,y:0};if(current.skill==='zeroRead')current.params={a:1,b:0,root:0,ask:'point'};if(current.skill==='signchart')current.params.fillMode='root';render(current)`);
+  const labels=await c.eval('[...document.querySelectorAll("#answers button")].map(b=>b.textContent)');assert(labels.length>=3,skill);
+  const stored=await c.run('JSON.stringify(current)');
+  for(let i=0;i<3;i++){
+   await c.run('current=JSON.parse('+JSON.stringify(stored)+');render(current)');
+   assert.deepEqual(await c.eval('[...document.querySelectorAll("#answers button")].map(b=>b.textContent)'),labels,skill+' rerender');
+  }
+  assert.equal(await c.run(`generate(${JSON.stringify(skill)}).answerChoices===undefined`),true,'a new task gets its own choices');
  }
  // Complete a real discovery round from an empty learner, including the first plotted point.
  await reset();await tap('[data-start="discover"]');
@@ -98,6 +116,6 @@ class CDP{
  await solveCurrent();await c.run('flushProgress()');assert.equal(await c.eval('testWrites.at(-1).id'),'journey-synthetic-a');assert.equal(await c.eval('testRow.state.journey.active.results.length'),1);
  await c.eval('testSwap()');await c.wait('__R.run('+JSON.stringify("account?.id==='journey-synthetic-b'&&accountReady")+')');assert.equal(await c.run('state.total'),0);assert.equal(await c.run('state.journey?.active||null'),null);assert.equal(await c.run('current'),null);
  assert(await c.eval('testWrites.every(w=>w.id==="journey-synthetic-a")'));
- assert.deepEqual(c.errors,[]);console.log('PASS journey: mobile map/tasks, real discovery round, cumulative challenge and retake, help, global review, reload, partial construction, idempotent XP, DEV resume');
+ assert.deepEqual(c.errors,[]);console.log('PASS journey: mobile map/tasks, stable answer choices across help/reload, real discovery round, cumulative challenge and retake, help, global review, reload, partial construction, idempotent XP, DEV resume');
  }finally{await c.send('Fetch.disable');c.ws.close()}
 })().catch(e=>{console.error(e);process.exit(1)});

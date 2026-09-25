@@ -50,6 +50,27 @@ class CDP{
   await setup('equation_from_ab',2,1);assert.equal(await c.eval('document.querySelector("[data-slot].active").dataset.slot'),'a');await completeFormula(touch);assert(await c.run('current.work.done'));await layout();
   await setup('equation_from_ab',2,1);const m=await c.run('current.params.model');await token('number',{n:0,d:1},touch);await token('variable','x',touch);await token('sign','+',touch);assert.equal(await c.run('current.work.errors.length'),0);await token('number',m.b,touch);assert.equal(await c.run('current.work.errors.length'),1);assert(!await c.run('current.work.done'));await tap('[data-slot="a"]',touch);await token('number',m.a,touch);assert(await c.run('current.work.done'));
   await setup('equation_from_two_points',1,1);for(const axis of ['y','x'])for(const name of ['B','A'])await tap(`[data-coord-point="${name}"][data-coord-axis="${axis}"]`,touch);assert.equal(await stage(),'a');assert(await c.eval('!!document.querySelector(".coordinate-fraction") && document.querySelectorAll("[data-number-part]").length===2'));await layout();await shot('slope-inline-'+width);await number(await c.run('current.params.model.a'),touch);assert.equal(await stage(),'point');await layout();
+  // The first slope exercise names the active coordinate, with real subscripts.
+  await setup('slope_from_two_points',0,0);
+  await c.run("devMode=false;current=generate('slope_from_two_points',{difficulty:0});render(current)");
+  await c.run("helpTopic=current.skill;openScreen('help')");assert.deepEqual(await c.eval('[...document.querySelectorAll(".helpText .slope-rule sub")].map(s=>s.textContent)'),['B','A','B','A']);await shot('slope-rule-'+width);await c.run("closeScreen('play')");
+  assert.equal(await c.eval('document.querySelectorAll(".coordinate-slot sub").length'),4);await layout();await shot('slope-guide-'+width);
+  for(const [axis,name] of [['y','B'],['y','A'],['x','B'],['x','A']]){
+   assert.equal(await c.eval('document.querySelector(".coordinate-instruction strong").textContent'),axis+name);
+   assert.equal(await c.eval('document.querySelector(".coordinate-instruction sub").textContent'),name);
+   await tap(`[data-coord-point="${name}"][data-coord-axis="${axis}"]`,touch);await layout();
+   await c.run('current=JSON.parse(JSON.stringify(current));render(current)');
+  }
+  assert.equal(await stage(),'a');assert.match(await c.eval('document.querySelector(".coordinate-instruction").textContent'),/Bereken teller en noemer/);
+  await c.run("state.skills.slope_from_two_points.seen=1;current=generate('slope_from_two_points',{difficulty:0});render(current)");
+  assert.equal(await c.eval('document.querySelector(".coordinate-instruction strong")'),null,'later exercises omit the step-by-step guide');
+  await setup('slope_from_two_points',0,0);
+  await tap('[data-coord-point="A"][data-coord-axis="y"]',touch);
+  assert.equal(await c.eval('document.querySelector(".coordinate-instruction strong").textContent'),'yB');
+  await tap('[data-coord-point="B"][data-coord-axis="y"]',touch);
+  assert.equal(await c.eval('document.querySelector(".coordinate-instruction strong").textContent'),'xA');
+  await tap('[data-coord-row="xs"][data-coord-slot="1"]',touch);
+  assert.equal(await c.eval('document.querySelector(".coordinate-instruction strong").textContent'),'xB','the instruction follows the selected slot');
   await setup('slope_from_two_points',1,1);await toStage('a');
   await c.click('wis',touch);await c.click('2',touch);await tap('[data-number-part="1"]',touch);await c.click('0',touch);await c.click('Controleer',touch);assert.equal(await stage(),'a');assert.match(await c.eval('document.querySelector("#status").textContent'),/noemer niet nul/);
   await tap('[data-number-part="1"]',touch);await c.click('⌫',touch);await c.click('±',touch);await c.click('2',touch);
