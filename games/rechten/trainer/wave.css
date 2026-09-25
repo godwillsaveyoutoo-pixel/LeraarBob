@@ -15,6 +15,8 @@
 .stage:has(.coordinate-builder) .play{grid-template-columns:minmax(0,1fr);grid-template-areas:'primary-content';max-width:1000px}
 .stage:has(.coordinate-builder) .answers{display:none}.stage:has(.coordinate-builder) .visual{width:100%}
 .coordinate-builder{--coordinate-size:clamp(25px,2.4vw,34px);width:100%;display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center}
+.coordinate-symbol{white-space:nowrap}.coordinate-symbol sub,.slope-rule sub{font-size:.65em;line-height:0;vertical-align:-.3em}
+.slope-rule>span:first-child{padding-bottom:.25em}.slope-rule>span:last-child{padding-top:.15em}
 .coordinate-points{display:flex;align-items:center;justify-content:center;gap:56px}.coordinate-point{display:flex;align-items:center;gap:7px;font-size:var(--coordinate-size)}.coordinate-point strong{font-weight:600}
 .coordinate-token,.coordinate-slot{display:inline-flex;align-items:center;justify-content:center;min-width:64px;min-height:58px;font-size:var(--coordinate-size);padding:6px 10px;line-height:1.1;font-variant-numeric:tabular-nums}
 .coordinate-token{touch-action:none;user-select:none;background:transparent;border:1px solid #d7e2dc;cursor:grab;font-weight:500}.coordinate-token.selected{outline:2px solid var(--accent);background:var(--accent2)}
