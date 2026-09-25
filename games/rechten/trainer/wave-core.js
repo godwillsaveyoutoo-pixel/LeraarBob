@@ -9,12 +9,12 @@ function parse(s){s=String(s).replaceAll('−','-');if(!/^-?\d+(?:[.,]\d+|\/-?\d
 const text=a=>{a=q(a);return String(a.n).replace('-','−')+(a.d===1?'':'/'+a.d)},html=a=>{a=q(a);return a.d===1?text(a):`${a.n<0?'−':''}<span class="frac"><span>${Math.abs(a.n)}</span><span>${a.d}</span></span>`};
 function formula(a,b){a=q(a);b=q(b);if(!a.n)return 'y = '+html(b);return 'y = '+(eq(a,1)?'':eq(a,-1)?'−':html(a))+'x'+(b.n?' '+(b.n<0?'−':'+')+' '+html(q(Math.abs(b.n),b.d)):'')}
 const catalog={
- rewrite_linear_equation:{label:'vergelijking herleiden',requires:['equation_from_ab']},
+ rewrite_linear_equation:{label:'vergelijking herleiden',requires:['ab']},
  input_from_output:{label:'x uit een functiewaarde',requires:['fx','rewrite_linear_equation']},
  point_on_line:{label:'punt op de rechte controleren',requires:['fx','point']},
  point_plot:{label:'punt op het rooster plaatsen',requires:['point']},
- equation_from_ab:{label:'voorschrift uit a en b',requires:['ab']},
- graph_from_equation:{label:'rechte uit voorschrift tekenen',requires:['point_plot','slope','intercept','equation_from_ab']},
+ equation_from_ab:{label:'voorschrift uit a en b',requires:['ab','signchart']},
+ graph_from_equation:{label:'rechte uit voorschrift tekenen',requires:['point_plot','slope','intercept','ab']},
  slope_from_two_points:{label:'a uit twee punten',requires:['point','delta','slope']},
  line_behavior:{label:'stijgend, dalend of constant',requires:['slope_from_two_points']},
  special_lines:{label:'bijzondere rechten',requires:['line_behavior']},
@@ -22,7 +22,7 @@ const catalog={
  equation_from_point_slope:{label:'voorschrift uit a en punt',requires:['intercept_from_point']},
  equation_from_two_points:{label:'voorschrift uit twee punten',requires:['slope_from_two_points','equation_from_point_slope']}
 };
-const order=['point','point_plot','delta','slope','slope_from_two_points','line_behavior','special_lines','intercept','ab','equation_from_ab','intercept_from_point','equation_from_point_slope','equation_from_two_points','graph_from_equation','fx','rewrite_linear_equation','input_from_output','point_on_line','table','zeroRead','zero','sign','signchart'];
+const order=['point','point_plot','delta','slope','slope_from_two_points','line_behavior','special_lines','intercept','ab','fx','table','graph_from_equation','rewrite_linear_equation','input_from_output','point_on_line','zeroRead','zero','sign','signchart','equation_from_ab','intercept_from_point','equation_from_point_slope','equation_from_two_points'];
 const requirements={point:[],delta:['point_plot'],slope:['delta'],intercept:['special_lines'],ab:['intercept','slope'],...Object.fromEntries(Object.entries(catalog).map(([k,v])=>[k,v.requires]))};
 function legacyAccess(skills){const s=new Proxy(skills||{},{get:(s,k)=>s[k]||{seen:0,strength:0}}),a=['delta'];if(s.delta.seen>=2&&s.delta.strength>=.22)a.push('slope');if(s.slope.seen>=3&&s.slope.strength>=.30)a.push('point');if(s.point.seen>=2&&s.slope.strength>=.40)a.push('intercept');if(s.intercept.seen>=2&&s.slope.strength>=.44)a.push('ab');if(s.ab.seen>=3&&s.ab.strength>=.38)a.push('fx');if(s.fx.seen>=3&&s.fx.strength>=.36)a.push('table');if(s.table.seen>=3&&s.fx.strength>=.46)a.push('zeroRead');if(s.zeroRead.seen>=3&&s.zeroRead.strength>=.34)a.push('zero');if(s.zero.seen>=3&&s.zero.strength>=.38)a.push('sign');if(s.sign.seen>=3&&s.sign.strength>=.40)a.push('signchart');return a}
 function migrate(saved){
@@ -82,7 +82,6 @@ function constructionCheck(t,value){
  if(!Array.isArray(value)||value.length!==2||!value.every(validPoint))return fail('graph.missing','Plaats twee punten voordat je de rechte controleert.');
  if(eq(value[0].x,value[1].x)&&eq(value[0].y,value[1].y))return fail('graph.identical','Twee identieke punten bepalen geen rechte. Verplaats één punt.');
  const good=value.map(p=>onLine(p,m));
- if(t.difficulty===0&&(!eq(value[0].x,0)||!eq(value[0].y,m.b)))return fail('graph.intercept','Begin op de y-as: A moet (0; b) zijn.',{point:0});
  if(!good[0]||!good[1])return fail(!good[0]?'graph.first':'graph.second',!good[0]?'Punt A voldoet niet aan het voorschrift. Controleer zijn y bij deze x.':'Punt A klopt. Verplaats B zodat Δy / Δx gelijk is aan a.',{point:!good[0]?0:1});
  return ok;
 }
@@ -180,19 +179,42 @@ function generate(skill,{difficulty=0,variant=0,seed=1}={}){
  const m=model(A,B);const variantName=m.kind==='affine'?(m.a.n===0?'horizontal':m.a.d!==1?(m.a.n<0?'negative-fraction':'positive-fraction'):(m.a.n<0?'negative':'positive')):m.kind;
  return {A,B,model:m,variant:variantName,representation:skill==='line_behavior'?['graph','slope','points'][difficulty]:skill==='special_lines'&&difficulty===0?'graph':'points',support:difficulty===0?'guided':'independent'};
 }
-function stages(t){if(algebraSkills.includes(t.skill))return algebraStages(t);if(constructionSkills.includes(t.skill))return [t.skill];const p=t.params,m=p.model,s=t.skill;if(s==='line_behavior')return ['behavior'];if(s==='special_lines'||m.kind!=='affine')return m.kind==='identical'?['classify']:['classify','property','axis','constant','function'];const slope=['ys','xs','dy','dx','a'];if(s==='slope_from_two_points')return slope;const b=['subY','subX','ax','b'];return [...(s==='equation_from_two_points'?[...slope,'point']:[]),...b,...(s==='intercept_from_point'?[]:['formulaA','formulaB']),...(s==='equation_from_two_points'?['verifyA','verifyB']:['verifyA'])]}
-function fresh(t){return {index:0,values:{},tokens:[],entry:['','1'],part:0,errors:[],steps:[],help:false,done:false,history:[]}}
-function expected(t,w,stage=stages(t)[w.index]){if(algebraSkills.includes(t.skill))return algebraExpected(t,w,stage);if(constructionSkills.includes(t.skill))return null;const p=t.params,m=p.model,A=p[w.values.point||'A'],rev=w.values.ys?.[0]==='A',dy=rev?sub(p.A.y,p.B.y):sub(p.B.y,p.A.y),dx=rev?sub(p.A.x,p.B.x):sub(p.B.x,p.A.x);switch(stage){case 'behavior':return m.a.n>0?'stijgend':m.a.n<0?'dalend':'constant';case 'classify':return m.kind==='identical'?'identiek':m.kind==='vertical'?'verticaal':'horizontaal';case 'property':return m.kind==='vertical'?'dx0':'a0';case 'axis':return m.kind==='vertical'?'x':'y';case 'constant':return m.kind==='vertical'?m.c:m.b;case 'function':return m.kind==='affine'?'functie':'geen functie';case 'dy':return dy;case 'dx':return dx;case 'a':case 'formulaA':return m.a;case 'subY':return A.y;case 'subX':return A.x;case 'ax':return mul(m.a,A.x);case 'b':case 'formulaB':return m.b;case 'verifyA':return p.A.y;case 'verifyB':return p.B.y}}
-function check(t,w,value){if(algebraSkills.includes(t.skill))return algebraCheck(t,w,value);if(constructionSkills.includes(t.skill))return constructionCheck(t,value);const stage=stages(t)[w.index],want=expected(t,w);let ok=false,code=stage,message='';
+function stages(t){if(algebraSkills.includes(t.skill))return algebraStages(t);if(constructionSkills.includes(t.skill))return [t.skill];const m=t.params.model,s=t.skill;if(s==='line_behavior')return ['behavior'];if(s==='special_lines'||m.kind!=='affine')return m.kind==='identical'?['classify']:['classify','property','axis','constant','function'];const slope=['ys','xs','a'];if(s==='slope_from_two_points')return slope;return [...(s==='equation_from_two_points'?[...slope,'point']:['subA','subPoint']),'ax','b','formulaA','formulaB',...(s==='equation_from_two_points'?['verifyA','verifyB']:[])]}
+function fresh(t){return {routeVersion:4,index:0,values:{},tokens:[],entry:['','1'],part:0,errors:[],steps:[],help:false,done:false,history:[]}}
+function resumeWork(t){
+ const w=t.work||(t.work=fresh(t));if(w.routeVersion===4)return w;
+ if(!algebraSkills.includes(t.skill)&&!constructionSkills.includes(t.skill)&&t.params.model.kind==='affine'&&!['special_lines','line_behavior'].includes(t.skill)){
+  const version=w.routeVersion||1,two=t.skill==='equation_from_two_points',slope=version>=2?['ys','xs','a']:['ys','xs','dy','dx','a'];
+  const b=version===3&&!two?['subA','subY','subX','b']:version>=2?['subA','subY','subX','ax','b']:['subY','subX','ax','b'];
+  const old=t.skill==='slope_from_two_points'?slope:[...(two?[...slope,'point']:[]),...b,...(version===1&&t.skill==='intercept_from_point'?[]:['formulaA','formulaB']),...(two?['verifyA','verifyB']:version===3?[]:['verifyA'])];
+  const next=stages(t),map=i=>{
+   let stage=old[i];if(['dy','dx'].includes(stage))stage='a';
+   if(['subY','subX'].includes(stage)||two&&stage==='subA')stage=two?'point':'subPoint';
+   if(stage==='verifyA'&&!next.includes(stage))stage='formulaB';
+   return Math.max(0,next.indexOf(stage));
+  };
+  w.index=w.done?next.length:map(w.index);w.history=w.history.map(h=>({...h,index:map(h.index)}));
+ }
+ w.routeVersion=4;return w;
+}
+function expected(t,w,stage=stages(t)[w.index]){if(algebraSkills.includes(t.skill))return algebraExpected(t,w,stage);if(constructionSkills.includes(t.skill))return null;const p=t.params,m=p.model,A=p[w.values.point||'A'],rev=w.values.ys?.[0]==='A',dy=rev?sub(p.A.y,p.B.y):sub(p.B.y,p.A.y),dx=rev?sub(p.A.x,p.B.x):sub(p.B.x,p.A.x);switch(stage){case 'behavior':return m.a.n>0?'stijgend':m.a.n<0?'dalend':'constant';case 'classify':return m.kind==='identical'?'identiek':m.kind==='vertical'?'verticaal':'horizontaal';case 'property':return m.kind==='vertical'?'dx0':'a0';case 'axis':return m.kind==='vertical'?'x':'y';case 'constant':return m.kind==='vertical'?m.c:m.b;case 'function':return m.kind==='affine'?'functie':'geen functie';case 'dy':return dy;case 'dx':return dx;case 'subA':case 'a':case 'formulaA':return m.a;case 'subPoint':case 'point':return 'A';case 'subY':return A.y;case 'subX':return A.x;case 'ax':return mul(m.a,A.x);case 'b':case 'formulaB':return m.b;case 'verifyA':return p.A.y;case 'verifyB':return p.B.y}}
+function pointEquation(t,w){const A=t.params[w.values.point||'A'];return w.bEquation||{left:expr(0,1,mul(t.params.model.a,A.x)),right:expr(0,0,A.y)}}
+function check(t,w,value,stageOverride){if(algebraSkills.includes(t.skill))return algebraCheck(t,w,value);if(constructionSkills.includes(t.skill))return constructionCheck(t,value);const stage=stageOverride||stages(t)[w.index],want=expected(t,w,stage);let ok=false,code=stage,message='';
+ if(stage==='b'&&['moveConstant','combineConstants'].includes(value?.kind)){
+  const moved=!!w.bArithmetic?.moved;
+  if(value.kind==='moveConstant')return moved?{ok:false,code:'wave.b',message:'Reken nu de getallen samen.'}:{ok:true,nextArithmetic:{moved:true}};
+  return moved?{ok:true,completeArithmetic:true}:{ok:false,code:'wave.b',message:'Breng eerst de losse term naar het andere lid.'};
+ }
+ if(stage==='b'&&value?.kind){try{return {ok:true,nextB:operate(pointEquation(t,w),value)}}catch(e){return {ok:false,code:'wave.b',message:e.message}}}
  if(stage==='ys'||stage==='xs'){ok=Array.isArray(value)&&value.length===2&&new Set(value).size===2&&value.every(k=>k==='A'||k==='B');if(stage==='xs'&&ok){ok=value.join()===w.values.ys.join();code='direction';message=`Δy: ${w.values.ys[1]}→${w.values.ys[0]}; Δx: ${value[1]}→${value[0]}. Gebruik dezelfde richting.`}else message='Kies de twee verschillende punten voor de aftrekking.'}
- else if(stage==='point')ok=value==='A'||value==='B';
+ else if(stage==='point'||stage==='subPoint')ok=stage==='subPoint'?value==='A':value==='A'||value==='B';
  else if(stage==='subY'||stage==='subX'){ok=value===(stage==='subY'?'y':'x');message='In y = ax + b staat y links en x bij a.'}
  else if(want&&typeof want==='object'){ok=!!value&&typeof value==='object'&&eq(value,want);message=stage==='b'?`b = y − ax. Met jouw b wordt y = ${text(add(mul(t.params.model.a,t.params[w.values.point||'A'].x),value||q(0)))}; vereist: ${text(t.params[w.values.point||'A'].y)}.`:stage==='dx'||stage==='dy'?'Trek de gekozen coördinaten in de getoonde richting af.':stage.startsWith('verify')?'Vul de oorspronkelijke x in je formule in en vergelijk met de oorspronkelijke y.':stage==='a'?'Deel Δy door Δx, met beide tekens.':stage==='ax'?'Vermenigvuldig a met de x-coördinaat.':'Gebruik de berekende coëfficiënt op de juiste plaats.'}
  else {ok=value===want;message=stage==='behavior'?'Kijk wat y doet als x toeneemt.':stage==='classify'?'Gelijke y: horizontaal. Gelijke x: verticaal, behalve als beide punten identiek zijn.':stage==='property'?'Horizontaal heeft a = 0; verticaal heeft Δx = 0 en geen hellingsgetal.':stage==='function'?'Een functie heeft bij elke x precies één y.':'Verticaal houdt x vast; horizontaal houdt y vast.'}
  return {ok,code:'wave.'+code,message};
 }
-function submit(t,w,value){if(algebraSkills.includes(t.skill))return algebraSubmit(t,w,value);if(w.done)return {ok:false,code:'done'};const stage=stages(t)[w.index],r=check(t,w,value);w.steps.push({stage,value,ok:r.ok,code:r.ok?null:r.code});w.steps=w.steps.slice(-32);if(!r.ok){if(!w.errors.includes(r.code))w.errors.push(r.code);return r}w.history.push({index:w.index,values:structuredClone(w.values)});w.values[stage]=value;w.index++;w.tokens=[];w.entry=['','1'];w.part=0;w.done=w.index===stages(t).length;return r}
-function undo(w){const prev=w.history.pop();if(prev){w.index=prev.index;w.values=prev.values;if(prev.cursor){w.cursor=prev.cursor;w.gridEdits=[]}if(Object.hasOwn(prev,'equation')){w.equation=prev.equation;w.lastOperation='';w.operation=null}w.done=false;w.tokens=[];w.entry=['','1'];w.part=0}}
+function submit(t,w,value){if(algebraSkills.includes(t.skill))return algebraSubmit(t,w,value);if(w.done)return {ok:false,code:'done'};const stage=stages(t)[w.index],r=check(t,w,value);w.steps.push({stage,value,ok:r.ok,code:r.ok?null:r.code});w.steps=w.steps.slice(-32);if(!r.ok){if(!w.errors.includes(r.code))w.errors.push(r.code);return r}w.history.push({index:w.index,values:structuredClone(w.values),bEquation:structuredClone(w.bEquation||null),bArithmetic:structuredClone(w.bArithmetic||null)});if(r.nextArithmetic){w.bArithmetic=r.nextArithmetic}else if(r.completeArithmetic){w.values.b=t.params.model.b;w.index++}else if(r.nextB){w.bEquation=r.nextB;if(isolated(r.nextB,'y')){w.values.b=r.nextB.right.c;w.index++}}else{w.values[stage]=value;if(stage==='point'||stage==='subPoint'){w.values.point=value;w.values.subY='y';w.values.subX='x'}w.index++;}delete w.slopeEntry;w.tokens=[];w.entry=['','1'];w.part=0;w.fraction=false;w.replace=false;w.done=w.index===stages(t).length;return r}
+function undo(w){const prev=w.history.pop();if(prev){w.index=prev.index;w.values=prev.values;w.bEquation=prev.bEquation||null;w.bArithmetic=prev.bArithmetic||null;delete w.pointGesture;delete w.selectedTerm;delete w.coordinateSlot;delete w.formulaBuild;delete w.slopeEntry;w.fraction=false;w.replace=false;if(prev.cursor){w.cursor=prev.cursor;w.gridEdits=[]}if(Object.hasOwn(prev,'equation')){w.equation=prev.equation;w.lastOperation='';w.operation=null}w.done=false;w.tokens=[];w.entry=['','1'];w.part=0}}
 function signature(t){return JSON.stringify([t.skill,t.difficulty,t.params])}
 const required={rewrite_linear_equation:['one-step','multiple','fraction','horizontal','vertical'],input_from_output:['integer','negative','fraction','all','none'],point_on_line:['on','off','constant-on','constant-off'],point_plot:['positive','signed','axis','scale'],equation_from_ab:['positive','negative','positive-fraction','negative-fraction','horizontal'],graph_from_equation:['positive','negative','positive-fraction','negative-fraction','horizontal'],slope_from_two_points:['positive','negative','positive-fraction','negative-fraction','horizontal','vertical','identical'],line_behavior:['positive','negative','horizontal'],special_lines:['horizontal','vertical','identical'],intercept_from_point:['positive','negative','negative-fraction','horizontal'],equation_from_point_slope:['positive','negative','negative-fraction','horizontal'],equation_from_two_points:['positive','negative','negative-fraction','horizontal','vertical','identical']};
 // Two 32-bit hashes plus source length bound evidence size; full recent task data
@@ -200,5 +222,5 @@ const required={rewrite_linear_equation:['one-step','multiple','fraction','horiz
 function compactSignature(source){if(/^sig1:[0-9a-f]{16}:\d+$/.test(source))return source;let a=2166136261,b=0x9e3779b9;for(let i=0;i<source.length;i++){const c=source.charCodeAt(i);a=Math.imul(a^c,16777619);b=Math.imul(b^c,2246822507)}return 'sig1:'+(a>>>0).toString(16).padStart(8,'0')+(b>>>0).toString(16).padStart(8,'0')+':'+source.length}
 function evidence(st,t,total,clean){if(!clean)return;st.coverage||={};st.coverage[t.params.variant]=true;st.independent||=[];const key=compactSignature(signature(t));if(!st.independent.some(e=>compactSignature(e.signature)===key))st.independent.push({at:total,signature:key});st.independent=st.independent.slice(-16)}
 function mastered(st,skill){const e=st.independent||[];return required[skill].every(v=>st.coverage?.[v])&&e.some((a,i)=>e.slice(i+1).some(b=>b.at-a.at>=3))}
-return {compactSignature,required,algebraSkills,expr,equationHTML,equivalent,operate,isolated,algebraEquation,constructionSkills,gridPoint,onLine,constructionCheck,q,fromNumber,add,sub,mul,div,eq,num,parse,text,html,formula,catalog,order,requirements,legacyAccess,migrate,ready,unlock,model,generate,stages,fresh,expected,check,submit,undo,signature,evidence,mastered};
+return {resumeWork,pointEquation,compactSignature,required,algebraSkills,expr,equationHTML,equivalent,operate,isolated,algebraEquation,constructionSkills,gridPoint,onLine,constructionCheck,q,fromNumber,add,sub,mul,div,eq,num,parse,text,html,formula,catalog,order,requirements,legacyAccess,migrate,ready,unlock,model,generate,stages,fresh,expected,check,submit,undo,signature,evidence,mastered};
 });

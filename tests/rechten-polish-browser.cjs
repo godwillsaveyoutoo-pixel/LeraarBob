@@ -23,7 +23,7 @@ class CDP{
  c.errors=[];await c.eval('window.nextTransferAnswer='+nextAnswer.toString());await c.eval('window.nextAlgebraAnswer='+nextAlgebra.toString());
  for(const [width,height] of [[1920,1080],[1366,768],[1024,600],[640,360]]){
  await c.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:false});
- for(const skill of await c.run('Object.keys(W.catalog)'))for(const level of [0,1,2]){
+ for(const skill of await c.run('Object.keys(W.catalog).filter(k=>!W.disabledSkills.includes(k))'))for(const level of [0,1,2]){
   await setup(skill,level);await layout();
   if(skill==='point_plot')assert(!await c.eval('document.querySelector(".construct-nudges")'));
   if(skill==='line_behavior'&&level===0){assert(await c.eval(`document.querySelector('.concept-graph').getBoundingClientRect().height>${height>550?260:100}`));if(width===1366)await shot('behavior-graph')}
@@ -47,6 +47,6 @@ class CDP{
   if(variant===2)assert(await c.eval('!!document.querySelector(".possible-lines")'));
  }
  }
- assert.deepEqual(c.errors,[]);console.log('PASS visual/learning audit: all 16 recent skills × 3 levels and their calculation stages at 1920/1366/1024/640; readable concept graphs, point-only transfer, no redundant point buttons or coordinate labels, horizontal/vertical/function/identical cases, no clipping or overlapping controls.');
+ assert.deepEqual(c.errors,[]);console.log('PASS visual/learning audit: all 15 active recent skills × 3 levels and their calculation stages at 1920/1366/1024/640; readable concept graphs, point-only transfer, no redundant point buttons or coordinate labels, horizontal/vertical/function/identical cases, no clipping or overlapping controls.');
  }finally{await c.send('Fetch.disable');c.ws.close()}
 })().catch(e=>{console.error(e);process.exit(1)});

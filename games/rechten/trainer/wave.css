@@ -26,7 +26,7 @@
 .concept-givens{display:flex;align-items:center;justify-content:center;gap:24px;font-size:clamp(23px,2.1vw,30px)}.concept-point{white-space:nowrap}.concept-data .concept-givens{font-size:clamp(30px,3vw,44px);flex-wrap:wrap;gap:24px 36px}.concept-slope{font-size:clamp(38px,4vw,58px)}
 .concept-graph{width:min(95cqw,calc(100cqh - var(--reserve)),520px);height:min(95cqw,calc(100cqh - var(--reserve)),520px);flex-shrink:0}.concept-graph svg{display:block;width:100%;height:100%}.concept-context:has(.concept-formula){--reserve:110px}.concept-context:has(.wave-entry){--reserve:170px}.concept-context:has(.concept-note){--reserve:150px}
 .concept-formula{font-size:clamp(25px,2.5vw,36px)}.concept-blank{display:inline-block;width:35px;border-bottom:1px solid currentColor}.concept-note{font-size:16px;line-height:1.4;max-width:480px;margin:0}.shared-coordinate{background:#e5eee5;border-bottom:2px solid #508174}
-.concept-choices:not(.wave-keypad){gap:16px;align-content:center}.concept-choices:not(.wave-keypad)>button{border-radius:50%;width:clamp(104px,10vw,142px);height:clamp(104px,10vw,142px);min-width:0;padding:12px;font-size:clamp(16px,1.6vw,21px);white-space:normal;line-height:1.25;background:radial-gradient(circle at 32% 25%,#fff,#eef4ef);border:1px solid #c5d6ca;box-shadow:0 4px 10px #244b3b0b;transition:transform .12s,border-color .12s}.concept-choices:not(.wave-keypad)>button:hover{transform:translateY(-2px);border-color:var(--accent)}.concept-choices:not(.wave-keypad)>button:active{transform:scale(.96)}
+.concept-choices:not(.wave-keypad){gap:16px;align-content:center}.concept-choices:not(.wave-keypad)>.bubble{--orb-size:clamp(104px,10vw,142px);font-size:clamp(18px,1.8vw,24px);white-space:normal;line-height:1.2}.concept-choices .orb-content{white-space:normal}
 /* Laptop space scales the content as well as the surrounding whitespace. */
 @media(min-height:551px){
  .stage.wave{grid-template-rows:0 58px minmax(0,1fr) 64px;padding-inline:24px}.stage.wave .question{font-size:clamp(24px,2vw,30px)}.stage.wave .play{max-width:1320px;gap:clamp(24px,4vw,64px);grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
@@ -40,3 +40,145 @@
  .coordinate-builder{--coordinate-size:23px;gap:7px}.coordinate-points{gap:28px}.coordinate-point{gap:5px}.coordinate-token,.coordinate-slot{min-width:54px;min-height:48px;padding:3px 8px}.coordinate-slot{min-width:78px}.coordinate-instruction,.coordinate-direction{font-size:11px}.coordinate-row{gap:8px;padding:0 8px 4px}.coordinate-fraction{gap:4px}.coordinate-label{font-size:12px;margin-left:10px}
  .concept-context{--reserve:36px;gap:5px}.concept-givens{font-size:17px;gap:12px}.concept-data .concept-givens{font-size:25px;gap:18px}.concept-slope{font-size:34px}.concept-context:has(.concept-formula){--reserve:70px}.concept-context:has(.wave-entry){--reserve:115px}.concept-context:has(.concept-note){--reserve:115px}.concept-formula{font-size:22px}.concept-note{font-size:12px}.concept-choices:not(.wave-keypad){gap:8px}.concept-choices:not(.wave-keypad)>button{width:82px;height:82px;padding:6px;font-size:14px}.algebra-previous{font-size:12px}
 }
+
+/* Direct construction and an equation sheet shared with the substitution tasks. */
+.stage[data-task=graph_from_equation] .play,.stage[data-task=point_plot] .play{grid-template-columns:minmax(0,1fr);grid-template-areas:'primary-content';max-width:850px}
+.stage[data-task=graph_from_equation] .answers,.stage[data-task=point_plot] .answers{display:none}
+.stage[data-task=graph_from_equation] .construct-grid,.stage[data-task=point_plot] .construct-grid{height:min(100cqh,640px)}
+.construct-slots button.active,.substitution-slot.active,.coordinate-slot.selected{outline:2px solid var(--violet);outline-offset:3px;background:#f0edff}
+.construct-slots{justify-content:center}.construct-slots button{min-width:48px;min-height:48px}
+.substitution-slot{display:inline-flex;justify-content:center;align-items:center;min-width:48px;min-height:48px;border-radius:9px;border:1px solid var(--line)}
+.derivation-progress{display:flex;gap:12px;font-size:12px;color:var(--muted);flex-wrap:wrap;justify-content:center}.derivation-progress span{padding:6px 0;border-bottom:2px solid transparent}.derivation-progress .active{color:var(--accent);border-color:var(--accent);font-weight:650}
+.substitution-choices{justify-content:center}.substitution-choices button{font-size:clamp(23px,2.5vw,34px);background:#fff;min-width:100px;min-height:64px}
+.equation-balance{display:flex;align-items:center;justify-content:center;gap:10px;font-size:clamp(25px,2.8vw,40px)}.equation-member{display:flex;align-items:center;justify-content:center;gap:3px;flex-wrap:wrap}
+.equation-term{font:inherit;min-width:48px;min-height:58px;padding:6px 8px;background:#fff;border:1px solid #d1ddd6;border-radius:10px;white-space:nowrap}.equation-term:hover{border-color:var(--accent)}.equation-term.selected{outline:2px solid var(--violet);background:#f0edff}
+.equation-cue,.equation-instruction{font-size:14px;line-height:1.5;color:var(--muted);margin:12px 0 0;text-align:center;max-width:420px}.wave-controls button small{display:block;font-size:13px;margin-top:6px;color:var(--muted)}
+.function-target{margin-top:16px;color:var(--ink);font-size:1.25em}.algebra-previous{padding:8px 18px;border-left:2px solid var(--line);color:var(--muted)}
+@media(max-height:550px){.derivation-progress{gap:8px;font-size:10px}.derivation-progress span{padding:3px 0}.equation-balance{font-size:23px;gap:6px}.equation-term{min-height:48px;padding:3px 6px}.equation-cue{font-size:11px;margin-top:6px}.substitution-choices button{min-height:48px}.function-target{margin-top:6px}.concept-choices:not(.wave-keypad)>.bubble{--orb-size:82px;font-size:17px}}
+
+.number-entry{display:flex;align-items:center;justify-content:center;gap:10px}.number-entry button{font:inherit;min-width:64px;min-height:56px;border:1px solid #c5d4ca;background:#fff;padding:4px 10px}.number-entry button.active{background:#f0edff;border-color:var(--violet)}.number-fraction{display:flex;flex-direction:column;align-items:stretch;gap:4px}.number-fraction button:first-child{border-bottom:2px solid var(--ink);border-radius:6px 6px 0 0}.number-fraction button:last-child{border-radius:0 0 6px 6px}
+@media(max-height:550px){.number-entry{font-size:23px}.number-entry button{min-height:48px;min-width:54px;padding:3px 6px}}
+
+@media(max-height:550px){
+ .algebra-visual .wave-context{gap:6px}.algebra-visual .wave-givens{font-size:15px;line-height:1.2}.algebra-visual .function-target{font-size:15px;margin-top:5px}.algebra-visual .wave-context small{font-size:11px;line-height:1.2}
+ .algebra-previous{padding:3px 8px;font-size:13px;line-height:1.15}.algebra-previous small{display:none}.algebra-visual .wave-context:has(.algebra-previous) .equation-cue{display:none}
+}
+/* Algebra is manipulated on the sheet itself; a ghost and preview follow the hand. */
+.stage:has(.equation-sheet) .play{grid-template-columns:minmax(0,1fr);grid-template-areas:'primary-content';max-width:1100px}.stage:has(.equation-sheet) .answers{display:none}
+.equation-sheet{width:100%;text-align:center}.equation-sheet .equation-balance{gap:18px;font-size:clamp(30px,4vw,54px)}
+.equation-member{padding:14px;min-width:130px;min-height:90px;border:2px solid transparent;border-radius:16px;transition:background .12s,border-color .12s}
+.equation-product{display:inline-flex;align-items:center;background:#fff;border:1px solid #d1ddd6;border-radius:10px}.equation-product .equation-term{border:0;background:transparent;border-radius:0 9px 9px 0;min-width:48px;padding-left:2px}.equation-factor{font:inherit;border:0;border-radius:9px 0 0 9px;background:transparent;min-width:48px;min-height:58px;padding:6px 3px 6px 8px;cursor:grab;touch-action:none;user-select:none}
+.equation-term{cursor:grab;touch-action:none;user-select:none}.equation-factor:hover{background:#eeeaff}.equation-factor.selected{background:#eeeaff;outline:2px solid var(--violet)}.equation-member.drop-ready{border-color:#8ea6dd;border-style:dashed;background:#f1f3fb;cursor:pointer}.equation-member.drop-near{background:#dcece2;border-color:var(--accent);border-style:solid}.equation-sheet .dragging{opacity:.3}
+.equation-preview{min-height:90px;color:var(--accent);font-size:.85em;line-height:1.4}.equation-preview:empty{min-height:0}.equation-preview small{font-size:14px!important;color:var(--muted)}.equation-sheet .equation-cue{max-width:none;margin:10px 0 0;font-size:15px}.equation-tap-cue{font-size:12px;color:var(--muted);margin:5px 0 0}
+.equation-drag-ghost{position:fixed;z-index:10000;pointer-events:none;transform:translate(-50%,-70%);background:#fff;padding:10px 16px;border:2px solid var(--violet);border-radius:12px;font-size:36px;box-shadow:0 10px 30px #193c4326}
+@media(max-height:550px){.equation-sheet .equation-balance{font-size:28px;gap:8px}.equation-member{min-height:62px;min-width:96px;padding:4px}.equation-factor{min-height:48px;padding:3px}.equation-preview{min-height:0;font-size:22px;line-height:1.1}.equation-preview small{font-size:10px!important}.equation-sheet .equation-cue{font-size:11px;margin-top:5px}.equation-tap-cue{font-size:10px;margin:3px 0}.stage:has(.equation-preview:not(:empty)) .algebra-previous{display:none}.stage:has(.equation-preview:not(:empty)) .equation-cue,.stage:has(.equation-preview:not(:empty)) .equation-tap-cue{display:none}.equation-drag-ghost{font-size:27px;padding:5px 10px}}
+
+.stage:has(.substitution-sheet) .play{grid-template-columns:minmax(0,1fr);grid-template-areas:'primary-content';max-width:1100px}.stage:has(.substitution-sheet) .answers{display:none}.substitution-sheet .wave-givens{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}.given-chip{font:inherit;min-width:58px;min-height:58px;padding:6px 10px;background:#fff;border:1px solid #c5d4ca;border-radius:10px;cursor:grab;touch-action:none;user-select:none}.given-chip.dragging{opacity:.3}.substitution-slot.drop-ready{border:2px dashed var(--violet)}.substitution-slot.drop-near{background:var(--accent2);outline-color:var(--accent)}
+@media(min-height:551px){.substitution-sheet .wave-equation{font-size:48px}.substitution-sheet .substitution-slot{min-width:64px;min-height:64px}}
+@media(max-height:550px){.given-chip{min-height:48px;min-width:48px;padding:3px 6px}.substitution-sheet .equation-cue{font-size:11px;margin:0;max-width:500px}}
+@media(max-height:550px){
+ .algebra-visual .wave-context:has(.equation-sheet) .wave-givens{font-size:13px}.algebra-visual .wave-context:has(.equation-sheet) .function-target{display:inline-block;font-size:13px;margin:0 0 0 16px}
+ .algebra-visual .wave-context:has(.algebra-previous) .equation-tap-cue{display:none}
+}
+.equation-sheet:has(.equation-preview:not(:empty)) .equation-cue,.equation-sheet:has(.equation-preview:not(:empty)) .equation-tap-cue{display:none}
+@media(min-height:551px){.algebra-visual .wave-context:has(.equation-sheet) .wave-givens{font-size:22px}.algebra-visual .wave-context:has(.equation-sheet) .function-target{font-size:22px;margin-top:8px}}
+/* Table and graph workbenches keep the function above the working area. */
+.stage:has(.transfer-workbench){grid-template-rows:0 84px minmax(0,1fr) 64px}
+.stage:has(.transfer-workbench) .play{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-areas:'primary-content secondary-content';max-width:1250px;gap:24px}
+.stage:has(.transfer-workbench) .visual{width:100%;height:100%}.stage:has(.transfer-workbench) .answers{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;max-width:100%;height:100%;padding:0}
+.transfer-workbench,.transfer-working{width:100%;height:100%;min-height:0}.transfer-working{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}.transfer-working .workbench-grid{width:100%;max-width:100%;height:100%;min-height:0;flex:1}
+.stage:has(.transfer-workbench) .question{font-size:clamp(25px,2.6vw,38px)}.transfer-function{display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}.transfer-coefficient{min-width:58px;min-height:58px;padding:6px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #c8d6cf;border-radius:10px;background:#fff}.transfer-coefficient.active,.transfer-fraction-slot.active,.transfer-substitution .active{outline:2px solid var(--violet);outline-offset:2px;background:#f0edff}.transfer-coefficient.drop-ready{border:2px dashed var(--violet)}.transfer-coefficient.drop-near{background:var(--accent2);outline-color:var(--accent)}
+.transfer-value-table{border-collapse:collapse;text-align:center;font-size:clamp(22px,2.4vw,34px);width:100%;max-width:460px}.transfer-value-table th,.transfer-value-table td{border-bottom:1px solid #bdcfc5;padding:8px 4px}.transfer-value-table th{color:var(--accent);border-right:1px solid #bdcfc5;font-weight:600}.transfer-value-table td button,.transfer-value-table td>span{font:inherit;min-width:58px;min-height:58px;display:inline-flex;align-items:center;justify-content:center;padding:4px 7px}.transfer-value-table button{touch-action:none;user-select:none;cursor:grab;background:#fff}.transfer-value-table .same-point{background:#e4eee7;border-color:var(--accent)}.transfer-value-table .dragging{opacity:.3}
+.transfer-instruction{font-size:16px;text-align:center;line-height:1.5;color:var(--muted);max-width:430px;margin:0}.transfer-clue{font-size:clamp(26px,3vw,40px);line-height:1.5;text-align:center}.transfer-clue>span{display:block;color:var(--muted);font-size:.6em}
+.transfer-slope{display:flex;align-items:center;gap:14px;font-size:32px}.transfer-fraction>div{display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 0}.transfer-fraction>div:first-child{border-bottom:2px solid var(--ink)}.transfer-fraction-slot{font:inherit;min-width:74px;min-height:58px;padding:6px}.transfer-fraction-slot.drop-ready{border:2px dashed var(--violet)}.transfer-fraction-slot.drop-near{background:var(--accent2)}
+.transfer-numeric{display:flex;flex-direction:column;align-items:center;gap:20px;max-width:100%}.transfer-calculation{display:flex;align-items:center;justify-content:center;gap:4px;font-size:26px;white-space:nowrap}.transfer-calculation .number-entry{font-size:26px;gap:4px}.transfer-calculation .number-fraction{flex-direction:row;align-items:center}.transfer-calculation .number-fraction:before{content:'/';order:1}.transfer-calculation .number-fraction button:last-child{order:2}.transfer-calculation .number-fraction button{border-radius:8px;border-bottom-width:1px}.transfer-keypad{width:100%}
+.transfer-found{font-size:36px;min-height:64px;padding:12px 24px;cursor:grab;touch-action:none;background:#fff}.transfer-substitution{display:flex;align-items:center;justify-content:center;gap:5px;font-size:28px;flex-wrap:wrap}.transfer-substitution [data-point-slot]{display:inline-flex;min-width:48px;min-height:48px;align-items:center;justify-content:center;border-radius:8px}.transfer-substitution .drop-near{background:var(--accent2)}
+.stage:has(.transfer-workbench) .equation-sheet .equation-balance{font-size:36px;gap:8px}.stage:has(.transfer-workbench) .equation-member{padding:5px;min-width:90px}.stage:has(.transfer-workbench) .equation-preview{font-size:25px}
+.stage[data-task=equation_from_graph]:has(.transfer-workbench) .play{grid-template-columns:minmax(0,1fr);grid-template-areas:'primary-content';max-width:850px}.stage[data-task=equation_from_graph]:has(.transfer-workbench) .answers{display:none}
+.coefficient-dial{font:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;min-width:76px;min-height:68px;padding:0 8px;border:1px solid #b6cbbf;background:#fff;touch-action:none;user-select:none;cursor:ns-resize}.dial-arrow{font-size:10px;line-height:1;color:var(--muted)}.coefficient-dial .frac{font-size:.72em;line-height:.85}.coefficient-dial:focus-visible{outline:2px solid var(--violet)}
+@media(max-height:550px){
+ .stage:has(.transfer-workbench){grid-template-rows:0 56px minmax(0,1fr) 60px}.stage:has(.transfer-workbench) .play{gap:12px}.stage:has(.transfer-workbench) .answers{gap:10px}.stage:has(.transfer-workbench) .question{font-size:23px}
+ .transfer-function{gap:5px}.transfer-coefficient{min-width:48px;min-height:48px;padding:2px}.transfer-coefficient .frac{font-size:.8em}.transfer-value-table{font-size:21px}.transfer-value-table th,.transfer-value-table td{padding:2px}.transfer-value-table td button,.transfer-value-table td>span{min-width:48px;min-height:48px;padding:3px}.transfer-value-table th{font-size:19px}
+ .transfer-working{gap:4px}.transfer-instruction{font-size:11px;line-height:1.3}.transfer-clue{font-size:26px}.transfer-slope{font-size:24px;gap:8px}.transfer-fraction>div{padding:4px 0;gap:5px}.transfer-fraction-slot{min-height:48px;min-width:60px;padding:3px}.transfer-numeric{gap:0}.transfer-calculation,.transfer-calculation .number-entry{font-size:21px}.transfer-calculation .number-entry button{min-height:48px;min-width:48px}.transfer-keypad.wave-keypad{gap:2px;grid-template-rows:repeat(3,48px)}
+ .transfer-found{min-height:48px;font-size:26px;padding:6px 16px}.transfer-substitution{font-size:22px;gap:3px}.stage:has(.transfer-workbench) .equation-sheet .equation-balance{font-size:25px}.stage:has(.transfer-workbench) .equation-member{min-height:58px;min-width:70px;padding:2px}.stage:has(.transfer-workbench) .equation-preview{font-size:21px}.stage:has(.transfer-workbench) .equation-cue{font-size:11px}.stage:has(.transfer-workbench) .equation-tap-cue{display:none}
+ .coefficient-dial{min-height:50px;min-width:60px;padding:0 5px}.coefficient-dial .frac{font-size:.7em}.dial-arrow{font-size:8px}
+}
+
+/* A continuous calculation: the coordinate fraction stays beside its answer. */
+.stage:has(.slope-worksheet) .play{grid-template-columns:minmax(0,1.5fr) minmax(260px,1fr);grid-template-areas:'primary-content secondary-content';max-width:1320px;gap:24px}
+.stage:has(.slope-worksheet) .answers{display:grid}
+.stage:has(.slope-worksheet) .answers:empty{visibility:hidden}
+.slope-worksheet{--coordinate-size:clamp(22px,2.1vw,32px);gap:16px}
+.slope-worksheet .coordinate-points{gap:20px;flex-wrap:wrap}
+.slope-worksheet .coordinate-equation{gap:10px}
+.slope-worksheet .coordinate-slot{min-width:64px}
+.slope-worksheet .coordinate-token:disabled,.slope-worksheet .coordinate-slot.filled:disabled{opacity:1}
+.slope-worksheet .number-entry{font-size:var(--coordinate-size);gap:10px}
+.slope-worksheet .number-entry button{min-width:64px}
+.stage:has(.point-worksheet) .play{grid-template-columns:minmax(0,1fr);grid-template-areas:'primary-content';max-width:1100px}
+.stage:has(.point-worksheet) .play>.answers{display:none}
+.point-worksheet .wave-givens{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.point-substituted{font-size:clamp(22px,2.3vw,32px);line-height:1.3}
+.point-found{display:inline-block;margin-left:24px;font-size:24px;color:var(--b)}
+.point-worksheet .answers.construct-palette{display:flex!important;flex-shrink:0;flex-direction:row;flex-wrap:wrap;height:auto;width:auto;max-width:100%;gap:8px!important;margin:0}
+.point-worksheet .wave-equation small{font-size:13px}
+@media(max-height:550px){
+ .stage:has(.slope-worksheet) .question,.stage:has(.point-worksheet) .question{font-size:18px}
+ .stage:has(.slope-worksheet) .play{grid-template-columns:minmax(0,1fr) 252px;gap:10px}
+ .slope-worksheet{--coordinate-size:20px;gap:6px}
+ .slope-worksheet .coordinate-points{gap:10px;flex-wrap:nowrap}
+ .slope-worksheet .coordinate-point{gap:2px;font-size:16px}
+ .slope-worksheet .coordinate-token{min-width:48px;padding:3px}
+ .slope-worksheet .coordinate-slot,.slope-worksheet .number-entry button{min-width:48px;padding:3px}
+ .slope-worksheet .coordinate-row{gap:5px;padding-inline:0}
+ .slope-worksheet .coordinate-equation,.slope-worksheet .number-entry{gap:5px}
+ .slope-worksheet .coordinate-direction{display:none}
+ .point-worksheet{gap:5px}
+ .point-worksheet .point-substituted,.point-found{font-size:17px}
+ .point-worksheet.substitution-sheet .point-substituted{font-size:25px}
+ .point-worksheet .wave-givens{font-size:16px;line-height:1.2}
+ .point-worksheet .equation-member{min-height:54px;padding:2px}
+ .point-worksheet .equation-tap-cue{display:none}
+ .point-worksheet .equation-cue{margin:0}
+ .point-worksheet .wave-equation small{display:none}
+ .point-worksheet .construct-palette button{min-width:48px;min-height:48px;height:48px;padding:3px;font-size:21px}
+}
+@media(max-width:600px) and (min-height:551px){
+ .stage:has(.slope-worksheet) .play{grid-template-columns:minmax(0,1fr);grid-template-areas:'primary-content' 'secondary-content';grid-template-rows:minmax(0,1fr) 180px;gap:10px}
+ .stage:has(.slope-worksheet) .answers{grid-template-columns:repeat(5,minmax(48px,1fr));grid-template-rows:repeat(3,48px);gap:4px}
+ .slope-worksheet .coordinate-points{gap:12px}
+ .slope-worksheet .coordinate-token,.slope-worksheet .coordinate-slot,.slope-worksheet .number-entry button{min-width:48px;padding:4px}
+ .slope-worksheet .coordinate-equation,.slope-worksheet .coordinate-row,.slope-worksheet .number-entry{gap:5px}
+ .point-worksheet{gap:12px}.point-worksheet .construct-palette button{height:48px;min-width:48px;font-size:22px}
+}
+
+/* Formula tasks keep the current function and the unsimplified working equation. */
+.stage:has(.worksheet-question){grid-template-rows:0 96px minmax(0,1fr) 64px}
+.worksheet-question{display:flex;flex-direction:column;gap:8px;align-items:center}
+.worksheet-function{font-size:clamp(25px,2.6vw,38px);line-height:1.2}
+.worksheet-prompt{font-size:clamp(16px,1.6vw,22px);line-height:1.25;letter-spacing:0}
+.point-drop-equation{padding:16px 24px;border:2px dashed var(--violet);border-radius:12px;min-height:64px}
+.point-drop-equation.drop-near{background:var(--accent2)}
+.point-chip{white-space:nowrap}
+.point-arithmetic .equation-member{gap:8px}
+.point-arithmetic .equation-term.drop-ready{outline:2px dashed var(--violet);outline-offset:3px}
+.point-arithmetic .equation-term.drop-near{background:var(--accent2)}
+.point-worksheet .point-found{margin:0}
+.behavior-function{font-size:clamp(26px,2.6vw,40px)}
+.behavior-given-label{font-size:16px;color:var(--muted);margin:0}
+.behavior-context.with-graph{--reserve:140px}
+.behavior-context.with-graph:has(.concept-note){--reserve:180px}
+@media(max-height:550px){
+ .stage:has(.worksheet-question){grid-template-rows:0 68px minmax(0,1fr) 60px}
+ .worksheet-question{gap:3px}.worksheet-function{font-size:22px}.worksheet-prompt{font-size:14px}
+ .point-worksheet .equation-sheet .equation-balance{font-size:25px;gap:4px}
+ .point-arithmetic .equation-member{min-width:64px;gap:4px}
+ .point-drop-equation{padding:8px 18px;min-height:48px}
+ .point-worksheet .wave-givens:has(.point-chip){flex-wrap:nowrap}
+ .point-worksheet .point-chip{font-size:17px}
+ .behavior-function{font-size:22px}.behavior-given-label{font-size:12px}
+ .behavior-context.with-graph{--reserve:83px}
+ .behavior-context.with-graph:has(.concept-note){--reserve:106px}
+}
+
+@media(max-height:550px){.stage:has(.worksheet-question) .point-worksheet{gap:3px}}

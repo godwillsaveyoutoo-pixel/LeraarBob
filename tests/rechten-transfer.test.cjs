@@ -1,10 +1,10 @@
 const {test}=require('node:test'),assert=require('node:assert/strict');
 const C=require('../games/rechten/trainer/wave-core.js'),{solve,nextAnswer}=require('./rechten-transfer-helpers.cjs');
-const task=(skill,difficulty=2,variant=0,seed=1)=>({skill,difficulty,params:C.generate(skill,{difficulty,variant,seed})});
+const task=(skill,difficulty=2,variant=0,seed=1)=>({skill,difficulty,params:C.transfer.legacyGenerate(skill,{difficulty,variant,seed})});
 // Independent determinant test using BigInt, including rational coordinates.
 const rat=v=>[BigInt(v.n),BigInt(v.d)],sub=([a,b],[c,d])=>[a*d-c*b,b*d],mul=([a,b],[c,d])=>[a*c,b*d],same=([a,b],[c,d])=>a*d===c*b;
 const collinear=(A,B,P)=>same(mul(sub(rat(B.x),rat(A.x)),sub(rat(P.y),rat(A.y))),mul(sub(rat(B.y),rat(A.y)),sub(rat(P.x),rat(A.x))));
-test('2400 controlled transfer tasks; own points, both subtraction orders, every variant and domain',()=>{
+test('2400 archived transfer tasks; own points, both subtraction orders, every variant and domain',()=>{
  let count=0;for(const skill of C.transferSkills){const st={};for(let difficulty=0;difficulty<3;difficulty++)for(let seed=1;seed<=200;seed++){
   const t=task(skill,difficulty,seed%12,seed),w=solve(C,t,{read:seed%2===0,reverse:seed%3===0,first:1,second:0});assert(w.done);assert.equal(w.errors.length,0);
   if(t.params.rows.length===3){const expected=collinear(...t.params.rows);assert.equal(w.values.tableVerdict==='fits',expected);assert.equal(expected,t.params.variant!=='inconsistent')}
@@ -34,9 +34,9 @@ test('undo rewinds chosen data, signature reflects selections, and graph point d
  const t=task('graph_from_table'),w=t.work=C.fresh(t);assert(C.submit(t,w,2).ok);const P=t.params.rows[2],wrong={...P,y:C.add(P.y,1)};assert.equal(C.submit(t,w,wrong).code,'wave.transfer.plotY');assert(C.submit(t,w,P).ok);assert(C.submit(t,w,0).ok);C.undo(w);assert.equal(w.values.colB,undefined);assert.deepEqual(w.values.plotA,P);
  const e=task('equation_from_graph'),a=solve(C,e),sig=C.signature(e);assert(a.done);solve(C,e,{reverse:true});assert.notEqual(C.signature(e),sig);
 });
-test('v703 upgrade keeps historical scores, pending transfer-independent work, and all 27 skills reachable',()=>{
+test('v703 upgrade keeps historical scores, pending transfer-independent work, and all 26 skills reachable',()=>{
  const old={version:703,catalogVersion:3,xp:23,skills:{ab:{seen:6,strength:.7},future:{kept:1}},access:['fx','equation_from_two_points'],review:[],waveDraft:{skill:'rewrite_linear_equation',work:{index:0,operation:{kind:'divide'},entry:['-3','2']}}},before=structuredClone(old),m=C.migrate(old);assert.deepEqual(old,before);assert.equal(m.version,704);assert.equal(m.catalogVersion,4);assert.deepEqual(m.skills,old.skills);assert.deepEqual(m.waveDraft,old.waveDraft);assert.deepEqual(C.migrate(m),m);
- const s={skills:Object.fromEntries(C.order.map(k=>[k,{}])),access:[],review:[]};for(const k of C.order){assert(C.unlock(s).includes(k),k);s.skills[k]={intro:true,seen:4,strength:.5,recent:[true,true,true,true]}}assert.equal(C.unlock(s).length,27);for(const v of Object.values(s.skills))v.strength=0;assert.equal(C.unlock(s).length,27);assert(!C.requirements.intercept_from_point.includes('rewrite_linear_equation'));assert(!C.order.includes('information_sufficiency'));
+ const s={skills:Object.fromEntries(C.order.map(k=>[k,{}])),access:[],review:[]};for(const k of C.order){assert(C.unlock(s).includes(k),k);s.skills[k]={intro:true,seen:4,strength:.5,recent:[true,true,true,true]}}assert.equal(C.unlock(s).length,26);for(const v of Object.values(s.skills))v.strength=0;assert.equal(C.unlock(s).length,26);assert(!C.requirements.intercept_from_point.includes('rewrite_linear_equation'));assert(!C.order.includes('information_sufficiency'));
 });
 
 test('compact mastery signatures migrate without changing evidence dates, coverage, scores or duplicates',()=>{

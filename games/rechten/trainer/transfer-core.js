@@ -10,7 +10,8 @@ Object.assign(C.catalog,{
  equation_from_context:{label:'voorschrift uit context',requires:['equation_from_ab','fx']}
 });
 for(const k of skills)C.requirements[k]=C.catalog[k].requires;
-C.order.splice(C.order.indexOf('zeroRead'),0,...skills);
+C.order.splice(C.order.indexOf('zeroRead'),0,'graph_from_table');
+C.order.push(...skills.filter(k=>k!=='graph_from_table'));
 Object.assign(C.required,{
  graph_from_table:['positive','negative','horizontal','fraction','inconsistent'],
  equation_from_graph:['positive','negative','horizontal','fraction','offscreen'],
@@ -53,7 +54,7 @@ function stages(t,w=t.work||C.fresh(t)){
  if(t.skill==='equation_from_table')return ['colA','colB',...slope,...b,...finish,'verifyRest','tableVerdict'];
  return [...(t.difficulty===2?['colA','colB',...slope,...b,...finish]:['roleA','contextA','roleB','contextB','formulaA','formulaB']), 'contextZero','contextTest','contextDomain'];
 }
-function proxy(t,w,stage){const [A,B]=points(t,w),m=t.skill==='equation_from_context'?t.params.model:candidate(t,w),task={...t,skill:'equation_from_two_points',params:{A,B,model:m}},work={...w,index:base.stages(task).indexOf(stage)};return {task,work}}
+function proxy(t,w,stage){const [A,B]=points(t,w),m=t.skill==='equation_from_context'?t.params.model:candidate(t,w),task={...t,legacyTransfer:true,skill:'equation_from_two_points',params:{A,B,model:m}},work={...w,index:base.stages(task).indexOf(stage)};return {task,work}}
 function expected(t,w,stage=stages(t,w)[w.index]){
  const p=t.params,m=candidate(t,w);
  if(stage==='plotA')return p.rows[w.values.colA];if(stage==='plotB')return p.rows[w.values.colB];if(stage==='plotRest')return rest(t,w);
@@ -76,7 +77,7 @@ function check(t,w,value){
  }
  if(stage.startsWith('plot')){const target=expected(t,w,stage);try{const x=eq(value.x,target.x),y=eq(value.y,target.y);return x&&y?ok:fail(x?'plotY':y?'plotX':'plotBoth',x?'x klopt. Verbeter alleen y volgens de gekozen kolom.':y?'y klopt. Verbeter alleen x volgens de gekozen kolom.':'Neem x en y uit dezelfde gekozen tabelkolom.',{correctAxes:{x,y}})}catch{return fail('plotBoth','Plaats het punt uit de gekozen kolom.')}}
  if(stage==='bRoute')return value==='point'||value==='read'&&Math.abs(num(div(p.model.b,p.scaleY)))<=5?ok:fail('interceptView','Het y-snijpunt ligt buiten het venster. Bereken b met één van je punten.');
- if(['ys','xs','dy','dx','a','point','subY','subX','ax','b','formulaA','formulaB','verifyA','verifyB'].includes(stage)){const z=proxy(t,w,stage);return base.check(z.task,z.work,value)}
+ if(['ys','xs','dy','dx','a','point','subY','subX','ax','b','formulaA','formulaB','verifyA','verifyB'].includes(stage)){const z=proxy(t,w,stage);return base.check(z.task,z.work,value,stage)}
  const want=expected(t,w,stage);let valid=false;try{valid=want&&typeof want==='object'?eq(value,want):value===want}catch{}
  const messages={readB:'Lees b af op de y-as. De assenschaal telt mee.',roleA:'De verandering per eenheid bepaalt a, inclusief het teken bij afname.',roleB:'De waarde bij x = 0 bepaalt b.',contextA:'Gebruik de verandering per eenheid. Bij afname is a negatief.',contextB:'Neem de startwaarde: de uitvoer bij x = 0.',contextZero:'Vul x = 0 in je voorschrift in; de uitvoer heeft dezelfde eenheid als y.',contextTest:'Vul de gevraagde invoer in je formule in en behoud de eenheden.',contextDomain:'Gebruik een niet-negatieve invoer binnen het gegeven bereik.',verifyRest:'Bereken de uitvoer van je formule bij de x uit de overblijvende kolom.',tableVerdict:'Vergelijk de derde y met je rechte of berekende uitvoer. Eén afwijkend punt betekent dat geen affine formule door alle tabelpunten gaat.',draw:'Trek de rechte door de twee geplaatste punten.'};
  return valid?ok:fail(stage,messages[stage]||'Controleer deze stap.');
@@ -97,4 +98,5 @@ C.submit=(t,w,v)=>is(t)?submit(t,w,v):base.submit(t,w,v);
 const selectedTask=t=>is(t)?{...t,params:{...t.params,selected:t.work?points(t,t.work):null}}:t;
 C.signature=t=>base.signature(selectedTask(t));
 C.evidence=(st,t,total,clean)=>base.evidence(st,selectedTask(t),total,clean);
+if(typeof module==='object')require('./transfer-workbench-core.js')(C);else globalThis.RechtenTransferWorkbenchInstall(C);
 });

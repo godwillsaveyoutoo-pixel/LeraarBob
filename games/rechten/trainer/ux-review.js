@@ -24,12 +24,12 @@ const rows=[
   {
     "skill": "slope_from_two_points",
     "priority": "Aangepast",
-    "note": "Sobere sleepbreuk zonder vraagtekens of aslabels per getal. De volgende rekenstappen kunnen nog in hetzelfde werkblad worden samengebracht."
+    "note": "Coördinatenbreuk en aanklikbare teller/noemer staan in één doorlopende gelijkheid."
   },
   {
     "skill": "line_behavior",
     "priority": "Aangepast",
-    "note": "Grafiek, hellingsgetal en punten hebben een passende schaal. Ronde keuzes; grafiek verschijnt bij de puntenvariant pas na het antwoord."
+    "note": "y = ax + b en de gegeven helling of twee punten staan expliciet bij de vraag wat met y gebeurt als x toeneemt."
   },
   {
     "skill": "special_lines",
@@ -53,18 +53,18 @@ const rows=[
   },
   {
     "skill": "intercept_from_point",
-    "priority": "P1",
-    "note": "x en y vanuit het punt naar de substitutie slepen; b in dezelfde grote vergelijking berekenen."
+    "priority": "Aangepast",
+    "note": "a invullen, het hele punt in de vergelijking slepen en vervolgens product, transpositie en optelling zelf uitvoeren."
   },
   {
     "skill": "equation_from_point_slope",
-    "priority": "P1",
-    "note": "Eén zichtbaar rekenblad voor substitutie, b, formule en controle; minder losse schermstappen."
+    "priority": "Aangepast",
+    "note": "Dezelfde vergelijking blijft staan tijdens het invullen van a en het punt en het slepen van de algebra-bewerkingen voor b."
   },
   {
     "skill": "equation_from_two_points",
-    "priority": "P1",
-    "note": "Coördinatenplaatsing is aangepast; puntkeuze, b en beide controles nog in hetzelfde rekenblad samenbrengen."
+    "priority": "Aangepast",
+    "note": "Eerst a berekenen; de formule bovenaan neemt a over. Daarna één punt in de vergelijking slepen en b via algebra-bewerkingen bepalen."
   },
   {
     "skill": "graph_from_equation",
@@ -98,18 +98,18 @@ const rows=[
   },
   {
     "skill": "graph_from_table",
-    "priority": "P2",
-    "note": "Gekozen tabelkolom met het actieve roosterpunt verbinden en derde-puntcontrole duidelijker maken."
+    "priority": "Aangepast",
+    "note": "Twee punten rechtstreeks kiezen of verplaatsen; de rechte verschijnt meteen en wordt met OK gecontroleerd."
   },
   {
     "skill": "equation_from_graph",
-    "priority": "P1",
-    "note": "Coördinatenplaatsing is aangepast; gekozen grafiekpunten en latere berekening samen zichtbaar houden."
+    "priority": "Aangepast",
+    "note": "a en b rechtstreeks in f(x) = ax + b instellen door scrollen of vegen."
   },
   {
     "skill": "equation_from_table",
-    "priority": "P1",
-    "note": "Coördinatenplaatsing is aangepast; kolommen, formule en controle van de derde kolom verbinden."
+    "priority": "Aangepast",
+    "note": "Vaste formule en x/f(x)-tabel; waarden naar de breuk en formule slepen, met een aparte route wanneer x = 0 ontbreekt."
   },
   {
     "skill": "equation_from_context",

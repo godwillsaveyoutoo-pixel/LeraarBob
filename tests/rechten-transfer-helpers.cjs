@@ -1,4 +1,5 @@
 function nextAnswer(C,t,w,opt={}){
+ if(C.transferWorkbench.modern(t))return C.expected(t,w);
  const stage=C.transfer.stages(t,w)[w.index];
  if(stage==='colA')return opt.first??0;if(stage==='colB')return opt.second??1;
  if(stage==='pickA'||stage==='pickB'){

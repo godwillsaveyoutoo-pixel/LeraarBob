@@ -256,18 +256,19 @@ Zie [Wave 3-verslag](../docs/rechten-wave-3.md) voor uitrolvolgorde en open chec
 
 ```sh
 node tests/rechten-transfer.test.cjs
-node tests/rechten-transfer-browser.cjs
 node scripts/build-rechten-db-test.cjs --wave4 > /tmp/rechten-wave4-database-test.sql
 ```
 
-De transfertests dekken grafiek uit tabel en voorschrift uit grafiek/tabel/context:
+De archieftests dekken bewaarde Wave 4-opgaven uit grafiek/tabel/context:
 2.400 taken, alle gekozen kolomparen, alternatieve roosterpunten, beide
 b-routes, inconsistentie van de derde rij, exacte breuken, constanten, eenheden
 en contextdomeinen. De browser test beide mobiele maten, muis/touch,
 annuleren, undo, navigatie/herladen, diagnose zonder dubbeltelling en v703→704.
 De duurtests omvatten 450 transfer- en 640 gemengde opgaven; de omvang wordt
 inclusief JSONB-scheidingstekens getoetst aan de serverlimiet van 256 KiB.
-De catalogus telt nu 27 skills. Voer browsertests na elkaar uit.
+De huidige catalogus telt 26 actieve skills; context is voorlopig gepauzeerd.
+`rechten-transfer-browser.cjs` beschrijft de oude bediening. Gebruik voor de
+huidige bediening de workbench-test hieronder. Voer browsertests na elkaar uit.
 SQL wordt alleen op tijdelijke objecten met fictieve data getest.
 Zie [Wave 4-verslag](../docs/rechten-wave-4.md) voor bestanden en uitrolvolgorde.
 
@@ -292,7 +293,15 @@ node tests/rechten-shell-browser.cjs
 ```
 
 Controleert de standaard hoofdkaart, vijf deelkaarten, letterlijke leerdoelen,
-persoonlijke aanbeveling, blijvende sterren bij herhaling en de vier hoofdtabs.
+persoonlijke aanbeveling, blijvende vinkjes bij herhaling en de vier hoofdtabs.
+De kaartcontroles toetsen ook verbonden wegen op elke schermmaat, de vaste
+leerlingpositie bij het bekijken van andere stops, terugkeren via Mijn plek,
+aparte badges voor afgerond/beheerst/herhalen en meteen starten op mobiel.
+Een voltooide latere stop kleurt eerdere, onvoltooide wegen niet in.
+De hoofdstukregressie controleert dat herhaling uit hoofdstuk 1 tijdens hoofdstuk 2
+de kaartpositie niet terugzet, ook na stoppen en herladen. Het hoofdstuklabel
+blijft zichtbaar op laptop en 640×360. De pure routeproeven controleren ook dat
+nieuwe stof in de gekozen stop blijft en alle vijf hoofdstukken bereikbaar zijn.
 Behoud van de actieve opgave en veilige aliasweergave worden met fictieve data
 getest op 1366×768, 1100×700, 1024×768, 780×360, 640×360 en 390×844.
 De bestaande Wave-testopstellingen sluiten de nieuwe standaardkaart voordat
@@ -334,7 +343,7 @@ Gebruik dezelfde lokale server en geïsoleerde Chromium op poort 9235 als bij
 de andere browsertests; voer deze tests na elkaar uit omdat ze één tab delen.
 De inhoudelijke optimalisatielijst staat in `docs/rechten-ux-werkkaart.md`.
 
-`node tests/rechten-polish-browser.cjs` doorloopt alle zestien toegevoegde skills
+`node tests/rechten-polish-browser.cjs` doorloopt alle vijftien actieve toegevoegde skills
 op drie niveaus en hun deelstappen bij 1920×1080, 1366×768, 1024×600 en 640×360.
 Controleert inhoudsschaling, bedieningsgrootte, overlap, algebra met vorige regel,
 de sobere coördinatenbreuk en de drie bijzondere puntengevallen. De grafiek mag
@@ -343,3 +352,28 @@ behouden hun formule en functiebetekenis; identieke punten krijgen meerdere
 voorbeeldrechten. De bestaande constructie- en UX-suites testen echte pointer-,
 touch- en toetsenbordinteractie. Gebruik dezelfde geïsoleerde browser en voer
 browsersuites na elkaar uit.
+
+### Rechtentrainer: directe bediening en algebra slepen
+
+Met de lokale server en de geïsoleerde testbrowser op poorten 8765 en 9235:
+
+```sh
+node tests/rechten-redesign-browser.cjs
+node tests/rechten-polish-browser.cjs
+node --test tests/rechten-wave.test.cjs tests/rechten-construction.test.cjs tests/rechten-algebra.test.cjs tests/rechten-transfer.test.cjs tests/rechten-journey.test.cjs
+```
+
+De redesign-test gebruikt echte muis-, touch- en toetsenbordgebaren. Hij controleert direct punten plaatsen, punten verplaatsen, formulevakken die automatisch doorschuiven, de verkorte hellingroute, substitutie door slepen, termen over het gelijkheidsteken verplaatsen, een factor lospakken om te delen, de live preview, afbreken en ongedaan maken. Schermafbeeldingen staan na afloop in `/tmp/rechten-redesign-*.png`. De polish-test controleert alle nieuwe vraagvormen en hun tussenstappen op vier schermformaten.
+
+### Rechtentrainer: tabel en grafiek als werkblad
+
+```sh
+node tests/rechten-transfer-workbench.test.cjs
+node tests/rechten-transfer-workbench-browser.cjs
+```
+
+De kernsuite controleert 1.800 nieuwe opgaven, consistente tabellen, beide routes voor b, alle kolomparen en aftrekvolgordes, bereikbare scrollwaarden, foutcorrectie, undo en historische voortgang. De browsertest gebruikt echte muis- en touchgebaren bij 1366×768 en 640×360: tabelwaarden naar de breuk/formule slepen, a en b invullen, b vrijmaken door slepen, scrollen/vegen in de formule en een rechte door twee zelf geplaatste punten. De tabel blijft rechts zichtbaar. Schermafbeeldingen staan in `/tmp/rechten-workbench-*.png`.
+
+De compacte werkbladen behouden de coördinatenbreuk tijdens het invullen van teller en noemer. De redesign-test controleert ook noemer nul, negatieve noemers, direct selecteren, hervatten en teruggaan. Punt + a gebruikt drie zichtbare stappen: a invullen, b bepalen en het voorschrift afwerken. Een volledig punt wordt in de vergelijking gesleept. Product, transpositie en optelling gebeuren daarna via afzonderlijke sleepbewegingen, zonder vooraf berekende tussenregels. Dezelfde bediening geldt voor een gekozen punt bij het voorschrift uit twee punten. De kernsuite controleert het hervatten van oudere versies op de juiste stap.
+
+De hoofdstuk- en kerntests controleren dat voorschriften uit a en b, punten, tabel en grafiek in het laatste hoofdstuk staan, na nulwaarden en tekens. Eerdere vaardigheden blijven bereikbaar zonder voorschriften als vereiste; bestaande toegang, rondes en sterren blijven bewaard.

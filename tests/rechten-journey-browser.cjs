@@ -24,14 +24,14 @@ class CDP{
   const type=await c.run('current.skill');
   if(type==='point_plot'){
    const p=await c.run(`(()=>{const t=current,s=document.querySelector('.construct-grid'),x=W.num(W.div(t.params.target.x,t.params.scaleX)),y=W.num(W.div(t.params.target.y,t.params.scaleY)),p=new DOMPoint(110+18*x,110-18*y).matrixTransform(s.getScreenCTM());return {x:p.x,y:p.y}})()`);
-   await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...p,radiusX:3,radiusY:3}]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await c.click('Plaats',true);
+   await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...p,radiusX:3,radiusY:3}]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});assert(await c.run('current.work.done'),'releasing the point on the grid submits it');
   }else if(await c.run('!!W.catalog[current.skill]')){
    await c.run(`(()=>{const w=current.work;let n=0;while(!w.done&&n++<40){const stage=W.stages(current)[w.index];const value=stage==='ys'||stage==='xs'?['B','A']:stage==='point'?'A':stage==='subX'?'x':stage==='subY'?'y':W.expected(current,w);const r=W.submit(current,w,value);if(!r.ok)throw Error(JSON.stringify(r))}if(!w.done)throw Error('unfinished');finishWave();render(current)})()`);
   }else if(type==='point'){
    const label=await c.run('`(${fmt(current.params.x)}, ${fmt(current.params.y)})`');await c.click(label,true);
   }else await c.run(`locked=true;finishOutcome(true,'test answer')`);
  }
- async function onward(){const id=await c.run('current.id');await c.wait('__R.run('+JSON.stringify(`current.id!==${JSON.stringify(id)}||state.session.completed===true`)+')')}
+ async function onward(){const id=await c.run('current.id');if(await c.run('reviewResult(current)'))await c.click('Verder →',true);await c.wait('__R.run('+JSON.stringify(`current.id!==${JSON.stringify(id)}||state.session.completed===true`)+')')}
  try{
  for(const [width,height] of [[1100,700],[780,360],[640,360]]){
   await c.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:false});await c.send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
