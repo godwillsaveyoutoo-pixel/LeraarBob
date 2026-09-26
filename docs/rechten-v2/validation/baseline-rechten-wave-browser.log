@@ -1,0 +1,5 @@
+Error: {"exceptionId":2,"text":"Uncaught","lineNumber":0,"columnNumber":119,"scriptId":"368","stackTrace":{"callFrames":[{"functionName":"","scriptId":"368","url":"","lineNumber":0,"columnNumber":125},{"functionName":"","scriptId":"368","url":"","lineNumber":0,"columnNumber":240}]},"exception":{"type":"object","subtype":"error","className":"Error","description":"Error: Missing button Controleer\n    at <anonymous>:1:126\n    at <anonymous>:1:241","objectId":"6549952826871284024.8.2"}}
+    at CDP.eval (/tmp/leraarbob-rechten-v2/tests/rechten-wave-browser.cjs:6:147)
+    at async CDP.click (/tmp/leraarbob-rechten-v2/tests/rechten-wave-browser.cjs:9:41)
+    at async solve (/tmp/leraarbob-rechten-v2/tests/rechten-wave-browser.cjs:21:279)
+    at async /tmp/leraarbob-rechten-v2/tests/rechten-wave-browser.cjs:30:451

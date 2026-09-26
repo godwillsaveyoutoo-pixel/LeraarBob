@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f6f8f5">
+<meta name="theme-color" content="#f7f4ed">
+<link rel="stylesheet" href="../../../shared/learning-theme.css">
 <title>leraarBob Trainer · Eerstegraadsfuncties · Supabase connected · v0.9 · Leerlingaccounts</title>
 <style>
 /* leraarBob · one viewport, explicit screen areas. Learning visuals follow below. */
@@ -68,17 +69,25 @@
 <script src="journey-ui.js"></script>
 <script src="ux-review.js"></script>
 <link rel="stylesheet" href="training-proof.css">
+<link rel="stylesheet" href="notebook.css">
 <script src="training-proof.js"></script>
+<script src="navigation.js" defer></script>
 </head>
 <body>
 <div id="app">
   <header class="topbar">
     <a class="brand axiomaHome" href="../../../" aria-label="Naar leraarBob startpagina"><i class="brandMark" aria-hidden="true"></i>leraarBob <span>Trainer</span></a>
-    <nav class="appNav" aria-label="Hoofdnavigatie">
+    <div class="trainer-actions">
+      <button id="profileBtn" class="header-icon" type="button" aria-label="Mijn profiel" title="Mijn profiel">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg>
+      </button>
+      <button id="menuBtn" class="header-icon" type="button" aria-label="Menu openen" title="Menu" aria-expanded="false" aria-controls="trainerMenu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18M3 12h18M3 19h18"/></svg>
+      </button>
+    <nav id="trainerMenu" class="appNav" aria-label="Hoofdnavigatie" hidden>
       <button id="journeyBtn" class="navButton">Kaart</button>
       <button id="progressBtn" data-trainer-action="progress" class="navButton">Voortgang</button>
       <button id="groupBtn" class="navButton">Groep</button>
-      <button id="profileBtn" class="navButton">Profiel</button>
       <button id="playBtn" data-trainer-action="play" class="navButton">Oefenen</button>
       <button id="helpBtn" data-trainer-action="help" class="navButton">Uitleg</button>
       <button id="pauseExercise" class="navButton" type="button" aria-label="Oefening pauzeren of stoppen">Pauze</button>
@@ -87,6 +96,7 @@
       <button id="settingsBtn" class="navButton">Instellingen</button>
       <button id="devBtn" hidden class="navButton devNav" title="Ontwikkelomgeving">DEV</button>
     </nav>
+    </div>
   </header>
   <main class="world">
     <section id="stage" class="stage" aria-label="Actieve oefening" hidden>
@@ -1431,6 +1441,6 @@ updateStart();renderTop();renderSessionCue();renderCloudStatus();initCloudFounda
 })();
 </script>
 <script src="../../../shared/axioma-game-adapters.js"></script>
-<script src="../../../shared/axioma-game.js" data-game-id="rechten-trainer"></script>
+<script src="../../../shared/axioma-game.js" data-game-id="rechten-trainer" data-profile-button="profileBtn"></script>
 </body>
 </html>

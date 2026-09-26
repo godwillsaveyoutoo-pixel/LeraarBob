@@ -1,0 +1,12 @@
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Start bij dit leerdoel/. Input:
+
+'Start bij deze stop →'
+
+    at /tmp/leraarbob-rechten-v2/tests/rechten-ux-browser.cjs:33:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'Start bij deze stop →',
+  expected: /Start bij dit leerdoel/,
+  operator: 'match',
+  diff: 'simple'
+}

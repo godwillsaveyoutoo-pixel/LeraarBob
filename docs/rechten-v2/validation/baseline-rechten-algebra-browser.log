@@ -1,0 +1,6 @@
+Error: {"exceptionId":4,"text":"Uncaught","lineNumber":0,"columnNumber":125,"scriptId":"428","stackTrace":{"callFrames":[{"functionName":"","scriptId":"428","url":"","lineNumber":0,"columnNumber":131},{"functionName":"","scriptId":"428","url":"","lineNumber":0,"columnNumber":252}]},"exception":{"type":"object","subtype":"error","className":"Error","description":"Error: Missing button − op beide leden\n    at <anonymous>:1:132\n    at <anonymous>:1:253","objectId":"6549952826871284024.10.2"}}
+    at CDP.eval (/tmp/leraarbob-rechten-v2/tests/rechten-algebra-browser.cjs:7:147)
+    at async CDP.click (/tmp/leraarbob-rechten-v2/tests/rechten-algebra-browser.cjs:10:41)
+    at async doStep (/tmp/leraarbob-rechten-v2/tests/rechten-algebra-browser.cjs:27:9)
+    at async solve (/tmp/leraarbob-rechten-v2/tests/rechten-algebra-browser.cjs:32:103)
+    at async /tmp/leraarbob-rechten-v2/tests/rechten-algebra-browser.cjs:37:53

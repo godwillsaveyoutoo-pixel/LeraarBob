@@ -47,11 +47,16 @@ function mount(){
  const root=host.attachShadow({mode:'open'});
  root.innerHTML='<style>:host{display:inline-flex;flex:0 0 165px;width:165px;min-width:165px;vertical-align:middle;z-index:10000;font:12px/1.4 system-ui;color:#132d34}:host([data-floating]){position:fixed;top:6px;left:6px}button{font:inherit;cursor:pointer;border:1px solid #80989e;border-radius:7px;padding:7px 10px;background:#f5f8f9;color:#132d34;min-height:32px}button:focus-visible{outline:3px solid #cd9930;outline-offset:2px}.dock{box-sizing:border-box;width:165px;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 1px 5px #0003}.panel{position:fixed;inset:0;background:#102028a6;display:grid;place-items:center;padding:16px}.panel[hidden]{display:none}.box{background:#f5f8f9;color:#132d34;padding:20px;border-radius:12px;width:min(420px,calc(100vw - 48px));box-shadow:0 8px 36px #0005}p{margin:0 0 16px}.actions{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:1100px){:host{flex-basis:34px;width:34px;min-width:34px}.dock{font-size:0;width:34px;padding:4px;min-height:34px}.dock:before{content:"◉";font-size:20px}.dock[data-status="saved"]{color:#277457}.dock[data-status="offline"],.dock[data-status="conflict"],.dock[data-status="pending"]{color:#936615}}@media(prefers-color-scheme:dark){button,.box{background:#17343d;color:#e9f2f5}}</style><button class="dock" aria-label="Account en opslagstatus"></button><section class="panel" hidden role="dialog" aria-modal="true" aria-label="Account en voortgang"><div class="box"><p role="status"></p><div class="actions"></div></div></section>';
  document.body.append(host);dock=root.querySelector('.dock');panel=root.querySelector('.panel');message=root.querySelector('p');actions=root.querySelector('.actions');dock.onclick=details;setStatus('loading');
+ // A trainer with its own profile keeps the account dialog, but needs no second header button.
+ if(script.dataset.profileButton && document.getElementById(script.dataset.profileButton)){
+  dock.hidden=true;host.style.cssText='position:absolute;width:0;min-width:0;flex-basis:0';
+ }
+
  new MutationObserver(placeDock).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','inert','class']});
  window.addEventListener('resize',placeDock);placeDock();
  root.addEventListener('keydown',event=>{
   if(panel.hidden)return;
-  if(event.key==='Escape'&&panel.dataset.blocking!=='true'){event.preventDefault();panel.hidden=true;dock.focus()}
+  if(event.key==='Escape'&&panel.dataset.blocking!=='true'){event.preventDefault();event.stopPropagation();panel.hidden=true;(document.getElementById(script.dataset.profileButton)||dock).focus()}
   if(event.key==='Tab'){
    const buttons=[...actions.querySelectorAll('button')];if(!buttons.length)return;
    const index=buttons.indexOf(root.activeElement);event.preventDefault();buttons[(index+(event.shiftKey?-1:1)+buttons.length)%buttons.length].focus();

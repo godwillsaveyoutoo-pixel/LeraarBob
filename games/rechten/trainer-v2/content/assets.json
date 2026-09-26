@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "stage": "world-shell-area-maps",
+  "assets": [
+    {
+      "id": "grenspas-semantic-workspace",
+      "source": "components/boundary-view.js",
+      "renderer": "graph",
+      "aspectRatio": "492:492",
+      "safeZone": "Native ticks, asnamen en eigen grenspin; decor buiten het rooster",
+      "layer": "semantic foreground",
+      "fallback": "SVG title/desc plus grens-, gebied- en notatievelden",
+      "budgetBytes": 8192,
+      "brief": "Exacte native SVG; leerlingpin en intervalselectie; tekenkleuren alleen na een geslaagde gebiedscommit."
+    },
+    {
+      "id": "hellingrug-semantic-workspace",
+      "source": "components/workbench.js",
+      "renderer": "graph/table",
+      "aspectRatio": "600:340",
+      "safeZone": "exacte gegeven coördinaten onder het rooster",
+      "layer": "semantic foreground",
+      "fallback": "Punten A/B, benoemde delta's, verticale breuk en tabel",
+      "budgetBytes": 8192,
+      "brief": "Leerlingstappen tekenen de rail; kandidaatlijn en causale proef pas na commit."
+    },
+    {
+      "id": "signaalstad-semantic-workspace",
+      "source": "components/workbench.js",
+      "renderer": "formula/table/graph",
+      "aspectRatio": "two flexible pinned views",
+      "safeZone": "bovenbalk voor pinbediening; onderstrook voor voorspelling",
+      "layer": "semantic foreground",
+      "fallback": "Gegeven formule/tabel, SVG-beschrijving en exacte fouttekst",
+      "budgetBytes": 8192,
+      "brief": "Maximaal twee native weergaven; defecte grafiek en gekozen probe; geen oplossing in art."
+    },
+    {
+      "id": "boundary-pass",
+      "source": "assets/grenspas-island.webp",
+      "renderer": "components/shell-view.js area()",
+      "aspectRatio": "1536:1024",
+      "safeZone": "Vijf native HTML-skillnodes boven het decor; geen ingebakken labels",
+      "layer": "decorative background",
+      "fallback": "Grenspas + doorgang hersteld als HTML",
+      "budgetBytes": 750000,
+      "brief": "Waterverf-eiland met bergpas, brug en waterval; toestand blijft native HTML."
+    },
+    {
+      "id": "slope-ridge",
+      "source": "app-shell.js",
+      "renderer": "landscape(hellingrug)",
+      "aspectRatio": "300:170",
+      "safeZone": "geen ingebakken tekst",
+      "layer": "decorative background",
+      "fallback": "Hellingrug + route sluit aan als HTML",
+      "budgetBytes": 1024,
+      "brief": "Gebroken/volledige rail in sobere bergschets."
+    },
+    {
+      "id": "signal-city",
+      "source": "app-shell.js",
+      "renderer": "landscape(signaalstad)",
+      "aspectRatio": "300:170",
+      "safeZone": "geen ingebakken tekst",
+      "layer": "decorative background",
+      "fallback": "Signaalstad + signaal komt aan als HTML",
+      "budgetBytes": 1024,
+      "brief": "Onderbroken/verbonden signaallijn door stadscontour."
+    },
+    {
+      "id": "shell-icons",
+      "source": "components/shell-view.js",
+      "renderer": "icon / logo",
+      "aspectRatio": "24:24 inside minimum 44:44 control",
+      "safeZone": "hele native button blijft interactief",
+      "layer": "foreground",
+      "fallback": "Nederlandse aria-labels op profiel/menu/pauze/undo",
+      "budgetBytes": 1024,
+      "brief": "Consistente lijniconen; geen tekst of status enkel in kleur."
+    },
+    {
+      "id": "world-islands",
+      "source": "assets/island-atlas.webp",
+      "renderer": "components/shell-view.js sprite()",
+      "aspectRatio": "3:2 sheet, six square cells",
+      "layer": "decorative background",
+      "safeZone": "Five separate native buttons and paper labels; sixth sprite cell empty",
+      "fallback": "All native place names and availability labels remain visible",
+      "budgetBytes": 550000,
+      "brief": "Watercolor island atlas; active/completed/locked states are HTML/CSS, never baked into the art."
+    },
+    {
+      "id": "paper-texture",
+      "source": "assets/paper-grain.svg",
+      "renderer": "CSS background",
+      "layer": "decorative background",
+      "budgetBytes": 2048,
+      "fallback": "Solid warm off-white",
+      "aspectRatio": "tile 240:240",
+      "safeZone": "No semantic content",
+      "brief": "Native subtle paper grain; low contrast behind native UI."
+    },
+    {
+      "id": "sea",
+      "source": "assets/sea-waves.svg",
+      "renderer": "CSS background plus native horizon SVG",
+      "layer": "decorative background",
+      "budgetBytes": 2048,
+      "fallback": "Solid light blue",
+      "aspectRatio": "tile 240:160",
+      "safeZone": "All interactive labels remain separate",
+      "brief": "Native repeating water strokes and subdued horizon."
+    },
+    {
+      "id": "handwritten-type",
+      "source": "assets/fonts/PatrickHand-Regular.ttf",
+      "renderer": "local @font-face AtlasHand",
+      "layer": "native text",
+      "fallback": "Segoe Print, cursive; system-ui for compact labels",
+      "budgetBytes": 250000,
+      "license": "assets/fonts/OFL-PatrickHand.txt",
+      "aspectRatio": "native reflowing text",
+      "safeZone": "Mathematical glyphs remain text; no baked-in letters",
+      "brief": "Local Patrick Hand regular, OFL; compact metadata uses system-ui."
+    },
+    {
+      "id": "puntenbaai-area-map",
+      "source": "assets/puntenbaai-island.webp",
+      "renderer": "components/shell-view.js area()",
+      "aspectRatio": "1536:1024",
+      "safeZone": "Markercentra en route liggen op de vaste x/y-ankers in content/area-maps.js; labels zijn native HTML. Vervang de illustratie op hetzelfde volledige canvas zonder bijsnijden.",
+      "layer": "decorative background",
+      "fallback": "Native titel, genummerde skillhaltes, route, status en navigatie blijven bruikbaar zonder afbeelding.",
+      "budgetBytes": 750000,
+      "brief": "Waterverf-eiland via ingebouwde imagegen; transparantie behouden. Zie docs/rechten-v2/area-maps/ART_PROMPTS.json."
+    },
+    {
+      "id": "hellingrug-area-map",
+      "source": "assets/hellingrug-island.webp",
+      "renderer": "components/shell-view.js area()",
+      "aspectRatio": "1536:1024",
+      "safeZone": "Markercentra en route liggen op de vaste x/y-ankers in content/area-maps.js; labels zijn native HTML. Vervang de illustratie op hetzelfde volledige canvas zonder bijsnijden.",
+      "layer": "decorative background",
+      "fallback": "Native titel, genummerde skillhaltes, route, status en navigatie blijven bruikbaar zonder afbeelding.",
+      "budgetBytes": 750000,
+      "brief": "Waterverf-eiland via ingebouwde imagegen; transparantie behouden. Zie docs/rechten-v2/area-maps/ART_PROMPTS.json."
+    },
+    {
+      "id": "signaalstad-area-map",
+      "source": "assets/signaalstad-island.webp",
+      "renderer": "components/shell-view.js area()",
+      "aspectRatio": "1536:1024",
+      "safeZone": "Markercentra en route liggen op de vaste x/y-ankers in content/area-maps.js; labels zijn native HTML. Vervang de illustratie op hetzelfde volledige canvas zonder bijsnijden.",
+      "layer": "decorative background",
+      "fallback": "Native titel, genummerde skillhaltes, route, status en navigatie blijven bruikbaar zonder afbeelding.",
+      "budgetBytes": 750000,
+      "brief": "Waterverf-eiland via ingebouwde imagegen; transparantie behouden. Zie docs/rechten-v2/area-maps/ART_PROMPTS.json."
+    },
+    {
+      "id": "formulewerf-area-map",
+      "source": "assets/formulewerf-island.webp",
+      "renderer": "components/shell-view.js area()",
+      "aspectRatio": "1536:1024",
+      "safeZone": "Markercentra en route liggen op de vaste x/y-ankers in content/area-maps.js; labels zijn native HTML. Vervang de illustratie op hetzelfde volledige canvas zonder bijsnijden.",
+      "layer": "decorative background",
+      "fallback": "Native titel, genummerde skillhaltes, route, status en navigatie blijven bruikbaar zonder afbeelding.",
+      "budgetBytes": 750000,
+      "brief": "Waterverf-eiland via ingebouwde imagegen; transparantie behouden. Zie docs/rechten-v2/area-maps/ART_PROMPTS.json."
+    }
+  ]
+}

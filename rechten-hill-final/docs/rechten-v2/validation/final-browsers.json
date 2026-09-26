@@ -1,0 +1,62 @@
+[
+  {
+    "test": "rechten-shell-browser",
+    "exit": 0,
+    "seconds": 9.7,
+    "tail": "PASS student shell: default atlas, five areas, literal goals, recommendations, connected roads, stable location, independent completion/mastery/review badges, four tabs, task retention, real final-chapter task, escaped alias; 1366/1100/1024/780/640/390 layouts\n"
+  },
+  {
+    "test": "rechten-training-proof-browser",
+    "exit": 0,
+    "seconds": 1.8,
+    "tail": "PASS training proof: stop midway, completed round, saved receipt after reload, required name, editable account alias, account isolation, guest and account downloads while offline, Unicode names, small screen. PDFs: /tmp/rechten-proof-downloads-XbW8Nn\n"
+  },
+  {
+    "test": "rechten-transfer-workbench-browser",
+    "exit": 0,
+    "seconds": 9.8,
+    "tail": "PASS current transfer routes: actual mouse/touch table dragging, both b routes, automatic slope fraction, coefficient installation, b term manipulation, wheel/swipe graph coefficients and two-point drawing at desktop and 640\u00d7360.\n"
+  },
+  {
+    "test": "rechten-redesign-browser",
+    "exit": 0,
+    "seconds": 25.0,
+    "tail": "PASS redesign: mouse and touch, arrows, direct grid placement and dragging, any two line points, automatic formula validation and correction, shorter slope route, complete b derivations, dragging givens, moving signed terms, detaching factors and function layout at desktop and phone landscape.\n"
+  },
+  {
+    "test": "rechten-journey-browser",
+    "exit": 0,
+    "seconds": 42.8,
+    "tail": "PASS journey: mobile map/tasks, stable answer choices across help/reload, real discovery round, cumulative challenge and retake, help, global review, reload, partial construction, idempotent XP, DEV resume\n"
+  },
+  {
+    "test": "rechten-leave-round-browser",
+    "exit": 0,
+    "seconds": 5.3,
+    "tail": "PASS leave round: mixed and legacy rounds, new round reachable, scores/reviews/stars preserved, pending auto-next cancelled, partial construction cleared after reload, completed round rewarded once; laptop and mobile\n"
+  },
+  {
+    "test": "rechten-polish-browser",
+    "exit": 0,
+    "seconds": 6.1,
+    "tail": "PASS visual/learning audit: all 15 active recent skills \u00d7 3 levels and their calculation stages at 1920/1366/1024/640; readable concept graphs, point-only transfer, no redundant point buttons or coordinate labels, horizontal/vertical/function/identical cases, no clipping or overlapping controls.\n"
+  },
+  {
+    "test": "account-progress-browser",
+    "exit": 0,
+    "seconds": 13.8,
+    "tail": "PASS shared device: prior unassigned progress never uploaded into another account\nPASS remote hydration: pythagoras\nPASS remote hydration: stelsels\nPASS remote hydration: algebra-smederij\nPASS remote hydration: taartenwinkel\nPASS remote hydration: kubusbouw\nPASS remote hydration: verfwinkel\nPASS remote hydration: data-check\nPASS remote hydration: signal-lab\nPASS remote hydration: gravity-maze\nPASS offline retry, edits during saving, account switch and delayed save isolation\nPASS concurrent revision conflict: remote not overwritten, local work retained\nPASS failed initial download: own cache remains playable; without a cache no empty game overwrites online progress\nPASS vector trainer: XP and suspended learning route restored on another device after free practice\nPASS real numbers: earned XP, learning route and completed answer restored on a second device\nPASS real numbers: automatic account saves, chosen topic and partial sorting on a second device; shared XP, mastery and session count on return to route\nPASS real numbers: new rational cube-root task and partially entered fraction survive account restoration and earn saved XP\nPASS teacher can open: brandweer\nPASS teacher can open: kleiduifschieten\nPASS teacher can open: functies-rechten\nPASS teacher can open: rechten-trainer\nPASS teacher can open: reele-getallen-trainer\nPASS guest/teacher separation and guest solo entry; no actual accounts or database writes\n"
+  },
+  {
+    "test": "trainer-teacher-browser",
+    "exit": 0,
+    "seconds": 0.5,
+    "tail": "PASS: teacher opens trainer, starts exercise, opens follow-up and returns to exercise; no student progress fetched\n"
+  },
+  {
+    "test": "teacher-details-browser",
+    "exit": 0,
+    "seconds": 1.0,
+    "tail": "PASS: readable trainer details, error advice, planned review, new/legacy activity, mobile layout, filters, pupil isolation, escaped aliases and account-change race\n"
+  }
+]

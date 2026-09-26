@@ -1,0 +1,4 @@
+Error: {"exceptionId":1,"text":"Uncaught","lineNumber":0,"columnNumber":115,"scriptId":"243","stackTrace":{"callFrames":[{"functionName":"","scriptId":"243","url":"","lineNumber":0,"columnNumber":121},{"functionName":"","scriptId":"243","url":"","lineNumber":0,"columnNumber":232}]},"exception":{"type":"object","subtype":"error","className":"Error","description":"Error: Missing button Plaats\n    at <anonymous>:1:122\n    at <anonymous>:1:233","objectId":"6549952826871284024.5.2"}}
+    at CDP.eval (/tmp/leraarbob-rechten-v2/tests/rechten-answer-flow-browser.cjs:6:147)
+    at async CDP.click (/tmp/leraarbob-rechten-v2/tests/rechten-answer-flow-browser.cjs:9:41)
+    at async /tmp/leraarbob-rechten-v2/tests/rechten-answer-flow-browser.cjs:36:234

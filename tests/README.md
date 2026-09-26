@@ -377,3 +377,46 @@ De kernsuite controleert 1.800 nieuwe opgaven, consistente tabellen, beide route
 De compacte werkbladen behouden de coördinatenbreuk tijdens het invullen van teller en noemer. De redesign-test controleert ook noemer nul, negatieve noemers, direct selecteren, hervatten en teruggaan. Punt + a gebruikt drie zichtbare stappen: a invullen, b bepalen en het voorschrift afwerken. Een volledig punt wordt in de vergelijking gesleept. Product, transpositie en optelling gebeuren daarna via afzonderlijke sleepbewegingen, zonder vooraf berekende tussenregels. Dezelfde bediening geldt voor een gekozen punt bij het voorschrift uit twee punten. De kernsuite controleert het hervatten van oudere versies op de juiste stap.
 
 De hoofdstuk- en kerntests controleren dat voorschriften uit a en b, punten, tabel en grafiek in het laatste hoofdstuk staan, na nulwaarden en tekens. Eerdere vaardigheden blijven bereikbaar zonder voorschriften als vereiste; bestaande toegang, rondes en sterren blijven bewaard.
+
+## Compact trainermenu
+
+Met dezelfde lokale server en geïsoleerde Chromium op poort 9235:
+
+```sh
+node tests/rechten-navigation-browser.cjs
+```
+
+Controleert profiel/menu op desktop en mobiel, echte muisklikken, Escape,
+focusherstel, sluiten buiten het menu, schermnavigatie, behoud van de opgave,
+uitklapbare toelichting en bereikbare accountmeldingen. Gebruikt een gastmock;
+er worden geen echte accounts gebruikt. Screenshots: `/tmp/rechten-navigation-*.png`.
+
+## Rechtenwereld: Formulewerf A
+
+```sh
+node --test tests/rechten-v2-formula-a.test.cjs tests/rechten-v2-formulewerf.test.cjs
+V2_SCREENSHOT_DIR=/tmp/formulewerf-a node tests/rechten-v2-formula-a-browser.cjs
+```
+
+Met lokale server op 8775 en geïsoleerde Chromium op 9245. De browsertest blokkeert
+externe requests en gebruikt een fictieve gast. Hij test de vier volledige
+reeksen, bouwstenen, twee punten tekenen, a/b invoeren, equivalente algebra,
+herstel met behoud van juiste antwoorden, ongedaan maken, hervatten, hints,
+herhaling en scherm draaien. Inclusief echte muisdrag, touchdrag, toetsenbord en
+layoutcontroles vanaf 640×360. Voer browsersuites na elkaar uit.
+De bestaande Formulewerf-kaarttest controleert ook de overgang naar de nieuwe
+speelbare A-haltes; de B-haltes behouden hun voorvertoning.
+
+## Rechtenwereld: Formulewerf B
+
+```sh
+node --test tests/rechten-v2-formula-b.test.cjs
+V2_SCREENSHOT_DIR=/tmp/formulewerf-b node tests/rechten-v2-formula-b-browser.cjs
+```
+
+Zelfde lokale server en geïsoleerde browser als Formulewerf A. Controleert drie
+volledige reeksen met alle tussenstappen, beide consistente aftrekvolgordes,
+keuze van A of B, negatieve getallen, breuken, nulhellingen, muisdrag, touchdrag,
+toetsenbord, herstel met behoud van correct werk, herladen, hints en herhaling.
+Het stappenplan mag het eindantwoord niet tonen vóór de leerling het heeft
+bepaald. Browsersuites delen een tab en moeten na elkaar draaien.

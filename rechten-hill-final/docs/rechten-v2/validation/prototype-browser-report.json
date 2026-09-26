@@ -1,0 +1,22 @@
+{
+  "checks": [
+    "layout: prototype interval 780",
+    "layout: prototype delta 780",
+    "layout: prototype interval 640",
+    "layout: prototype delta 640",
+    "prototype two contrasting mechanics with true touch inputs, explicit commit and keyboard switch"
+  ],
+  "screenshots": [
+    "../screenshots/prototype-interval-780.png",
+    "../screenshots/prototype-delta-780.png",
+    "../screenshots/prototype-interval-640.png",
+    "../screenshots/prototype-delta-640.png"
+  ],
+  "scope": "synthetic guest, no production account or network writes",
+  "manualRemaining": [
+    "physical Samsung A20",
+    "NVDA/TalkBack",
+    "real student transfer comparison"
+  ],
+  "passed": true
+}

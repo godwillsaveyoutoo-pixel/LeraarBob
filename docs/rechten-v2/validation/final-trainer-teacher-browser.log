@@ -1,0 +1,1 @@
+PASS: teacher opens trainer, starts exercise, opens follow-up and returns to exercise; no student progress fetched

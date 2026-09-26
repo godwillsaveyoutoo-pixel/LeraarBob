@@ -1,0 +1,48 @@
+✔ exactly 27 preserved IDs, context remains paused, every matrix record has all 21 contract fields (3.26012ms)
+✔ complete non-empty metadata; frozen deterministic semantic task snapshots and JSON roundtrip (9.647368ms)
+✔ 12000 seeded Grenspas cases: oracle roots, strict sides, symbols, all/none, no mutation (608.69473ms)
+✔ 12000 seeded Hellingrug cases, two orientations: independent exact rate and hidden third point (1645.151188ms)
+✔ local repair preserves correct deltas; mixed subtraction and reciprocal are distinguishable (0.509412ms)
+✔ 8000 Signal tasks: zero/difference information choices, atomic repair and independent hidden x10 (346.88804ms)
+✔ invalid syntax, missing selections, huge numbers and zero denominator are interaction errors (1.483955ms)
+✔ underlying degenerate/equivalence validators remain unchanged and reject false mathematical claims (0.584002ms)
+✔ committed fault and hidden feedback state the first exact divergence in screenreader text (0.529101ms)
+✔ all three missions complete through explicit commit/advance with contrasting cases and no production mastery (37.781011ms)
+✔ Grenspas actually exercises f>0 and f<0 with falling contrast and horizontal all/none reasoning (5.191555ms)
+✔ JSON reload preserves every partial answer, hint, feedback, lock and completed task exactly (20.42134ms)
+✔ opening another world preserves an unfinished task and its draft; restart uses a new run ID (1.192783ms)
+✔ wrong delta locks only correct components; undo cannot discard the confirmed correct component (1.203104ms)
+✔ rate error keeps both deltas and correction does not become independent; hidden point is a new input (4.527684ms)
+✔ signal fault repair is an atomic commit with a preserved correct coefficient and a later x10 probe (3.46148ms)
+✔ syntax errors do not count as misconceptions and later clean valid input remains independent (3.45559ms)
+✔ a hint on an evidence case suppresses independent claims; full example creates a genuinely new task ID (4.286533ms)
+✔ editing and undo are pure and frozen during feedback, while progress requires explicit advance (1.113073ms)
+✔ guest reload preserves pending work; v1 readonly import has timestamp and is idempotent (5.848718ms)
+✔ generic save preserves unknown fields and never writes specialized mastery (2.268367ms)
+✔ guest, teacher and learner caches remain isolated with no guest import for a learner (1.393524ms)
+✔ offline writes survive reload and retry through the existing revision protocol (0.857773ms)
+✔ edits made during an in-flight save are saved at the following revision (6.467669ms)
+✔ account replacement during load/save cannot populate or write a new owner cache (1.240864ms)
+✔ remote conflict freezes work; explicit local choice backs up both sides and preserves unrelated remote fields (1.082963ms)
+✔ explicit remote conflict choice loads remote without scoring or overwriting it (0.467861ms)
+✔ stale offline tab cannot overwrite newer tab and supports explicit resolution (0.638011ms)
+✔ unknown schema and malformed cache are backed up and blocked without rewriting originals (0.569051ms)
+✔ unknown remote v2 schema is not downgraded and storage failure blocks destructive resolution (0.751112ms)
+✔ snapshot/export return independent copies and commit refuses a wrong schema (0.810852ms)
+✔ evidence deduplicates task/attempt and assisted or feedback-revealed work is never independent (0.804553ms)
+✔ scheduler uses old planner on a clone, keeps 27 IDs including paused context and adds no mastery (2.031546ms)
+✔ assistance and a failed committed attempt contaminate later evidence for the same task (0.317611ms)
+✔ legacy pre-wave guest state is snapshotted verbatim without version upgrade (0.391631ms)
+✔ a forged migration marker cannot import another account snapshot (0.318931ms)
+✔ cloud fetch failure on first boot does not overwrite an unknown existing remote namespace (0.450132ms)
+✔ cross-tab Web Locks serialize a simultaneous first migration and prevent lost local writes (1.254413ms)
+✔ restarting one adapter after an account switch clears the previous legacy snapshot and all prior UI state (0.524582ms)
+✔ integration uses the unchanged AxiomaProgress load/save and only its account-bound generic RPC (3.36363ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2685.712518

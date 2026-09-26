@@ -1,0 +1,6 @@
+PASS shell account replacement removes old readmodel; separate old-owner work survives
+PASS profile uses existing central account/login route
+PASS shell revision conflict blocks inputs and explicit remote choice restores exact state with backup
+PASS shell offline partial work resumes and explicit retry saves through old protocol
+PASS horizontal Grenspas is answerable using only the rendered controls
+PASS v2 shell integration: 5 groups; isolated synthetic accounts, no external traffic

@@ -1,0 +1,23 @@
+PASS shared device: prior unassigned progress never uploaded into another account
+PASS remote hydration: pythagoras
+PASS remote hydration: stelsels
+PASS remote hydration: algebra-smederij
+PASS remote hydration: taartenwinkel
+PASS remote hydration: kubusbouw
+PASS remote hydration: verfwinkel
+PASS remote hydration: data-check
+PASS remote hydration: signal-lab
+PASS remote hydration: gravity-maze
+PASS offline retry, edits during saving, account switch and delayed save isolation
+PASS concurrent revision conflict: remote not overwritten, local work retained
+PASS failed initial download: own cache remains playable; without a cache no empty game overwrites online progress
+PASS vector trainer: XP and suspended learning route restored on another device after free practice
+PASS real numbers: earned XP, learning route and completed answer restored on a second device
+PASS real numbers: automatic account saves, chosen topic and partial sorting on a second device; shared XP, mastery and session count on return to route
+PASS real numbers: new rational cube-root task and partially entered fraction survive account restoration and earn saved XP
+PASS teacher can open: brandweer
+PASS teacher can open: kleiduifschieten
+PASS teacher can open: functies-rechten
+PASS teacher can open: rechten-trainer
+PASS teacher can open: reele-getallen-trainer
+PASS guest/teacher separation and guest solo entry; no actual accounts or database writes
