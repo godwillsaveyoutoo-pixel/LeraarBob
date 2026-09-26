@@ -420,3 +420,6 @@ keuze van A of B, negatieve getallen, breuken, nulhellingen, muisdrag, touchdrag
 toetsenbord, herstel met behoud van correct werk, herladen, hints en herhaling.
 Het stappenplan mag het eindantwoord niet tonen vóór de leerling het heeft
 bepaald. Browsersuites delen een tab en moeten na elkaar draaien.
+
+`node tests/rechten-v2-formula-b-layout.cjs` controleert aanvullend 52
+werkbladfasen met langere breuken op desktop en lage laptopschermen.
