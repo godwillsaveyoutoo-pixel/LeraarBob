@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Schepen op een assenstelsel met een rechte">
+  <rect width="640" height="400" fill="#e6efea"/>
+  <g stroke="#9ab0b7" stroke-width="1" opacity=".6"><path d="M80 40V360M140 40V360M200 40V360M260 40V360M320 40V360M380 40V360M440 40V360M500 40V360M560 40V360M80 80H560M80 140H560M80 200H560M80 260H560M80 320H560"/></g>
+  <path d="M80 260H572M260 360V28" fill="none" stroke="#405e6a" stroke-width="3"/>
+  <path d="m564 252 10 8-10 8M252 38l8-12 8 12" fill="none" stroke="#405e6a" stroke-width="3"/>
+  <g fill="#8eafa0" stroke="#436d61" stroke-width="3"><path d="M122 127Q106 140 122 153H263L288 140 263 127Z"/><path d="M362 247Q346 260 362 273H443L468 260 443 247Z"/></g>
+  <g fill="#faf9f4" stroke="#436d61" stroke-width="2"><circle cx="140" cy="140" r="7"/><circle cx="200" cy="140" r="7"/><circle cx="260" cy="140" r="7"/><circle cx="380" cy="260" r="7"/><circle cx="440" cy="260" r="7"/></g>
+  <path d="M100 340 480 55" stroke="#b75e42" stroke-width="4" stroke-dasharray="9 6"/>
+  <circle cx="380" cy="130" r="17" fill="none" stroke="#b75e42" stroke-width="3"/>
+  <text x="406" y="73" fill="#294f66" font-family="Georgia,serif" font-style="italic" font-size="29">y = ax + b</text>
+  <text x="578" y="267" fill="#405e6a" font-family="Georgia,serif" font-style="italic" font-size="24">x</text><text x="270" y="31" fill="#405e6a" font-family="Georgia,serif" font-style="italic" font-size="24">y</text>
+</svg>

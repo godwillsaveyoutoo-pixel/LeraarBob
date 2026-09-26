@@ -1,0 +1,144 @@
+/* Shared 1536 × 1024 authored surface for every area. Only the stage scales;
+   marker centers, SVG route and decorative landmarks share percentage anchors. */
+.mapped-area{--area-sidebar:22%;--area-pad:12px}
+.mapped-area .area-map{inset:var(--area-pad) 2% var(--area-pad) var(--area-sidebar)!important;container-type:size}
+.mapped-area .area-stage{width:min(100cqw,150cqh);max-height:none;aspect-ratio:3/2;container-type:size}
+.mapped-area .area-island{width:100%;height:100%;inset:0;object-fit:fill}
+.mapped-area .area-paths{opacity:.95}
+.mapped-area .area-paths path{stroke:#fff6d2;stroke-width:5;stroke-dasharray:10 9;filter:drop-shadow(0 1px 1px #4b4a35);vector-effect:non-scaling-stroke}
+.mapped-area .area-stage .skill-node{--marker:clamp(26px,7cqw,70px);left:var(--x);top:var(--y);transform:translate(-50%,calc(var(--marker) / -2));width:24cqw;min-width:0;min-height:44px;height:auto!important;aspect-ratio:auto;border-radius:8px;justify-content:flex-start;z-index:3}
+.mapped-area .area-stage[data-density=dense] .skill-node{width:20cqw}
+.mapped-area .area-stage .skill-marker{width:var(--marker);height:var(--marker);min-height:var(--marker);border-width:clamp(2px,.4cqw,4px);font:clamp(16px,3.9cqw,37px)/1 var(--hand)}
+.mapped-area .area-stage .skill-marker>.ui-icon{width:60%;height:60%}
+.mapped-area .area-stage .skill-label{width:100%;max-width:100%;min-width:0;min-height:0;margin:2px 0 0;padding:clamp(3px,.65cqw,7px) 2px;font:clamp(11px,2.6cqw,26px)/1.08 var(--hand);transform:none;border-radius:4px;overflow-wrap:normal}
+.mapped-area .area-stage[data-density=dense] .skill-label{font-size:clamp(10px,2.4cqw,24px)}
+.mapped-area .area-stage .skill-lock{width:clamp(16px,2.8cqw,24px);height:clamp(16px,2.8cqw,24px);right:-5px;bottom:-2px}
+.mapped-area .area-stage .skill-lock>.ui-icon{width:65%;height:65%}
+.mapped-area .skill-node.is-recommended .skill-label{border:2px solid #947522}
+.mapped-area .skill-node.is-recommended .skill-marker{box-shadow:0 0 0 4px #ffe08a,0 3px 6px #283c4840}
+.mapped-area .skill-node.is-locked .skill-label{color:#44534f;background-color:#eeeede}
+.mapped-area .skill-node.is-available .skill-marker{background:#327c96}
+.mapped-area .skill-node:hover .skill-label{outline:2px solid #28755c}
+.mapped-area .skill-node:not(:disabled):hover .skill-marker{transform:none}
+.mapped-area .area-intro{top:clamp(16px,4vh,44px);left:clamp(16px,3vw,48px);max-width:calc(var(--area-sidebar) - 32px);width:100%;pointer-events:auto}
+.mapped-area .area-intro h1{font-size:clamp(30px,4.2vw,64px)}
+.mapped-area .area-intro p{font-size:clamp(16px,1.8vw,25px);line-height:1.25}
+.area-legend{display:flex;flex-wrap:wrap;gap:7px 12px;margin-top:22px;font:12px/1.5 system-ui,sans-serif;color:#3d5659}
+.area-legend span{white-space:nowrap}
+.area-zones{position:absolute;z-index:6;top:48%;left:clamp(16px,3vw,48px);width:calc(var(--area-sidebar) - 32px);display:grid;gap:10px}
+.area-zones button{min-height:48px;padding:8px;text-align:left;font:clamp(14px,1.65vw,21px)/1.1 var(--hand);background:#fffcf1 var(--paper-texture);border-color:#a6afa0}
+.area-zones button[aria-current=page]{background:#e4eee3;border:2px solid #276a55}
+.area-zones button span{display:inline-grid;place-items:center;border:1px solid #9cab91;border-radius:50%;width:23px;height:23px;margin-right:4px}
+.stop-main{min-height:0;position:relative;isolation:isolate;display:grid;place-items:center;padding:20px}
+.stop-paper{width:min(650px,90%);background:#fffdf4 var(--paper-texture);border:1px solid #c2c4ad;border-radius:5px 16px 7px 12px;padding:clamp(16px,3vw,36px);text-align:center;box-shadow:0 8px 22px #29474b24}
+.stop-paper h1{font:clamp(26px,3.5vw,43px)/1.08 var(--hand);margin:12px 0}
+.stop-paper p{font-size:clamp(12px,1.5vw,17px);line-height:1.5;margin-top:12px}
+.stop-paper .stop-note{color:#566868}
+.world-stage .island-node.is-available .island-art{filter:none}
+.world-stage .island-node.is-available .island-marker{background:#327c96}
+@media(max-height:550px) and (orientation:landscape){
+ .mapped-area{--area-sidebar:24%;--area-pad:6px}
+ .mapped-area .area-intro{left:14px;top:12px;max-width:calc(var(--area-sidebar) - 22px)}
+ .mapped-area .area-intro h1{font-size:clamp(27px,4.4vw,38px)}
+ .mapped-area .area-intro p{font-size:15px}
+ .mapped-area .area-intro .tape-label{font-size:10px;letter-spacing:0;padding-inline:5px}
+ .area-legend{gap:3px 8px;margin-top:12px;font-size:10px}
+ .area-zones{left:14px;top:auto;bottom:10px;width:calc(var(--area-sidebar) - 22px);gap:5px}
+ .area-zones button{min-height:40px;font-size:14px;padding:5px}
+ .area-zones button span{display:none}
+ .mapped-area[data-area-id=formulewerf] .area-legend{display:none}
+ .mapped-area .atlas-footer{gap:8px;padding-inline:14px}
+ .mapped-area .atlas-footer .paper-pill,.mapped-area .atlas-footer .paint-button,.stop-page .atlas-footer button{font-size:19px;min-height:46px;padding:6px 12px;gap:6px;min-width:0}
+ .stop-main{padding:8px}
+ .stop-paper{padding:12px 20px}
+ .stop-paper .tape-label{font-size:11px}
+ .stop-paper h1{margin:6px 0;font-size:28px}
+ .stop-paper .proof-badge{font-size:17px;margin-top:3px}
+ .stop-paper p{margin-top:5px;font-size:12px}
+}
+@media(max-height:320px) and (orientation:landscape){
+ :root{--header-height:44px;--footer-height:50px}
+ .atlas-header{padding-inline:12px;gap:10px}
+ .atlas-brand{min-height:44px;gap:4px}
+ .brand-lettering{font-size:24px}
+ .brand-pencil{height:28px;width:14px}
+ .brand-lettering small{font-size:8px}
+ .breadcrumbs{font-size:16px;gap:3px}
+ .atlas-actions{gap:0}
+ .mapped-area .area-intro p,.area-legend{display:none}
+ .mapped-area .area-intro{top:8px}
+ .mapped-area .area-intro h1{font-size:27px}
+ .mapped-area .area-intro .tape-label{font-size:8px}
+ .area-zones{bottom:6px;gap:4px}
+ .area-zones button{font-size:12px;min-height:36px}
+ .mapped-area .atlas-footer .paper-pill,.mapped-area .atlas-footer .paint-button,.stop-page .atlas-footer button{font-size:16px;min-height:40px;padding:5px 9px}
+ .stop-paper h1{font-size:24px}
+ .stop-paper p{font-size:11px}
+ .stop-paper .tape-label{display:none}
+ .atlas-menu{top:100%;padding:4px}
+ .atlas-menu :is(button,a){min-height:36px;font-size:17px;padding:5px 10px}
+}
+@media(orientation:portrait){
+ .mapped-area{--area-sidebar:0%;--area-pad:8px}
+ .mapped-area .area-intro{left:18px;top:12px;max-width:90%;width:auto}
+ .mapped-area .area-intro h1{font-size:36px}
+ .mapped-area .area-intro p,.mapped-area .area-legend{display:none}
+ .mapped-area .area-map{inset:125px 8px 8px!important}
+ .mapped-area .area-stage{top:50%;width:min(100cqw,150cqh);max-width:100%}
+ .area-zones{top:83px;bottom:auto;left:8px;width:calc(100% - 16px);display:flex;gap:5px}
+ .area-zones button{flex:1;min-height:40px;font-size:14px;padding:5px}
+ .area-zones button span{display:none}
+ .mapped-area .atlas-footer,.stop-page .atlas-footer{padding-inline:8px;gap:6px}
+ .mapped-area .atlas-footer button,.stop-page .atlas-footer button{font-size:16px;min-height:46px;min-width:0;padding:7px 10px;white-space:normal;gap:5px}
+ .mapped-area .atlas-footer button .ui-icon,.stop-page .atlas-footer button .ui-icon{width:18px}
+}
+@media(forced-colors:active){.mapped-area .skill-node.is-recommended .skill-marker{outline:3px solid Highlight}.area-paths path{stroke:CanvasText}.area-zones button[aria-current=page]{outline:2px solid Highlight}.stop-paper{background:Canvas;border-color:CanvasText}}
+/* The existing world stage also keeps its title clear at intermediate zooms. */
+@media(orientation:landscape) and (max-width:1100px) and (min-height:551px){
+ .world-page .map-intro{top:20px;left:24px;max-width:25%}
+ .world-page .map-intro h1{font-size:clamp(32px,4.3vw,45px)}
+ .world-page .map-intro p{font-size:20px}
+}
+@media(max-height:320px) and (orientation:landscape){
+ .icon-button{min-height:44px}
+ .world-page .map-intro h1{font-size:26px}
+ .world-page .map-intro p{display:none}
+ .world-page .map-intro .tape-label{font-size:9px}
+ .world-stage .island-node{width:clamp(80px,18cqw,125px)}
+ .world-stage .island-marker{width:28px;height:28px;font-size:20px;border-width:2px}
+ .world-stage .island-label{min-width:0;width:95%;max-width:110%;font-size:clamp(13px,2.6cqw,17px);padding:4px 5px}
+ .world-stage .island-label small{font-size:8px;margin-top:2px}
+ .world-page .atlas-footer .paper-pill,.world-page .atlas-footer .paint-button{min-height:40px;font-size:17px;padding:5px 12px}
+}
+/* Recommendation uses the marker ring and numbered footer CTA, so changing
+   the current stop never adds a floating label near an adjacent landmark. */
+.area-legend span:first-child{color:#70500a;font-weight:650}
+.mapped-area .skill-node.is-locked:hover .skill-marker{background:#66736d}
+/* Status must never change text wrapping: the border has the same thickness
+   for available, locked, current and completed nodes. The marker carries the ring. */
+.mapped-area .area-stage .skill-node .skill-label{border-width:1px}
+@media(orientation:portrait) and (max-height:700px){
+ .world-stage .place-formulewerf,.world-stage .place-signaalstad{top:73%}
+}
+
+/* Formulewerf only: the preserved stages now follow A (1–4) → B (5–9). */
+.mapped-area[data-area-id=formulewerf] .area-intro h1{font-size:clamp(26px,3.1vw,46px)}
+.mapped-area[data-area-id=formulewerf] .area-intro .tape-label{font-size:clamp(9px,1vw,14px);letter-spacing:0}
+.mapped-area[data-area-id=formulewerf] .area-legend{display:none}
+.mapped-area[data-area-id=formulewerf] .area-zones{top:auto;bottom:clamp(12px,4vh,44px)}
+.mapped-area[data-area-id=formulewerf] .skill-rewrite_linear_equation{width:36cqw}
+.mapped-area[data-area-id=formulewerf] .skill-rewrite_linear_equation .skill-label{line-height:1.15}
+.mapped-area[data-area-id=formulewerf] .is-route-finish .skill-label{border-bottom:3px solid #58768b}
+.mapped-area[data-area-id=formulewerf] .is-route-finish .skill-label small{display:block;font:clamp(8px,1.4cqw,13px)/1.2 var(--hand);margin-top:2px;color:#36546a}
+@media(orientation:landscape) and (max-height:550px){
+ .mapped-area[data-area-id=formulewerf] .area-intro h1{font-size:clamp(20px,2.8vw,25px)}
+ .mapped-area[data-area-id=formulewerf] .area-intro h1::after{height:2px;margin:3px 0 5px}
+ .mapped-area[data-area-id=formulewerf] .area-intro p{display:none}
+ .mapped-area[data-area-id=formulewerf] .area-intro .tape-label{font-size:8px;padding:2px 3px}
+ .mapped-area[data-area-id=formulewerf] .area-zones{bottom:8px}
+ .mapped-area[data-area-id=formulewerf] .area-zones button{font-size:clamp(12px,1.7vw,14px)}
+}
+@media(orientation:portrait){
+ .mapped-area[data-area-id=formulewerf] .area-intro h1{font-size:24px}
+ .mapped-area[data-area-id=formulewerf] .area-zones{top:83px;bottom:auto}
+}

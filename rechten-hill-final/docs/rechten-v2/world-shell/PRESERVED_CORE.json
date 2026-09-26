@@ -1,0 +1,9 @@
+{
+  "games/rechten/trainer-v2/semantic-math-core.js": "6c2b75ec659f4293fdce262194259de2058b35294e2021834418cd2315b886d7",
+  "games/rechten/trainer-v2/mission-runtime.js": "61eef2b5bfbee048407f3df24e18bbaef0b607b43d2f9148302d56cfcfcb7eee",
+  "games/rechten/trainer-v2/evidence-adapter.js": "07bdda01f5914529799c30edf3bab55af12b2a141aa5dbce989a5bb57db2cfca",
+  "games/rechten/trainer-v2/scheduler-adapter.js": "78bb9dc7feaab080e062015a2e7ece8b0f48ba3bd21bcc16856f70003e3bdc94",
+  "games/rechten/trainer-v2/storage.js": "3d649f1b3f9299701540cee0bce6aec5ad6eaf0e02bee40d257f0da6eeaddba4",
+  "games/rechten/trainer-v2/content/skills.json": "6828b2167eb6844136c13006d7f3a755eac098a433a8654e501d2516a2350ad5",
+  "games/rechten/trainer-v2/components/workbench.js": "f4a261a8f7917da98794c27b0f3ce2381c53fda0e32ef8d9641331fec69e6a67"
+}

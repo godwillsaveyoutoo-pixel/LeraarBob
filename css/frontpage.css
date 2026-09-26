@@ -1,8 +1,9 @@
-:root{color-scheme:light;--bg:#f7f8f4;--surface:#fff;--ink:#203d36;--muted:#69746d;--line:#e2e6dd;--accent:#345d48;--soft:#eaf0e3;--focus:#347565}
-:root[data-mode="dark"]{color-scheme:dark;--bg:#14231e;--surface:#1d3027;--ink:#edf1e7;--muted:#b0bdb1;--line:#34483b;--accent:#bdcfa9;--soft:#2c4030;--focus:#d1e5aa}
+@import url('../shared/learning-theme.css');
+:root{color-scheme:light;--bg:var(--learning-paper);--surface:var(--learning-surface);--ink:var(--learning-ink);--muted:var(--learning-muted);--line:var(--learning-line);--accent:var(--learning-accent);--soft:var(--learning-accent-soft);--focus:var(--learning-focus)}
+:root[data-mode="dark"]{color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:100px}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Segoe UI",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5}
+body{margin:0;background:var(--bg);background-image:var(--learning-paper-wash);color:var(--ink);font-family:var(--learning-font);-webkit-font-smoothing:antialiased;line-height:1.5}
 button,input{font:inherit;color:inherit}button,a,input{-webkit-tap-highlight-color:transparent}button{cursor:pointer}a{color:inherit}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:5px}[hidden]{display:none!important}
 .container{width:calc(100% - 64px);margin-inline:auto}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}

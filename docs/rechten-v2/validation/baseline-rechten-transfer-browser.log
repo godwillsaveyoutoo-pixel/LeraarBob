@@ -1,0 +1,7 @@
+Error: {"exceptionId":5,"text":"Uncaught","lineNumber":0,"columnNumber":112,"scriptId":"457","stackTrace":{"callFrames":[{"functionName":"","scriptId":"457","url":"","lineNumber":0,"columnNumber":118},{"functionName":"","scriptId":"457","url":"","lineNumber":0,"columnNumber":226}]},"exception":{"type":"object","subtype":"error","className":"Error","description":"Error: Missing button wis\n    at <anonymous>:1:119\n    at <anonymous>:1:227","objectId":"6549952826871284024.11.2"}}
+    at CDP.eval (/tmp/leraarbob-rechten-v2/tests/rechten-transfer-browser.cjs:8:147)
+    at async CDP.click (/tmp/leraarbob-rechten-v2/tests/rechten-transfer-browser.cjs:11:41)
+    at async number (/tmp/leraarbob-rechten-v2/tests/rechten-transfer-browser.cjs:24:36)
+    at async doStep (/tmp/leraarbob-rechten-v2/tests/rechten-transfer-browser.cjs:36:43)
+    at async solve (/tmp/leraarbob-rechten-v2/tests/rechten-transfer-browser.cjs:40:98)
+    at async /tmp/leraarbob-rechten-v2/tests/rechten-transfer-browser.cjs:46:93

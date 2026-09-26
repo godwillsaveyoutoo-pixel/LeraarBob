@@ -2,6 +2,23 @@
 // Opnieuw bouwen: node scripts/build-catalog.cjs
 window.AXIOMA_CATALOG = [
   {
+    "title": "Rechtenwereld",
+    "subtitle": "Verken de eilanden en oefen met punten, hellingen en rechten.",
+    "href": "games/rechten/trainer-v2/#wereld",
+    "category": "Eerstegraadsfuncties",
+    "kind": "train",
+    "accent": "blue",
+    "theme": "Functies",
+    "art": "trainer",
+    "cover": "games/rechten/trainer-v2/assets/island-atlas.webp",
+    "detail": "Puntenbaai · Hellingrug · Grenspas",
+    "id": "rechtenwereld",
+    "progressType": "local",
+    "teacherVisible": false,
+    "gameType": "train",
+    "tracking": "local"
+  },
+  {
     "title": "Rechtentrainer",
     "subtitle": "Oefen met rechten en zie jezelf vooruitgaan.",
     "href": "games/rechten/trainer/",

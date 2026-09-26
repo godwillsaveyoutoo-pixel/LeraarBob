@@ -1,0 +1,65 @@
+{
+  "date": "2026-09-25",
+  "branch": "feat/rechten-radical-redesign-v2",
+  "base": "1d9d3da",
+  "implementationCommit": "72c0900a026aca151f7a1b42f559d78b51e740d5",
+  "productionFilesUnchanged": 87,
+  "unitTests": {
+    "passed": 126,
+    "failed": 0,
+    "existing": 78,
+    "new": 48
+  },
+  "v2Browser": {
+    "passedGroups": 145,
+    "screenshots": 28
+  },
+  "prototypeBrowser": {
+    "passedGroups": 5,
+    "screenshots": 4
+  },
+  "v2ShellIntegration": {
+    "passedGroups": 5
+  },
+  "existingBrowserReruns": {
+    "passedSuites": 10
+  },
+  "existingBaselineFailures": [
+    "rechten-answer-flow-browser",
+    "rechten-wave-browser",
+    "rechten-construction-browser",
+    "rechten-algebra-browser",
+    "rechten-transfer-browser",
+    "rechten-ux-browser"
+  ],
+  "sourceSha256": {
+    "games/rechten/trainer-v2/README.md": "5c05241bbde7e5c19d7e512c3a8bb75f1636584c8863e27513a69dea3b14020d",
+    "games/rechten/trainer-v2/app-shell.js": "522e6ed70d6b467edab2958f48cfa8aeb035ce30a18ed3d7f0eecf5b91239c62",
+    "games/rechten/trainer-v2/components/workbench.js": "f4a261a8f7917da98794c27b0f3ce2381c53fda0e32ef8d9641331fec69e6a67",
+    "games/rechten/trainer-v2/content/assets.json": "c3d246c2f04f24eeb880da3c04c65b84ab5c37e66643ffefedf600914a5d1107",
+    "games/rechten/trainer-v2/content/skills.json": "6828b2167eb6844136c13006d7f3a755eac098a433a8654e501d2516a2350ad5",
+    "games/rechten/trainer-v2/evidence-adapter.js": "07bdda01f5914529799c30edf3bab55af12b2a141aa5dbce989a5bb57db2cfca",
+    "games/rechten/trainer-v2/index.html": "7c496428099a00291c24704177f26fa96c8c95c115d4ff44de9f176cdcd16185",
+    "games/rechten/trainer-v2/mission-runtime.js": "61eef2b5bfbee048407f3df24e18bbaef0b607b43d2f9148302d56cfcfcb7eee",
+    "games/rechten/trainer-v2/prototype.html": "d79ff0867d2e138fce3b16183ed9cbc77b84454414a97b31e1ef5874bd24c5ab",
+    "games/rechten/trainer-v2/prototype.js": "76270bf46795bd39c1facd9fbac4d29e99f1383d32e794a6797aae0a590b9fe1",
+    "games/rechten/trainer-v2/scheduler-adapter.js": "78bb9dc7feaab080e062015a2e7ece8b0f48ba3bd21bcc16856f70003e3bdc94",
+    "games/rechten/trainer-v2/semantic-math-core.js": "6c2b75ec659f4293fdce262194259de2058b35294e2021834418cd2315b886d7",
+    "games/rechten/trainer-v2/storage.js": "3d649f1b3f9299701540cee0bce6aec5ad6eaf0e02bee40d257f0da6eeaddba4",
+    "games/rechten/trainer-v2/styles/mission.css": "48b18f8bbef244cec0a1a207ea3999d0103db38db4d0433f0727c88585dea4fa",
+    "games/rechten/trainer-v2/styles/shell.css": "44e7177dab2020173192ed8376f4a4bbfaf6dd8ec3565c4896103ed92d49f7ad",
+    "games/rechten/trainer-v2/styles/tokens.css": "6ee71239e35eda0f6956ed598397e8c53c3e1e05131218237947542a661394f2",
+    "tests/rechten-v2-browser.cjs": "457f2c4418b91009220804567fe11fe1a85828b25a50eef40a36ae18f3868bae",
+    "tests/rechten-v2-math.test.cjs": "38be1c22c2bf164296a94579ed0fd61b0484d316280c99d868480deeb91ff49d",
+    "tests/rechten-v2-regression.test.cjs": "789466ea3124f63637c45b4ee61f8ad62a3f2c6c3d5aa1cb02484387fedea9a2",
+    "tests/rechten-v2-runtime.test.cjs": "34d4b9aa5ddb9b925f24515941757f9aed8342bd24c7b525b2f2328af48c00d6",
+    "tests/rechten-v2-shell-integration.cjs": "a1833a43fe45bf435ef5bde707cf8df53d6eae16673bf37686f82e6ce0e0dd0e",
+    "tests/rechten-v2-storage.test.cjs": "be46c3ed2a56d1c1459163cfdaf55df2b7f76febba85568f20d099001a0687d1"
+  },
+  "notExecuted": [
+    "physical Samsung A20",
+    "manual NVDA/TalkBack",
+    "student think-aloud/control transfer experiment",
+    "live Supabase database/RLS integration"
+  ]
+}

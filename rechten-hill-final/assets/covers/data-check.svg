@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" fill="none">
+  <defs><pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" stroke="#405040" stroke-opacity=".05"/></pattern></defs>
+  <rect width="600" height="300" fill="#e4ecee"/><rect width="600" height="300" fill="url(#grid)"/>
+  <circle cx="305" cy="143" r="108" fill="#cddfe0"/>
+  <g font-family="Georgia,serif">
+  <g transform="rotate(-5 282 147)">
+    <rect x="158" y="52" width="249" height="205" rx="13" fill="#577b86" opacity=".12"/><rect x="150" y="43" width="249" height="205" rx="13" fill="#f8fbfa"/>
+    <rect x="229" y="35" width="91" height="22" rx="7" fill="#a1b9bc"/><path d="M244 46h60" stroke="#dce9e8" stroke-width="3" stroke-linecap="round"/>
+    <path d="M188 104h177m-177 40h177m-177 40h177" stroke="#dde7e5" stroke-width="1.5"/>
+    <rect x="212" y="161" width="30" height="55" rx="3" fill="#a8c1a0"/><rect x="260" y="125" width="30" height="91" rx="3" fill="#86a9b6"/><rect x="308" y="87" width="30" height="129" rx="3" fill="#d6bd7a"/>
+    <path d="M188 81v135h177" stroke="#9fb6b8" stroke-width="2"/>
+    <text x="172" y="222" fill="#799a9e" font-size="14">0</text>
+  </g>
+  <circle cx="380" cy="150" r="45" fill="#f8fbfa" fill-opacity=".85" stroke="#477482" stroke-width="5"/>
+  <path d="m413 183 37 37" stroke="#477482" stroke-width="13" stroke-linecap="round"/>
+  <path d="m361 151 13 13 24-29" stroke="#62804f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M427 78h23m-23 8h15" stroke="#92b1b3" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>

@@ -1,0 +1,49 @@
+/* Serializable mission state; all mathematical decisions belong to exact adapters. */
+(function(root,factory){if(typeof module==='object')module.exports=factory(require('./semantic-math-core.js'),require('./evidence-adapter.js'),require('./points-core.js'),require('./hills-core.js'));else root.RechtenV2Runtime=factory(root.RechtenV2Math,root.RechtenV2Evidence,root.RechtenV2Points,root.RechtenV2Hills)})(globalThis,function(M,E,P,H){
+'use strict';const clone=v=>JSON.parse(JSON.stringify(v));
+const WORLDS=['grenspas','hellingrug','signaalstad','puntenbaai'];
+const initial=()=>({schema:1,screen:'world',active:null,missions:{},events:[],settings:{reducedMotion:false}});
+const variants={grenspas:[0,1,2,3],hellingrug:[0,1],signaalstad:[0,1]};
+function mission(world,run=1,index=0,skill='point'){if(world==='puntenbaai'||H.skills.includes(skill)){const task=(world==='puntenbaai'?P:H).makeTask(skill,index,run);return {world,skill,run,index,variant:task.variant,task,phase:world==='puntenbaai'?'coordinate':H.firstPhase(skill,task),values:{},history:[],locks:{},hints:0,hintOpen:false,errors:0,revealed:[],attempt:0,feedback:null,completed:false,completion:null}}const variant=variants[world][index],task=M.makeTask(world,{variant,seed:1,mode:index===0?'discover':'evidence'});return {world,run,index,variant,task,phase:world==='grenspas'?(index===0?'root':'interval'):world==='hellingrug'?'deltas':'probe',values:{direction:'AB',probe:'zero',pins:['formula','graph']},history:[],locks:{},hints:0,hintOpen:false,errors:0,revealed:[],attempt:0,feedback:null,completed:false,completion:null};}
+function active(state){return state.missions[state.active]}
+function start(state,world,restart=false,skill='point'){if(H.skills.includes(world)){skill=world;world='hellingrug'}if(P.skills.includes(world)){skill=world;world='puntenbaai'}if(world==='puntenbaai'&&!P.skills.includes(skill))throw Error('Onbekende puntenvaardigheid');if(!WORLDS.includes(world))throw Error('Onbekende missie');const s=clone(state);const key=world==='puntenbaai'||H.skills.includes(skill)?skill:world;s.active=key;s.screen='mission';if(!s.missions[key]||restart)s.missions[key]=mission(world,(s.missions[key]?.run||0)+1,0,skill);return s;}
+function remember(m){m.history.push({phase:m.phase,values:clone(m.values),locks:clone(m.locks)});m.history=m.history.slice(-32);}
+function edit(state,name,value){const s=clone(state),m=active(s);if(!m||m.feedback||m.completed||m.locks[name])return s;remember(m);m.values[name]=value;return s;}
+function undo(state){const s=clone(state),m=active(s);if(!m||m.feedback||m.completed)return s;const p=m.history.pop();if(p){if(p.phase===m.phase){const kept=Object.fromEntries(Object.keys(m.locks).filter(k=>m.locks[k]).map(k=>[k,m.values[k]]));m.values={...p.values,...kept};m.locks={...p.locks,...m.locks}}}return s;}
+function hint(state){const s=clone(state),m=active(s);if(m&&!m.completed&&!m.feedback){m.hints=Math.min(5,m.hints+1);m.hintOpen=true}return s;}
+function intervalResponse(m){const v=m.values,side=v.side;return {boundary:m.index===0?v.root:v.boundary,side,closed:m.task.model.a.n?v.closed:false,symbol:m.phase==='interval'&&m.index===0?(side==='left'?'<':side==='right'?'>':side):v.symbol,symbolBoundary:m.phase==='interval'&&m.index===0?v.root:v.symbolBoundary};}
+function commit(state){let s=clone(state),m=active(s);if(!m||m.feedback||m.completed)return s;let result,next=m.phase;
+ switch(m.phase){
+ case 'line-plot':case 'line-behavior':case 'line-special':case 'hill-dx':case 'hill-dy':case 'hill-rate':case 'hill-fill':case 'hill-calculate':result=H.check(m.task,m.values,m.phase);next=H.nextPhase(m.phase);break;
+ case 'coordinate':result=P.check(m.task,m.values);next='next-task';break;
+ case 'root':result=M.checkRoot(m.task,m.values.root);next='interval';break;
+ case 'interval':case 'symbol':result=M.checkInterval(m.task,intervalResponse(m));next=m.index===0&&m.phase==='interval'?'symbol':'next-task';break;
+ case 'deltas':result=M.checkDeltas(m.task,m.values);next='rate';break;
+ case 'rate':result=M.checkSlope(m.task,m.values);next='hidden';break;
+ case 'probe':result=M.signalProbe(m.task,m.values.probe,{expected:m.values.expected});next='repair';break;
+ case 'repair':result=M.checkSignal(m.task,m.values);next='hidden';break;
+ case 'hidden':result=M.checkHidden(m.task,m.values.hidden);next='next-task';break;
+ default:return s;
+ }
+ const semantic=result.kind!=='interaction_error'&&result.kind!=='authoring_error';
+ m.hintOpen=false;const priorErrors=m.errors;m.attempt++;if(!result.ok&&semantic)m.errors++;
+ const phase=m.phase==='hidden'||(m.index>0&&m.phase==='interval')?'transfer':m.phase==='repair'?'diagnose':['root','probe','deltas'].includes(m.phase)?'predict':'execute';
+ const evidence=E.record(s,{taskId:m.task.id+':run'+m.run,attemptId:`${m.phase}:${m.attempt}`,skill:m.phase==='root'?'zeroRead':m.task.skill_id,phase,correct:result.ok,mode:m.task.mode,helpLevel:m.hints,supported:priorErrors>0,feedbackSeen:m.revealed.includes(m.phase),misconception:result.ok?null:result.code,errorKind:semantic?null:result.kind,variant:m.task.variant,representation:m.world==='signaalstad'?m.values.pins.join('+'):m.task.given_representations.join('+'),revision:m.attempt});
+ s=evidence.state;m=active(s);m.feedback={result:clone(result),next,committedPhase:m.phase,response:clone(m.values)};if(semantic&&!m.revealed.includes(m.phase))m.revealed.push(m.phase);return s;
+}
+function advance(state){const s=clone(state),m=active(s);if(!m?.feedback)return s;const {result,next}=m.feedback;
+ if(!result.ok){m.locks={...m.locks,...Object.fromEntries(Object.entries(result.keep||{}).filter(([,v])=>v))};if(m.locks.root&&m.index>0)m.locks.boundary=true;if(m.phase==='hill-fill'&&m.locks[m.values.selectedSlot])m.values.selectedSlot=H.slots.find(k=>!m.locks[k])||m.values.selectedSlot;m.feedback=null;return s;}
+ if(next==='next-task'){
+  const done={taskId:m.task.id,supported:m.hints>0||m.errors>0||m.task.mode==='discover',variant:m.variant};
+  if(m.index+1<(m.world==='puntenbaai'?P.count:H.skills.includes(m.skill)?H.taskCount(m.skill):variants[m.world].length)){const nextMission=mission(m.world,m.run,m.index+1,m.skill);nextMission.completion=[...(m.completion||[]),done];s.missions[s.active]=nextMission;}
+  else {m.completed=true;m.phase='complete';m.feedback=null;m.completion=[...(m.completion||[]),done];m.history=[];}
+ }else{m.history=[];m.phase=next;m.feedback=null;m.locks={};if(next==='line-behavior'&&m.task.representation==='points'){m.locks.plotA=true;m.locks.plotB=true}if(next==='hill-dy')m.locks.dxChoice=true;if(next==='hill-calculate')for(const k of H.slots)m.locks[k]=true;if(next==='symbol'){m.locks.root=true;m.locks.side=true;m.locks.closed=true}if(next==='rate'){m.locks.direction=true;m.locks.dx=true;m.locks.dy=true}}
+ return s;
+}
+function newAfterExample(state){const s=clone(state),m=active(s);if(!m||m.hints<5)return s;const next=mission(m.world,m.run+1,m.index,m.skill);if(m.world!=='puntenbaai'&&!H.skills.includes(m.skill))next.task=M.makeTask(m.world,{variant:m.variant+1,seed:2,mode:'practice'});next.variant=next.task.variant;next.completion=m.completion;s.missions[s.active]=next;return s;}
+function beginHills(state){const s=clone(state),m=active(s);if(m?.phase==='hill-inspect'&&!m.completed){m.phase='hill-fill';m.values.selectedSlot='y1'}return s;}
+function putCoordinate(state,slot,token){const s=clone(state),m=active(s);if(!m||m.phase!=='hill-fill'||m.feedback||!H.slots.includes(slot)||m.locks[slot]||!H.coordinate(m.task,token))return s;remember(m);m.values[slot]=token;const next=H.slots.find(k=>!m.values[k]&&!m.locks[k]);m.values.selectedSlot=next||slot;return s;}
+function placeLinePoint(state,name,p){const s=clone(state),m=active(s);if(!m||!H.lines.skills.includes(m.skill)||!['line-plot','line-special'].includes(m.phase)||m.feedback||m.completed||!['A','B'].includes(name)||m.locks['plot'+name]||!H.lines.validPlot(m.task,p))return s;remember(m);m.values['plot'+name]=clone(p);m.values.selectedPoint=name==='A'&&!m.values.plotB?'B':name;return s;}
+function clearLinePoints(state){const s=clone(state),m=active(s);if(!m||!['line-plot','line-special'].includes(m.phase)||m.feedback||m.completed)return s;remember(m);for(const name of ['A','B'])if(!m.locks['plot'+name])delete m.values['plot'+name];m.values.selectedPoint=m.locks.plotA?'B':'A';return s;}
+return Object.freeze({placeLinePoint,clearLinePoints,beginHills,putCoordinate,initial,start,active,edit,undo,hint,commit,advance,newAfterExample,worlds:WORLDS});
+});
