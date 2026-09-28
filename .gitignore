@@ -1,0 +1,11 @@
+
+# Generated visual validation output (keep outside the production repository)
+docs/**/screenshots/
+docs/vectoren-v04/interface/
+docs/homepage-mockups/*.png
+docs/**/*.log
+
+# Temporary archives / exports
+**/assets/*.zip
+*.bak
+*~

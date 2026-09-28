@@ -1,0 +1,2 @@
+// Adapter for the shared duo and classroom coordinators.
+window.BattleGame={id:'vectoren',title:'Vectormissie',rpc:'axioma_vector_class',playerURL:'battle-player.html',worlds:VectorMission.STATIONS,mixedSkills:VectorMission.BATTLE_MIXED_SKILLS,skills:VectorTrainerCore.TaskGenerator.skills,generate:s=>VectorTrainerCore.TaskGenerator.generate(s.skill,s),validate:(t,a)=>VectorTrainerCore.TaskValidator.validate(t,a)};

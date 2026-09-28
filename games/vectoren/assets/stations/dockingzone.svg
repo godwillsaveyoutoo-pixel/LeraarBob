@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" fill="none">
+<title>Dockingstation: twee vectoren vormen één route</title>
+<defs><linearGradient id="metal" x1="60" y1="40" x2="170" y2="160" gradientUnits="userSpaceOnUse"><stop stop-color="#5681a7"/><stop offset=".48" stop-color="#183957"/><stop offset="1" stop-color="#0a203b"/></linearGradient><linearGradient id="glass" x1="90" y1="25" x2="160" y2="135" gradientUnits="userSpaceOnUse"><stop stop-color="#cf9cff" stop-opacity=".3"/><stop offset="1" stop-color="#102644" stop-opacity=".94"/></linearGradient><radialGradient id="light"><stop stop-color="#cf9cff" stop-opacity=".4"/><stop offset="1" stop-color="#cf9cff" stop-opacity="0"/></radialGradient></defs>
+<ellipse cx="120" cy="151" rx="99" ry="25" fill="#020a1a" fill-opacity=".65"/>
+<ellipse cx="120" cy="145" rx="100" ry="34" fill="url(#light)"/>
+<path d="M46 138L119 114L195 138V150L120 174L46 150Z" fill="#0b2138" stroke="#6b8dac" stroke-width="2"/>
+<path d="M46 138L119 114L195 138L120 163Z" fill="url(#metal)" stroke="#7ca7c8" stroke-width="2"/>
+<path d="M59 142L120 161L182 142M120 164V173" stroke="#cf9cff" stroke-width="2"/>
+
+<path d="M59 136V70L81 60V128Z" fill="url(#metal)" stroke="#8baece" stroke-width="2"/><path d="M165 128V60L187 70V136Z" fill="url(#metal)" stroke="#8baece" stroke-width="2"/>
+<path d="M59 70L82 37H164L187 70L172 79L154 55H91L74 79Z" fill="url(#metal)" stroke="#a0bfd9" stroke-width="2.5"/>
+<path d="M77 116V77L94 53H152L169 77V116" stroke="#cf9cff" stroke-width="3"/>
+<path d="M83 134L123 119L164 134L124 149Z" fill="#102d48" stroke="#648aae" stroke-width="2"/>
+<path d="M88 108H137" stroke="#56d9ef" stroke-width="5" stroke-linecap="round"/><path d="M141 108L129 100V116Z" fill="#56d9ef"/>
+<path d="M141 107V73" stroke="#f17bdc" stroke-width="5" stroke-linecap="round"/><path d="M141 67L133 80H149Z" fill="#f17bdc"/>
+<path d="M88 108L136 74" stroke="#f7d17b" stroke-width="3" stroke-dasharray="4 4"/>
+<circle cx="88" cy="108" r="5" fill="#e9fdff"/>
+<path d="M29 124L57 107L72 114L48 139L49 127Z" fill="#b3d2e9" stroke="#3d607d" stroke-width="2"/><path d="M38 131L31 137" stroke="#56d9ef" stroke-width="4"/>
+
+</svg>

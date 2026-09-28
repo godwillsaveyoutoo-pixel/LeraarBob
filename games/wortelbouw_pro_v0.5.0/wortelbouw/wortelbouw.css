@@ -1,0 +1,374 @@
+:root{
+  color-scheme:light;
+  --ink:#26382d;--muted:#6c705d;--green:#4f7743;--green-dark:#315638;
+  --gold:#ad7c32;--paper:#f4e7c1;--paper-light:#fff5d8;--wood:#9b6b34;
+  --line:#b9aa82;--sand:#dfc393;--danger:#9e5b49;
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:#dac28f;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+button,a,select{font:inherit;color:inherit}button,a{touch-action:manipulation}button{cursor:pointer}button:disabled{opacity:.38;cursor:default}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #62864d;outline-offset:2px}
+[hidden]{display:none!important}
+#app{height:100dvh;display:grid;grid-template-rows:76px minmax(0,1fr) 148px;overflow:hidden;background:#e8d4a6;padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left)}
+
+/* Top bar ---------------------------------------------------------------- */
+#topbar{display:flex;align-items:center;gap:12px;min-width:0;padding:7px 15px;background:linear-gradient(#f8edcf,#ecd9ae);border-bottom:1px solid #ad986c;box-shadow:0 2px 7px #604a2718;z-index:5}
+.brand{display:flex;align-items:center;gap:8px;min-width:180px;color:#34593c;text-decoration:none}.brandRabbit{font-size:31px;filter:saturate(.8)}.brand b{display:block;font-family:Georgia,serif;font-size:19px;letter-spacing:.035em}.brand small{display:block;font-size:10px;font-weight:800;letter-spacing:.11em;color:#5f724a;margin-top:1px}
+.proBadge{border:2px solid #765622;border-radius:14px;background:#efc366;padding:5px 10px;font-family:Georgia,serif;font-size:17px;font-weight:800;box-shadow:inset 0 1px #ffe1a1}
+.goalBlock{min-width:220px;flex:1}.goalBlock h1{margin:0;font-family:Georgia,serif;font-size:27px;line-height:1;color:#3a3f2c}.goalBlock span{display:block;font-size:12px;color:#696b56;margin-top:4px}
+.topProgress{display:flex;align-items:center;gap:0;width:210px}.topProgress i{width:18px;height:18px;border:2px solid #a79262;border-radius:50%;background:#d9c799;position:relative}.topProgress i:not(:last-child):after{content:"";position:absolute;left:16px;top:6px;width:32px;border-top:5px solid #a79262}.topProgress i:nth-child(-n+2){background:#5d9852;border-color:#497a42}.topProgress i:first-child:after{border-color:#5d9852}
+.progressButton{height:48px;padding:4px 12px;border:1px solid #afae80;border-radius:9px;background:#e5e5bd;font-size:11px;white-space:nowrap}.progressButton span{display:block;font-weight:800;font-size:14px;font-variant-numeric:tabular-nums}
+#steps{font-size:11px;color:#7a735d;white-space:nowrap;font-variant-numeric:tabular-nums}.tool{min-width:44px;height:44px;border:0;border-radius:11px;background:transparent;line-height:1;font-size:25px}.tool:hover{background:#d9d6ad}.navTool{font-size:32px;color:#345843}
+
+/* Main shell ------------------------------------------------------------- */
+#gameShell{position:relative;display:grid;grid-template-columns:minmax(230px,280px) minmax(0,1fr) minmax(190px,235px);gap:10px;min-height:0;padding:10px;background:linear-gradient(90deg,#b7a05f26,#d6bb8122)}
+#playColumn{min-width:0;min-height:0;position:relative}
+#stage{position:relative;width:100%;height:100%;min-height:0;overflow:hidden;border:1px solid #aa9568;border-radius:15px;background:#dfc292;box-shadow:inset 0 0 0 2px #f5e5bd80,0 3px 11px #72582b20}
+#floor{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+#targets{position:absolute;inset:0;pointer-events:none}
+#floor{touch-action:none;user-select:none;-webkit-user-select:none}
+
+/* Mission paper ---------------------------------------------------------- */
+.paperPanel{position:relative;min-height:0;padding:20px 18px 14px;border:1px solid #b59a63;border-radius:13px;background:#f6e8bd url('assets/wortelbouw/paper/paper.png');box-shadow:2px 4px 8px #62462126,inset 0 0 28px #a3712520;overflow:hidden}
+.paperPanel:after{content:"";position:absolute;inset:7px;border:1px solid #fff6da66;border-radius:9px;pointer-events:none}.paperPin{position:absolute;z-index:2;width:14px;height:24px;border:3px solid #8f6b3e;border-radius:9px;top:-7px;transform:rotate(19deg);background:#d8bb79}.pinLeft{left:20px}.pinRight{right:24px;transform:rotate(-12deg)}
+#missionPanel h2{position:relative;z-index:1;margin:0 0 10px;font-family:Georgia,serif;font-size:27px;color:#3c382b}
+#lesson{position:relative;z-index:1;padding-bottom:9px;border-bottom:1px solid #bba57180}#lesson strong{display:block;font-size:16px;color:#4f5f3d}#lesson span{display:block;margin-top:4px;font-size:12px;line-height:1.35;color:#696551}
+#instruction{position:relative;z-index:1;margin-top:12px}#instruction strong{display:block;font-size:17px;line-height:1.2}#instruction span{display:block;font-size:13px;line-height:1.45;color:#5f5b49;margin-top:5px}
+#missionSketch{position:relative;z-index:1;display:block;width:100%;height:auto;max-height:170px;margin:10px 0 4px}
+#missionQuestion{position:relative;z-index:1;margin:7px 0 0;font-family:Georgia,serif;font-size:16px;line-height:1.35;color:#413d30}
+
+/* Story rail ------------------------------------------------------------- */
+#storyRail{min-height:0;display:flex;flex-direction:column;gap:12px;align-items:stretch;justify-content:flex-start;padding-top:8px}
+.woodPoster{position:relative;margin-top:0;padding:26px 16px 20px;text-align:center;border:9px solid #8d5f2f;border-radius:8px;background:#eddaa8 url('assets/wortelbouw/signs/poster.png');box-shadow:inset 0 0 0 2px #e4bc6a,3px 4px 8px #6d4c272b;transform:rotate(.35deg)}.woodPoster:before,.woodPoster:after{content:"";position:absolute;top:-15px;width:26px;height:15px;border-radius:5px;background:#8b5d2e;border:2px solid #62421f}.woodPoster:before{left:10px}.woodPoster:after{right:10px}.posterNail{position:absolute;width:7px;height:7px;border-radius:50%;background:#655038;top:7px}.posterNail.n1{left:8px}.posterNail.n2{right:8px}
+#posterIcon{font-size:29px}#poster h2{font-family:Georgia,serif;font-size:23px;line-height:1.12;margin:5px 0 4px;color:#43392a}#poster p{font-size:15px;line-height:1.35;margin:0;color:#504838}
+.speechBubble{position:relative;margin-top:auto;margin-bottom:50px;padding:14px 15px 17px;border:2px solid #9e7c4d;border-radius:38% 42% 38% 44%/40% 42% 45% 40%;background:#fff0c9;box-shadow:2px 3px 7px #5e431d24}.speechBubble:after{content:"";position:absolute;right:27px;bottom:-19px;width:26px;height:30px;background:#fff0c9;border-right:2px solid #9e7c4d;border-bottom:2px solid #9e7c4d;transform:skewY(24deg) rotate(14deg)}#speechText{position:relative;z-index:2;margin:0 58px 0 0;font-size:14px;line-height:1.35}#guideRabbit{position:absolute;z-index:3;width:92px;height:auto;right:-11px;bottom:-70px;pointer-events:none}
+#success{padding:9px 10px;border:1px solid #a49162;border-radius:9px;background:#f5e7bdcc;color:#4c4938}#success h2{font-family:Georgia,serif;font-size:15px;margin:3px 0}.successMark{display:none}#successRoot{font-family:Georgia,serif;font-size:29px;color:#406239}#successEquation{font-weight:700;font-size:13px}#success p{font-size:11px;line-height:1.35;margin:4px 0 0}#rootStory{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Canvas overlays -------------------------------------------------------- */
+#notice{position:absolute;left:13px;top:13px;z-index:8;max-width:calc(100% - 26px);padding:8px 12px;border:1px solid #a66f4d;border-radius:8px;background:#fff2d9f2;box-shadow:0 3px 10px #65431f1a;font-size:13px;pointer-events:none}
+#cordLabel{position:absolute;z-index:7;transform:translate(-50%,-50%);padding:3px 8px;border:1px solid #9f7936;border-radius:5px;background:#ffedb5;color:#6a4b18;font-family:Georgia,serif;font-weight:800;font-size:18px;pointer-events:none;white-space:nowrap;box-shadow:0 2px 5px #4b3a1c26}
+#colorKey{position:absolute;top:10px;left:12px;z-index:4;display:flex;gap:10px;padding:5px 9px;border:1px solid #b7a270;border-radius:999px;background:#f8ebc8d8;font-size:10px;color:#53604a;pointer-events:none}#colorKey span:before{content:"";display:inline-block;width:10px;height:10px;margin-right:5px;border-radius:2px;background:#679653;border:1px solid #41663a}#colorKey .building:before{background:#b58859;border-color:#7f5e3d}#colorKey .edgeKey:before{background:#e2b955;border-color:#8b682e;border-radius:999px}#colorKey #routeCount{font-weight:800;color:#75531e}#colorKey #routeCount:before{display:none}
+.target{position:absolute;transform:translate(-50%,-50%);height:44px;min-width:44px;border:0;background:transparent;pointer-events:auto;padding:0;display:grid;place-items:center;color:#456947}.target span{display:grid;place-items:center;width:25px;height:25px;border:1px solid currentColor;border-radius:50%;background:#fff1c9e8;font-size:18px;box-shadow:0 1px 4px #3c311e22}.target.piece span{width:26px;height:26px;background:#edf0d5e8;color:#4d7546;border-color:#557c4d}.target.triangle span{background:#f2d7b6e8;color:#855b38;border-color:#855b38}.target.edge span{width:23px;height:23px;font-size:11px;font-weight:800}.target.square span{width:auto;min-width:44px;height:26px;padding:2px 6px;border-radius:4px;font-size:11px}.target:disabled span{background:#a86855;color:white;border-color:#854c40}
+
+/* Bottom dock ------------------------------------------------------------ */
+#bottomDock{display:grid;grid-template-columns:minmax(350px,430px) minmax(0,1fr) minmax(180px,230px);gap:9px;padding:8px 11px;background:linear-gradient(#f0e4c1,#e6d2a4);border-top:1px solid #a98e5e;box-shadow:0 -2px 7px #60471f18;z-index:5}
+#toolDock,#rootAxisPanel,#nextDock{position:relative;min-width:0;border:1px solid #baa473;border-radius:11px;background:#f7eac7c7;box-shadow:inset 0 1px #fff7df}
+#toolDock{display:block;padding:5px 7px}.dockTitle{font-family:Georgia,serif;font-weight:800;font-size:14px}.workTools{display:flex;align-items:center;gap:5px;min-width:0;height:96px;margin-top:2px}.utilityTools{position:absolute;right:5px;top:1px;display:flex;align-items:center;gap:1px}.proShell:not(.manual) .modes button span{display:none}.proShell:not(.manual) .modes button{min-width:54px;width:54px;padding:2px}.modeToggle{font-size:23px;background:#e3e5bc}.ruler{display:flex;align-items:center;gap:1px;border-bottom:2px solid #a07b47;height:48px;flex-shrink:0}.ruler button{width:40px;height:44px;border:0;border-radius:7px;background:transparent;font-size:16px;font-weight:700;position:relative}.ruler button:after{content:"";position:absolute;left:50%;bottom:0;height:5px;border-left:1px solid #9d7a4a}.ruler button[aria-pressed=true]{background:#d8e2b5;color:#365a3a}.modes{display:flex;gap:4px;min-width:0}.modes button{height:58px;min-width:96px;display:flex;align-items:center;justify-content:center;gap:3px;padding:3px 6px;border:1px solid #b7aa82;border-radius:8px;background:#f5e8c7;color:#514936;font-size:10px;white-space:nowrap}.modes button[aria-pressed=true]{background:#dbe7bd;border-color:#718c5a;color:#345c3d}.modes svg{width:32px;height:29px;fill:#c5996333;stroke:#8c633e;stroke-width:1.5;flex-shrink:0}.modes .knownSide{stroke:#567d48;stroke-width:4}.modes .angle{fill:none;stroke:#705039;stroke-width:1}.manual .ruler,.manual #flip{display:none}.manual .modes{margin-left:0}.manual .workTools{justify-content:flex-start}
+#extendedRuler{display:flex;align-items:center;gap:6px;font-size:11px}#longMeasure{height:43px;min-width:82px;border:1px solid #9f865d;border-radius:7px;background:#fff2d2;font-size:16px}
+#rootAxisPanel{display:grid;grid-template-columns:145px minmax(0,1fr);align-items:center;padding:7px 9px}.rootIntro strong{display:block;font-family:Georgia,serif;font-size:18px}.rootIntro span{display:block;font-size:10px;line-height:1.25;color:#6d674e;margin-top:2px}#rootAxisCanvas{width:100%;height:90px;min-height:0;display:block}
+#nextDock{display:flex;align-items:center;justify-content:center;padding:8px}#achievement{width:100%;display:flex;flex-direction:column;gap:6px;align-items:stretch}#relationship{font-family:Georgia,serif;font-size:16px;text-align:center;color:#49643d}#continue{width:100%;min-height:52px;border:2px solid #355e39;border-radius:15px;background:linear-gradient(#5e934d,#4c7e43);color:#fff6dd;font-weight:800;box-shadow:inset 0 1px #8ebb77,0 2px 0 #2f5434}#stepCue{font-size:12px;color:#756c55;text-align:center}
+.finished #stepCue{display:none}.finished #achievement{display:flex!important}
+
+/* Progress --------------------------------------------------------------- */
+#progressDialog{width:min(680px,calc(100vw - 24px));max-height:calc(100dvh - 24px);border:1px solid #a69163;border-radius:14px;padding:16px;background:#f6e8c2;color:var(--ink);overflow:auto}#progressDialog::backdrop{background:#1b2b1f9e}.progressHeading{display:flex;align-items:center;justify-content:space-between;gap:12px}.progressHeading h2{margin:0;font-family:Georgia,serif;font-size:23px}.progressHeading p{margin:4px 0 0;font-size:13px;color:var(--muted)}.progressNote{font-size:12px;color:var(--muted);margin:12px 0}#progressLevels{display:grid;grid-template-columns:1fr 1fr;gap:8px}.progressLevel{display:flex;align-items:center;gap:10px;border:1px solid #c2ae7c;border-radius:9px;background:#fff0cc;padding:8px;text-align:left;min-height:60px}.progressLevel.done{border:2px solid #80995e;background:#ebedc9}.progressLevel strong{display:block;font-size:14px}.progressLevel small{display:block;font-size:11px;color:var(--muted);margin-top:3px}.progressLevel .mark{color:#47733f;font-size:20px;width:24px;flex-shrink:0}.progressLevel[aria-current=true]{box-shadow:inset 4px 0 #50784a}
+#rotate{display:none}
+
+/* Responsive: laptop ----------------------------------------------------- */
+@media(max-width:1180px){
+  #gameShell{grid-template-columns:230px minmax(0,1fr) 195px;gap:7px;padding:7px}
+  .topProgress{display:none}.brand{min-width:150px}.brandRabbit{display:none}.brand b{font-size:17px}.goalBlock h1{font-size:24px}
+  #bottomDock{grid-template-columns:minmax(330px,390px) minmax(0,1fr) 180px;padding:7px;gap:7px}.modes button{min-width:78px}.modes button span{display:none}
+  #rootAxisPanel{grid-template-columns:112px 1fr}.rootIntro span{display:none}
+}
+
+/* Smartphone / very short landscape: stage is the whole game space. */
+@media(max-width:900px),(max-height:520px){
+  #app{grid-template-rows:48px minmax(0,1fr) 72px}
+  #topbar{gap:6px;padding:3px 7px}.brand{min-width:0}.brand small,.proBadge,#goalSubtitle,#steps,.topProgress{display:none}.brand b{font-size:13px}.brandRabbit{display:none}.goalBlock{min-width:0}.goalBlock h1{font-size:19px;white-space:nowrap}.progressButton{height:40px;padding:2px 7px;font-size:9px}.progressButton span{font-size:12px}.navTool{min-width:38px;width:38px;height:40px;font-size:27px}
+  #gameShell{display:block;padding:4px;min-height:0}
+  #playColumn{width:100%;height:100%}#stage{border-radius:9px}
+  #storyRail{display:none}
+  #missionPanel{position:absolute;z-index:9;left:10px;top:10px;width:min(315px,54vw);height:auto;min-height:0;padding:7px 10px;border-radius:8px;background:#f7e9c9e8;pointer-events:none;box-shadow:0 2px 7px #60451c18}#missionPanel:after,.paperPin,#missionPanel>h2,#lesson,#missionSketch,#missionQuestion{display:none}#instruction{margin:0}#instruction strong{font-size:13px}#instruction span{font-size:10px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.manual #instruction span{display:none}
+  #colorKey{display:none}
+  #bottomDock{display:flex;align-items:stretch;gap:4px;padding:4px 6px}
+  #toolDock{flex:1;display:flex;align-items:center;justify-content:space-between;padding:2px 4px;min-width:0}.dockTitle{display:none}.workTools{height:62px;gap:2px;margin-top:0}.utilityTools{position:static;gap:0}.utilityTools .tool,#manual,#flip{min-width:40px;width:40px;height:44px;font-size:22px}.modes{gap:2px}.modes button{min-width:48px;width:48px;height:50px;padding:2px}.modes svg{width:38px;height:34px}.modes button span{display:none}.ruler button{width:34px;height:42px;font-size:14px}
+  #rootAxisPanel{display:none;flex:1;padding:3px 6px;grid-template-columns:1fr}.rootIntro{display:none}#rootAxisCanvas{height:60px;min-height:0}
+  #nextDock{display:none;width:142px;padding:3px}#continue{min-height:54px;font-size:12px;border-radius:10px}
+  .finished #toolDock{display:none}.finished #rootAxisPanel{display:grid}.finished #nextDock{display:flex}.finished #bottomDock{height:72px}
+  #success{display:none!important}.finished #missionPanel{display:none}
+}
+
+@media(max-width:700px){#progressLevels{grid-template-columns:1fr}.progressLevel{min-height:52px}}
+@media(orientation:portrait){#rotate{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:#f0e1bb}#rotate strong{font-family:Georgia,serif;font-size:26px}#rotate p{line-height:1.5}#rotate a{color:#3d7148;padding:14px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}.speechBubble,.woodPoster{transition:none!important}}
+
+/* v0.3.2 success choreography -------------------------------------------- */
+@keyframes rootDockIn{from{opacity:.25;transform:translateY(5px)}to{opacity:1;transform:none}}
+.finished #rootAxisPanel{animation:rootDockIn .34s ease-out both}
+@media(prefers-reduced-motion:reduce){.finished #rootAxisPanel{animation:none}}
+
+/* v0.4 Interaction rebuild ------------------------------------------------ */
+.buildTray{display:flex;gap:5px;align-items:center;margin-top:3px;padding-right:112px;height:42px}
+.pieceTool{display:flex;align-items:center;gap:7px;height:38px;padding:3px 9px;border:1px solid #b7aa82;border-radius:9px;background:#f6e9c8;color:#5a533f;text-align:left;min-width:118px}
+.pieceTool .pieceIcon{display:grid;place-items:center;width:28px;height:28px;border-radius:7px;background:#ead8a7;color:#6f7844;font:800 24px/1 Georgia,serif}
+.pieceTool b,.pieceTool small{display:block}.pieceTool b{font-size:12px;line-height:1.1}.pieceTool small{font-size:9px;color:#746b53;margin-top:1px}
+.pieceTool.active{background:#dfe9c0;border-color:#718d5a;color:#345a3b;box-shadow:inset 0 0 0 1px #ffffff8a}.pieceTool.active .pieceIcon{background:#f1f4d4;color:#426c43}
+.pieceTool:disabled{opacity:.45}
+#toolDock .workTools{height:52px;margin-top:2px}
+#toolDock .modes button{height:48px}
+#toolDock .ruler{height:44px}
+#toolDock .ruler button{height:40px}
+
+.menuQuickActions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:13px 0 12px}
+.menuQuickActions button{min-height:46px;border:1px solid #af9867;border-radius:10px;background:#fff0cb;padding:8px 10px;text-align:left;font-weight:750;color:#465640}
+.menuQuickActions button:first-child{background:#dfe9c0;border-color:#708a59}
+.menuLevelsTitle{margin:14px 0 8px;font:800 16px Georgia,serif;color:#4c4939}
+
+@media(max-width:1180px){.pieceTool{min-width:102px;padding:3px 6px}.pieceTool small{display:none}.buildTray{padding-right:100px}}
+@media(max-width:900px),(max-height:520px){
+  .buildTray{height:62px;margin:0;padding:0 2px;gap:2px}.pieceTool{min-width:42px;width:44px;height:48px;padding:2px;justify-content:center}.pieceTool>span:last-child{display:none}.pieceTool .pieceIcon{width:35px;height:35px;font-size:28px}
+  #toolDock .workTools{height:58px}.manual #toolDock .workTools{max-width:170px}
+  .menuQuickActions{grid-template-columns:1fr 1fr}.menuQuickActions button{min-height:42px;font-size:12px}
+}
+
+/* v0.4.4 Canvas First mobile ---------------------------------------------
+   Landscape phones have width to spare and almost no height. The stage now
+   owns the whole area below the 40px header. Building controls float in a
+   narrow RIGHT rail; success uses a 52px root ribbon. No tap-mode control. */
+@media(max-width:900px),(max-height:520px){
+  #app{position:relative;grid-template-rows:40px minmax(0,1fr);padding-bottom:env(safe-area-inset-bottom)}
+  #topbar{height:40px;gap:4px;padding:2px 5px}
+  .brand{min-width:0;max-width:106px;gap:0}.brand b{font-size:11px;letter-spacing:.02em;white-space:nowrap}.brand small,.brandRabbit,.proBadge,#goalSubtitle,#steps,.topProgress{display:none!important}
+  .goalBlock{min-width:0;flex:1}.goalBlock h1{font-size:17px;line-height:1;overflow:hidden;text-overflow:ellipsis}
+  .progressButton{width:44px;min-width:44px;height:34px;padding:1px 3px;font-size:0;display:grid;grid-template-columns:1fr;place-items:center;line-height:1}
+  .progressButton:before{content:'☰';font-size:15px;line-height:1}.progressButton span{font-size:9px;line-height:1;margin-top:-3px}
+  .navTool{min-width:31px;width:31px;height:34px;font-size:24px;padding:0}
+
+  #gameShell{grid-row:2;display:block;padding:3px;min-height:0}
+  #playColumn{width:100%;height:100%}#stage{height:100%;border-radius:8px}
+  #storyRail{display:none}
+  #missionPanel{left:6px;top:6px;width:auto;max-width:min(330px,58vw);padding:5px 8px;border-radius:7px;background:#f7e9c9e3;box-shadow:0 1px 5px #60451c16}
+  #instruction strong{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#instruction span{display:none!important}
+
+  /* The footer no longer owns a layout row. */
+  #bottomDock{position:absolute;z-index:16;right:6px;bottom:6px;left:auto;width:50px;height:auto;display:block;padding:0;border:0;background:transparent;box-shadow:none;pointer-events:none}
+  #app[data-phase="start"] #bottomDock,#app[data-phase="reveal"] #bottomDock{display:none}
+  #toolDock{pointer-events:auto;width:50px;min-width:50px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px;border:1px solid #a68e61;border-radius:12px;background:#f6e8c9e8;box-shadow:0 2px 8px #60471f22,inset 0 1px #fff7df}
+  .dockTitle,.buildTray{display:none!important}
+  #toolDock .workTools{width:44px;height:auto!important;max-width:none!important;display:flex;flex-direction:column;align-items:center;gap:3px;margin:0}
+  #toolDock .workTools[hidden]{display:none!important}
+  .modes{display:flex;flex-direction:column;gap:3px}.modes button{min-width:42px!important;width:42px!important;height:42px!important;padding:1px!important;border-radius:9px}.modes svg{width:34px;height:31px}.modes button span{display:none!important}
+  .ruler,#extendedRuler,#flip{display:none!important}
+  .utilityTools{position:static;display:flex;flex-direction:column;align-items:center;gap:1px}
+  .utilityTools .tool{min-width:42px;width:42px;height:40px;font-size:21px}
+  #overview,#restart{display:none!important}
+  #undo:disabled{display:none}
+  #app[data-phase="helper"] #toolDock,#app[data-phase="result"] #toolDock{width:48px;min-width:48px}
+  #app[data-phase="helper"] #workTools,#app[data-phase="result"] #workTools{display:none!important}
+
+  /* Success is a thin overlay, not a second dashboard row. */
+  #rootAxisPanel,#nextDock{display:none}
+  .finished #bottomDock{left:6px;right:6px;bottom:5px;width:auto;height:52px;display:grid;grid-template-columns:minmax(0,1fr) 48px;gap:4px;align-items:stretch}
+  .finished #toolDock{display:none}
+  .finished #rootAxisPanel{pointer-events:auto;display:grid;height:52px;padding:2px 5px;grid-template-columns:1fr;border-radius:10px;background:#f7eac7e8;box-shadow:0 2px 7px #60471f1c,inset 0 1px #fff7df}
+  .finished .rootIntro{display:none}.finished #rootAxisCanvas{height:46px;min-height:0}
+  .finished #nextDock{pointer-events:auto;display:flex;width:48px;height:52px;padding:2px;border-radius:10px;background:#f7eac7e8}
+  .finished #achievement{height:100%;gap:0}.finished #relationship{display:none}.finished #continue{height:46px;min-height:46px;padding:0;border-radius:10px;font-size:0}
+  .finished #continue:after{content:'›';font-size:30px;line-height:1}.finished #stepCue{display:none}
+  .finished #missionPanel{display:none}
+
+  #notice{left:7px;top:7px;max-width:calc(100% - 72px);padding:6px 8px;font-size:11px}
+  #colorKey{display:none}
+  .menuQuickActions{grid-template-columns:1fr 1fr}.menuQuickActions button{min-height:42px;font-size:12px}
+}
+
+
+/* v0.4.5 Overlay Chrome ---------------------------------------------------
+   Short landscape screens are one continuous canvas. The header, root axis,
+   and success navigation float above it and never alter the camera viewport. */
+#mobileChrome{display:none}
+#rootAxisToggle{display:none}
+
+@media(max-width:900px),(max-height:520px){
+  #app{display:block;position:relative;height:100dvh;padding:0;overflow:hidden}
+  #gameShell{position:absolute;inset:0;display:block;padding:3px;min-height:0}
+  #playColumn,#stage{width:100%;height:100%}
+
+  /* The top bar is an overlay rather than a layout row. */
+  #topbar{position:absolute;z-index:24;left:0;right:0;top:0;height:40px;padding:2px 86px 2px 5px;
+    transform:translateY(0);transition:transform .22s ease,box-shadow .22s ease;background:linear-gradient(#f8edcff4,#ecd9aef0);backdrop-filter:blur(3px)}
+  #app.chrome-collapsed #topbar{transform:translateY(calc(-100% - 3px));box-shadow:none}
+  #mobileChrome{position:absolute;z-index:28;top:max(4px,env(safe-area-inset-top));right:max(5px,env(safe-area-inset-right));display:flex;gap:4px;pointer-events:auto}
+  .chromeButton{display:grid;place-items:center;width:36px;height:34px;padding:0;border:1px solid #a99364;border-radius:9px;background:#f4e7c9e8;color:#345843;font:700 19px/1 system-ui;box-shadow:0 2px 6px #60471f20;backdrop-filter:blur(3px)}
+  .chromeButton:active{transform:translateY(1px)}
+  #topbarToggle{font-size:18px}
+
+  /* Keep the little instruction card out of the bar, but do not resize stage. */
+  #missionPanel{top:45px;transition:top .22s ease,opacity .18s ease}
+  #app.chrome-collapsed #missionPanel{top:6px}
+  #app[data-phase="start"] #missionPanel{opacity:.92}
+
+  /* Everything in the old footer is now positioned independently as overlay. */
+  #bottomDock{position:absolute;z-index:18;inset:0;width:auto;height:auto;display:block!important;padding:0;border:0;background:transparent;box-shadow:none;pointer-events:none}
+  #toolDock{position:absolute;pointer-events:auto;right:max(6px,env(safe-area-inset-right));bottom:36px;width:48px;min-width:48px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px;border:1px solid #a68e61;border-radius:12px;background:#f6e8c9dc;box-shadow:0 2px 8px #60471f22,inset 0 1px #fff7df;backdrop-filter:blur(2px)}
+  #app[data-phase="start"] #toolDock,#app[data-phase="reveal"] #toolDock,.finished #toolDock{display:none!important}
+
+  /* Root-axis: always present as a 26px discovery strip, 56px only when opened.
+     It overlays the world; opening it never triggers a camera resize. */
+  #rootAxisPanel{position:absolute!important;pointer-events:auto;display:grid!important;left:max(6px,env(safe-area-inset-left));right:max(6px,env(safe-area-inset-right));bottom:max(5px,env(safe-area-inset-bottom));height:26px!important;min-height:26px;padding:1px 31px 1px 4px!important;grid-template-columns:1fr!important;border:1px solid #b6a06e;border-radius:9px;background:#f7eac7c9;box-shadow:0 2px 7px #60471f18,inset 0 1px #fff7df;overflow:hidden;transition:height .22s ease,background .22s ease;backdrop-filter:blur(2px)}
+  #app.root-axis-expanded #rootAxisPanel{height:56px!important;background:#f7eac7ed}
+  #rootAxisPanel .rootIntro{display:none!important}
+  #rootAxisCanvas{width:100%;height:22px!important;min-height:0;display:block;transition:height .22s ease}
+  #app.root-axis-expanded #rootAxisCanvas{height:52px!important}
+  #rootAxisToggle{position:absolute;z-index:3;right:2px;top:1px;display:grid;place-items:center;width:28px;height:22px;padding:0;border:0;border-radius:7px;background:#eadbb7c7;color:#48603e;font:800 16px/1 system-ui}
+  #app.root-axis-expanded #rootAxisToggle{height:26px}
+
+  /* The success arrow floats; no dedicated horizontal panel. */
+  #nextDock{position:absolute!important;pointer-events:none;display:none!important;right:max(6px,env(safe-area-inset-right));bottom:max(34px,calc(env(safe-area-inset-bottom) + 33px));width:44px!important;height:44px!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important}
+  .finished #nextDock{display:flex!important;pointer-events:auto}
+  .finished #achievement{width:44px;height:44px;display:block}
+  .finished #relationship,.finished #stepCue{display:none!important}
+  .finished #continue{width:44px!important;height:44px!important;min-height:44px!important;padding:0!important;border-radius:50%!important;font-size:0!important;box-shadow:0 2px 7px #2f543466,inset 0 1px #8ebb77}
+  .finished #continue:after{content:'›';font-size:29px;line-height:1}
+  .finished #rootAxisPanel{right:max(56px,calc(env(safe-area-inset-right) + 56px))}
+
+  #success{display:none!important}.finished #missionPanel{display:none}
+  #notice{top:48px;transition:top .22s ease}
+  #app.chrome-collapsed #notice{top:7px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #topbar,#missionPanel,#rootAxisPanel,#rootAxisCanvas{transition:none!important}
+}
+
+/* v0.4.6 Collapsed goal reminder -----------------------------------------
+   When mobile chrome folds away, the existing instruction parchment becomes
+   a compact goal + action reminder. It remains an overlay and never affects
+   camera geometry. */
+.compactMissionRow{display:block}
+#compactGoalReminder{display:none}
+@media(max-width:900px),(max-height:520px){
+  #app.chrome-collapsed #missionPanel{
+    display:block;max-width:min(455px,calc(100vw - 96px));padding:4px 7px 4px 5px;
+    background:#f7e9c9ed;border-color:#b8a16f;box-shadow:0 2px 7px #60451c1d;
+  }
+  #app.chrome-collapsed .compactMissionRow{display:flex;align-items:center;gap:7px;min-width:0}
+  #app.chrome-collapsed #compactGoalReminder{
+    display:flex;align-items:baseline;gap:4px;flex:0 0 auto;padding:3px 7px 3px 6px;
+    border:1px solid #91a56e;border-radius:999px;background:#e5ecc7de;color:#365b3d;
+    box-shadow:inset 0 1px #ffffff9c;white-space:nowrap
+  }
+  #app.chrome-collapsed #compactGoalReminder span{font:800 7px/1 system-ui;text-transform:uppercase;letter-spacing:.11em;color:#71815d}
+  #app.chrome-collapsed #compactGoalReminder strong{font:800 16px/1 Georgia,serif;color:#355c3d}
+  #app.chrome-collapsed #instruction{min-width:0;flex:1}
+  #app.chrome-collapsed #instruction strong{font-size:11px;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #app.chrome-collapsed #instruction span{display:none!important}
+  .finished #compactGoalReminder{display:none!important}
+}
+
+/* v0.4.7 — Axioma navigation + compact game menu ------------------------
+   Header follows the shared leraarBob > game > world grammar. The game menu
+   becomes a purposeful pause surface rather than a long settings popup. */
+.crumbTrail{display:flex;align-items:center;gap:7px;min-width:0;flex:0 1 auto;white-space:nowrap}
+.siteCrumb,.gameCrumb,.worldCrumb{font-family:Georgia,serif;font-weight:800;letter-spacing:.01em}
+.siteCrumb{color:#31573b;text-decoration:none;font-size:16px}
+.siteCrumb:hover{text-decoration:underline;text-underline-offset:3px}
+.gameCrumb{appearance:none;border:0;padding:4px 2px;background:transparent;color:#3f4936;font-size:18px;cursor:pointer}
+.gameCrumb:hover{color:#2e673b}
+.worldCrumb{font-size:15px;color:#6b6b54;overflow:hidden;text-overflow:ellipsis}
+.crumbSep{color:#9a875e;font-size:17px;font-weight:800}
+#topbar .goalBlock{margin-left:4px}
+#topbar .goalBlock h1{font-size:24px}
+.progressButton .menuGlyph{font-size:18px;line-height:1}
+
+/* Menu frame */
+#progressDialog.gameMenu{width:min(940px,calc(100vw - 28px));height:min(660px,calc(100dvh - 28px));max-height:none;padding:0;border:1px solid #8f805e;border-radius:18px;background:#efe0b9;overflow:hidden;box-shadow:0 22px 70px #1d2d2044}
+#progressDialog.gameMenu::backdrop{background:#1c2d22b8;backdrop-filter:blur(2px)}
+.menuShell{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);background:linear-gradient(135deg,#f7ebc9 0%,#ead7aa 100%)}
+.menuHeader{display:grid;grid-template-columns:minmax(0,1fr) auto 46px;align-items:center;gap:14px;padding:14px 16px 12px;border-bottom:1px solid #b6a274;background:#f8edcef0}
+.menuIdentity{min-width:0}.menuIdentity>span{display:block;color:#56704b;font-size:10px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}.menuIdentity h2{margin:1px 0 0;font:800 25px/1.05 Georgia,serif;color:#303d31}
+.menuHeaderProgress{text-align:right}.menuHeaderProgress strong{display:block;font:800 18px/1 Georgia,serif;color:#385d3d}.menuHeaderProgress span{font-size:10px;color:#74705b}
+.menuClose{width:42px;height:42px;border:1px solid #789062;border-radius:12px;background:#fff1cf;color:#315b3a;font-size:26px;line-height:1}
+.menuBody{min-height:0;display:grid;grid-template-columns:260px minmax(0,1fr)}
+.menuPlay{min-height:0;padding:16px;border-right:1px solid #baa676;background:#f1e1b6a8;display:flex;flex-direction:column;gap:10px}
+.currentLevelCard{padding:14px;border:1px solid #a99769;border-radius:14px;background:#fff0cbe0;box-shadow:inset 0 1px #fff8df}
+.currentEyebrow{display:block;font-size:9px;font-weight:900;letter-spacing:.11em;text-transform:uppercase;color:#788364}
+.currentGoal{display:block;margin:6px 0 3px;font:800 35px/1 Georgia,serif;color:#365d3f}
+.currentLevelCard h3{margin:0;font:800 17px/1.15 Georgia,serif;color:#3f4033}.currentLevelCard p{margin:7px 0 0;font-size:11px;line-height:1.35;color:#6b6956}
+.menuResume{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:50px;padding:10px 13px;border:1px solid #587649;border-radius:12px;background:#5f8c52;color:white;font-weight:850;box-shadow:inset 0 1px #98ba83,0 2px 6px #38512e2a}
+.menuResume span{font-size:23px}.menuResume:hover{background:#557f49}
+#progressDialog .menuQuickActions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:0}
+#progressDialog .menuQuickActions button{display:grid;grid-template-columns:30px 1fr;align-items:center;gap:5px;min-height:46px;padding:7px 8px;border:1px solid #b29b6a;border-radius:11px;background:#f9e9c2;color:#465342;text-align:left}
+#progressDialog .menuQuickActions button:first-child{background:#f9e9c2;border-color:#b29b6a}
+#progressDialog .menuQuickActions button span{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#ead9ae;color:#4b6846;font-size:18px}#progressDialog .menuQuickActions button b{font-size:11px}
+.menuMicrocopy{margin:2px 1px 0;font-size:10px;line-height:1.4;color:#77715d}.menuHome{margin-top:auto;color:#466346;text-decoration:none;font-size:11px;font-weight:800}.menuHome:hover{text-decoration:underline}
+.menuLevelsPane{min-height:0;display:grid;grid-template-rows:auto 5px minmax(0,1fr);padding:16px 16px 13px;gap:9px}
+.menuLevelsHead{display:flex;justify-content:space-between;align-items:end;gap:10px}.menuLevelsHead span{display:block;font-size:9px;text-transform:uppercase;font-weight:900;letter-spacing:.12em;color:#748066}.menuLevelsHead h3{margin:2px 0 0;font:800 19px/1.1 Georgia,serif;color:#3c4235}.menuLevelsHead>strong{font:800 16px/1 Georgia,serif;color:#476d45;white-space:nowrap}
+.menuProgressTrack{height:5px;overflow:hidden;border-radius:999px;background:#d2bf91}.menuProgressTrack i{display:block;width:0;height:100%;border-radius:inherit;background:#628b53;transition:width .22s ease}
+#progressDialog #progressLevels{min-height:0;overflow:auto;overscroll-behavior:contain;padding:1px 3px 4px 1px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:7px;scrollbar-width:thin;scrollbar-color:#9b8a61 transparent}
+#progressDialog .progressLevel{position:relative;display:grid;grid-template-columns:32px minmax(0,1fr);align-items:center;gap:8px;min-height:62px;padding:7px 9px;border:1px solid #bda978;border-radius:11px;background:#fff0ca;text-align:left;color:#3e453a;box-shadow:none}
+#progressDialog .progressLevel:hover{border-color:#7d9765;background:#fff5d9}
+#progressDialog .progressLevel.done{border:1px solid #8aa16b;background:#edf0cd}
+#progressDialog .progressLevel[aria-current=true]{border:2px solid #5d8150;background:#e2ecc3;box-shadow:0 0 0 2px #ffffff6b}
+#progressDialog .progressLevel .mark{display:grid;place-items:center;width:29px;height:29px;border-radius:9px;background:#ead8aa;color:#5e664c;font:800 13px/1 system-ui}
+#progressDialog .progressLevel.done .mark{background:#6f965e;color:white}
+#progressDialog .progressLevel strong{display:block;font-size:12px;line-height:1.15}.progressLevel small{display:block;margin-top:3px;font-size:9px;line-height:1.2;color:#77725e}
+
+@media(max-width:900px),(max-height:520px){
+  /* Header: breadcrumb identity on the left, mathematical goal next, actions right. */
+  #topbar{gap:5px;padding-left:max(7px,env(safe-area-inset-left));padding-right:86px}
+  .crumbTrail{gap:4px;max-width:44vw}.siteCrumb{font-size:11px}.gameCrumb{font-size:12px;padding:2px 0}.worldCrumb{font-size:10px}.crumbSep{font-size:11px}
+  #topbar .goalBlock{margin-left:2px;min-width:0}.goalBlock h1{font-size:15px!important}.goalBlock span{display:none!important}
+  .progressButton{width:38px!important;min-width:38px!important;height:32px!important;padding:0!important;display:grid!important;grid-template-columns:1fr!important;place-items:center!important}
+  .progressButton:before{display:none!important}.progressButton .menuGlyph{font-size:15px}.progressButton #completedCount,.progressButton span:last-child{font-size:8px;line-height:1;margin:0}
+
+  /* On landscape phones the menu uses the screen, not a little modal inside it. */
+  #progressDialog.gameMenu{width:calc(100vw - 8px);height:calc(100dvh - 8px);margin:auto;border-radius:12px}
+  .menuHeader{height:46px;grid-template-columns:minmax(0,1fr) auto 38px;gap:8px;padding:6px 8px}.menuIdentity>span{font-size:8px}.menuIdentity h2{font-size:18px}.menuHeaderProgress strong{font-size:14px}.menuHeaderProgress span{display:none}.menuClose{width:36px;height:34px;border-radius:9px;font-size:22px}
+  .menuBody{grid-template-columns:190px minmax(0,1fr)}
+  .menuPlay{padding:8px;gap:6px}.currentLevelCard{padding:8px 9px;border-radius:10px}.currentEyebrow{font-size:7px}.currentGoal{display:inline-block;margin:3px 7px 2px 0;font-size:25px;vertical-align:middle}.currentLevelCard h3{display:inline;font-size:12px}.currentLevelCard p{margin-top:4px;font-size:8.5px;line-height:1.2}
+  .menuResume{min-height:40px;padding:7px 9px;border-radius:9px;font-size:11px}.menuResume span{font-size:18px}
+  #progressDialog .menuQuickActions{gap:5px}#progressDialog .menuQuickActions button{display:flex;justify-content:center;min-height:37px;padding:3px;border-radius:8px;text-align:center}#progressDialog .menuQuickActions button span{width:25px;height:25px;font-size:15px}#progressDialog .menuQuickActions button b{display:none}
+  .menuMicrocopy{font-size:8px;line-height:1.25}.menuHome{font-size:9px}
+  .menuLevelsPane{padding:8px 8px 6px;gap:5px}.menuLevelsHead span{font-size:7px}.menuLevelsHead h3{font-size:14px}.menuLevelsHead>strong{font-size:12px}.menuProgressTrack{height:4px}
+  #progressDialog #progressLevels{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding-right:2px}
+  #progressDialog .progressLevel{grid-template-columns:25px minmax(0,1fr);gap:5px;min-height:46px;padding:4px 6px;border-radius:8px}#progressDialog .progressLevel .mark{width:23px;height:23px;border-radius:7px;font-size:10px}#progressDialog .progressLevel strong{font-size:9.5px}.progressLevel small{font-size:7.5px;margin-top:1px}
+}
+@media(max-width:620px) and (min-height:521px), (orientation:portrait) and (max-width:760px){
+  #progressDialog.gameMenu{width:calc(100vw - 12px);height:calc(100dvh - 12px)}
+  .menuBody{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}.menuPlay{border-right:0;border-bottom:1px solid #baa676;display:grid;grid-template-columns:minmax(0,1fr) minmax(140px,.7fr);align-items:center}.currentLevelCard{grid-row:1 / span 2}.menuResume{grid-column:2}.menuQuickActions{grid-column:2}.menuMicrocopy,.menuHome{display:none}.menuLevelsPane{min-height:0}.menuLevelsHead h3{font-size:15px}
+}
+
+/* v0.4.8 — compact navigation + grassy completed levels -------------------
+   When the mobile top bar is folded, previous/next remain available as one
+   compact pill. Completed levels read as fertile grass rather than generic
+   pale cards. */
+#collapsedNav{display:none}
+@media(max-width:900px),(max-height:520px){
+  #mobileChrome{align-items:center}
+  #collapsedNav{display:none;align-items:stretch;height:34px;border:1px solid #8f9c69;border-radius:10px;overflow:hidden;background:#e2e9c4e8;box-shadow:0 2px 6px #60471f20;backdrop-filter:blur(3px)}
+  #app.chrome-collapsed #collapsedNav{display:flex}
+  .chromeNavButton{display:grid;place-items:center;width:32px;height:32px;padding:0;border:0;background:transparent;color:#355c3e;font:800 25px/1 Georgia,serif}
+  .chromeNavButton+ .chromeNavButton{border-left:1px solid #a8b384}
+  .chromeNavButton:active{background:#cbd9a8}
+}
+
+#progressDialog .progressLevel.done{
+  border-color:#6f9158;
+  background:
+    radial-gradient(circle at 18% 26%,#f7f0c880 0 1.2px,transparent 1.5px) 0 0/24px 24px,
+    radial-gradient(circle at 76% 64%,#ffffff5e 0 1px,transparent 1.4px) 0 0/31px 31px,
+    linear-gradient(145deg,#d4e7ad 0%,#bdd893 56%,#afcf83 100%);
+  color:#304b34;
+}
+#progressDialog .progressLevel.done:hover{
+  border-color:#587b47;
+  background:
+    radial-gradient(circle at 18% 26%,#fff7d08c 0 1.2px,transparent 1.5px) 0 0/24px 24px,
+    radial-gradient(circle at 76% 64%,#ffffff70 0 1px,transparent 1.4px) 0 0/31px 31px,
+    linear-gradient(145deg,#dcebb9 0%,#c4df9c 56%,#b4d489 100%);
+}
+#progressDialog .progressLevel.done .mark{background:#5f8a50;color:#fffce7;box-shadow:inset 0 1px #95b77d}
+#progressDialog .progressLevel.done small{color:#53664b}
+#progressDialog .progressLevel.done[aria-current=true]{
+  border:2px solid #426d42;
+  background:
+    radial-gradient(circle at 20% 28%,#fff8d79a 0 1.2px,transparent 1.6px) 0 0/23px 23px,
+    linear-gradient(145deg,#cee4a4,#acd17e);
+  box-shadow:0 0 0 2px #fff5d26b,inset 4px 0 #4f7e49;
+}
+
+/* v0.5.0 — Battle entry ------------------------------------------------- */
+.menuBattle{display:grid;grid-template-columns:36px 1fr;grid-template-rows:auto auto;column-gap:9px;align-items:center;margin-top:9px;padding:10px 11px;border:1px solid #73905b;border-radius:12px;background:linear-gradient(135deg,#dfe9bd,#c8dba0);color:#35583d;text-decoration:none;box-shadow:inset 0 1px #ffffffa8,0 2px 5px #4a5c3520}.menuBattle>span{grid-row:1/3;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#f6eccd;color:#557246;font-size:18px}.menuBattle b{font-size:13px}.menuBattle small{font-size:10px;color:#607050}.menuBattle:hover{filter:brightness(1.025)}
+@media(max-height:520px){.menuBattle{margin-top:5px;padding:7px 8px}.menuBattle small{display:none}}

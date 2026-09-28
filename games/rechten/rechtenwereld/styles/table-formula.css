@@ -1,0 +1,48 @@
+/* Read table columns as points; keep the source visible throughout the calculation. */
+.table-source{display:flex;flex-direction:column;justify-content:center;gap:24px;padding:24px 18px;color:var(--lesson-ink)}
+.table-source h2{font:30px/1.1 var(--hand);text-align:center}
+.derive-data-table{border-collapse:separate;border-spacing:0;table-layout:fixed;width:100%;font:30px/1.1 var(--hand);text-align:center}
+.derive-data-table th{font-weight:400}
+.derive-data-table thead th{font-size:16px;height:30px;color:var(--lesson-muted)}
+.derive-data-table th:first-child{width:54px}
+.derive-data-table tbody th{background:#eaf1eb;color:#24674d;border-right:2px solid #6d9b89;border-bottom:1px solid var(--lesson-line)}
+.derive-data-table td{border-bottom:1px solid var(--lesson-line);border-right:1px solid var(--lesson-line);background:#fffefa}
+.derive-data-table thead td{background:transparent;border:0}
+.derive-data-table tbody tr:first-child td{border-top:1px solid var(--lesson-line)}
+.derive-data-table button{display:flex;align-items:center;justify-content:center;width:100%;min-width:44px;min-height:64px;border:0;border-radius:0;background:transparent;color:inherit;font:inherit;padding:8px 3px}
+.derive-data-table .frac{font-size:.66em}
+.derive-data-table [data-coordinate-point]{color:var(--point-ink);background:var(--point-wash)}
+.derive-data-table thead [data-coordinate-point]{border-radius:8px 8px 0 0;color:var(--point-ink)}
+.derive-data-table button[aria-pressed=true]{outline:0;box-shadow:none;color:inherit;background:transparent}
+.derive-data-table button:disabled{opacity:1;cursor:default}
+.derive-data-table button:not(:disabled):hover{background:#eaf3fe}
+.derive-data-table button:focus-visible{outline:2px solid var(--lesson-blue);outline-offset:-3px}
+.table-selection-note,.table-pair-prompt{font:20px/1.25 var(--hand);text-align:center;color:var(--lesson-muted)}
+.table-road{display:flex;gap:8px;list-style:none;padding:18px 0 0;margin:0;border-top:1px solid var(--lesson-line)}
+.table-road li{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;font:18px/1.15 var(--hand);color:var(--lesson-muted)}
+.table-road li>span{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#edf0ee}
+.table-road .is-current{color:var(--lesson-blue)}
+.table-road .is-current>span{background:var(--lesson-blue);color:white}
+.table-road .is-done{color:var(--lesson-success)}
+.table-road .is-done>span{background:var(--lesson-success);color:white}
+.table-road small{display:block;margin-top:5px;font:16px var(--hand)}
+[data-skill=equation_from_table] .derive-undo{top:5px;bottom:auto}
+[data-skill=equation_from_table] .derive-work{padding-top:40px}
+@media(max-height:760px) and (orientation:landscape),(max-height:900px) and (min-aspect-ratio:2/1){
+ .table-source{padding:8px;gap:6px;border-radius:12px}
+ .table-source h2{font-size:20px}
+ .derive-data-table{font-size:24px}
+ .derive-data-table th:first-child{width:42px}
+ .derive-data-table thead th{font-size:13px;height:20px}
+ .derive-data-table button{min-height:44px;height:44px;padding:2px}
+ .table-selection-note{display:none}
+ .table-road{gap:4px;padding-top:5px}
+ .table-road li{font-size:14px;gap:4px;flex-direction:row;justify-content:center}
+ .table-road li>span{width:20px;height:20px;flex:none;font-size:13px}
+ .table-road small{display:none}
+ .table-pair-prompt{font-size:17px}
+ [data-skill=equation_from_table] .derive-work{padding-top:8px}
+ [data-skill=equation_from_table] .derive-working>h2{max-width:calc(100% - 48px)}
+ [data-skill=equation_from_table] .derive-formula .derive-working>h2{font-size:18px}
+}
+@media(forced-colors:active){.derive-data-table td,.derive-data-table th{color:CanvasText;background:Canvas;border-color:CanvasText}.derive-data-table button[aria-pressed=true]{outline:2px solid Highlight;outline-offset:-3px}.table-road .is-current>span{background:Highlight;color:HighlightText}}

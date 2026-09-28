@@ -1,0 +1,146 @@
+/* Shared visual language for all released exercises. Colour supplements letters,
+   values, selection outlines and explicit feedback; it never supplies an answer. */
+.boundary-mission {
+ --lesson-ink:#173b54;
+ --lesson-muted:#4f6979;
+ --lesson-paper:#fffefa;
+ --lesson-line:#c4d2d6;
+ --lesson-blue:#2465b4;
+ --lesson-blue-wash:#eaf3fe;
+ --lesson-blue-border:#9abddd;
+ --lesson-note:#fff4c6;
+ --lesson-note-border:#dcc88f;
+ --lesson-help:#916717;
+ --lesson-help-wash:#fff9eb;
+ --lesson-help-border:#decda6;
+ --lesson-success:#24674d;
+ --lesson-success-wash:#eaf5ed;
+ --lesson-success-border:#86b49b;
+ --lesson-retry:#8b4e24;
+ --lesson-retry-wash:#fff4e9;
+ --lesson-point-a:#2469a8;
+ --lesson-point-a-wash:#edf5fe;
+ --lesson-point-a-border:#a1c3e3;
+ --lesson-point-b:#22745e;
+ --lesson-point-b-wash:#edf7f2;
+ --lesson-point-b-border:#a5cdbd;
+ --lesson-slope:#69439c;
+ --lesson-intercept:#89550f;
+ --lesson-negative:#aa414d;
+ color:var(--lesson-ink);
+}
+/* Calm paper and one warm visual identity for reminders and hints. */
+.boundary-mission :is(.reminder-paper,.line-reminder,.derive-reminder,.reminder-content) {
+ color:var(--lesson-ink);background:var(--lesson-note) var(--paper-texture);
+ /* The grain asset has an opaque paper base; blend it so the note tint shows. */
+ background-blend-mode:multiply;
+ border-color:var(--lesson-note-border);border-radius:16px;transform:none;
+ box-shadow:0 3px 12px #4a4e3910;
+}
+.boundary-mission :is(.reminder-paper,.derive-reminder)::before {background:#e7dcbb99}
+.boundary-mission :is(.reminder-paper,.line-reminder,.derive-reminder,.reminder-content) h2 {color:var(--lesson-ink)}
+.boundary-mission :is(.reminder-paper,.line-reminder,.derive-reminder,.reminder-content) h2 .ui-icon {color:var(--lesson-help)}
+.boundary-mission .formula-reminder h2 .ui-icon {background:#fff0c3;border-color:#ead49a}
+.boundary-mission :is(.graph-paper,.line-evidence,.grens-evidence,.formula-paper,.derive-paper,.hill-builder,.hill-stepper) {
+ background:var(--lesson-paper) var(--paper-texture);border-color:var(--lesson-line);
+ box-shadow:0 3px 12px #243e4810;
+}
+.boundary-mission .graph-paper {transform:none}
+.boundary-mission :is(.line-rules,.hill-reminder-formula,.derive-rule,.grens-highlight,.grens-equation) {background:var(--lesson-blue-wash);color:var(--lesson-ink);border-radius:10px}
+.boundary-mission :is(.exercise-heading,.formula-heading)::before {background:#dfedf9}
+.boundary-mission :is(.line-question,.hill-construction-heading) h1 {text-decoration-color:#aacde9}
+.boundary-mission .derive-heading h1::after {background:#aacde9}
+.boundary-mission :is(.formula-given,.derive-found) {background:var(--lesson-blue-wash)}
+.boundary-mission :is(.formula-answer h2,.formula-task-step h2) {background:var(--lesson-blue-wash)}
+.boundary-mission .build-puzzle {stroke:var(--lesson-blue);fill:#f7fbff}
+/* An answer is a choice until checked: neutral -> blue selection -> green proof. */
+.boundary-mission :is(.point-options button,.line-choice,.grens-choice,.formula-tokens button,.derive-answer-options button) {
+ color:var(--lesson-ink);background:var(--lesson-paper);border-color:var(--lesson-line);
+}
+.boundary-mission :is(.point-options button,.line-choice,.grens-choice,.derive-answer-options button)[aria-pressed=true] {
+ color:var(--lesson-blue);background:var(--lesson-blue-wash);border-color:var(--lesson-blue);
+ outline:2px solid var(--lesson-blue);outline-offset:-2px;
+}
+.boundary-mission :is(.point-options button,.line-choice,.grens-choice,.formula-tokens button,.derive-answer-options button):hover:not(:disabled) {
+ background:var(--lesson-blue-wash);border-color:var(--lesson-blue-border);
+}
+.boundary-mission:has(.feedback.success) :is(.point-options button,.line-choice,.grens-choice)[aria-pressed=true],
+.boundary-mission .point-response.is-correct {
+ color:var(--lesson-success);background:var(--lesson-success-wash);border-color:var(--lesson-success-border);
+ outline-color:var(--lesson-success);opacity:1;
+}
+.boundary-mission :is(.coordinate-slot,.derive-slot,.formula-slot,.grens-slot) {
+ background:#f7fafc;color:var(--lesson-ink);border-color:var(--lesson-line);
+}
+.boundary-mission :is(.coordinate-slot,.derive-slot,.formula-slot,.grens-slot):disabled {opacity:1}
+.boundary-mission :is(.coordinate-slot,.derive-slot,.formula-slot,.grens-slot)[aria-pressed=true] {
+ border-color:var(--lesson-blue);outline:2px solid var(--lesson-blue);outline-offset:1px;
+ background:var(--lesson-blue-wash);box-shadow:0 0 0 4px #2465b413;
+}
+.boundary-mission :is(.coordinate-slot,.derive-slot,.formula-slot).is-drop-target {outline:3px dashed var(--lesson-blue)}
+.boundary-mission .derive-answer-open {color:var(--lesson-ink);border-color:var(--lesson-blue);background:var(--lesson-blue-wash);box-shadow:0 0 0 4px #2465b413}
+.boundary-mission :is(.formula-parameter input,.hill-result input) {color:var(--lesson-ink);background:#f7fafc;border-color:var(--lesson-blue-border)}
+.boundary-mission .formula-parameter button {background:var(--lesson-blue-wash);border-color:var(--lesson-blue-border);color:var(--lesson-blue)}
+.boundary-mission .formula-parameter>span {background:var(--lesson-blue-wash)}
+.boundary-mission .formula-parameter[data-parameter=b]>span {background:#fbf1df}
+/* A and B keep their identity in givens, draggable numbers and submitted work.
+   Empty slots have no point colour: students still choose the correct order. */
+.boundary-mission :is([data-coordinate-point=A],.hill-point-card[data-point=A]) {--point-ink:var(--lesson-point-a);--point-wash:var(--lesson-point-a-wash);--point-paper:var(--point-wash);--point-border:var(--lesson-point-a-border);color:var(--point-ink)}
+.boundary-mission :is([data-coordinate-point=B],.hill-point-card[data-point=B]) {--point-ink:var(--lesson-point-b);--point-wash:var(--lesson-point-b-wash);--point-paper:var(--point-wash);--point-border:var(--lesson-point-b-border);color:var(--point-ink)}
+.boundary-mission :is(.hill-point-card,.derive-point-pair,.derive-token[data-coordinate-point],.coordinate-slot[data-coordinate-point],.derive-slot[data-coordinate-point]) {background:var(--point-wash);border-color:var(--point-border);color:var(--point-ink)}
+.boundary-mission .hill-point-card :is(strong,.coordinate-token,.coordinate-token small),
+.boundary-mission .derive-point-pair :is(.derive-point-name,.derive-token) {color:var(--point-ink)}
+.boundary-mission .hill-point-card .coordinate-token {background:var(--lesson-paper);border-color:var(--point-border)}
+.boundary-mission .line-given-coords>span:first-child {color:var(--lesson-point-a)}
+.boundary-mission .line-given-coords>span:last-child {color:var(--lesson-point-b)}
+.boundary-mission :is(.pin-A .line-pin-dot,.hill-dot[data-point=A],.hill-point-label[data-point=A],.pin-A text,.reminder-sketch [data-point=A]) {fill:var(--lesson-point-a)}
+.boundary-mission :is(.pin-B .line-pin-dot,.hill-dot[data-point=B],.hill-point-label[data-point=B],.pin-B text,.reminder-sketch [data-point=B]) {fill:var(--lesson-point-b)}
+.boundary-mission .hill-halo[data-point=A] {fill:var(--lesson-point-a-wash)}
+.boundary-mission .hill-halo[data-point=B] {fill:var(--lesson-point-b-wash)}
+.boundary-mission .line-point-token.token-A {background:var(--lesson-point-a-wash);color:var(--lesson-point-a);border-color:var(--lesson-point-a-border)}
+.boundary-mission .line-point-token.token-B {background:var(--lesson-point-b-wash);color:var(--lesson-point-b);border-color:var(--lesson-point-b-border)}
+.boundary-mission .line-point-token[aria-pressed=true],.boundary-mission [data-derive-point][aria-pressed=true] {outline:2px solid var(--lesson-blue);outline-offset:2px}
+.boundary-mission .line-clear {background:var(--lesson-paper);border-color:var(--lesson-line);color:var(--lesson-muted)}
+/* Parameters have the same accent in explanations, givens and input labels. */
+.boundary-mission [data-parameter=a],.boundary-mission [data-parameter=a]>span:first-child {color:var(--lesson-slope)}
+.boundary-mission [data-parameter=b],.boundary-mission [data-parameter=b]>span:first-child {color:var(--lesson-intercept)}
+/* Step status is independent of point/parameter identity. */
+.boundary-mission :is(.hill-stepper li,.derive-steps li)[aria-current=step] {background:var(--lesson-blue-wash);border-color:var(--lesson-blue-border)}
+.boundary-mission :is(.hill-stepper li,.derive-steps li)[aria-current=step]>span,
+.boundary-mission .grens-step:not(.is-done)>span {background:var(--lesson-blue);border-color:var(--lesson-blue);color:#fff}
+.boundary-mission :is(.hill-stepper li,.derive-steps li).is-done {background:var(--lesson-success-wash);border-color:var(--lesson-success-border)}
+.boundary-mission :is(.hill-stepper li,.derive-steps li).is-done>span {background:var(--lesson-success);border-color:var(--lesson-success);color:#fff}
+.boundary-mission .derive-checked {color:var(--lesson-success)}
+.boundary-mission .grens-step h2 {background:var(--lesson-blue-wash)}
+.boundary-mission .grens-step.is-done :is(h2,strong) {background:var(--lesson-success-wash);color:var(--lesson-success)}
+.boundary-mission .grens-step.is-done>span {background:var(--lesson-success);color:#fff}
+/* Mathematical signs retain their own legend: blue positive, red negative,
+   teal zero. Negative does not mean an incorrect response. */
+.boundary-mission :is(.grens-sign-positive,[data-sign-value='+']) {color:var(--lesson-blue)}
+.boundary-mission :is(.grens-sign-negative,[data-sign-value='-']) {color:var(--lesson-negative)}
+.boundary-mission [data-sign-value='0'] {color:var(--lesson-point-b)}
+.boundary-mission .grens-graph .grens-function.is-positive {stroke:var(--lesson-blue)}
+.boundary-mission :is(.grens-function.is-negative,.sketch-negative) {stroke:var(--lesson-negative)}
+.boundary-mission :is(.grens-root-pin,.grens-root-label) {fill:var(--lesson-point-b)}
+/* One feedback hierarchy, with words/check marks as well as colour. */
+.boundary-mission .hint-button {color:var(--lesson-help);background:var(--lesson-help-wash);border-color:var(--lesson-help-border)}
+.boundary-mission .feedback-bubble .feedback {background:var(--lesson-help-wash);border-color:var(--lesson-help-border);color:var(--lesson-ink)}
+.boundary-mission .feedback-bubble .feedback.success {background:var(--lesson-success-wash);color:var(--lesson-success);border-color:var(--lesson-success-border)}
+.boundary-mission .feedback-bubble .feedback.error {background:var(--lesson-retry-wash);color:var(--lesson-retry);border-color:#d7b295}
+.boundary-mission .feedback-bubble .flow-pause {background:var(--lesson-success-wash);border-color:var(--lesson-success-border);color:var(--lesson-success)}
+.boundary-mission.formula-build-mission .formula-work .feedback-bubble {background:var(--lesson-help-wash);border-color:var(--lesson-help-border)}
+.boundary-mission.formula-build-mission .feedback-bubble .feedback {background:none}
+.boundary-mission.formula-build-mission .formula-work .feedback-bubble:has(.success) {background:var(--lesson-success-wash);border-color:var(--lesson-success-border)}
+.boundary-mission.formula-build-mission .formula-work .feedback-bubble:has(.error) {background:var(--lesson-retry-wash);border-color:#d7b295}
+.boundary-mission :is(button,input):focus-visible {outline-color:var(--lesson-blue)}
+@media(forced-colors:active) {
+ .boundary-mission {--lesson-ink:CanvasText;--lesson-muted:CanvasText;--lesson-paper:Canvas;--lesson-line:CanvasText;--lesson-blue:Highlight;--lesson-blue-wash:Canvas;--lesson-note:Canvas;--lesson-note-border:CanvasText;--lesson-help:CanvasText;--lesson-help-wash:Canvas;--lesson-help-border:CanvasText;--lesson-success:CanvasText;--lesson-success-wash:Canvas;--lesson-success-border:CanvasText;--lesson-retry:CanvasText;--lesson-retry-wash:Canvas;--lesson-point-a:CanvasText;--lesson-point-b:CanvasText;--lesson-point-a-wash:Canvas;--lesson-point-b-wash:Canvas;--lesson-point-a-border:CanvasText;--lesson-point-b-border:CanvasText;--lesson-slope:CanvasText;--lesson-intercept:CanvasText;--lesson-negative:CanvasText}
+ .boundary-mission :is(.coordinate-slot,.derive-slot,.formula-slot,.grens-slot,.line-point-token)[aria-pressed=true] {outline-color:Highlight;box-shadow:none}
+}
+@media not (forced-colors:active) {
+ .boundary-mission :is(.hill-line,.lines-model:not(.is-draft),.formula-model:not(.is-draft),.grens-function:not(.is-negative),.sketch-line) {stroke:#287db8}
+ .boundary-mission :is(.point-label,.point-dot) {fill:var(--lesson-point-a)}
+ .boundary-mission :is(.graph-paper-caption,.line-grid-caption,.formula-plot-note,.points-progress,.grens-counter,.derive-instruction) {color:var(--lesson-muted)}
+ .boundary-mission :is(.formula-slot.is-filled[data-formula-slot=factor],.derive-slot[data-derive-slot=answerFactor],.derive-token[data-derive-token=a]) {color:var(--lesson-slope)}
+ .boundary-mission :is(.formula-slot.is-filled[data-formula-slot=constant],.formula-slot.is-filled[data-formula-slot=operator],.derive-slot[data-derive-slot=answerConstant],.derive-slot[data-derive-slot=answerSign]) {color:var(--lesson-intercept)}
+}

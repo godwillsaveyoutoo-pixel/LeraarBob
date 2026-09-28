@@ -1,0 +1,42 @@
+/* Shared visual vocabulary. Import before each app's component styles. */
+:root {
+  --learning-paper: #f7f4ed;
+  --learning-surface: #fffdf8;
+  --learning-ink: #203748;
+  --learning-muted: #596975;
+  --learning-line: #d8dcd7;
+  --learning-accent: #28674f;
+  --learning-accent-soft: #e4eee4;
+  --learning-blue: #286fba;
+  --learning-blue-soft: #e3eff8;
+  --learning-positive: #286fba;
+  --learning-negative: #b44246;
+  --learning-success: #28674f;
+  --learning-error: #a63d40;
+  --learning-focus: #6550b5;
+  --learning-note: #fff2cf;
+  --learning-radius: 12px;
+  --learning-shadow: 0 2px 3px #20374808, 0 8px 24px #20374808;
+  --learning-font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --learning-paper-wash: radial-gradient(ellipse at 15% 0%, #d9e8f333, transparent 60%),
+    radial-gradient(ellipse at 95% 100%, #eddfbe33, transparent 65%);
+}
+:root[data-mode="dark"] {
+  --learning-paper: #18252d;
+  --learning-surface: #22333d;
+  --learning-ink: #edf1ef;
+  --learning-muted: #b6c4cc;
+  --learning-line: #43545c;
+  --learning-accent: #b4dbc1;
+  --learning-accent-soft: #2a443c;
+  --learning-blue: #95c8f4;
+  --learning-blue-soft: #273e51;
+  --learning-positive: #95c8f4;
+  --learning-negative: #ffa7aa;
+  --learning-success: #b4dbc1;
+  --learning-error: #ffa7aa;
+  --learning-focus: #c9baff;
+  --learning-note: #433d29;
+  --learning-shadow: 0 2px 3px #0002, 0 8px 24px #0002;
+  --learning-paper-wash: none;
+}

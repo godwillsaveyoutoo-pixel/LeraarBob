@@ -1,0 +1,157 @@
+/* Reference cockpit: one continuous sky, a transparent board and floating controls.
+   Inlined by the build, so the artwork URL resolves beside the generated HTML. */
+body.side-controls[data-screen=play]{background:#030c19 url(assets/vector-cockpit-sky.png) center/cover no-repeat fixed}
+.side-controls[data-screen=play] #app{background:transparent}
+.side-controls[data-screen=play] #play{background:linear-gradient(90deg,#01091518,#01091508 75%,#01091535);padding:0 clamp(14px,2.3vw,40px) clamp(14px,3vw,40px);gap:12px}
+.side-controls[data-screen=play] .trainer-header{background:linear-gradient(180deg,#020b16e6,#03111dad);border:0;border-bottom:1px solid #2bc7f085;border-radius:0 0 28px 28px;box-shadow:0 1px 18px #1b99dc12;padding-inline:clamp(16px,3vw,50px)}
+.side-controls[data-screen=play] .brand{min-width:180px}
+.side-controls[data-screen=play] .brand .brand-name{font-size:35px;text-shadow:0 2px 8px #010914}
+.side-controls[data-screen=play] .brand .brand-sub{border-radius:5px;padding-inline:15px}
+.side-controls[data-screen=play] .mission-breadcrumbs{border-left:0;padding-left:12px;gap:16px}
+.side-controls[data-screen=play] .mission-breadcrumbs #crumbWorld{min-height:48px;padding:7px 22px;border:1px solid #47d9ff;border-radius:6px;background:linear-gradient(115deg,#10436299,#061624b3);color:#72e8ff;transform:skew(-10deg);font-size:23px;font-style:italic;font-weight:800;box-shadow:inset 0 0 12px #3acaff26,0 0 12px #28b7ed12;text-shadow:0 0 10px #30cfff55}
+.side-controls[data-screen=play] #crumbWorld::before{display:none}
+.side-controls[data-screen=play] .mission-breadcrumbs #crumbStation{min-height:46px;padding:8px 20px;border:1px solid #326686;border-radius:5px;background:#091b2c96;color:#a9e2fb;transform:skew(-10deg);font-size:17px}
+.side-controls[data-screen=play] .crumb-divider{color:#64dcfa;font-size:30px;text-shadow:0 0 8px #4bdeff}
+.side-controls[data-screen=play] .crumb-exercise,.side-controls[data-screen=play] .round-chip,.side-controls[data-screen=play] .streak-chip{display:none!important}
+.side-controls[data-screen=play] .header-actions{gap:24px}
+.side-controls[data-screen=play] .status-chip,.side-controls[data-screen=play] .profile-chip,.side-controls[data-screen=play] #menuBtn{border:1px solid #356b91;background:#041222a8;box-shadow:inset 0 0 15px #1c93c21a;border-radius:11px}
+.side-controls[data-screen=play] .xp-chip{padding:8px 22px;min-height:50px;gap:14px;font-size:30px;text-shadow:0 0 10px #ffcc6b55}
+.side-controls[data-screen=play] .xp-chip #xpLabel{font-size:17px}
+.side-controls[data-screen=play] .profile-chip{width:58px;height:58px;padding:6px;justify-content:center;border-color:#4fd5fb;box-shadow:inset 0 0 18px #38beec26}
+.side-controls[data-screen=play] .profile-copy,.side-controls[data-screen=play] .profile-chip>span:last-child{display:none}
+.side-controls[data-screen=play] .profile-avatar{border-radius:50%;width:36px;height:36px;background:#0e3e61;color:#adefff;filter:drop-shadow(0 0 5px #48caff);border:2px solid #75e2ff}
+.side-controls[data-screen=play] #menuBtn{width:58px;height:58px;font-size:29px}
+.side-controls[data-screen=play] .questionbar{min-height:120px;padding:22px 0 16px 42px;position:relative}
+.side-controls[data-screen=play] .questionbar::before{content:'';position:absolute;left:14px;top:30px;width:1px;height:48px;background:linear-gradient(transparent,#64e5ff,transparent);box-shadow:0 0 9px #12bdf1}
+.side-controls[data-screen=play] .questionbar h1{font-size:clamp(23px,2.25vw,38px);font-weight:720;text-shadow:0 2px 10px #020814}
+.side-controls[data-screen=play] .questionbar::after{content:'';position:absolute;bottom:8px;left:42px;width:110px;height:2px;background:linear-gradient(90deg,transparent,#5fdcff,transparent);box-shadow:0 0 10px #37cffa}
+.side-controls[data-screen=play] .practice-labels{font-size:clamp(12px,1vw,16px);color:#29d7fc;margin-bottom:7px}
+.side-controls[data-screen=play] .work{--tool-width:86px;--action-width:188px;gap:18px;overflow:visible}
+.side-controls[data-screen=play] #boardWrap{background:transparent;border:0;border-radius:0;box-shadow:none;overflow:hidden}
+.side-controls[data-screen=play] #boardWrap::before{display:none}
+.side-controls[data-screen=play] #board{--grid:#3296c28c;background:transparent}
+.side-controls[data-screen=play] #board .grid-line{stroke:var(--grid);stroke-width:1}
+.side-controls[data-screen=play] #board .grid-minor{stroke:#2488b153;stroke-width:1;stroke-dasharray:2 5;stroke-opacity:1}
+.side-controls[data-screen=play] #board .grid-node{fill:#74d9fa;opacity:.42}
+.side-controls[data-screen=play] #board .given,.side-controls[data-screen=play] #board .student,.side-controls[data-screen=play] #board .result{filter:drop-shadow(0 0 4px color-mix(in srgb,currentColor 65%,transparent))}
+.side-controls[data-screen=play] #board .vector-label{font-size:23px;font-weight:750}
+.side-controls[data-screen=play] #board text{stroke:#020d1c;stroke-width:3px}
+.side-controls[data-screen=play] .flight-layer>g{filter:drop-shadow(0 0 6px currentColor)}
+.side-controls[data-screen=play] .exercise-left,.side-controls[data-screen=play] .exercise-right{border:0;background:none;box-shadow:none;padding:22px 0 0;gap:10px;overflow-y:auto}
+.side-controls[data-screen=play] .draw-tools{gap:10px}
+.side-controls[data-screen=play] .draw-tools button,.side-controls[data-screen=play] #coachTab,.side-controls[data-screen=play] #previousQuestion,.side-controls[data-screen=play] #lessonBack{clip-path:none;border:1px solid #2e8cbb;border-radius:13px;background:linear-gradient(145deg,#0b2e46c9,#03101fd6);box-shadow:inset 0 0 14px #1b9bcc17,0 0 10px #0088bf12;color:#aee5ff;font-size:14px}
+.side-controls[data-screen=play] .draw-tools button{min-height:92px;padding:10px 5px}
+.side-controls[data-screen=play] .draw-tools button span{display:block;font-size:34px;line-height:1.2;margin:0 0 6px;text-shadow:0 0 9px #3ccfff44}
+.side-controls[data-screen=play] .draw-tools button[aria-pressed=true]{color:#72eaff;border-color:#56e5ff;box-shadow:inset 0 0 14px #21c7ff40,0 0 0 1px #1981a9,0 0 18px #21c7ff35}
+.side-controls[data-screen=play] #activityHint{display:none}
+.side-controls[data-screen=play] .exercise-actions{gap:18px;padding:12px 0 0}
+.side-controls[data-screen=play] #skip{color:#a4dfff;font-size:15px;min-height:44px;padding:8px 2px;text-underline-offset:7px;white-space:nowrap}
+.side-controls[data-screen=play] #skip::after{content:' ›';display:inline-block;margin-left:7px;font-size:24px;text-decoration:none}
+.side-controls[data-screen=play] #commit{clip-path:none;border:1px solid #68e5ff;border-radius:14px;background:linear-gradient(130deg,#0f5274bc,#031421eb 75%);box-shadow:inset 0 0 15px #34cdff45,0 0 0 1px #217c99,0 0 22px #16baf52b;color:#f0faff;font-size:20px;font-weight:750;min-height:66px;padding:12px 8px}
+.side-controls[data-screen=play] #commit::after{content:' ›';color:#6de4ff;margin-left:10px}
+.side-controls[data-screen=play] #commit:hover{background:linear-gradient(130deg,#176288d9,#06263ce8)}
+.side-controls[data-screen=play] .work:has(#numberWork:not([hidden])),.side-controls[data-screen=play] .work:has(#choiceWork:not([hidden])),.side-controls[data-screen=play] .work.is-lesson,.side-controls[data-screen=play] .work.has-feedback{--action-width:300px}
+.side-controls[data-screen=play] .work:has(#numberWork:not([hidden])) .exercise-right,.side-controls[data-screen=play] .work:has(#choiceWork:not([hidden])) .exercise-right,.side-controls[data-screen=play] .work.is-lesson .exercise-right,.side-controls[data-screen=play] .work.has-feedback .exercise-right{background:#051528ed;border:1px solid #34769a;border-radius:12px;padding:16px}
+.side-controls[data-screen=play] .trainer-nav{background:#06182af5;border:1px solid #368bae;border-radius:14px;box-shadow:0 12px 40px #0009}
+.side-controls[data-screen=play] .trainer-nav button{border-radius:8px;border-color:#24475e;background:#0b2335}
+@media(min-width:901px) and (min-height:501px){
+ .side-controls[data-screen=play] .work.has-coach{--tool-width:275px}
+ .side-controls[data-screen=play] .has-coach .exercise-left{padding:16px;background:#051528ed;border:1px solid #34769a;border-radius:12px}
+ .side-controls[data-screen=play] .has-coach .draw-tools button{min-height:48px}
+ .side-controls[data-screen=play] .has-coach .draw-tools button span{display:inline;font-size:24px;margin-right:6px}
+}
+@media(max-width:1200px){
+ .side-controls[data-screen=play] .brand .brand-name{font-size:28px}
+ .side-controls[data-screen=play] .brand{min-width:145px}
+ .side-controls[data-screen=play] .mission-breadcrumbs{gap:10px;padding-left:0}
+ .side-controls[data-screen=play] .mission-breadcrumbs #crumbWorld{font-size:19px;padding:6px 14px}
+ .side-controls[data-screen=play] .mission-breadcrumbs #crumbStation{font-size:14px;padding:6px 12px}
+ .side-controls[data-screen=play] .header-actions{gap:12px}
+ .side-controls[data-screen=play] .work{--tool-width:74px;--action-width:152px;gap:12px}
+ .side-controls[data-screen=play] #commit{font-size:17px;min-height:58px}
+ .side-controls[data-screen=play] #skip{font-size:12px}
+ .side-controls[data-screen=play] .draw-tools button{min-height:76px}
+}
+@media(max-width:900px),(max-height:500px){
+ .side-controls[data-screen=play] .trainer-header{padding-inline:14px;gap:12px}
+ .side-controls[data-screen=play] .brand .brand-name{font-size:23px}
+ .side-controls[data-screen=play] .brand{min-width:118px}
+ .side-controls[data-screen=play] .mission-breadcrumbs #crumbWorld{font-size:16px;padding:6px 10px;min-height:44px}
+ .side-controls[data-screen=play] .mission-breadcrumbs #crumbStation{font-size:12px;padding:6px 8px;min-height:44px}
+ .side-controls[data-screen=play] .header-actions{gap:8px}
+ .side-controls[data-screen=play] .profile-chip,.side-controls[data-screen=play] #menuBtn{width:44px;height:44px;min-height:44px;border-radius:8px}
+ .side-controls[data-screen=play] .profile-avatar{width:30px;height:30px;font-size:24px}
+ .side-controls[data-screen=play] .xp-chip{padding:5px 10px;min-height:44px;gap:6px;font-size:23px}
+ .side-controls[data-screen=play] .xp-chip #xpLabel{font-size:14px}
+ .side-controls[data-screen=play] .work:has(#numberWork:not([hidden])),.side-controls[data-screen=play] .work:has(#choiceWork:not([hidden])),.side-controls[data-screen=play] .work.is-lesson,.side-controls[data-screen=play] .work.has-feedback{--action-width:248px}
+ .side-controls[data-screen=play] .work:has(#numberWork:not([hidden])) .exercise-right,.side-controls[data-screen=play] .work:has(#choiceWork:not([hidden])) .exercise-right,.side-controls[data-screen=play] .work.is-lesson .exercise-right,.side-controls[data-screen=play] .work.has-feedback .exercise-right{padding:8px}
+ .side-controls[data-screen=play] #board .vector-label{font-size:20px}
+}
+@media(max-height:500px){
+ .side-controls[data-screen=play] #play{padding:0 10px 8px;gap:4px}
+ .side-controls[data-screen=play] .trainer-header{border-radius:0 0 16px 16px}
+ .side-controls[data-screen=play] .questionbar{min-height:56px;padding:4px 0 7px 18px}
+ .side-controls[data-screen=play] .questionbar::before{left:4px;top:9px;height:32px}
+ .side-controls[data-screen=play] .questionbar::after{left:18px;bottom:1px;width:70px}
+ .side-controls[data-screen=play] .questionbar h1{font-size:19px;line-height:1.25}
+ .side-controls[data-screen=play] .practice-labels{font-size:10px;margin-bottom:2px}
+ .side-controls[data-screen=play] .work{--tool-width:64px;--action-width:120px;gap:8px}
+ .side-controls[data-screen=play] .exercise-left,.side-controls[data-screen=play] .exercise-right{padding:8px 0 0;gap:4px}
+ .side-controls[data-screen=play] .draw-tools{gap:6px}
+ .side-controls[data-screen=play] .draw-tools button{min-height:48px;padding:3px;font-size:11px;border-radius:9px}
+ .side-controls[data-screen=play] .draw-tools button span{font-size:22px;display:inline;margin:0 3px 0 0}
+ .side-controls[data-screen=play] #commit{min-height:44px;font-size:13px;padding:7px 3px;border-radius:10px}
+ .side-controls[data-screen=play] #commit::after{margin-left:3px}
+ .side-controls[data-screen=play] #skip{font-size:11px;white-space:normal;padding:4px 0}
+ .side-controls[data-screen=play] #skip::after{display:none}
+ .side-controls[data-screen=play] .exercise-actions{gap:5px;padding-top:2px}
+ .side-controls[data-screen=play] .work:has(#numberWork:not([hidden])){--action-width:260px}
+ .side-controls[data-screen=play] .work:has(#numberWork:not([hidden])) .exercise-right{padding:4px;gap:3px}
+ .side-controls[data-screen=play] #board .vector-label{font-size:17px}
+}
+@media(max-width:450px){
+ .side-controls[data-screen=play] .trainer-header{gap:6px;padding-inline:10px}
+ .side-controls[data-screen=play] .mission-breadcrumbs{gap:5px}
+ .side-controls[data-screen=play] .mission-breadcrumbs #crumbWorld{font-size:13px;padding:4px 6px}
+ .side-controls[data-screen=play] .mission-breadcrumbs #crumbStation{font-size:11px;padding:4px}
+ .side-controls[data-screen=play] .crumb-divider{font-size:20px}
+ .side-controls[data-screen=play] .header-actions{gap:5px}
+}
+/* A solid, glare-free alternative for learners who choose extra contrast. */
+body.side-controls.high-contrast[data-screen=play]{background:#030b18}
+.side-controls.high-contrast[data-screen=play] #board{--grid:#648aa7}
+.side-controls.high-contrast[data-screen=play] #board .grid-minor,.side-controls.high-contrast[data-screen=play] #board .grid-node{display:none}
+.side-controls.high-contrast[data-screen=play] #board .given,.side-controls.high-contrast[data-screen=play] #board .student,.side-controls.high-contrast[data-screen=play] #board .result,.side-controls.high-contrast[data-screen=play] .flight-layer>g{filter:none}
+
+@media(min-width:901px) and (min-height:501px){
+ .side-controls[data-screen=play] .has-coach .draw-tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .side-controls[data-screen=play] .has-coach .draw-tools button{min-height:62px;font-size:11px;padding:5px 2px}
+ .side-controls[data-screen=play] .has-coach .draw-tools button span{display:block;font-size:23px;margin:0 0 3px}
+}
+/* Keep the full number keypad and answer actions visible on short displays. */
+@media(max-height:500px){
+ .side-controls[data-screen=play][data-interaction=number] .questionbar{padding-block:2px 5px;min-height:50px}
+ .side-controls[data-screen=play][data-interaction=number] .questiontext{display:flex;align-items:center;gap:10px}
+ .side-controls[data-screen=play][data-interaction=number] .questiontext h1{flex:1;min-width:0;font-size:18px}
+ .side-controls[data-screen=play][data-interaction=number] .task-givens{flex:0 1 48%;margin:0;font-size:16px;line-height:1.25}
+}
+.side-controls[data-screen=play] .work.has-feedback #commit::after,
+.side-controls[data-screen=play] .work.is-lesson #commit::after{content:none}
+
+/* Reserve the bottom action row; only long feedback may scroll. */
+.side-controls[data-screen=play] .work.has-feedback .exercise-right{overflow:hidden}
+.side-controls[data-screen=play] .work.has-feedback #feedbackPanel{flex:1 1 auto;min-height:0;overflow:auto;gap:8px;padding-right:3px;scroll-padding:8px}
+.side-controls[data-screen=play] .work.has-feedback .exercise-actions{flex:0 0 auto;margin-top:0;padding-top:8px;gap:6px}
+.side-controls[data-screen=play] #flightControls{display:flex;flex-direction:column;gap:9px;flex-shrink:0}
+.side-controls[data-screen=play] #flightControls .flight-kicker,
+.side-controls[data-screen=play] #flightControls .flight-key,
+.side-controls[data-screen=play] #flightStatus{display:none}
+.side-controls[data-screen=play] #flightControls #flightExplanation{font-size:15px;line-height:1.4;margin:0}
+.side-controls[data-screen=play] #flightProgress{flex-shrink:0}
+.side-controls[data-screen=play] #flightToggle{flex-shrink:0;width:100%;min-height:44px}
+@media(max-height:500px){
+ .side-controls[data-screen=play] #flightControls{gap:6px}
+ .side-controls[data-screen=play] #flightControls #flightExplanation{font-size:13px}
+ .side-controls[data-screen=play] .work.has-feedback .exercise-actions{padding-top:4px}
+}
+@media(prefers-reduced-motion:reduce){.side-controls[data-screen=play] #flightStatus{display:block}}

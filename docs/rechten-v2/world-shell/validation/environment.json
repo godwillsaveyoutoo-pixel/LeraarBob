@@ -1,0 +1,25 @@
+{
+  "date": "2026-09-26",
+  "branch": "feat/rechten-v2-world-shell",
+  "implementationCommit": "1b42e0839742246e31702b07afa42cc83394a4b4",
+  "baseCommit": "e104ecf",
+  "node": "v24.18.1",
+  "browser": "Chromium 153.0.8010.36 snap",
+  "baseUrl": "http://127.0.0.1:8775",
+  "cdpPort": 9245,
+  "scope": "Isolated synthetic guest/accounts; all external requests intercepted; no real student writes",
+  "coreHashes": "../PRESERVED_CORE.json",
+  "committedScreenshots": [
+    "../screenshots/world-1366x768.webp",
+    "../screenshots/area-1366x768.webp",
+    "../screenshots/exercise-1366x768.webp",
+    "../screenshots/world-320x568.webp",
+    "../screenshots/area-320x568.webp",
+    "../screenshots/exercise-640x360.webp",
+    "../screenshots/interval-repair-640x360.webp",
+    "../screenshots/interval-correct-640x360.webp",
+    "../screenshots/area-completed-640x360.webp",
+    "../screenshots/exercise-correct-1366x768.webp",
+    "../screenshots/forced-colors-1366x768.webp"
+  ]
+}

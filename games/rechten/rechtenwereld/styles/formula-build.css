@@ -1,0 +1,130 @@
+/* The reusable-tile exercise: three calm paper panels, one persistent hint.
+   Everything is scoped so the other Formulewerf workbenches keep their layout. */
+.formula-build-mission .formula-workspace {
+  width:100%; max-width:1800px; margin-inline:auto;
+  grid-template-columns:minmax(0,1.75fr) minmax(260px,1fr);
+  grid-template-rows:auto minmax(0,1fr);
+  gap:clamp(12px,2vh,24px) clamp(14px,1.5vw,26px);
+  padding:clamp(12px,2vh,26px) 2vw clamp(12px,2vh,24px);
+}
+.formula-build-mission .formula-heading {grid-column:1/-1;grid-row:1;padding:0 12px;justify-self:center;width:min(100%,1000px)}
+.formula-build-mission .formula-heading::before {inset:0 0 30px;background:#dceffd;transform:rotate(-.4deg)}
+.formula-build-mission .formula-heading h1 {font-size:clamp(28px,3.6vw,56px);padding:12px 12px 16px}
+.formula-build-progress {display:flex;align-items:center;justify-content:center;gap:24px;font:20px/1.2 var(--hand);color:#52758a;padding-top:5px}
+.formula-progress-dots {display:flex;align-items:center;gap:7px}
+.formula-progress-dots i {width:12px;height:12px;border:1.5px solid #b8cdd2;border-radius:50%;background:#fffefa}
+.formula-progress-dots .is-done,.formula-progress-dots .is-current {background:#66acce;border-color:#66acce}
+.formula-progress-dots .is-current {outline:2px solid #cee4ed;outline-offset:2px}
+.formula-build-mission .formula-paper,.formula-build-mission .formula-reminder {height:100%;max-height:640px;align-self:center;border-radius:20px;background:#fffefa var(--paper-texture);box-shadow:0 4px 14px #3147390b}
+.formula-build-mission .formula-reminder {grid-row:2;transform:none;padding:clamp(16px,1.8vw,30px);border-color:#d9d1bb}
+.formula-build-mission .formula-reminder::before {display:none}
+.formula-build-mission .formula-reminder h2 {font-size:clamp(25px,2.4vw,38px);gap:12px}
+.formula-build-mission .formula-reminder h2 .ui-icon {width:48px;height:48px;flex-shrink:0;padding:9px;background:#fff0bd;border:1px solid #ffe094;border-radius:50%}
+.formula-build-mission .formula-reminder p {font:clamp(20px,1.85vw,29px)/1.3 var(--hand);margin-top:clamp(12px,2.7vh,27px)}
+.formula-build-mission .formula-reminder::after {content:'';display:block;margin-top:24px;height:3px;background:#91cadd;border-radius:50%;transform:rotate(-1deg)}
+.formula-build-mission .formula-work {gap:clamp(16px,4vh,48px);padding:clamp(22px,3vw,46px) clamp(18px,2.4vw,40px)}
+.formula-build-mission .formula-work .graph-undo {top:12px;left:12px;transform:none;box-shadow:0 2px 4px #31473910}
+.formula-build-mission .formula-given {flex-shrink:0;width:calc(100% - 32px);margin-left:32px;gap:clamp(15px,2vw,32px);padding:clamp(14px,2.5vh,28px) 12px;background:#e4f1fc;font-size:clamp(27px,2.7vw,44px);line-height:1.2}
+.formula-build-mission .formula-builder {gap:clamp(7px,.8vw,14px);flex-shrink:0}
+.formula-build-mission .formula-builder>span {font-size:clamp(35px,4.2vw,65px);margin-right:6px}
+.formula-build-mission .formula-slot {max-width:132px;min-height:76px;height:clamp(76px,11.5vh,112px);border:1.5px dashed #a9cbdc;background:#f7fbfe;border-radius:15px;font-size:clamp(35px,3.9vw,60px);padding:5px;transition:background .15s}
+.formula-build-mission .formula-slot.is-filled {border-style:solid}
+.formula-build-mission .formula-slot[aria-pressed=true] {border:2px solid #7953c8;outline:1px solid #7953c8;outline-offset:0;background:#eee8fc}
+.formula-build-mission .formula-slot:disabled {opacity:1;color:inherit}
+.formula-build-mission:has(.feedback.success) .formula-slot {border-style:solid;border-color:#81b394;background:#eaf4e9;color:#276e53}
+.formula-build-mission .formula-build-help {display:block;font:clamp(18px,1.8vw,27px)/1.2 var(--hand);color:inherit}
+.formula-build-mission .formula-work .feedback-bubble {width:fit-content;max-width:100%;gap:12px;border:1px solid #ebd39a;border-radius:28px;padding:6px 16px 6px 8px;background:#fffaf0}
+.formula-build-mission .feedback-bubble .hint-button {background:#ffefbf;border-color:#f5dfa3;flex-shrink:0}
+.formula-build-mission .feedback-bubble .feedback {border:0;background:none;padding:0;font:clamp(18px,1.65vw,25px)/1.22 var(--hand);text-align:center}
+.formula-build-mission .feedback-bubble:has(.success) {background:#eaf5ea;border-color:#83af91}
+.formula-build-mission .feedback-bubble:has(.error) {background:#fff5e7;border-color:#d8b083}
+.formula-build-mission .formula-answer {padding:clamp(14px,1.3vw,24px);gap:clamp(12px,2vh,22px)}
+.formula-build-mission .formula-answer h2 {display:flex;align-items:center;justify-content:center;gap:14px;font-size:clamp(27px,2.8vw,43px);padding:12px 6px 16px;background:#eee7fc;border-radius:20px;flex-shrink:0}
+.build-puzzle {width:34px;height:34px;fill:#f9f5ff;stroke:#7952c3;stroke-width:1.7;stroke-linejoin:round;overflow:visible;flex-shrink:0}
+.formula-build-mission .formula-tokens {gap:clamp(9px,1vw,16px);width:100%;min-height:0}
+.formula-build-mission .formula-tokens button {min-height:64px;height:clamp(64px,10.7vh,106px);font-size:clamp(32px,3vw,49px);border-radius:17px;background:#fff;box-shadow:0 3px 4px #213d4810}
+.formula-build-mission .formula-tokens .frac {font-size:.62em}
+.formula-build-mission .formula-tokens button:not(:disabled):hover {background:#f3effd;border-color:#9d86ca}
+.formula-token-help {display:flex;align-items:center;justify-content:center;gap:10px;font:clamp(17px,1.5vw,23px)/1.15 var(--hand);color:#62879c}
+.formula-token-help svg {width:45px;height:35px;fill:none;stroke:currentColor;stroke-width:1.7;flex-shrink:0}
+.formula-build-mission .boundary-footer {display:flex;justify-content:space-between;padding-inline:max(3vw,calc((100vw - 1350px)/2));padding-block:12px 25px;gap:20px}
+.formula-build-mission .boundary-footer .paper-pill>span {display:inline}
+.formula-build-mission::after {height:80px;background:#d1e6de;clip-path:polygon(0 34%,8% 46%,19% 88%,32% 72%,45% 27%,53% 48%,67% 65%,79% 47%,90% 13%,100% 38%,100% 100%,0 100%)}
+@media(min-width:1100px) and (min-height:650px) {
+ .formula-build-mission .formula-workspace {grid-template-columns:minmax(215px,.85fr) minmax(0,1.85fr) minmax(270px,1.06fr)}
+ .formula-build-mission .formula-reminder {display:block}
+}
+@media(max-height:850px) {
+ .formula-build-mission .formula-heading h1 {font-size:clamp(27px,3vw,42px);padding:5px 8px 10px}
+ .formula-build-mission .formula-work {gap:18px;padding:24px 16px}
+ .formula-build-mission .formula-reminder {padding:17px}
+ .formula-build-mission .formula-reminder h2 {font-size:27px;gap:8px}
+ .formula-build-mission .formula-reminder h2 .ui-icon {width:38px;height:38px;padding:6px}
+ .formula-build-mission .formula-reminder p {font-size:22px;margin-top:15px}
+ .formula-build-mission .formula-given {font-size:29px;padding:16px 8px;gap:16px}
+ .formula-build-mission .formula-slot {height:76px;font-size:39px}
+ .formula-build-mission .formula-answer {gap:12px}
+ .formula-build-mission .formula-answer h2 {font-size:31px;padding:8px 4px 12px}
+ .formula-build-mission .formula-tokens button {height:66px;min-height:66px;font-size:34px}
+ .formula-build-mission .formula-build-help {font-size:20px}
+ .formula-build-mission .feedback-bubble .feedback {font-size:19px}
+ .formula-build-mission .formula-token-help {font-size:18px}
+}
+/* Small landscape screens retain real 44px targets. Extra number tokens use
+   a fourth column instead of growing into the footer. */
+@media(max-height:649px) and (orientation:landscape) {
+ .formula-build-mission .formula-workspace {grid-template-columns:minmax(0,1.5fr) minmax(220px,1fr);gap:7px 12px;padding:5px 14px}
+ .formula-build-mission .formula-heading {display:flex;align-items:center;justify-content:center;gap:20px;padding:0 4px;min-width:0}
+ .formula-build-mission .formula-heading h1 {font-size:25px;line-height:1.12;padding:4px 8px 8px}
+ .formula-build-mission .formula-heading::before {inset:0 0 0}
+ .formula-build-progress {font-size:15px;gap:10px;padding:0;white-space:nowrap}
+ .formula-progress-dots {gap:4px}
+ .formula-progress-dots i {width:7px;height:7px;border-width:1px}
+ .formula-build-mission .formula-work {gap:10px;padding:10px 12px}
+ .formula-build-mission .formula-work .graph-undo {top:5px;left:5px}
+ .formula-build-mission .formula-given {font-size:26px;width:calc(100% - 42px);margin-left:42px;padding:8px;gap:14px}
+ .formula-build-mission .formula-given>span {font-size:19px}
+ .formula-build-mission .formula-builder {gap:7px}
+ .formula-build-mission .formula-builder>span {font-size:32px}
+ .formula-build-mission .formula-slot {min-height:52px;height:52px;max-width:85px;border-radius:10px;font-size:31px}
+ .formula-build-mission .formula-build-help {font-size:17px}
+ .formula-build-mission .formula-work .feedback-bubble {padding:3px 10px 3px 4px;gap:7px;border-radius:22px}
+ .formula-build-mission .feedback-bubble .feedback {font-size:16px}
+ .formula-build-mission .formula-answer {padding:10px;gap:9px}
+ .formula-build-mission .formula-answer h2 {font-size:25px;padding:4px 6px 8px;border-radius:12px;gap:9px}
+ .build-puzzle {width:23px;height:23px}
+ .formula-build-mission .formula-tokens {gap:7px}
+ .formula-build-mission .formula-tokens button {height:50px;min-height:50px;font-size:29px;padding:3px;border-radius:10px}
+ .formula-build-mission .formula-token-help {display:none}
+ .formula-build-mission .boundary-footer {padding:5px 18px 12px}
+ .formula-build-mission::after {height:35px}
+}
+@media(max-height:450px) and (orientation:landscape) {
+ .formula-build-mission .formula-heading {gap:8px}
+ .formula-build-mission .formula-heading h1 {font-size:22px;padding:2px 4px 6px}
+ .formula-build-mission .formula-heading .formula-progress-dots {display:none}
+ .formula-build-mission .formula-work {gap:7px;padding:5px 9px}
+ .formula-build-mission .formula-given {font-size:23px;padding:5px;gap:12px}
+ .formula-build-mission .formula-given>span {font-size:16px}
+ .formula-build-mission .formula-slot {height:48px;min-height:48px;font-size:29px}
+ .formula-build-mission .formula-build-help {display:none}
+ .formula-build-mission .feedback-bubble .feedback {font-size:14px}
+ .formula-build-mission .formula-answer {padding:7px;gap:5px}
+ .formula-build-mission .formula-answer h2 {font-size:22px;padding:0 4px 5px}
+ .formula-build-mission .formula-tokens {gap:5px}
+ .formula-build-mission .formula-tokens:has(button:nth-child(10)) {grid-template-columns:repeat(4,minmax(0,1fr))}
+ .formula-build-mission .formula-tokens button {height:44px;min-height:44px;font-size:26px;border-radius:8px}
+ .formula-build-mission .boundary-footer {padding:3px 16px 9px}
+}
+@media(forced-colors:active) {
+ .formula-build-mission .formula-slot,.formula-build-mission .formula-tokens button,.formula-build-mission .formula-given {background:Canvas;color:CanvasText}
+ .formula-build-mission .formula-slot[aria-pressed=true] {outline:2px solid Highlight}
+ .formula-progress-dots .is-current {outline-color:Highlight}
+}
+/* Center stacked fractions without an extra inline text baseline. */
+.formula-build-mission .formula-slot,.formula-build-mission .formula-tokens button {display:flex;align-items:center;justify-content:center}
+.formula-build-mission [data-formula-token="x"] {grid-column:1}
+@media(min-height:650px) and (max-height:700px) {
+ .formula-build-mission .formula-reminder p {font-size:20px;margin-top:12px}
+ .formula-build-mission .formula-reminder::after {margin-top:12px}
+}

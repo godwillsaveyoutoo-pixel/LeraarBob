@@ -1,0 +1,10 @@
+# Vaste interfaceafspraken
+
+- De bovenste menubalk van een spel moet altijd door de gebruiker ingeklapt én opnieuw uitgeklapt kunnen worden. Dit geldt ook voor toekomstige nieuwe schermen en herontwerpen.
+- Laat in ingeklapte toestand een duidelijk bereikbare herstelknop staan, ook op een smartphone. Die mag geen opgave of belangrijke actie afdekken. Houd aanraakdoelen minstens 44 × 44 pixels en geef knoppen een toegankelijke naam en de juiste `aria-expanded`-status.
+- Behoud de expliciete inklapkeuze tussen oefeningen en bij herladen. Gebruik de vrijgekomen schermruimte voor de inhoud; inklappen mag het spel, de invoer of de voortgang niet resetten.
+- Hergebruik waar passend `shared/collapsible-topbar.js` en `shared/collapsible-topbar.css`, met een `data-collapsible-topbar`-attribuut op de kopbalk. De gedeelde voorkeur is presentatie-informatie, geen leerlingvoortgang.
+- Bij wijzigingen aan een kopbalk: controleer beide standen, terug openen, herladen en compacte schermen. Deze regel vraagt geen ongevraagde massale ombouw van andere bestaande spellen.
+
+- Gebruik voor de bovenste navigatierij op de startpagina en actieve spellen `shared/leraarbob-topbar.js` en `.css`: leraarBob → spel/wereld/onderdeel, gevolgd door het centrale leraarBob-account, instellingen, menu en inklappen. Kleuren mogen bij het spel passen; positie, iconen en werking blijven gelijk.
+- Toon XP of het aantal afgeronde levels in de gedeelde bovenste navigatierij, naast de profielknop. Gebruik de echte voortgang van het spel; voeg geen fictieve XP-omrekening toe. Houd overige spelspecifieke bediening, timers en sessiecodes onder die navigatierij. Bewaar bestaande DOM-nodes en handlers wanneer een spel wordt aangesloten; herlaad of reset geen oefening door een menuwijziging. Geïsoleerde werkborden in iframes krijgen geen tweede platformbalk.

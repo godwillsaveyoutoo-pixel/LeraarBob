@@ -1,0 +1,12 @@
+/* The two variable rows and their labels meet at one clear, continuous cross. */
+:is(.derive-data-table,.plot-data-table,.grens-chart,.data-table){--function-table-divider:3px solid #39765f}
+:is(.derive-data-table,.plot-data-table)>tbody>tr:first-child>*{border-bottom:var(--function-table-divider)}
+:is(.derive-data-table,.plot-data-table,.grens-chart) tr>th[scope=row]{border-right:var(--function-table-divider)}
+.grens-chart>thead>tr>*{border-bottom:var(--function-table-divider)}
+.grens-chart>tbody>tr:first-child>*{border-top:0}
+/* The older vertical x/y table uses the same hierarchy around its headings. */
+.data-table>thead>tr>*{border-bottom:var(--function-table-divider)}
+.data-table tr>:first-child{border-right:var(--function-table-divider)}
+@media(forced-colors:active){
+ :is(.derive-data-table,.plot-data-table,.grens-chart,.data-table){--function-table-divider:3px solid CanvasText}
+}

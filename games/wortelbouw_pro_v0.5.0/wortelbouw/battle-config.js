@@ -1,0 +1,7 @@
+(function(root,factory){if(typeof module==='object')module.exports=factory(require('./geometry.js'));else root.BattleGame=factory(root.WortelbouwGeometry)})(globalThis,function(G){
+ const pools={basis:[2,5,13,25],groot:[18,100,104]};
+ const worlds=Object.entries(pools).map(([id,values])=>({id,name:id==='basis'?'Konijnengrond · basis':'Grotere lengtes',skills:values.map(n=>'build_'+n)}));
+ function generate(spec){const n=Number(spec.skill.replace('build_',''));if(!Object.values(pools).flat().includes(n))throw Error('Onbekende bouwopgave');return G.levels.findIndex(l=>l.n===n);}
+ function validate(level,answer){try{if(!Array.isArray(answer?.actions)||!answer.actions.length||answer.actions.length>150)return {ok:false};let state=G.initial(level);for(const a of answer.actions){if(!a||!['start','triangle','helper','result','reveal'].includes(a.type))return {ok:false};if(['start','triangle'].includes(a.type)&&(!Number.isInteger(a.k)||a.k<1||a.k>G.maxLength(state)))return {ok:false};if(a.type==='start'&&(!Number.isFinite(a.x)||!Number.isFinite(a.y)||Math.abs(a.x)>1000||Math.abs(a.y)>1000))return {ok:false};state=G.apply(state,a);}return {ok:state.phase==='won'};}catch{return {ok:false};}}
+ return {id:'wortelbouw',title:'Wortelbouw',rpc:'axioma_game_class',playerURL:'battle-player.html',worlds,skills:Object.values(pools).flat().map(n=>({id:'build_'+n,label:'Bouw lengte '+G.goalLabel(G.levels.find(l=>l.n===n))})),mixedSkills:worlds.flatMap(w=>w.skills),generate,validate};
+});

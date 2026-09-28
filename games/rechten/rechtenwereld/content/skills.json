@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "skills": [
+    {
+      "id": "point",
+      "family_id": "F1",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "point_plot",
+      "family_id": "F1",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "delta",
+      "family_id": "F2",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "slope",
+      "family_id": "F2",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "slope_from_two_points",
+      "family_id": "F2",
+      "active": true,
+      "pilot": true
+    },
+    {
+      "id": "line_behavior",
+      "family_id": "F2",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "special_lines",
+      "family_id": "F2",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "intercept",
+      "family_id": "F3",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "ab",
+      "family_id": "F3",
+      "active": true,
+      "pilot": true
+    },
+    {
+      "id": "fx",
+      "family_id": "F4",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "table",
+      "family_id": "F4",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "graph_from_equation",
+      "family_id": "F5",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "graph_from_table",
+      "family_id": "F5",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "rewrite_linear_equation",
+      "family_id": "F8",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "input_from_output",
+      "family_id": "F4",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "point_on_line",
+      "family_id": "F4",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "zeroRead",
+      "family_id": "F6",
+      "active": true,
+      "pilot": true
+    },
+    {
+      "id": "zero",
+      "family_id": "F6",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "sign",
+      "family_id": "F6",
+      "active": true,
+      "pilot": true
+    },
+    {
+      "id": "signchart",
+      "family_id": "F6",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "equation_from_ab",
+      "family_id": "F7",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "intercept_from_point",
+      "family_id": "F7",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "equation_from_point_slope",
+      "family_id": "F7",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "equation_from_two_points",
+      "family_id": "F7",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "equation_from_graph",
+      "family_id": "F7",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "equation_from_table",
+      "family_id": "F7",
+      "active": true,
+      "pilot": false
+    },
+    {
+      "id": "equation_from_context",
+      "family_id": "F7",
+      "active": false,
+      "pilot": false
+    }
+  ]
+}

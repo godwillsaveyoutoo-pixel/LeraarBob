@@ -1,0 +1,45 @@
+/* A round fills the viewport; setup and results can scroll independently. */
+body[data-playing=true]{height:100dvh;min-height:0;overflow:hidden;display:grid;grid-template-rows:var(--lb-header-height,60px) minmax(0,1fr)}
+body[data-playing=true]>main{width:100%;max-width:none;min-height:0;height:100%;padding:4px 8px;display:flex;flex-direction:column;gap:2px}
+body[data-playing=true] #notice{margin:0;font-size:12px;max-height:40px;overflow:auto}
+body[data-playing=true] #session{flex:1;min-height:0;display:grid;grid-template-rows:44px minmax(0,1fr);gap:2px}
+body[data-playing=true] .session-bar{display:flex;gap:12px;margin:0;min-height:0;padding:0 4px}
+body[data-playing=true] .session-bar h1{font-size:18px;margin:0;white-space:nowrap}
+body[data-playing=true] .session-bar .eyebrow,body[data-playing=true] .join-code small,body[data-playing=true] #copyLink,body[data-playing=true] .device-note{display:none}
+body[data-playing=true] .join-code{display:flex;flex-direction:row;margin-left:auto;gap:8px}
+body[data-playing=true] #code{font-size:17px;letter-spacing:.08em}
+body[data-playing=true] #closeSession{padding:4px 10px;min-height:44px;grid-column:auto;font-size:12px}
+body[data-playing=true] #playArea{min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr)}
+body[data-playing=true] .round-status{padding:0 4px;min-height:28px;gap:12px;flex-wrap:nowrap;font-size:12px}
+body[data-playing=true] #timer{font-size:18px;white-space:nowrap}
+body[data-playing=true] #submissionStatus{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+body[data-playing=true] #board{height:100%;min-height:0;min-width:0;border:0}
+body[data-playing=true].topbar-collapsed .session-bar{padding-right:50px}
+.classroom-app .axioma-login-dialog{border-radius:0}
+@media(max-width:500px){body[data-playing=true] .session-bar{gap:6px}body[data-playing=true] .session-bar h1{font-size:15px}body[data-playing=true] #code{font-size:14px}body[data-playing=true] #closeSession{font-size:0;width:44px;padding:0}body[data-playing=true] #closeSession:after{content:'×';font-size:24px}body[data-playing=true] .round-status{gap:8px}body[data-playing=true] #submissionStatus{font-size:11px}}
+/* Narrow devices use two stacked workboards instead of an off-screen second pane. */
+.battle-app .panes,.battle-app .round-bar{min-width:0}
+.battle-app #arena{overflow:hidden}
+.battle-app .player,.battle-app button,.battle-app .setup-card,.battle-app dialog{border-radius:0}
+@media(max-width:600px) and (orientation:portrait){.battle-app .panes{grid-template-columns:1fr;grid-template-rows:repeat(2,minmax(0,1fr))}.battle-app .player{grid-template-rows:32px minmax(0,1fr)}.battle-app .player header{padding:0 8px}.battle-app .player h2{font-size:13px}.battle-app .player header b{font-size:18px}.battle-app .round-bar{flex-wrap:nowrap;gap:6px}.battle-app #roundStatus{min-width:0;font-size:11px}.battle-app .round-advance{white-space:normal;width:min(260px,85%);padding:8px;min-height:48px;font-size:16px}}
+/* Shared controls take their colour from the game, without rounded panels. */
+body[data-battle-game=rechten],body[data-battle-game=wortelbouw]{color-scheme:light;background:#f3efdf;color:#263f38;--cyan:#287568;--pink:#976135;--gold:#f0c76b;--lb-surface:#faf7ed;--lb-ink:#263f38;--lb-hover:#e3ead9;--lb-control-radius:0px;--lb-panel-radius:0px}
+body[data-battle-game=rechten] .card,body[data-battle-game=wortelbouw] .card,body[data-battle-game] .setup-card{background:#faf7edf5;border-color:#9dab97}
+body[data-battle-game] :is(input,select,button,.button){background:#f7f3e7;color:#294d42;border-color:#91a48b;border-radius:0}
+body[data-battle-game] .primary{background:#315d4e;color:#fff;border-color:#406955}
+body[data-battle-game] :is(p,.hint,.rules,.eyebrow,.device-note,.round-status,#identity,#roundStatus){color:#3e5e50}
+body[data-battle-game] :is(#code,#timer,.join-code small,#count,#ownResult){color:#765000}
+body[data-battle-game] :is(.members li,.ranking li,dialog,.host[data-phase=lobby] .join-code){background:#f7f3e7;color:#263f38;border-color:#9dab97}
+body[data-battle-game] .ranking .points{color:#765000}body[data-battle-game] .ranking .rise{color:#23614d}body[data-battle-game] .ranking .fall{color:#9a3541}
+body[data-battle-game] .player{background:#f3efdf}body[data-battle-game] .player header{background:#e3ead9;color:#263f38}body[data-battle-game] .player small{color:#425b48}
+body.classroom-app[data-playing=true].topbar-collapsed main{padding-top:4px}
+body[data-battle-game] leraarbob-topbar::part(row){background:#faf7ed;color:#263f38;border-color:#91a48b}
+body[data-battle-game] leraarbob-topbar::part(brand){color:#315446;border-color:#91a48b}
+body[data-battle-game] leraarbob-topbar::part(crumb-game),body[data-battle-game] leraarbob-topbar::part(crumb-link){background:#315d4e;color:white;border-color:#729881;box-shadow:none}
+.battle-app .round-bar{flex-wrap:nowrap;min-height:44px}
+.battle-app #roundStatus{min-width:0}
+.battle-app .player{grid-template-rows:36px minmax(0,1fr)}
+.battle-app .player header{padding:2px 8px;gap:8px}
+.battle-app .player header b{font-size:20px}
+.battle-app .player h2{font-size:15px}
+body.classroom-app[data-playing=true] #board{height:100%;min-height:0}

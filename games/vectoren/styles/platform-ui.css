@@ -1,0 +1,49 @@
+/* Vectormissie: straight-edged controls and the shared, branded navigation. */
+body,body[data-platform-page="Vectormissie"]{
+ --lb-control-radius:0px;--lb-panel-radius:0px;--lb-tile-radius:0px;--lb-mark-radius:0px;
+}
+/* The engine still owns these nodes; the shared row is their visible replacement. */
+.trainer-header:not(.lb-header){visibility:hidden}
+.trainer-header.lb-header .lb-gamebar{display:none!important}
+leraarbob-topbar::part(row){padding:7px 20px;gap:18px;background:linear-gradient(120deg,#081b2a,#0b2030);border-bottom:1px solid #40849f;box-shadow:0 2px 12px #02091266}
+leraarbob-topbar::part(brand){flex-direction:column;align-items:flex-end;gap:3px;padding:2px 14px 2px 0;border-right:1px solid #3c6378;border-radius:0;color:#f4f9ff;font-size:27px;font-weight:900;font-style:italic;line-height:1;letter-spacing:-1px}
+leraarbob-topbar::part(brand)::after{content:'TRAINER';background:#f3cf72;color:#112333;font:800 8px/1 system-ui,sans-serif;letter-spacing:2.5px;padding:3px 10px}
+leraarbob-topbar::part(crumbs){gap:8px}
+leraarbob-topbar::part(crumb-game),leraarbob-topbar::part(crumb-link){min-height:44px;padding:8px 14px;border:1px solid #527d98;border-radius:0;background:#102c40;color:#bdeaff;font-size:14px;font-weight:700;box-shadow:inset 0 -3px #326c87}
+leraarbob-topbar::part(crumb-game){font-style:italic;font-size:19px;font-weight:800;color:#79e7ff;border-color:#4bb4d4;background:linear-gradient(125deg,#15465a,#0a2337);box-shadow:inset 3px 0 #58daef,inset 0 -3px #2d7996}
+leraarbob-topbar::part(crumb-game):hover,leraarbob-topbar::part(crumb-link):hover{background:#1b4358;border-color:#85eaff}
+leraarbob-topbar::part(crumb-separator){color:#79dbee;font-size:22px}
+leraarbob-topbar::part(crumb-current){color:#b4cddd}
+leraarbob-topbar::part(progress){border-radius:0}
+/* These are interface surfaces only: circular geometry and vector drawings stay intact. */
+body :is(button,input,select,textarea,dialog,[role=dialog],[role=menu],.trainer-nav,.lb-account-dialog,.lb-restore,
+ .trainer-header,.round-chip,.status-chip,.mini-meter,.progress-meter,.world-progress,.station-meter,
+ .coach-panel,.coach-number,.coach-tip,.teaching-panel,.exercise-left,.exercise-right,.exercise-actions,
+ .progress-total,.progress-station,.progress-station-number,.progress-station-panel,.progress-skill,.summary-card,
+ .mission-card,.mission-action,.mission-beacon,.mission-index,.mission-title,.station-badge,.station-number,.world-mode-badge,.lesson-calculation,.slot,.step-track span,
+ #boardWrap,#play footer,.battle-setup,.battle-card,.ranking-card,.setup-card,.player,.round-advance,.canvas-app main,.canvas-tools,.colors i,
+ .help-example-layout,.visual-key,.meter,.world-storage-warning,.world-progress i,.button){border-radius:0!important}
+/* Comfortable, consistent answer targets, even on short landscape screens. */
+.side-controls[data-screen=play] .work:has(#choiceWork:not([hidden])):not(.has-feedback):not(.is-lesson) .exercise-right{padding:16px;gap:16px}
+.side-controls[data-screen=play] #choiceWork{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0;align-content:start}
+.side-controls[data-screen=play] #choiceWork .choice-answer{min-height:60px;padding:12px 8px;border:1px solid #59829d;background:linear-gradient(130deg,#142f43,#0b2033);font-size:15px;line-height:1.35;font-weight:700;box-shadow:inset 0 -3px #28516a}
+.side-controls[data-screen=play] #choiceWork .choice-answer:hover:not(:disabled){background:#20485f;border-color:#80dded}
+.side-controls[data-screen=play] #choiceWork .choice-answer.correct{border-color:var(--teal);background:#123d37;box-shadow:inset 3px 0 var(--teal)}
+.side-controls[data-screen=play] #choiceWork .choice-answer.incorrect{border-color:var(--wrong);background:#3d2031;box-shadow:inset 3px 0 var(--wrong)}
+.side-controls[data-screen=play] .work:has(#choiceWork:not([hidden])):not(.has-feedback):not(.is-lesson) #skip{width:100%;flex:0 0 auto;white-space:nowrap;padding:8px;min-height:44px}
+@media(max-height:500px){
+ leraarbob-topbar::part(row){padding:4px 12px;gap:12px}
+ leraarbob-topbar::part(brand){font-size:23px}
+ leraarbob-topbar::part(crumb-game){font-size:16px;padding-inline:12px}
+ leraarbob-topbar::part(crumb-link){font-size:12px;padding-inline:10px}
+ .side-controls[data-screen=play] .work:has(#choiceWork:not([hidden])):not(.has-feedback):not(.is-lesson) .exercise-right{padding:12px;gap:12px}
+ .side-controls[data-screen=play] #choiceWork{gap:10px}
+ .side-controls[data-screen=play] #choiceWork .choice-answer{min-height:52px;padding:10px 6px;font-size:14px}
+}
+@media(max-width:650px){
+ leraarbob-topbar::part(row){padding:5px 8px;gap:8px}
+ leraarbob-topbar::part(brand){font-size:22px;padding-right:8px}
+ leraarbob-topbar::part(crumbs){gap:4px}
+ leraarbob-topbar::part(crumb-game){font-size:14px;padding:6px 10px}
+ leraarbob-topbar::part(crumb-link){font-size:11px;padding:6px}
+}

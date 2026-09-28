@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ead9b7">
+  <title>Wortelbouw Battle · leraarBob</title>
+  <link rel="stylesheet" href="battle.css">
+  <script src="pro/assets.js" defer></script>
+  <script src="geometry.js" defer></script>
+  <script src="battle.js" defer></script>
+  <link rel="stylesheet" href="platform-ui.css">
+  <script src="../../../shared/leraarbob-topbar.js" data-title="Wortelbouw Pro" data-header="#battleTopbar" data-game-href="games/wortelbouw_pro_v0.5.0/wortelbouw/index.html" defer></script>
+  <script src="platform-ui.js" defer></script>
+  <script src="../../../shared/vendor/supabase.js" defer></script>
+  <script src="../../../shared/supabase-config.js" defer></script>
+  <script src="../../../shared/axioma-auth.js" defer></script>
+<link rel="stylesheet" href="duo-layout.css"></head>
+<body>
+<div id="battleApp">
+  <header id="battleTopbar">
+    <nav class="battleCrumbs breadcrumbs" aria-label="Navigatie">
+      <a href="index.html" class="gameCrumb">Wortelbouw Pro</a>
+      <span class="crumb-divider" aria-hidden="true">›</span>
+      <strong>Battle</strong>
+    </nav>
+    <nav id="trainerMenu" hidden aria-label="Battlenavigatie"><a href="classroom.html"><span>Groepsbattle<small>Start een sessie of doe mee</small></span></a>
+      <button id="proBattleSetup"><span>Battle instellen<small>Spelers en rondes kiezen</small></span></button>
+      <button id="proSound"><span>Geluid aan of uit</span></button>
+      <a href="index.html"><span>Solo bouwen<small>Terug naar je eigen opgaven</small></span></a>
+    </nav>
+    <div class="battleTopActions">
+      <button id="battleSound" type="button" aria-label="Geluid uitzetten" title="Geluid">♪</button>
+      <button id="battleFullscreen" type="button" aria-label="Volledig scherm" title="Volledig scherm">⛶</button>
+      <button id="battleMenu" type="button" aria-label="Battlemenu" title="Battlemenu">☰</button>
+    </div>
+  </header>
+
+  <div id="battleInfo" aria-live="polite">
+    <div class="playerTag playerOneTag">
+      <strong id="playerOneName">Speler 1</strong>
+      <span id="playerOneScore" class="scoreDots" aria-label="0 punten">○ ○ ○</span>
+    </div>
+    <div id="roundMessage" class="roundMessage"><span>RONDE 1/3</span><b>·</b><strong>MAAK √5</strong></div>
+    <div class="playerTag playerTwoTag">
+      <span id="playerTwoScore" class="scoreDots" aria-label="0 punten">○ ○ ○</span>
+      <strong id="playerTwoName">Speler 2</strong>
+    </div>
+  </div>
+
+  <main id="battleStage">
+    <section class="arena arenaLeft" aria-label="Speelveld speler 1">
+      <canvas id="battleCanvas1" aria-label="Wortelbouw speelveld speler 1"></canvas>
+      <button id="undo1" class="arenaUndo" type="button" aria-label="Speler 1: ongedaan maken" title="Ongedaan maken">↶</button>
+      <div id="arenaNotice1" class="arenaNotice" role="status" hidden></div>
+    </section>
+    <div class="gardenDivider" aria-hidden="true"><i></i></div>
+    <section class="arena arenaRight" aria-label="Speelveld speler 2">
+      <canvas id="battleCanvas2" aria-label="Wortelbouw speelveld speler 2"></canvas>
+      <button id="undo2" class="arenaUndo" type="button" aria-label="Speler 2: ongedaan maken" title="Ongedaan maken">↶</button>
+      <div id="arenaNotice2" class="arenaNotice" role="status" hidden></div>
+    </section>
+    <div id="battleCountdown" aria-hidden="true"></div>
+    <button id="nextRoundButton" type="button" hidden>Volgende ronde →</button>
+  </main>
+</div>
+
+<dialog id="battleSetup" aria-labelledby="battleSetupTitle">
+  <form method="dialog" class="setupCard">
+    <div class="setupHead">
+      <div><span>Wortelbouw</span><h1 id="battleSetupTitle">Battle</h1></div>
+      <button value="cancel" class="setupClose" aria-label="Sluiten">×</button>
+    </div>
+    <p class="setupLead">Twee leerlingen bouwen tegelijk. De eerste correcte constructie krijgt het punt.</p>
+    <div class="nameGrid">
+      <label><span>Links</span><input id="name1Input" maxlength="18" value="Speler 1" autocomplete="off"></label>
+      <label><span>Rechts</span><input id="name2Input" maxlength="18" value="Speler 2" autocomplete="off"></label>
+    </div>
+    <div class="setupOptions">
+      <label><span>Rondes</span><select id="roundCountSelect"><option value="3" selected>3 rondes</option><option value="5">5 rondes</option></select></label>
+      <label><span>Reeks</span><select id="battleSeriesSelect"><option value="mix" selected>Gemengd</option><option value="basis">Basis</option><option value="groot">Grote lengtes</option></select></label>
+    </div>
+    <div class="setupRules"><span>Sleep vrij je eerste veld.</span><span>Bouw daarna vanaf een gouden zijde.</span><span>Geen tikmodus.</span></div>
+    <div class="setupActions">
+      <a href="index.html" class="backSolo">← Solo</a>
+      <button id="startBattleButton" value="default" type="button">Start battle <span aria-hidden="true">→</span></button>
+    </div>
+  </form>
+</dialog>
+</body>
+</html>

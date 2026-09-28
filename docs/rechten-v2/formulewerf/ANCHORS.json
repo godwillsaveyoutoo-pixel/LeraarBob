@@ -1,0 +1,121 @@
+{
+  "aspectRatio": "3:2",
+  "width": 1536,
+  "height": 1024,
+  "area": {
+    "name": "Formulewerf",
+    "caption": "Voorschriften en representaties",
+    "intro": "Van de basisvorm naar zelf afleiden.",
+    "art": "formulewerf",
+    "zones": [
+      {
+        "id": "bouwen",
+        "badge": "A",
+        "name": "Voorschrift en grafiek",
+        "intro": "Gebruik en herken de basisvorm y = ax + b. Daarna leid je zelf voorschriften af in werkplaats B.",
+        "nodes": [
+          {
+            "key": "equation_from_ab",
+            "id": "equation_from_ab",
+            "name": "Voorschrift uit a en b",
+            "label": "Voorschrift<br>uit a en b",
+            "x": 24,
+            "y": 25,
+            "number": 1
+          },
+          {
+            "key": "graph_from_equation",
+            "id": "graph_from_equation",
+            "name": "Rechte uit voorschrift",
+            "label": "Rechte uit<br>voorschrift",
+            "x": 76,
+            "y": 25,
+            "number": 2
+          },
+          {
+            "key": "equation_from_graph",
+            "id": "equation_from_graph",
+            "name": "Voorschrift uit grafiek",
+            "label": "Voorschrift<br>uit grafiek",
+            "x": 68,
+            "y": 62,
+            "entryPolicy": {
+              "difficultyLayers": [
+                0,
+                1
+              ],
+              "readableSlope": true,
+              "visibleIntercept": true,
+              "requiresInterceptFromArbitraryPoint": false,
+              "requiresExtendedTwoPointCalculation": false
+            },
+            "number": 3
+          },
+          {
+            "key": "rewrite_linear_equation",
+            "id": "rewrite_linear_equation",
+            "name": "Schrijf de vergelijking in de vorm y = ax + b",
+            "label": "Schrijf de vergelijking<br>in de vorm<br>y = ax + b",
+            "x": 32,
+            "y": 58,
+            "number": 4
+          }
+        ]
+      },
+      {
+        "id": "omzetten",
+        "badge": "B",
+        "name": "Zelf een voorschrift bepalen",
+        "intro": "Van de basisvorm naar zelf afleiden: eerst de parameters, daarna een volledig voorschrift en een context.",
+        "nodes": [
+          {
+            "key": "intercept_from_point",
+            "id": "intercept_from_point",
+            "name": "b uit helling en punt",
+            "label": "b uit helling<br>en punt",
+            "x": 24,
+            "y": 25,
+            "number": 5
+          },
+          {
+            "key": "equation_from_point_slope",
+            "id": "equation_from_point_slope",
+            "name": "Voorschrift uit helling en punt",
+            "label": "Voorschrift uit<br>helling en punt",
+            "x": 50,
+            "y": 25,
+            "number": 6
+          },
+          {
+            "key": "equation_from_two_points",
+            "id": "equation_from_two_points",
+            "name": "Voorschrift uit twee punten",
+            "label": "Voorschrift uit<br>twee punten",
+            "x": 76,
+            "y": 24,
+            "number": 7
+          },
+          {
+            "key": "equation_from_table",
+            "id": "equation_from_table",
+            "name": "Voorschrift uit tabel",
+            "label": "Voorschrift<br>uit tabel",
+            "x": 68,
+            "y": 63,
+            "number": 8
+          },
+          {
+            "key": "equation_from_context",
+            "id": "equation_from_context",
+            "name": "Voorschrift uit context",
+            "label": "Voorschrift<br>uit context",
+            "x": 32,
+            "y": 63,
+            "culmination": true,
+            "number": 9
+          }
+        ]
+      }
+    ]
+  }
+}

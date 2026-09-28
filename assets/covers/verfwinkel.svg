@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" fill="none">
+  <defs><pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" stroke="#405040" stroke-opacity=".05"/></pattern></defs>
+  <rect width="600" height="300" fill="#e4ecee"/><rect width="600" height="300" fill="url(#grid)"/>
+  <circle cx="305" cy="143" r="108" fill="#cddfe0"/>
+  <g font-family="Georgia,serif">
+  <path d="M96 251h413" stroke="#afc3c5" stroke-width="2"/>
+  <path d="M241 144c-8-79 122-79 114 0" stroke="#7b9292" stroke-width="3"/>
+  <path d="m228 143 14 96q54 24 108 0l14-96" fill="#f8fbfa" stroke="#9fb6b8" stroke-width="2"/>
+  <path d="m235 181 7 58q54 24 108 0l8-58q-63 22-123 0Z" fill="#91b1a0"/>
+  <ellipse cx="296" cy="143" rx="68" ry="19" fill="#f8fbfa" stroke="#9fb6b8" stroke-width="2"/>
+  <ellipse cx="296" cy="143" rx="56" ry="12" fill="#789a88"/>
+  <path d="m316 142 27-69" stroke="#bda37f" stroke-width="10" stroke-linecap="round"/>
+  <path d="m146 179 5 57q25 13 50 0l5-57" fill="#86a9b6"/><ellipse cx="176" cy="179" rx="30" ry="9" fill="#bcd2d7"/><ellipse cx="176" cy="179" rx="23" ry="5" fill="#477482"/>
+  <path d="m397 179 5 57q25 13 50 0l5-57" fill="#d6bd7a"/><ellipse cx="427" cy="179" rx="30" ry="9" fill="#eee1b6"/><ellipse cx="427" cy="179" rx="23" ry="5" fill="#b59b55"/>
+  <g transform="translate(155 79) rotate(-6)"><rect width="105" height="39" rx="10" fill="#f8fbfa"/><text x="25" y="27" fill="#477482" font-size="23">2 : 1</text></g>
+  <path d="m383 112 29 20m-12 1 12-1-4-12" stroke="#799a9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M280 211h32" stroke="#e7f0e6" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>

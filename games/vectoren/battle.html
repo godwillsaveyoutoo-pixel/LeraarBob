@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#071326"><title>Vectorbattle · leraarBob</title><link rel="stylesheet" href="styles/vector-battle.css"><link rel="stylesheet" href="styles/mission-architecture.css"><link rel="stylesheet" href="../../shared/collapsible-topbar.css"><script src="../../shared/leraarbob-topbar.js" data-title="Vectormissie" data-context="none" data-game-href="games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html" defer></script><link rel="stylesheet" href="styles/platform-ui.css"><link rel="stylesheet" href="../../shared/multiplayer/layout.css"></head>
+<body class="battle-app" style="--night-sky:url(../assets/vector-night-sky.svg)">
+<header class="battle-top" data-collapsible-topbar><a href="Axioma_Vectorentrainer_v0.4_vectormissie.html">← Vectormissie</a><strong>VECTOR<span>BATTLE</span></strong><a href="classroom.html">Met de hele klas →</a><button id="openRanking" type="button">★ Ranglijst</button><button id="fullscreen" type="button">⛶ Volledig scherm</button></header>
+<main>
+<section id="setup" class="setup">
+ <div class="battle-intro"><span class="eyebrow">TWEE LEERLINGEN · ÉÉN SCHERM</span><h1>Wie zet de juiste koers?</h1><p>Dezelfde vraag. Twee werkborden. Wie als eerste juist antwoordt, verdient het punt.</p><div class="duel-art" aria-hidden="true"><span>↗</span><b>VS</b><span>↖</span></div></div>
+ <form id="battleForm" class="setup-card">
+  <div class="names"><label class="cyan">Links<input id="name0" maxlength="24" placeholder="Leerling 1" autocomplete="off"></label><label class="pink">Rechts<input id="name1" maxlength="24" placeholder="Leerling 2" autocomplete="off"></label></div>
+  <label>Wereld<select id="world"></select></label><label>Onderdeel<select id="skill"></select></label><p id="mixedHint" class="rules">Mixed combineert ontbinden, vectoren in een figuur, kop-staart, optellen en aftrekken. De gegeven vectoren staan getekend.</p>
+  <label>Aantal rondes<select id="rounds"><option value="5">5 rondes</option><option value="10">10 rondes</option></select></label>
+  <p class="rules">Een fout antwoord? Na 3 seconden kun je opnieuw proberen. Met ‘Pas’ geef je deze ronde op. Bij gelijke eindscore delen jullie de overwinning.</p>
+  <p class="device-note">Speel op een laptop of een tablet in liggende stand. Op een touchscreen kunnen jullie tegelijk tekenen; met één muis delen jullie de bediening.</p>
+  <button id="startBattle" class="primary" type="submit" disabled>Speelhelften laden…</button><p id="loadStatus" role="status"></p>
+ </form>
+</section>
+<section id="arena" hidden aria-label="Battle met twee spelers">
+ <div class="round-bar"><span id="roundLabel"></span><p id="roundStatus" role="status" aria-live="polite"></p><button id="stopBattle" type="button">Stoppen</button></div>
+ <div class="panes"><button id="nextRound" class="primary round-advance" type="button" aria-describedby="roundStatus" hidden disabled>Volgende ronde →</button><section class="player player-left" aria-label="Linker speler"><header data-collapsible-topbar><h2 id="playerName0">Leerling 1</h2><span><b id="score0">0</b> punten</span><small id="state0">Klaar</small></header><iframe id="pane0" src="battle-player.html" title="Werkbord linker leerling"></iframe></section><section class="player player-right" aria-label="Rechter speler"><header><h2 id="playerName1">Leerling 2</h2><span><b id="score1">0</b> punten</span><small id="state1">Klaar</small></header><iframe id="pane1" src="battle-player.html" title="Werkbord rechter leerling"></iframe></section></div>
+</section>
+<section id="result" class="result" hidden><span class="eyebrow">BATTLE AFGEROND</span><h1 id="winner"></h1><p id="finalScore"></p><p id="resultDetail"></p><div><button id="rematch" class="primary">Revanche →</button><button id="newBattle">Andere battle</button></div></section>
+</main>
+<dialog id="stopDialog"><h2>Battle stoppen?</h2><p>De huidige battle wordt afgesloten. Je persoonlijke oefenvoortgang blijft bewaard.</p><div><button id="keepPlaying">Verder spelen</button><button id="confirmStop">Stop battle</button></div></dialog>
+<dialog id="rankingDialog" class="ranking-dialog" aria-labelledby="rankingTitle">
+ <div class="ranking-heading"><div><span class="eyebrow">OP DIT TOESTEL</span><h2 id="rankingTitle">Battle-ranglijst</h2></div><button id="closeRanking" type="button" autofocus>Sluiten</button></div>
+ <p class="rules">Winst: 3 klassementspunten · Gelijkspel: 1 · Verlies: 0. Bij evenveel punten telt het aantal overwinningen; daarna delen spelers hun plaats.</p>
+ <p id="rankingEmpty">Nog geen afgeronde battles. Speel een battle om de ranglijst te starten.</p>
+ <div id="rankingTableWrap" class="ranking-table-wrap" tabindex="0" role="region" aria-label="Battleklassement" hidden><table><thead><tr><th scope="col">Plaats</th><th scope="col">Speler</th><th scope="col">Punten</th><th scope="col">Gewonnen</th><th scope="col">Gespeeld</th></tr></thead><tbody id="rankingRows"></tbody></table></div>
+ <p class="device-note">Gebruik telkens dezelfde spelersnaam. Deze lijst hoort bij deze browser, niet bij leerlingaccounts. De laatste 500 afgeronde battles tellen mee.</p>
+ <p id="rankingStatus" role="status"></p>
+</dialog>
+<script src="vector-battle-ranking.js"></script><script src="vector-core.js"></script><script src="vector-mission.js"></script><script src="battle-config.js"></script><script src="../../shared/multiplayer/duo.js"></script>
+<script src="../../shared/collapsible-topbar.js"></script></body></html>

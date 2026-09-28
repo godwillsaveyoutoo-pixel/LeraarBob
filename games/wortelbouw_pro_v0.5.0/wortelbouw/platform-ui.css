@@ -1,0 +1,107 @@
+/* Shared leraarBob navigation, with Wortelbouw's warm garden palette. */
+body{--lb-surface:#faf6eb;--lb-ink:#2d483d;--lb-line:#c6ccbb;--lb-hover:#42664d0e}
+#app.proShell{grid-template-rows:auto minmax(0,1fr) auto}
+#topbar.lb-header .lb-gamebar{display:none!important}
+#battleTopbar .battleTopActions{display:none!important}
+#battleInfo{top:var(--lb-header-height,60px)}
+#battleStage{top:calc(var(--lb-header-height,60px) + 42px)}
+#battleTopbar .lb-gamebar{display:none}
+/* A composed portrait and a readable card replace the floating speech balloon. */
+#storyRail{overflow:auto;padding:4px 2px 8px;scrollbar-width:thin}
+#speechBubble{flex-shrink:0;margin: auto 0 0;padding:18px;border:1px solid #bec9b6;border-radius:16px;background:linear-gradient(145deg,#fffef8,#f4f5e8);box-shadow:0 6px 20px #354b3010}
+#speechBubble:after{display:none}
+.guideHeading{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.guidePortrait{display:block;flex:0 0 60px;width:60px;height:68px;border-radius:22px;background:linear-gradient(145deg,#e0ebda,#edf1e3);overflow:hidden}
+#guideRabbit{position:static;display:block;width:60px;height:68px;object-fit:contain;pointer-events:none}
+.guideEyebrow{display:block;font-size:9px;font-weight:750;letter-spacing:.12em;color:#64775e;line-height:1.5}
+#guideTitle{display:block;margin-top:3px;font-size:15px;font-weight:750;line-height:1.3;color:#31513b}
+#speechText{position:static;margin:0;font-size:15px;line-height:1.6;color:#38473b;overflow-wrap:break-word}
+#success{flex-shrink:0}
+@media(max-width:900px),(max-height:520px){
+  #app #gameShell{top:var(--lb-header-height,100px)}
+  #app #missionPanel,#app.chrome-collapsed #missionPanel{display:none!important}
+  #app #notice{top:7px}
+  #app #storyRail:has(#speechBubble:not([hidden])){display:block;position:absolute;right:12px;bottom:88px;z-index:19;width:min(280px,45vw);max-height:calc(100% - 106px);padding:0;pointer-events:none}
+  #storyRail #poster,#storyRail #success{display:none!important}
+  #speechBubble{padding:12px;border-radius:12px;margin:0}
+  .guideHeading{gap:9px;margin-bottom:6px}.guidePortrait{flex-basis:42px;width:42px;height:46px;border-radius:14px}#guideRabbit{width:42px;height:46px}
+  #speechText{font-size:13px;line-height:1.5}#guideTitle{font-size:13px}.guideEyebrow{font-size:8px}
+}
+@media(max-height:620px){#battleStage{top:calc(var(--lb-header-height,60px) + 36px)}}
+@media(orientation:portrait){#rotate,body:has(#battleApp):before{top:var(--lb-header-height,110px);z-index:40}#topbar #steps{display:none}}
+
+/* Branded signposts, still rendered by the shared platform navigation. */
+leraarbob-topbar::part(row){gap:20px;padding:9px 20px;background:linear-gradient(180deg,#fffdf6,#f5efdE);border-bottom:1px solid #b8c1a6;box-shadow:0 3px 10px #3d50210c}
+leraarbob-topbar::part(brand){position:relative;flex-direction:column;align-items:flex-end;gap:2px;padding:2px 14px 3px 2px;font-size:27px;line-height:1.05;font-weight:900;letter-spacing:-1.2px;color:#294b38;border-radius:0;border-right:1px solid #cbd0ba;text-shadow:0 1px #fff}
+leraarbob-topbar::part(brand)::after{content:'TRAINER';display:block;padding:3px 12px 3px 14px;background:#ebc865;border-radius:5px 2px 5px 2px;transform:skew(-9deg);font:800 9px/1 system-ui,sans-serif;letter-spacing:2.5px;color:#3e482d;text-shadow:none}
+leraarbob-topbar::part(crumbs){gap:9px;padding:3px 2px}
+leraarbob-topbar::part(crumb-game),leraarbob-topbar::part(crumb-link),leraarbob-topbar::part(crumb-current){display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:9px 13px;border:1px solid #aebd9b;border-radius:10px 3px 10px 3px;font-size:14px;line-height:1.2;white-space:nowrap;box-shadow:inset 0 1px #ffffffb0,0 2px 3px #3d50210b}
+leraarbob-topbar::part(crumb-game){background:linear-gradient(135deg,#3f674d,#2e503d);border-color:#335a40;color:#fffbee;box-shadow:inset 0 1px #ffffff26,0 3px 7px #284d3520;font-weight:800}
+leraarbob-topbar::part(crumb-game)::before{content:'√';display:grid;place-items:center;width:25px;height:25px;border:1px solid #acbc8970;border-radius:6px;background:#ffffff12;color:#edda94;font:700 23px/1 Georgia,serif}
+leraarbob-topbar::part(crumb-link){background:linear-gradient(135deg,#f4f6e9,#e7edd8);color:#37533b}
+leraarbob-topbar::part(crumb-link)::before{content:'';width:21px;height:24px;flex-shrink:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c7c4d' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21v-8M12 14C4 14 3 8 3 5c7 0 10 4 9 9ZM12 11c0-7 4-10 9-10 0 6-3 10-9 10ZM7 21h10'/%3E%3C/svg%3E") center/contain no-repeat}
+leraarbob-topbar::part(crumb-current){background:#f9edca;border-color:#d3bd7b;color:#674f22;font-weight:750}
+leraarbob-topbar::part(crumb-separator){font-size:23px;font-weight:400;color:#8b9778}
+leraarbob-topbar::part(crumb-game):hover{background:#426f51;border-color:#799d68}
+leraarbob-topbar::part(crumb-link):hover{background:#dde8cc;border-color:#849e6e}
+@media(max-width:1100px){
+  leraarbob-topbar::part(row){gap:10px;padding:6px 10px}
+  leraarbob-topbar::part(brand){font-size:23px;padding-right:9px}
+  leraarbob-topbar::part(crumbs){gap:5px}
+  leraarbob-topbar::part(crumb-game),leraarbob-topbar::part(crumb-link),leraarbob-topbar::part(crumb-current){gap:6px;padding:7px 9px;font-size:12px}
+  leraarbob-topbar::part(crumb-game)::before{width:21px;height:23px;font-size:21px}
+  leraarbob-topbar::part(crumb-link)::before{width:17px;height:22px}
+}
+@media(max-width:650px){
+  leraarbob-topbar::part(row){gap:5px;padding:6px 8px}
+  leraarbob-topbar::part(brand){border-right:0;padding-right:4px}
+  leraarbob-topbar::part(crumbs){gap:4px}
+  leraarbob-topbar::part(crumb-game),leraarbob-topbar::part(crumb-link),leraarbob-topbar::part(crumb-current){padding:7px;font-size:11px;gap:5px}
+  leraarbob-topbar::part(crumb-link)::before{display:none}
+}
+
+/* One exercise row: arrows and goal, instruction, then the unframed number line. */
+#app.proShell{grid-template-rows:auto 64px minmax(0,1fr) auto}
+#puzzleBar{position:relative;z-index:29;display:flex;align-items:center;gap:22px;min-width:0;height:64px;padding:0 18px;background:#e8d4a6;border-bottom:1px solid #8b785b26}
+#puzzleBar #mobileChrome{position:static;display:flex;flex-shrink:0;pointer-events:auto}
+#puzzleBar #collapsedNav{display:flex;align-items:center;gap:4px;height:auto;border:0;background:none;box-shadow:none;overflow:visible;backdrop-filter:none}
+#puzzleBar .chromeNavButton{display:grid;place-items:center;flex:0 0 44px;width:44px;min-width:44px;height:44px;padding:10px;border:0;border-radius:4px;background:transparent;color:#294e36;box-shadow:none}
+#puzzleBar .chromeNavButton svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+#puzzleBar .chromeNavButton:hover{background:#ffffff60}
+#puzzleBar .chromeNavButton:active{background:#c5d3b480}
+#app #puzzleBar #compactGoalReminder{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:64px;height:40px;padding:0 10px;border:0;border-inline:1px solid #7b8d6538;border-radius:0;background:none;box-shadow:none;white-space:nowrap}
+#app #puzzleBar #compactGoalReminder span{font:650 9px/1.2 system-ui;letter-spacing:.1em;text-transform:uppercase;color:#526744}
+#app #puzzleBar #compactGoalReminder strong{font:700 21px/1.1 Georgia,serif;color:#294e36}
+#app #puzzleBar #instruction{flex:0 1 210px;min-width:0;margin:0;padding:0;background:none;border:0;box-shadow:none}
+#app #puzzleBar #instruction strong{display:block;font:550 12px/1.4 system-ui;color:#3a5036;white-space:normal;overflow:visible;text-overflow:clip}
+#puzzleBar #instruction span{display:none!important}
+#puzzleBar #fullscreenButton,#puzzleBar #topbarToggle,#puzzleBar #rootAxisToggle,#puzzleBar .rootIntro{display:none}
+#puzzleBar #rootAxisPanel{position:relative!important;inset:auto;display:block!important;flex:1;min-width:0;height:64px!important;min-height:0;padding:0!important;border:0;border-radius:0;background:none;box-shadow:none;backdrop-filter:none;overflow:hidden;animation:none;transition:none}
+#puzzleBar #rootAxisCanvas{display:block;width:100%;height:64px!important;transition:none}
+body:has(#puzzleBar).topbar-collapsed #puzzleBar{padding-right:66px}
+body:has(#puzzleBar)>.lb-restore{top:10px;right:10px;border:0;border-radius:4px;background:transparent;color:#294e36;box-shadow:none}
+body:has(#puzzleBar)>.lb-restore:hover{background:#ffffff60}
+leraarbob-topbar::part(collapse){border:0;border-radius:4px;background:transparent}
+@media(min-width:901px) and (min-height:521px){#bottomDock{grid-template-columns:minmax(350px,1fr) minmax(180px,230px)}}
+@media(max-width:900px),(max-height:520px){
+  #puzzleBar{position:absolute;top:var(--lb-header-height,68px);left:0;right:0;gap:16px;padding:0 10px}
+  #app #gameShell{top:calc(var(--lb-header-height,68px) + 64px)}
+  #app #puzzleBar #instruction{flex-basis:185px}
+  #app #toolDock,#app #nextDock{bottom:max(8px,env(safe-area-inset-bottom))}
+}
+@media(max-width:650px){
+  #puzzleBar{gap:10px}
+  #app #puzzleBar #instruction{flex-basis:150px;font-size:11px}
+  #app #puzzleBar #compactGoalReminder{min-width:50px;padding-inline:4px}
+}
+@media(orientation:portrait){#puzzleBar #instruction{display:none}}
+/* Keep the restore control clear of player two's name and score. */
+body.topbar-collapsed #battleInfo{height:56px;padding-right:70px}
+body.topbar-collapsed #battleStage{top:calc(var(--lb-header-height,0px) + 56px)}
+/* Keep both destinations readable beside the brand on the narrowest phones. */
+@media(max-width:370px){
+ leraarbob-topbar::part(brand){font-size:20px;padding-right:0}
+ leraarbob-topbar::part(crumbs){gap:3px;padding-inline:0}
+ leraarbob-topbar::part(crumb-game),leraarbob-topbar::part(crumb-link){padding-inline:5px}
+ leraarbob-topbar::part(crumb-game)::before{display:none}
+}

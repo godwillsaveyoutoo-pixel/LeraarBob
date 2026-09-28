@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#071326"><title>leraarBob · Vectorentrainer v0.4 · Vectormissie</title><style>/* VECTOR_STYLE */</style><style>/* MISSION_SHELL_STYLE */</style><style>/* MISSION_WORLD_STYLE */</style><style>/* MISSION_EXERCISE_STYLE */</style><style>/* MISSION_STATION_STYLE */</style><style>/* MISSION_PROGRESS_STYLE */</style><style>/* MISSION_ARCHITECTURE_STYLE */</style><style>/* MISSION_COCKPIT_STYLE */</style><style>/* TOPBAR_STYLE */</style><style>/* PLATFORM_UI_STYLE */</style><script src="../../shared/leraarbob-topbar.js" data-title="Vectormissie" data-context="none" defer></script></head>
+<body data-screen="home" style="--night-sky:url(assets/vector-night-sky.svg)"><div id="app">
+<header class="trainer-header" data-collapsible-topbar>
+<a id="homeBtn" class="brand quiet" href="../../index.html" data-platform-home aria-label="Naar de startpagina van leraarBob"><span class="brand-name">leraarBob</span><span class="brand-sub">TRAINER</span></a>
+<nav class="mission-breadcrumbs" aria-label="Broodkruimelpad">
+<button id="crumbWorld" type="button" title="Naar de wereldkaart" aria-label="Vectormissie: naar de wereldkaart">Vectormissie</button><span id="crumbStationDivider" class="crumb-divider" aria-hidden="true" hidden>›</span><button id="crumbStation" type="button" title="Naar de haltes van dit station" hidden></button><span id="crumbExerciseDivider" class="crumb-divider crumb-exercise" aria-hidden="true" hidden>›</span><span id="crumbExercise" class="crumb-exercise" aria-current="page" hidden></span>
+</nav>
+<div class="header-actions"><div class="round-chip"><span id="roundLabel">Jouw vectorroute</span><span class="mini-meter"><i id="sessionMeter"></i></span></div>
+<span class="status-chip xp-chip"><span aria-hidden="true">★</span><span id="xpLabel">0 XP</span><i id="xpMeter" hidden></i></span>
+<span id="streakLabel" class="status-chip streak-chip"><span aria-hidden="true">♨</span><span><strong id="streakValue">0</strong> <span id="streakUnit">dagen</span><small>op rij</small></span></span>
+<button id="guestBtn" class="profile-chip" type="button" aria-label="Profiel en opgeslagen voortgang"><span class="profile-avatar" data-avatar="explorer" aria-hidden="true">◉</span><span class="profile-copy"><strong id="profileName">Gast</strong><small id="profileDetail">Op dit toestel</small></span><span aria-hidden="true">⌄</span></button>
+<button id="menuBtn" class="icon quiet" aria-label="Menu" aria-expanded="false" aria-controls="trainerMenu">☰</button></div>
+<nav id="trainerMenu" class="trainer-nav" aria-label="Trainernavigatie" hidden><button id="playBtn" data-trainer-action="play"><span class="menu-icon" aria-hidden="true">⌘</span><span>Oefeningenreeks<small>Volg jouw route</small></span></button><button id="freeBtn"><span class="menu-icon" aria-hidden="true">↗</span><span>Vrij oefenen<small>Kies zelf een halte</small></span></button><button id="canvasBtn"><span class="menu-icon" aria-hidden="true">✎</span><span>Vrij kanvas<small>Vectoren, punten en lijnen</small></span></button><button id="battleBtn"><span class="menu-icon" aria-hidden="true">⚔</span><span>Battle met twee<small>Speel naast elkaar</small></span></button><button id="classBtn"><span class="menu-icon" aria-hidden="true">⌁</span><span>Klasmodus<small>Start een sessie of doe mee</small></span></button><button id="helpBtn" data-trainer-action="help"><span class="menu-icon" aria-hidden="true">?</span><span>Uitleg</span></button><button id="progressBtn" data-trainer-action="progress"><span class="menu-icon" aria-hidden="true">▥</span><span>Mijn voortgang</span></button><button id="themeBtn" aria-pressed="false"><span class="menu-icon" aria-hidden="true">◐</span><span>Extra contrast</span></button><button id="collapseTopbarMenu" data-collapse-topbar type="button"><span class="menu-icon" aria-hidden="true">⌃</span><span>Bovenbalk inklappen<small>Meer ruimte voor je werkbord</small></span></button><button id="fullBtn"><span class="menu-icon" aria-hidden="true">⛶</span><span>Volledig scherm</span></button></nav>
+</header>
+<section id="home" class="world-screen" aria-label="Vectormissie wereldkaart">
+  <div class="vector-world" id="vectorWorld">
+    <picture><source media="(max-width:639px) and (min-height:501px)" srcset="assets/vector-night-sky-portrait.svg"><img class="vector-world-bg" src="assets/vector-night-sky.svg" alt="" fetchpriority="high"></picture>
+    <div class="world-vignette" aria-hidden="true"></div>
+    <section class="world-intro" aria-label="Vectormissie">
+      <span class="world-kicker">JOUW LEERROUTE DOOR DE KOSMOS</span>
+      <h1>Kies je koers.</h1>
+      <p>Vijf stations. Eén missie: vectoren begrijpen.</p>
+      <span id="worldModeBadge" class="world-mode-badge">Oefeningenreeks</span>
+    </section>
+    <svg id="worldRoutes" class="world-routes" aria-hidden="true" focusable="false"></svg>
+    <div id="stationNodes" class="station-nodes" aria-label="Stations van de Vectormissie"></div>
+    <aside class="world-mission-card" aria-label="Jouw missie">
+      <div><strong>Jouw missie</strong><small id="worldMissionText">Ontdek alle stations.</small></div>
+      <div class="world-progress"><i id="worldProgressFill"></i></div>
+      <b id="worldProgressText">0%</b>
+    </aside>
+    <div class="world-next" id="worldNext"><span>Volgende station</span><strong id="worldNextName">Koerscentrum</strong></div>
+    <button id="startBtn" class="world-continue" type="button"><span aria-hidden="true">🚀</span> Verder <span aria-hidden="true">›</span></button>
+    <button id="resumeBtn" hidden type="button">Hervat oefening</button>
+    <span id="masteryCount" class="sr-only"></span>
+    <p id="storageWarning" class="world-storage-warning" role="status" hidden></p>
+  </div>
+</section>
+<section id="stationScreen" class="station-screen" hidden aria-label="Station">
+ <div class="station-space-bg" aria-hidden="true"></div>
+ <header class="station-heading">
+  <div class="station-heading-copy"><span id="stationNumber" class="station-number">1</span><div><span id="stationModeLabel" class="eyebrow">Oefeningenreeks</span><h1 id="stationTitle">Koerscentrum</h1><p id="stationSubtitle"></p></div></div>
+  <div class="station-summary"><span id="stationPercent">0%</span><div><span id="stationCompletion">0 / 3 stevig</span><div class="station-meter"><i id="stationMeterFill"></i></div></div></div>
+ </header>
+ <div class="station-content">
+  <div class="station-orbits" aria-hidden="true"><span></span><span></span><span></span></div>
+  <svg id="stationPaths" class="station-paths" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"></svg>
+  <div id="skillList" class="mission-grid" role="group" aria-label="Haltes van dit station"></div>
+ </div>
+ <footer class="station-footer"><button id="stationBack" class="station-back" type="button">← Wereldkaart</button><div class="station-footer-copy"><strong>Kies een halte</strong><span id="stationGoal"></span></div><button id="stationRecommendedBtn" class="primary station-primary" type="button">Verder oefenen →</button></footer>
+</section>
+<section id="play" hidden aria-label="Oefenruimte"><div class="questionbar"><div class="questiontext"><div class="practice-labels"><strong id="practiceMode"></strong><span id="modeLabel"></span></div><h1 id="prompt"></h1><p id="promptNote"></p><p id="taskGivens" class="task-givens" hidden></p><p id="flowFeedback" class="flow-feedback" role="status" aria-live="polite" hidden></p></div><p id="toolHint" class="toolhint"></p><button id="seriesReturn" hidden>Hervat reeks · XP →</button></div><div id="work" class="work"><div id="boardWrap"><div id="lessonVisualKey" class="visual-key" hidden><span>Een gekopieerde vector behoudt zijn kleur</span></div><svg id="board" class="vector-board" tabindex="0" role="application" aria-label="Vectorenrooster. Sleep of tik begin en einde. Met pijltjestoetsen verplaats je de cursor; Enter kiest een punt."></svg></div><aside id="coachPanel" class="coach-panel" hidden aria-label="Zo doe je het"><div class="coach-head"><div><span class="coach-kicker">◌ &nbsp; Zo doe je het</span><h2 id="coachTitle">Kop-staart</h2></div><button id="coachClose" class="coach-close" type="button" aria-label="Verberg Zo doe je het">×</button></div><ol id="coachSteps" class="coach-steps"></ol><div id="coachTip" class="coach-tip"></div></aside><button id="coachTab" class="coach-tab" type="button" aria-controls="coachPanel" aria-expanded="false" hidden>💡 Zo doe je het</button><div id="choiceWork" role="group" aria-label="Kies je antwoord" hidden></div><div id="numberWork" hidden><div id="calculation"><div id="givens"></div><div id="scaffold"></div></div><div id="coordinateEditor" class="coordinate-editor" role="group" aria-label="Coördinaten invoeren"><div class="slots"><button class="slot" id="slotX" aria-pressed="true"><small id="labelX">x · horizontaal</small><strong id="valueX">?</strong></button><button class="slot" id="slotY" aria-pressed="false"><small id="labelY">y · verticaal</small><strong id="valueY">?</strong></button></div><div id="keypad" class="keypad"></div></div></div><aside id="lessonPanel" class="teaching-panel" hidden><div id="lessonCount" class="eyebrow"></div><div id="lessonTrack" class="step-track" aria-label="Stappen van het voorbeeld"></div><h2 id="lessonTitle"></h2><p id="lessonText"></p><div id="lessonCalculation" class="lesson-calculation"></div></aside><aside id="feedbackPanel" class="teaching-panel" role="status" aria-live="polite" hidden><h2 id="feedbackTitle"></h2><strong id="earnedXP"></strong><p id="feedback"></p><div id="feedbackReason" class="lesson-calculation"></div><div id="flightControls" hidden><p class="flight-kicker">PROEFVLUCHT · GELIJKE TIJD</p><p id="flightExplanation"></p><div class="flight-key"><span class="flight-source">◆ <span id="flightSourceName"></span></span><span class="flight-target">◆ <span id="flightTargetName"></span></span></div><progress id="flightProgress" max="1" value="0" aria-label="Verstreken vliegtijd"></progress><button id="flightToggle" type="button">Pauzeer vlucht</button><small id="flightStatus"></small></div><button id="dismissFeedback">Pas mijn antwoord aan</button></aside></div><footer><button id="previousQuestion" type="button" class="quiet" aria-label="Vorige vraag bekijken" title="Vorige vraag bekijken" hidden>←<span> Vorige vraag</span></button><button id="lessonBack" class="quiet" hidden>← Vorige stap</button><div id="drawTools" class="draw-tools"><button id="vectorTool" aria-pressed="true"><span aria-hidden="true">↗</span> Pijl</button><button id="resultTool" aria-pressed="false"><span aria-hidden="true">↗</span> Resultante</button><button id="undoBtn" aria-label="Laatste tekening ongedaan maken"><span aria-hidden="true">↶</span> Undo</button></div><p id="activityHint"></p><button id="skip" class="quiet">Later oefenen</button><button id="commit" class="primary">Controleer</button></footer></section>
+<section id="helpScreen" hidden aria-label="Uitleg"><div class="help-toolbar"><label for="helpTopic">Uitleg</label><select id="helpTopic"></select><button id="closeHelp">Terug naar oefening</button></div><div class="help-content"><div class="help-question"><h2 id="helpTitle"></h2><p id="helpPrompt"></p><p id="helpGivens" class="task-givens" hidden></p></div><div class="help-example-layout"><div class="help-visual"><div id="helpVisualKey" class="visual-key"><span>Een gekopieerde vector behoudt zijn kleur</span></div><svg id="helpBoard" class="vector-board" role="img" aria-label="Uitgewerkt vectorvoorbeeld"></svg></div><div class="help-steps"><div id="helpCount" class="eyebrow"></div><div id="helpTrack" class="step-track" aria-label="Stappen van het voorbeeld"></div><h2 id="helpStepTitle"></h2><p id="helpConcept"></p><div id="helpExample" class="lesson-calculation"></div></div></div></div><div class="help-footer"><button id="libraryBtn" class="quiet">Kies een losse oefening</button><div class="lesson-actions"><button id="helpPrevious">← Vorige</button><button id="helpNext" class="primary">Volgende stap →</button></div></div></section>
+<section id="progressScreen" hidden aria-label="Mijn voortgang">
+ <div class="progress-heading"><div><span class="eyebrow">STAP VOOR STAP VOORUIT</span><h1>Mijn voortgang</h1><p>Kies een wereld en bekijk wat al stevig zit.</p></div><span id="progressTotal" class="progress-total"></span><button id="closeProgress">← Terug</button></div>
+ <div class="progress-layout">
+  <nav id="progressStations" class="progress-stations" aria-label="Voortgang per wereld"></nav>
+  <section id="progressStationPanel" class="progress-station-panel" aria-labelledby="progressStationTitle">
+   <div class="progress-detail-heading"><div><h2 id="progressStationTitle"></h2><p id="progressStationSubtitle"></p></div><span id="progressStationPercent"></span></div>
+   <div class="progress-detail-scroll" tabindex="0" role="region" aria-label="Vaardigheden en voortgang van de gekozen wereld"><div id="progressRows"></div><p class="progress-explanation">Zelfstandig juist bij een nieuwe vraag telt als bewijs. Een verbetering na een fout telt als oefenen.</p></div>
+  </section>
+ </div>
+</section>
+<section id="summary" hidden><div class="summary-inner"><div class="eyebrow">Sessie afgerond</div><h1>Een stap verder.</h1><div id="summaryStats" class="summary-stats"></div><p id="summaryText"></p><button id="again" class="primary">Nieuwe sessie →</button><button id="summaryHome" class="quiet">Naar start</button></div></section>
+
+</div>
+<dialog id="practiceConfirm" class="mission-dialog" aria-labelledby="practiceConfirmTitle" aria-describedby="practiceConfirmText">
+ <form method="dialog">
+  <span class="eyebrow">Buiten je route</span>
+  <h2 id="practiceConfirmTitle">Vrij oefenen starten?</h2>
+  <p id="practiceConfirmText"></p>
+  <div class="mission-dialog-actions"><button id="practiceCancel" value="cancel" autofocus>Annuleren</button><button id="practiceAccept" class="primary" value="practice">Vrij oefenen</button></div>
+ </form>
+</dialog>
+<div id="rotate"><div><h2>Een breed werkbord.</h2><p>Draai je toestel om vectoren te tekenen. Je kunt de leerroute ook rechtop bekijken.</p><button id="rotateHome">Naar start</button></div></div>
+<script data-platform-root="../../">/* VECTOR_PLATFORM */</script><script>/* VECTOR_CORE */</script><script>/* VECTOR_LESSONS */</script><script>/* VECTOR_MISSION */</script><script>/* VECTOR_FLIGHT */</script><script type="text/axioma-game">/* VECTOR_APP */</script><script src="../../shared/vendor/supabase.js"></script><script src="../../shared/supabase-config.js"></script><script src="../../shared/axioma-auth.js"></script><script src="../../shared/axioma-social.js"></script><script src="../../shared/axioma-progress.js"></script><script>/* GAME_ADAPTERS */</script><script data-game-id="vectoren-trainer" data-profile-button="guestBtn">/* GAME_RUNTIME */</script><script>/* TOPBAR_SCRIPT */</script></body></html>

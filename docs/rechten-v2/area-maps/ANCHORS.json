@@ -1,0 +1,339 @@
+{
+  "aspectRatio": "3:2",
+  "width": 1536,
+  "height": 1024,
+  "anchor": "center of marker, percentages within the complete image canvas",
+  "areas": {
+    "puntenbaai": {
+      "name": "Puntenbaai",
+      "caption": "Coördinaten en punten",
+      "intro": "Vind je plek. Zet je eerste punt.",
+      "art": "puntenbaai",
+      "zones": [
+        {
+          "id": "route",
+          "name": "Rond de baai",
+          "nodes": [
+            {
+              "key": "point",
+              "id": "point",
+              "name": "Coördinaten aflezen",
+              "label": "Coördinaten<br>aflezen",
+              "x": 30,
+              "y": 48,
+              "number": 1
+            },
+            {
+              "key": "point_plot",
+              "id": "point_plot",
+              "name": "Punt plaatsen",
+              "label": "Punt<br>plaatsen",
+              "x": 70,
+              "y": 32,
+              "number": 2
+            }
+          ]
+        }
+      ]
+    },
+    "hellingrug": {
+      "name": "Hellingrug",
+      "caption": "Richting en helling",
+      "intro": "Van basisverschil tot bergtop.",
+      "art": "hellingrug",
+      "zones": [
+        {
+          "id": "route",
+          "name": "De klimroute",
+          "nodes": [
+            {
+              "key": "delta",
+              "id": "delta",
+              "name": "Δx en Δy",
+              "label": "Δx en Δy",
+              "x": 17,
+              "y": 64,
+              "number": 1
+            },
+            {
+              "key": "slope",
+              "id": "slope",
+              "name": "Helling uit Δy / Δx",
+              "label": "Helling uit<br>Δy / Δx",
+              "x": 36,
+              "y": 46,
+              "number": 2
+            },
+            {
+              "key": "slope_from_two_points",
+              "id": "slope_from_two_points",
+              "name": "Helling uit twee punten",
+              "label": "Helling uit<br>twee punten",
+              "x": 55,
+              "y": 25,
+              "number": 3
+            },
+            {
+              "key": "line_behavior",
+              "id": "line_behavior",
+              "name": "Stijgend, dalend of constant",
+              "label": "Stijgend, dalend<br>of constant",
+              "x": 74,
+              "y": 55,
+              "number": 4
+            },
+            {
+              "key": "special_lines",
+              "id": "special_lines",
+              "name": "Bijzondere rechten",
+              "label": "Bijzondere<br>rechten",
+              "x": 86,
+              "y": 18,
+              "number": 5
+            }
+          ]
+        }
+      ]
+    },
+    "signaalstad": {
+      "name": "Signaalstad",
+      "caption": "Functies, grafieken en tabellen",
+      "intro": "Volg het signaal. Lees en controleer.",
+      "art": "signaalstad",
+      "zones": [
+        {
+          "id": "route",
+          "name": "Het signaalnetwerk",
+          "nodes": [
+            {
+              "key": "intercept",
+              "id": "intercept",
+              "name": "y-afsnede b aflezen",
+              "label": "y-afsnede b<br>aflezen",
+              "x": 18,
+              "y": 21,
+              "number": 1
+            },
+            {
+              "key": "ab",
+              "id": "ab",
+              "name": "a en b herkennen",
+              "label": "a en b<br>herkennen",
+              "x": 39,
+              "y": 21,
+              "number": 2
+            },
+            {
+              "key": "fx",
+              "id": "fx",
+              "name": "Functiewaarde f(x)",
+              "label": "Functiewaarde<br>f(x)",
+              "x": 61,
+              "y": 21,
+              "number": 3
+            },
+            {
+              "key": "table",
+              "id": "table",
+              "name": "Tabel aanvullen",
+              "label": "Tabel<br>aanvullen",
+              "x": 82,
+              "y": 21,
+              "number": 4
+            },
+            {
+              "key": "input_from_output",
+              "id": "input_from_output",
+              "name": "Welke x hoort bij deze functiewaarde?",
+              "label": "Welke x bij<br>deze f(x)?",
+              "x": 72,
+              "y": 65,
+              "number": 5
+            },
+            {
+              "key": "point_on_line",
+              "id": "point_on_line",
+              "name": "Ligt dit punt op de rechte?",
+              "label": "Punt op<br>de rechte?",
+              "x": 49,
+              "y": 65,
+              "number": 6
+            },
+            {
+              "key": "graph_from_table",
+              "id": "graph_from_table",
+              "name": "Rechte tekenen uit een tabel",
+              "label": "Rechte tekenen<br>uit tabel",
+              "x": 27,
+              "y": 65,
+              "number": 7
+            }
+          ]
+        }
+      ]
+    },
+    "formulewerf": {
+      "name": "Formulewerf",
+      "caption": "Voorschriften en representaties",
+      "intro": "Bouw je voorschrift. Verbind de vormen.",
+      "art": "formulewerf",
+      "zones": [
+        {
+          "id": "bouwen",
+          "name": "Voorschrift bouwen",
+          "nodes": [
+            {
+              "key": "equation_from_ab",
+              "id": "equation_from_ab",
+              "name": "Voorschrift uit a en b",
+              "label": "Voorschrift<br>uit a en b",
+              "x": 24,
+              "y": 25,
+              "number": 1
+            },
+            {
+              "key": "intercept_from_point",
+              "id": "intercept_from_point",
+              "name": "b bepalen uit helling en punt",
+              "label": "b uit helling<br>en punt",
+              "x": 50,
+              "y": 25,
+              "number": 2
+            },
+            {
+              "key": "equation_from_point_slope",
+              "id": "equation_from_point_slope",
+              "name": "Voorschrift uit helling en één punt",
+              "label": "Voorschrift uit<br>helling en punt",
+              "x": 76,
+              "y": 24,
+              "number": 3
+            },
+            {
+              "key": "equation_from_two_points",
+              "id": "equation_from_two_points",
+              "name": "Voorschrift uit twee punten",
+              "label": "Voorschrift uit<br>twee punten",
+              "x": 68,
+              "y": 68,
+              "number": 4
+            }
+          ]
+        },
+        {
+          "id": "omzetten",
+          "name": "Representaties omzetten",
+          "nodes": [
+            {
+              "key": "graph_from_equation",
+              "id": "graph_from_equation",
+              "name": "Rechte tekenen uit voorschrift",
+              "label": "Rechte uit<br>voorschrift",
+              "x": 24,
+              "y": 25,
+              "number": 5
+            },
+            {
+              "key": "equation_from_graph",
+              "id": "equation_from_graph",
+              "name": "Voorschrift uit grafiek",
+              "label": "Voorschrift<br>uit grafiek",
+              "x": 50,
+              "y": 25,
+              "number": 6
+            },
+            {
+              "key": "equation_from_table",
+              "id": "equation_from_table",
+              "name": "Voorschrift uit tabel",
+              "label": "Voorschrift<br>uit tabel",
+              "x": 76,
+              "y": 24,
+              "number": 7
+            },
+            {
+              "key": "equation_from_context",
+              "id": "equation_from_context",
+              "name": "Voorschrift uit context",
+              "label": "Voorschrift<br>uit context",
+              "x": 68,
+              "y": 68,
+              "number": 8
+            },
+            {
+              "key": "rewrite_linear_equation",
+              "id": "rewrite_linear_equation",
+              "name": "Vergelijking herschrijven / y vrijmaken",
+              "label": "Vergelijking<br>herschrijven",
+              "x": 32,
+              "y": 68,
+              "number": 9
+            }
+          ]
+        }
+      ]
+    },
+    "grenspas": {
+      "name": "Grenspas",
+      "caption": "Nulwaarden en tekens",
+      "intro": "Vind de grens. Ontdek het juiste gebied.",
+      "art": "grenspas",
+      "zones": [
+        {
+          "id": "route",
+          "name": "De grensroute",
+          "nodes": [
+            {
+              "key": "zeroRead",
+              "id": "zeroRead",
+              "name": "Nulwaarde aflezen",
+              "label": "Nulwaarde<br>aflezen",
+              "x": 28,
+              "y": 24,
+              "number": 1
+            },
+            {
+              "key": "zero",
+              "id": "zero",
+              "name": "Nulwaarde berekenen",
+              "label": "Nulwaarde<br>berekenen",
+              "x": 28,
+              "y": 70,
+              "number": 2
+            },
+            {
+              "key": "positive",
+              "id": "sign",
+              "name": "Wanneer is f(x) > 0?",
+              "label": "Wanneer is<br>f(x) &gt; 0?",
+              "x": 51,
+              "y": 47,
+              "variant": "positive",
+              "playable": true,
+              "number": 3
+            },
+            {
+              "key": "negative",
+              "id": "sign",
+              "name": "Wanneer is f(x) < 0?",
+              "label": "Wanneer is<br>f(x) &lt; 0?",
+              "x": 75,
+              "y": 25,
+              "variant": "negative",
+              "number": 4
+            },
+            {
+              "key": "signchart",
+              "id": "signchart",
+              "name": "Tekenschema",
+              "label": "Tekenschema",
+              "x": 82,
+              "y": 70,
+              "number": 5
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

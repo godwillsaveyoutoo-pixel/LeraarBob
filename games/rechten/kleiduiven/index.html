@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0c222a">
+<title>leraarBob · Kleiduifschieten · Samen spelen</title>
+<style>
+:root{
+  --ink:#e6eee7;--muted:#96adb1;--accent:#f3c47e;--good:#88d6b6;--bad:#d29679;
+  --field:#0c222a;--panel:#102b33;--top:64px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--field);color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+button,input{font:inherit}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+#app{height:100dvh;display:grid;grid-template-rows:var(--top) minmax(0,1fr);background:#0c222a}
+.topbar{
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;
+  padding:8px 22px;border-bottom:1px solid #6d909335;background:#0c222a;z-index:20
+}
+.brand{font-size:26px;font-weight:800;letter-spacing:-.04em;white-space:nowrap}
+.brand small{font-size:.44em;letter-spacing:.12em;color:#92aeb1;margin-left:10px;font-weight:650;text-transform:uppercase}
+.progress{display:flex;align-items:center;justify-content:center;gap:8px}
+.dot{width:24px;height:5px;border-radius:4px;background:#36535b;transition:.2s}
+.dot.current{background:#f3c47e;box-shadow:0 0 12px #f3c47e40}
+.dot.hit{background:#88d6b6}
+.dot.retry{background:#bc7b64}
+.hud{display:flex;align-items:center;gap:12px}
+.total{font-variant-numeric:tabular-nums;font-size:26px;font-weight:500;letter-spacing:-.035em;min-width:104px;text-align:right}
+.icon{height:38px;min-width:42px;border:1px solid #69878377;background:#ffffff03;color:#c6d8d2;border-radius:7px;cursor:pointer}
+.game{min-height:0;padding:18px 28px 20px;display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:26px}
+.arena{position:relative;display:grid;grid-template-rows:28px minmax(0,1fr) 34px;min-width:0;min-height:0}
+.fieldLabel{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.09em;color:#9cb5b8;padding:0 12px}
+.fieldLabel span:last-child{font-size:20px;letter-spacing:0;color:#c5d9d2;font-family:Georgia,serif}
+#field{width:100%;height:100%;display:block;overflow:hidden;touch-action:none}
+.caption{display:flex;align-items:center;gap:8px;font-size:12px;color:#b8cccd;min-width:0;padding-inline:12px}
+.liveDot{width:6px;height:6px;border-radius:50%;background:#a3d0ba;flex-shrink:0}
+.caption #reserve{font-size:11px;color:#769398;margin-left:auto;white-space:nowrap}
+.console{min-height:0;border-left:1px solid #5f82873b;padding:20px 0 0 26px;display:flex;flex-direction:column}
+.eyebrow{font-size:11px;letter-spacing:.13em;font-weight:650;color:#92aeb1;line-height:1.5}
+.question{font-size:42px;letter-spacing:-.04em;line-height:1.15;margin-top:14px}
+.question i{font-family:Georgia,serif;font-style:normal;color:#f3c47e;font-size:1.3em}
+.consoleTop p{font-size:14px;line-height:1.6;color:#a5bfc1;margin:10px 0 20px}
+.deadline{padding:12px 0 16px;border-top:1px solid #5f82873b}
+.deadline>span{font-size:10px;letter-spacing:.09em;color:#9ab1b6}
+#timer{display:block;text-align:left;font-size:29px;margin:7px 0 10px;font-variant-numeric:tabular-nums;color:#e4eae1}
+#timer.urgent{color:#f0ad85}
+.timeTrack{height:3px;border-radius:5px;overflow:hidden;background:#35515c}
+.timeTrack i{display:block;width:100%;height:100%;background:#c5d9b6;transform-origin:left;will-change:transform}
+#choices{display:flex;flex-direction:column;gap:10px;width:100%;flex:1;min-height:0;max-height:290px}
+.choice{
+  display:flex;justify-content:space-between;align-items:center;flex:1;min-height:54px;
+  border:1px solid #66858470;border-radius:9px;background:#ffffff05;color:#e4ece2;
+  font-size:35px;width:100%;padding:8px 20px;box-shadow:0 2px 0 #0002;
+  transition:background .15s,border-color .15s,transform .15s;cursor:pointer
+}
+.choice:hover:not(:disabled){background:#d2e5c212;border-color:#b2c8b5}
+.choice:active:not(:disabled){transform:scale(.98)}
+.choice:disabled{cursor:default;opacity:.42}
+.choice.correct{background:#43775b40;border-color:#97d3b2;color:#b8edc7;opacity:1}
+.choice.wrong{background:#9d5b4230;border-color:#d29679;color:#f1b89e;opacity:1}
+.choice.selected{border-color:#f3c47e;background:#f3c47e18;opacity:1}
+.choiceKey{font-size:11px;border:1px solid #96b7b333;border-radius:4px;color:#a2baba;width:24px;height:24px;display:grid;place-items:center}
+.consoleFoot{display:flex;justify-content:space-between;font-size:12px;color:#96b2b7;margin-top:auto;padding-top:18px;gap:12px}
+#teamLabel{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:145px}
+#attempts{white-space:nowrap}
+
+/* field */
+.outer{fill:none;stroke:#718e8945;stroke-width:2}
+.rim{fill:none;stroke:#82a09555;stroke-dasharray:2 12;stroke-width:3}
+.range{fill:none;stroke:#839f9229;stroke-width:1;stroke-dasharray:3 7}
+.axes{fill:none;stroke:#a5c1b080;stroke-width:1.4}
+.axisName{fill:#bcd4c4;font-size:22px;font-family:Georgia,serif}
+.corners{fill:none;stroke:#a6b99488;stroke-width:2}
+.tickLabel{fill:#b1c9c3;font-size:17px;text-anchor:middle;font-family:Georgia,serif}
+#wake{stroke:#efc684;stroke-width:3;stroke-linecap:round;opacity:.23;stroke-dasharray:2 6}
+#shotTrail{stroke:#ffe8b6;stroke-width:3;stroke-linecap:round;opacity:0;filter:drop-shadow(0 0 5px #f5bd72)}
+#projectile{fill:#fff3cc;opacity:0;filter:drop-shadow(0 0 5px #ffcf8b)}
+#target{opacity:1;transform-box:view-box;filter:none}
+.targetRing{fill:none;stroke:#f3c47e;stroke-width:1;stroke-dasharray:4 7;opacity:.65}
+#impact{fill:none;stroke:#fde4a1;stroke-width:3;opacity:0}
+#particles{pointer-events:none}
+#turretBarrel{transform-origin:500px 310px}
+#discSpin{transform-origin:center}
+#countdown{
+  position:absolute;inset:28px 0 34px 0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;
+  background:#0e2833b0;backdrop-filter:blur(5px);border-radius:18px;color:#f2dbad;z-index:4
+}
+#countdown[hidden]{display:none}
+#countdown>span{font-size:12px;letter-spacing:.2em}
+#countdown strong{font-size:120px;font-weight:400;line-height:1}
+#countdown small{font-size:16px;color:#c9d9cc}
+
+/* lobby/results */
+.overlay{position:absolute;inset:var(--top) 0 0;z-index:50;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 12% 48%,#254444 0%,#102b33 43%,#0c222a 75%);padding:42px 5%;overflow:auto}
+.overlay[hidden]{display:none}
+.battleLobby{width:min(960px,100%);display:grid;gap:18px;min-width:0}
+#lobby{padding:20px clamp(12px,3vw,36px)}
+.battleHeading h1{font-size:clamp(26px,3.4vw,40px);line-height:1.1;letter-spacing:-.035em;margin:0 0 8px;font-weight:650}
+.battleHeading p{margin:0;color:#b1c8c5;font-size:14px;line-height:1.5}
+.battleOptions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.battlePanel{min-width:0;padding:18px;border:1px solid #69878366;border-radius:12px;background:#ffffff03}
+.battlePanel h2{font-size:20px;margin:0 0 12px}.battlePanel .eyebrow{display:block;margin-bottom:8px}
+.tempo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.tempo button{min-height:56px;border:1px solid #69878377;background:#ffffff03;border-radius:7px;font-size:22px;color:#c6d8d2;padding:6px;cursor:pointer}
+.tempo button span{display:block;font-size:11px;margin-top:3px;color:#9eb7b7}
+.tempo button[aria-pressed=true]{border-color:#ecc58a;background:#f0c77b10;color:#f3d096}
+.battlePanel .primary{min-height:44px;padding:8px 12px;font-size:16px}
+.battlePanel button:disabled{opacity:.45;cursor:default}
+#lobbyGroupList{max-height:174px;overflow:auto;scrollbar-gutter:stable;font-size:13px;line-height:1.5}
+#lobbyGroupList p{margin:0;color:#b1c8c5}#lobbyGroupList a{color:#f3c47e}
+#lobbyGroupList .groupRow{padding:8px 0;gap:8px}#lobbyGroupList .groupRow div{min-width:0;overflow-wrap:anywhere}#lobbyGroupList button{flex-shrink:0}
+.battleFooter{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.battleFooter .utilityBtn{font-size:13px;min-height:40px}
+#lobbyMessage{margin:0;color:#f3c47e;font-size:13px}#lobbyMessage:empty{display:none}
+@media(max-width:540px){.battleOptions{grid-template-columns:1fr;gap:10px}.battleLobby{gap:12px}.battlePanel{padding:12px}.battlePanel h2{font-size:18px;margin-bottom:8px}#lobbyGroupList{max-height:110px}.battleHeading p{font-size:13px}}
+@media(max-height:500px){#lobby{padding:10px 14px}.battleLobby{gap:10px}.battleHeading h1{font-size:25px;margin-bottom:4px}.battleHeading p{font-size:12px}.battlePanel{padding:10px 12px}.battlePanel h2{font-size:17px;margin-bottom:6px}.battlePanel .eyebrow{margin-bottom:5px;font-size:10px}.tempo{margin-bottom:8px}.tempo button{min-height:44px;font-size:19px}.tempo button span{margin-top:0;font-size:10px}#lobbyGroupList{max-height:112px}}
+.fair{font-size:12px;color:#9bb4b6;line-height:1.75;margin:4px 0 8px}
+.primary{display:flex;justify-content:space-between;align-items:center;background:#edc78f;color:#173339;border:1px solid #ffdfaa;border-radius:7px;min-height:58px;font-size:18px;font-weight:600;padding:14px 18px;cursor:pointer;width:100%}
+.utilityBtn{border:1px solid #69878377;background:#ffffff03;color:#c6d8d2;border-radius:7px;min-height:42px;padding:8px 12px;cursor:pointer}
+.results{width:min(930px,94vw);display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.resultHero h2{font-size:clamp(40px,5vw,70px);letter-spacing:-.055em;line-height:1.02;margin:.25em 0}
+.finalTime{display:block;font-size:clamp(52px,7vw,104px);font-variant-numeric:tabular-nums;color:#f3c47e;letter-spacing:-.05em}
+.resultHero p{color:#a8c3c5;line-height:1.55}
+.resultActions{display:flex;gap:10px;flex-wrap:wrap}
+.timesPanel{border-left:1px solid #64868155;padding-left:30px;min-width:0}
+.timesPanel h3{font-size:24px;margin:6px 0 12px}
+.timesList{list-style:none;margin:0;padding:0;max-height:370px;overflow:auto}
+.timesList li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;padding:10px 0;border-bottom:1px solid #55727833;align-items:center}
+.timesList li>span{color:#78989d}.timesList li strong{font-variant-numeric:tabular-nums}
+.timesList small{display:block;color:#7f9ea2;margin-top:2px}
+.rotate{display:none;position:fixed;inset:0;z-index:100;background:#0c222a;place-items:center;text-align:center;padding:30px}
+.rotate strong{font-size:28px}.rotate p{color:#96adb1}
+@media(max-width:900px){
+ :root{--top:50px}.topbar{padding:5px 8px;gap:6px}.brand{font-size:21px}.brand small{display:none}.total{font-size:18px;min-width:75px}.icon{height:34px}
+ .game{padding:7px 10px 8px;grid-template-columns:minmax(0,1fr) 225px;gap:10px}.console{padding:7px 0 0 10px}
+ .question{font-size:29px;margin-top:4px}.consoleTop p{font-size:10px;margin:4px 0 6px}.deadline{padding:5px 0 7px}
+ #timer{font-size:22px;margin:3px 0 5px}.choice{min-height:42px;font-size:25px;padding:4px 12px}.choiceKey{width:20px;height:20px;font-size:9px}
+ .consoleFoot{font-size:10px;padding-top:6px}.fieldLabel{font-size:9px}.fieldLabel span:last-child{font-size:15px}.caption{font-size:9px}.caption #reserve{font-size:9px}
+
+}
+@media(max-height:430px){
+ .consoleTop p{display:none}.question{font-size:27px}.deadline{padding-top:3px}.choice{min-height:39px}.game{padding-top:4px}.fieldLabel{height:22px}.caption{height:24px}
+}
+@media(orientation:portrait) and (max-width:900px){.rotate{display:grid}body:has(#lobby:not([hidden])) .rotate{display:none}.overlay{align-items:flex-start}}
+
+.axiomaHome{color:inherit;text-decoration:none;cursor:pointer}
+.axiomaHome:hover{text-decoration:none;opacity:.78}
+.axiomaHome:focus-visible{outline:2px solid currentColor;outline-offset:5px;border-radius:4px}
+
+.topbar{grid-template-columns:auto minmax(0,1fr) auto auto}
+#groupMenu,#rankingMenu{padding:5px 9px;font-size:13px}
+#groupDialog,#rankingDialog{width:min(700px,calc(100vw - 28px));max-height:calc(100dvh - 28px);overflow:auto;margin:auto;border:1px solid #698783;border-radius:14px;padding:24px;background:#102b33;color:#e6eee7;font:15px/1.5 system-ui,sans-serif}
+#groupDialog::backdrop,#rankingDialog::backdrop{background:#061b26b8}.groupHead{display:flex;justify-content:space-between;align-items:start;gap:16px}.groupHead h2{font-size:25px;margin:0}.groupHead button{font-size:22px}
+.overlay{align-items:safe center}
+#groupMessage{color:#f3c47e;min-height:1.5em}#groupContent p{color:#b1c8c5}.groupRow{display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid #64868155;padding:12px 0}.groupRow small{display:block;color:#96adb1}.groupActions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:20px}.groupActions .primary{width:auto;min-height:42px;padding:8px 14px}.groupRank{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:28px;border-top:1px solid #64868155;padding-top:16px}
+#groupDialog select,#rankingDialog select{font:inherit;color:#e6eee7;background:#173b43;border:1px solid #698783;border-radius:6px;padding:7px}#groupDialog button:disabled{opacity:.45;cursor:default}#groupRankingContent table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}#groupRankingContent th,#groupRankingContent td{padding:10px 6px;border-bottom:1px solid #64868155;text-align:left}#groupRankingContent .me{color:#f3c47e;background:#f3c47e0b}
+#rankingDialog .groupRank{margin-top:16px}#rankingDialog p{color:#b1c8c5}#rankingDialog a{color:#f3c47e}#rankingLive{color:#f3c47e!important}#groupRankingContent td:nth-child(2){overflow-wrap:anywhere}#groupRankingContent td:last-child{white-space:nowrap}#groupRankingContent caption{text-align:left;color:#b1c8c5;padding:12px 0}
+@media(max-width:900px){.topbar .progress{gap:4px}.dot{width:16px}.hud{gap:5px}#groupDialog,#rankingDialog{padding:16px}.groupHead h2{font-size:21px}}
+@media(max-width:700px){.topbar{grid-template-columns:1fr auto auto}.topbar .progress{display:none}}
+@media(max-width:420px){#rankingDialog{padding:12px;font-size:13px}#groupRankingContent th,#groupRankingContent td{padding:10px 3px}}
+@media(orientation:portrait) and (max-width:900px){.topbar{grid-template-columns:1fr auto auto}.topbar .progress,.topbar .total,.topbar #mute,.topbar #restart{display:none}}
+</style>
+<script src="../../../shared/axioma-platform.js"></script>
+<script src="../../../shared/leraarbob-topbar.js" data-title="Kleiduifschieten" defer></script></head>
+<body>
+<div id="app">
+<header class="topbar">
+  <a class="brand axiomaHome" href="../../../" aria-label="Naar leraarBob startpagina">leraarBob <small>KLEIDUIVEN 01</small></a>
+  <div id="progress" class="progress" aria-label="Voortgang per richting"></div>
+  <div class="hud"><button id="groupMenu" class="icon" title="Groepssessies">Groep</button><button id="rankingMenu" class="icon" aria-haspopup="dialog">Ranglijst</button><strong id="total" class="total">00:00,00</strong><button id="mute" class="icon" aria-pressed="false" title="Geluid">♪</button><button id="restart" class="icon" title="Herstart">↻</button></div>
+</header>
+
+<main class="game">
+  <section class="arena">
+    <div class="fieldLabel"><span id="wave">SOLO · REEKS 1</span><span>y = ax · b = 0</span></div>
+    <svg id="field" viewBox="0 0 1000 620" aria-label="Assenstelsel met schutter in de oorsprong en een vliegende kleiduif">
+      <defs>
+        <radialGradient id="ground"><stop stop-color="#25484d"/><stop offset=".7" stop-color="#19363d"/><stop offset="1" stop-color="#102a32"/></radialGradient>
+        <radialGradient id="disc"><stop stop-color="#ffdfa0"/><stop offset=".65" stop-color="#efa54f"/><stop offset="1" stop-color="#b66b2e"/></radialGradient>
+        <pattern id="grid" width="70" height="70" patternUnits="userSpaceOnUse" x="500" y="310"><path d="M70 0H0V70" fill="none" stroke="#7fb5b5" stroke-opacity=".12" stroke-width="1"/></pattern>
+        <filter id="shadow" x="-100%" y="-100%" width="300%" height="300%"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-opacity=".5"/></filter>
+        <clipPath id="boundary"><rect x="55" y="30" width="890" height="560" rx="30"/></clipPath>
+      </defs>
+      <g clip-path="url(#boundary)">
+        <rect x="55" y="30" width="890" height="560" rx="30" fill="url(#ground)"/>
+        <rect x="55" y="30" width="890" height="560" fill="url(#grid)"/>
+        <circle cx="500" cy="310" r="247" class="outer"/><circle cx="500" cy="310" r="253" class="rim"/>
+        <g id="rangeMarks"></g>
+        <circle cx="500" cy="310" r="140" class="range"/><circle cx="500" cy="310" r="70" class="range"/>
+        <path d="M85 310H915M500 48V573" class="axes"/>
+        <path d="m906 304 9 6-9 6M494 57l6-9 6 9" class="axes"/>
+        <g id="ticks"></g><text x="924" y="317" class="axisName">x</text><text x="513" y="57" class="axisName">y</text>
+        <path d="M70 65V45h28M930 65V45h-28M70 555v20h28M930 555v20h-28" class="corners"/>
+        <circle id="approachRing" cx="500" cy="310" r="230" fill="none" stroke="#9bb5aa" stroke-width="1.5" stroke-dasharray="4 10" opacity=".18"/>
+        <line id="wake" x1="500" y1="310" x2="500" y2="310"/>
+        <line id="shotTrail" x1="500" y1="310" x2="500" y2="310"/>
+        <circle id="projectile" cx="500" cy="310" r="5"/>
+        <g id="target" transform="translate(660 150)">
+          <ellipse cy="9" rx="21" ry="15" fill="#071a24" opacity=".4"/>
+          <g id="discSpin"><circle r="19" fill="url(#disc)" stroke="#ffe5ab" stroke-width="2"/><circle r="12" fill="none" stroke="#955b29" stroke-width="1.5"/><circle r="5" fill="#ffe0a0"/><path d="M-16 0h5M11 0h5M0-16v5M0 11v5" stroke="#ffeaca" stroke-width="2"/></g>
+          <circle r="27" class="targetRing"/>
+        </g>
+        <g id="turret" filter="url(#shadow)">
+          <circle cx="500" cy="310" r="32" fill="#10242b" stroke="#617b7d" stroke-width="2"/>
+          <circle cx="500" cy="310" r="25" fill="#203f45" stroke="#9dbbb7" stroke-width="1.5"/>
+          <g id="turretBarrel" transform="rotate(-45 500 310)">
+            <rect x="499" y="300" width="51" height="20" rx="5" fill="#8ca9a4" stroke="#cadbd2" stroke-width="1.5"/>
+            <rect x="527" y="304" width="24" height="12" rx="2" fill="#3e5e61"/>
+            <path d="M540 304v12" stroke="#cfdfd5" stroke-width="2"/>
+          </g>
+          <circle cx="500" cy="310" r="13" fill="#b7cfc0"/><circle cx="500" cy="310" r="6" fill="#e7eaca"/>
+        </g>
+        <g id="particles"></g><circle id="impact" cx="500" cy="310" r="10"/>
+      </g>
+    </svg>
+    <div class="caption"><span class="liveDot"></span><span id="status">Kies de juiste helling en raak de kleiduif.</span><span id="reserve">7 richtingen</span></div>
+    <div id="countdown" hidden><span>STA KLAAR</span><strong id="countNum">3</strong><small>Kies de juiste helling.</small></div>
+  </section>
+
+  <aside class="console">
+    <div class="consoleTop"><span class="eyebrow">KIES & VUUR</span><div class="question">Welke <i>a</i>?</div><p>Lees de richting van links naar rechts.</p></div>
+    <div class="deadline"><span>TIJD VOOR DIT DOEL</span><strong id="timer">5,0 s</strong><div class="timeTrack"><i id="timeFill"></i></div></div>
+    <div id="choices" aria-label="Kies de richtingscoëfficiënt en vuur"></div>
+    <div class="consoleFoot"><span id="teamLabel">Jij</span><span id="attempts">0 missers</span></div>
+  </aside>
+</main>
+
+<div id="lobby" class="overlay">
+  <div class="battleLobby">
+    <header class="battleHeading"><h1>Kleiduifschieten</h1><p>Speel tegen elkaar: wie het eerst <strong>7 juiste antwoorden op rij</strong> geeft, wint. Een misser? Terug naar nul.</p></header>
+    <div class="battleOptions">
+      <section class="battlePanel" aria-labelledby="createBattleTitle">
+        <h2 id="createBattleTitle">Groep maken</h2>
+        <span id="tempoLabel" class="eyebrow">Tijd per doel · voor iedereen gelijk</span>
+        <div class="tempo" role="group" aria-labelledby="tempoLabel"><button data-speed="8" aria-pressed="false">8 s<span>Rustig</span></button><button data-speed="5" aria-pressed="true">5 s<span>Vlot</span></button><button data-speed="3" aria-pressed="false">3 s<span>Snel</span></button></div>
+        <button id="openGroup" class="primary" disabled>Groep maken <span aria-hidden="true">→</span></button>
+      </section>
+      <section class="battlePanel" aria-labelledby="joinBattleTitle"><h2 id="joinBattleTitle">Meedoen</h2><div id="lobbyGroupList">Groepen laden…</div></section>
+    </div>
+    <p id="lobbyMessage" role="status"></p>
+    <footer class="battleFooter"><button id="start" class="utilityBtn" title="Oefen de richtingen op het gekozen tempo, met herkansingen">Solo oefenen</button><button id="lobbyRanking" class="utilityBtn">Ranglijst</button><button id="lobbyMute" class="utilityBtn">Geluid aan</button></footer>
+  </div>
+</div>
+
+<div id="results" class="overlay" hidden>
+  <div class="results">
+    <div class="resultHero"><span class="eyebrow">SOLO VOLTOOID · 7 / 7</span><h2 id="resultName">Alles geraakt.</h2><strong id="finalTime" class="finalTime">00:00,00</strong><p id="resultStats"></p><p>Totaaltijd van het eerste doel tot de laatste treffer. Inclusief missers en herkansingen.</p><div class="resultActions"><button id="again" class="primary">Opnieuw oefenen <span>↗</span></button><button id="backLobby" class="utilityBtn">Terug</button></div></div>
+    <div class="timesPanel"><span class="eyebrow">SOLO · JOUW TIJDEN</span><h3 id="timesTitle">Oefentijden · 5 seconden</h3><ol id="timesList" class="timesList"></ol><p class="fair" id="storageNote"></p></div>
+  </div>
+</div>
+
+<div class="rotate"><div><strong>Draai je toestel.</strong><p>Kleiduifschieten gebruikt een landscape speelveld.</p></div></div>
+</div>
+<dialog id="groupDialog" aria-labelledby="groupTitle">
+  <div class="groupHead"><h2 id="groupTitle">Kleiduifschieten in groep</h2><button id="groupClose" class="utilityBtn" aria-label="Sluiten">×</button></div>
+  <p id="groupMessage" role="status"></p>
+  <div id="groupContent"></div>
+  <div class="groupRank"><button id="groupRanking" class="utilityBtn" aria-haspopup="dialog">Ranglijst bekijken</button></div>
+</dialog>
+<dialog id="rankingDialog" aria-labelledby="rankingTitle">
+  <div class="groupHead"><h2 id="rankingTitle">Ranglijst · Kleiduifschieten</h2><button id="rankingClose" class="utilityBtn" aria-label="Ranglijst sluiten">×</button></div>
+  <p>Groepswedstrijden: de meeste overwinningen staan bovenaan. Bij een gelijk aantal beslist de beste winnende tijd.</p>
+  <p id="rankingLive" hidden>De wedstrijd en de timer lopen door terwijl je de ranglijst bekijkt.</p>
+  <div class="groupRank"><label for="groupRankSpeed">Tijd per doel</label><select id="groupRankSpeed"><option value="3">3 seconden</option><option value="5" selected>5 seconden</option><option value="8">8 seconden</option></select></div>
+  <div id="groupRankingContent" aria-live="polite"></div>
+  <p class="fair">Solo oefenen heeft eigen oefentijden. Die zie je na je oefenreeks.</p>
+</dialog>
+<script src="../../../shared/vendor/supabase.js"></script>
+<script src="../../../shared/supabase-config.js"></script>
+<script src="../../../shared/axioma-auth.js"></script>
+<script src="../../../shared/axioma-social.js"></script>
+<script src="../../../shared/axioma-progress.js"></script>
+<script src="../../../shared/axioma-clay-questions.js"></script>
+<script type="text/axioma-game" data-src="kleiduiven.js"></script>
+<script src="../../../shared/axioma-game-adapters.js"></script>
+<script src="../../../shared/axioma-game.js" data-game-id="kleiduifschieten"></script>
+</body>
+</html>

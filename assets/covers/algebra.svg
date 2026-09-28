@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" fill="none">
+  <defs><pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" stroke="#405040" stroke-opacity=".05"/></pattern></defs>
+  <rect width="600" height="300" fill="#f4e9de"/><rect width="600" height="300" fill="url(#grid)"/>
+  <circle cx="305" cy="143" r="108" fill="#ecd7c2"/>
+  <g font-family="Georgia,serif">
+  <path d="M98 253h410" stroke="#c7b6a4" stroke-width="2"/>
+  <path d="M191 159h224l-25 24h-59v24l25 30H218l25-30v-24h-22Z" fill="#968574"/>
+  <path d="M191 159h224l-10 10H201Z" fill="#b9a38a"/><rect x="212" y="236" width="152" height="17" rx="4" fill="#a89179"/>
+  <g transform="rotate(32 327 110)"><rect x="320" y="63" width="14" height="91" rx="5" fill="#9c6243"/><rect x="295" y="50" width="64" height="30" rx="6" fill="#7f8274"/><path d="M307 54v22" stroke="#b6b8a8" stroke-width="3"/></g>
+  <path d="m279 128-8-11m16 6 1-14m-22 26-13-3" stroke="#c7964e" stroke-width="3" stroke-linecap="round"/>
+  <g font-style="italic">
+    <g transform="translate(143 62) rotate(-6)"><rect width="110" height="45" rx="10" fill="#faf5eb"/><text x="19" y="30" fill="#9c6243" font-size="25">x² − 9</text></g>
+    <g transform="translate(331 199) rotate(-5)"><rect width="165" height="43" rx="10" fill="#faf5eb"/><text x="15" y="28" fill="#9c6243" font-size="21">(x − 3)(x + 3)</text></g>
+  </g>
+  <path d="M131 140c-12 31-7 60 23 77m-13-2 13 2-4-13" stroke="#b69d7f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 5"/>
+  </g>
+</svg>

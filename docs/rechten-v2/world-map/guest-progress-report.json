@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "all islands; 2 completed stops and 1 ongoing round from real guest evidence",
+    "guest profile, journal, all 5 expandable/scrollable islands: 320x568",
+    "guest profile, journal, all 5 expandable/scrollable islands: 390x844",
+    "guest profile, journal, all 5 expandable/scrollable islands: 640x360",
+    "guest profile, journal, all 5 expandable/scrollable islands: 672x378",
+    "guest profile, journal, all 5 expandable/scrollable islands: 844x390",
+    "guest profile, journal, all 5 expandable/scrollable islands: 1024x768",
+    "guest profile, journal, all 5 expandable/scrollable islands: 1366x768",
+    "keyboard disclosure; resume exact task/draft and completed evidence; guest reload unchanged"
+  ],
+  "passed": true
+}

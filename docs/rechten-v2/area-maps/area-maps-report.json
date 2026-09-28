@@ -1,0 +1,331 @@
+{
+  "checks": [
+    "world 1920x1080 @0.8",
+    "puntenbaai/route 1920x1080 @0.8",
+    "hellingrug/route 1920x1080 @0.8",
+    "signaalstad/route 1920x1080 @0.8",
+    "formulewerf/bouwen 1920x1080 @0.8",
+    "formulewerf/omzetten 1920x1080 @0.8",
+    "grenspas/route 1920x1080 @0.8",
+    "world 1920x1080 @1",
+    "puntenbaai/route 1920x1080 @1",
+    "hellingrug/route 1920x1080 @1",
+    "signaalstad/route 1920x1080 @1",
+    "formulewerf/bouwen 1920x1080 @1",
+    "formulewerf/omzetten 1920x1080 @1",
+    "grenspas/route 1920x1080 @1",
+    "world 1920x1080 @1.25",
+    "puntenbaai/route 1920x1080 @1.25",
+    "hellingrug/route 1920x1080 @1.25",
+    "signaalstad/route 1920x1080 @1.25",
+    "formulewerf/bouwen 1920x1080 @1.25",
+    "formulewerf/omzetten 1920x1080 @1.25",
+    "grenspas/route 1920x1080 @1.25",
+    "world 1366x768 @0.8",
+    "puntenbaai/route 1366x768 @0.8",
+    "hellingrug/route 1366x768 @0.8",
+    "signaalstad/route 1366x768 @0.8",
+    "formulewerf/bouwen 1366x768 @0.8",
+    "formulewerf/omzetten 1366x768 @0.8",
+    "grenspas/route 1366x768 @0.8",
+    "world 1366x768 @1",
+    "puntenbaai/route 1366x768 @1",
+    "hellingrug/route 1366x768 @1",
+    "signaalstad/route 1366x768 @1",
+    "formulewerf/bouwen 1366x768 @1",
+    "formulewerf/omzetten 1366x768 @1",
+    "grenspas/route 1366x768 @1",
+    "world 1366x768 @1.25",
+    "puntenbaai/route 1366x768 @1.25",
+    "hellingrug/route 1366x768 @1.25",
+    "signaalstad/route 1366x768 @1.25",
+    "formulewerf/bouwen 1366x768 @1.25",
+    "formulewerf/omzetten 1366x768 @1.25",
+    "grenspas/route 1366x768 @1.25",
+    "world 1024x768 @0.8",
+    "puntenbaai/route 1024x768 @0.8",
+    "hellingrug/route 1024x768 @0.8",
+    "signaalstad/route 1024x768 @0.8",
+    "formulewerf/bouwen 1024x768 @0.8",
+    "formulewerf/omzetten 1024x768 @0.8",
+    "grenspas/route 1024x768 @0.8",
+    "world 1024x768 @1",
+    "puntenbaai/route 1024x768 @1",
+    "hellingrug/route 1024x768 @1",
+    "signaalstad/route 1024x768 @1",
+    "formulewerf/bouwen 1024x768 @1",
+    "formulewerf/omzetten 1024x768 @1",
+    "grenspas/route 1024x768 @1",
+    "world 1024x768 @1.25",
+    "puntenbaai/route 1024x768 @1.25",
+    "hellingrug/route 1024x768 @1.25",
+    "signaalstad/route 1024x768 @1.25",
+    "formulewerf/bouwen 1024x768 @1.25",
+    "formulewerf/omzetten 1024x768 @1.25",
+    "grenspas/route 1024x768 @1.25",
+    "world 780x360 @0.8",
+    "puntenbaai/route 780x360 @0.8",
+    "hellingrug/route 780x360 @0.8",
+    "signaalstad/route 780x360 @0.8",
+    "formulewerf/bouwen 780x360 @0.8",
+    "formulewerf/omzetten 780x360 @0.8",
+    "grenspas/route 780x360 @0.8",
+    "world 780x360 @1",
+    "puntenbaai/route 780x360 @1",
+    "hellingrug/route 780x360 @1",
+    "signaalstad/route 780x360 @1",
+    "formulewerf/bouwen 780x360 @1",
+    "formulewerf/omzetten 780x360 @1",
+    "grenspas/route 780x360 @1",
+    "world 780x360 @1.25",
+    "puntenbaai/route 780x360 @1.25",
+    "hellingrug/route 780x360 @1.25",
+    "signaalstad/route 780x360 @1.25",
+    "formulewerf/bouwen 780x360 @1.25",
+    "formulewerf/omzetten 780x360 @1.25",
+    "grenspas/route 780x360 @1.25",
+    "world 640x360 @0.8",
+    "puntenbaai/route 640x360 @0.8",
+    "hellingrug/route 640x360 @0.8",
+    "signaalstad/route 640x360 @0.8",
+    "formulewerf/bouwen 640x360 @0.8",
+    "formulewerf/omzetten 640x360 @0.8",
+    "grenspas/route 640x360 @0.8",
+    "world 640x360 @1",
+    "puntenbaai/route 640x360 @1",
+    "hellingrug/route 640x360 @1",
+    "signaalstad/route 640x360 @1",
+    "formulewerf/bouwen 640x360 @1",
+    "formulewerf/omzetten 640x360 @1",
+    "grenspas/route 640x360 @1",
+    "world 640x360 @1.25",
+    "puntenbaai/route 640x360 @1.25",
+    "hellingrug/route 640x360 @1.25",
+    "signaalstad/route 640x360 @1.25",
+    "formulewerf/bouwen 640x360 @1.25",
+    "formulewerf/omzetten 640x360 @1.25",
+    "grenspas/route 640x360 @1.25",
+    "recommended puntenbaai/point 640x360 @1.25",
+    "recommended puntenbaai/point_plot 640x360 @1.25",
+    "recommended hellingrug/delta 640x360 @1.25",
+    "recommended hellingrug/slope 640x360 @1.25",
+    "recommended hellingrug/slope_from_two_points 640x360 @1.25",
+    "recommended hellingrug/line_behavior 640x360 @1.25",
+    "recommended hellingrug/special_lines 640x360 @1.25",
+    "recommended signaalstad/intercept 640x360 @1.25",
+    "recommended signaalstad/ab 640x360 @1.25",
+    "recommended signaalstad/fx 640x360 @1.25",
+    "recommended signaalstad/table 640x360 @1.25",
+    "recommended signaalstad/input_from_output 640x360 @1.25",
+    "recommended signaalstad/point_on_line 640x360 @1.25",
+    "recommended signaalstad/graph_from_table 640x360 @1.25",
+    "recommended formulewerf/equation_from_ab 640x360 @1.25",
+    "recommended formulewerf/intercept_from_point 640x360 @1.25",
+    "recommended formulewerf/equation_from_point_slope 640x360 @1.25",
+    "recommended formulewerf/equation_from_two_points 640x360 @1.25",
+    "recommended formulewerf/graph_from_equation 640x360 @1.25",
+    "recommended formulewerf/equation_from_graph 640x360 @1.25",
+    "recommended formulewerf/equation_from_table 640x360 @1.25",
+    "recommended formulewerf/equation_from_context 640x360 @1.25",
+    "recommended formulewerf/rewrite_linear_equation 640x360 @1.25",
+    "recommended grenspas/zeroRead 640x360 @1.25",
+    "recommended grenspas/zero 640x360 @1.25",
+    "recommended grenspas/positive 640x360 @1.25",
+    "recommended grenspas/negative 640x360 @1.25",
+    "recommended grenspas/signchart 640x360 @1.25",
+    "stop puntenbaai/point",
+    "stop puntenbaai/point_plot",
+    "stop hellingrug/delta",
+    "stop hellingrug/slope",
+    "stop hellingrug/slope_from_two_points",
+    "stop hellingrug/line_behavior",
+    "stop hellingrug/special_lines",
+    "stop signaalstad/intercept",
+    "stop signaalstad/ab",
+    "stop signaalstad/fx",
+    "stop signaalstad/table",
+    "stop signaalstad/input_from_output",
+    "stop signaalstad/point_on_line",
+    "stop signaalstad/graph_from_table",
+    "stop formulewerf/equation_from_ab",
+    "stop formulewerf/intercept_from_point",
+    "stop formulewerf/equation_from_point_slope",
+    "stop formulewerf/equation_from_two_points",
+    "stop formulewerf/graph_from_equation",
+    "stop formulewerf/equation_from_graph",
+    "stop formulewerf/equation_from_table",
+    "stop formulewerf/equation_from_context",
+    "stop formulewerf/rewrite_linear_equation",
+    "stop grenspas/zeroRead",
+    "stop grenspas/zero",
+    "stop grenspas/negative",
+    "stop grenspas/signchart"
+  ],
+  "screenshots": [
+    "screenshots/puntenbaai-1366x768.png",
+    "screenshots/hellingrug-1366x768.png",
+    "screenshots/signaalstad-1366x768.png",
+    "screenshots/formulewerf-bouwen-1366x768.png",
+    "screenshots/formulewerf-omzetten-1366x768.png",
+    "screenshots/grenspas-1366x768.png",
+    "screenshots/puntenbaai-780x360.png",
+    "screenshots/hellingrug-780x360.png",
+    "screenshots/signaalstad-780x360.png",
+    "screenshots/formulewerf-bouwen-780x360.png",
+    "screenshots/formulewerf-omzetten-780x360.png",
+    "screenshots/grenspas-780x360.png"
+  ],
+  "passed": true,
+  "matrix": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "zoom": 0.8,
+      "viewport": {
+        "width": 2400,
+        "height": 1350,
+        "dpr": 0.800000011920929
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "zoom": 1,
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "zoom": 1.25,
+      "viewport": {
+        "width": 1536,
+        "height": 864,
+        "dpr": 1.25
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "zoom": 0.8,
+      "viewport": {
+        "width": 1707,
+        "height": 960,
+        "dpr": 0.800000011920929
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "zoom": 1,
+      "viewport": {
+        "width": 1366,
+        "height": 768,
+        "dpr": 1
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "zoom": 1.25,
+      "viewport": {
+        "width": 1093,
+        "height": 614,
+        "dpr": 1.25
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "zoom": 0.8,
+      "viewport": {
+        "width": 1280,
+        "height": 960,
+        "dpr": 0.800000011920929
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "zoom": 1,
+      "viewport": {
+        "width": 1024,
+        "height": 768,
+        "dpr": 1
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "zoom": 1.25,
+      "viewport": {
+        "width": 819,
+        "height": 614,
+        "dpr": 1.25
+      }
+    },
+    {
+      "width": 780,
+      "height": 360,
+      "zoom": 0.8,
+      "viewport": {
+        "width": 975,
+        "height": 450,
+        "dpr": 0.800000011920929
+      }
+    },
+    {
+      "width": 780,
+      "height": 360,
+      "zoom": 1,
+      "viewport": {
+        "width": 780,
+        "height": 360,
+        "dpr": 1
+      }
+    },
+    {
+      "width": 780,
+      "height": 360,
+      "zoom": 1.25,
+      "viewport": {
+        "width": 624,
+        "height": 288,
+        "dpr": 1.25
+      }
+    },
+    {
+      "width": 640,
+      "height": 360,
+      "zoom": 0.8,
+      "viewport": {
+        "width": 800,
+        "height": 450,
+        "dpr": 0.800000011920929
+      }
+    },
+    {
+      "width": 640,
+      "height": 360,
+      "zoom": 1,
+      "viewport": {
+        "width": 640,
+        "height": 360,
+        "dpr": 1
+      }
+    },
+    {
+      "width": 640,
+      "height": 360,
+      "zoom": 1.25,
+      "viewport": {
+        "width": 512,
+        "height": 288,
+        "dpr": 1.25
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" fill="none">
+<title>Robotarm: vectoren ontbinden en combineren</title>
+<defs><linearGradient id="metal" x1="60" y1="40" x2="170" y2="160" gradientUnits="userSpaceOnUse"><stop stop-color="#5681a7"/><stop offset=".48" stop-color="#183957"/><stop offset="1" stop-color="#0a203b"/></linearGradient><linearGradient id="glass" x1="90" y1="25" x2="160" y2="135" gradientUnits="userSpaceOnUse"><stop stop-color="#f17bdc" stop-opacity=".3"/><stop offset="1" stop-color="#102644" stop-opacity=".94"/></linearGradient><radialGradient id="light"><stop stop-color="#f17bdc" stop-opacity=".4"/><stop offset="1" stop-color="#f17bdc" stop-opacity="0"/></radialGradient></defs>
+<ellipse cx="120" cy="151" rx="99" ry="25" fill="#020a1a" fill-opacity=".65"/>
+<ellipse cx="120" cy="145" rx="100" ry="34" fill="url(#light)"/>
+<path d="M46 138L119 114L195 138V150L120 174L46 150Z" fill="#0b2138" stroke="#6b8dac" stroke-width="2"/>
+<path d="M46 138L119 114L195 138L120 163Z" fill="url(#metal)" stroke="#7ca7c8" stroke-width="2"/>
+<path d="M59 142L120 161L182 142M120 164V173" stroke="#f17bdc" stroke-width="2"/>
+
+<path d="M59 137V124Q77 113 96 124V138Q77 149 59 137Z" fill="url(#metal)" stroke="#8badca" stroke-width="2"/>
+<path d="M74 127L69 92L107 57L119 69L87 100L90 127" fill="url(#metal)" stroke="#a0bdd4" stroke-width="3" stroke-linejoin="round"/>
+<path d="M113 59L159 85L151 99L107 73Z" fill="url(#metal)" stroke="#a0bdd4" stroke-width="3"/>
+<circle cx="79" cy="98" r="11" fill="#122c48" stroke="#f17bdc" stroke-width="3"/><circle cx="113" cy="66" r="10" fill="#122c48" stroke="#f17bdc" stroke-width="3"/>
+<circle cx="155" cy="91" r="8" fill="#122c48" stroke="#f7d17b" stroke-width="3"/>
+<path d="M157 97L170 107L180 101M151 99L151 116L163 120" stroke="#a6c9df" stroke-width="5" stroke-linecap="round"/>
+<path d="M105 128H194V41" stroke="#f17bdc" stroke-width="2.5" stroke-dasharray="5 5"/><path d="M105 128L189 46" stroke="#71e2b5" stroke-width="4"/><path d="M195 40L180 46L189 55Z" fill="#71e2b5"/>
+<path d="M183 128L192 122L183 116M194 42L188 51M194 42L200 51" stroke="#f17bdc" stroke-width="2"/>
+<circle cx="105" cy="128" r="4" fill="#fff0cc"/>
+
+</svg>

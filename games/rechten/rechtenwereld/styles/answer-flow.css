@@ -1,0 +1,15 @@
+/* Reuse the disabled hint's space during positive feedback; keep the familiar
+   Next button available for learners who want to continue immediately. */
+.feedback-bubble .flow-pause {background:#eaf4ec;border-color:#8cad9a;color:#286e53}
+.flow-pause svg {width:21px;height:21px}
+.feedback .flow-note {font-size:.82em;color:#4c7460;white-space:normal}
+.practice-settings {display:flex;flex-wrap:wrap;justify-content:center;gap:4px 24px;grid-column:1/-1}
+.profile-paper .practice-settings .motion-setting {margin-top:12px;text-align:left}
+@media(max-height:550px) and (orientation:landscape) {
+ .profile-paper .practice-settings {gap:0 16px}
+ .profile-paper .practice-settings .motion-setting {margin-top:4px;font-size:12px}
+}
+@media(forced-colors:active) {
+ .feedback-bubble .flow-pause {background:ButtonFace;color:ButtonText}
+ .feedback .flow-note {color:CanvasText}
+}

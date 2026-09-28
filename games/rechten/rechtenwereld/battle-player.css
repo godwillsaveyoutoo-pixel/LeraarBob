@@ -1,0 +1,22 @@
+/* Isolated native exercises: no duplicate account bar, no forced rotation. */
+html,body.battle-player{height:100%;overflow:hidden}
+.battle-player #app{height:100dvh;min-height:0;--header-height:0px;--lb-header-height:0px}
+.battle-player :is(.atlas-header,#rotateGate,.reminder-paper,#hint,#pause,.points-progress,.graph-paper-caption,.mission-name,.point-direction,.point-instruction){display:none!important}
+.battle-player :is(.boundary-mission,.mission-shell){display:grid!important;height:100dvh;grid-template-rows:minmax(0,1fr) 50px;min-width:0}
+.battle-player .boundary-workspace{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(160px,.8fr);gap:10px;padding:8px;min-height:0}
+.battle-player .graph-paper{padding:4px;max-height:none;transform:none;border-radius:0}
+.battle-player .graph-paper:before,.battle-player .boundary-mission:after{display:none}
+.battle-player .answer-tray{min-width:0;max-width:none;gap:8px;overflow:auto;max-height:100%;padding:4px}
+.battle-player .exercise-heading h1{font-size:clamp(18px,2.8vw,26px);line-height:1.18;margin:0}
+.battle-player .exercise-heading{padding:0;margin:0}
+.battle-player .point-options{gap:8px}
+.battle-player .point-options button{min-height:44px;padding:3px;font-size:23px;border-radius:0}
+.battle-player .point-response{font-size:20px;min-height:44px;padding:4px;border-radius:0}
+.battle-player .boundary-footer{display:flex!important;min-height:0;height:50px;padding:3px 8px;gap:8px}
+.battle-player .boundary-footer .feedback-bubble{flex:1;min-width:0;overflow:hidden}
+.battle-player .boundary-footer .feedback{font:12px/1.2 system-ui}
+.battle-player button{border-radius:0;min-height:44px}
+.battle-player #commit{min-height:44px;min-width:90px;padding:4px 10px;font-size:18px}
+#battleStatus:empty{display:none}#battleStatus{position:fixed;z-index:50;bottom:4px;left:4px;right:4px;padding:12px;margin:0;background:#faf7ee;color:#254738;border:1px solid #729881;font:14px system-ui;text-align:center}
+@media(max-width:500px) and (min-height:450px){.battle-player .boundary-workspace{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(150px,1fr) auto;gap:6px}.battle-player .answer-tray{max-height:35dvh}.battle-player .exercise-heading h1{font-size:20px}}
+@media(max-width:500px) and (max-height:449px){.battle-player .boundary-workspace{grid-template-columns:minmax(0,1fr) minmax(144px,.85fr);padding:4px;gap:4px}.battle-player .exercise-heading h1{font-size:16px}.battle-player .point-options{gap:4px}.battle-player .point-options button{font-size:18px}.battle-player .boundary-footer .feedback-bubble{display:none}.battle-player #commit{margin-left:auto}}

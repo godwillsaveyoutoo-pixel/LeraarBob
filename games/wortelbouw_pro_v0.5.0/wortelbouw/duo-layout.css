@@ -1,0 +1,16 @@
+/* The existing simultaneous build game also fits a portrait device. */
+.arenaUndo{width:44px;height:44px;border-radius:0}
+#nextRoundButton,.setupCard,.setupCard input,.setupCard select,#startBattleButton,.setupRules span{border-radius:0}
+#nextRoundButton{top:50%;bottom:auto;transform:translate(-50%,-50%);max-width:calc(100% - 24px)}
+#battleSetup{max-width:calc(100vw - 20px);max-height:calc(100dvh - 20px);overflow:auto}
+@media(orientation:portrait){
+ body:has(#battleApp):before{display:none}
+ #battleStage{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) 6px minmax(0,1fr)}
+ .gardenDivider{width:100%;height:6px}
+ #battleInfo{grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:60px;gap:2px;padding:3px 8px}
+ #roundMessage{grid-column:1/-1;grid-row:1;justify-content:center}
+ .playerTag{grid-row:2;gap:4px}.playerTag strong{font-size:15px}.scoreDots{font-size:8px;letter-spacing:0}
+ #battleStage,body.topbar-collapsed #battleStage{top:calc(var(--lb-header-height,0px) + 60px)}
+ body.topbar-collapsed #battleInfo{height:60px;padding-right:56px}
+ .nameGrid,.setupOptions{gap:8px;padding-inline:12px}.setupActions{padding-inline:12px;flex-wrap:wrap}
+}

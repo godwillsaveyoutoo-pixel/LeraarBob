@@ -1,0 +1,183 @@
+/* World overview only. Islands remain individual controls on a responsive stage;
+   the painted backdrop carries no labels or navigation. */
+.world-page{position:relative;isolation:isolate;background:#60b9d0}
+.world-page::before{content:"";position:absolute;inset:var(--header-height) 0 0;z-index:-1;background:linear-gradient(#def3ed24,#b2e4e012),url('../assets/world-ocean.webp') center center/cover no-repeat;pointer-events:none}
+.world-page .sea-atmosphere{background:radial-gradient(ellipse at 13% 16%,#d5f0eee6,transparent 37%)}
+.world-page .sea-atmosphere::after,.world-page .horizon{display:none}
+.world-page .atlas-header{border-bottom:0;box-shadow:0 3px 9px #193f491f}
+.world-page .atlas-header::after{content:"";position:absolute;inset:auto 0 -4px;height:5px;background:#f8f7ee var(--paper-texture);clip-path:polygon(0 0,100% 0,100% 40%,97% 80%,94% 30%,90% 70%,85% 40%,80% 90%,74% 40%,69% 70%,62% 30%,55% 90%,48% 30%,42% 65%,35% 20%,28% 80%,22% 40%,15% 80%,9% 30%,4% 70%,0 45%)}
+.world-page .atlas-main{overflow:hidden}
+.world-page .map-intro{top:clamp(20px,4vh,45px);left:3.5%;max-width:34%;text-shadow:0 1px 12px #d8f1ea}
+.world-page .map-intro .tape-label{padding:6px 20px;font-size:clamp(14px,1.6vw,24px);border-color:#c5af7b;background:#faedc9 var(--paper-texture);box-shadow:1px 3px 5px #1d53652b;transform:rotate(-6deg)}
+.world-page .map-intro h1{font-size:clamp(40px,5.5vw,88px);line-height:1.03;margin-top:12px;color:#092f46;white-space:nowrap}
+/* Programmatic heading focus announces the destination without drawing a box
+   around the title. Keyboard focus on every interactive control stays visible. */
+.world-page #world-title:focus{outline:none}
+.world-page .map-intro h1::after{height:4px;width:88%;margin:8px 0 15px;transform:rotate(-2deg);background:#246c8d}
+.world-page .map-intro p{font-size:clamp(20px,2.2vw,34px);line-height:1.18;color:#163e50}
+.world-page .world-map{inset:0!important}
+.world-page .world-stage{width:100%;height:100%;max-height:none;aspect-ratio:auto}
+.world-page .map-paths path{stroke:#fffce8;stroke-width:5;stroke-dasharray:9 12;opacity:.95;filter:drop-shadow(0 2px 1px #246f8622)}
+.world-page .world-stage .island-node{--island-size:min(28cqw,40cqh,400px);width:var(--island-size);min-width:0;min-height:0;aspect-ratio:1;border-radius:45%;z-index:1}
+.world-page .world-stage .island-node::before{content:"";position:absolute;left:13%;right:13%;top:61%;height:20%;border-radius:50%;background:radial-gradient(ellipse,#126e8460,transparent 70%);filter:blur(5px);z-index:-2;pointer-events:none}
+.world-page .world-stage .island-art{filter:drop-shadow(0 8px 3px #18597026);transform:translateY(-7%)}
+.world-page .world-stage .island-node:hover .island-art{transform:translateY(-8.5%)}
+.world-page .world-stage .island-marker{top:51%;width:clamp(44px,4.7cqw,75px);height:clamp(44px,4.7cqw,75px);min-height:0;font-size:clamp(28px,3.3cqw,50px);border:3px solid #fffdf1;background:#287899;box-shadow:0 3px 6px #16455938;z-index:2}
+.world-page .world-stage .is-current .island-marker,.world-page .world-stage .is-completed .island-marker{background:#24745c}
+.world-page .world-stage .island-label{top:73%;width:76%;min-width:0;max-width:none;padding:12px 8px 10px;background:#fffae9 var(--paper-texture);border:1px solid #dccdaa;border-radius:10px 5px 12px 7px;font-size:clamp(22px,2.3cqw,36px);line-height:1.06;box-shadow:0 5px 6px #18455430;transform:translateX(-50%) rotate(-2deg);text-shadow:none}
+.world-page .world-stage .island-label small{font:clamp(12px,1.22cqw,19px)/1.2 var(--hand);color:#3e5c69;margin-top:5px}
+.world-page .world-stage .is-current .island-label{border-color:#d4c69e;box-shadow:0 5px 6px #18455430,0 3px 0 #e5c666}
+.world-page .world-stage .is-current .island-label small{color:#17644f}
+.world-page .world-stage .place-puntbaai{left:15%;top:67%}
+.world-page .world-stage .place-hellingrug{left:41%;top:31%}
+.world-page .world-stage .place-grenspas{left:47%;top:76%}
+.world-page .world-stage .place-formulewerf{left:73%;top:74%}
+.world-page .world-stage .place-signaalstad{left:85%;top:26%}
+.world-page .world-stage .place-signaalstad .island-label{transform:translateX(-50%) rotate(1deg)}
+.world-page .current-rays{inset:-4% 17% auto auto;width:30%;height:17%;border:0;border-radius:0;transform:rotate(15deg);background:linear-gradient(73deg,transparent 44%,#fffde6 46% 56%,transparent 58%) 0 70%/22% 45%,linear-gradient(100deg,transparent 44%,#fffde6 46% 56%,transparent 58%) 48% 0/22% 55%,linear-gradient(128deg,transparent 44%,#fffde6 46% 56%,transparent 58%) 100% 55%/32% 50%;background-repeat:no-repeat;filter:drop-shadow(0 0 6px #ffed9cb3)}
+.world-page .map-compass{display:block;top:22px;right:2%;bottom:auto;width:clamp(70px,7.5vw,120px);color:#245f80;opacity:.78;font-family:var(--hand)}
+.world-page .map-compass svg{display:block;width:100%;height:auto}
+.world-page .atlas-footer{background:transparent;padding:10px 3.4% 20px;gap:15px}
+.world-page .progress-link{padding:12px 22px;border:1px solid #d7cbae;border-radius:13px 19px 10px 15px;background:#fff9e8 var(--paper-texture);box-shadow:0 5px 8px #153e4b30;font-size:clamp(23px,2.3vw,33px);min-width:0}
+.world-page .small-meter{height:7px;background:#c9cec0;margin-top:6px}
+.world-page .small-meter i{background:#24785e}
+.world-page .footer-context{display:flex;align-items:center;gap:12px;padding:14px 22px;color:#345768;background:#fff9e8 var(--paper-texture);border:1px solid #d7cbae;border-radius:9px 16px 8px 12px;box-shadow:0 4px 7px #153e4b21;transform:rotate(-1deg);font-size:clamp(18px,1.8vw,27px)}
+.world-page .footer-context strong{color:#196952;font-weight:400}
+.world-page .paint-button{min-width:185px;min-height:66px;font-size:33px;background:linear-gradient(150deg,#379575,#17664f);box-shadow:0 0 0 2px #488f74,0 5px 8px #123f4938;border-width:3px}
+.world-page .paint-button:hover{background:#1e7156}
+.world-page .island-node:focus-visible{outline:3px dashed #fffde6;outline-offset:4px}
+.world-page .island-node:focus-visible .island-label{outline:3px solid #53469b;outline-offset:3px}
+@media(orientation:landscape) and (max-height:650px){
+ .world-page .map-intro{top:16px;left:3%;max-width:34%}
+ .world-page .map-intro h1{font-size:clamp(29px,5vw,53px);margin-top:6px}
+ .world-page .map-intro h1::after{margin:4px 0 8px;height:3px}
+ .world-page .map-intro .tape-label{font-size:13px;padding:3px 12px}
+ .world-page .map-intro p{font-size:clamp(17px,2vw,23px)}
+ .world-page .world-stage .island-node{--island-size:min(25cqw,39cqh)}
+ .world-page .world-stage .island-marker{width:clamp(30px,4.5cqw,52px);height:clamp(30px,4.5cqw,52px);font-size:clamp(22px,3cqw,34px);border-width:2px}
+ .world-page .world-stage .island-label{font-size:clamp(17px,2.4cqw,25px);width:85%;padding:7px 5px}
+ .world-page .world-stage .island-label small{font-size:clamp(10px,1.3cqw,13px);margin-top:3px}
+ .world-page .atlas-footer{padding:5px 3% 10px}
+ .world-page .progress-link{font-size:20px;min-height:48px;padding:7px 15px}
+ .world-page .paint-button{min-width:130px;min-height:48px;font-size:23px;padding:6px 17px}
+ .world-page .footer-context{font-size:17px;padding:10px 14px}
+ .world-page .map-compass{top:10px;width:64px}
+}
+@media(orientation:landscape) and (max-height:450px){
+ .world-page .map-intro{top:9px}
+ .world-page .world-stage .place-puntbaai{top:64%}
+ .world-page .world-stage .place-grenspas{top:74%}
+ .world-page .world-stage .place-formulewerf{top:72%}
+ .world-page .map-intro p{display:none}
+ .world-page .footer-context{display:none}
+ .world-page .world-stage .island-label{width:112%;font-size:16px;padding:5px 3px}
+ .world-page .world-stage .island-label small{font-size:10px}
+ .world-page .world-stage .island-marker{top:48%;width:30px;height:30px;font-size:22px}
+ .world-page .map-compass{width:49px;right:1%}
+ .world-page .world-stage .island-marker .ui-icon{width:19px;height:19px}
+}
+/* On short phones, preserve space between island labels and footer controls. */
+@media(orientation:landscape) and (max-height:380px){
+ .world-page .world-stage .place-grenspas{top:70%}
+ .world-page .world-stage .place-formulewerf{top:70%}
+}
+@media(orientation:portrait){
+ .world-page::before{background-position:48% center}
+ .world-page .sea-atmosphere{background:linear-gradient(#d6f0eeb3,transparent 36%)}
+ .world-page .map-intro{top:18px;left:6%;max-width:88%}
+ .world-page .map-intro .tape-label{font-size:13px;padding:3px 12px}
+ .world-page .map-intro h1{font-size:clamp(38px,9.5vw,70px);margin-top:7px}
+ .world-page .map-intro h1::after{height:3px;margin:5px 0}
+ .world-page .map-intro p{display:none}
+ .world-page .world-map{inset:115px 0 0!important}
+ .world-page .world-stage .island-node{--island-size:min(47cqw,40cqh,270px)}
+ .world-page .world-stage .island-marker{top:47%;width:42px;height:42px;font-size:28px}
+ .world-page .world-stage .island-label{top:70%;width:92%;font-size:clamp(21px,5.7cqw,31px);padding:8px 4px;border-radius:7px 4px 9px 5px}
+ .world-page .world-stage .island-label small{font-size:clamp(11px,2.8cqw,16px);margin-top:4px}
+ .world-page .world-stage .place-puntbaai{left:25%;top:16%}
+ .world-page .world-stage .place-hellingrug{left:75%;top:16%}
+ .world-page .world-stage .place-grenspas{left:50%;top:48%}
+ .world-page .world-stage .place-formulewerf{left:25%;top:80%}
+ .world-page .world-stage .place-signaalstad{left:75%;top:80%}
+ .world-page .map-paths-wide{display:none}
+ .world-page .map-paths-tall{display:block}
+ .world-page .map-compass{width:65px;top:22px;right:5%;opacity:.45}
+ .world-page .atlas-footer{padding:7px 5% 12px}
+ .world-page .progress-link{font-size:21px;padding:9px 13px;min-height:52px}
+ .world-page .progress-link>.ui-icon:first-child{width:25px;display:block}
+ .world-page .progress-link>.ui-icon:last-child{display:none}
+ .world-page .footer-context{display:none}
+ .world-page .paint-button{min-width:0;min-height:52px;font-size:25px;padding:8px 17px;gap:8px}
+ .world-page .paint-button .ui-icon{width:23px}
+}
+@media(orientation:portrait) and (max-height:700px){
+ .world-page .world-map{inset:102px 0 0!important}
+ .world-page .map-intro{top:13px}
+ .world-page .world-stage .island-node{--island-size:min(44cqw,37cqh)}
+ .world-page .world-stage .place-formulewerf,.world-page .world-stage .place-signaalstad{top:76%}
+ .world-page .world-stage .island-label{font-size:20px;padding:6px 3px;width:112%;max-width:145px}
+ .world-page .world-stage .island-label small{font-size:10px;margin-top:3px}
+ .world-page .world-stage .island-marker{top:42%;width:34px;height:34px;font-size:24px;border-width:2px}
+ .world-page .progress-link{font-size:19px;padding:8px 11px;gap:7px}
+ .world-page .progress-link>.ui-icon:first-child{width:22px}
+ .world-page .paint-button{font-size:23px;padding:8px 13px}
+ .world-page .atlas-footer{padding-inline:4%;gap:10px}
+}
+@media(prefers-reduced-motion:reduce){.world-page .world-stage .island-art,.world-page .world-stage .island-node:hover .island-art{transform:translateY(-7%);transition:none}}
+[data-reduced-motion=true] .world-page .world-stage .island-art,[data-reduced-motion=true] .world-page .world-stage .island-node:hover .island-art{transform:translateY(-7%);transition:none}
+@media(forced-colors:active){
+ .world-page{background:Canvas}
+ .world-page::before,.world-page .sea-atmosphere,.world-page .atlas-header::after{display:none}
+ .world-page .map-intro h1,.world-page .map-intro p{color:CanvasText;text-shadow:none}
+ .world-page .world-stage .island-label,.world-page .progress-link,.world-page .footer-context,.world-page .paint-button{background:Canvas;color:CanvasText;border:1px solid CanvasText;box-shadow:none}
+ .world-page .world-stage .island-label small,.world-page .footer-context strong{color:CanvasText}
+ .world-page .world-stage .island-marker{background:Canvas;color:CanvasText;border-color:CanvasText}
+ .world-page .world-stage .is-current .island-marker{outline:3px solid Highlight}
+ .world-page .map-paths path{stroke:CanvasText}
+ .world-page .small-meter i{background:Highlight}
+}
+
+/* Shared stacking order across ALL islands: shadows → art → rays → labels →
+   markers. Position controls with margins, because transform/isolation or a
+   numbered z-index on a whole button would trap its label behind its siblings. */
+.world-page .world-stage .island-node.island-node{
+ transform:none;isolation:auto;z-index:auto;
+ margin-left:calc(var(--island-size) / -2);
+ margin-top:calc(var(--island-size) / -2);
+}
+.world-page .world-stage .island-node::before{z-index:1}
+.world-page .world-stage .island-art{z-index:2}
+.world-page .current-rays{z-index:3}
+.world-page .world-stage .island-label{z-index:20}
+.world-page .world-stage .island-marker{z-index:30}
+/* Browser zoom can leave less than 320 CSS pixels of height. Give the lower
+   labels enough room above the footer, including a two-line recommendation. */
+@media(orientation:landscape) and (max-height:320px){
+ .world-page .world-stage .place-puntbaai{top:60%}
+ .world-page .world-stage .place-grenspas{top:64%}
+ .world-page .world-stage .place-formulewerf{top:62%}
+ .world-page .world-stage .island-label{width:135%}
+}
+
+.world-page .world-stage .is-current .island-marker{background:#98721b}
+.world-page .world-stage .is-prior .island-marker{background:#6b877d}
+.world-page .world-stage .is-soon .island-marker{background:#7b8986}
+.world-page .world-stage .is-current .island-label small{color:#806018}
+.island-check{position:absolute;right:0;top:20%;transform:translate(50%,-50%);display:grid;place-items:center;width:42%;height:42%;min-width:14px;min-height:14px;border-radius:50%;border:1.5px solid #fffdf1;background:#24745c;color:white}
+.is-prior .island-check{background:#6b877d}
+.world-page .world-stage .island-check .ui-icon{width:78%;height:78%;stroke-width:2.5}
+
+@media(orientation:portrait){
+ .world-page .atlas-footer{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:10px}
+ .world-page .atlas-footer>button{min-width:0;width:100%;white-space:normal;font-size:21px;padding-inline:8px;gap:6px}
+ .world-page .atlas-footer .ui-icon{flex:none;width:20px}
+}
+
+.route-label-compact{display:none}
+@media(orientation:portrait) and (max-width:480px){
+ .world-page .route-label{display:none}
+ .world-page .route-label-compact{display:inline}
+}
+@media(orientation:portrait) and (max-width:380px){
+ .world-page .atlas-footer>button{font-size:19px}
+}

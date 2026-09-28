@@ -1,0 +1,36 @@
+const assert=require('node:assert/strict');const {createDB}=require('./helpers/vector-class-db.cjs');
+(async()=>{const{db,rpc,ids}=await createDB();const deck=Array.from({length:5},(_,i)=>({skill:'opposite',seed:123+i,variant:0,level:1}));try{
+ await assert.rejects(rpc(null,'create',{deck,seconds:60}),/Meld je/);
+ await assert.rejects(rpc('alex','create',{deck,seconds:60}),/leerkracht/);
+ await assert.rejects(rpc('teacher','create',{deck:[{}],seconds:60}),/5 of 10/);
+ let s=await rpc('teacher','create',{deck,seconds:60}),id=s.id;assert.equal(s.phase,'lobby');assert.match(s.code,/^[A-F0-9]{6}$/);assert.equal(s.spec,null);
+ assert.equal((await rpc('teacher','create',{deck,seconds:60})).id,id);
+ await assert.rejects(rpc('teacher','start',{id}),/minstens/);
+ await assert.rejects(rpc('outsider','state',{id}),/niet deel/);
+ await assert.rejects(rpc('alex','join',{code:'XYZXYZ'}),/bestaat niet/);
+ await rpc('alex','join',{code:s.code});s=await rpc('alex','join',{code:s.code});assert.equal(s.members.length,1);
+ await rpc('sam','join',{code:s.code});await assert.rejects(rpc('alex','start',{id}),/leerkracht/);
+ s=await rpc('teacher','start',{id});assert.equal(s.round,0);assert.equal(s.phase,'question');assert.deepEqual(s.spec,deck[0]);assert.equal(s.deck,undefined);
+ s=await rpc('outsider','join',{code:s.code});assert.equal(s.members.find(m=>m.user_id===ids.outsider).eligible_from_round,1);
+ await rpc('outsider','join',{code:s.code});
+ await assert.rejects(rpc('outsider','submit',{id,round:0,answer:{}}),/volgende ronde/);
+ await assert.rejects(rpc('alex','submit',{id,round:1,answer:{}}),/voorbij/);
+ s=await rpc('alex','submit',{id,round:0,answer:{strokes:[]}});assert.equal(s.mine.submitted,true);assert.equal(s.mine.correct,null);assert.equal(s.submissions,null);
+ s=await rpc('alex','submit',{id,round:0,answer:{changed:true}});assert.equal(s.phase,'question');
+ s=await rpc('sam','submit',{id,round:0,answer:{},skipped:true});assert.equal(s.phase,'grading');
+ s=await rpc('teacher','state',{id});assert.equal(s.submissions.length,2);assert.deepEqual(s.submissions.find(x=>x.user_id===ids.alex).answer,{strokes:[]});
+ await assert.rejects(rpc('alex','grade',{id,round:0,grades:[]}),/leerkracht/);
+ const grades=[{user_id:ids.alex,correct:true},{user_id:ids.sam,correct:true}];s=await rpc('teacher','grade',{id,round:0,grades});assert.equal(s.phase,'results');assert.equal(s.members.find(x=>x.user_id===ids.sam).points,0);const points=s.members.find(x=>x.user_id===ids.alex).points;assert(points>=500&&points<=1000);
+ s=await rpc('teacher','grade',{id,round:0,grades});assert.equal(s.members.find(x=>x.user_id===ids.alex).points,points);
+ s=await rpc('alex','state',{id});assert.equal(s.mine.correct,true);assert.equal(s.submissions,null);
+ s=await rpc('teacher','next',{id});assert.equal(s.round,1);s=await rpc('outsider','submit',{id,round:1,answer:{}});assert.equal(s.mine.submitted,true);
+ await db.query("update axioma_private.vector_class_rooms set deadline=now()-interval '1 second' where id=$1",[id]);
+ await assert.rejects(rpc('alex','submit',{id,round:1,answer:{}}),/tijd is voorbij/);
+ s=await rpc('sam','state',{id});assert.equal(s.phase,'grading');s=await rpc('teacher','grade',{id,round:1,grades:[{user_id:ids.outsider,correct:false}]});assert.equal(s.phase,'results');
+ for(let round=2;round<5;round++){s=await rpc('teacher','next',{id});assert.equal(s.round,round);await db.query("update axioma_private.vector_class_rooms set deadline=now()-interval '1 second' where id=$1",[id]);await rpc('teacher','state',{id});await rpc('teacher','grade',{id,round,grades:[]});}
+ s=await rpc('teacher','next',{id});assert.equal(s.phase,'finished');await assert.rejects(rpc('teacher','next',{id}),/niet starten/);
+ const access=await db.query("select has_function_privilege('anon','public.axioma_vector_class(text,jsonb)','execute') as anon,has_table_privilege('authenticated','axioma_private.vector_class_answers','select') as direct");assert.deepEqual(access.rows[0],{anon:false,direct:false});
+ s=await rpc('teacher','create',{deck,seconds:60});assert.notEqual(s.id,id);await rpc('alex','join',{code:s.code});await rpc('alex','leave',{id:s.id});assert.equal((await rpc('teacher','state',{id:s.id})).members.length,0);
+ await rpc('teacher','close',{id:s.id});await assert.rejects(rpc('sam','join',{code:s.code}),/afgelopen/);assert.equal((await rpc('teacher','state',{id:s.id})).phase,'closed');
+ console.log('PASS: real PostgreSQL session lifecycle, role boundaries, roster, deadline, single attempt, scoring, idempotency, rankings, finish and leave');
+}finally{await db.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

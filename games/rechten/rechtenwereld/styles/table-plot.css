@@ -1,0 +1,59 @@
+/* Table as the source, plotting as the task. Keep most space for the graph. */
+.formula-mission[data-skill=graph_from_table] .formula-workspace{grid-template-columns:minmax(0,1.15fr) minmax(310px,1fr);gap:16px 28px;padding-inline:3vw}
+[data-skill=graph_from_table] .formula-heading{grid-column:1/-1}
+[data-skill=graph_from_table] .formula-reminder{display:none}
+[data-skill=graph_from_table] .formula-answer{gap:28px;padding:24px;background:transparent;border:0;box-shadow:none}
+.plot-table-source{width:100%;padding:20px;border:1px solid #d4e3e8;border-radius:16px;background:#eef5f8}
+.formula-answer .plot-table-source h2{font:24px/1.2 var(--hand);background:none;border:0;padding:0;margin:0 0 16px;text-align:left;color:var(--lesson-muted)}
+.plot-data-table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;text-align:center;font:clamp(28px,2.7vw,42px)/1.1 var(--hand)}
+.plot-data-table th,.plot-data-table td{height:72px;padding:8px 4px;border-right:1px solid #c9d8dc;border-bottom:1px solid #c9d8dc;background:#fffefa}
+.plot-data-table th{width:22%;font-weight:400;border-right:2px solid #779c8d;background:#e6f0e9;color:#28674f}
+.plot-data-table tr:first-child>*{border-top:1px solid #c9d8dc}
+.plot-data-table th{border-left:1px solid #c9d8dc}
+.plot-data-table tr:first-child th{border-top-left-radius:9px}
+.plot-data-table tr:first-child td:last-child{border-top-right-radius:9px}
+.plot-data-table tr:last-child th{border-bottom-left-radius:9px}
+.plot-data-table tr:last-child td:last-child{border-bottom-right-radius:9px}
+.plot-data-table .frac{font-size:.65em}
+.plot-data-table [data-coordinate-point]{background:var(--point-wash);color:var(--point-ink)}
+.plot-table-source>p{font:20px/1.25 var(--hand);color:var(--lesson-muted);margin-top:14px;text-align:center}
+.plot-table-task{width:100%;display:flex;flex-direction:column;gap:15px}
+.formula-answer .plot-table-task h2{font:clamp(25px,2.3vw,36px)/1.2 var(--hand);background:none;padding:0;text-align:left}
+.plot-table-task>p{font:clamp(20px,1.6vw,26px)/1.3 var(--hand);color:var(--lesson-muted)}
+.plot-point-status{display:flex;gap:10px;flex-wrap:wrap;font:20px/1.2 var(--hand)}
+.plot-point-status>span{display:flex;align-items:center;gap:7px;background:var(--point-wash);border:1px solid var(--point-border);color:var(--point-ink);padding:9px 12px;border-radius:10px}
+.plot-point-status strong{font-weight:400}
+.plot-point-status .frac{font-size:.7em}
+@media(max-height:760px) and (orientation:landscape),(max-height:900px) and (min-aspect-ratio:2/1){
+ .formula-mission[data-skill=graph_from_table] .formula-workspace{grid-template-columns:minmax(0,1.2fr) minmax(245px,1fr);gap:5px 12px;padding:5px 14px}
+ [data-skill=graph_from_table] .formula-answer{gap:12px;padding:6px}
+ .plot-table-source{padding:10px;border-radius:10px}
+ .formula-answer .plot-table-source h2{font-size:18px;margin-bottom:7px}
+ .plot-data-table{font-size:29px}
+ .plot-data-table th,.plot-data-table td{height:48px;padding:4px}
+ .plot-table-source>p{font-size:16px;margin-top:7px}
+ .plot-table-task{gap:7px}
+ .formula-answer .plot-table-task h2{font-size:22px}
+ .plot-table-task>p{font-size:17px;line-height:1.15}
+ .plot-point-status{font-size:16px;gap:6px}
+ .plot-point-status>span{padding:5px 8px}
+}
+@media(max-height:450px) and (orientation:landscape){
+ [data-skill=graph_from_table] .formula-answer{padding:0;gap:8px}
+ .plot-table-source{padding:5px 8px}
+ .formula-answer .plot-table-source h2{font-size:16px;margin-bottom:4px}
+ .plot-data-table{font-size:23px}
+ .plot-data-table th,.plot-data-table td{height:35px;padding:2px}
+ .plot-table-source>p{font-size:14px;margin-top:4px}
+ .formula-answer .plot-table-task h2{font-size:18px}
+ .plot-table-task>p{font-size:15px}
+ .plot-point-status{display:none}
+}
+@media(forced-colors:active){.plot-table-source,.plot-data-table th,.plot-data-table td,.plot-point-status>span{background:Canvas;color:CanvasText;border-color:CanvasText}}
+@media(min-height:761px) and (max-height:850px){
+ [data-skill=graph_from_table] .formula-answer{padding:12px;gap:16px}
+ .plot-table-source{padding:12px}
+ .plot-data-table th,.plot-data-table td{height:58px}
+ .plot-table-source>p{font-size:18px}
+ .plot-table-task{gap:10px}
+}

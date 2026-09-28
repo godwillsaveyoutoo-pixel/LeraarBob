@@ -1,0 +1,982 @@
+<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#fffef9"><title>Reële getallen · leraarBob</title><style>:root{color-scheme:light;--paper:#fffef9;--ink:#303e43;--muted:#576c76;--panel:#edf4f5;--line:#d7e3e6;--blue:#347794;--green:#267762;--rust:#a24d3a;--gold:#916413;--violet:#775caa;--grid:#dde8ea;font:16px/1.45 'Segoe UI',system-ui,sans-serif}
+:root[data-mode=dark]{color-scheme:dark;--paper:#162830;--ink:#edf5ef;--muted:#b4c8cf;--panel:#203c46;--line:#3a5360;--blue:#85c5e1;--green:#83d6b5;--rust:#ffad91;--gold:#eac77f;--violet:#ceb0ee;--grid:#2d4854}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);height:100dvh;overflow:hidden}h1,h2,p{margin:0}button,a,select{-webkit-tap-highlight-color:transparent}button{font:inherit;font-weight:650;color:inherit;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:9px;background:var(--paper);padding:7px 13px;cursor:pointer}button:hover{background:var(--panel)}button:disabled{opacity:.5;cursor:default}button[aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--blue);background:var(--panel)}button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--gold);outline-offset:2px}.primary{background:var(--blue);border-color:var(--blue);color:var(--paper)}[hidden]{display:none!important}
+#app{height:100%;display:grid;grid-template-rows:54px minmax(0,1fr)}header{display:flex;gap:12px;align-items:center;padding:3px 20px;border-bottom:1px solid var(--line)}.brand{color:inherit;text-decoration:none;letter-spacing:-1px;font-size:23px;min-height:44px;display:flex;align-items:center}nav{margin-left:auto;display:flex;gap:3px}nav button{border-color:transparent;font-size:13px;padding:7px 10px}.header-actions{display:flex;gap:5px;align-items:center}#xp{width:86px;text-align:center;color:var(--gold);font-weight:750;font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}#theme{font-size:22px;padding:4px;border-color:transparent}
+#stage{min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr) 62px}.question{display:flex;justify-content:space-between;align-items:center;padding:8px 24px;border-bottom:1px solid var(--line);gap:10px;min-height:64px}.question h1{font-size:clamp(18px,2.2vw,27px);font-weight:650;line-height:1.25;letter-spacing:-.4px}.eyebrow,#eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}#round{font-size:12px;white-space:nowrap;color:var(--muted)}
+#workspace{min-width:0;min-height:0;padding:16px 24px;display:flex;gap:24px;overflow:hidden}.canvas{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;position:relative}.answer-panel{width:244px;flex:0 0 244px;display:flex;flex-direction:column;justify-content:center;gap:12px;min-height:0}.math-large{font-size:clamp(38px,5vw,68px);line-height:1.15}.math-medium{font-size:30px}.muted{font-size:15px;color:var(--muted)}math{font-family:'Cambria Math','STIX Two Math',serif;white-space:nowrap;font-size:1em}math mfrac{font-size:1em}.formula-row{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:nowrap;max-width:100%}.source-caption{font-size:14px;color:var(--muted);text-align:center}.fraction-answer{display:grid;grid-template-columns:44px 90px;align-items:center;gap:6px}.fraction-answer .sign{grid-row:1/3;font-size:27px;border:0}.fraction-answer .slot:first-of-type{border-bottom:2px solid var(--ink)}.fraction-stack{display:flex;flex-direction:column;align-items:stretch;gap:4px;width:88px}.fraction-rule{height:2px;background:var(--ink)}.slot{min-width:80px;font-size:30px;font-variant-numeric:tabular-nums}.slot small{display:block;font-size:11px;font-weight:500;color:var(--muted)}.keypad{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.keypad button{font-size:21px;padding:4px;min-height:48px}.keypad .empty-key{grid-column:span 2}
+.relations{display:flex;gap:14px}.relations button{font-size:32px;min-width:64px;min-height:56px}.comparison-gap{font-size:36px;min-width:40px;text-align:center;color:var(--blue)}.line-canvas{width:100%;min-height:120px;flex:1;max-height:230px;touch-action:none}.line-canvas text{font:16px 'Segoe UI',sans-serif;fill:var(--ink)}.line-canvas .tick{stroke:var(--muted)}.line-canvas .axis{stroke:var(--ink)}.line-canvas .selection{stroke:var(--blue);fill:var(--blue)}.line-tools{display:flex;gap:8px;align-items:center;justify-content:center}.line-tools output{min-width:85px;text-align:center;font-size:22px}.interval-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px}.interval-controls button{font-size:16px;padding:5px}.interval-controls .wide{grid-column:1/-1}.interval-preview{font-size:24px;text-align:center}.interval-source{font-size:clamp(22px,3vw,40px);text-align:center;line-height:1.35}
+.token-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:1fr 1fr;gap:14px;width:100%;max-width:780px;min-height:0}.number-token{font-size:34px;min-height:94px;position:relative;padding:12px 4px 24px;border-width:2px}.number-token small{position:absolute;bottom:5px;left:0;right:0;font:11px system-ui;color:var(--muted)}.number-token[data-group=A]{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 10%,var(--paper))}.number-token[data-group=B]{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 10%,var(--paper))}.group-keys button{font-size:18px}.group-keys button[data-group=A]{color:var(--blue)}.group-keys button[data-group=B]{color:var(--gold)}.sets{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sets button{font-size:25px;min-height:54px}.sets [data-set=irr]{font-size:16px}.set-map{font-size:22px;color:var(--blue)}
+.digits{display:flex;align-items:center;justify-content:center;gap:4px;max-width:100%}.digits .digit{font:28px Georgia,serif;padding:5px;min-width:44px;min-height:54px;border-radius:3px;position:relative}.digits .digit.selected{background:var(--panel);border-top:3px solid var(--blue)}.digits-prefix{font-size:34px;margin-right:5px}.rule{max-width:680px;font-size:17px;text-align:center;line-height:1.55}.root-area{height:100px;width:100%;color:var(--blue)}.root-area text{fill:var(--ink);font:16px system-ui}.saved-step{font-size:17px;color:var(--muted)}
+.lesson-copy,.feedback-copy{flex:0 0 320px;width:320px;display:flex;flex-direction:column;justify-content:center;gap:16px;min-height:0;background:var(--panel);border-left:3px solid var(--blue);padding:22px}.lesson-copy h2,.feedback-copy h2{font-size:25px;line-height:1.2}.lesson-copy p,.feedback-copy p{font-size:18px;line-height:1.55}.feedback-copy.good{border-color:var(--green)}.feedback-copy.repair{border-color:var(--rust)}.feedback-copy.good h2{color:var(--green)}.feedback-copy.repair h2{color:var(--rust)}.xp-earned{font-size:17px;color:var(--gold)}#workspace.readonly .canvas{pointer-events:none}#workspace.feedback .canvas{pointer-events:none}.feedback-copy{flex:1;max-width:760px;margin:auto;width:auto}.feedback-picture{width:180px;flex:0 0 180px;display:grid;place-items:center;font-size:64px;color:var(--blue)}
+footer{display:flex;align-items:center;gap:10px;padding:8px 24px;border-top:1px solid var(--line)}#hint{flex:1;font-size:13px;line-height:1.35;color:var(--muted)}#skip{font-size:12px;border-color:transparent}#commit{min-width:130px}#back{font-size:13px}
+#library,#help,#progress,#summary{padding:30px max(24px,5vw);overflow:auto}.page-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;max-width:1150px;margin:0 auto 24px}.page-heading h1{font-size:36px;line-height:1.15;letter-spacing:-1px;margin:8px 0 12px}.page-heading p{max-width:750px;color:var(--muted);line-height:1.65}.page-actions{max-width:1150px;margin:0 auto 24px;display:flex;gap:20px;align-items:center}.page-actions span{font-size:14px;color:var(--muted)}.topic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:15px;max-width:1150px;margin:auto}.topic-card{padding:20px;background:var(--panel);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;gap:12px}.topic-card h2{font-size:20px}.topic-card p{font-size:14px;color:var(--muted)}.topic-card button{margin-top:auto;align-self:flex-start}.topic-card.solid{border:3px solid var(--gold)}#progressRows{max-width:1000px;margin:auto}.progress-row{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:15px 0;border-bottom:1px solid var(--line)}.progress-row strong{display:block}.progress-row span,.progress-row small{color:var(--muted);font-size:14px}.summary-inner{max-width:800px;margin:8vh auto}.summary-inner h1{font-size:45px;letter-spacing:-1px;margin:15px 0}.summary-inner p{line-height:1.65;margin:18px 0}.summary-inner button{margin-right:8px}#stats{display:flex;gap:32px;margin:25px 0}#stats strong{font-size:32px;display:block;color:var(--blue)}#stats span{font-size:14px;color:var(--muted)}
+#rotate{display:none;position:fixed;inset:54px 0 0;background:var(--paper);z-index:20;place-items:center;padding:25px;text-align:center}#rotate p{max-width:360px;margin:15px auto;line-height:1.6}#storageWarning{position:fixed;bottom:0;left:0;right:0;background:var(--rust);color:var(--paper);padding:8px;z-index:30}
+@media(max-height:500px) and (min-width:640px){#app{grid-template-rows:48px minmax(0,1fr)}header{padding:2px 10px;gap:6px}.brand{font-size:21px}nav button{padding:5px 8px}.header-actions{gap:2px}#xp{width:70px}#stage{grid-template-rows:52px minmax(0,1fr) 54px}.question{padding:3px 16px;min-height:0}.question h1{font-size:18px}#round{font-size:11px}#workspace{padding:6px 14px;gap:14px}.canvas{gap:8px}.answer-panel{width:216px;flex-basis:216px;gap:6px}.keypad{gap:4px}.keypad button{min-height:44px;font-size:20px}.math-large{font-size:42px}.math-medium{font-size:25px}.slot{font-size:26px;min-height:48px}.source-caption{font-size:13px}.line-canvas{min-height:90px}.line-tools{gap:6px}.line-tools output{font-size:19px}.token-grid{gap:9px}.number-token{min-height:76px;font-size:29px;padding:8px 3px 22px}.sets{gap:6px}.sets button{min-height:48px}.muted{font-size:13px}.rule{font-size:15px}.digits{gap:2px}.digits .digit{font-size:24px;min-width:44px;min-height:48px}.digits-prefix{font-size:28px}.root-area{height:64px}.saved-step{font-size:15px}.lesson-copy{flex-basis:270px;width:270px;padding:13px;gap:10px}.lesson-copy h2,.feedback-copy h2{font-size:20px}.lesson-copy p,.feedback-copy p{font-size:16px;line-height:1.45}.feedback-copy{padding:14px;gap:10px}.feedback-picture{flex-basis:110px;width:110px;font-size:48px}footer{padding:5px 12px;gap:6px}#hint{font-size:12px}#commit{min-width:120px;padding:6px 10px}#back{padding:6px 8px}.interval-controls{gap:5px}.interval-controls button{font-size:14px}.interval-source{font-size:25px}.interval-preview{font-size:20px}.formula-row{gap:10px}}
+@media(max-width:700px){#round{display:none}.question h1{font-size:17px}.lesson-copy{width:255px;flex-basis:255px}.lesson-copy h2{font-size:18px}.lesson-copy p{font-size:15px}.digits .digit{min-width:44px}#workspace.readonly .digits{flex-wrap:wrap}.formula-row{gap:8px}}
+@media(max-width:639px){header{padding:4px 8px;gap:4px}.brand{font-size:19px}nav{gap:0}nav button{font-size:11px;padding:4px 6px}.header-actions{gap:0}#xp{width:62px;font-size:12px}#theme{display:none}#app{grid-template-rows:90px minmax(0,1fr)}header{flex-wrap:wrap}nav{order:3;width:100%;justify-content:center}.header-actions{margin-left:auto}#rotate{inset:90px 0 0}.page-heading{flex-wrap:wrap}.page-heading h1{font-size:28px}.page-actions{flex-wrap:wrap}.summary-inner h1{font-size:34px}}
+@media(orientation:portrait),(max-width:639px),(max-height:340px){body[data-screen=stage] #rotate{display:grid}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* A long decimal is one expression: explanations follow it instead of squeezing it. */
+#workspace.readonly.period{flex-direction:column;gap:6px}#workspace.readonly.period .canvas{flex:1;gap:4px}#workspace.readonly.period .rule{display:none}#workspace.readonly.period .lesson-copy{width:100%;flex:0 0 auto;max-width:900px;align-self:center;padding:8px 16px;gap:3px}#workspace.readonly.period .lesson-copy h2{font-size:18px}#workspace.readonly.period .lesson-copy p{font-size:15px}#workspace.readonly.period .source-caption{display:none}
+@media(orientation:portrait),(max-width:639px){body[data-preview=true] #rotate{display:none}body[data-preview=true] #stage{display:block;overflow:auto}body[data-preview=true] #workspace{display:flex;flex-direction:column;overflow:visible;padding:16px}body[data-preview=true] .canvas{min-height:220px}body[data-preview=true] .lesson-copy{width:100%;flex-basis:auto}body[data-preview=true] footer{position:sticky;bottom:0;background:var(--paper)}body[data-preview=true] #skip{display:none}}
+
+.feedback-picture{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;flex-basis:270px;width:270px;font-size:32px}.feedback-picture .source-caption{text-align:center}.feedback-comparison{display:flex;gap:6px;align-items:center;justify-content:center;font-size:26px}.selected-sets{font-size:19px;text-align:center}.feedback-copy{min-width:0}.feedback-copy p{overflow-wrap:anywhere}
+@media(max-height:500px) and (min-width:640px){.feedback-picture{width:200px;flex-basis:200px;font-size:26px;gap:7px}.feedback-picture .source-caption{font-size:13px}.feedback-comparison{font-size:23px}.selected-sets{font-size:16px}}
+
+/* Direct manipulation: the line and digits are the answer controls. */
+.digits{touch-action:none;user-select:none}.period-tools{display:flex;align-items:center;justify-content:center;gap:18px}.period-tools .muted{font-size:14px}.period-tools button{font-size:13px;flex-shrink:0}.interval .answer-panel{gap:8px}.interval .answer-panel>.muted{text-align:center;font-size:12px}.line-canvas{cursor:crosshair}
+
+/* Number sets are nested, so placement also communicates inclusion. */
+.set-bank{display:flex;gap:10px;justify-content:center;width:100%}.set-token{min-width:84px;font-size:26px;touch-action:none;user-select:none}.set-token small{display:block;font:11px system-ui;color:var(--muted)}.set-token.dragging{outline:3px solid var(--gold)}.set-map-board{width:100%;flex:1;min-height:90px;max-height:240px}.set-region{border:2px solid var(--blue);border-radius:12px;display:flex;padding:5px;gap:5px;flex:1;height:100%;min-width:0;background:color-mix(in srgb,var(--blue) 4%,var(--paper))}.set-region .set-region{border-color:var(--green)}.set-region .set-region .set-region{border-color:var(--gold)}.set-region .set-region .set-region .set-region{border-color:var(--violet)}.set-zone{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;min-width:70px;gap:5px;padding:4px}.set-label{font-size:26px}.set-zone .set-elements{font-size:20px;display:flex;gap:4px;flex-wrap:wrap;justify-content:center}.set-region:has(>.set-region)>.set-zone{flex:0 0 21%}.set-zone.drop-active{background:var(--panel);outline:3px solid var(--gold)}
+#workspace.readonly.sets{flex-direction:column;gap:5px}#workspace.readonly.sets .canvas{gap:5px}#workspace.readonly.sets .set-token{font-size:18px;min-height:44px;padding:2px 8px}#workspace.readonly.sets .set-token small{display:none}#workspace.readonly.sets .set-map-board{min-height:78px}#workspace.readonly.sets .lesson-copy{width:100%;flex:0 0 auto;padding:8px 14px;gap:2px}#workspace.readonly.sets .lesson-copy h2{font-size:17px}#workspace.readonly.sets .lesson-copy p{font-size:14px;line-height:1.35}#workspace.readonly.sets .set-region{padding:2px;gap:2px}#workspace.readonly.sets .set-label{font-size:21px}#workspace.readonly.sets .set-zone .set-elements{font-size:17px}.feedback-set{display:flex;align-items:center;gap:8px;font-size:24px}
+.decimal-types{display:grid;grid-template-columns:1fr;gap:6px}.decimal-types button{font-size:15px;min-height:44px}.type-answer{font-size:20px;font-weight:700;color:var(--blue);text-align:center}.interval-convention{font-size:12px;text-align:center;color:var(--muted)}.infinity-tools{display:flex;gap:6px}.infinity-tools button{flex:1}.interval .answer-panel{gap:5px}.interval-source{font-size:clamp(18px,2.5vw,30px)}
+@media(max-height:500px) and (min-width:640px){.set-token{font-size:22px;padding:3px 8px;min-height:50px}.set-zone{min-width:60px}.set-label{font-size:23px}.set-zone .set-elements{font-size:18px}#workspace.sets .canvas{gap:6px}.interval-source{font-size:20px}.interval .canvas{gap:4px}.interval-controls button,.infinity-tools button{padding:4px}.interval .answer-panel>button{font-size:13px}.decimaltype .rule{font-size:14px}}
+
+.drag-ghost{position:fixed;z-index:100;pointer-events:none;transform:translate(-50%,-50%);box-shadow:0 8px 24px #0003;background:var(--paper);opacity:.9}.set-token.dragging{opacity:.45}#workspace.readonly.sets button:disabled{opacity:1;cursor:default}
+
+/* Set names belong to their boundary; dots mark the elements within it. */
+.set-map-board{margin-top:12px}.set-region{position:relative;--set-color:var(--blue)}.set-region .set-region{--set-color:var(--green)}.set-region .set-region .set-region{--set-color:var(--gold)}.set-region .set-region .set-region .set-region{--set-color:var(--violet)}
+.set-label{position:absolute;top:-2px;right:12px;transform:translateY(-50%);line-height:1.1;background:var(--paper);color:var(--set-color);padding:0 4px;z-index:1;pointer-events:none}.set-region:has(>.set-region)>.set-label{right:auto;left:calc(21% - 12px);transform:translate(-100%,-50%)}
+.set-zone .set-elements{align-items:center;gap:10px 16px}.set-element{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}.element-point{display:inline-block;flex:0 0 5px;width:5px;height:5px;border-radius:50%;background:var(--ink)}
+#workspace.readonly.sets .set-map-board{margin-top:9px;min-height:66px}#workspace.readonly.sets .set-label{font-size:18px}
+
+#workspace.readonly.sets .set-bank{flex:none;gap:12px}.set-preview-token{display:inline-flex;align-items:center;justify-content:center;min-width:66px;font-size:18px;line-height:1.1}#workspace.readonly.sets .lesson-copy{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:3px 10px}#workspace.readonly.sets .lesson-copy p{grid-column:1/-1}#workspace.readonly.sets .canvas{justify-content:flex-start}
+
+/* More room between the upper boundaries, while keeping small boards usable. */
+.set-region:has(>.set-region){padding-top:20px}
+@media(max-height:500px) and (min-width:640px){.set-region:has(>.set-region){padding-top:10px;padding-bottom:3px}}
+#workspace.readonly.sets .set-region:has(>.set-region){padding-top:6px;padding-bottom:1px}#workspace.readonly.sets .set-map-board{min-height:82px}#workspace.readonly.sets .lesson-copy{padding-block:6px}#workspace.readonly.sets,#workspace.readonly.sets .canvas{gap:3px}
+@media(min-height:600px){#workspace.readonly.sets .set-region:has(>.set-region){padding-top:20px;padding-bottom:2px}#workspace.readonly.sets .set-map-board{min-height:130px}}
+
+#seriesReturn{flex-shrink:0;font-size:13px;padding:5px 10px;border-color:var(--blue);color:var(--blue)}
+
+.root-form-answer{display:flex;align-items:center;justify-content:center;gap:12px}.radical-input{display:flex;align-items:center}.radical-input>span{font-size:52px}.radical-input>.slot{border-top:2px solid var(--ink)}.root-calculation-answer .slot{min-width:160px}.rootcalc .canvas,.rootsimplify .canvas{gap:12px}.root-form-answer .slot{min-width:100px}.rootcalc .math-large,.rootsimplify .math-large{font-size:42px}
+
+.math-product{display:flex;align-items:center;justify-content:center;gap:3px}
+</style><script src="../../shared/leraarbob-topbar.js" data-title="Reële getallen" defer></script></head>
+<body><div id="app"><header><a class="brand" data-platform-home aria-label="Naar de startpagina van leraarBob" href="../../index.html">leraarBob</a><nav aria-label="Trainer"><button data-trainer-action="play" id="playNav">Oefenen</button><button id="topicsNav">Onderwerpen</button><button data-trainer-action="help" id="helpNav">Uitleg</button><button data-trainer-action="progress" id="progressNav">Voortgang</button></nav><div class="header-actions"><span id="xp" title="Ervaringspunten">0 XP</span><button id="theme" aria-label="Lichte of donkere modus">◐</button></div></header>
+<main id="stage"><div class="question"><div><p id="eyebrow"></p><h1 id="prompt"></h1></div><span id="round"></span><button id="seriesReturn" hidden>Volg leerroute →</button></div><div id="workspace"></div><footer><p id="hint" role="status"></p><button id="back" hidden>← Vorige</button><button id="skip">Later</button><button id="commit" class="primary">Controleer</button></footer></main>
+<section id="library" hidden><div class="page-heading"><div><p class="eyebrow">Getallenatelier</p><h1>Hetzelfde getal. Anders bekeken.</h1><p>Breuken, decimalen, wortels en intervallen krijgen betekenis door hun verbanden.</p></div><button id="resume" class="primary">Verder oefenen →</button></div><div class="page-actions"><button id="newSession">Nieuwe reeks</button><span>Volg je leerroute of kies zelf een onderwerp. Alles telt mee voor XP en voortgang en wordt automatisch bewaard. 8 opgaven per reeks.</span></div><div id="topics" class="topic-grid"></div></section>
+<section id="help" hidden><div class="page-heading"><div><p class="eyebrow">Uitgewerkte voorbeelden</p><h1>Bekijk het verband.</h1><p>Dezelfde voorbeelden als in je leerroute. Je antwoord blijft bewaard.</p></div><button id="closeHelp">Terug naar oefening</button></div><div id="helpTopics" class="topic-grid"></div></section>
+<section id="progress" hidden><div class="page-heading"><div><p class="eyebrow">Jouw leerroute</p><h1 id="progressTitle">Wat begrijp je al zelfstandig?</h1><p>Na twee zelfstandige antwoorden gaat een volgend onderwerp open. ‘Stevig’ vraagt ook verschillende voorstellingen en een latere herhaling.</p></div><button id="closeProgress">Terug</button></div><div id="progressRows"></div></section>
+<section id="summary" hidden><div class="summary-inner"><p class="eyebrow">Reeks afgerond</p><h1>Een verband meer gezien.</h1><div id="stats"></div><p id="summaryText"></p><button id="again" class="primary">Nieuwe reeks →</button><button id="browse">Onderwerpen bekijken</button></div></section>
+</div><div id="rotate"><div><h2>Geef je getallen ruimte.</h2><p>Draai je toestel om te oefenen. Uitleg en voortgang kun je ook rechtop bekijken.</p><button id="rotateLibrary">Bekijk de onderwerpen</button></div></div><p id="storageWarning" role="status" hidden></p>
+<script data-platform-root="../../">/* Platform navigation. Subject engines own exercises; this layer owns destinations. */
+(() => {
+  'use strict';
+  if (window.AxiomaPlatform) return;
+  const script = document.currentScript;
+  const root = script?.src ? new URL('../', script.src) : new URL(script?.dataset.platformRoot || '../../', location.href);
+  const home = new URL('index.html', root);
+  const wired = new WeakSet();
+  function homeURL() { return home.href; }
+  function goHome(event) {
+    event?.preventDefault(); event?.stopPropagation();
+    // Keep previews inside their host; their existing navigation listener handles this event.
+    if (window !== window.top) {
+      window.parent.postMessage({type:'axioma:navigate-home',url:home.href}, location.origin === 'null' ? '*' : location.origin);
+      return;
+    }
+    location.assign(home.href);
+  }
+  function wireHome(element, { beforeLeave } = {}) {
+    if (!element) return null;
+    // Some imported games put the brand inside an old menu button. Convert that
+    // button, preserving its child nodes (and references to game title nodes).
+    let link = element.closest('button') || element;
+    if (wired.has(link)) return link;
+    if (link.tagName !== 'A') {
+      const anchor = document.createElement('a');
+      for (const attribute of link.attributes) if (!['type','role','tabindex','onclick'].includes(attribute.name)) anchor.setAttribute(attribute.name, attribute.value);
+      while (link.firstChild) anchor.append(link.firstChild);
+      link.replaceWith(anchor); link = anchor;
+    }
+    link.href = home.href;
+    link.dataset.platformHome = '';
+    link.classList.add('axioma-platform-home');
+    link.setAttribute('aria-label','Naar de startpagina van leraarBob');
+    link.title = 'Naar de startpagina van leraarBob';
+    link.addEventListener('click', async event => {
+      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault(); event.stopPropagation();
+      if (beforeLeave && await beforeLeave() === false) return;
+      goHome();
+    });
+    wired.add(link); return link;
+  }
+  function bindTrainer(actions) {
+    for (const button of document.querySelectorAll('[data-trainer-action]')) {
+      const action = actions[button.dataset.trainerAction];
+      if (action) button.addEventListener('click', action);
+    }
+  }
+  function trainerScreen(name) {
+    for (const button of document.querySelectorAll('[data-trainer-action]')) {
+      const active = button.dataset.trainerAction === name;
+      if (active) button.setAttribute('aria-current','page'); else button.removeAttribute('aria-current');
+    }
+  }
+  const style=document.createElement('style');
+  style.textContent='.axioma-platform-home{color:inherit;text-decoration:none;cursor:pointer}.axioma-platform-home:focus-visible{outline:3px solid currentColor;outline-offset:3px}[data-trainer-action][aria-current="page"]{box-shadow:inset 0 -2px currentColor}';
+  document.head.append(style);
+  window.AxiomaPlatform = Object.freeze({homeURL,goHome,wireHome,bindTrainer,trainerScreen});
+  const mount=()=>document.querySelectorAll('[data-platform-home],a.axiomaHome').forEach(element=>wireHome(element));
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})();
+</script><script>/* Exact values and learning state. No DOM, pixels, network or learner identity. */
+(function(root){
+'use strict';
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+function rational(n,d=1){if(!Number.isSafeInteger(n)||!Number.isSafeInteger(d)||!d)throw Error('Ongeldige breuk');if(d<0){n=-n;d=-d}const g=gcd(n,d);return {n:n/g,d:d/g}}
+const integer=n=>({kind:'integer',n}),fraction=(n,d)=>({kind:'fraction',n,d}),decimal=text=>({kind:'decimal',text:String(text).replace('.',',')}),percent=n=>({kind:'percent',n}),sqrt=(n,sign=1)=>({kind:'root',n,sign}),cbrt=n=>({kind:'root',n,sign:1,degree:3});
+function parse(text){
+ const s=String(text??'').trim().replace('−','-');if(!/^-?\d{1,6}(?:[.,]\d{1,4})?$/.test(s))return null;
+ const negative=s[0]==='-',[a,b='']=s.replace('-','').replace(',','.').split('.');return rational((negative?-1:1)*Number(a+b),10**b.length);
+}
+function value(e){
+ switch(e.kind){case 'integer':return rational(e.n);case 'fraction':return rational(e.n,e.d);case 'decimal':return parse(e.text);case 'percent':return rational(e.n,100);case 'root':{const degree=e.degree||2;if(![2,3].includes(degree)||!Number.isSafeInteger(e.n)||(degree===2&&e.n<0)||![-1,1].includes(e.sign))throw Error('Geen reële wortel');const sign=e.sign*Math.sign(e.n||1),absolute=Math.abs(e.n),k=Math.round(absolute**(1/degree));if(k**degree===absolute)return rational(sign*k);return {root:absolute,degree,sign}}case 'pi':return {pi:true,sign:1};case 'period':{const lead=e.lead||'',repeat=e.repeat,den=10**lead.length*(10**repeat.length-1);return rational(Number(e.whole||0)*den+Number(lead||0)*(10**repeat.length-1)+Number(repeat),den)}default:throw Error('Onbekende voorstelling')}
+}
+function compare(a,b){
+ if(a.pi||b.pi)return Math.sign(number(a)-number(b));
+ if(a.root!==undefined&&b.root!==undefined){if(a.sign!==b.sign)return Math.sign(a.sign-b.sign);const da=a.degree||2,db=b.degree||2;return a.sign*signBig(BigInt(a.root)**BigInt(db)-BigInt(b.root)**BigInt(da));}
+ if(a.root!==undefined){if(a.sign>0&&b.n<0)return 1;if(a.sign<0&&b.n>=0)return -1;const d=BigInt(a.degree||2);return a.sign*signBig(BigInt(a.root)*BigInt(b.d)**d-BigInt(Math.abs(b.n))**d)}
+ if(b.root!==undefined)return -compare(b,a);
+ return signBig(BigInt(a.n)*BigInt(b.d)-BigInt(b.n)*BigInt(a.d));
+}
+const signBig=n=>n<0n?-1:n>0n?1:0;
+const equal=(a,b)=>compare(a,b)===0,number=v=>v.pi?Math.PI:v.root!==undefined?v.sign*v.root**(1/(v.degree||2)):v.n/v.d;
+function numberSets(e){const v=value(e);return v.root!==undefined||v.pi?['irr','R']:v.d===1?[...(v.n>=0?['N']:[]),'Z','Q','R']:['Q','R']}
+function decimalType(e){const v=value(e);if(v.root!==undefined||v.pi)return 'irr';let d=v.d;while(d%2===0)d/=2;while(d%5===0)d/=5;return d===1?'finite':gcd(v.d,10)===1?'pure':'mixed'}
+const decimalNames={finite:'Eindig decimaal',pure:'Zuiver repeterend',mixed:'Gemengd repeterend',irr:'Irrationaal getal'};
+const radical=(n,d=1,degree=2,sign=1)=>({kind:'radical',radicand:d===1?integer(n):fraction(n,d),degree,sign});
+function parseExact(text){const parts=String(text).replaceAll('−','-').split('/');if(parts.length===1)return parse(parts[0]);if(parts.length!==2||!/^[-]?\d{1,6}$/.test(parts[0])||!/^\d{1,6}$/.test(parts[1])||!Number(parts[1]))return null;return rational(Number(parts[0]),Number(parts[1]))}
+const exactText=r=>r.d===1?format(r.n):`${format(r.n)}/${r.d}`;
+function extractRoot(n,degree){let outside=1;for(let k=2;k**degree<=Math.abs(n);k++)if(n%(k**degree)===0)outside=k;return {outside,inside:Math.abs(n)/outside**degree}}
+function rootBounds(t,stage){const degree=t.degree||2,k=t.k;if(stage===0)return [k**degree,(k+1)**degree];return t.source.sign<0?[-k-1,-k]:[k,k+1]}
+function endpoint(v){return v==='-inf'?-Infinity:v==='inf'?Infinity:parse(v)?number(parse(v)):null}
+function intervalLabel(lo,hi,cl,ch){return `${cl&&lo!==null?'[':']'}${lo===null?'−∞':format(lo)}; ${hi===null?'+∞':format(hi)}${ch&&hi!==null?']':'['}`}
+function format(n){return String(n).replace('-', '−').replace('.',',')}
+function decimalOf(v){return format(Number((v.n/v.d).toFixed(4)))}
+function label(e){switch(e.kind){case 'fraction':return `${format(e.n)}/${e.d}`;case 'integer':return format(e.n);case 'decimal':return e.text.replace('-','−');case 'percent':return `${format(e.n)}%`;case 'root':return `${e.sign<0?'−':''}${e.degree===3?'∛':'√'}${e.n<0?'('+format(e.n)+')':e.n}`;case 'power':return `(${format(e.base)})${e.degree===3?'³':'²'}`;case 'radical':return `${e.sign<0?'−':''}${e.degree===3?'∛':'√'}(${label(e.radicand)})`;case 'pi':return 'π';case 'period':return `${e.whole||0},${e.lead||''}${e.repeat.repeat(3)}…`;default:return ''}}
+const skills=[
+ {id:'fraction',title:'Een waarde, meerdere vormen',short:'Breuken bouwen',deps:[],concept:'Een breuk, decimaal en procent kunnen precies hetzelfde getal voorstellen.'},
+ {id:'line',title:'Getallen krijgen een plaats',short:'De getallijn',deps:['fraction'],concept:'De schaal bepaalt de plaats. Gelijke afstanden betekenen gelijke verschillen.'},
+ {id:'compare',title:'Groter, kleiner of gelijk',short:'Vergelijken',deps:['line'],concept:'Vergelijk de waarden, ook als de schrijfwijzen verschillen. Links op de lijn ligt het kleinere getal.'},
+ {id:'group',title:'Andere vorm, dezelfde waarde',short:'Equivalenten groeperen',deps:['compare'],concept:'Voorstellingen horen samen als ze exact dezelfde waarde hebben.'},
+ {id:'rootcalc',title:'Wortels uit het hoofd',short:'Wortels berekenen',deps:['group'],concept:'Bereken vierkantswortels en derdemachtswortels exact, ook met mintekens, machten en breuken.'},
+ {id:'rootsimplify',title:'Haal eruit wat je kunt',short:'Wortelvormen vereenvoudigen',deps:['rootcalc'],concept:'Haal volledige kwadraten of derdemachten buiten de wortel. Bijvoorbeeld: √72 = 6√2.'},
+ {id:'root',title:'Hoe groot is deze wortel?',short:'Wortels schatten',deps:['rootsimplify'],concept:'Tussen welke twee opeenvolgende gehele getallen ligt de wortel? Gebruik bekende kwadraten of derdemachten om te controleren.'},
+ {id:'interval',title:'Een heel gebied op de lijn',short:'Intervallen bouwen',deps:['root'],concept:'Een interval heeft grenzen. Open betekent dat de grens niet meetelt, gesloten dat ze wel meetelt.'},
+ {id:'classify',title:'Tot welke verzamelingen?',short:'Getalsoorten',deps:['root'],concept:'Kijk naar de waarde. Een geheel getal is ook rationaal en reëel; een wortelteken maakt een getal niet automatisch irrationaal.'},
+ {id:'sets',title:'Getallen in elkaar passende verzamelingen',short:'Slepen naar ℕ, ℤ, ℚ en ℝ',deps:['classify'],concept:'ℕ ligt in ℤ, ℤ in ℚ, en ℚ in ℝ. Plaats elk getal in de kleinste passende verzameling.'},
+ {id:'decimaltype',title:'Hoe gaat de decimaal verder?',short:'Vier soorten decimalen',deps:['period'],concept:'Eindig, zuiver repeterend, gemengd repeterend of irrationaal: kijk naar de volledige voortzetting.'},
+ {id:'period',title:'Een blok dat blijft terugkomen',short:'Periodieke decimalen',deps:['classify'],concept:'We schrijven de periode drie keer, gevolgd door … . De herhaling gaat onbeperkt door. Een vaste aanloop hoort niet bij de periode.'}
+];
+function rng(seed){let a=seed>>>0;return()=>{a+=0x6D2B79F5;let t=Math.imul(a^a>>>15,1|a);t^=t+Math.imul(t^t>>>7,61|t);return((t^t>>>14)>>>0)/4294967296}}
+function generate(skill,{seed=1,variant=0,level=0,contentVersion=3}={}){
+ if(!skills.some(s=>s.id===skill))throw Error('Onbekende vaardigheid');
+ const random=rng(seed),pick=a=>a[Math.floor(random()*a.length)],v=variant%5;
+ const t={skill,seed,variant,level,contentVersion,representation:'symbols'};
+ if(skill==='fraction'){
+  const values=level?[rational(3,4),rational(7,20),rational(-3,5),rational(5,4),rational(9,8),rational(7,8)]:[rational(3,4),rational(1,2),rational(1,4),rational(2,5),rational(3,5)];
+  t.target=pick(values);t.source=v%2?percent(t.target.n*100/t.target.d):decimal(decimalOf(t.target));if(t.source.kind==='percent'&&!Number.isInteger(t.source.n))t.source=decimal(decimalOf(t.target));
+  t.prompt='Bouw een vereenvoudigde breuk met dezelfde waarde.';t.representation=t.source.kind;
+ }else if(skill==='line'){
+  t.step=level&&v%2?rational(1,4):rational(1,2);t.min=level?-2:0;t.max=level?2:2;
+  const ticks=Math.round((t.max-t.min)/number(t.step));t.tick=pick(Array.from({length:ticks+1},(_,i)=>i));t.target=rational(t.min*t.step.d+t.tick*t.step.n,t.step.d);
+  t.source=v%2?decimal(decimalOf(t.target)):fraction(t.target.n,t.target.d);t.prompt='Plaats dit getal op de geijkte lijn.';t.representation=t.source.kind;
+ }else if(skill==='compare'){
+  const pairs=level?[[decimal('-0,8'),decimal('-0,75')],[fraction(8,4),integer(2)],[fraction(-3,4),decimal('-0,7')],[fraction(7,8),decimal('0,9')],[fraction(4,5),percent(75)],[percent(125),fraction(5,4)]]:[[percent(75),decimal('0,8')],[fraction(1,2),decimal('0,5')],[fraction(3,4),percent(70)],[decimal('0,4'),fraction(1,2)],[fraction(1,4),percent(25)]];
+  [t.left,t.right]=pick(pairs);if(random()>.5)[t.left,t.right]=[t.right,t.left];t.target=compare(value(t.left),value(t.right));t.prompt='Vergelijk de waarden. Kies <, = of >.';t.representation=v%2?'numberline':'symbols';
+ }else if(skill==='group'){
+  const pairs=level?[[rational(-1,2),rational(3,4)],[rational(5,4),rational(1,4)],[rational(2,5),rational(3,5)]]:[[rational(1,2),rational(3,4)],[rational(1,4),rational(1,2)],[rational(2,5),rational(3,4)]];
+  const values=level&&v%2?[rational(pick([1,2,3,4])),rational(1,2)]:pick(pairs);t.tokens=values.flatMap(r=>[fraction(r.n,r.d),r.d===1?integer(r.n):decimal(decimalOf(r)),percent(r.n*100/r.d)]).map(e=>({e,shuffle:random()})).sort((a,b)=>a.shuffle-b.shuffle).map(x=>x.e);
+  t.prompt='Groepeer de zes kaartjes volgens hun waarde.';t.representation=t.tokens.some(e=>e.kind==='integer')?'whole-mix':'fraction-mix';
+ }else if(skill==='rootcalc'){
+  const kind=variant%(level===0?4:12),k=pick([2,3,4,5,6,7,8,9,10,11,12,15]),c=pick([2,3,4,5,6]);
+  t.source=radical(k*k);t.target=rational(k);t.representation='square';
+  if(kind===1){t.source.sign=-1;t.target.n*=-1;t.representation='negative-square';}
+  if(kind===2||kind===3){const n=kind===3?-c:c;t.source=radical(n**3,1,3);t.target=rational(n);t.representation='cube';}
+  if(kind===4||kind===9){const base=kind===4?-4:pick([-3,-5,-7]);t.source.radicand={kind:'power',base,degree:2};t.target=rational(Math.abs(base));t.representation='square-of-negative';}
+  if(kind===5||kind===8){t.source=radical(9,16,2,kind===8?-1:1);t.target=rational(kind===8?-3:3,4);t.representation='fraction';}
+  if(kind===6||kind===7){t.source=radical(kind===7?-125:125,64,3);t.target=rational(kind===7?-5:5,4);t.representation='cube-fraction';}
+  if(kind===10){t.source=radical(-k*k);t.target=null;t.representation='not-real';}
+  if(kind===11){t.source=radical(0,1,variant%2?3:2);t.target=rational(0);t.representation='zero';}
+  t.prompt='Bereken de wortelwaarde exact, zonder rekenmachine.';
+ }else if(skill==='rootsimplify'){
+  const kind=variant%(level===0?2:6),degree=kind===2||kind===3||kind===5?3:2;
+  let n=pick(degree===2?[8,12,18,20,27,32,45,48,50,72,98,108,125]:[16,24,54,81,128,192,250]),d=1,sign=kind===1?-1:1;
+  if(kind===3)n=-n;
+  if(kind===4){n=125;d=64;}if(kind===5){n=54;d=125;}
+  const {outside,inside}=extractRoot(n,degree),den=Math.round(d**(1/degree));
+  t.source=radical(n,d,degree,sign);t.radicand=rational(n,d);t.target={coefficient:rational(sign*Math.sign(n)*outside,den),inside};
+  t.degree=degree;t.factorPower=outside**degree;t.prompt='Vereenvoudig: breng zoveel mogelijk buiten de wortel.';
+  t.representation=d!==1?'fraction':degree===3?'cube':'square';
+ }else if(skill==='root'){
+  t.n=pick(level?[2,5,10,17,20,26,35,50]:[2,5,10,17,20]);t.k=Math.floor(Math.sqrt(t.n));t.source=sqrt(t.n);if(contentVersion>=2&&level){if(variant%3===1)t.source=sqrt(t.n,-1);if(variant%3===2){t.degree=3;t.n=pick([-30,-10,-2,2,10,30]);t.k=Math.floor(Math.cbrt(t.n));t.source=cbrt(t.n);}}t.prompt='Zoek eerst de twee opeenvolgende kwadraten.';t.representation=t.degree===3?'cubes':t.source.sign<0?'negative-root':v%2?'area':'bounds';if(t.degree===3)t.prompt='Zoek de twee opeenvolgende gehele derdemachten.';
+  if(contentVersion>=3){t.directBounds=true;t.prompt='Tussen welke twee opeenvolgende gehele getallen ligt deze wortel?';t.representation=t.degree===3?'cubes':t.source.sign<0?'negative-root':'bounds';}
+ }else if(skill==='interval'){
+  t.lo=pick(level?[-3,-2,-1,0]:[-1,0,1]);t.hi=t.lo+pick([2,3,4]);t.closedLo=!!(v&1);t.closedHi=!!(v&2);t.min=-4;t.max=7;
+  t.sourceMode=v%2?'words':'notation';t.prompt='Bouw het interval op de lijn.';t.representation=t.sourceMode;
+  if(contentVersion>=2){
+   t.lo=pick([-3,-2,-1,0,1,2,3,4,5]);t.hi=t.lo+pick([1,2,3,4]);
+   const kind=level?variant%12:variant%3;if(kind===1)t.closedLo=t.closedHi=true;const wordLo=t.closedLo?'groter dan of gelijk aan':'groter dan',wordHi=t.closedHi?'kleiner dan of gelijk aan':'kleiner dan';
+   t.sourceText=kind===1?`x is ${wordHi} ${format(t.hi)} en ${wordLo} ${format(t.lo)}.`:`x is ${wordLo} ${format(t.lo)} en ${wordHi} ${format(t.hi)}.`;
+   if(kind===2)t.sourceText=`${format(t.lo)} ${t.closedLo?'≤':'<'} x ${t.closedHi?'≤':'<'} ${format(t.hi)}`;
+   if([3,6].includes(kind)){t.lo=null;t.closedLo=false;t.closedHi=kind===3;t.sourceText=`x is kleiner ${t.closedHi?'dan of gelijk aan':'dan'} ${format(t.hi)}.`;}
+   if([4,5].includes(kind)){t.hi=null;t.closedHi=false;t.closedLo=kind===5;t.sourceText=`x is groter ${t.closedLo?'dan of gelijk aan':'dan'} ${format(t.lo)}.`;}
+   if([7,11].includes(kind)){t.lo=0;t.hi=null;t.closedLo=kind===7;t.closedHi=false;t.sourceText=kind===7?'x ∈ ℝ⁺':'x ∈ ℝ⁺, met x ≠ 0';t.convention='Hier betekent ℝ⁺: alle reële getallen groter dan of gelijk aan 0.';}
+   if(kind===8){t.lo=null;t.hi=0;t.closedLo=false;t.closedHi=true;t.sourceText='x ∈ ℝ⁻';t.convention='Hier betekent ℝ⁻: alle reële getallen kleiner dan of gelijk aan 0.';}
+   if(kind===9){t.lo=t.hi=null;t.closedLo=t.closedHi=false;t.sourceText='x ∈ ℝ';}
+   if(kind===10)t.sourceText=intervalLabel(t.lo,t.hi,t.closedLo,t.closedHi);
+   t.representation=t.lo===null||t.hi===null?'unbounded':kind===2?'inequality':'words';t.min=Math.min(-4,(t.lo??t.hi??0)-1);t.max=Math.max(7,(t.hi??t.lo??0)+1);
+  }else t.max=6;
+ }else if(skill==='classify'){
+  t.source=pick(level?[integer(0),integer(-3),fraction(6,3),fraction(-3,4),sqrt(16),sqrt(2),sqrt(3,-1),decimal('1,25')]:[integer(5),integer(-2),integer(0),fraction(3,4),sqrt(16)]);
+  if(contentVersion>=2&&level)t.source=pick([integer(0),integer(-3),fraction(6,3),fraction(-3,4),sqrt(16),sqrt(9,-1),sqrt(2),sqrt(3,-1),cbrt(-8),cbrt(27),cbrt(-2),cbrt(5),decimal('1,25')]);t.target=numberSets(t.source);
+  t.prompt='Kies alle verzamelingen waartoe dit getal behoort.';t.representation=t.source.kind;
+ }else if(skill==='sets'){
+  t.tokens=[pick([integer(0),sqrt(16),cbrt(27),fraction(6,3)]),pick([integer(-3),sqrt(9,-1),cbrt(-8)]),pick([fraction(-3,4),decimal('1,25'),fraction(7,3)]),pick([sqrt(2),sqrt(3,-1),cbrt(-2),cbrt(5),{kind:'pi'}])].map(e=>({e,r:random()})).sort((a,b)=>a.r-b.r).map(x=>x.e);
+  t.target=t.tokens.map(e=>{const kinds=numberSets(e);return kinds[0]==='irr'?'R':kinds[0]});t.prompt='Sleep elk getal naar de kleinste passende verzameling.';t.representation=t.tokens.some(e=>e.degree===3)?'cube-roots':'mixed-forms';
+ }else if(skill==='decimaltype'){
+  const examples=[decimal('0,125'),{kind:'period',whole:0,lead:'',repeat:'27'},{kind:'period',whole:0,lead:'1',repeat:'6'},sqrt(2),fraction(7,8),fraction(5,3),fraction(1,6),cbrt(-2),sqrt(16),{kind:'pi'},cbrt(-8),sqrt(3,-1)];
+  t.source=examples[variant%examples.length];t.target=decimalType(t.source);t.prompt='Welke soort decimale ontwikkeling heeft dit getal?';t.representation=t.source.kind;
+  t.rule=t.source.kind==='period'?`${t.source.lead?'Na de vaste aanloop '+t.source.lead+' herhaalt':'Meteen na de komma herhaalt'} het blok ${t.source.repeat} zich onbeperkt.`:t.source.kind==='pi'?'π is de verhouding tussen de omtrek en de diameter van een cirkel.':'';
+ }else if(skill==='period'){
+  const pairs=level?[['1','6'],['03','27'],['','125'],['','27'],['','3'],['2','45']]:[['','3'],['','27'],['1','6'],['','12'],['','09']];
+  [t.lead,t.repeat]=pick(pairs);t.repeat=shortestPeriod(t.repeat);t.whole=pick([0,1,2]);t.digits=t.lead+t.repeat.repeat(t.repeat.length>3?2:3);t.target={start:t.lead.length,end:t.lead.length+t.repeat.length-1};
+  t.rule=`${t.lead?'Eerst '+t.lead+', daarna':'Na de komma'} blijft het blok ${t.repeat} zich onbeperkt herhalen.`;
+  t.prompt='Duid één kortste herhaalblok aan, zo vroeg mogelijk.';t.representation=t.lead?'with-prefix':'pure-period';
+ }
+ t.signature=JSON.stringify({...t,seed:0,variant:0,level:0});return t;
+}
+// Keep inclusion attached to its endpoint when the learner works right-to-left.
+function orderInterval(a){
+ const lo=endpoint(a.values[0]),hi=endpoint(a.values[1]);
+ if(lo!==null&&hi!==null&&lo>hi){a.values.reverse();[a.closedLo,a.closedHi]=[a.closedHi,a.closedLo];return true}return false;
+}
+function shortestPeriod(block){
+ for(let n=1;n<=block.length;n++)if(block.length%n===0&&block.slice(0,n).repeat(block.length/n)===block)return block.slice(0,n);
+ return block;
+}
+function freshAnswer(t){return {values:t.skill==='interval'?['','']:['',''],sign:1,relation:null,groups:Array(6).fill(null),labels:[],tick:null,closedLo:false,closedHi:false,start:null,end:null,stage:t.directBounds?1:0,noReal:false,periodAnchor:null,placements:Array(t.tokens?.length||4).fill(null),decimalType:null}}
+const result=(ok,code,message,extra={})=>({ok,code,message,...extra});
+function validate(t,a){
+ const good=message=>result(true,'ok',message),bad=(code,message)=>result(false,code,message),empty=()=>result(false,'input','Maak eerst je antwoord af.',{input:true});
+ if(t.skill==='fraction'){
+  if(!/^\d{1,6}$/.test(a.values[0])||!/^\d{1,6}$/.test(a.values[1]))return empty();const n=Number(a.values[0])*a.sign,d=Number(a.values[1]);
+  if(!d)return result(false,'input','De noemer mag niet 0 zijn.',{input:true});
+  if(!equal(rational(n,d),t.target)){const r=rational(n,d),shown=decimalOf(r),exact=equal(r,parse(shown));return bad('value',`Je breuk ${exact?'heeft de waarde':'is ongeveer'} ${shown}. Vergelijk die met het gegeven getal.`);}
+  if(gcd(n,d)!==1)return result(false,'simplify','De waarde klopt. Deel teller en noemer nog door dezelfde gemeenschappelijke deler.',{partial:true});
+  return good('Dezelfde waarde, nu als vereenvoudigde breuk.');
+ }
+ if(t.skill==='rootcalc'){
+  if(a.noReal)return t.target===null?good('In ℝ bestaat geen vierkantswortel van een negatief getal. Elk reëel kwadraat is niet-negatief.'):bad('root-real','Deze wortel heeft wel een reële waarde. Een minteken vóór √ mag; een derdemachtswortel kan ook negatief zijn.');
+  const r=parseExact(a.values[0]);if(!r)return empty();
+  if(t.target===null)return bad('root-real','Onder √ staat een negatief getal. Geen enkel reëel getal heeft dat als kwadraat.');
+  if(equal(r,t.target))return good(`${label(t.source)} = ${exactText(t.target)}. Controleer met de bijbehorende macht.`);
+  return bad('root-value',t.representation==='square-of-negative'?'Bereken eerst het kwadraat. De vierkantswortel daarvan is niet-negatief: √(a²) = |a|.':t.source.degree===3?'Welk getal geeft bij driemaal vermenigvuldigen met zichzelf het getal onder de wortel? Denk ook aan het teken.':'√ geeft de niet-negatieve wortel. Een minteken vóór de wortel neem je daarna mee.');
+ }
+ if(t.skill==='rootsimplify'){
+  const c=parseExact(a.values[0]),inside=Number(a.values[1]);if(!c||!/^\d{1,6}$/.test(a.values[1])||inside<1)return empty();
+  const degree=BigInt(t.degree),r=t.radicand;
+  const same=BigInt(c.n)**degree*BigInt(inside)*BigInt(r.d)===BigInt(r.n)*BigInt(c.d)**degree&&(t.degree===3||Math.sign(c.n)===t.source.sign);
+  if(!same)return bad('root-factor',`Een factor mag alleen buiten de wortel als je de ${t.degree===3?'derdemachtswortel':'vierkantswortel'} van die factor neemt. De waarde moet gelijk blijven.`);
+  if(inside!==t.target.inside)return result(false,'root-simplify','De waarde klopt, maar er kan nog meer buiten de wortel. Zoek een grotere kwadraat- of derdemachtsfactor.',{partial:true});
+  const parts=a.values[0].replaceAll('−','-').split('/');if(parts.length===2&&gcd(Number(parts[0]),Number(parts[1]))>1)return result(false,'root-coefficient','De wortel is vereenvoudigd. Vereenvoudig nu ook de breuk vóór het wortelteken.',{partial:true});
+  return good(`Volledig vereenvoudigd: ${t.target.coefficient.d===1?exactText(t.target.coefficient):`(${exactText(t.target.coefficient)})`}${t.degree===3?'∛':'√'}${t.target.inside}. Onder de wortel blijft geen volledige ${t.degree===3?'derdemachtsfactor':'kwadraatfactor'} groter dan 1 over.`);
+ }
+ if(t.skill==='compare'){if(a.relation===null)return empty();if(a.relation===t.target)return good(t.target===0?'Deze twee schrijfwijzen stellen hetzelfde getal voor.':'Het kleinere getal ligt links van het grotere.');return bad('order',number(value(t.left))<0&&number(value(t.right))<0?'Bij negatieve getallen ligt het getal met de grootste afstand tot nul verder naar links.':t.left.kind==='root'||t.right.kind==='root'?'Onderzoek de wortelwaarde met een bekend kwadraat. Het wortelteken alleen vertelt niet hoe groot het getal is.':'Breng de waarden naar dezelfde voorstelling. Bijvoorbeeld: procent betekent per honderd.');}
+ if(t.skill==='line'){
+  if(!Number.isInteger(a.tick))return empty();const n=rational(t.min*t.step.d+a.tick*t.step.n,t.step.d);
+  return equal(n,t.target)?good('Je punt past bij de waarde én de schaal.'):bad('scale',`Je punt staat op ${decimalOf(n)}. Tel de gelijke tussenruimten vanaf een bekend anker.`);
+ }
+ if(t.skill==='group'){
+  if(a.groups.length!==6||a.groups.some(x=>!['A','B'].includes(x)))return empty();
+  for(let i=0;i<6;i++)for(let j=i+1;j<6;j++)if((a.groups[i]===a.groups[j])!==equal(value(t.tokens[i]),value(t.tokens[j])))return {...bad('equivalence',`Vergelijk kaart ${i+1} en kaart ${j+1}: ${a.groups[i]===a.groups[j]?'hebben ze echt dezelfde waarde?':'stellen ze misschien hetzelfde getal voor?'}`),pair:[i,j]};
+  return good('In elke groep staan drie schrijfwijzen van dezelfde waarde.');
+ }
+ if(t.skill==='root'){
+  const l=parse(a.values[0]),u=parse(a.values[1]);if(!l||!u)return empty();
+  const [lower,upper]=rootBounds(t,t.directBounds?1:a.stage);
+  if(equal(l,rational(lower))&&equal(u,rational(upper)))return good(a.stage===0?'De machten kloppen. Bouw nu de grenzen voor de wortelwaarde.':t.source.sign<0?'Bij tegengestelde getallen keert de volgorde om. De negatieve wortelwaarde ligt tussen jouw grenzen.':'De wortelwaarde ligt tussen de bijbehorende gehele getallen.');
+  return bad(a.stage===0?'squares':'root-bounds',a.stage===0?`Zoek twee opeenvolgende gehele getallen waarvan de ${t.degree===3?'derdemachten':'kwadraten'} de gegeven waarde insluiten.`:t.source.sign<0?'Begrens eerst de positieve wortel. Neem de tegengestelden en keer de volgorde om.':`Controleer door je grenzen tot de ${t.degree===3?'derde':'tweede'} macht te verheffen.`);
+
+ }
+ if(t.skill==='interval'){
+  a={...a,values:[...a.values]};orderInterval(a);
+  const l=endpoint(a.values[0]),u=endpoint(a.values[1]);if(l===null||u===null)return empty();if(l>=u)return bad('bounds-order','De linkergrens moet kleiner zijn dan de rechtergrens.');
+  if(l!==(t.lo??-Infinity)||u!==(t.hi??Infinity))return bad('bounds','Controleer de grenswaarden en de richting. Bij een onbegrensde kant hoort een pijl naar −∞ of +∞.');
+  if(a.closedLo!==t.closedLo||a.closedHi!==t.closedHi)return bad('inclusion',!Number.isFinite(l)&&a.closedLo||!Number.isFinite(u)&&a.closedHi?'Oneindig is geen grensgetal dat je kunt opnemen. Een oneindige kant is altijd open.':'Bij < of > hoort een hol punt; bij ≤ of ≥ een vol punt. Controleer beide kanten.');
+  return good('De grenswaarden, de richting en het meetellen van de eindpunten kloppen.');
+ }
+ if(t.skill==='sets'){
+  if(a.placements.length!==t.tokens.length||a.placements.some(x=>!['N','Z','Q','R'].includes(x)))return empty();const i=a.placements.findIndex((x,i)=>x!==t.target[i]);
+  if(i>=0)return {...bad('sets',`${label(t.tokens[i])}: kijk naar de waarde en kies de kleinste passende verzameling. Een getal in ℕ hoort ook bij ℤ, ℚ en ℝ, maar ligt in het binnenste vak.`),token:i};
+  return good('Alle getallen liggen in de kleinste passende verzameling. De grotere verzamelingen bevatten ze ook.');
+ }
+ if(t.skill==='decimaltype'){
+  if(!a.decimalType)return empty();if(a.decimalType===t.target)return good(({finite:'De decimale ontwikkeling stopt. Je mag daarna nullen toevoegen.',pure:'De periode begint meteen na de komma: er is geen vaste aanloop.',mixed:'Eerst komt een vaste aanloop, daarna herhaalt het blok onbeperkt.',irr:'De decimale ontwikkeling is oneindig en niet-periodiek.'})[t.target]);
+  return bad('decimal-type',t.source.kind==='root'&&value(t.source).n!==undefined?`Bereken eerst ${label(t.source)}. Een wortelteken betekent niet automatisch irrationaal.`:'Eindig: de cijfers stoppen. Zuiver: de periode start meteen. Gemengd: eerst een vaste aanloop. Irrationaal: oneindig, zonder periode.');
+ }
+
+ if(t.skill==='classify'){
+  if(!a.labels.length)return empty();const wrong=a.labels.find(x=>!t.target.includes(x)),missing=t.target.find(x=>!a.labels.includes(x));
+  if(wrong||missing)return bad('sets',t.source.kind==='root'&&value(t.source).n!==undefined?`Bereken eerst de wortel. ${label(t.source)} is ${format(number(value(t.source)))}. Kies daarna alle passende verzamelingen.`:wrong==='N'?'Natuurlijke getallen zijn 0, 1, 2, …; negatieve en niet-gehele waarden horen daar niet bij.':wrong==='irr'||missing==='Q'?'Een getal is rationaal als het als breuk van twee gehele getallen kan worden geschreven, met een niet-nulle noemer.':missing==='R'?'Alle getallen in deze oefening zijn reëel. ℝ telt dus ook mee.':'Denk aan de insluiting: ℕ binnen ℤ, ℤ binnen ℚ en ℚ binnen ℝ. Irrationale getallen liggen ook in ℝ.');
+  return good('Je hebt alle passende verzamelingen gekozen. ℕ bevat hier ook 0.');
+ }
+ if(t.skill==='period'){
+  if(a.start===null||a.end===null)return empty();
+  if(a.start===t.target.start&&a.end===t.target.end)return good('Je hebt één kortste herhaalblok gekozen. De vaste aanloop blijft ervoor.');
+  const selected=t.digits.slice(a.start,a.end+1),tail=t.digits.slice(a.start);
+  return bad('period',tail.startsWith(selected.repeat(2))?'Je blok herhaalt zich. Kan het korter of begint dezelfde herhaling al eerder?':'Herhaal je gekozen blok. Dan krijg je niet dezelfde opeenvolging van cijfers; controleer ook de vaste aanloop.');
+ }
+ throw Error('Onbekende beoordeling');
+}
+// A bounded record of processed exercises; old saves legitimately have no event history.
+function sanitizeActivity(items){return (Array.isArray(items)?items:[]).filter(e=>e&&skills.some(s=>s.id===e.skill)&&['independent','supported','skipped'].includes(e.outcome)).slice(-30).map(e=>({skill:e.skill,outcome:e.outcome,code:typeof e.code==='string'?e.code.slice(0,40):null,at:Number.isFinite(e.at)&&e.at>0&&e.at<1e14?e.at:0,seq:Number.isInteger(e.seq)&&e.seq>0?e.seq:0,xp:Number.isFinite(e.xp)?Math.max(0,Math.min(18,e.xp)):0}))}
+const freshSkill=()=>({intro:false,seen:0,clean:0,recent:[],signatures:[],representations:[],reviewClean:0,last:-1,repair:null,due:0});
+function fresh(){return {version:1,xp:0,total:0,sessions:0,activity:[],lastSkill:null,skills:Object.fromEntries(skills.map(s=>[s.id,freshSkill()]))}}
+const count=n=>Number.isFinite(n)?Math.floor(Math.max(0,Math.min(1e7,n))):0;
+function sanitize(raw){const p=fresh();if(raw?.version!==1)return p;p.activity=sanitizeActivity(raw.activity);for(const k of ['xp','total','sessions'])p[k]=count(raw[k]);p.lastSkill=skills.some(s=>s.id===raw.lastSkill)?raw.lastSkill:null;for(const {id} of skills){const d=raw.skills?.[id]||{},s=p.skills[id];s.intro=d.intro===true;for(const k of ['seen','clean','reviewClean','due'])s[k]=count(d[k]);s.last=Number.isInteger(d.last)?Math.max(-1,Math.min(p.total,d.last)):-1;s.repair=typeof d.repair==='string'?d.repair.slice(0,30):null;for(const k of ['signatures','representations'])s[k]=Array.isArray(d[k])?[...new Set(d[k].filter(x=>typeof x==='string'))].slice(-30):[];s.recent=Array.isArray(d.recent)?d.recent.filter(x=>typeof x==='boolean').slice(-4):[];}return p}
+function unlocked(p,id){return skills.find(s=>s.id===id).deps.every(d=>p.skills[d].clean>=2)}
+function mastered(p,id){const s=p.skills[id];return s.clean>=4&&s.reviewClean>=1&&s.signatures.length>=3&&s.representations.length>=2&&s.recent.length>=3&&s.recent.slice(-3).every(Boolean)&&!s.repair}
+function choose(p){
+ const available=skills.filter(s=>unlocked(p,s.id));const due=available.find(s=>p.skills[s.id].repair&&p.skills[s.id].due<=p.total);if(due)return due.id;
+ const fresh=available.find(s=>!p.skills[s.id].intro);if(fresh)return fresh.id;
+ return available.map(s=>({id:s.id,score:(p.total-p.skills[s.id].last)+(mastered(p,s.id)?-5:3)+(s.id===p.lastSkill?-4:0)})).sort((a,b)=>b.score-a.score)[0].id;
+}
+function record(p,t,{clean=false,solved=false,code='practice',now=Date.now()}={}){
+ const s=p.skills[t.skill],repair=!!s.repair,age=p.total-s.last;
+ const xp=clean?(repair?15:10+2*t.level):solved?5:0;p.xp+=xp;p.total++;p.lastSkill=t.skill;
+ s.intro=true;s.seen++;s.last=p.total;s.recent=[...s.recent,!!clean].slice(-4);
+ if(clean){s.clean++;if(age>=3)s.reviewClean++;s.signatures=[...new Set([...s.signatures,t.signature])].slice(-30);s.representations=[...new Set([...s.representations,t.representation])];s.repair=null;}
+ else{s.repair=code;s.due=p.total+3;}
+ p.activity=[...sanitizeActivity(p.activity),{skill:t.skill,outcome:clean?'independent':solved?'supported':'skipped',code:clean?null:code,at:now,seq:p.total,xp}].slice(-30);return xp;
+}
+const api={radical,parseExact,exactText,extractRoot,numberSets,decimalType,decimalNames,rootBounds,endpoint,intervalLabel,cbrt,orderInterval,shortestPeriod,rational,parse,value,compare,equal,number,format,decimalOf,label,integer,fraction,decimal,percent,sqrt,skills,generate,freshAnswer,validate,Progress:{fresh,sanitize,choose,unlocked,mastered,record}};
+if(typeof module!=='undefined'&&module.exports)module.exports=api;root.RealNumbersCore=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
+</script><script>(function(root){
+'use strict';
+const C=typeof module!=='undefined'&&module.exports?require('./real-core.js'):root.RealNumbersCore;
+function build(t){
+ const a=C.freshAnswer(t),steps=[];const add=(title,text)=>steps.push({title,text,answer:JSON.parse(JSON.stringify(a))});
+ switch(t.skill){
+ case 'fraction':{
+  const r=t.target,isPercent=t.source.kind==='percent',places=isPercent?2:(t.source.text.split(',')[1]||'').length,d=10**places,n=Math.abs(r.n*d/r.d);
+  add('Lees wat één deel betekent',isPercent?'Procent betekent per honderd. De teller vertelt hoeveel honderdsten je neemt.':`Er staan ${places} cijfers na de komma. Schrijf het getal eerst in ${places===1?'tienden':places===2?'honderdsten':'duizendsten'}.`);
+  a.values=[String(n),String(d)];a.sign=Math.sign(r.n)||1;add('Bewaar dezelfde waarde','De breuk stelt hetzelfde getal voor. Een eventueel minteken geldt voor de hele breuk.');
+  a.values=[String(Math.abs(r.n)),String(r.d)];add('Vereenvoudig samen','Deel teller én noemer door dezelfde gemeenschappelijke deler. De waarde verandert niet.');break;
+ }
+ case 'line':
+  add('Lees eerst de schaal',`Van ${C.format(t.min)} naar ${C.format(t.max)}. Eén klein streepje verder is ${C.decimalOf(t.step)} erbij.`);
+  a.tick=Math.round((0-t.min)/C.number(t.step));add('Begin bij een bekend anker','Vanaf nul beweeg je naar rechts voor positieve waarden en naar links voor negatieve. Tel tussenruimten, niet streepjes.');
+  a.tick=t.tick;add('Koppel waarde aan plaats',`${C.label(t.source)} is ${C.decimalOf(t.target)}. Het gekozen punt ligt op precies die waarde.`);break;
+ case 'compare':
+  add('Vergelijk de waarden','Een langere schrijfwijze maakt een getal niet groter. Zet beide waarden eerst om naar dezelfde voorstelling.');
+  add('Maak de vergelijking zichtbaar',`${C.label(t.left)} = ${C.decimalOf(C.value(t.left))}; ${C.label(t.right)} = ${C.decimalOf(C.value(t.right))}. Bij negatieve waarden ligt het kleinste getal verder naar links.`);
+  a.relation=t.target;add('Lees van links naar rechts',t.target===0?'De waarden zijn gelijk. Daarom past =.':t.target<0?'De linkse waarde is kleiner. Daarom past <.':'De linkse waarde is groter. Daarom past >.');break;
+ case 'group':{
+  add('Maak groepen op waarde','Groep A en B hebben vooraf geen betekenis. Jij kiest welke waarde bij welke letter hoort.');
+  const first=C.value(t.tokens[0]);a.groups=t.tokens.map(e=>C.equal(C.value(e),first)?'A':null);add('Verbind één waarde',`De kaartjes in A stellen allemaal ${C.decimalOf(first)} voor. Procent betekent per honderd.`);
+  a.groups=a.groups.map(x=>x||'B');add('Controleer binnen én tussen groepen','Binnen elke groep zijn de waarden gelijk. De twee groepen hebben verschillende waarden. A en B omwisselen mag ook.');break;
+ }
+ case 'rootcalc':{
+  const cube=t.source.degree===3,r=t.target;
+  add('Wat wordt er gevraagd?',`Bereken ${C.label(t.source)} exact. ${cube?'Een derdemachtswortel vraagt welk getal driemaal met zichzelf vermenigvuldigd de gegeven waarde oplevert.':'Een vierkantswortel vraagt naar het niet-negatieve getal waarvan het kwadraat de gegeven waarde is.'}`);
+  if(!r){add('Kan dit in ℝ?','Het kwadraat van een reëel getal is nooit negatief. Onder dit vierkantswortelteken staat een negatief getal.');a.noReal=true;add('Geen reële waarde','√(−9) bestaat niet in ℝ. Dat is iets anders dan −√9: daar neem je het tegengestelde van 3.');break;}
+  const exp=cube?'³':'²';
+  add('Gebruik de bijbehorende macht',t.representation==='square-of-negative'?`Bereken eerst (${C.format(t.source.radicand.base)})² = ${t.source.radicand.base**2}. De wortel daarvan is ${C.format(r.n)}, niet ${C.format(-r.n)}. √(a²) = |a|.`:r.d!==1?`Neem de wortel van teller en noemer: (${C.format(cube?r.n:Math.abs(r.n))})${exp} = ${(cube?r.n:Math.abs(r.n))**(cube?3:2)} en ${r.d}${exp} = ${r.d**(cube?3:2)}.`:`(${C.format(cube?r.n:Math.abs(r.n))})${exp} = ${(cube?r.n:Math.abs(r.n))**(cube?3:2)}. ${t.source.sign<0?'Het minteken vóór de wortel neem je daarna mee.':''}`);
+  a.values[0]=C.exactText(r);add('Schrijf de exacte waarde',`${C.label(t.source)} = ${C.exactText(r)}. ${cube&&r.n<0?'Een negatieve waarde tot de derde macht blijft negatief.':'Een breuk mag als exact antwoord blijven staan.'}`);break;
+ }
+ case 'rootsimplify':{
+  const r=t.target,degree=t.degree,den=t.radicand.d;
+  add('Zoek een volledige macht',`Vereenvoudig ${C.label(t.source)}. Zoek een ${degree===3?'derdemacht':'kwadraat'} als factor, zodat er zoveel mogelijk buiten de wortel komt.`);
+  add('Splits in factoren',`${Math.abs(t.radicand.n)} = ${t.factorPower} × ${r.inside}. ${degree===3?'∛':'√'}${t.factorPower} = ${Math.round(t.factorPower**(1/degree))}.${den!==1?` De noemer is ${Math.round(den**(1/degree))}${degree===3?'³':'²'} = ${den}.`:''}`);
+  a.values=[C.exactText(r.coefficient),String(r.inside)];add('Breng de factor naar buiten',`${C.label(t.source)} = ${r.coefficient.d===1?C.exactText(r.coefficient):`(${C.exactText(r.coefficient)})`}${degree===3?'∛':'√'}${r.inside}. ${r.coefficient.n<0?'Neem ook het minteken mee. ':''}Onder de wortel blijft geen ${degree===3?'derdemachtsfactor':'kwadraatfactor'} groter dan 1 over.`);break;
+ }
+ case 'root':{
+  const powers=C.rootBounds(t,0),bounds=C.rootBounds(t,1),cube=t.degree===3;
+  if(t.directBounds){
+   add('Schat eerst de wortelwaarde',`Tussen welke twee opeenvolgende gehele getallen ligt ${C.label(t.source)}? We zoeken gehele grenzen, geen wortels als antwoord.`);
+   add('Controleer met bekende machten',`(${C.format(t.k)})${cube?'³':'²'} = ${C.format(powers[0])} en (${C.format(t.k+1)})${cube?'³':'²'} = ${C.format(powers[1])}. ${C.format(t.n)} ligt ertussen.`);
+   a.values=bounds.map(String);add('Geef de grenzen voor de wortel',`${C.format(bounds[0])} < ${C.label(t.source)} < ${C.format(bounds[1])}. ${t.source.sign<0?'Bij het nemen van tegengestelden keert de volgorde om.':'De wortelwaarde ligt dus tussen deze twee gehele getallen.'}`);break;
+  }
+
+  add(cube?'Van derde macht naar wortel':'Van kwadraat naar wortel',cube?`Zoek een getal waarvan de derde macht ${t.n} is. Negatieve getallen hebben ook een reële derdemachtswortel.`:t.source.sign<0?`Bij ${C.label(t.source)} staat het minteken vóór de wortel. Zoek eerst de positieve wortelwaarde en neem daarna het tegengestelde.`:`Een vierkant met oppervlakte ${t.n} heeft zijde √${t.n}. Vergelijk met gehele zijden.`);
+  a.values=powers.map(String);add('Zoek de naburige machten',`${t.k}${cube?'³':'²'} = ${powers[0]} en ${t.k+1}${cube?'³':'²'} = ${powers[1]}. ${t.n} ligt ertussen.`);
+  a.stage=1;a.values=['',''];add('Ga naar de wortelwaarde',t.source.sign<0?'Door het tegengestelde te nemen keert de volgorde om: het grootste positieve getal wordt het kleinste negatieve.':cube?'Derdemachtswortels behouden de volgorde, ook bij negatieve getallen.':'Neem de positieve zijden. √9 is 3; −√9 is −3. √(−9) is geen reëel getal.');
+  a.values=bounds.map(String);add('Begrens zonder afronden',`${C.format(bounds[0])} < ${C.label(t.source)} < ${C.format(bounds[1])}. Dit zijn exacte grenzen, geen afgeronde wortelwaarde.`);break;
+ }
+ case 'interval':
+  add('Vertaal de voorwaarde',t.sourceText||'Alle punten tussen de grenzen horen erbij. Voor de grenspunten beslis je apart.');
+  a.values=[t.lo===null?'-inf':String(t.lo),t.hi===null?'inf':String(t.hi)];add('Kies de grenzen en de richting',t.lo===null||t.hi===null?'Aan een onbegrensde kant teken je een pijl. Kies −∞ voor alle kleinere waarden, +∞ voor alle grotere waarden.':'Je mag links of rechts beginnen. Tik beide grensgetallen op de lijn.');
+  a.closedLo=t.closedLo;a.closedHi=t.closedHi;add('Open of gesloten?',`${t.lo===null||t.hi===null?'Een oneindige kant is altijd open. ':''}Bij < of > blijft het grenspunt hol. Bij ≤ of ≥ maak je het vol. ${t.convention||''}`);break;
+ case 'sets':{
+  add('Verzamelingen liggen in elkaar','ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ. Een natuurlijk getal hoort dus ook bij de drie grotere verzamelingen.');
+  const first=t.target.indexOf('N');a.placements[first]='N';add('Kies het kleinste vak',`${C.label(t.tokens[first])} is natuurlijk. Het komt in ℕ, het binnenste vak. Dat vak ligt tegelijk in ℤ, ℚ en ℝ.`);
+  a.placements=[...t.target];add('Plaats ook de andere getallen','Negatieve gehele getallen komen in ℤ buiten ℕ. Niet-gehele rationale getallen in ℚ buiten ℤ. Irrationale getallen in ℝ buiten ℚ.');break;
+ }
+ case 'decimaltype':
+  add('Vier verschillende voortzettingen','Eindig: de cijfers stoppen. Zuiver repeterend: het herhaalblok begint meteen na de komma.');
+  add('Een aanloop of helemaal geen periode?','Gemengd repeterend: eerst een vaste aanloop, daarna een periode. Irrationaal: oneindig veel cijfers, zonder periode.');
+  a.decimalType=t.target;add(C.decimalNames[t.target],({finite:'Dit getal heeft een eindige decimale ontwikkeling. Gehele getallen ook: 3 kun je schrijven als 3,0.',pure:'Dit getal heeft een periode die meteen na de komma begint.',mixed:'Na de komma staat eerst een vaste aanloop. Daarna blijft hetzelfde blok terugkomen.',irr:'Deze waarde is irrationaal. De decimale ontwikkeling is oneindig en niet-periodiek. Dat besluit je niet uit alleen enkele zichtbare cijfers.'})[t.target]);break;
+ case 'classify':{
+  const r=C.value(t.source);
+  add('Lees de waarde, niet de vorm',r.root!==undefined?`${C.label(t.source)} is irrationaal: ${t.source.degree===3?'het getal onder deze derdemachtswortel is geen gehele derdemacht':'het getal onder deze vierkantswortel is geen geheel kwadraat'}.`:`${C.label(t.source)} heeft waarde ${C.decimalOf(r)}. Bijvoorbeeld: √16 = 4, dus een wortelteken betekent niet automatisch irrationaal.`);
+  add('Verzamelingen passen in elkaar','ℕ = {0, 1, 2, …}. ℤ bevat ook negatieve gehele getallen. Elk geheel getal is een breuk met noemer 1 en hoort dus ook bij ℚ.');
+  a.labels=t.target;add('Kies alle passende namen','ℝ bevat zowel rationale als irrationale getallen. Daarom kies je ℝ ook. De buitenste verzameling vervangt de andere juiste namen niet.');break;
+ }
+ case 'period':
+  add('De voortzetting is gegeven',t.rule+' Met alleen een eindig rijtje cijfers zou je niet zeker weten hoe het getal verdergaat.');
+  add('Laat de vaste aanloop staan',t.lead?`De aanloop ${t.lead} komt maar één keer. Het herhaalblok begint daarna.`:'Er is geen vaste aanloop. De herhaling begint meteen na de komma.');
+  a.start=t.target.start;a.end=t.target.end;add('Neem het kortste blok',`Het blok ${t.repeat} herhaalt zich onbeperkt. We schrijven het drie keer en zetten er … achter: de herhaling gaat verder.`);
+  add('Een andere notatie die je kunt tegenkomen','Soms staat er een streep boven één periode. Dat betekent precies dezelfde onbeperkte herhaling. Hier gebruiken we drie herhalingen met … .');steps.at(-1).alternatePeriod=true;break;
+ }
+ return steps;
+}
+const api={build};if(typeof module!=='undefined'&&module.exports)module.exports=api;root.RealNumbersLessons=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
+</script><script type="text/axioma-game">(function(){
+'use strict';
+const C=RealNumbersCore,P=C.Progress,L=RealNumbersLessons,$=id=>document.getElementById(id),KEY='axioma-real-numbers-v1';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let progress=P.fresh(),task=null,answer=null,session=null,phase='answer',topic=null,dirty=false,errorCode=null,lessonStep=0,feedback=null,preview=null,activeSlot=0,activeGroup='A',serial=Date.now()>>>0,drag=null,digitDrag=null,setDrag=null,activeToken=0,previous='stage',suspendedSeries=null;
+function m(e,overbar=false){
+ const num=n=>`<mn>${esc(C.format(n))}</mn>`;
+ function body(e){
+  if(e.kind==='fraction')return `${e.n<0?'<mo>−</mo>':''}<mfrac>${num(Math.abs(e.n))}${num(e.d)}</mfrac>`;
+  if(e.kind==='power')return `<msup><mrow><mo>(</mo>${num(e.base)}<mo>)</mo></mrow>${num(e.degree)}</msup>`;
+  if(e.kind==='root'||e.kind==='radical'){const inside=e.kind==='radical'?body(e.radicand):num(e.n);return `${e.sign<0?'<mo>−</mo>':''}${e.degree===3?`<mroot><mrow>${inside}</mrow><mn>3</mn></mroot>`:`<msqrt><mrow>${inside}</mrow></msqrt>`}`;}
+  if(e.kind==='pi')return '<mi>π</mi>';
+  if(e.kind==='period')return `${num(e.whole||0)}<mo>,</mo><mn>${esc(e.lead||'')}</mn>${overbar?`<mover accent="true"><mn>${esc(e.repeat)}</mn><mo>¯</mo></mover>`:`<mn>${esc(e.repeat.repeat(3))}</mn><mo>…</mo>`}`;
+  return num(e.kind==='decimal'?e.text:e.n)+(e.kind==='percent'?'<mo>%</mo>':'');
+ }
+ return `<math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="${esc(C.label(e))}"><mrow>${body(e)}</mrow></math>`;
+}
+const rationalMath=r=>m(C.fraction(r.n,r.d));
+const intervalText=C.intervalLabel;const endpointText=v=>v==='-inf'?'−∞':v==='inf'?'+∞':C.format(v||'?');
+function snapshot(){return task?structuredClone({skill:task.skill,seed:task.seed,variant:task.variant,level:task.level,contentVersion:task.contentVersion,answer,session,phase,topic,dirty,errorCode,lessonStep,feedback,activeSlot,activeGroup,activeToken}):null}
+function save(){try{AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:document.documentElement.dataset.mode||'light',draft:snapshot(),suspendedSeries}));AxiomaGame.report(C.skills.filter(s=>P.mastered(progress,s.id)).map(s=>s.id),C.skills.length)}catch{$('storageWarning').hidden=false;$('storageWarning').textContent='Bewaren lukt niet. Laat deze pagina open om je werk te behouden.'}}
+function restore(){try{
+ const raw=JSON.parse(AxiomaGame.storage.getItem(KEY)||'null');progress=P.sanitize(raw?.progress);if(raw?.mode==='dark')document.documentElement.dataset.mode='dark';suspendedSeries=raw?.suspendedSeries&&C.skills.some(s=>s.id===raw.suspendedSeries.skill)?raw.suspendedSeries:null;return restoreDraft(raw?.draft);
+ }catch{return false}}
+function restoreDraft(d){try{
+ if(!d||!C.skills.some(s=>s.id===d.skill))return false;
+ task=C.generate(d.skill,{contentVersion:[2,3].includes(d.contentVersion)?d.contentVersion:1,seed:Number(d.seed)>>>0,variant:Math.max(0,Math.floor(Number(d.variant)||0)),level:Math.min(2,Math.max(0,Math.floor(Number(d.level)||0)))});answer=C.freshAnswer(task);const a=d.answer||{};
+ answer.values=[0,1].map(i=>typeof a.values?.[i]==='string'?a.values[i].slice(0,8):'');answer.sign=a.sign===-1?-1:1;answer.relation=[-1,0,1].includes(a.relation)?a.relation:null;answer.groups=Array.from({length:6},(_,i)=>['A','B'].includes(a.groups?.[i])?a.groups[i]:null);answer.labels=[...new Set((Array.isArray(a.labels)?a.labels:[]).filter(x=>['N','Z','Q','irr','R'].includes(x)))];answer.tick=Number.isInteger(a.tick)&&a.tick>=0&&a.tick<=32?a.tick:null;answer.closedLo=a.closedLo===true;answer.closedHi=a.closedHi===true;answer.stage=task.directBounds||a.stage===1?1:0;answer.noReal=a.noReal===true;
+ for(const key of ['start','end'])answer[key]=Number.isInteger(a[key])&&a[key]>=0&&a[key]<(task.digits?.length||0)?a[key]:null;
+ if(task.skill==='interval')C.orderInterval(answer);if(task.skill==='period'&&answer.start!==null&&answer.end===null)answer.end=answer.start;answer.periodAnchor=Number.isInteger(a.periodAnchor)&&a.periodAnchor===answer.start&&answer.start===answer.end?a.periodAnchor:null;
+ answer.placements=Array.from({length:task.tokens?.length||4},(_,i)=>['N','Z','Q','R'].includes(a.placements?.[i])?a.placements[i]:null);answer.decimalType=Object.hasOwn(C.decimalNames,a.decimalType)?a.decimalType:null;activeToken=Math.max(0,Math.min((task.tokens?.length||4)-1,Number(d.activeToken)||0));
+ phase=['intro','answer','feedback','done'].includes(d.phase)?d.phase:'answer';topic=C.skills.some(s=>s.id===d.topic)?d.topic:d.free===true?task.skill:null;dirty=d.dirty===true;errorCode=typeof d.errorCode==='string'?d.errorCode:null;lessonStep=Math.max(0,Math.min(L.build(task).length-1,Math.floor(Number(d.lessonStep)||0)));
+ session={answered:0,clean:0,xp:0};for(const k of ['answered','clean','xp'])session[k]=Math.min(k==='xp'?10000:8,Math.max(0,Number(d.session?.[k])||0));
+ feedback=d.feedback&&typeof d.feedback.message==='string'?{...d.feedback,message:d.feedback.message.slice(0,600)}:null;if(phase==='feedback'&&!feedback)phase='answer';if(phase==='done'&&!feedback)feedback={ok:true,message:'Deze oefening is al verwerkt. Je kunt verdergaan.',xp:0};activeSlot=d.activeSlot===1?1:0;activeGroup=d.activeGroup==='B'?'B':'A';return true;
+ }catch{return false}}
+function screen(name){document.body.dataset.screen=name;document.body.dataset.preview=String(!!preview);for(const id of ['stage','library','help','progress','summary'])$(id).hidden=id!==name;AxiomaPlatform.trainerScreen(preview?'help':({stage:'play',help:'help',progress:'progress'})[name]||'');$('xp').textContent=`${progress.xp} XP`;if(name==='stage')render();}
+function makeTask(id){
+ const previousTask=task?.skill===id?task.signature:null;preview=null;const s=progress.skills[id],level=s.seen<2?0:s.seen<5?1:2;
+ let candidate;for(let i=0;i<30;i++){candidate=C.generate(id,{seed:++serial,variant:s.seen+(i>14?i-14:0),level});if(candidate.signature!==previousTask&&!s.signatures.slice(-3).includes(candidate.signature))break}task=candidate;
+ answer=C.freshAnswer(task);phase=!s.intro?'intro':'answer';lessonStep=0;dirty=false;errorCode=null;feedback=null;activeSlot=0;activeToken=0;save();screen('stage');
+}
+function next(){if(session.answered>=8){finishSession();return}makeTask(topic||P.choose(progress))}
+function start(){suspendedSeries=null;session={answered:0,clean:0,xp:0};topic=null;next()}
+function resume(){preview=null;task?screen('stage'):start()}
+function followRoute(){
+ preview=null;
+ if(!topic){resume();return}
+ if(session.answered>=8){finishSession();return}
+ topic=null;
+ if(suspendedSeries){const draft=suspendedSeries,currentSession=session;suspendedSeries=null;if(restoreDraft(draft)){topic=null;session=currentSession;save();screen('stage');return}}
+ next();
+}
+function explore(id){
+ if(task&&!topic)suspendedSeries=snapshot();
+ if(!session||session.answered>=8)session={answered:0,clean:0,xp:0};
+ topic=id;makeTask(id);
+}
+function button(label,data,extra=''){return `<button ${data} ${extra}>${label}</button>`}
+function slot(a,i,label,readonly){return button(`<small>${esc(label)}</small>${esc(endpointText(a.values[i]))}`,`class="slot" data-slot="${i}" aria-label="${esc(label)}" aria-pressed="${activeSlot===i}"`,readonly?'disabled':'')}
+function pad(rootInput=false){return `<div class="keypad" aria-label="Getallen invoeren">${[['7','7'],['8','8'],['9','9'],['back','⌫'],['4','4'],['5','5'],['6','6'],['sign','±'],['1','1'],['2','2'],['3','3'],[rootInput==='single'?'slash':'next',rootInput==='single'?'/':'⇥'],['0','0'],['clear','Wis']].map(([key,label])=>button(label,`data-key="${key}" aria-label="${({back:'Laatste cijfer wissen',sign:'Teken wisselen',next:'Ander invoerveld',clear:'Actief veld wissen'})[key]||label}"`)).join('')}${rootInput==='pair'?button('/','data-key="slash" aria-label="Breukstreep"'):'<span class="empty-key"></span>'}</div>`}
+function svgLine(){return '<svg class="line-canvas" id="numberline" role="application" tabindex="0" aria-label="Getallijn. Tik een plaats of gebruik de pijltjestoetsen en stapknoppen."></svg>'}
+function relationButtons(a){return `<div class="relations">${[-1,0,1].map((v,i)=>button(['&lt;','=','&gt;'][i],`data-relation="${v}" aria-pressed="${a.relation===v}" aria-label="${['Kleiner dan','Gelijk aan','Groter dan'][i]}"`)).join('')}</div>`}
+function taskMarkup(t,a,readonly){
+ let canvas='',panel='';
+ if(t.skill==='fraction'){
+  canvas=`<div class="source-caption">Dezelfde waarde</div><div class="formula-row"><div class="math-large">${m(t.source)}</div><span class="math-medium">=</span><div class="fraction-answer">${button(a.sign===-1?'−':'+','class="sign" data-key="sign" aria-label="Teken van de breuk wisselen"',readonly?'disabled':'')}<div class="fraction-stack">${slot(a,0,'teller',readonly)}<span class="fraction-rule"></span>${slot(a,1,'noemer',readonly)}</div></div></div>`;panel=pad();
+ }else if(t.skill==='compare'){
+  canvas=`<div class="formula-row math-large">${m(t.left)}<span class="comparison-gap">${a.relation===null?'?':['<','=','>'][a.relation+1]}</span>${m(t.right)}</div>${t.representation==='numberline'?svgLine():'<p class="source-caption">Verschillende schrijfwijzen, echte waarden.</p>'}`;panel=relationButtons(a);
+ }else if(t.skill==='line'){
+  canvas=`<div class="math-large">${m(t.source)}</div>${svgLine()}`;panel=`<p class="muted">Tik op de lijn. Verfijn met de stapknoppen.</p><div class="line-tools">${button('−','data-step="-1" aria-label="Eén streepje naar links"')}<output>${a.tick===null?'Nog geen punt':C.decimalOf(C.rational(t.min*t.step.d+a.tick*t.step.n,t.step.d))}</output>${button('+','data-step="1" aria-label="Eén streepje naar rechts"')}</div><p class="muted">Eén streepje = ${C.decimalOf(t.step)}</p>`;
+ }else if(t.skill==='group'){
+  canvas=`<div class="token-grid">${t.tokens.map((e,i)=>button(`${m(e)}<small>Kaart ${i+1} · ${a.groups[i]?'groep '+a.groups[i]:'nog geen groep'}</small>`,`class="number-token" data-token="${i}" data-group="${a.groups[i]||''}" aria-label="Kaart ${i+1}: ${esc(C.label(e))}, ${a.groups[i]?'groep '+a.groups[i]:'nog geen groep'}"`)).join('')}</div>`;
+  panel=`<p class="muted">Kies een groep. Tik daarna op de kaartjes die erbij horen.</p><div class="group-keys line-tools">${['A','B'].map(g=>button('Groep '+g,`data-group="${g}" data-select-group="${g}" aria-pressed="${activeGroup===g}"`)).join('')}</div><p class="muted">Nogmaals tikken maakt een kaartje vrij.</p>`;
+ }else if(t.skill==='rootcalc'){
+  canvas=`<div class="math-large">${m(t.source)}</div><div class="root-calculation-answer">${a.noReal?'<strong>Geen reële waarde</strong>':slot(a,0,'antwoord',readonly)}</div>${button('Geen reële waarde',`data-toggle="noReal" aria-pressed="${a.noReal}"`,readonly?'disabled':'')}`;
+  panel=pad('single');
+ }else if(t.skill==='rootsimplify'){
+  canvas=`<div class="math-large">${m(t.source)}</div><div class="root-form-answer">${slot(a,0,'voor de wortel',readonly)}<div class="radical-input"><span aria-hidden="true">${t.degree===3?'∛':'√'}</span>${slot(a,1,'onder de wortel',readonly)}</div></div>`;
+  panel=pad('pair');
+ }else if(t.skill==='root'){
+  const center=a.stage?m(t.source):m(C.integer(t.n)),powers=C.rootBounds(t,0);
+  canvas=`${t.directBounds?'<p class="source-caption">Zoek twee opeenvolgende gehele getallen.</p>':a.stage?`<div class="saved-step">Vorige stap: ${powers[0]} &lt; ${t.n} &lt; ${powers[1]}</div>`:`<div class="source-caption">Twee opeenvolgende ${t.degree===3?'gehele derdemachten':'gehele kwadraten'}</div>`}<div class="formula-row">${slot(a,0,'ondergrens',readonly)}<span>&lt;</span><span class="math-medium">${center}</span><span>&lt;</span>${slot(a,1,'bovengrens',readonly)}</div>`;panel=pad();
+ }else if(t.skill==='interval'){
+  const source=t.sourceText?esc(t.sourceText):t.sourceMode==='notation'?esc(intervalText(t.lo,t.hi,t.closedLo,t.closedHi)):`x is groter ${t.closedLo?'dan of gelijk aan':'dan'} ${C.format(t.lo)} en kleiner ${t.closedHi?'dan of gelijk aan':'dan'} ${C.format(t.hi)}.`;
+  canvas=`<div class="interval-source">${source}</div>${t.convention?`<p class="interval-convention">${esc(t.convention)}</p>`:''}${svgLine()}`;
+  panel=`<div class="interval-controls">${[0,1].map(i=>button(`${a.values.every(Boolean)?i?'Rechts':'Links':'Punt'} ${esc(endpointText(a.values[i]))}`,`data-slot="${i}" aria-pressed="${activeSlot===i}"`)).join('')}</div><div class="line-tools">${button('−','data-step="-1" aria-label="Actief grenspunt één naar links"')}<span class="muted">Verplaats punt</span>${button('+','data-step="1" aria-label="Actief grenspunt één naar rechts"')}</div><div class="infinity-tools">${button('← −∞','data-infinity="-inf" aria-label="Onbegrensd naar links"')}${button('+∞ →','data-infinity="inf" aria-label="Onbegrensd naar rechts"')}</div>${button('Opnieuw tekenen','data-reset="interval"')}`;
+ }else if(t.skill==='classify'){
+  canvas=`<div class="math-large">${m(t.source)}</div><p class="source-caption">Meerdere namen kunnen tegelijk juist zijn.</p>`;
+  panel=`<div class="sets">${[['N','ℕ'],['Z','ℤ'],['Q','ℚ'],['irr','irrationaal'],['R','ℝ']].map(([id,name])=>button(name,`data-set="${id}" aria-pressed="${a.labels.includes(id)}"`)).join('')}</div><p class="muted">ℕ bevat hier ook 0.</p>`;
+  if(readonly&&a.labels.length)canvas+=`<div class="set-map">${a.labels.map(id=>({N:'ℕ',Z:'ℤ',Q:'ℚ',R:'ℝ',irr:'irrationaal'})[id]).join(' · ')}</div>`;
+ }else if(t.skill==='sets'){
+  const bank=t.tokens.map((e,i)=>readonly?`<span class="set-preview-token">${m(e)}</span>`:button(`${m(e)}<small>${a.placements[i]?({N:'ℕ',Z:'ℤ',Q:'ℚ',R:'ℝ'})[a.placements[i]]:'Kies of sleep'}</small>`,`class="set-token" data-sort-token="${i}" aria-pressed="${activeToken===i}" aria-label="${esc(C.label(e))}, ${a.placements[i]?'geplaatst in '+a.placements[i]:'nog te plaatsen'}"`)).join('');
+  const region=i=>{const id=['R','Q','Z','N'][i];return `<div class="set-region"><strong class="set-label" aria-hidden="true">${({R:'ℝ',Q:'ℚ',Z:'ℤ',N:'ℕ'})[id]}</strong><button class="set-zone" data-zone="${id}" aria-label="Plaats in ${id}"><span class="set-elements">${t.tokens.map((e,j)=>a.placements[j]===id?`<span class="set-element"><i class="element-point" aria-hidden="true"></i>${m(e)}</span>`:'').join('')}</span></button>${i<3?region(i+1):''}</div>`};
+  canvas=`<div class="set-bank">${bank}</div><div class="set-map-board">${region(0)}</div>`;
+ }else if(t.skill==='decimaltype'){
+  canvas=`<div class="math-large">${m(t.source)}</div>${t.rule?`<p class="rule">${esc(t.rule)}</p>`:''}${readonly&&a.decimalType?`<p class="type-answer">${esc(C.decimalNames[a.decimalType])}</p>`:''}`;
+  panel=`<div class="decimal-types">${Object.entries(C.decimalNames).map(([id,name])=>button(name,`data-decimal-type="${id}" aria-pressed="${a.decimalType===id}"`)).join('')}</div>`;
+ }else if(t.skill==='period'){
+  const selected=a.start!==null&&a.end!==null;
+  canvas=`<p class="rule">${esc(t.rule)}</p><div class="digits"><span class="digits-prefix">${t.whole},</span>${[...t.digits].map((digit,i)=>button(digit,`class="digit ${selected&&i>=a.start&&i<=a.end?'selected':''}" data-digit="${i}" aria-pressed="${selected&&i>=a.start&&i<=a.end}" aria-label="Decimaal ${i+1}: ${digit}"`)).join('')}<span>…</span></div><p class="source-caption" aria-live="polite">${selected?`Jouw blok: ${esc(t.digits.slice(a.start,a.end+1))}`:'Nog geen blok gekozen'}</p>${!readonly?`<div class="period-tools"><p class="muted">Eén cijfer? Tik één keer.<br>Meer cijfers? Sleep erover, of tik de twee uiteinden.</p>${button('Wis selectie','data-reset="period"')}</div>`:''}`;
+ }
+ return {canvas,panel};
+}
+function feedbackSource(t,a){
+ const caption=text=>`<p class="source-caption">${esc(text)}</p>`,values=a.values.map(x=>esc(x||'?'));
+ if(t.skill==='fraction')return caption('Gegeven')+m(t.source)+caption('Jouw breuk')+`<math><mrow>${a.sign<0?'<mo>−</mo>':''}<mfrac><mtext>${values[0]}</mtext><mtext>${values[1]}</mtext></mfrac></mrow></math>`;
+ if(t.skill==='compare')return caption('Jouw vergelijking')+`<div class="feedback-comparison">${m(t.left)}<span>${esc(a.relation===null?'?':['<','=','>'][a.relation+1])}</span>${m(t.right)}</div>`;
+ if(t.skill==='group')return (feedback.pair||[0,1]).map(i=>caption(`Kaart ${i+1} · ${a.groups[i]?'groep '+a.groups[i]:'geen groep'}`)+m(t.tokens[i])).join('');
+ if(t.skill==='rootcalc'){const r=C.parseExact(a.values[0]);return caption('Gegeven')+m(t.source)+caption('Jouw antwoord')+(a.noReal?'<div>Geen reële waarde</div>':r?m(r.d===1?C.integer(r.n):C.fraction(r.n,r.d)):`<div>${values[0]}</div>`);}
+ if(t.skill==='rootsimplify'){const c=C.parseExact(a.values[0]),inside=Number(a.values[1]);return caption('Gegeven')+m(t.source)+caption('Jouw wortelvorm')+(c&&Number.isInteger(inside)&&inside>0?`<div class="math-product">${m(c.d===1?C.integer(c.n):C.fraction(c.n,c.d))}${m(t.degree===3?C.cbrt(inside):C.sqrt(inside))}</div>`:`<div>(${values[0]})${t.degree===3?'∛':'√'}${values[1]}</div>`);}
+ if(t.skill==='root')return caption('Jouw grenzen')+`<div class="feedback-comparison"><span>${values[0]}</span><span>&lt;</span>${a.stage?m(t.source):m(C.integer(t.n))}<span>&lt;</span><span>${values[1]}</span></div>`;
+ if(t.skill==='interval')return caption('Gevraagd')+`<div>${esc(intervalText(t.lo,t.hi,t.closedLo,t.closedHi))}</div>`+caption('Jouw interval')+`<div>${esc(intervalText(a.values[0]==='-inf'?null:a.values[0]||'?',a.values[1]==='inf'?null:a.values[1]||'?',a.closedLo,a.closedHi))}</div>`;
+ if(t.skill==='sets')return caption('Kleinste passende verzameling')+t.tokens.map((e,i)=>`<div class="feedback-set">${m(e)} → ${({N:'ℕ',Z:'ℤ',Q:'ℚ',R:'ℝ'})[a.placements[i]]||'?'}</div>`).join('');
+ if(t.skill==='decimaltype')return m(t.source)+caption(C.decimalNames[a.decimalType]||'Nog niet gekozen');
+ if(t.skill==='classify')return m(t.source)+caption('Jouw selectie')+`<div class="selected-sets">${a.labels.map(id=>({N:'ℕ',Z:'ℤ',Q:'ℚ',R:'ℝ',irr:'irrationaal'})[id]).join(' · ')||'Nog niets gekozen'}</div>`;
+ if(t.skill==='period')return caption(t.rule)+caption(phase==='done'?'Drie herhalingen, daarna …':'Jouw herhaalblok')+(phase==='done'?m({kind:'period',whole:t.whole,lead:t.lead,repeat:t.repeat}):`<div>${a.start!==null&&a.end!==null?esc(t.digits.slice(a.start,a.end+1)):'?'}</div>`);
+ return caption('Gevraagd')+m(t.source)+caption('Jouw punt')+`<div>${a.tick===null?'?':C.decimalOf(C.rational(t.min*t.step.d+a.tick*t.step.n,t.step.d))}</div>`;
+}
+function render(){
+ if(!task&&!preview)return;
+ const focused=document.activeElement,focusKey=focused&&$('workspace').contains(focused)?['slot','key','token','set','selectGroup','digit','toggle','step','reset','sortToken','zone','decimalType','infinity'].find(k=>focused.dataset[k]!==undefined):null,focusValue=focusKey?focused.dataset[focusKey]:null,focusLine=focused?.id==='numberline';
+ const t=preview?.task||task,isLesson=!!preview||phase==='intro',step=isLesson?L.build(t)[preview?preview.step:lessonStep]:null,a=step?.answer||answer;
+ document.body.dataset.preview=String(!!preview);$('xp').textContent=`${progress.xp} XP`;$('xp').title=`${progress.xp} XP totaal · ${session?.xp||0} XP deze reeks`;
+ $('eyebrow').textContent=`${preview?'Uitlegcollectie':isLesson?'Nieuw begrip':topic?'Zelfgekozen onderwerp':progress.skills[t.skill].repair?'Opnieuw proberen':'Jouw leerroute'} · ${C.skills.find(s=>s.id===t.skill).short}`;
+ $('prompt').textContent=t.skill==='root'&&!t.directBounds&&a.stage===1?'Bouw nu de grenzen voor de wortelwaarde.':t.prompt;
+ $('seriesReturn').hidden=!topic||!!preview;
+ $('round').hidden=!!preview||!!topic;$('round').textContent=`Opgave ${Math.min(8,(session?.answered||0)+(phase==='done'?0:1))} / 8`;
+ const feedbackMode=!isLesson&&['feedback','done'].includes(phase);
+ $('workspace').className=`${isLesson?'readonly ':''}${feedbackMode?'feedback ':''}${t.skill}`;
+ const parts=taskMarkup(t,a,isLesson);
+ if(step?.alternatePeriod)parts.canvas=`<div class="math-large">${m({kind:'period',whole:t.whole,lead:t.lead,repeat:t.repeat},true)}</div><p class="source-caption">Dezelfde decimaal, een andere notatie.</p>`;
+ if(feedbackMode){
+  $('workspace').innerHTML=`<div class="feedback-picture">${feedbackSource(t,a)}</div><div class="feedback-copy ${feedback.ok?'good':'repair'}" role="status" aria-live="polite"><h2>${feedback.partial?'Waarde juist · vorm nog aanpassen':feedback.ok?(phase==='done'?'Juist!':'Deze stap klopt'):'Bekijk dit verband'}</h2>${phase==='done'?`<strong class="xp-earned">+${feedback.xp} XP · ${dirty?'met hulp of na verbetering':'zelfstandig opgelost'}</strong>`:''}<p>${esc(feedback.message)}</p>${feedback.detail?`<p>${esc(feedback.detail)}</p>`:''}</div>`;
+ }else{
+  $('workspace').innerHTML=`<div class="canvas">${parts.canvas}</div>${isLesson?`<aside class="lesson-copy"><span class="eyebrow">Stap ${(preview?preview.step:lessonStep)+1} van ${L.build(t).length}</span><h2>${esc(step.title)}</h2><p>${esc(step.text)}</p></aside>`:parts.panel?`<aside class="answer-panel">${parts.panel}</aside>`:''}`;
+  if(isLesson)$('workspace').querySelectorAll('button').forEach(b=>b.disabled=true);
+ }
+ $('skip').hidden=isLesson||feedbackMode;$('back').hidden=!isLesson&&!(feedbackMode&&!feedback.ok);$('back').textContent=isLesson?'← Vorige':'Voorbeeld';$('back').disabled=isLesson&&(preview?preview.step:lessonStep)===0;
+ $('commit').textContent=isLesson?((preview?preview.step:lessonStep)<L.build(t).length-1?'Volgende stap →':preview?(task?'Terug naar oefening':'Naar uitlegcollectie'):'Zelf proberen →'):phase==='done'?'Volgende →':phase==='feedback'?(feedback.ok?'Bouw de wortelgrenzen →':'Verbeter je antwoord'):'Controleer';
+ $('hint').textContent=isLesson?'Bekijk het voorbeeld op je eigen tempo.':feedbackMode?'Lees rustig. Je kiest zelf wanneer je verdergaat.':t.skill==='interval'?'Tik een grens: hol ↔ vol. Kies −∞ of +∞ voor een onbegrensde kant.':t.skill==='sets'?'Sleep naar de kleinste verzameling, of tik een kaart en daarna een vak. ℕ bevat ook 0.':t.skill==='rootcalc'?'Een breuk invoeren? Gebruik /. Controleer pas wanneer je klaar bent.':t.skill==='rootsimplify'?'Vul de factor en de resterende wortel in. / maakt een breuk.':t.skill==='root'&&!t.directBounds?'Beide stappen samen vormen één opgave.':'Je keuze wordt pas beoordeeld na Controleer.';
+ drawLine(t,a);
+ if(focusLine)$('numberline')?.focus({preventScroll:true});else if(focusKey){const attr=focusKey.replace(/[A-Z]/g,c=>'-'+c.toLowerCase());$('workspace').querySelector(`[data-${attr}="${focusValue}"]`)?.focus({preventScroll:true});}
+}
+function drawLine(t=preview?.task||task,a=(preview||phase==='intro')?L.build(t)[preview?preview.step:lessonStep].answer:answer){
+ const svg=$('numberline');if(!svg)return;const box=svg.getBoundingClientRect(),w=box.width,h=box.height;if(!w||!h)return;
+ const compare=t.skill==='compare',min=compare?Math.floor(Math.min(C.number(C.value(t.left)),C.number(C.value(t.right))))-1:t.min,max=compare?Math.ceil(Math.max(C.number(C.value(t.left)),C.number(C.value(t.right))))+1:t.max,step=t.skill==='line'?C.number(t.step):1;
+ const x=v=>28+(v-min)/(max-min)*(w-56),y=Math.max(35,Math.min(h-38,h*.52));let html=`<line class="axis" x1="28" y1="${y}" x2="${w-28}" y2="${y}" stroke-width="2"/>`;
+ for(let i=0;i<=Math.round((max-min)/step);i++){if(t.skill==='interval'&&(i===0&&a.values.includes('-inf')||i===Math.round((max-min)/step)&&a.values.includes('inf')))continue;const v=min+i*step,px=x(v);html+=`<line class="tick" x1="${px}" y1="${y-5}" x2="${px}" y2="${y+5}"/>`;if(Number.isInteger(v)&&(w>400||v%2===0||v===min||v===max))html+=`<text x="${px}" y="${y+26}" text-anchor="middle">${C.format(v)}</text>`;}
+ const marker=(v,closed,label,offset=0)=>{const px=x(v);html+=`<circle cx="${px}" cy="${y}" r="7" fill="${closed?'var(--blue)':'var(--paper)'}" stroke="var(--blue)" stroke-width="3"/>${label?`<text x="${Math.max(35,Math.min(w-35,px))}" y="${y-17-offset}" text-anchor="middle">${esc(label)}</text>`:''}`};
+ if(compare){marker(C.number(C.value(t.left)),true,'A',0);marker(C.number(C.value(t.right)),false,'B',18);}
+ if(t.skill==='line'&&a.tick!==null){const v=min+a.tick*step;marker(v,true,C.format(Number(v.toFixed(4))));}
+ if(t.skill==='interval'){
+  const l=C.endpoint(a.values[0]),r=C.endpoint(a.values[1]),edge=v=>v===-Infinity?min:v===Infinity?max:v;
+  if(l!==null&&r!==null&&l<r)html+=`<line x1="${x(edge(l))}" x2="${x(edge(r))}" y1="${y}" y2="${y}" stroke="var(--blue)" stroke-width="7" opacity=".5"/>`;
+  for(const [v,closed] of [[l,a.closedLo],[r,a.closedHi]])if(v!==null){if(Number.isFinite(v))marker(v,closed,C.format(v));else {const px=x(edge(v)),direction=v<0?-1:1;html+=`<path d="M ${px-direction*14} ${y-10} L ${px} ${y} L ${px-direction*14} ${y+10}" stroke="var(--blue)" stroke-width="4" fill="none"/><text x="${px-direction*8}" y="${y-18}" text-anchor="middle">${v<0?'−∞':'+∞'}</text>`;}}
+  const active=C.endpoint(a.values[activeSlot]);if(!preview&&phase==='answer'&&active!==null&&Number.isFinite(active)){html+=`<circle cx="${x(active)}" cy="${y}" r="14" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="3 3"/>`}
+
+ }
+ if(t.skill==='interval')svg.setAttribute('aria-label','Interval. Tik twee grenspunten in willekeurige volgorde. Tik opnieuw voor hol of vol. Sleep om te verplaatsen. Pijltjestoetsen verplaatsen het actieve punt; Enter wisselt hol en vol.');
+ svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.innerHTML=html;
+ if(preview||phase!=='answer'||!['line','interval'].includes(t.skill))return;
+ const at=clientX=>{const r=svg.getBoundingClientRect();return min+Math.max(0,Math.min(1,(clientX-r.left-28)/(r.width-56)))*(max-min)};
+ const place=clientX=>{const v=at(clientX);if(t.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((max-min)/step),Math.round((v-min)/step)));else moveEndpoint(Math.round(v));drawLine(t,answer)};
+ svg.onpointerdown=e=>{
+  if(e.button>0||drag)return;e.preventDefault();svg.focus({preventScroll:true});
+  const v=Math.round(at(e.clientX)),hit=t.skill==='interval'?answer.values.findIndex(s=>C.endpoint(s)===v):-1;
+  drag={answer:structuredClone(answer),slot:activeSlot,id:e.pointerId,x:e.clientX,y:e.clientY,hit,moved:false};svg.setPointerCapture(e.pointerId);
+  if(t.skill==='interval'){
+   activeSlot=hit>=0?hit:answer.values.indexOf('')>=0?answer.values.indexOf(''):[0,1].sort((i,j)=>Math.abs((C.endpoint(answer.values[i])??0)-v)-Math.abs((C.endpoint(answer.values[j])??0)-v))[0];
+   if(hit<0)place(e.clientX);else drawLine(t,answer);
+  }else place(e.clientX);
+ };
+ svg.onpointermove=e=>{if(drag?.id===e.pointerId&&Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>6){drag.moved=true;place(e.clientX)}};
+ svg.onpointerup=e=>{
+  if(drag?.id!==e.pointerId)return;const r=svg.getBoundingClientRect();
+  if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom){answer=drag.answer;activeSlot=drag.slot}
+  else if(t.skill==='interval'&&!drag.moved&&drag.hit>=0)toggleEndpoint();
+  drag=null;save();render();
+ };
+ svg.onpointercancel=()=>{if(drag){answer=drag.answer;activeSlot=drag.slot;drag=null;save();render()}};
+ svg.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();stepValue(e.key==='ArrowLeft'?-1:1)}else if(t.skill==='interval'&&['Enter',' '].includes(e.key)){e.preventDefault();if(answer.values[activeSlot]==='')moveEndpoint(0);else toggleEndpoint();save();render()}};
+}
+function moveEndpoint(value){
+ const other=1-activeSlot;
+ // Distinct endpoints cannot collapse; crossing them keeps each circle's inclusion.
+ if(answer.values[other]!==''&&C.endpoint(answer.values[other])===C.endpoint(value))return;
+ answer.values[activeSlot]=String(value);if(value==='-inf'||value==='inf')answer[activeSlot?'closedHi':'closedLo']=false;if(C.orderInterval(answer))activeSlot=1-activeSlot;
+}
+function toggleEndpoint(){if(!Number.isFinite(C.endpoint(answer.values[activeSlot])))return;const key=activeSlot?'closedHi':'closedLo';answer[key]=!answer[key]}
+function selectDigit(i){
+ if(answer.periodAnchor!==null&&answer.periodAnchor!==i){answer.start=Math.min(answer.periodAnchor,i);answer.end=Math.max(answer.periodAnchor,i);answer.periodAnchor=null;}
+ else {answer.start=answer.end=i;answer.periodAnchor=i;}
+}
+// Pointer selection follows the finger, with one digit already a complete answer.
+$('workspace').addEventListener('pointerdown',e=>{
+ const b=e.target.closest('[data-digit]');if(!b||b.disabled||preview||phase!=='answer'||e.button>0||digitDrag)return;
+ e.preventDefault();b.focus({preventScroll:true});digitDrag={id:e.pointerId,start:Number(b.dataset.digit),last:Number(b.dataset.digit),answer:structuredClone(answer),moved:false};$('workspace').setPointerCapture(e.pointerId);
+});
+function paintDigitSelection(){for(const b of $('workspace').querySelectorAll('[data-digit]')){const selected=Number(b.dataset.digit)>=answer.start&&Number(b.dataset.digit)<=answer.end;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected))}}
+$('workspace').addEventListener('pointermove',e=>{
+ if(digitDrag?.id!==e.pointerId)return;const b=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-digit]');if(!b)return;
+ const i=Number(b.dataset.digit);if(i!==digitDrag.start)digitDrag.moved=true;digitDrag.last=i;
+ if(digitDrag.moved){answer.start=Math.min(i,digitDrag.start);answer.end=Math.max(i,digitDrag.start);answer.periodAnchor=null;paintDigitSelection()}
+});
+$('workspace').addEventListener('pointerup',e=>{
+ if(digitDrag?.id!==e.pointerId)return;const b=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-digit]');
+ if(!b)answer=digitDrag.answer;else {const end=Number(b.dataset.digit);if(digitDrag.moved||end!==digitDrag.start){answer.start=Math.min(digitDrag.start,end);answer.end=Math.max(digitDrag.start,end);answer.periodAnchor=null;}else selectDigit(digitDrag.start);}
+ digitDrag=null;save();render();
+});
+$('workspace').addEventListener('pointercancel',()=>{if(digitDrag){answer=digitDrag.answer;digitDrag=null;save();render()}});
+
+function key(k){
+ if(phase!=='answer'||preview)return;
+ answer.noReal=false;
+ if(k==='next')activeSlot=1-activeSlot;
+ else if(k==='slash'&&['rootcalc','rootsimplify'].includes(task.skill)&&activeSlot===0&&!answer.values[0].includes('/')&&/^[-]?\d+$/.test(answer.values[0]))answer.values[0]+='/';
+ else if(k==='sign'){if(task.skill==='fraction')answer.sign*=-1;else answer.values[activeSlot]=answer.values[activeSlot].startsWith('-')?answer.values[activeSlot].slice(1):'-'+answer.values[activeSlot];}
+ else if(k==='clear')answer.values[activeSlot]='';else if(k==='back')answer.values[activeSlot]=answer.values[activeSlot].slice(0,-1);else if(/^\d$/.test(k)&&answer.values[activeSlot].replace('-','').length<6)answer.values[activeSlot]+=k;
+ save();render();
+}
+function stepValue(d){if(preview||phase!=='answer')return;if(task.skill==='line')answer.tick=Math.max(0,Math.min(Math.round((task.max-task.min)/C.number(task.step)),(answer.tick??Math.round(-task.min/C.number(task.step)))+d));else if(task.skill==='interval'){let v=Math.max(task.min,Math.min(task.max,(answer.values[activeSlot]==='-inf'?task.min:answer.values[activeSlot]==='inf'?task.max:Number(answer.values[activeSlot])||0)+d));if(answer.values[1-activeSlot]!==''&&Number(answer.values[1-activeSlot])===v)v=Math.max(task.min,Math.min(task.max,v+d));moveEndpoint(v);}save();render()}
+$('workspace').onclick=e=>{
+ const b=e.target.closest('button');if(!b||b.disabled)return;const d=b.dataset;
+ if(d.example){example(d.example);return}if(preview||phase!=='answer')return;
+ if(d.key){key(d.key);return}if(d.slot!==undefined)activeSlot=Number(d.slot);
+ if(d.relation!==undefined)answer.relation=Number(d.relation);
+ if(d.selectGroup)activeGroup=d.selectGroup;
+ if(d.token!==undefined){const i=Number(d.token);answer.groups[i]=answer.groups[i]===activeGroup?null:activeGroup;}
+ if(d.set)answer.labels=answer.labels.includes(d.set)?answer.labels.filter(x=>x!==d.set):[...answer.labels,d.set];
+ if(d.toggle)answer[d.toggle]=!answer[d.toggle];
+ if(d.digit!==undefined){if(e.detail>0)return;selectDigit(Number(d.digit))}
+ if(d.infinity){const existing=answer.values.indexOf(d.infinity);activeSlot=existing>=0?existing:answer.values.indexOf('')>=0?answer.values.indexOf(''):d.infinity==='-inf'?0:1;moveEndpoint(d.infinity);}
+ if(d.sortToken!==undefined){if(e.detail>0&&setDrag)return;activeToken=Number(d.sortToken);}
+ if(d.zone){answer.placements[activeToken]=d.zone;activeToken=answer.placements.indexOf(null)>=0?answer.placements.indexOf(null):activeToken;}
+ if(d.decimalType)answer.decimalType=d.decimalType;
+ if(d.reset==='interval'){answer.values=['',''];answer.closedLo=answer.closedHi=false;activeSlot=0;}
+ if(d.reset==='period')answer.start=answer.end=answer.periodAnchor=null;
+ if(d.step){stepValue(Number(d.step));return}save();render();
+};
+// Pointer-based sorting also works on touch screens; tapping remains an alternative.
+$('workspace').addEventListener('pointerdown',e=>{
+ const token=e.target.closest('[data-sort-token]');if(!token||token.disabled||preview||phase!=='answer'||e.button>0)return;
+ e.preventDefault();activeToken=Number(token.dataset.sortToken);const ghost=token.cloneNode(true);ghost.removeAttribute('data-sort-token');ghost.className='set-token drag-ghost';ghost.setAttribute('aria-hidden','true');ghost.tabIndex=-1;ghost.style.left=e.clientX+'px';ghost.style.top=e.clientY+'px';document.body.append(ghost);setDrag={id:e.pointerId,token:activeToken,ghost};$('workspace').setPointerCapture(e.pointerId);token.classList.add('dragging');
+});
+$('workspace').addEventListener('pointermove',e=>{
+ if(setDrag?.id!==e.pointerId)return;setDrag.ghost.style.left=e.clientX+'px';setDrag.ghost.style.top=e.clientY+'px';const zone=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-zone]');for(const z of $('workspace').querySelectorAll('[data-zone]'))z.classList.toggle('drop-active',z===zone);
+});
+$('workspace').addEventListener('pointerup',e=>{
+ if(setDrag?.id!==e.pointerId)return;const zone=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-zone]');if(zone)answer.placements[setDrag.token]=zone.dataset.zone;setDrag.ghost.remove();setDrag=null;save();render();
+});
+$('workspace').addEventListener('pointercancel',()=>{if(setDrag){setDrag.ghost.remove();setDrag=null;render()}});
+document.addEventListener('keydown',e=>{if(document.body.dataset.screen!=='stage'||preview||phase!=='answer'||!['fraction','root','rootcalc','rootsimplify'].includes(task.skill)||e.ctrlKey||e.metaKey||e.altKey)return;if(/^\d$/.test(e.key)){e.preventDefault();key(e.key)}else if(['Backspace','-','/'].includes(e.key)){e.preventDefault();key(e.key==='-'?'sign':e.key==='/'?'slash':'back')}});
+function commit(){
+ if(preview){if(preview.step<L.build(preview.task).length-1){preview.step++;render()}else{preview=null;task?screen('stage'):showHelp()}return;}
+ if(phase==='intro'){
+  if(lessonStep<L.build(task).length-1){lessonStep++;save();render();return}
+  progress.skills[task.skill].intro=true;makeTask(task.skill);return;
+ }
+ if(phase==='done'){next();return}
+ if(phase==='feedback'){if(feedback.ok&&task.skill==='root'){answer.stage=1;answer.values=['',''];activeSlot=0;}phase='answer';feedback=null;save();render();return}
+ const r=C.validate(task,answer);feedback=r;
+ if(!r.ok){if(!r.input){dirty=true;errorCode=r.code;progress.skills[task.skill].repair=r.code;progress.skills[task.skill].due=progress.total+3;}phase='feedback';save();render();return}
+ if(task.skill==='root'&&answer.stage===0){phase='feedback';save();render();return}
+ phase='done';const xp=P.record(progress,task,{clean:!dirty,solved:true,code:errorCode||'practice'});session.answered++;session.xp+=xp;if(!dirty)session.clean++;feedback={...r,xp};save();render();
+}
+$('commit').onclick=commit;$('back').onclick=()=>{if(phase==='feedback'&&!feedback?.ok&&!preview){example(task.skill);return}if(preview)preview.step=Math.max(0,preview.step-1);else lessonStep=Math.max(0,lessonStep-1);save();render()};
+$('skip').onclick=()=>{if(preview||phase!=='answer')return;P.record(progress,task,{clean:false,solved:false,code:errorCode||'practice'});session.answered++;next()};
+function topicCards(root,help=false){
+ root.replaceChildren();C.skills.forEach((s,i)=>{const card=document.createElement('article');card.className='topic-card'+(P.mastered(progress,s.id)?' solid':'');const status=P.mastered(progress,s.id)?'Stevig':progress.skills[s.id].seen?'In opbouw':P.unlocked(progress,s.id)?'Klaar om te ontdekken':'Later in je leerroute';card.innerHTML=`<span class="eyebrow">${String(i+1).padStart(2,'0')} · ${help?'Uitgewerkt voorbeeld':status}</span><h2>${esc(s.short)}</h2><p>${esc(s.concept)}</p><button>${help?'Bekijk het voorbeeld':'Oefen dit onderwerp →'}</button>`;card.querySelector('button').onclick=()=>help?example(s.id):explore(s.id);root.append(card);});
+}
+function library(){preview=null;$('resume').textContent=task?'Verder oefenen →':'Start oefeningen →';topicCards($('topics'));screen('library')}
+function showHelp(){preview=null;topicCards($('helpTopics'),true);screen('help')}
+function example(id){
+ if(task&&phase==='answer'){dirty=true;errorCode=errorCode||'help';progress.skills[task.skill].repair=errorCode;progress.skills[task.skill].due=progress.total+3;save();}
+ preview={task:C.generate(id,{seed:++serial,variant:task?.skill===id?task.variant:0,level:task?.skill===id?task.level:0}),step:0};screen('stage');
+}
+function showProgress(){previous=document.body.dataset.screen;preview=null;$('progressTitle').textContent=`${progress.xp} XP · ${C.skills.filter(s=>P.mastered(progress,s.id)).length} van ${C.skills.length} stevig`;$('progressRows').innerHTML=C.skills.map(s=>{const d=progress.skills[s.id];return `<div class="progress-row"><div><strong>${esc(s.short)}</strong><small>${d.clean} zelfstandig juist · ${d.seen} geoefend${d.repair?' · herhaling gepland':''}</small></div><span>${P.mastered(progress,s.id)?'★ Stevig':!P.unlocked(progress,s.id)?'Later in de route':d.seen?'In opbouw':'Nieuw'}</span></div>`}).join('');screen('progress')}
+function finishSession(){progress.sessions++;$('stats').innerHTML=[[session.answered,'geoefend'],[session.clean,'zelfstandig juist'],[session.xp,'XP verdiend']].map(([n,label])=>`<div><strong>${n}</strong><span>${label}</span></div>`).join('');$('summaryText').textContent='De volgende reeks haalt eerdere begrippen opnieuw op. Nieuwe waarden en andere voorstellingen laten zien wat zelfstandig blijft lukken.';task=null;answer=null;suspendedSeries=null;save();screen('summary')}
+AxiomaPlatform.bindTrainer({play:resume,help:showHelp,progress:showProgress});
+$('resume').onclick=resume;$('seriesReturn').onclick=followRoute;
+$('closeHelp').onclick=()=>{preview=null;task?screen('stage'):start()};$('closeProgress').onclick=()=>previous==='stage'&&!task?showHelp():screen(previous==='progress'?'stage':previous);
+$('newSession').onclick=$('again').onclick=start;$('topicsNav').onclick=$('browse').onclick=$('rotateLibrary').onclick=library;
+$('theme').onclick=()=>{document.documentElement.dataset.mode=document.documentElement.dataset.mode==='dark'?'light':'dark';save();if(document.body.dataset.screen==='stage')render()};
+new ResizeObserver(()=>{if(document.body.dataset.screen==='stage')drawLine()}).observe($('workspace'));
+window.addEventListener('pagehide',save);
+// Read-only model inspection, useful for reproducible browser checks.
+window.AxiomaRealTrainer=Object.freeze({inspect:()=>structuredClone({task,answer,phase,lessonStep,preview,session,progress,topic,dirty,feedback,suspendedSeries})});
+if(restore())screen('stage');else start();
+})();
+</script><script src="../../shared/vendor/supabase.js"></script><script src="../../shared/supabase-config.js"></script><script src="../../shared/axioma-auth.js"></script><script src="../../shared/axioma-social.js"></script><script src="../../shared/axioma-progress.js"></script><script>// Translates the existing completion records into each engine's native save format.
+// Once a full snapshot exists, the engine owns that format and it is restored verbatim.
+(() => {
+'use strict';
+const numbers=(state,first,total)=>(state.completed||[]).map(Number).filter(n=>Number.isInteger(n)&&n>=first&&n<first+total);
+const put=(state,key,value)=>{if(!Object.hasOwn(state.storage,key))state.storage[key]=JSON.stringify(value)};
+const next=(done,first,total)=>{for(let i=first;i<first+total;i++)if(!done.includes(i))return i;return first+total-1};
+function indexed(key,total,field='lastLevel'){
+ return {keys:[key],hydrate(state){const done=numbers(state,0,total);put(state,key,{completed:done,[field]:next(done,0,total)})}};
+}
+const adapters={
+ 'wortelbouw':{keys:['axioma.wortelbouw.progress.v1']},
+ 'pythagoras':{keys:['axioma.pythagoras.completed.v1','axioma.pythagoras.current.v1'],hydrate(state){const done=numbers(state,1,10);put(state,this.keys[0],done);put(state,this.keys[1],next(done,1,10))}},
+ 'stelsels':{keys:['axioma.stelsels.completed.v1','axioma.stelsels.current.v1'],hydrate(state){const done=numbers(state,0,14);put(state,this.keys[0],done);put(state,this.keys[1],next(done,0,14))}},
+ 'algebra-smederij':{keys:['rf22_done','rf21_last','rf21_theme'],hydrate(state){put(state,'rf22_done',(state.completed||[]).map(String))}},
+ 'taartenwinkel':indexed('axioma.taartenwinkel.v05.progress',7,'lastService'),
+ 'kubusbouw':indexed('axioma.scaleAssembly.v0.5.progress',22),
+ 'verfwinkel':indexed('axioma.verfwinkel.progress.v1',16),
+ 'signal-lab':indexed('signalLab.v0.4.1.progress',12),
+ 'data-check':{keys:['evidenceDeskCompletedV06','evidenceDeskMetaV06'],hydrate(state){const done=numbers(state,1,22);put(state,this.keys[0],Array.from({length:22},(_,i)=>done.includes(i+1)));put(state,this.keys[1],{lastLevel:next(done,1,22)-1})}},
+ 'gravity-maze':{keys:['gravity-maze-human-v1-blind','gravity-maze-human-v1-assisted']},
+ 'vectoren-trainer':{keys:['axioma-vectorentrainer-v020']},
+ 'reele-getallen-trainer':{keys:['axioma-real-numbers-v1']},
+ 'brandweer':{keys:['axioma.brandweer.current.v1'],hydrate(state){const done=numbers(state,1,16);put(state,this.keys[0],next(done,1,16)-1)}},
+ 'kleiduifschieten':{keys:['axioma.rechten.kleiduiven.standalone.v12']},
+ 'rechten-trainer':{tracking:false,external:true},
+ 'functies-rechten':{tracking:false},
+ 'rechten-zeeslag':{tracking:false,multiplayer:true}
+};
+const readers={
+ 'pythagoras':['axioma.pythagoras.completed.v1',10,value=>value],
+ 'stelsels':['axioma.stelsels.completed.v1',14,value=>value],
+ 'algebra-smederij':['rf22_done',()=>window.RF?.Challenges?.length||0,value=>value],
+ 'taartenwinkel':['axioma.taartenwinkel.v05.progress',7,value=>value.completed],
+ 'kubusbouw':['axioma.scaleAssembly.v0.5.progress',22,value=>value.completed],
+ 'verfwinkel':['axioma.verfwinkel.progress.v1',16,value=>value.completed],
+ 'signal-lab':['signalLab.v0.4.1.progress',12,value=>value.completed],
+ 'data-check':['evidenceDeskCompletedV06',22,value=>value.map((done,i)=>done?i+1:null).filter(Boolean)]
+};
+for(const [id,[key,total,read]] of Object.entries(readers))adapters[id].onWrite=(changed,value)=>{
+ if(changed!==key)return;
+ try{const units=read(JSON.parse(value));if(Array.isArray(units))return {completed:[...new Set(units.map(String))],total:typeof total==='function'?total():total}}catch(_){}
+};
+adapters['gravity-maze'].onWrite=(key,value,state)=>{
+ if(!adapters['gravity-maze'].keys.includes(key))return;
+ let best=[];for(const k of adapters['gravity-maze'].keys){try{const units=JSON.parse(state.storage[k]||'{}').completed;if(Array.isArray(units)&&units.length>best.length)best=units}catch(_){}}
+ return {completed:best.map(String),total:9};
+};
+window.AxiomaGameAdapters=Object.freeze(adapters);
+})();
+</script><script data-game-id="reele-getallen-trainer">// Account-bound lifecycle for games. Engines use storage below, never browser-wide progress.
+(() => {
+'use strict';
+const script=document.currentScript, gameId=script.dataset.gameId;
+const config=window.AxiomaGameAdapters?.[gameId] || {};
+const clone=v=>JSON.parse(JSON.stringify(v));
+let account=null, cacheKey='', record={state:{storage:{}},revision:0,dirty:false};
+let active=false, started=false, booting=false, busy=false, timer=null, edit=0, status='loading', storageFailed=false;
+let host, dock, panel, message, actions, readyResolve;
+const ready=new Promise(resolve=>readyResolve=resolve);
+const nativeStorage=()=>window.localStorage;
+function deadline(promise){
+ let timeout;
+ return Promise.race([promise,new Promise((_,reject)=>{timeout=setTimeout(()=>reject(Error('Verbinding duurt te lang')),12000)})]).finally(()=>clearTimeout(timeout));
+}
+const label=()=>account?.role==='student'?(account.alias||'Leerling'):account?.role==='teacher'?'Leerkracht':'Gast';
+const accountKey=a=>a ? a.role+':'+a.id : 'guest';
+const keyFor=a=>'axioma:progress:v2:'+encodeURIComponent(window.AXIOMA_CONFIG?.url||'offline')+':'+accountKey(a)+':'+gameId;
+
+function setStatus(value){
+ status=value;
+ if(dock)dock.textContent=label()+' · '+({loading:'Laden…',saved:'Opgeslagen',saving:'Opslaan…',pending:'Nog te bewaren',offline:'Alleen op dit toestel',guest:'Op dit toestel',teacher:'Oefenmodus',conflict:'Voortgang gewijzigd',error:'Controle nodig',changed:'Account gewijzigd',untracked:'Vrij verkennen',multiplayer:'Samen spelen'})[value];
+ if(dock){dock.title=dock.textContent;dock.setAttribute('aria-label','Account en opslag: '+dock.textContent);dock.dataset.status=value;}
+ if(storageFailed&&dock)dock.textContent=label()+' · Opslag niet beschikbaar';
+}
+function persist(){
+ try{nativeStorage().setItem(cacheKey,JSON.stringify(record));return true}
+ catch(_){storageFailed=true;setStatus(status);return false}
+}
+function notice(text,buttons,blocking=false){
+ message.textContent=text;actions.replaceChildren();
+ for(const [text,fn] of buttons){const b=document.createElement('button');b.type='button';b.textContent=text;b.onclick=fn;actions.append(b)}
+ panel.dataset.blocking=String(blocking);panel.hidden=false;
+ actions.querySelector('button')?.focus();
+}
+function home(){return window.AxiomaPlatform?.homeURL() || new URL('../',location.href).href}
+function login(){const url=new URL(home());url.searchParams.set('login','1');url.searchParams.set('return',location.href);location.href=url.href}
+function details(){
+ if(!active&&!started)return;
+ if(!active&&started){if(status==='conflict')conflict();else changed();return}
+ const explanation=storageFailed?'Bewaren op dit toestel lukt niet. Laat deze pagina open en probeer opnieuw.':({saved:'Je voortgang is gekoppeld aan '+label()+'. Je kunt op een ander toestel verdergaan.',saving:'Je wijzigingen worden bewaard.',pending:'Je laatste wijzigingen staan op dit toestel en worden nog online bewaard.',offline:'Online bewaren lukt momenteel niet. Je wijzigingen blijven apart voor jouw account op dit toestel staan. Probeer opnieuw voordat je op een ander toestel verdergaat.',guest:'Je oefent als gast. Deze voortgang blijft op dit toestel en wordt niet automatisch naar een leerlingaccount overgenomen.',teacher:'Je oefent als leerkracht. Dit telt niet als leerlingvoortgang.',untracked:'Dit is een vrije verkenning zonder persoonlijke voortgang.',multiplayer:'Partijen en ranglijsten worden door het samenspel bijgehouden.'})[status]||'Je account en voortgang worden gecontroleerd.';
+ notice(explanation,[...(['offline','pending','saving'].includes(status)?[['Opnieuw bewaren',async()=>{await flush();if(status==='saved')panel.hidden=true;else details()}]]:[]),[account?'Account op startpagina':'Inloggen',login],['Sluiten',()=>panel.hidden=true]]);
+}
+function mount(){
+ host=document.createElement('div');host.id='axioma-game-status';
+ // Shadow DOM keeps game button/layout rules out of the shared account controls.
+ const root=host.attachShadow({mode:'open'});
+ root.innerHTML='<style>:host{display:inline-flex;flex:0 0 165px;width:165px;min-width:165px;vertical-align:middle;z-index:10000;font:12px/1.4 system-ui;color:#132d34}:host([data-floating]){position:fixed;top:6px;left:6px}button{font:inherit;cursor:pointer;border:1px solid #80989e;border-radius:7px;padding:7px 10px;background:#f5f8f9;color:#132d34;min-height:32px}button:focus-visible{outline:3px solid #cd9930;outline-offset:2px}.dock{box-sizing:border-box;width:165px;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 1px 5px #0003}.panel{position:fixed;inset:0;background:#102028a6;display:grid;place-items:center;padding:16px}.panel[hidden]{display:none}.box{background:#f5f8f9;color:#132d34;padding:20px;border-radius:12px;width:min(420px,calc(100vw - 48px));box-shadow:0 8px 36px #0005}p{margin:0 0 16px}.actions{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:1100px){:host{flex-basis:34px;width:34px;min-width:34px}.dock{font-size:0;width:34px;padding:4px;min-height:34px}.dock:before{content:"◉";font-size:20px}.dock[data-status="saved"]{color:#277457}.dock[data-status="offline"],.dock[data-status="conflict"],.dock[data-status="pending"]{color:#936615}}@media(prefers-color-scheme:dark){button,.box{background:#17343d;color:#e9f2f5}}</style><button class="dock" aria-label="Account en opslagstatus"></button><section class="panel" hidden role="dialog" aria-modal="true" aria-label="Account en voortgang"><div class="box"><p role="status"></p><div class="actions"></div></div></section>';
+ document.body.append(host);dock=root.querySelector('.dock');panel=root.querySelector('.panel');message=root.querySelector('p');actions=root.querySelector('.actions');dock.onclick=details;setStatus('loading');
+ new MutationObserver(placeDock).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','inert','class']});
+ window.addEventListener('resize',placeDock);placeDock();
+ root.addEventListener('keydown',event=>{
+  if(panel.hidden)return;
+  if(event.key==='Escape'&&panel.dataset.blocking!=='true'){event.preventDefault();panel.hidden=true;dock.focus()}
+  if(event.key==='Tab'){
+   const buttons=[...actions.querySelectorAll('button')];if(!buttons.length)return;
+   const index=buttons.indexOf(root.activeElement);event.preventDefault();buttons[(index+(event.shiftKey?-1:1)+buttons.length)%buttons.length].focus();
+  }
+ });
+ // Block input to the old engine immediately on logout or account replacement.
+ for(const type of ['click','pointerdown','keydown','touchstart'])document.addEventListener(type,event=>{
+  if((!active||!panel.hidden)&&!event.composedPath().includes(host)){
+   if(event.composedPath().some(node=>node.matches?.('a[data-platform-home]')))return;
+   event.preventDefault();event.stopImmediatePropagation();
+  }
+ },true);
+}
+function placeDock(){
+ if(!host)return;
+ const header=[...document.querySelectorAll('.header-actions'),...document.querySelectorAll('header')].find(el=>{const r=el.getBoundingClientRect();return r.width&&r.height&&r.top>=-5&&r.bottom<=innerHeight&&!el.closest('[inert]')&&getComputedStyle(el).visibility!=='hidden'});
+ const parent=header||document.body;if(host.parentNode!==parent)parent.append(host);
+ if(host.hasAttribute('data-floating')===!!header)host.toggleAttribute('data-floating',!header);
+}
+function changed(){
+ if(!started)return;
+ active=false;clearTimeout(timer);setStatus('changed');
+ notice('Je account is gewijzigd. Open het spel opnieuw om met de juiste voortgang verder te gaan.',[['Verder met mijn account',()=>location.reload()]],true);
+}
+function check(detail){
+ if(started&&(detail.pending||accountKey(detail.account)!==accountKey(account)))changed();
+}
+function dirty(){
+ if(!active)return;
+ record.dirty=true;edit++;persist();
+ if(account?.role==='student'){
+  setStatus(status==='offline'?'offline':'pending');clearTimeout(timer);timer=setTimeout(flush,700);
+ }
+}
+function getItem(key){
+ key=String(key);
+ if(Object.hasOwn(record.state.storage,key))return record.state.storage[key];
+ // Unassigned legacy browser progress is available only in guest mode.
+ if(!account){try{return nativeStorage().getItem(key)}catch(_){return null}}
+ return null;
+}
+function setItem(key,value){
+ if(!active)return;
+ key=String(key);value=String(value);
+ if(record.state.storage[key]===value)return;
+ record.state.storage[key]=value;
+ const summary=config.onWrite?.(key,value,record.state);
+ if(summary)Object.assign(record.state,summary,{finished:!!summary.total&&summary.completed.length>=summary.total});
+ dirty();
+}
+function removeItem(key){if(!active)return;record.state.storage[String(key)]=null;dirty()}
+function report(completed,total,current){
+ if(!active)return;
+ const units=[...new Set((Array.isArray(completed)?completed:[]).map(String))];
+ const next={completed:units,total:Math.max(0,Number(total)||0),finished:!!total&&units.length>=total};
+ if(current!=null)next.current=current;
+ if(Object.entries(next).some(([key,v])=>JSON.stringify(record.state[key])!==JSON.stringify(v))){Object.assign(record.state,next);dirty()}
+}
+function emit(completed,total,current){
+ window.dispatchEvent(new CustomEvent('axioma:game-progress',{detail:{gameId,accountId:account?.id||null,completed,total,current}}));
+}
+function snapshot(){
+ const state=clone(record.state);
+ // Only declared engine save keys go online (no device telemetry or incidental UI keys).
+ state.storage=Object.fromEntries(Object.entries(state.storage).filter(([key])=>(config.keys||[]).includes(key)));
+ state.schemaVersion=2;
+ return state;
+}
+function conflict(){
+ active=false;setStatus('conflict');
+ notice('Dit spel is ook op een ander tabblad of toestel gewijzigd. Je werk op dit toestel blijft apart bewaard. Laad de online versie om verder te gaan.',[['Laad online voortgang',()=>{
+  try{nativeStorage().setItem(cacheKey+':conflict:'+Date.now(),JSON.stringify(record));nativeStorage().removeItem(cacheKey)}catch(_){notice('De reservekopie kan niet worden bewaard. Maak ruimte vrij op dit toestel en probeer opnieuw.',[['Opnieuw proberen',conflict]],true);return}
+  location.reload();
+ }]],true);
+}
+async function flush(){
+ if(config.external){window.dispatchEvent(new Event('axioma:retry-save'));return}
+ if(!active||busy||!record.dirty||account?.role!=='student'||config.tracking===false)return;
+ busy=true;const version=edit,owner=account.id,state=snapshot();setStatus('saving');
+ try{
+  const result=await window.AxiomaProgress.save(gameId,state,record.revision,owner);
+  if(!active)return;
+  if(result?.status==='conflict'){conflict();return}
+  if(!result||result.status==='guest')throw Error('Niet bewaard');
+  record.revision=Number(result.revision)||record.revision+1;
+  record.dirty=edit!==version;persist();setStatus(record.dirty?'pending':'saved');
+ }catch(_){if(active)setStatus('offline')}
+ finally{busy=false;if(active&&record.dirty&&status==='pending'){clearTimeout(timer);timer=setTimeout(flush,700)}}
+}
+async function engines(){
+ for(const placeholder of document.querySelectorAll('script[type="text/axioma-game"]')){
+  if(!active)return;
+  const executable=document.createElement('script');
+  if(placeholder.dataset.src){
+   executable.src=placeholder.dataset.src;executable.async=false;
+   await new Promise((resolve,reject)=>{executable.onload=resolve;executable.onerror=()=>reject(Error('Spelbestand kon niet laden'));placeholder.after(executable)});
+  }else{executable.textContent=placeholder.textContent;placeholder.after(executable)}
+ }
+ placeDock();window.dispatchEvent(new Event('axioma:game-ready'));
+}
+async function boot(){
+ if(booting||started)return;booting=true;
+ notice('Je account en voortgang worden geladen…',[],true);
+ try{
+  if(!Object.hasOwn(window.AxiomaGameAdapters||{},gameId))throw Error('Spelkoppeling ontbreekt');
+  if(location.protocol!=='file:'){
+   await deadline(window.AxiomaAuth.ready());account=await deadline(window.AxiomaAuth.getAccount());
+   if(account&& !['student','teacher'].includes(account.role))throw Error('Account niet beschikbaar');
+  }
+  cacheKey=keyFor(account);
+  let cached=null;try{cached=JSON.parse(nativeStorage().getItem(cacheKey)||'null')}catch(_){}
+  record={state:{storage:{}},revision:0,dirty:false};
+  if(cached?.state?.storage&&typeof cached.state.storage==='object')record=cached;
+  if(account?.role==='student'&&config.tracking!==false){
+   let remote;
+   try{remote=await deadline(window.AxiomaProgress.load(gameId,account.id))}
+   catch(error){
+    if(!cached){throw error}
+    setStatus('offline');
+   }
+   if(remote){
+    if(record.dirty&&record.revision!==remote.revision){conflict();return}
+    if(!record.dirty){record={state:remote.state||{storage:{}},revision:remote.revision,dirty:false};record.state.storage ||= {}}
+    setStatus(record.dirty?'pending':'saved');
+   }
+  }else setStatus(config.external?(account?.role==='student'?'loading':account?'teacher':'guest'):config.tracking===false?(config.multiplayer?'multiplayer':'untracked'):account?'teacher':'guest');
+  // Recheck after network requests; never mount an old account's engine.
+  if(location.protocol!=='file:'&&accountKey(await window.AxiomaAuth.getAccount())!==accountKey(account))throw Error('Account gewijzigd');
+  if(account?.role==='student')config.hydrate?.(record.state);
+  active=true;started=true;panel.hidden=true;persist();
+  window.AxiomaAuth?.onChange(check);
+  readyResolve();await engines();
+  if(record.dirty)timer=setTimeout(flush,700);
+ }catch(_){
+  active=false;setStatus('error');
+  notice('Je account of opgeslagen voortgang kon niet worden geladen. Probeer opnieuw; je bestaande voortgang blijft behouden.',[['Opnieuw proberen',()=>{if(started)location.reload();else boot()}],['Naar startpagina',()=>location.href=home()]],true);
+ }finally{booting=false}
+}
+window.AxiomaGame=Object.freeze({ready,storage:Object.freeze({getItem,setItem,removeItem}),report,emit,flush,
+ get state(){return clone(record.state)},get account(){return account},get active(){return active},get status(){return status}
+});
+window.addEventListener('pagehide',()=>{if(active){persist();flush()}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)flush()});
+window.addEventListener('online',()=>{if(active)flush()});
+window.addEventListener('axioma:save-status',event=>{if(config.external&&active)setStatus(event.detail)});
+window.addEventListener('pageshow',event=>{if(event.persisted)window.AxiomaAuth?.getAccount().then(a=>check({account:a})).catch(changed)});
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{mount();boot()},{once:true});else{mount();boot()}
+})();
+</script></body></html>

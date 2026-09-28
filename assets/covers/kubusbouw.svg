@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" fill="none">
+  <defs><pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" stroke="#405040" stroke-opacity=".05"/></pattern></defs>
+  <rect width="600" height="300" fill="#e7efdf"/><rect width="600" height="300" fill="url(#grid)"/>
+  <circle cx="305" cy="143" r="108" fill="#d6e5ca"/>
+  <g font-family="Georgia,serif">
+  <defs><g id="cube" stroke="#6f8d74" stroke-width="1.5" stroke-linejoin="round"><path d="m0 0 43-25L86 0 43 25Z" fill="#d6e5ca"/><path d="M0 0v49l43 25V25Z" fill="#a8c1a0"/><path d="m43 25 43-25v49L43 74Z" fill="#7e9f82"/></g></defs>
+  <path d="m139 208 172-100 172 100-172 67Z" fill="#c9d8be" fill-opacity=".6"/>
+  <path d="m139 208 172-100 172 100-172 67Zm43-25 172 92m-129-117 172 94m-129-119 172 99m-258 0 172-99m-129 119 172-94m-129 117 172-92" stroke="#a1b395" stroke-width="1.5"/>
+  <use href="#cube" x="225" y="130"/><use href="#cube" x="182" y="155"/><use href="#cube" x="268" y="155"/><use href="#cube" x="225" y="180"/><use href="#cube" x="225" y="81"/>
+  <g transform="translate(380 66) rotate(6)"><rect width="84" height="86" rx="10" fill="#f8faf3"/><g fill="#a8c1a0" stroke="#6f8d74" stroke-width="1.5"><rect x="18" y="19" width="24" height="24"/><rect x="42" y="19" width="24" height="24"/><rect x="18" y="43" width="24" height="24"/><rect x="42" y="43" width="24" height="24"/></g></g>
+  <path d="M378 180h48v40m-6-6 6 6 6-6" stroke="#799a70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 5"/>
+  </g>
+</svg>

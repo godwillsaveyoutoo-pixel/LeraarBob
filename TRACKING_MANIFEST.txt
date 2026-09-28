@@ -1,0 +1,28 @@
+Game ID              eenvoudige tracking / cloud-unit
+---------------------------------------------------------------
+pythagoras            10 levels
+stelsels              14 unieke oefeningen (methode/modus maakt niet uit)
+algebra-smederij      opgeloste challenges
+taartenwinkel         7 diensten
+kubusbouw             22 levels
+verfwinkel            16 levels
+data-check            22 dossiers
+signal-lab            12 proeven
+gravity-maze          9 kamers
+
+Accountgebonden browsercache:
+  axioma:progress:v2:<project>:<rol>:<account>:<spel>
+  Gastgegevens blijven afzonderlijk; geen automatische overname in een account.
+
+Cloud bij aangemelde leerling:
+  public.axioma_game_progress
+  via shared/axioma-game.js en shared/axioma-progress.js
+  Snapshot: completed, total, finished, schemaVersion, storage.
+  De server controleert account-ID en revisie voordat hij schrijft.
+
+Reële getallen: reele-getallen-trainer, 8 vaardigheden + XP, leerroute en oefenconcept.
+Vectoren: vectoren-trainer, 24 vaardigheden + leermodel en oefenconcept.
+Rechtentrainer: eigen axioma_progress, dezelfde login en account-ID-controle.
+Zeeslag: online partijregistratie/ranglijst; solo telt niet mee in online ranking.
+Kleiduifgroepen: bestaande servergestuurde sessies en ranglijst.
+Zie PLATFORM_FRAMEWORK.md voor de volledige afspraken en tests.

@@ -1,0 +1,237 @@
+/* The station buildings define the materials of the whole mission interface.
+   This layer is inlined in the trainer and linked by battle / canvas.
+   Sky paths are relative to the consuming stylesheet (the HTML for inlined CSS). */
+:root{--metal-edge:#789ab6;--metal-face:#1b354d;--metal-dark:#0b1c30;--chamfer:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+body{background:#060d1b}
+#home.world-screen{background:#060d1b}
+.vector-world{border-color:#334d65;border-radius:0;background:#060d1b}
+.vector-world-bg{opacity:1;object-fit:fill}
+.world-vignette{background:linear-gradient(#050c1910,transparent 65%,#040a1680)}
+.world-kicker{color:#94b0c8}
+.world-intro h1{font-weight:750;letter-spacing:-.045em;text-shadow:0 3px 0 #020713}
+.world-intro p{color:#a9bfd3}
+.world-station,.progress-station,.progress-station-panel,#stationScreen{--station-accent:#56d9ef;--progress-accent:var(--station-accent)}
+.station-stuwkrachtlab,#stationScreen[data-station=stuwkrachtlab],:is(.progress-station,.progress-station-panel)[data-station=stuwkrachtlab]{--station-accent:#f7bc72;--progress-accent:var(--station-accent)}
+.station-dockingzone,#stationScreen[data-station=dockingzone],:is(.progress-station,.progress-station-panel)[data-station=dockingzone]{--station-accent:#cf9cff;--progress-accent:var(--station-accent)}
+.station-navigatienet,#stationScreen[data-station=navigatienet],:is(.progress-station,.progress-station-panel)[data-station=navigatienet]{--station-accent:#71e2b5;--progress-accent:var(--station-accent)}
+.station-manoeuvreveld,#stationScreen[data-station=manoeuvreveld],:is(.progress-station,.progress-station-panel)[data-station=manoeuvreveld]{--station-accent:#f17bdc;--progress-accent:var(--station-accent)}
+/* The panel is chamfered, but its building remains outside its bounds. */
+.world-station,.world-station:hover,.world-station.is-recommended,.world-station.is-complete{isolation:isolate;background:none;border-color:transparent;border-radius:0;box-shadow:none}
+.world-station::before,.world-station::after{content:"";position:absolute;pointer-events:none;clip-path:var(--chamfer);z-index:-1}
+.world-station::before{inset:-1px;background:linear-gradient(140deg,#accbdd,var(--station-accent) 42%,#3a5871 75%)}
+.world-station::after{inset:1px;background:linear-gradient(125deg,#314d65 0,#18334b 12%,#10263c 55%,#0b1a2d 55%);box-shadow:inset 0 -5px #061322,inset 0 2px #c8edff20,inset 3px 0 var(--station-accent)}
+.world-station:hover::after,.world-station:focus-visible::after{background:linear-gradient(125deg,#395873,#20425c 45%,#142c43 45%);box-shadow:inset 0 -5px #061322,inset 0 0 0 2px var(--station-accent)}
+.world-station:focus-visible{outline:2px solid var(--station-accent);outline-offset:5px}
+.world-station.is-recommended::before{background:var(--station-accent)}
+.world-station .station-badge{border-radius:0;border-color:var(--station-accent);background:#0a2136;color:var(--station-accent);box-shadow:3px 3px 0 #030c1b}
+.world-station-copy strong{color:#edf6fc}.world-station-copy small{color:#b7cada}
+.world-station .station-state,.world-station .station-score b{color:var(--station-accent)}
+.station-structure{filter:drop-shadow(0 10px 10px #020613)}
+.world-station:hover .station-structure,.world-station:focus-visible .station-structure{filter:drop-shadow(0 0 12px color-mix(in srgb,var(--station-accent) 30%,transparent))}
+/* Riveted control consoles: square edges, a lit upper lip and a dark base. */
+.world-mission-card,.world-next{background:linear-gradient(120deg,#1c354a,#0b1b2d);border-top:1px solid #8daec5;border-bottom:3px solid #030c18;box-shadow:inset 3px 0 #4e748d}
+.world-mission-card{padding:10px 14px;gap:6px 14px}
+.world-next{padding:10px 16px}
+.world-progress,.world-progress i,.mini-meter,.mini-meter i,.station-meter,.station-meter i,.progress-meter,.progress-meter i{border-radius:0}
+.world-progress{background:repeating-linear-gradient(90deg,#304d65 0 14px,#14293c 14px 17px)}
+.trainer-header,.battle-top,.canvas-app>header{background:linear-gradient(115deg,#142a40,#091627 65%);border-bottom-color:#789ab6;box-shadow:0 4px 0 #020813}
+.round-chip,.status-chip,.profile-chip,#menuBtn{border-radius:3px;background:linear-gradient(135deg,#203b53,#10253a 55%,#0b1c2e 55%);border-color:#5c819e;box-shadow:inset 0 1px #c3e5ff22,inset 0 -3px #040c19}
+.profile-avatar{border-radius:3px}.brand-sub{border-radius:1px}
+.trainer-nav{border-radius:2px;background:#102338;border-color:#85a9c3;box-shadow:6px 7px 0 #020814b3,inset 0 2px #b9d9ed33}
+.trainer-nav button{border-radius:1px;border-color:#385772;background:linear-gradient(125deg,#203a53,#0d2035)}
+.menu-icon{border-radius:0;background:#09192b;border:1px solid #668aa6}
+/* Actions borrow the chamfer and bevel from the buildings' plinths. */
+.world-continue,#resumeBtn,.station-back,button.primary,#commit,.draw-tools button,.coach-tab,#closeProgress,.battle-app button,.canvas-app button:not(.colors button){border-radius:0;clip-path:var(--chamfer);box-shadow:inset 0 2px #d3edff44,inset 0 -4px #020a1855;border-color:#90afc4;background:linear-gradient(125deg,#2a4961,#142e45 52%,#10243a 52%);color:#edf6fc}
+.world-continue,#commit,button.primary,.battle-app .primary{background:linear-gradient(125deg,#4b718a,#25495f 52%,#19364a 52%);border-color:#b3d8e8;color:#effbff;box-shadow:inset 0 3px #c9eaf56b,inset 0 -5px #081826,inset 4px 0 #71e2b5}
+.world-continue:hover,#commit:hover,button.primary:hover,.battle-app .primary:hover{background:linear-gradient(125deg,#527f97,#315c72 52%,#24495f 52%)}
+:is(.world-continue,#resumeBtn,.station-back,button.primary,#commit,.draw-tools button,.coach-tab,#closeProgress,.battle-app button,.canvas-app button):focus-visible{outline-offset:-4px;outline:3px solid #ffe1a0}
+.draw-tools button[aria-pressed=true],.canvas-app button[aria-pressed=true]:not(.colors button){background:linear-gradient(125deg,#315e74,#14374e);border-color:#56d9ef;box-shadow:inset 0 -3px #56d9ef,inset 0 1px #b6eaff55}
+.station-space-bg{background-image:linear-gradient(#060e1bb3,#060e1bc9),var(--night-sky);background-size:100% 100%}
+.station-space-bg::after{display:none}
+.station-number{transform:none;border-radius:0;background:linear-gradient(135deg,#36566f,#10283f);border-color:var(--station-accent);box-shadow:4px 4px 0 #020a17}
+.mission-action{border-radius:2px}.mission-beacon{border-radius:2px;background:linear-gradient(135deg,#41637e,#19354e 55%,#10283f 55%);box-shadow:4px 5px 0 #040d1d,inset 0 2px #c2e6ff33}
+.mission-index{border-radius:1px;box-shadow:2px 2px 0 #020a17}
+.mission-title{border-radius:0;background:linear-gradient(110deg,#203c53,#102338);border-color:#789ab6;box-shadow:0 3px 0 #030c19}
+.station-orbits span{border-radius:0;border-color:#789ab518;transform:translate(-50%,-50%) rotate(-24deg)}
+.station-orbits span:nth-child(2){transform:translate(-50%,-50%) rotate(24deg)}
+.station-orbits::before{border-radius:0}
+.progress-station,.progress-station-panel,.progress-total,.progress-station-number{border-radius:2px}
+.progress-station{background:linear-gradient(125deg,#1f3a51,#102338);box-shadow:inset 0 1px #c6e6ff20,inset 0 -3px #030b18}
+#boardWrap,#play footer,.coach-panel,#feedbackPanel,.teaching-panel,.setup-card,.player,.battle-app dialog,.canvas-app main{border-radius:2px;box-shadow:inset 0 2px #b4d4e51c,0 3px 0 #030b18}
+#play footer,.coach-panel,.teaching-panel,.setup-card{background:linear-gradient(130deg,#183149,#0c2035 65%);border-color:#6c90ab}
+.coach-number{border-radius:1px}#boardWrap::before{display:none}
+.battle-app .setup,.battle-app .result{background-image:linear-gradient(#050d1b80,#050d1b80),var(--night-sky);background-size:cover}
+.battle-app input,.battle-app select,.canvas-app input{border-radius:1px;border-color:#7797b0;box-shadow:inset 0 3px #020a1866}
+.canvas-app .canvas-tools{background:linear-gradient(110deg,#132c42,#09192c);border-bottom:1px solid #34516a}
+@media(max-height:500px),(max-width:900px){.world-mission-card{padding:4px 8px;gap:4px 10px}.world-next{padding:4px 8px}}
+@media(max-width:639px) and (min-height:501px){.world-mission-card{padding:5px 8px}.vector-world-bg{object-fit:fill;opacity:1}}
+@media(forced-colors:active){.world-station{border:2px solid ButtonText}.world-station::before,.world-station::after{display:none}.world-station .station-state,.world-station .station-score b{color:ButtonText}}
+@media(max-width:639px) and (min-height:501px){
+ .world-mission-card{gap:4px 6px}
+ .world-mission-card strong{font-size:12px;white-space:nowrap}
+ .world-mission-card b{font-size:16px}
+}
+
+/* Confirm the change of practice mode without changing the route behind the dialog. */
+.mission-dialog{width:min(460px,calc(100vw - 32px));max-height:calc(100dvh - 32px);margin:auto;padding:24px;color:var(--ink);background:linear-gradient(130deg,#24415a,#0d2035 65%);border:1px solid #90afc4;border-radius:2px;box-shadow:inset 0 3px #c9eaf533,0 18px 65px #0009;overflow:auto}
+.mission-dialog::backdrop{background:#020814bb}
+.mission-dialog h2{font-size:24px;line-height:1.2;margin:8px 0 14px}
+.mission-dialog p{color:#c9dcea;font-size:16px;line-height:1.6}
+.mission-dialog-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-top:22px}
+.mission-dialog button{min-height:44px;border-radius:1px}
+@media(max-height:500px),(max-width:400px){.mission-dialog{padding:18px}.mission-dialog h2{font-size:21px}.mission-dialog p{font-size:14px}.mission-dialog-actions{margin-top:16px}}
+
+/* The world is a destination, with the station as its quieter second navigation level. */
+.mission-breadcrumbs{gap:10px}
+.mission-breadcrumbs #crumbWorld{display:inline-flex;align-items:center;gap:9px;padding:7px 12px;min-height:46px;font-size:22px;font-weight:850;font-style:italic;letter-spacing:-.6px;color:#b5f4ff;border:1px solid #537f9f;border-radius:2px;background:linear-gradient(125deg,#2b4b65,#11283f 60%);box-shadow:inset 0 2px #9bdcec44,inset 0 -3px #030d20;text-shadow:0 2px #030c1b}
+#crumbWorld::before{content:'↗';display:grid;place-items:center;width:27px;height:27px;border:1px solid #78d3e4;color:#71e2b5;font-size:24px;font-style:normal;transform:skew(-7deg)}
+.mission-breadcrumbs #crumbWorld:hover{background:linear-gradient(125deg,#3a657e,#1b3c54);color:#fff;text-decoration:none;border-color:#9cf0ff}
+.mission-breadcrumbs #crumbStation{padding:6px 10px;font-weight:650;border:1px solid #3e657e;border-bottom:3px solid #527f94;border-radius:2px;background:#10263b;color:#a6dceb}
+.mission-breadcrumbs #crumbStation:hover{background:#21425a;color:#fff;text-decoration:none;border-color:#80c1d6}
+.crumb-divider{color:#789caf;font-weight:700}
+.profile-avatar{position:relative}
+.profile-avatar::after{content:'';position:absolute;right:-3px;bottom:-3px;width:9px;height:9px;border:2px solid #10243b;border-radius:50%;background:#87a2b8}
+[data-save-status=saved] .profile-avatar::after{background:#71e2b5}
+:is([data-save-status=offline],[data-save-status=pending],[data-save-status=saving]) .profile-avatar::after{background:#f7bc72}
+:is([data-save-status=error],[data-save-status=conflict],[data-save-status=changed]) .profile-avatar::after{background:#ff929e}
+@media(max-width:1500px){.mission-breadcrumbs #crumbWorld{font-size:19px;padding:6px 9px}}
+@media(max-width:1100px),(max-height:500px){#crumbWorld::before{display:none}.mission-breadcrumbs #crumbWorld{font-size:17px;min-height:44px;padding:5px 8px}.mission-breadcrumbs #crumbStation{padding:5px 7px;font-size:13px}}
+@media(max-width:700px){.mission-breadcrumbs{gap:4px}.mission-breadcrumbs #crumbWorld{font-size:15px;padding:4px 6px}.mission-breadcrumbs #crumbStation{font-size:12px;padding:4px 5px}}
+@media(max-width:450px){.mission-breadcrumbs #crumbWorld{font-size:13px;letter-spacing:-.3px;padding:4px}.mission-breadcrumbs #crumbStation{font-size:11px;padding:4px 3px}.mission-breadcrumbs{gap:3px}}
+
+/* A quiet night sky behind the mathematical ink. Grid and labels remain crisp. */
+#boardWrap{background-color:#030916;background-image:linear-gradient(#02061144,#02061144),var(--night-sky);background-size:cover;background-position:center}
+#board{--grid:#253952}
+#board .given,#board .student,#board .result,#board .example{filter:drop-shadow(0 0 3px color-mix(in srgb,currentColor 45%,transparent))}
+.flight-layer{filter:none}
+.flight-layer>g{filter:drop-shadow(0 0 4px currentColor)}
+.high-contrast #boardWrap{background:#030916}
+.high-contrast #board{--grid:#527492}
+.high-contrast #board .given,.high-contrast #board .student,.high-contrast #board .result,.high-contrast .flight-layer>g{filter:none}
+#previousQuestion{min-width:44px;min-height:44px;flex-shrink:0;font-size:13px;padding:6px 10px}
+@media(max-width:1150px),(max-height:500px){#previousQuestion span{display:none}#previousQuestion{padding:5px;min-width:44px;font-size:20px}}
+/* Menus stay inside the viewport, with full-width touch targets on phones. */
+.trainer-nav{max-width:calc(100vw - 24px);max-height:calc(100dvh - 100px);overflow-y:auto;overscroll-behavior:contain;scroll-padding:8px}
+.trainer-nav button{min-width:0;white-space:normal;overflow-wrap:anywhere}
+.trainer-nav button>span:last-child{min-width:0}
+@media(max-height:500px){.trainer-nav{width:min(420px,calc(100vw - 24px));grid-template-columns:repeat(2,minmax(0,1fr));max-height:calc(100dvh - 68px)}}
+@media(max-width:450px) and (min-height:501px){.trainer-nav{width:calc(100vw - 24px);grid-template-columns:1fr;max-height:calc(100dvh - 82px);right:12px}.trainer-nav button{min-height:50px}.trainer-nav small{font-size:11px}}
+/* The drawing orientation hint must not block navigation on a phone. */
+.trainer-header{z-index:11}
+#rotate{top:82px}
+@media(max-width:450px){#rotate{top:62px}}
+@media(max-height:500px){#rotate{top:52px}}
+
+/* Solo cockpit: tools left, an uninterrupted board in the centre, actions right. */
+.side-controls #play{grid-template-rows:auto minmax(0,1fr)}
+.side-controls #play>footer{display:none}
+.side-controls .work{--tool-width:112px;--action-width:156px;display:grid;grid-template-columns:var(--tool-width) minmax(0,1fr) var(--action-width);gap:12px}
+.side-controls #boardWrap{grid-column:2;grid-row:1;width:100%;height:100%;margin:0!important}
+.exercise-left,.exercise-right{min-width:0;min-height:0;display:flex;flex-direction:column;gap:10px;padding:10px;border:1px solid #47667e;border-top-color:#89abc1;background:linear-gradient(130deg,#142b40,#081827);overflow:auto;overscroll-behavior:contain;scroll-padding:6px}
+.exercise-left{grid-column:1;grid-row:1}
+.exercise-right{grid-column:3;grid-row:1}
+.side-controls .draw-tools{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.side-controls .draw-tools button{width:100%;padding:8px 4px;min-height:52px;font-size:13px;flex-shrink:0;white-space:normal}
+.side-controls .draw-tools button span{display:block;margin:0;font-size:23px;line-height:1.15}
+.side-controls #previousQuestion,.side-controls #lessonBack{width:100%;min-height:48px;white-space:normal}
+.side-controls #previousQuestion span{display:inline}
+.side-controls #previousQuestion{font-size:12px}
+.side-controls #coachTab{position:static;width:100%;min-height:50px;padding:6px;font-size:12px;white-space:normal}
+.side-controls #activityHint{display:block;padding:0;font-size:12px;line-height:1.55;flex:0 0 auto}
+.exercise-actions{display:flex;flex-direction:column;gap:10px;margin-top:auto;padding-top:6px;flex-shrink:0}
+.side-controls #skip{margin:0;white-space:normal;width:100%;padding:6px;font-size:12px}
+.side-controls #commit{min-width:0;width:100%;font-size:16px;padding:12px 6px;min-height:58px;margin:0;white-space:normal}
+.side-controls .work:has(#numberWork:not([hidden])),.side-controls .work:has(#choiceWork:not([hidden])),.side-controls .work.is-lesson,.side-controls .work.has-feedback{--action-width:300px}
+.side-controls #lessonPanel,.side-controls #feedbackPanel,.side-controls #numberWork,.side-controls #choiceWork{position:static;width:100%;max-width:none;flex:0 0 auto;padding:0;border:0;background:none;box-shadow:none;overflow:visible}
+.side-controls #feedbackPanel{gap:12px}
+.side-controls #lessonPanel{gap:12px}
+.side-controls .work.has-flight #feedbackPanel{flex-basis:auto}
+.side-controls .work.has-feedback #activityHint,.side-controls .work.is-lesson #activityHint{display:none}
+.side-controls #numberWork{min-height:0;display:flex;flex-direction:column;gap:8px}
+.side-controls #numberWork[hidden],.side-controls #choiceWork[hidden]{display:none!important}
+.side-controls #choiceWork{gap:8px}
+.side-controls .work.symbolic .exercise-right{grid-column:2 / 4}
+.side-controls .work.symbolic #numberWork{display:grid;grid-template-columns:1fr minmax(260px,360px);gap:20px;flex:1}
+.side-controls .work.symbolic .exercise-actions{width:160px;align-self:flex-end}
+.side-controls #play:has(.has-flight) #drawTools{display:flex}
+.side-controls .draw-tools button:disabled{opacity:.4}
+@media(min-width:901px) and (min-height:501px){
+ .side-controls .work.has-coach{--tool-width:275px}
+ .side-controls #coachPanel{width:100%;padding:0;border:0;background:none;box-shadow:none;flex:0 0 auto}
+ .side-controls .has-coach .draw-tools{margin-top:auto}
+ .side-controls .has-coach .draw-tools button{min-height:48px}
+ .side-controls .has-coach .draw-tools button span{display:inline;margin-right:6px}
+}
+@media(max-width:1100px),(max-height:500px){
+ .side-controls .work{--tool-width:88px;--action-width:126px;gap:8px}
+ .exercise-left,.exercise-right{padding:7px;gap:6px}
+ .side-controls .work:has(#numberWork:not([hidden])),.side-controls .work:has(#choiceWork:not([hidden])),.side-controls .work.is-lesson,.side-controls .work.has-feedback{--action-width:248px}
+ .side-controls .draw-tools{gap:6px}
+ .side-controls .draw-tools button{font-size:11px;min-height:44px;padding:4px 2px}
+ .side-controls #previousQuestion{font-size:11px;min-height:44px;padding:4px}
+ .side-controls #coachTab{min-height:44px;padding:4px;font-size:11px}
+ .side-controls #commit{font-size:14px;min-height:50px;padding:8px 4px}
+ .side-controls #skip{font-size:11px;padding:4px 2px}
+ .side-controls #activityHint{font-size:11px}
+ .side-controls #feedbackPanel h2,.side-controls #lessonPanel h2{font-size:18px}
+ .side-controls #feedbackPanel p,.side-controls #lessonPanel p{font-size:13px;line-height:1.45}
+ .side-controls #feedbackReason{font-size:11px;line-height:1.4}
+ .side-controls #lessonBack{min-height:44px;font-size:11px;padding:4px}
+ .side-controls .exercise-actions{gap:6px}
+}
+@media(max-height:500px){
+ .side-controls .questionbar{min-height:50px}
+ .side-controls .work{--tool-width:76px;--action-width:110px;gap:6px}
+ .side-controls .work:has(#numberWork:not([hidden])),.side-controls .work:has(#choiceWork:not([hidden])),.side-controls .work.is-lesson,.side-controls .work.has-feedback{--action-width:230px}
+ .exercise-left,.exercise-right{padding:5px;gap:4px}
+ .side-controls .draw-tools{gap:4px}
+ .side-controls .draw-tools button span{display:inline;font-size:17px;margin-right:3px}
+ .side-controls #previousQuestion span{display:none}
+ .side-controls #previousQuestion{font-size:20px}
+ .side-controls #activityHint{display:none}
+ .side-controls #commit{min-height:44px;font-size:13px}
+ .side-controls #feedbackPanel,.side-controls #lessonPanel{gap:6px}
+ .side-controls #flightControls{gap:5px}
+ .side-controls #flightControls #flightExplanation{font-size:12px}
+ .side-controls #flightToggle{font-size:11px;padding:4px}
+ .side-controls #earnedXP{font-size:11px}
+ .side-controls #choiceWork{grid-template-columns:1fr 1fr;gap:5px}
+ .side-controls #choiceWork button{min-height:44px;font-size:15px}
+ .side-controls #numberWork .coordinate-editor{display:flex;flex-direction:column;gap:5px}
+ .side-controls #numberWork .slots{grid-template-columns:1fr 1fr;gap:5px}
+ .side-controls #numberWork .slot{min-height:44px}
+ .side-controls #numberWork .slot strong{font-size:19px}
+ .side-controls #numberWork .keypad{gap:4px}
+ .side-controls #numberWork .keypad button{font-size:17px;min-height:44px}
+}
+@media(max-height:500px){
+ .side-controls .work:has(#numberWork:not([hidden])){--action-width:260px}
+ .side-controls .work:has(#numberWork:not([hidden])) .exercise-actions,
+ .side-controls .work:has(#choiceWork:not([hidden])) .exercise-actions,
+ .side-controls .work.has-feedback .exercise-actions{flex-direction:row;align-items:center}
+ .side-controls .work:has(#numberWork:not([hidden])) #commit,
+ .side-controls .work:has(#choiceWork:not([hidden])) #commit,
+ .side-controls .work.has-feedback #commit{flex:1}
+ .side-controls .work:has(#numberWork:not([hidden])) #skip,
+ .side-controls .work:has(#choiceWork:not([hidden])) #skip{width:70px;flex:0 0 70px}
+}
+@media(max-height:500px){
+ .side-controls .work:has(#numberWork:not([hidden])) .exercise-right{padding:4px;gap:3px}
+ .side-controls .work:has(#numberWork:not([hidden])) .exercise-actions{padding-top:0;gap:4px}
+ .side-controls #numberWork .coordinate-editor{gap:2px}
+ .side-controls #numberWork .keypad{gap:3px}
+}
+.side-controls #feedbackPanel p{font-size:15px;line-height:1.4}
+@media(max-width:900px),(max-height:500px){
+ .side-controls #coachPanel{left:calc(var(--tool-width) + 26px);max-width:calc(100vw - var(--tool-width) - 150px)}
+}
+/* Avoid an empty rail when a question has no drawing tools or earlier question. */
+.side-controls .exercise-left:not(:has(> :not([hidden]))){display:none}
+.side-controls .work:has(.exercise-left:not(:has(> :not([hidden])))){grid-template-columns:minmax(0,1fr) var(--action-width)}
+.side-controls .work:has(.exercise-left:not(:has(> :not([hidden])))) #boardWrap{grid-column:1}
+.side-controls .work:has(.exercise-left:not(:has(> :not([hidden])))) .exercise-right{grid-column:2}
+.side-controls .work.symbolic:has(.exercise-left:not(:has(> :not([hidden])))) .exercise-right{grid-column:1 / -1}
+/* Long example text scrolls inside its panel; the next-step action stays in view. */
+.side-controls .work.is-lesson .exercise-right{overflow:hidden}
+.side-controls #lessonPanel{flex:1 1 auto;min-height:0;overflow:auto;padding-right:3px;scroll-padding:8px}
+@media(max-height:500px){.side-controls .work.has-feedback #skip{width:70px;flex:0 0 70px}}

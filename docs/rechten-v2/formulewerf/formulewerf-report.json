@@ -1,0 +1,224 @@
+{
+  "checks": [
+    "workshop A 1920x1080 @0.8",
+    "workshop B 1920x1080 @0.8",
+    "workshop A 1920x1080 @1",
+    "workshop B 1920x1080 @1",
+    "workshop A 1920x1080 @1.25",
+    "workshop B 1920x1080 @1.25",
+    "workshop A 1366x768 @0.8",
+    "workshop B 1366x768 @0.8",
+    "workshop A 1366x768 @1",
+    "workshop B 1366x768 @1",
+    "workshop A 1366x768 @1.25",
+    "workshop B 1366x768 @1.25",
+    "workshop A 1024x768 @0.8",
+    "workshop B 1024x768 @0.8",
+    "workshop A 1024x768 @1",
+    "workshop B 1024x768 @1",
+    "workshop A 1024x768 @1.25",
+    "workshop B 1024x768 @1.25",
+    "workshop A 780x360 @0.8",
+    "workshop B 780x360 @0.8",
+    "workshop A 780x360 @1",
+    "workshop B 780x360 @1",
+    "workshop A 780x360 @1.25",
+    "workshop B 780x360 @1.25",
+    "workshop A 640x360 @0.8",
+    "workshop B 640x360 @0.8",
+    "workshop A 640x360 @1",
+    "workshop B 640x360 @1",
+    "workshop A 640x360 @1.25",
+    "workshop B 640x360 @1.25",
+    "progress -1 / bouwen",
+    "progress -1 / omzetten",
+    "progress 0 / bouwen",
+    "progress 0 / omzetten",
+    "progress 1 / bouwen",
+    "progress 1 / omzetten",
+    "progress 2 / bouwen",
+    "progress 2 / omzetten",
+    "progress 3 / bouwen",
+    "progress 3 / omzetten",
+    "progress 4 / bouwen",
+    "progress 4 / omzetten",
+    "progress 5 / bouwen",
+    "progress 5 / omzetten",
+    "progress 6 / bouwen",
+    "progress 6 / omzetten",
+    "progress 7 / bouwen",
+    "progress 7 / omzetten",
+    "progress 8 / bouwen",
+    "progress 8 / omzetten",
+    "progress 9 / bouwen",
+    "progress 9 / omzetten",
+    "preview equation_from_ab",
+    "preview graph_from_equation",
+    "preview equation_from_graph",
+    "preview rewrite_linear_equation",
+    "preview intercept_from_point",
+    "preview equation_from_point_slope",
+    "preview equation_from_two_points",
+    "preview equation_from_table",
+    "preview equation_from_context"
+  ],
+  "screenshots": [
+    "screenshots/werkplaats-a-1366x768.png",
+    "screenshots/werkplaats-b-1366x768.png",
+    "screenshots/werkplaats-a-780x360.png",
+    "screenshots/werkplaats-b-780x360.png"
+  ],
+  "passed": true,
+  "matrix": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "zoom": 0.8,
+      "viewport": {
+        "width": 2400,
+        "height": 1350,
+        "dpr": 0.800000011920929
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "zoom": 1,
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "zoom": 1.25,
+      "viewport": {
+        "width": 1536,
+        "height": 864,
+        "dpr": 1.25
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "zoom": 0.8,
+      "viewport": {
+        "width": 1707,
+        "height": 960,
+        "dpr": 0.800000011920929
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "zoom": 1,
+      "viewport": {
+        "width": 1366,
+        "height": 768,
+        "dpr": 1
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "zoom": 1.25,
+      "viewport": {
+        "width": 1093,
+        "height": 614,
+        "dpr": 1.25
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "zoom": 0.8,
+      "viewport": {
+        "width": 1280,
+        "height": 960,
+        "dpr": 0.800000011920929
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "zoom": 1,
+      "viewport": {
+        "width": 1024,
+        "height": 768,
+        "dpr": 1
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "zoom": 1.25,
+      "viewport": {
+        "width": 819,
+        "height": 614,
+        "dpr": 1.25
+      }
+    },
+    {
+      "width": 780,
+      "height": 360,
+      "zoom": 0.8,
+      "viewport": {
+        "width": 975,
+        "height": 450,
+        "dpr": 0.800000011920929
+      }
+    },
+    {
+      "width": 780,
+      "height": 360,
+      "zoom": 1,
+      "viewport": {
+        "width": 780,
+        "height": 360,
+        "dpr": 1
+      }
+    },
+    {
+      "width": 780,
+      "height": 360,
+      "zoom": 1.25,
+      "viewport": {
+        "width": 624,
+        "height": 288,
+        "dpr": 1.25
+      }
+    },
+    {
+      "width": 640,
+      "height": 360,
+      "zoom": 0.8,
+      "viewport": {
+        "width": 800,
+        "height": 450,
+        "dpr": 0.800000011920929
+      }
+    },
+    {
+      "width": 640,
+      "height": 360,
+      "zoom": 1,
+      "viewport": {
+        "width": 640,
+        "height": 360,
+        "dpr": 1
+      }
+    },
+    {
+      "width": 640,
+      "height": 360,
+      "zoom": 1.25,
+      "viewport": {
+        "width": 512,
+        "height": 288,
+        "dpr": 1.25
+      }
+    }
+  ]
+}

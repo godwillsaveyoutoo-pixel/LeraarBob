@@ -1,0 +1,52 @@
+/* One platform row; game controls and indicators are a separate row beneath it. */
+.lb-header{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:0!important;height:auto!important;min-height:0!important;padding:0!important;max-width:none!important;overflow:visible!important;transform:none!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;border-radius:0!important;z-index:50}
+.lb-header.lb-collapsed{height:0!important;min-height:0!important;border:0!important;overflow:hidden!important}
+.lb-header .lb-gamebar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:5px 16px;min-width:0;max-width:100%;font-size:13px;background:var(--lb-surface,#102333);color:var(--lb-ink,#e7f1fa)}
+.lb-header .lb-gamebar .header-actions{margin-left:auto;gap:10px;display:flex;align-items:center;flex-wrap:wrap}
+.lb-header .lb-legacy-nav,.lb-header .lb-empty,.lb-header .lb-gamebar[hidden],leraarbob-topbar[hidden]{display:none!important}
+.lb-header .lb-gamebar:has(>.lb-legacy-nav:only-child){display:none}
+.lb-restore{position:fixed;z-index:10001;right:8px;top:6px;width:44px;height:44px;padding:8px;min-width:44px;min-height:44px;background:var(--lb-surface,#102333);color:var(--lb-ink,#e7f1fa);border:1px solid #799aae;border-radius:8px;cursor:pointer}.lb-restore svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2}.lb-restore[hidden]{display:none!important}.lb-restore:focus-visible{outline:3px solid #e5b957;outline-offset:2px}
+body:has(.lb-header)>.topbar-restore{display:none!important}
+html[data-mode=light],body:has(.atlas-header),body:has(.topline){--lb-surface:#f7f4ed;--lb-ink:#263e3d;--lb-line:#a4b4ac;--lb-hover:#284d3810}
+.lb-account-dialog{width:min(480px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;background:var(--lb-surface,#102333);color:var(--lb-ink,#e7f1fa);padding:22px;border:1px solid #799aae;border-radius:12px;font:16px/1.5 system-ui}.lb-account-dialog[hidden]{display:none}.lb-account-dialog::backdrop{background:#0009}.lb-dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.lb-dialog-heading h2{font-size:22px;margin:0}.lb-account-dialog button,.lb-account-dialog input,.lb-account-dialog select{font:inherit;min-height:44px;border:1px solid #799aae;border-radius:6px;padding:8px;background:transparent;color:inherit}.lb-account-dialog #authClose{min-width:44px;font-size:24px}.lb-account-dialog .auth-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0}.lb-account-dialog .auth-tabs button{flex:1;font-size:13px}.lb-account-dialog .active{border-color:#d7ab42}.lb-account-dialog form,.lb-account-dialog label{display:grid;gap:8px}.lb-account-dialog form{gap:15px}.lb-account-dialog input{width:100%;min-width:0}.lb-account-dialog .auth-message{font-size:14px;color:#d7ab42}.lb-account-dialog .auth-message:empty{display:none}.lb-account-dialog .auth-primary{width:100%;font-weight:750}.lb-account-dialog button:focus-visible,.lb-account-dialog input:focus-visible{outline:3px solid #d7ab42;outline-offset:2px}
+@media(max-width:800px){.lb-header .lb-gamebar{gap:8px;padding:4px 10px}.lb-header .lb-gamebar:empty{display:none}}
+
+/* Engines with fixed header tracks must reserve the actual shared-header height. */
+.lb-grid-two{grid-template-rows:auto minmax(0,1fr)!important}
+.lb-grid-three{grid-template-rows:auto minmax(0,1fr) auto!important}
+.lb-header{position:relative!important;top:0!important;left:0!important;right:0!important;width:100%!important;max-height:none!important;flex-shrink:0!important;transition:none!important}
+.lb-header .lb-gamebar{flex-shrink:0}
+.lb-header .round-chip,.lb-header .status-chip{min-height:28px!important;height:auto!important;padding:3px 10px!important;border-radius:5px!important;font-size:14px!important}
+.lb-header .round-chip{display:flex!important;align-items:center;min-width:0!important;gap:8px!important}.lb-header .mini-meter{width:80px}.lb-header #roundLabel,.lb-header #xpLabel{font-size:12px!important}
+body:has(.lb-header) .vector-world{width:min(100%,calc((100dvh - var(--lb-header-height,82px))*16/9))}
+@media(max-height:500px){body:has(.lb-header) .vector-world{width:min(100%,calc((100dvh - var(--lb-header-height,52px))*2.5))}}
+@media(max-width:639px) and (min-height:501px){body:has(.lb-header) .vector-world{width:100%}}
+/* Full-screen game start panels leave the platform navigation available. */
+body:has(.lb-header) .rf-home{top:var(--lb-header-height,60px)!important;height:calc(100dvh - var(--lb-header-height,60px))!important}
+body:has(.lb-header) .app.home-open>.lb-header{visibility:visible!important;z-index:1000}
+body:has(.lb-header) #menu-handle,body:has(.lb-header) #menu-close,body:has(.lb-header) #topReveal{display:none!important}
+/* Gravity's canvas menu is positioned over its field rather than in a grid. */
+body:has(#top-menu.lb-header) #top-menu.lb-header{position:absolute!important;z-index:20;inset:0 0 auto!important}
+body:has(#top-menu.lb-header) .field{padding-top:var(--lb-header-height,60px)}
+body:has(.lb-header) #axioma-game-status{position:absolute!important;width:0!important;min-width:0!important;flex-basis:0!important}
+
+.lb-header{max-width:100vw!important}
+body:has(.rf-home:not([hidden])) .lb-header .lb-gamebar{display:none!important}
+body:has(#top-menu.lb-header) .field{padding-top:0;top:var(--lb-header-height,60px)}
+
+/* Existing welcome and rotate-device panels start below the shared navigation. */
+body:has(.lb-header) :is(.rotate,.sa-rotate,.patisserie-home,.sa-landing,.sa-levels,.vf-intro,.homeScreen,.signal-home){top:var(--lb-header-height,60px)!important;bottom:0!important;height:calc(100dvh - var(--lb-header-height,60px))!important}
+body:has(.patisserie-home:not([hidden])) .game.home-open .lb-gamebar,
+body:has(.vf-intro:not([hidden])) .lb-gamebar,
+body:has(.signal-home) .app.home-open .lb-gamebar,
+body:has(.homeScreen) #app.mode-home .lb-gamebar{display:none!important}
+html[data-mode=dark] body{--lb-surface:#102333;--lb-ink:#e7f1fa;--lb-line:#799aae50;--lb-hover:#ffffff12}
+
+body[data-platform-page="Kleiduifschieten"] #lobby{top:var(--lb-header-height,60px);max-height:calc(100dvh - var(--lb-header-height,60px))}
+body[data-platform-page="Data Check"] #app>.stage{grid-row:2!important}
+body[data-platform-page="Data Check"] #app>.dock{grid-row:3!important}
+
+.lb-grid-four{grid-template-rows:auto auto minmax(0,1fr) auto!important}
+
+/* The shared row owns the XP/completion badge; keep the engine source in the DOM. */
+.lb-progress-source{display:none!important}

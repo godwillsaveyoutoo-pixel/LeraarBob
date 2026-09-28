@@ -1,0 +1,128 @@
+/* Progress is a browsable journal; only the journal scrolls, navigation stays put. */
+.progress-page .journal-main{display:block;width:100%;padding:clamp(12px,2.6vw,32px);overflow:hidden}
+.journal-scroll{width:100%;height:100%;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:3px 12px 18px 3px;max-width:1180px;margin:auto;scroll-padding-block:14px}
+.journal-scroll:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:6px}
+.journey-heading{display:flex;gap:25px;justify-content:space-between;align-items:center;margin-bottom:12px}
+.journey-heading h1{font:clamp(32px,3.5vw,48px)/1.1 var(--hand);margin:12px 0 8px}
+.journey-heading p{font-size:14px;line-height:1.55;max-width:630px;color:#49616a}
+.journey-totals{display:flex;gap:32px;flex:none;padding:16px 25px;border-left:1px solid #acbeb3}
+.journey-totals p{display:grid;gap:3px;font-size:13px}
+.journey-totals strong{font:42px/1 var(--hand);color:#23604e}
+.journey-totals strong small{font-size:24px;color:#526c6b}
+.journey-instruction{font:21px/1.3 var(--hand);margin-bottom:14px;color:#49616a}
+.journey-areas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+.journey-area{min-width:0;background:#fffcf1 var(--paper-texture);border:1px solid #c4c9b9;border-radius:10px 15px 9px 12px;box-shadow:0 3px 9px #233f3710;overflow:hidden}
+.journey-area>summary{display:flex;align-items:center;gap:14px;padding:13px 18px;min-height:98px;cursor:pointer;list-style:none}
+.journey-area>summary::-webkit-details-marker{display:none}
+.journey-area>summary>.island-art{width:68px;height:68px;flex:none;filter:none}
+.journey-area-title{flex:1;min-width:0;display:grid;gap:4px}
+.journey-area-title>strong{font:28px/1.15 var(--hand)}
+.journey-area-title>span:not(.small-meter){font-size:12px;line-height:1.4;color:#4c6867}
+.journey-area-title .small-meter{height:5px;margin-top:4px;max-width:260px}
+.journey-area[open]>summary{border-bottom:1px solid #d8dece}
+.journey-area[open]>summary>.ui-icon{transform:rotate(90deg)}
+.journey-area>summary:focus-visible{outline-offset:-4px}
+.journey-stops{margin:0;padding:0 16px;list-style:none}
+.journey-stops li{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid #e2e5d9;min-height:74px}
+.journey-status{display:grid;place-items:center;width:29px;height:29px;flex:none;background:#edf0e7;border:1px solid #b4c3b6;border-radius:50%;font:19px var(--hand);color:#5b726c}
+.journey-status.done{color:white;background:#287459;border-color:#287459}
+.journey-status.started{color:#635297;background:#f0eaf9;border-color:#a394c4}
+.journey-stop-text{flex:1;min-width:0;display:grid;gap:5px}
+.journey-stop-text>strong{font-size:14px;font-weight:600;line-height:1.4}
+.journey-stop-text>span{font-size:11px;color:#536a67;line-height:1.5}
+.journey-stop-text b{color:#26705a;font-weight:600}
+.journey-practice{display:flex;align-items:center;justify-content:center;gap:5px;min-height:44px;min-width:70px;padding:7px 9px;background:#edf4ea;border-color:#b4c8b7;font:19px var(--hand);flex:none}
+.journey-practice .ui-icon{width:15px}
+.journey-area-link{display:flex;align-items:center;justify-content:center;gap:8px;margin:10px auto;min-height:44px;background:transparent;border:0;font:20px var(--hand);color:#23604e}
+.journey-practice-summary{padding:22px 5px 8px;color:#49616a}
+.journey-practice-summary h2{font:26px var(--hand);color:var(--ink);margin-bottom:6px}
+.journey-practice-summary p{font-size:13px;line-height:1.6}
+.journey-practice-summary p:last-child{font-size:12px;margin-top:6px}
+.journey-practice-summary strong{color:#23604e;font-size:17px}
+.journey-practice-summary p>span{margin:0 8px}
+.profile-progress{display:flex;align-items:center;gap:15px;justify-content:center;max-width:440px;width:100%;margin:14px auto 9px;background:#e9f1e5;border-color:#acc0ad;padding:12px 18px}
+.profile-progress>span{display:grid;gap:5px;flex:1;text-align:left}
+.profile-progress strong{font:26px/1 var(--hand)}
+.profile-progress small{font-size:12px;line-height:1.4}
+.profile-paper .profile-storage-note{font-size:13px;line-height:1.5;color:#536b65;margin:0 auto 18px;max-width:450px}
+.journal-page h1[tabindex="-1"]:focus,.profile-page h1[tabindex="-1"]:focus{outline:none}
+@media(max-width:750px){
+ .journey-heading{align-items:start;gap:12px}
+ .journey-heading .tape-label{display:none}
+ .journey-heading h1{font-size:33px;margin:0 0 6px}
+ .journey-heading p{font-size:12px}
+ .journey-totals{gap:18px;padding:8px 0 8px 16px}
+ .journey-totals strong{font-size:33px}
+ .journey-totals strong small{font-size:18px}
+ .journey-totals p{font-size:11px;max-width:75px}
+ .journey-areas{grid-template-columns:1fr;gap:12px}
+ .journey-area>summary{min-height:82px;padding:10px 14px}
+ .journey-area-title>strong{font-size:25px}
+ .journey-area>summary>.island-art{width:55px;height:55px}
+ .journey-instruction{font-size:18px}
+ .progress-page .atlas-footer .paint-button{font-size:22px;min-width:0;padding-inline:15px}
+}
+@media(orientation:portrait) and (max-width:500px){
+ .journey-heading{display:block}
+ .journey-totals{border-left:0;border-top:1px solid #b7c7b8;margin-top:14px;padding:13px 0 0;gap:30px}
+ .journey-totals p{max-width:none;display:flex;align-items:center;gap:8px}
+ .journey-totals strong{white-space:nowrap}
+ .journey-area>summary{gap:9px;padding-inline:10px}
+ .journey-stops{padding-inline:10px}
+ .journey-stops li{gap:7px}
+ .journey-status{width:24px;height:24px;font-size:17px}
+ .journey-stop-text>strong{font-size:13px}
+ .journey-stop-text>span{font-size:11px}
+ .journey-practice{min-width:61px;font-size:17px;padding-inline:6px}
+ .journey-practice .ui-icon{display:none}
+ .journal-scroll{padding-right:5px}
+ .profile-paper .profile-storage-note{font-size:12px}
+}
+@media(orientation:portrait) and (max-height:700px){
+ .profile-paper h1{font-size:32px;margin:5px 0}
+ .profile-avatar{width:48px;height:48px}
+ .profile-avatar .ui-icon{width:31px;height:31px}
+ .profile-paper>p{font-size:13px}
+ .profile-paper .storage-status{margin:4px 0 7px}
+ .profile-progress{padding:9px 12px;margin:8px auto}
+ .profile-progress strong{font-size:23px}
+ .profile-progress small{font-size:11px}
+ .profile-paper .profile-storage-note{display:none}
+ .profile-actions{flex-wrap:nowrap;gap:7px}
+ .profile-page[data-profile-role=student] .profile-actions{flex-wrap:wrap}
+ .profile-page[data-profile-role=student] .profile-avatar{display:none}
+ .profile-actions button{font-size:15px;padding:7px 9px;min-height:44px}
+ .profile-actions .paint-button{font-size:19px;padding:7px 12px;min-height:44px;gap:5px}
+ .profile-paper .motion-setting{font-size:12px;min-height:44px;margin-top:9px}
+ .profile-paper .motion-setting input{width:44px;height:44px}
+}
+@media(orientation:landscape) and (max-height:550px){
+ .progress-page .journal-main{padding:10px 18px}
+ .journey-heading{margin-bottom:10px}
+ .journey-heading .tape-label{display:none}
+ .journey-heading h1{font-size:30px;margin:0 0 5px}
+ .journey-heading p{font-size:12px;max-width:390px}
+ .journey-totals{padding:5px 15px;gap:22px}
+ .journey-totals strong{font-size:30px}
+ .journey-totals strong small{font-size:18px}
+ .journey-totals p{font-size:11px}
+ .journey-instruction{font-size:18px;margin-bottom:10px}
+ .profile-paper{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:16px;padding:12px 18px 12px 80px;text-align:left}
+ .profile-paper h1{grid-column:1;font-size:28px}
+ .profile-paper>p:not(.profile-storage-note){grid-column:1;font-size:12px}
+ .profile-paper .storage-status{margin:3px 0 8px}
+ .profile-paper .profile-avatar{left:14px;top:25px;width:48px;height:48px}
+ .profile-progress{grid-column:2;grid-row:1 / span 3;margin:0;align-self:center;padding:10px;gap:9px}
+ .profile-progress strong{font-size:23px}
+ .profile-progress small{font-size:11px}
+ .profile-paper .profile-storage-note{display:none}
+ .profile-paper .profile-actions{grid-column:1/-1;margin-top:8px;flex-wrap:nowrap;gap:10px}
+ .profile-paper .profile-actions button{min-height:44px;font-size:16px}
+ .profile-paper .profile-actions .paint-button{min-height:44px;font-size:20px}
+ .profile-paper .motion-setting{grid-column:1/-1;margin-top:6px;font-size:12px;min-height:44px}
+}
+@media(forced-colors:active){.journey-area,.profile-progress,.journey-status,.journey-practice{background:Canvas;color:CanvasText;border-color:CanvasText}.journey-status.done{background:Highlight;color:HighlightText}.journey-stop-text b,.journey-totals strong{color:CanvasText}}
+.journey-status{position:relative}
+.journey-check{position:absolute;right:0;top:20%;transform:translate(50%,-50%);display:grid;place-items:center;width:42%;height:42%;min-width:10px;min-height:10px;border:1px solid #fffdf1;border-radius:50%;background:#24745c;color:white}
+
+.journey-check .ui-icon{width:78%;height:78%;stroke-width:2.5}

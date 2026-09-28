@@ -1,0 +1,67 @@
+/* Separate information to use from the work the learner is asked to do. */
+.derive-work .derive-working{display:flex;gap:24px}
+.derive-source{align-self:stretch;display:flex;flex-direction:column;align-items:center;gap:14px;padding:16px 18px;background:#eef5f8;border:1px solid #d6e4ea;border-radius:14px;min-width:0}
+.derive-source .derive-source-label{align-self:flex-start;font:20px/1.15 var(--hand);color:#4d6a7b;font-weight:400;margin:0}
+.derive-source .derive-given{display:flex;border:0;padding:0;width:100%;font-size:30px}
+.derive-source .derive-given>span{display:none}
+.derive-source .derive-previous{display:flex}
+.derive-source .derive-known-equation{font-size:36px;color:var(--lesson-ink)}
+.derive-task{display:flex;flex-direction:column;align-items:center;gap:20px;max-width:100%;min-width:0}
+.derive-task>h2{font:clamp(23px,2.1vw,32px)/1.2 var(--hand);font-weight:400;text-align:center;margin:0;color:var(--lesson-ink);text-wrap:balance}
+.derive-task .derive-token-bank{margin-top:0}
+.derive-source .derive-point-choice{width:100%}
+.derive-source .derive-found{color:var(--lesson-ink)}
+@media(max-height:850px) and (min-height:761px){
+ .derive-work .derive-working{gap:16px}
+ .derive-source{padding:12px;gap:10px}
+ .derive-task{gap:14px}
+ .derive-task>h2{font-size:25px}
+}
+@media(max-height:760px) and (orientation:landscape),(max-height:900px) and (min-aspect-ratio:2/1){
+ .derive-work .derive-working,.derive-substitute:has(.derive-point-choice) .derive-working{display:flex;gap:10px}
+ .derive-source{padding:7px 10px;gap:6px;border-radius:9px}
+ .derive-source .derive-source-label{font-size:15px;line-height:1.1}
+ .derive-source .derive-given{font-size:22px}
+ .derive-source .derive-known-equation{font-size:27px}
+ .derive-task{gap:7px}
+ .derive-task>h2{font-size:19px;line-height:1.15}
+ .derive-fill .derive-working{gap:7px}
+ .derive-fill .derive-source{padding-block:5px;gap:3px}
+ .derive-fill .derive-task{gap:3px}
+ .derive-formula .derive-task{gap:6px}
+ .derive-work .derive-undo{top:auto;bottom:0;left:0}
+ [data-skill=equation_from_table] .derive-work{padding-top:8px}
+}
+@media(forced-colors:active){.derive-source{background:Canvas;border-color:CanvasText}.derive-source .derive-source-label{color:CanvasText}}
+@media(max-height:450px) and (orientation:landscape){
+ .derive-work{padding:5px 10px}
+ .derive-work .derive-working,.derive-substitute:has(.derive-point-choice) .derive-working{gap:6px}
+ .derive-source{padding:4px 8px;gap:3px;flex-shrink:0}
+ .derive-task{gap:4px;flex-shrink:0}
+ .derive-task>h2{font-size:17px}
+ .derive-formula .derive-undo{top:0;bottom:auto}
+ .derive-formula .derive-source-label{padding-left:34px}
+ .derive-final{padding:6px 10px;font-size:29px}
+ .derive-proof{font-size:15px;line-height:1.15;text-align:center}
+ [data-skill=equation_from_table] .derive-work{padding-top:5px}
+}
+@media(max-height:450px) and (orientation:landscape){
+ .derive-fill .derive-working{gap:4px}
+ .derive-fill .derive-source{padding-block:2px;gap:1px}
+ .derive-fill .derive-task .derive-fraction>span{padding-block:1px}
+}
+/* Laptop-sized workspaces need more presence than the phone controls. */
+@media(min-width:1000px) and (min-height:451px) and (max-height:760px),(min-width:1000px) and (min-height:451px) and (max-height:900px) and (min-aspect-ratio:2/1){
+ .derive-work .derive-working,.derive-substitute:has(.derive-point-choice) .derive-working{gap:18px}
+ .derive-source{padding:12px 16px;gap:9px}
+ .derive-source .derive-source-label{font-size:19px}
+ .derive-task{gap:12px}
+ .derive-task>h2{font-size:25px}
+ .derive-work .derive-math{font-size:38px}
+ .derive-work .derive-token{font-size:29px;min-height:48px;height:48px}
+ .derive-work .derive-slot{min-width:58px;min-height:66px;height:auto}
+ .derive-source .derive-point-pair{font-size:31px}
+ .derive-source .derive-found,.derive-source .derive-given{font-size:29px}
+ .derive-source .derive-previous{font-size:30px}
+ .derive-source .derive-point-choice{font-size:20px}
+}

@@ -1,0 +1,32 @@
+/* Shared hide/reopen controls. Layout adapters below return the released space. */
+.has-collapsible-topbar [data-collapsible-topbar][hidden]{display:none!important}
+.has-collapsible-topbar .topbar-collapse,.has-collapsible-topbar .topbar-restore{display:flex;align-items:center;justify-content:center;flex:0 0 auto;min-width:44px;min-height:44px;width:44px;height:44px;padding:4px;border:1px solid #479ac0;border-radius:8px;background:#092238;color:#b6edff;font:700 24px/1 system-ui;cursor:pointer;touch-action:manipulation;box-shadow:inset 0 0 10px #30b7ef20}
+.has-collapsible-topbar .topbar-restore{position:fixed;top:6px;right:8px;z-index:15;width:auto;gap:5px;padding:4px 10px;font-size:22px}
+.has-collapsible-topbar .topbar-restore-label{font-size:13px}
+.has-collapsible-topbar .topbar-collapse:hover,.has-collapsible-topbar .topbar-restore:hover{background:#16425e}
+.has-collapsible-topbar .topbar-collapse:focus-visible,.has-collapsible-topbar .topbar-restore:focus-visible{outline:3px solid #f5ce72;outline-offset:2px}
+.has-collapsible-topbar .topbar-restore[hidden]{display:none!important}
+body.topbar-collapsed #app{grid-template-rows:minmax(0,1fr)}
+body.topbar-collapsed .vector-world{width:min(100%,calc(100dvh * 16/9))}
+body.topbar-collapsed #resumeBtn{right:calc(4% + 64px)}
+body.side-controls.topbar-collapsed #play .questionbar{padding-right:110px}
+body.topbar-collapsed .station-heading,body.topbar-collapsed .help-toolbar,body.topbar-collapsed #progressScreen .screen-heading{padding-right:110px}
+body.topbar-collapsed #rotate{top:0}
+body.battle-app.topbar-collapsed{grid-template-rows:minmax(0,1fr)}
+body.battle-app.topbar-collapsed .round-bar{padding-right:110px}
+body.canvas-app.topbar-collapsed{grid-template-rows:auto minmax(0,1fr) auto}
+body.canvas-app.topbar-collapsed .canvas-tools{padding-right:110px}
+body.classroom-app.topbar-collapsed main{padding-top:58px}
+@media(max-height:500px){body.topbar-collapsed .vector-world{width:min(100%,calc(100dvh * 2.5))}}
+@media(max-width:900px){
+ .has-collapsible-topbar .trainer-header .topbar-collapse{display:none}
+ .has-collapsible-topbar .topbar-restore{width:44px;padding:4px}
+ .has-collapsible-topbar .topbar-restore-label{display:none}
+}
+@media(max-width:639px) and (min-height:501px){body.topbar-collapsed .vector-world{width:100%}}
+@media(max-width:600px){
+ .has-collapsible-topbar .battle-top{gap:6px}
+ .has-collapsible-topbar .battle-top>a[href="classroom.html"]{display:none}
+ .has-collapsible-topbar .battle-top #fullscreen{width:44px;min-width:44px;padding:4px;font-size:0}
+ .has-collapsible-topbar .battle-top #fullscreen::before{content:'⛶';font-size:24px}
+}

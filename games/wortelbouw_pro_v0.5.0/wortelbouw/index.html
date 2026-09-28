@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ead9b7">
+  <title>Wortelbouw Pro v0.5.0 · leraarBob</title>
+  <link rel="stylesheet" href="wortelbouw.css">
+  <script src="../../../shared/axioma-platform.js" defer></script>
+  <script src="pro/assets.js" defer></script>
+  <script src="pro/presentation-data.js" defer></script>
+  <script src="pro/celebration.js" defer></script>
+  <script src="geometry.js" defer></script>
+  <script src="progress.js" defer></script>
+  <link rel="stylesheet" href="platform-ui.css">
+  <script src="../../../shared/leraarbob-topbar.js" data-title="Wortelbouw Pro" data-header="#topbar" data-game-href="games/wortelbouw_pro_v0.5.0/wortelbouw/index.html" defer></script>
+  <script src="platform-ui.js" defer></script>
+</head>
+<body>
+<div id="app" class="proShell">
+  <header id="topbar">
+    <nav class="breadcrumbs" aria-label="Je locatie">
+      <button id="gameMenuCrumb" data-screen="world" type="button">Wortelbouw Pro</button>
+      <span class="crumb-divider" aria-hidden="true">›</span><button id="worldMenuCrumb" type="button">Konijnengrond</button>
+    </nav>
+    <nav id="trainerMenu" hidden aria-label="Spelnavigatie"><a href="classroom.html"><span>Groepsbattle<small>Start een sessie of doe mee</small></span></a>
+      <button id="proLevels"><span>Opgaven<small><span id="completedCount">0/14</span> afgerond · kies je opgave</small></span></button>
+      <a id="battleBtn" href="battle.html"><span>Battle met twee<small>Bouw naast elkaar</small></span></a>
+      <button id="proOverview"><span>Je bouwwerk<small>Alles in beeld</small></span></button>
+    </nav>
+  </header>
+
+  <div hidden aria-hidden="true">
+    <div class="goalBlock">
+      <h1 id="goal">Lengte √2</h1>
+      <span id="goalSubtitle">Bouw stap voor stap een nieuwe lengte.</span>
+    </div>
+    <div class="topProgress" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    <button id="progressButton" class="progressButton menuButton" aria-label="Wortelbouw-menu openen"><span class="menuGlyph" aria-hidden="true">☰</span><span>Opgaven</span></button>
+    <span id="steps">0 stappen</span>
+    <button id="previous" class="tool navTool" aria-label="Vorige puzzel">‹</button>
+    <button id="next" class="tool navTool" aria-label="Volgende puzzel">›</button>
+    <span id="levelCount" hidden>1 / 14</span>
+    <span id="goalCrumb">Lengte √2</span>
+  </div>
+
+  <section id="puzzleBar" aria-label="Oefenbediening">
+  <div id="mobileChrome" aria-label="Schermbediening">
+    <div id="collapsedNav" class="collapsedNav" aria-label="Opgaven navigeren">
+      <button id="previousCompact" class="chromeNavButton" type="button" aria-label="Vorige puzzel" title="Vorige puzzel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg></button>
+      <div id="compactGoalReminder" aria-label="Huidig doel"><span>doel</span><strong id="compactGoalValue">√2</strong></div>
+      <button id="nextCompact" class="chromeNavButton" type="button" aria-label="Volgende puzzel" title="Volgende puzzel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+    </div>
+    <button id="fullscreenButton" class="chromeButton" type="button" aria-label="Volledig scherm" title="Volledig scherm">⛶</button>
+    <button id="topbarToggle" class="chromeButton" type="button" aria-label="Bovenbalk inklappen" title="Bovenbalk inklappen">⌃</button>
+  </div>
+
+    <div id="instruction" role="status"><strong>Teken je eerste veld</strong><span>Sleep waar je wilt.</span></div>
+    <section id="rootAxisPanel" aria-label="Wortel-as">
+      <button id="rootAxisToggle" type="button" aria-label="Wortel-as uitklappen" title="Wortel-as uitklappen">⌃</button>
+      <div class="rootIntro"><strong>Wortel-as</strong><span>Elke ontdekte lengte groeit hier als een wortel.</span></div>
+      <canvas id="rootAxisCanvas" aria-hidden="true"></canvas>
+    </section>
+  </section>
+
+  <main id="gameShell">
+    <aside id="missionPanel" class="paperPanel" aria-label="Opdracht">
+      <span class="paperPin pinLeft" aria-hidden="true"></span>
+      <span class="paperPin pinRight" aria-hidden="true"></span>
+      <h2>Opdracht</h2>
+      <div id="lesson"><strong id="lessonTitle"></strong><span id="lessonHint"></span></div>
+      
+      <canvas id="missionSketch" width="260" height="150" aria-hidden="true"></canvas>
+      <p id="missionQuestion">Bouw verder vanuit een gouden zijde.</p>
+    </aside>
+
+    <section id="playColumn">
+      <div id="stage" aria-label="Konijnengrond: bouw vierkanten en rechthoekige driehoeken">
+        <canvas id="floor" role="img" aria-label="Konijnengrond: teken je eerste veld vrij en bouw daarna verder vanaf een zijde. Correcte vierkanten worden grasvelden."></canvas>
+        <div id="targets" aria-label="Stukken op de vloer"></div>
+        <div id="notice" role="status" hidden></div>
+        <div id="cordLabel" hidden></div>
+
+        <div id="colorKey" aria-label="Bouwstatus"><span class="land">Vruchtbare grond</span><span class="building">In aanleg</span><span class="edgeKey">Bouwzijde</span><span id="routeCount" hidden></span></div>
+      </div>
+    </section>
+
+    <aside id="storyRail" aria-label="Verhaal en hints">
+      <section id="poster" class="woodPoster" aria-live="polite">
+        <span class="posterNail n1" aria-hidden="true"></span><span class="posterNail n2" aria-hidden="true"></span>
+        <div id="posterIcon" aria-hidden="true">🥕</div>
+        <h2 id="posterTitle">Kleine stappen.</h2>
+        <p id="posterBody">Grote wortels.</p>
+      </section>
+      <section id="speechBubble" class="speechBubble" role="status" aria-live="polite" hidden>
+        <div class="guideHeading">
+          <span class="guidePortrait"><img id="guideRabbit" src="assets/wortelbouw/rabbits/rabbit-mentor.svg" alt="" aria-hidden="true"></span>
+          <div><span class="guideEyebrow">JE BOUWMAATJE</span><strong id="guideTitle">Nieuwe ontdekking</strong></div>
+        </div>
+        <p id="speechText"></p>
+      </section>
+      <section id="success" role="status" aria-live="polite" hidden>
+        <span class="successMark" aria-hidden="true">↘</span>
+        <h2 id="successTitle">Wortel gevonden!</h2>
+        <strong id="successRoot"></strong>
+        <div id="successEquation"></div>
+        <div id="routeComparison" hidden></div>
+        <p id="successLesson"></p>
+      </section>
+      <div id="rootStory" role="status" aria-live="polite" hidden></div>
+    </aside>
+  </main>
+
+  <footer id="bottomDock">
+    <section id="toolDock" aria-label="Gereedschap">
+      <div class="dockTitle">Gereedschap</div>
+      <div id="buildTray" class="buildTray" aria-label="Bouwdoos">
+        <button id="fieldTool" class="pieceTool active" type="button"><span class="pieceIcon">□</span><span><b>Veld</b><small>bouwen</small></span></button>
+        <button id="triangleTool" class="pieceTool" type="button"><span class="pieceIcon">△</span><span><b>Driehoek</b><small>aan een zijde</small></span></button>
+      </div>
+      <div id="workTools" class="workTools">
+        <label id="extendedRuler" hidden>Liniaal <select id="longMeasure" aria-label="Bekende zijde"></select></label>
+        <div class="ruler" role="group" aria-label="Liniaal: bekende zijde">
+          <button data-length="1" aria-pressed="false">1</button><button data-length="2" aria-pressed="false">2</button><button data-length="3" aria-pressed="true">3</button><button data-length="4" aria-pressed="false">4</button><button data-length="5" aria-pressed="false">5</button>
+        </div>
+        <div class="modes" role="group" aria-label="Bouw op een rechthoekszijde of op de schuine zijde">
+          <button data-mode="sum" aria-pressed="true" title="Som: bestaande zijde wordt een rechthoekszijde"><svg viewBox="0 0 36 30" aria-hidden="true"><path d="M5 25V5L31 25Z"/><path class="knownSide" d="M5 25V5"/><path class="angle" d="M5 19h6v6"/></svg><span>Rechthoekszijde</span></button>
+          <button data-mode="difference" aria-pressed="false" title="Verschil: bestaande zijde wordt de schuine zijde"><svg viewBox="0 0 36 30" aria-hidden="true"><path d="M5 25V5L31 25Z"/><path class="knownSide" d="M5 5L31 25"/><path class="angle" d="M5 19h6v6"/></svg><span>Schuine zijde</span></button>
+        </div>
+        <button id="flip" class="tool" aria-label="Spiegel de driehoek" title="Spiegel de driehoek" disabled>⇄</button>
+      </div>
+      <div class="utilityTools">
+        <button id="overview" class="tool" aria-label="Hele mozaïek in beeld" title="Hele mozaïek in beeld">⛶</button>
+        <button id="undo" class="tool" aria-label="Ongedaan maken" title="Ongedaan maken" disabled>↶</button>
+        <button id="restart" class="tool" aria-label="Deze puzzel opnieuw" title="Deze puzzel opnieuw">⟲</button>
+      </div>
+    </section>
+
+
+
+    <section id="nextDock">
+      <div id="achievement" hidden><span id="relationship"></span><button id="continue">Volgende puzzel →</button></div>
+      <span id="stepCue">Bouw rustig verder.</span>
+    </section>
+  </footer>
+</div>
+
+<aside id="rotate"><strong>Draai je toestel</strong><p>Leg je konijnengrond met je scherm in de breedte.</p><a href="../../../index.html">Terug naar leraarBob</a></aside>
+<dialog id="progressDialog" class="gameMenu" aria-labelledby="progressHeading">
+  <div class="menuShell">
+    <header class="menuHeader">
+      <div class="menuIdentity"><span>Wortelbouw</span><h2 id="progressHeading">Konijnengrond</h2></div>
+      <div class="menuHeaderProgress"><strong id="progressSummary">0 / 14</strong><span>afgerond</span></div>
+      <button id="closeProgress" class="menuClose" aria-label="Menu sluiten">×</button>
+    </header>
+    <div class="menuBody">
+      <section class="menuPlay" aria-label="Huidige opgave">
+        <div class="currentLevelCard">
+          <span class="currentEyebrow">Nu aan het bouwen</span>
+          <strong id="menuCurrentGoal" class="currentGoal">√2</strong>
+          <h3 id="menuCurrentTitle">De eerste wortel</h3>
+          <p id="menuCurrentStatus">Begin je bouwwerk.</p>
+        </div>
+        <button id="menuResume" class="menuResume">Verder bouwen <span aria-hidden="true">→</span></button>
+        <div id="menuQuickActions" class="menuQuickActions">
+          <button id="menuOverview"><span aria-hidden="true">⌗</span><b>Alles in beeld</b></button>
+          <button id="menuRestart"><span aria-hidden="true">↻</span><b>Herstart</b></button>
+        </div>
+        <a class="menuBattle" href="battle.html"><span aria-hidden="true">⚔</span><b>Battle · 2 spelers</b><small>Split-screen voor aan het bord</small></a>
+        <p class="menuMicrocopy">Sleep om te bouwen. Elk afgewerkt groen veld kan deel worden van je volgende stap.</p>
+        <a href="../../../index.html" data-platform-home class="menuHome">← leraarBob</a>
+      </section>
+      <section class="menuLevelsPane" aria-label="Opgaven">
+        <div class="menuLevelsHead"><div><span>Opgaven</span><h3>Kies waar je verderbouwt</h3></div><strong id="menuProgressLabel">0 / 14</strong></div>
+        <div class="menuProgressTrack" aria-hidden="true"><i id="menuProgressFill"></i></div>
+        <div id="progressLevels"></div>
+      </section>
+    </div>
+  </div>
+</dialog>
+
+<script type="text/axioma-game" data-src="wortelbouw.js"></script>
+<script>window.addEventListener('load',()=>setTimeout(()=>{if(!window.__WORTELBOUW_BOOTED__&&!window.AxiomaGame){const s=document.createElement('script');s.src='wortelbouw.js';document.body.append(s)}},120));</script>
+<script src="../../../shared/vendor/supabase.js" defer></script>
+<script src="../../../shared/supabase-config.js" defer></script>
+<script src="../../../shared/axioma-auth.js" defer></script>
+<script src="../../../shared/axioma-social.js" defer></script>
+<script src="../../../shared/axioma-progress.js" defer></script>
+<script src="../../../shared/axioma-game-adapters.js" defer></script>
+<script src="../../../shared/axioma-game.js" data-game-id="wortelbouw" defer></script>
+</body>
+</html>

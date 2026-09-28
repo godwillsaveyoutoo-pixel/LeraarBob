@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" fill="none">
+<title>Stuwmotor: vectoren vergroten en omkeren</title>
+<defs><linearGradient id="metal" x1="60" y1="40" x2="170" y2="160" gradientUnits="userSpaceOnUse"><stop stop-color="#5681a7"/><stop offset=".48" stop-color="#183957"/><stop offset="1" stop-color="#0a203b"/></linearGradient><linearGradient id="glass" x1="90" y1="25" x2="160" y2="135" gradientUnits="userSpaceOnUse"><stop stop-color="#f7bc72" stop-opacity=".3"/><stop offset="1" stop-color="#102644" stop-opacity=".94"/></linearGradient><radialGradient id="light"><stop stop-color="#f7bc72" stop-opacity=".4"/><stop offset="1" stop-color="#f7bc72" stop-opacity="0"/></radialGradient></defs>
+<ellipse cx="120" cy="151" rx="99" ry="25" fill="#020a1a" fill-opacity=".65"/>
+<ellipse cx="120" cy="145" rx="100" ry="34" fill="url(#light)"/>
+<path d="M46 138L119 114L195 138V150L120 174L46 150Z" fill="#0b2138" stroke="#6b8dac" stroke-width="2"/>
+<path d="M46 138L119 114L195 138L120 163Z" fill="url(#metal)" stroke="#7ca7c8" stroke-width="2"/>
+<path d="M59 142L120 161L182 142M120 164V173" stroke="#f7bc72" stroke-width="2"/>
+
+<path d="M103 109L94 136L119 146L145 136L137 110" fill="#101f35" stroke="#7799b8" stroke-width="2"/>
+<path d="M109 111Q99 131 121 154Q143 131 133 111" fill="#f49a53" fill-opacity=".65"/><path d="M116 111Q110 130 121 144Q132 130 127 111" fill="#ffe8a8"/>
+<path d="M97 95L76 112V129L103 115M145 95L168 110V127L139 115" fill="url(#metal)" stroke="#86b3d3" stroke-width="2"/>
+<path d="M99 50Q119 27 140 50L145 103Q121 119 97 103Z" fill="url(#metal)" stroke="#a4c7df" stroke-width="2.5"/>
+<path d="M99 50Q103 27 120 14Q139 32 140 50Q120 61 99 50Z" fill="#6192b9" stroke="#b9d9ed" stroke-width="2"/>
+<ellipse cx="121" cy="77" rx="12" ry="16" fill="#0a223b" stroke="#f7bc72" stroke-width="3"/><ellipse cx="122" cy="74" rx="6" ry="9" fill="#f7bc72" fill-opacity=".5"/>
+<path d="M99 102Q121 116 145 102M106 109V118M136 109V118" stroke="#97b8ce" stroke-width="3"/>
+<path d="M58 100V61M184 96V31" stroke="#f7bc72" stroke-width="5" stroke-linecap="round"/><path d="M58 54L48 69H68ZM184 24L174 39H194Z" fill="#ffe1a0"/>
+<path d="M48 110H68M174 110H194" stroke="#c89a66" stroke-width="2"/>
+
+</svg>

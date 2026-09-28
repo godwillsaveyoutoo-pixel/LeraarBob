@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" fill="none">
+<title>Navigatieconsole: coördinaten en verplaatsingen</title>
+<defs><linearGradient id="metal" x1="60" y1="40" x2="170" y2="160" gradientUnits="userSpaceOnUse"><stop stop-color="#5681a7"/><stop offset=".48" stop-color="#183957"/><stop offset="1" stop-color="#0a203b"/></linearGradient><linearGradient id="glass" x1="90" y1="25" x2="160" y2="135" gradientUnits="userSpaceOnUse"><stop stop-color="#71e2b5" stop-opacity=".3"/><stop offset="1" stop-color="#102644" stop-opacity=".94"/></linearGradient><radialGradient id="light"><stop stop-color="#71e2b5" stop-opacity=".4"/><stop offset="1" stop-color="#71e2b5" stop-opacity="0"/></radialGradient></defs>
+<ellipse cx="120" cy="151" rx="99" ry="25" fill="#020a1a" fill-opacity=".65"/>
+<ellipse cx="120" cy="145" rx="100" ry="34" fill="url(#light)"/>
+<path d="M46 138L119 114L195 138V150L120 174L46 150Z" fill="#0b2138" stroke="#6b8dac" stroke-width="2"/>
+<path d="M46 138L119 114L195 138L120 163Z" fill="url(#metal)" stroke="#7ca7c8" stroke-width="2"/>
+<path d="M59 142L120 161L182 142M120 164V173" stroke="#71e2b5" stroke-width="2"/>
+
+<path d="M105 145V112H138V145L122 153Z" fill="url(#metal)" stroke="#88afca" stroke-width="2"/>
+<path d="M49 40L182 29L191 115L58 126Z" fill="#102c45" stroke="#92b6cf" stroke-width="3"/>
+<path d="M57 47L175 38L182 107L64 117Z" fill="url(#glass)" stroke="#71e2b5" stroke-width="1.5"/>
+<path d="M80 46L85 114M104 43L110 112M128 42L134 110M151 40L158 108M60 65L177 56M61 84L179 75M63 101L181 93" stroke="#71e2b5" stroke-opacity=".25"/>
+<path d="M76 99L166 92M104 108L100 53" stroke="#b2f3d9" stroke-width="2"/>
+<path d="M104 97L127 76L153 72" stroke="#71e2b5" stroke-width="4" stroke-linejoin="round"/><path d="M159 71L146 65L148 79Z" fill="#71e2b5"/>
+<circle cx="104" cy="97" r="4" fill="#f7d17b"/><circle cx="127" cy="76" r="4" fill="#f7d17b"/>
+<path d="M67 143L122 126L172 142L118 159Z" fill="#244763" stroke="#729bb8" stroke-width="2"/><path d="M92 141L114 134M113 148L140 140" stroke="#71e2b5" stroke-width="3" stroke-dasharray="4 3"/>
+<path d="M199 138V99M191 104Q199 94 207 104M186 97Q199 83 212 97" stroke="#71e2b5" stroke-width="2.5" stroke-linecap="round"/>
+
+</svg>

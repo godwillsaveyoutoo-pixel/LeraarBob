@@ -1,0 +1,19 @@
+/* A tile is reusable: its copy follows the gesture, while the source stays put. */
+:is([data-derive-token],[data-formula-token],[data-coordinate-token],[data-line-point])[draggable=true]{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:grab}
+[data-line-marker]{cursor:grab;touch-action:none}
+.is-held{filter:brightness(.96);cursor:grabbing!important}
+.is-drag-source{opacity:.35!important;cursor:grabbing!important}
+body.is-token-dragging,body.is-token-dragging *{cursor:grabbing!important}
+.token-drag-preview{position:fixed;left:0;top:0;z-index:10000;pointer-events:none!important;width:max-content;height:max-content;filter:drop-shadow(0 7px 7px #173b543d);will-change:transform}
+.token-drag-preview>*{pointer-events:none!important}
+.token-drag-preview.has-drop-target{filter:drop-shadow(0 5px 9px #2465b455)}
+.boundary-mission :is(.coordinate-slot,.derive-slot,.formula-slot).is-drop-ready{border-style:dashed;border-color:#6a96bd}
+.boundary-mission :is(.coordinate-slot,.derive-slot,.formula-slot).is-drop-target{outline:3px solid #2465b4;outline-offset:2px;box-shadow:0 0 0 6px #2465b426;background:#e5f2ff}
+.boundary-mission [data-line-picker].is-drop-target{outline:3px solid #2465b4;outline-offset:-3px}
+.drag-point-preview{display:grid;place-items:center;width:48px;height:48px;border:3px solid #fffdf4;border-radius:50%;background:#e8f1fc;color:#2469a8;font:30px/1 var(--hand)}
+.drag-point-preview[data-point=B]{background:#e8f5ed;color:#22745e}
+@media(forced-colors:active){.is-drop-target{outline:3px solid Highlight!important}.token-drag-preview{filter:none;border:2px solid Highlight}}
+/* During a drag, the hovered destination takes precedence over the tap cursor. */
+.is-token-dragging .boundary-mission :is(.coordinate-slot,.derive-slot,.formula-slot).is-drop-ready[aria-pressed=true]:not(.is-drop-target){outline:none;box-shadow:none}
+
+.is-token-dragging .line-point-token[aria-pressed=true]:not(.is-drag-source){outline:none}

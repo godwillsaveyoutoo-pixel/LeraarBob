@@ -1,0 +1,60 @@
+/* A full trainer fits in each half of the shared battle screen. */
+body.battle-player #app{grid-template-rows:minmax(0,1fr)}
+.battle-player .trainer-header,.battle-player #rotate,.battle-player .practice-labels,.battle-player #coachPanel,.battle-player #coachTab,.battle-player #earnedXP,.battle-player #feedbackReason{display:none!important}
+.battle-player #play{padding:8px;gap:8px}
+.battle-player .questionbar{min-height:64px;padding:0;gap:6px;align-items:start}
+.battle-player .questionbar h1{font-size:18px;line-height:1.3;letter-spacing:0}
+.battle-player #promptNote{font-size:12px}
+.battle-player #toolHint{display:block;font-size:13px;max-width:130px}
+.battle-player .work{gap:8px}
+.battle-player #play footer{padding:6px;gap:6px;flex-wrap:wrap;min-height:56px;border-radius:10px}
+.battle-player .draw-tools{gap:4px;flex:1}
+.battle-player .draw-tools button{font-size:12px;min-height:44px;padding:4px 7px}
+.battle-player .draw-tools button span{font-size:18px;margin-right:3px}
+.battle-player #commit{font-size:14px;min-width:105px;min-height:44px;padding:6px 10px;margin-left:auto}
+.battle-player #skip{font-size:12px;margin-left:0;padding:4px 6px}
+.battle-player #activityHint{display:none}
+.battle-player #feedbackPanel{position:absolute;inset:auto 8px 8px;max-height:75%;width:auto;max-width:none;overflow:auto;padding:12px;gap:8px;z-index:5}
+.battle-player #feedbackPanel h2{font-size:18px}
+.battle-player #feedbackPanel p{font-size:14px;line-height:1.35}
+.battle-player .symbolic #numberWork{display:flex;gap:12px;padding:12px;overflow:auto}
+.battle-player #givens{font-size:18px}
+.battle-player #numberWork{width:220px;padding:6px}
+.battle-player .symbolic #numberWork{width:100%}
+.battle-player .keypad{gap:4px}
+.battle-player .keypad button{min-height:44px;font-size:17px}
+.battle-player .slot{min-height:44px}
+.battle-player #choiceWork{padding:6px;gap:6px}
+@media(max-width:540px){
+ .battle-player .questionbar h1{font-size:16px}
+ .battle-player #promptNote{display:none}
+ .battle-player .grid-number{flex-direction:column}
+ .battle-player .grid-number #boardWrap{min-height:100px}
+ .battle-player .grid-number #numberWork{width:100%;flex:none;display:grid;grid-template-columns:1fr}
+ .battle-player .grid-number .coordinate-editor{display:grid;grid-template-columns:100px 1fr;gap:6px}
+ .battle-player .grid-number .slots{grid-template-columns:1fr;gap:4px}
+ .battle-player .grid-number .slot small{font-size:9px}
+ .battle-player .grid-number .slot strong{font-size:18px}
+ .battle-player .grid-number .keypad button{min-height:36px;padding:2px}
+ .battle-player #play footer .draw-tools{flex-basis:100%}
+}
+
+.battle-player .questionbar h1{font-size:20px;line-height:1.35}
+.battle-player .task-givens{font-size:17px;line-height:1.5;margin-top:5px}
+@media(max-height:500px){.battle-player .questionbar h1{font-size:18px}.battle-player .task-givens{font-size:16px}}
+
+/* The isolated workboard spends its height on drawing, with tools at the sides. */
+body.battle-player #play{display:grid;grid-template-columns:62px minmax(0,1fr) 106px;grid-template-rows:auto minmax(0,1fr);padding:4px;gap:6px;position:relative}
+body.battle-player .questionbar{grid-column:1/-1;grid-row:1;min-height:0;padding:2px;display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+body.battle-player .questionbar h1{font-size:clamp(16px,2.2vw,23px);line-height:1.25}
+body.battle-player .work{grid-column:2;grid-row:2;min-height:0;gap:6px}
+body.battle-player #play footer{display:contents}
+body.battle-player .draw-tools{grid-column:1;grid-row:2;display:flex;flex-direction:column;align-self:start;gap:6px;min-width:0}
+body.battle-player .draw-tools button{width:100%;min-height:44px;padding:4px;font-size:11px;white-space:normal;border-radius:0}
+body.battle-player #commit{position:absolute;top:60px;right:4px;min-width:0;width:106px;min-height:44px;margin:0;padding:4px;border-radius:0}
+body.battle-player #skip{position:absolute;top:112px;right:4px;width:106px;min-height:44px;margin:0}
+body.battle-player #toolHint{display:none}
+body.battle-player #boardWrap,body.battle-player #choiceWork,body.battle-player #numberWork{border-radius:0}
+@media(max-width:500px){body.battle-player #play{grid-template-columns:46px minmax(0,1fr) 78px;gap:4px}body.battle-player #commit,body.battle-player #skip{width:78px;font-size:12px}body.battle-player .draw-tools button span{display:block;margin:0}body.battle-player .questionbar h1{font-size:15px}body.battle-player .task-givens{font-size:14px}}
+body.battle-player #commit{position:static;grid-column:3;grid-row:2;align-self:start}
+body.battle-player #skip{position:static;grid-column:3;grid-row:2;align-self:start;margin-top:52px}

@@ -1,0 +1,41 @@
+{
+  "checks": [
+    "point 1920x1080",
+    "point_plot 1920x1080",
+    "point 1366x768",
+    "point_plot 1366x768",
+    "point 1024x768",
+    "point_plot 1024x768",
+    "point 780x360",
+    "point_plot 780x360",
+    "point 640x360",
+    "point_plot 640x360",
+    "wrong plot",
+    "correct point_plot 1",
+    "correct point_plot 2",
+    "correct point_plot 3",
+    "correct point_plot 4",
+    "correct point_plot 5",
+    "plot completed",
+    "wrong read",
+    "correct point 0",
+    "correct point 1",
+    "correct point 2",
+    "correct point 3",
+    "correct point 4",
+    "correct point 5",
+    "read completed",
+    "resume from portrait"
+  ],
+  "screenshots": [
+    "screenshots/point-1366x768.png",
+    "screenshots/point-selected-1366x768.png",
+    "screenshots/point_plot-1366x768.png",
+    "screenshots/point_plot-selected-1366x768.png",
+    "screenshots/point-780x360.png",
+    "screenshots/point-selected-780x360.png",
+    "screenshots/point_plot-780x360.png",
+    "screenshots/point_plot-selected-780x360.png"
+  ],
+  "passed": true
+}

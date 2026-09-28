@@ -1,0 +1,117 @@
+/* Trainer adapter. Keep exercise geometry and mathematical SVGs intact. */
+:root {
+  --ink: var(--learning-ink);
+  --muted: var(--learning-muted);
+  --paper: var(--learning-paper);
+  --surface: var(--learning-surface);
+  --line: var(--learning-line);
+  --accent: var(--learning-accent);
+  --accent2: var(--learning-accent-soft);
+  --a: var(--learning-blue);
+  --a2: var(--learning-blue-soft);
+  --good: var(--learning-success);
+  --bad: var(--learning-error);
+}
+html, body { font-family: var(--learning-font); }
+#app, .appScreen, .start, .sessionDone { background-image: var(--learning-paper-wash); }
+.topbar { background: var(--surface); box-shadow: 0 2px 8px #20374805; }
+.brand { letter-spacing: -.04em; }
+.question { color: var(--ink); letter-spacing: -.025em; }
+.stage[data-task="sign"] .question {
+  background: linear-gradient(transparent 20%, var(--learning-blue-soft) 20% 90%, transparent 90%);
+  border-radius: var(--learning-radius);
+  justify-self: center;
+  padding-inline: 16px;
+}
+.primary, .journey-next { box-shadow: 0 3px 0 #173e3020; }
+.student-card, .dev-review-card { box-shadow: var(--learning-shadow); }
+button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visible,
+[tabindex]:focus-visible { outline: 3px solid var(--learning-focus); outline-offset: 3px; }
+/* Paper sits behind the exact SVG, never a raster replacement for mathematics. */
+.visual .graphWrap, .concept-graph, .construct-grid, .transfer-grid {
+  background: var(--surface);
+  border-radius: var(--learning-radius);
+  box-shadow: 0 0 0 1px var(--line), var(--learning-shadow);
+}
+.coordinate-world .grid-line { stroke: #b9c8d1; opacity: .7; }
+.coordinate-world .axis-line, .coordinate-world .axis-arrow { stroke: var(--ink); filter: none; }
+.axis-number, .axis-letter { fill: var(--ink); font-weight: 600; }
+.main-line { stroke: var(--learning-blue); stroke-width: 4.5; filter: none; }
+.main-line-glow { opacity: 0; }
+.main-line.sign-positive { stroke: var(--learning-positive); }
+.main-line.sign-negative { stroke: var(--learning-negative); }
+.signKey .pos { color: var(--learning-positive); }
+.signKey .neg { color: var(--learning-negative); }
+/* Interval answers become cards; number and drag tokens retain their shape. */
+.stage[data-task="sign"] .choiceRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: min(100%, 440px);
+  gap: clamp(10px, 2vh, 20px);
+}
+.stage[data-task="sign"] .choicePill {
+  width: 100%;
+  min-height: clamp(48px, 10vh, 92px);
+  background: var(--surface);
+  border: 2px solid #aebbbf;
+  border-radius: var(--learning-radius);
+  box-shadow: 0 3px 0 #20374808;
+  font-size: clamp(23px, 3vw, 40px);
+  font-variant-numeric: tabular-nums;
+}
+.stage[data-task="sign"] .choicePill.good {
+  background: var(--accent2); border-color: var(--good); color: var(--good);
+}
+.stage[data-task="sign"] .choicePill.bad {
+  background: #fbe9e6; border-color: var(--bad); color: var(--bad);
+}
+@media (hover: hover) {
+  .stage[data-task="sign"] .choicePill:not(.good):not(.bad):not(:disabled):hover {
+    background: var(--learning-blue-soft); border-color: var(--learning-blue);
+  }
+}
+@media (max-height: 550px) {
+  .stage[data-task="sign"] .choiceRow { gap: 8px; max-width: 320px; }
+  .stage[data-task="sign"] .choicePill { min-height: 48px; padding: 6px 16px; font-size: 23px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* Only profile and menu remain in the header, at every screen width. */
+.topbar { position: relative; z-index: 20; }
+.topbar .brand { display: flex; }
+.trainer-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+.header-icon {
+  display: inline-grid; place-items: center; width: 48px; height: 48px;
+  min-width: 48px; padding: 11px; border: 0; border-radius: 50%;
+  background: transparent; color: var(--ink);
+}
+.header-icon svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+#profileBtn svg { fill: currentColor; stroke-width: 1.5; }
+.header-icon:hover, .header-icon[aria-expanded="true"], .header-icon.screen-active { background: var(--accent2); color: var(--accent); }
+#trainerMenu {
+  position: absolute; top: calc(100% + 8px); right: var(--pad);
+  display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
+  gap: 3px; width: min(280px, calc(100vw - 24px));
+  max-height: calc(100dvh - var(--top) - 24px); overflow-y: auto;
+  padding: 8px; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--learning-radius); box-shadow: 0 12px 36px #20374826;
+}
+#trainerMenu .navButton {
+  flex-shrink: 0; min-height: 48px; width: 100%; margin: 0; padding: 10px 16px;
+  border: 0; border-radius: 7px; text-align: left; font: 600 15px var(--learning-font);
+}
+#trainerMenu .navButton.screen-active, #trainerMenu .navButton:hover { background: var(--accent2); color: var(--accent); }
+#trainerMenu .navButton.screen-active::after { display: none; }
+#trainerMenu #settingsBtn { display: block; }
+#app #trainerMenu #pauseExercise { margin: 0; padding: 10px 16px; justify-content: flex-start; }
+.journey-description { color: var(--muted); font-size: 13px; line-height: 1.5; margin-top: 12px; }
+.journey-description summary { cursor: pointer; min-height: 48px; display: list-item; align-content: center; padding-block: 12px; }
+.journey-description p { margin: 0 0 12px; }
+@media (max-width: 700px) { .trainer-actions { gap: 4px; } }
+
+@media (max-width: 500px) {
+  .journey-details { align-items: stretch; justify-content: flex-start; }
+  .journey-description { margin-top: 0; }
+}
