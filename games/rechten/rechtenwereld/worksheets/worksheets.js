@@ -1,15 +1,15 @@
 (()=>{
 'use strict';
-const world=new URLSearchParams(location.search).get('world')==='grenspas'?'grenspas':'hellingrug';
-const border=world==='grenspas',title=border?'Grenspas':'Hellingrug';
-const C=border?GrenspasWorksheet:HellingrugWorksheet,V=border?GrenspasWorksheetView:HellingrugWorksheetView,KEY=`leraarbob.worksheets.${world}.v1`;
+const subjects={hellingrug:{title:'Hellingrug',intro:'Van veranderingen aflezen naar zelf de helling bepalen.',core:HellingrugWorksheet,view:HellingrugWorksheetView},grenspas:{title:'Grenspas',intro:'Van de nulwaarde naar tekens en x-gebieden.',core:GrenspasWorksheet,view:GrenspasWorksheetView},formulewerf:{title:'Formulewerf',intro:'Van a en b naar zelf voorschriften bepalen en rechten tekenen.',core:FormulewerfWorksheet,view:FormulewerfWorksheetView}};
+const requested=new URLSearchParams(location.search).get('world'),world=Object.hasOwn(subjects,requested)?requested:'hellingrug';
+const {title,core:C,view:V}=subjects[world],KEY=`leraarbob.worksheets.${world}.v1`;
 const $=id=>document.getElementById(id),form=$('worksheetForm'),preview=$('worksheetPreview');
 let doc,kind='questions',dirty=false;
 $('worksheetWorld').value=world;
 $('worksheetWorld').onchange=()=>{const url=new URL(location.href);url.searchParams.set('world',$('worksheetWorld').value);location.assign(url)};
 for(const id of ['worksheetWorldLink','worksheetMenuBack']){$(id).href='index.html#'+world;$(id).textContent=id==='worksheetMenuBack'?'Terug naar '+title:title;}
 $('worksheetPlayLink').href='play.html?world='+world;
-const intro=document.querySelector('.worksheet-intro');intro.querySelector('h1').textContent=title;intro.querySelector('p').textContent=border?'Van de nulwaarde naar tekens en x-gebieden.':'Van veranderingen aflezen naar zelf de helling bepalen.';intro.querySelector('.back-link').href='index.html#'+world;intro.querySelector('.back-link').textContent='← Naar '+title;
+const intro=document.querySelector('.worksheet-intro');intro.querySelector('h1').textContent=title;intro.querySelector('p').textContent=subjects[world].intro;intro.querySelector('.back-link').href='index.html#'+world;intro.querySelector('.back-link').textContent='← Naar '+title;
 
 $('worksheetTypes').innerHTML=C.types.map(t=>`<label class="worksheet-type"><input type="checkbox" value="${t.id}" checked><span><strong>${t.label}</strong><small>${t.example}</small></span></label>`).join('');
 const seed=()=>{const values=new Uint32Array(1);crypto.getRandomValues(values);return values[0]||1};
@@ -35,5 +35,5 @@ $('showQuestions').onclick=()=>{kind='questions';render()};$('showKey').onclick=
 $('printWorksheet').onclick=async()=>{if(dirty)return;await document.fonts.ready;window.print()};
 new ResizeObserver(fit).observe(preview);addEventListener('afterprint',fit);
 window.RechtenWorksheetApp=Object.freeze({snapshot:()=>JSON.parse(JSON.stringify({doc,kind,dirty}))});
-window[border?'GrenspasWorksheetApp':'HellingrugWorksheetApp']=window.RechtenWorksheetApp;
+window[title+'WorksheetApp']=window.RechtenWorksheetApp;
 })();

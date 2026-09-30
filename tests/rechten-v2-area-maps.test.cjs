@@ -29,3 +29,13 @@ test('a partial sign step never completes either sign stop; positive completion 
  const state=R.start(R.initial(),'grenspas');state.events.push({skill:'sign',correct:true,variant:0,attemptId:'interval:2',phase:'execute'});assert.equal(A.statuses(state,'grenspas').nodes.find(n=>n.key==='positive').state,'available');
  state.events.push({skill:'sign',correct:true,variant:0,attemptId:'symbol:3',phase:'execute'});const status=A.statuses(state,'grenspas');assert.equal(status.nodes.find(n=>n.key==='positive').state,'completed');assert.equal(status.nodes.find(n=>n.key==='negative').state,'available');
 });
+test('verified teacher view opens playable worlds without awarding mastery or changing student gates',()=>{
+ const state=frozen(R.initial()),before=JSON.stringify(state),teacher={id:'test-teacher',role:'teacher'};
+ for(const id of Object.keys(A.areas)){
+  const summary=A.statuses(state,id,null,teacher);assert(summary.unlocked);assert.equal(summary.playableCompleted,0);
+  assert(summary.nodes.filter(n=>n.playable).every(n=>n.state!=='locked'));assert(summary.nodes.filter(n=>!n.playable).every(n=>n.state==='soon'));
+ }
+ assert(!A.unlocked(state,'formulewerf',null,{role:'student'}));assert(!A.unlocked(state,'formulewerf'));
+ assert.equal(JSON.stringify(state),before);
+ const map=S.world(state,{account:teacher});assert(!map.includes('Vergrendeld · eerst'));
+});

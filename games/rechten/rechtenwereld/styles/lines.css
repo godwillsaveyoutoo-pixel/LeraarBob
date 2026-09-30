@@ -82,3 +82,8 @@
  .lines-mission .line-tools {gap:5px;padding:2px}
  .lines-mission .line-tools button {width:44px;height:44px}
 }
+
+/* Half units must stay distinct on paper-coloured workbenches and small screens. */
+.lines-graph[data-axis-step="0.5"] .graph-grid path:not(.half-grid):not(.half-tick){stroke:#96afb6;stroke-width:1.1}
+.lines-graph[data-axis-step="0.5"] .graph-grid .half-grid{stroke:#b9cdd1;stroke-width:.85;opacity:1}
+.lines-graph[data-axis-step="0.5"] .graph-grid .half-tick{stroke:#375b69;stroke-width:1.6;opacity:1}

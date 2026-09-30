@@ -198,6 +198,7 @@ function showMenu(){
   }
   const platform=section('leraarBob','menu-nav menu-platform');
   add(platform,'Spellen',()=>goPlatformSection('homeGames','#ontdek'),{glyph:'home'});
+  add(platform,'Alle oefenbladen',()=>location.assign(new URL('oefenbladen.html',root)),{glyph:'pencil'});
   add(platform,'Mijn leerpad',()=>goPlatformSection('homeProgress','#playerProgress'),{glyph:'chart'});
   if(account?.role==='teacher'&&script.dataset.page!=='teacher')add(platform,'Mijn klassen',()=>location.assign(new URL('teacher/',root)),{glyph:'classroom'});
   if(window.AxiomaSocial&&script.dataset.social!=='false'){

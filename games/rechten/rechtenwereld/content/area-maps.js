@@ -52,7 +52,7 @@ const get=id=>has(id)?areas[canonical(id)]:areas.grenspas;
 const all=a=>a.zones.flatMap(z=>z.nodes);
 function selection(state){const shell=state.settings?.shell||{},id=has(shell.area)?canonical(shell.area):'grenspas',area=get(id),zone=(id==='formulewerf'&&area.zones.find(z=>z.nodes.some(n=>n.key===shell.stop)))||area.zones.find(z=>z.id===shell.zone)||area.zones[0],stop=zone.nodes.find(n=>n.key===shell.stop);return {id,area,zone,stop}}
 function positiveDone(state){const m=state.missions?.grenspas;return !!m?.completed||!!m?.completion?.some(c=>c.variant===0||c.variant===1)||!!state.events?.some(e=>e.skill==='sign'&&e.correct&&((e.variant===0&&e.attemptId?.startsWith('symbol:'))||(e.variant===1&&e.phase==='transfer')))}
-function statuses(state,id,legacy){
+function statuses(state,id,legacy,account){
  const a=get(id),nodes=all(a),raw=legacy?.state||legacy;
  let s=null;
  if(raw?.skills){s=W.migrate(raw);s.review||=[];s.skills||={};}
@@ -62,7 +62,7 @@ function statuses(state,id,legacy){
  const formulaDone=n=>(id==='formulewerf'||id==='signaalstad'&&n.id==='graph_from_table')&&n.playable&&(!!state.missions?.[n.id]?.completed||!!state.events?.some(e=>e.correct&&e.skill===n.id&&e.taskId?.startsWith('rechten-v2:'+id+':'+n.id+':')&&/:5:run\d+$/.test(e.taskId)&&e.attemptId?.startsWith(({graph_from_table:'formula-plot:',equation_from_ab:'formula-build:',graph_from_equation:'formula-plot:',equation_from_graph:'formula-read:',rewrite_linear_equation:'formula-rewrite:',intercept_from_point:'derive-intercept:',equation_from_point_slope:'derive-formula:',equation_from_two_points:'derive-formula:',equation_from_table:'derive-formula:'})[n.id])));
  const completed=n=>formulaDone(n)||grensDone(n)||hillDone(n)||pointsDone(n)|| (n.key==='positive'?positiveDone(state)||!!(s&&W.ready(s,n.id)):n.id==='zeroRead'?!!state.events?.some(e=>e.skill==='zeroRead'&&e.correct&&!e.taskId?.startsWith('rechten-v2:grenspas:'))||!!(s&&W.ready(s,n.id)):!!(s&&W.ready(s,n.id)));
  const released=n=>!!n.playable;
- const open=unlocked(state,id,legacy);
+ const open=unlocked(state,id,legacy,account);
  const available=n=>open&&released(n);
  const started=n=>{const m=state.missions?.[n.key];return !!m&&m.world===id&&!m.completed};
  const recommended=nodes.find(n=>available(n)&&!completed(n)&&started(n)&&n.key===state.active)||nodes.find(n=>available(n)&&!completed(n)&&started(n))||nodes.find(n=>available(n)&&!completed(n))||null;
@@ -86,17 +86,18 @@ function touched(state,id,legacy){
  return Object.values(state.missions||{}).some(m=>m?.world===id)||
   (state.events||[]).some(e=>String(e?.taskId||'').startsWith('rechten-v2:'+id+':'))||legacyTouched(id,legacy);
 }
-function unlocked(state,id,legacy){
+function unlocked(state,id,legacy,account){
+ if(account?.role==='teacher')return true;
  id=canonical(id);
  if(id==='puntenbaai'||id==='hellingrug'||!prerequisite[id])return true;
  if(touched(state,id,legacy))return true;
  return statuses(state,prerequisite[id],legacy).complete;
 }
-function recommendation(state,legacy){
+function recommendation(state,legacy,account){
  const active=state.missions?.[state.active];
  const result=(id,node,resume=false)=>({id,node,resume,zone:get(id).zones.find(z=>z.nodes.some(n=>n.key===node?.key))?.id||get(id).zones[0].id});
- if(active&&!active.completed&&unlocked(state,active.world,legacy)){const summary=statuses(state,active.world,legacy),node=summary.nodes.find(n=>n.key===state.active&&n.playable&&n.state!=='locked');if(node)return result(active.world,node,true)}
- for(const id of routeOrder){const summary=statuses(state,id,legacy);if(summary.unlocked&&summary.recommended)return result(id,summary.recommended,summary.nodes.find(n=>n.key===summary.recommended.key).started)}
+ if(active&&!active.completed&&unlocked(state,active.world,legacy,account)){const summary=statuses(state,active.world,legacy,account),node=summary.nodes.find(n=>n.key===state.active&&n.playable&&n.state!=='locked');if(node)return result(active.world,node,true)}
+ for(const id of routeOrder){const summary=statuses(state,id,legacy,account);if(summary.unlocked&&summary.recommended)return result(id,summary.recommended,summary.nodes.find(n=>n.key===summary.recommended.key).started)}
  return result('hellingrug',null);
 }
 

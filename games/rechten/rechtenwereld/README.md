@@ -285,3 +285,19 @@ node tests/hellingrug-worksheets-browser.cjs
 ```
 
 De Grenspas-controles toetsen de antwoorden aan de bestaande nulwaarde-, teken- en intervalvalidators, inclusief foutief gesloten grenzen, beide hellingtekens en negatieve/gehele/halve nulwaarden. Alle 31 leerdoelselecties worden met 24 vragen en drie begeleidingsvormen getest. De browsercontrole meet 36 fysieke indelingen, maakt beide PDF’s, controleert vier schermformaten en beide kopbalkstanden, wisselt tussen werelden en volgt de kaartingang met geïsoleerde testvoortgang. Voorbeelden staan na de test in `/tmp/leraarbob-grenspas-worksheets/`.
+
+## Formulewerf en centrale oefenbladen
+
+`/oefenbladen.html` bundelt Hellingrug, Grenspas, Formulewerf en de bestaande Algebra Trainer-papierroute. Het gedeelde platformmenu heeft één ingang ‘Alle oefenbladen’. In Rechtenwereld opent ‘Oefenbladen’ de huidige ondersteunde wereld; vanuit de wereldkaart kan ook ‘Leren, spelen of papier’ gebruikt worden. Verdere werelden kunnen aan de subjectregistratie in `worksheets/worksheets.js` worden toegevoegd.
+
+`worksheets.html?world=formulewerf` biedt de acht beschikbare Formulewerf-vaardigheden. De papieradapter hergebruikt exacte digitale modellen, verschuift die gecontroleerd en leidt punten, tabellen en equivalente vergelijkingen daaruit af. Reeksen hebben een reproduceerbare `FW1-…`-code. Er zijn lege tekenroosters, open uitwerkingen, afbouwende begeleiding en een afzonderlijke sleutel die andere juiste punten en equivalente algebraïsche routes toestaat. Voorbeelden en echte PDF-controles staan na de browserproef in `/tmp/leraarbob-formulewerf-worksheets/`.
+
+Docenttoegang gebruikt uitsluitend de accountrol uit de bestaande accountadapter. `statuses`, `unlocked` en `recommendation` krijgen deze als apart argument; er wordt geen ontgrendelvlag of fictieve beheersing opgeslagen. Niet-uitgebrachte levels blijven als voorbereiding herkenbaar. De router controleert ook directe oefenlinks met het juiste wereld-ID. Afmelden blokkeert de docentcontext en opent vervolgens de eigen gastgegevens.
+
+```sh
+node --test tests/formulewerf-worksheets.test.cjs tests/rechten-v2-area-maps.test.cjs tests/rechten-v2-graph-scale.test.cjs
+node tests/formulewerf-worksheets-browser.cjs
+node tests/rechten-teacher-paper-browser.cjs
+```
+
+De controles omvatten alle 255 vraagtypeselecties, exacte modelconsistentie, 54 fysieke papierindelingen, werkelijke A4-paginering, vier schermformaten, beide balkstanden en herladen. De toegangstest gebruikt een fictief docentaccount zonder cloudschrijfacties en controleert directe toegang, halve coördinaten, afmelden en de centrale papierroute.

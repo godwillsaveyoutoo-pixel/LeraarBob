@@ -16,3 +16,5 @@
 .worksheet-signchart th{width:15mm;border-right:.25mm solid #66777b;font-weight:600}
 .worksheet-signchart td:nth-child(3){border-inline:.25mm solid #8b999c}
 .worksheet-signchart .answer-blank{min-width:10mm;max-width:100%}
+.worksheet-values{border-collapse:collapse;table-layout:fixed;width:100%;max-width:100mm;margin:2mm 0 4mm;text-align:center}
+.worksheet-values th,.worksheet-values td{border:.25mm solid #8b999c;padding:2mm;min-width:14mm}
