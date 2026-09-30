@@ -32,19 +32,49 @@
     setLocked(value){this.locked=!!value;this.canvas.style.cursor=this.locked?'default':this.canvas.style.cursor;this.render()}
     level(){return G.levels[this.game.state.level]}
     notify(text){clearTimeout(this.noticeTimer);this.notice.textContent=text;this.notice.hidden=false;this.noticeTimer=setTimeout(()=>this.notice.hidden=true,1700)}
-    resize(){const r=this.canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);if(r.width===this.width&&r.height===this.height&&d===this.dpr)return false;this.width=r.width;this.height=r.height;this.dpr=d;this.canvas.width=Math.max(1,Math.round(r.width*d));this.canvas.height=Math.max(1,Math.round(r.height*d));this.ctx.setTransform(d,0,0,d,0,0);if(!this.game.state.objects.length){this.camera.x=this.width/2;this.camera.y=this.height*.62}this.reframe(null,true);this.render();return true}
+    resize(){const r=this.canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);if(r.width===this.width&&r.height===this.height&&d===this.dpr)return false;this.cancel();this.width=r.width;this.height=r.height;this.dpr=d;this.canvas.width=Math.max(1,Math.round(r.width*d));this.canvas.height=Math.max(1,Math.round(r.height*d));this.ctx.setTransform(d,0,0,d,0,0);this.reframe(null,true);this.render();return true}
     screen(p,cam=this.camera){return {x:cam.x+p.x*cam.unit,y:cam.y-p.y*cam.unit}}
     world(p,cam=this.camera){return {x:(p.x-cam.x)/cam.unit,y:(cam.y-p.y)/cam.unit}}
     pointerScreen(e){const r=this.canvas.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top}}
     pointerPoint(e,cam=this.camera){return this.world(this.pointerScreen(e),cam)}
-    objectsForView(){const s=this.game.state,arr=[...s.objects];if(s.phase==='helper'&&s.pending)arr.push(s.pending.helper,s.pending.result);else if(s.phase==='result'&&s.pending)arr.push(s.pending.result);return arr}
+    viewFrame(){
+      const pad=Math.min(20,this.width*.06,this.height*.06),frame={left:pad,right:this.width-pad,top:pad,bottom:this.height-pad};
+      // The undo control is inside a local arena, but outside an embedded class board.
+      const board=this.canvas.getBoundingClientRect(),undo=this.undoButton.getBoundingClientRect();
+      if(undo.width&&undo.left<board.right&&undo.right>board.left&&undo.top<board.bottom&&undo.bottom>board.top)frame.bottom=Math.min(frame.bottom,undo.top-board.top-10);
+      return frame;
+    }
+    objectsForView(){
+      const s=this.game.state,arr=[...s.objects];
+      if(s.pending){
+        // Fit the complete next build step so both unfolding drags remain reachable.
+        for(const tile of [s.pending.helper,s.pending.result])if(!arr.some(o=>o.id===tile.id))arr.push(tile);
+      }else if(s.phase==='choose'){
+        // Reserve a full ruler's length beyond every free edge, without suggesting
+        // an answer or drawing speculative pieces. A square alone must not fill the arena.
+        const reach=G.maxLength(s);
+        for(const e of this.freeEdges()){
+          const out=mul(G.perp(G.norm(sub(e.b,e.a))),-reach);
+          arr.push({points:[add(e.a,out),add(e.b,out)]});
+        }
+      }
+      return arr;
+    }
     reframe(lock=null,force=false){
       if(this.gesture&&!force)return;
-      const objects=this.objectsForView();if(!objects.length){this.camera.unit=Math.min(50,Math.max(34,Math.min(this.width,this.height)/9));this.camera.x=this.width/2;this.camera.y=this.height*.62;return}
-      const b=G.bounds(objects),pad=32,w=Math.max(.4,b.maxX-b.minX),h=Math.max(.4,b.maxY-b.minY),usableW=Math.max(160,this.width-pad*2),usableH=Math.max(140,this.height-pad*2);
-      const target=Math.min(82,Math.max(18,Math.min(usableW/w,usableH/h)*.82));
-      this.camera.unit=target;const cx=(b.minX+b.maxX)/2,cy=(b.minY+b.maxY)/2;this.camera.x=this.width/2-cx*target;this.camera.y=this.height/2+cy*target;
-      if(lock?.world&&lock?.screen){this.camera.x=lock.screen.x-lock.world.x*target;this.camera.y=lock.screen.y+lock.world.y*target}
+      const frame=this.viewFrame(),usableW=Math.max(1,frame.right-frame.left),usableH=Math.max(1,frame.bottom-frame.top),midX=(frame.left+frame.right)/2,midY=(frame.top+frame.bottom)/2;
+      const objects=this.objectsForView();
+      if(!objects.length){this.camera={unit:Math.min(50,Math.min(usableW,usableH)*.8/G.maxLength(this.game.state)),x:midX,y:midY};return;}
+      const b=G.bounds(objects),w=Math.max(.4,b.maxX-b.minX),h=Math.max(.4,b.maxY-b.minY);
+      // No minimum zoom: a minimum of 18px/unit clipped large builds on split screens.
+      const target=Math.min(82,usableW/w,usableH/h),cx=(b.minX+b.maxX)/2,cy=(b.minY+b.maxY)/2;
+      let x=midX-cx*target,y=midY+cy*target;
+      if(lock?.world&&lock?.screen){
+        // Preserve the grabbed corner only while every upcoming piece still fits.
+        x=clamp(lock.screen.x-lock.world.x*target,frame.left-b.minX*target,frame.right-b.maxX*target);
+        y=clamp(lock.screen.y+lock.world.y*target,frame.top+b.maxY*target,frame.bottom+b.minY*target);
+      }
+      this.camera={unit:target,x,y};
     }
     path(points){const c=this.ctx;c.beginPath();points.forEach((p,i)=>{const q=this.screen(p);i?c.lineTo(q.x,q.y):c.moveTo(q.x,q.y)});c.closePath()}
     polygonCenter(points){return center(points)}
@@ -54,9 +84,9 @@
       const grass=A?.get('grass');if(grass&&!ghost){const p0=this.screen(pts[0]),p1=this.screen(pts[1]),p3=this.screen(pts[3]),w=len(sub(p1,p0)),h=len(sub(p3,p0)),angle=Math.atan2(p1.y-p0.y,p1.x-p0.x);c.save();c.translate(p0.x,p0.y);c.rotate(angle);c.globalAlpha=.48;c.drawImage(grass,0,-h,w,h);c.restore()}
       c.restore();
       this.path(pts);c.strokeStyle=ghost?'#bda36d':'#72572c';c.lineWidth=ghost?2:3;c.lineJoin='round';c.stroke();
-      if(!ghost){const area=Math.round(o.area),p=this.screen(this.polygonCenter(pts));c.save();c.fillStyle='#f7eac8e8';c.strokeStyle='#a78f5d';c.lineWidth=1;c.font='800 13px Georgia,serif';const txt=`A=${area}`,m=c.measureText(txt),bw=m.width+12;c.beginPath();c.roundRect(p.x-bw/2,p.y-11,bw,22,7);c.fill();c.stroke();c.fillStyle='#31543a';c.textAlign='center';c.textBaseline='middle';c.fillText(txt,p.x,p.y);c.restore();this.drawRabbit(o)}
+      if(!ghost){const area=Math.round(o.area),p=this.screen(this.polygonCenter(pts));if(Math.sqrt(o.area)*this.camera.unit<48)p.y=Math.max(...pts.map(v=>this.screen(v).y))+16;c.save();c.fillStyle='#f7eac8e8';c.strokeStyle='#a78f5d';c.lineWidth=1;c.font='800 13px Georgia,serif';const txt=`A=${area}`,m=c.measureText(txt),bw=m.width+12;c.beginPath();c.roundRect(p.x-bw/2,p.y-11,bw,22,7);c.fill();c.stroke();c.fillStyle='#31543a';c.textAlign='center';c.textBaseline='middle';c.fillText(txt,p.x,p.y);c.restore();this.drawRabbit(o)}
     }
-    drawRabbit(o){const img=A?.get('rabbitIdle');if(!img)return;const p=this.screen(this.fieldLocal(o,.23,.72)),side=Math.sqrt(o.area)*this.camera.unit,size=clamp(side*.18,17,34);this.ctx.save();this.ctx.globalAlpha=.88;this.ctx.drawImage(img,p.x-size/2,p.y-size*.72,size,size);this.ctx.restore()}
+    drawRabbit(o){const img=A?.get('rabbitIdle'),side=Math.sqrt(o.area)*this.camera.unit;if(!img||side<40)return;const p=this.screen(this.fieldLocal(o,.23,.72)),size=clamp(side*.18,17,34);this.ctx.save();this.ctx.globalAlpha=.88;this.ctx.drawImage(img,p.x-size/2,p.y-size*.72,size,size);this.ctx.restore()}
     drawTriangle(t,ghost=false){const c=this.ctx;this.path(t.points);c.save();c.globalAlpha=ghost?.alpha??(ghost?.valid===false?.35:1);c.fillStyle=ghost?.valid===false?'#b66c59':'#c9a870';c.fill();c.strokeStyle=ghost?.valid===false?'#8b4436':'#8d6b38';c.lineWidth=ghost?2:2.5;c.stroke();c.restore();const rp=this.screen(t.right),a=this.screen(t.points[0]);c.save();c.fillStyle='#f6e8c6';c.strokeStyle='#806b41';c.lineWidth=1;c.fillRect(rp.x-4,rp.y-4,8,8);c.strokeRect(rp.x-4,rp.y-4,8,8);c.restore()}
     freeEdges(){const out=[];for(const sq of this.game.state.objects.filter(o=>o.type==='square'))for(const e of G.freeEdges(this.game.state,sq))out.push(e);return out}
     distanceToEdge(p,e){const v=sub(e.b,e.a),t=clamp(G.dot(sub(p,e.a),v)/G.dot(v,v)),q=add(e.a,mul(v,t));return len(sub(p,q))*this.camera.unit}
@@ -89,11 +119,11 @@
       if(!this.gesture){if(!this.locked&&this.game.state.phase==='choose'){const next=this.nearestEdge(this.pointerPoint(e),46)?.edge||null;if(!this.sameEdge(next,this.hoverEdge)){this.hoverEdge=next;this.canvas.style.cursor=next?'grab':'default';this.render()}}return}
       const g=this.gesture;if(g.id!==e.pointerId)return;const sp=this.pointerScreen(e),p=this.world(sp,g.camera),s=this.game.state;g.distance=Math.hypot(sp.x-g.downScreen.x,sp.y-g.downScreen.y);
       if(g.type==='start'){
-        const dx=sp.x-g.anchorScreen.x,dy=sp.y-g.anchorScreen.y,travel=Math.max(Math.abs(dx),Math.abs(dy)),step=clamp(g.camera.unit,18,52),k=clamp(Math.round(travel/step),1,G.maxLength(s));g.k=k;const sx=dx<0?-1:1,sy=dy>0?-1:1;g.x=g.anchor.x+sx*k/2;g.y=g.anchor.y+sy*k/2;g.valid=travel>=12;g.pieces=g.valid?[G.startSquare(k,g.x,g.y)]:[];
+        const dx=sp.x-g.anchorScreen.x,dy=sp.y-g.anchorScreen.y,travel=Math.max(Math.abs(dx),Math.abs(dy)),step=g.camera.unit,k=clamp(Math.round(travel/step),1,G.maxLength(s));g.k=k;const sx=dx<0?-1:1,sy=dy>0?-1:1;g.x=g.anchor.x+sx*k/2;g.y=g.anchor.y+sy*k/2;g.valid=travel>=Math.min(12,step*.6);g.pieces=g.valid?[G.startSquare(k,g.x,g.y)]:[];
       }else if(g.type==='triangle'){
-        const edge=g.edge,out=mul(G.perp(G.norm(sub(edge.b,edge.a))),-1),a=this.screen(g.anchor,g.camera),b=this.screen(add(g.anchor,out),g.camera),ol=Math.hypot(b.x-a.x,b.y-a.y)||1,od={x:(b.x-a.x)/ol,y:(b.y-a.y)/ol},ds={x:sp.x-g.anchorScreen.x,y:sp.y-g.anchorScreen.y},outPx=ds.x*od.x+ds.y*od.y,k=clamp(Math.round(Math.max(0,outPx)/Math.max(18,g.measureUnit)),1,G.maxLength(s));g.k=k;let cand=G.plan(s,this.active,edge.index,k,'sum',g.flip);if(cand&&!cand.valid){const m=G.plan(s,this.active,edge.index,k,'sum',!g.flip);if(m?.valid){g.flip=!g.flip;cand=m}}g.plan=cand;this.preview=cand;g.valid=outPx>=11&&!!cand?.valid;g.pieces=cand?[cand.triangle]:[];
+        const edge=g.edge,out=mul(G.perp(G.norm(sub(edge.b,edge.a))),-1),a=this.screen(g.anchor,g.camera),b=this.screen(add(g.anchor,out),g.camera),ol=Math.hypot(b.x-a.x,b.y-a.y)||1,od={x:(b.x-a.x)/ol,y:(b.y-a.y)/ol},ds={x:sp.x-g.anchorScreen.x,y:sp.y-g.anchorScreen.y},outPx=ds.x*od.x+ds.y*od.y,k=clamp(Math.round(Math.max(0,outPx)/g.measureUnit),1,G.maxLength(s));g.k=k;let cand=G.plan(s,this.active,edge.index,k,'sum',g.flip);if(cand&&!cand.valid){const m=G.plan(s,this.active,edge.index,k,'sum',!g.flip);if(m?.valid){g.flip=!g.flip;cand=m}}g.plan=cand;this.preview=cand;g.valid=outPx>=Math.min(11,g.measureUnit*.6)&&!!cand?.valid;g.pieces=cand?[cand.triangle]:[];
       }else{
-        const edge=s.pending.triangle[g.type],tile=s.pending[g.type],mid=add(edge.a,mul(sub(edge.b,edge.a),.5)),out=G.norm(sub(center(tile.points),mid)),L=Math.sqrt(tile.area),amount=clamp(G.dot(sub(p,g.down),out)/L);g.amount=amount;g.pieces=[{...tile,points:tile.points.map(v=>sub(v,mul(out,G.dot(sub(v,mid),out)*(1-amount))))}];g.valid=amount>=.62&&g.distance>=10;
+        const edge=s.pending.triangle[g.type],tile=s.pending[g.type],mid=add(edge.a,mul(sub(edge.b,edge.a),.5)),out=G.norm(sub(center(tile.points),mid)),L=Math.sqrt(tile.area),amount=clamp(G.dot(sub(p,g.down),out)/L);g.amount=amount;g.pieces=[{...tile,points:tile.points.map(v=>sub(v,mul(out,G.dot(sub(v,mid),out)*(1-amount))))}];g.valid=amount>=.62&&g.distance>=Math.min(10,L*g.camera.unit*.4);
       }
       this.render();
     }

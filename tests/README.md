@@ -491,3 +491,16 @@ XP-plaatsing, aanraakdoelen op vier schermformaten, menu en inklappen/herladen.
 De test wijzigt geen echte accounts. Screenshots: `/tmp/leraarbob-v10-screenshots/display-*.png`.
 De bredere navigatietest `tests/platform-topbar-browser.cjs` ondersteunt
 `LB_SCREENSHOT_DIR=/tmp/leraarbob-topbar/screenshots` voor tijdelijke uitvoer.
+
+## Tekenruimte in Wortelbouw-battle
+
+`node --test tests/wortelbouw-battle-camera.test.cjs` controleert de beschikbare
+ruimte voor alle toegelaten driehoekmaten, vrije zijden, gespiegelde hoeken,
+vervolgbouw, uitvouwen en undo op zes formaten. De camera blijft stil tijdens slepen.
+
+`node tests/wortelbouw-battle-space-browser.cjs` speelt alle zeven battle-opgaven
+met echte muis- en aanraakbewegingen in beide speelhelften, ook met verwisselde
+benen, op vijf formaten en met de bovenbalk open/ingeklapt. Controleert ook undo,
+rotatie tijdens tekenen, onafhankelijke spelers en de echte puntentelling.
+Gebruikt de lokale server (8775) en geïsoleerde Chromium-context (9245), zonder
+cloudgegevens te wijzigen. Screenshots staan in `/tmp/leraarbob-v10-screenshots/wortelbouw-battle-space-*.png`.
