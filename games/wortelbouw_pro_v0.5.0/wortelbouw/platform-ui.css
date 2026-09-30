@@ -112,5 +112,8 @@ body.topbar-collapsed #battleStage{top:calc(var(--lb-header-height,0px) + 56px)}
  body.lb-nav-pilot #puzzleBar{top:var(--lb-header-height,52px)}
  body.lb-nav-pilot #app #gameShell{top:calc(var(--lb-header-height,52px) + 64px)}
 }
-body.lb-nav-pilot.topbar-collapsed #puzzleBar{top:0}
-body.lb-nav-pilot.topbar-collapsed #app #gameShell{top:64px}
+/* Only compact screens position the board absolutely; desktop grid already reserves the axis row. */
+@media(max-width:900px),(max-height:520px){
+ body.lb-nav-pilot.topbar-collapsed #puzzleBar{top:0}
+ body.lb-nav-pilot.topbar-collapsed #app #gameShell{top:64px}
+}
