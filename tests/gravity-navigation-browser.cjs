@@ -1,7 +1,7 @@
 // Real Gravity Maze UI and engine in an isolated guest context; no external services.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const PORT=process.env.VECTOR_BROWSER_PORT||9245,BASE=process.env.VECTOR_BASE_URL||'http://127.0.0.1:8775';
-const OUT=path.resolve(__dirname,'../docs/gravity-ui/screenshots');fs.mkdirSync(OUT,{recursive:true});
+const OUT=path.resolve(process.env.LB_SCREENSHOT_DIR||path.join(__dirname,'../docs/gravity-ui/screenshots'));fs.mkdirSync(OUT,{recursive:true});
 class CDP{
  async connect(url){this.ws=new WebSocket(url);this.id=0;this.pending=new Map();this.errors=[];await new Promise(r=>this.ws.onopen=r);this.ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){const p=this.pending.get(m.id);if(!p)return;clearTimeout(p.timer);this.pending.delete(m.id);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result)}else if(m.method==='Page.loadEventFired')this.loads=(this.loads||0)+1;else if(m.method==='Runtime.exceptionThrown')this.errors.push(m.params.exceptionDetails);else if(m.method==='Fetch.requestPaused')this.route(m.params).catch(e=>this.errors.push(e.message));};}
  send(method,params={}){return new Promise((resolve,reject)=>{const id=++this.id,timer=setTimeout(()=>reject(Error('Timeout '+method)),15000);this.pending.set(id,{resolve,reject,timer});this.ws.send(JSON.stringify({id,method,params}))})}
@@ -75,7 +75,7 @@ class CDP{
   await c.eval('LeraarBobTopbar.setCollapsed(false)');await c.frames();
   for(const [width,height] of [[1366,768],[390,844]]){
    await c.size(width,height);await c.eval(shadow+".querySelector('.menu').click()");
-   assert.deepEqual(await c.eval(shadow+".querySelectorAll('.menu-name') && [..."+shadow+".querySelectorAll('.menu-name')].map(e=>e.textContent)"),['Spelmenu','Spelregels','Spellen','Mijn leerpad','Inloggen','Instellingen','Bovenbalk verbergen']);
+   assert.deepEqual(await c.eval(shadow+".querySelectorAll('.menu-name') && [..."+shadow+".querySelectorAll('.menu-name')].map(e=>e.textContent)"),['Spelmenu','Spelregels','Spellen','Mijn leerpad','Inloggen','Bovenbalk verbergen']);
    const before=await c.eval('gravityPrototype.snapshot()');await c.send('Input.dispatchKeyEvent',{type:'keyDown',key:'ArrowLeft',code:'ArrowLeft'});await c.send('Input.dispatchKeyEvent',{type:'keyUp',key:'ArrowLeft',code:'ArrowLeft'});assert.deepEqual(await c.eval('gravityPrototype.snapshot()'),before,'navigation blocks background play');
    await c.shot('menu-'+width);await c.eval(shadow+".querySelector('[data-source=roomsNav]').click()");assert(await c.eval("document.getElementById('selection').open"));
    assert(await c.eval("(()=>{const d=document.getElementById('selection'),r=d.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.bottom<=innerHeight&&d.scrollWidth<=d.clientWidth})()"));

@@ -6,8 +6,10 @@ const M=require('../games/rechten/rechtenwereld/semantic-math-core.js');
 
 test('legacy exercise engines, authentication and storage stay byte-identical outside explicit integrations',()=>{
  const manifest=require('../docs/rechten-v2/V1_BASELINE_SHA256.json');
- // These integrations are deliberately updated and tested by the social, game-progress and legacy redirect suites.
- const integrations=new Set(['shared/axioma-social.js','shared/axioma-game.js','shared/axioma-game-adapters.js','games/rechten/trainer/index.html']);
+ // Explicit platform integrations have behavioral coverage; the original baseline stays intact.
+ // Account avatars: account-auth.test.cjs and avatar-browser.cjs (roles/account isolation).
+ // Shared PDF writer: rechten-training-proof.test.cjs and progress-proof.test.cjs.
+ const integrations=new Set(['shared/axioma-social.js','shared/axioma-game.js','shared/axioma-game-adapters.js','shared/axioma-auth.js','games/rechten/trainer/index.html','games/rechten/trainer/training-proof.js']);
  const files=Object.entries(manifest).filter(([file])=>!file.startsWith('tests/')&&!integrations.has(file));assert(files.length>=20);
  for(const [file,expected] of files)assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex'),expected,file+' changed outside integration');
 });
