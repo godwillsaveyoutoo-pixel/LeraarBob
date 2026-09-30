@@ -1,0 +1,23 @@
+@import url('../rechten/rechtenwereld/styles/classroom.css');
+body.algebra-classroom{background:#f7f4ec;color:#263f38}
+.algebra-classroom .card{background:#fffdf6;border-color:#afbdaf}
+.algebra-classroom .setup{display:block;max-width:1000px;margin:auto}
+#classTypes{display:grid;gap:16px;margin:16px 0}
+#classTypes fieldset{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;border:0;padding:0;margin:0}
+#classTypes legend{font-weight:700;margin:0 0 8px}
+#classTypes label,.number-options label{display:flex;align-items:center;gap:10px;min-height:48px;padding:10px;border:1px solid #a6b7ad;cursor:pointer}
+#classTypes label:has(:checked){background:#e0ece4;border-color:#33725e}
+#classTypes input,.number-options input{width:20px;height:20px;min-height:0;flex:none;accent-color:#28654f}
+.number-options{display:flex;gap:8px;flex-wrap:wrap;border:0;padding:0;margin:16px 0}
+.number-options legend{font-weight:700;margin-bottom:8px}
+.class-accuracy{display:flex;gap:14px;align-items:center;margin:12px 0}.class-accuracy progress{width:min(350px,60%);height:18px;accent-color:#33775e}
+.class-accuracy progress[data-band=low]{accent-color:#a34339}.class-accuracy progress[data-band=middle]{accent-color:#ae7929}
+#reviewHost{height:min(65dvh,650px)}#reviewHost iframe{width:100%;height:100%;border:1px solid #a6b7ad}
+.algebra-classroom #roundBreakdown span{color:#263f38;background:#eef0e5;border:1px solid #a6b7ad}
+@media(max-width:440px){#classTypes fieldset{grid-template-columns:1fr 1fr}#classTypes label{font-size:14px;padding:8px;gap:7px}.number-options label{flex:1 1 auto}.class-accuracy{font-size:14px}}
+.algebra-classroom{color-scheme:light}
+.algebra-classroom form{gap:12px}.algebra-classroom #hostForm>h2{margin-bottom:0}.algebra-classroom #hostForm>p{margin:0}
+.algebra-classroom #roundBreakdown{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.algebra-classroom #roundBreakdown span{padding:6px 10px;font-size:14px}
+.algebra-classroom .ranking li{color:#263f38;animation:none}
+.algebra-classroom button:hover:not(:disabled){background:#e0ece4;color:#234b3c}
+.algebra-classroom leraarbob-topbar::part(crumb-current){color:#3d6356}

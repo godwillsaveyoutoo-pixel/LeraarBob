@@ -402,8 +402,10 @@ const FRAC_SHIFT=[R(1,2),R(1,3),R(2,3),R(3,2),R(3,4),R(5,2)].map(R);
 const DEC_COEFF=[R(1,2),R(4,5),R(6,5),R(3,2),R(9,5),R(5,2)].map(R);
 const DEC_SHIFT=[R(1,2),R(3,2),R(5,2),R(7,2),R(6,5),R(12,5)].map(R);
 
-function pick(a){return a[Math.floor(Math.random()*a.length)]}
-function chance(p){return Math.random()<p}
+let seededRandom=null;
+const random=()=>seededRandom?seededRandom():Math.random();
+function pick(a){return a[Math.floor(random()*a.length)]}
+function chance(p){return random()<p}
 function currentPolicy(){
   return {
     allowFractions:!!globalThis.document?.getElementById('allowFractions')?.checked,
@@ -578,11 +580,18 @@ function generateExercise(typeId,policy,index=0){
     if(!operandRepresentable(eq.l,policy,false)||!operandRepresentable(eq.r,policy,false)||steps.some(s=>!operandRepresentable(s.operand,policy))||!operandRepresentable(cur.l,policy)||!operandRepresentable(cur.r,policy))continue;
 
     return {
-      id:`${typeId}-${index}-${Math.random().toString(36).slice(2,7)}`,
+      id:`${typeId}-${index}-${random().toString(36).slice(2,7)}`,
       type:typeId,policy:{...policy},start:eq,steps,states,solution:(states.at(-1).l.t==='var'?states.at(-1).r.q:states.at(-1).l.q)
     };
   }
   throw new Error(`Geen nette oefening gevonden voor ${typeId}`);
+}
+
+// Synchronous seeded generation shares exactly the solo mathematics.
+function generateSeeded(type,policy,index,seed){
+ const previous=seededRandom;let value=seed>>>0;
+ seededRandom=()=>{value=(value+0x6D2B79F5)|0;let n=Math.imul(value^(value>>>15),1|value);n^=n+Math.imul(n^(n>>>7),61|n);return ((n^(n>>>14))>>>0)/4294967296;};
+ try{return generateExercise(type,policy,index);}finally{seededRandom=previous;}
 }
 
 /* ============================================================
@@ -723,5 +732,5 @@ function candidateOperands(ex,eq,op){
 
 function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
 
-return Object.freeze({gcd,lcm,Rat,R,ratKey,reciprocal,terminatingPlaces,N,V,Add,Mul,Div,EQ,cloneExpr,cloneEq,isNum,isVar,num,linearCoeff,makeLinearTerm,simplify,negExpr,simplifyEq,exprSig,eqSig,exprNodeCount,equationComplexity,containsVar,countType,solvedEquation,operandIsNumeric,applyEquation,decimalText,hashRat,autoNumberFormat,ratLatex,splitSign,latexExpr,latexEq,operationLatex,fallbackText,texHTML,renderMathNodes,TYPES,LEVEL_META,INT_COEFF,INT_SHIFT,FRAC_COEFF,FRAC_SHIFT,DEC_COEFF,DEC_SHIFT,pick,chance,currentPolicy,pickFmt,pickParam,pickSolution,numNodeFromParam,nice,rhsFmt,positiveDifferentCoeffs,step,generateExercise,topTerms,absExpr,exprIsZero,collectNumericDenominators,outerScalar,operandRepresentable,canonicalStepAt,candidateOperands,escapeHTML});
+return Object.freeze({gcd,lcm,Rat,R,ratKey,reciprocal,terminatingPlaces,N,V,Add,Mul,Div,EQ,cloneExpr,cloneEq,isNum,isVar,num,linearCoeff,makeLinearTerm,simplify,negExpr,simplifyEq,exprSig,eqSig,exprNodeCount,equationComplexity,containsVar,countType,solvedEquation,operandIsNumeric,applyEquation,decimalText,hashRat,autoNumberFormat,ratLatex,splitSign,latexExpr,latexEq,operationLatex,fallbackText,texHTML,renderMathNodes,TYPES,LEVEL_META,INT_COEFF,INT_SHIFT,FRAC_COEFF,FRAC_SHIFT,DEC_COEFF,DEC_SHIFT,pick,chance,currentPolicy,pickFmt,pickParam,pickSolution,numNodeFromParam,nice,rhsFmt,positiveDifferentCoeffs,step,generateExercise,generateSeeded,topTerms,absExpr,exprIsZero,collectNumericDenominators,outerScalar,operandRepresentable,canonicalStepAt,candidateOperands,escapeHTML});
 });

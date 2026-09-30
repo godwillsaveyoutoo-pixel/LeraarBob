@@ -287,3 +287,6 @@ button,input{border-radius:0!important}button{min-width:44px;min-height:44px;tou
 
 /* Give tall fractions and KaTeX baselines their full vertical space. */
 .derivationMath{line-height:2.2;overflow-y:hidden}
+.class-entry{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;margin:0 0 14px;color:var(--ink);border:1px solid var(--line);text-decoration:none;font-weight:700}
+.class-entry:hover{background:var(--greenSoft)}
+.sectionNav .class-entry{margin:0;padding:8px 12px;font-size:13px;white-space:nowrap}

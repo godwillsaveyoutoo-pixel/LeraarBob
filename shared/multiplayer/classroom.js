@@ -50,7 +50,7 @@ function renderRanking(){
 function renderBoard(){
  if(!state||!frameReady||!state.spec||(!reviewOpen&&(waiting()||!['question','grading'].includes(state.phase))))return;
  const key=state.id+':'+state.round;
- if(frameKey!==key){frameKey=key;send({type:'vector-battle-question',match:state.id,index:state.round,...state.spec,singleAttempt:true,projector:!!state.owner});}
+ if(frameKey!==key){frameKey=key;send({type:'vector-battle-question',match:state.id,index:state.round,...state.spec,singleAttempt:true,projector:!!state.owner,learner:account.id});}
  if(reviewOpen){if(reviewKey!==key){reviewKey=key;send({type:'vector-class-review',match:state.id,index:state.round});}return;}
  if(state.owner||state.mine?.submitted||state.phase==='grading'||pending)send({type:'vector-battle-resolved',match:state.id,index:state.round,message:state.owner?'De leerlingen werken op hun eigen toestel.':state.mine?.submitted?'Antwoord ontvangen. Wacht op de uitslag.':pending?'Je inzending wordt verstuurd.':'De tijd is om. Wacht op de uitslag.'});
 }
@@ -90,7 +90,7 @@ function render(){
   $('roundBreakdown').replaceChildren();
   if(results&&state.round>=0){for(const [label,count] of [['Juist',activeMembers.filter(p=>p.correct===true).length],['Onjuist',activeMembers.filter(p=>p.answered&&p.correct!==true).length],['Geen antwoord',activeMembers.filter(p=>!p.answered).length]]){const item=document.createElement('span');item.textContent=count+' '+label;item.dataset.kind=label;$('roundBreakdown').append(item);}}
  }
- if(results)renderRanking();renderBoard();tick();
+ if($('classAccuracy')){const pct=activeMembers.length?Math.round(100*activeMembers.filter(p=>p.correct===true).length/activeMembers.length):0;$('classAccuracy').value=pct;$('classAccuracy').textContent=pct+'%';$('classAccuracyText').textContent=pct+'% juist';$('classAccuracy').dataset.band=pct>=75?'high':pct>=40?'middle':'low';}if(results)renderRanking();renderBoard();tick();
 }
 function tick(){if(!state)return;const left=Math.max(0,Math.ceil((Date.parse(state.deadline)-Date.now()-offset)/1000));$('timer').textContent=state.phase==='question'?`${left} s`:'Tijd afgelopen';if(state.phase==='question'&&left===0)send({type:'vector-battle-resolved',match:state.id,index:state.round,message:'De tijd is om. Wacht op de uitslag.'});}
 function schedule(){clearTimeout(pollTimer);if(!state||['closed','finished'].includes(state.phase))return;const captured=epoch;pollTimer=setTimeout(async()=>{try{const next=await rpc('state',{id:state.id});if(captured===epoch){notice('');accept(next);if(pending&&state.phase==='question')submit();}}catch(e){if(captured===epoch){notice('Verbinding onderbroken. We proberen opnieuw. '+errorText(e));schedule();}}},1500);}
@@ -120,7 +120,10 @@ const requestedWorld=new URLSearchParams(location.search).get('world');
 if(Game.worlds.some(w=>w.id===requestedWorld))$('world').value=requestedWorld;
 $('world').onchange=updateSkills;updateSkills();
 $('logout').onclick=async()=>{try{await AxiomaAuth.signOut();await identity(null);}catch(e){notice(errorText(e));}};
-$('hostForm').onsubmit=e=>{e.preventDefault();const selected=$('skill').value==='mix'?pool():[$('skill').value];const seeds=crypto.getRandomValues(new Uint32Array(10));const deck=Array.from({length:Number($('rounds').value)},(_,i)=>({skill:selected[i%selected.length],seed:seeds[i],variant:i%4,level:1}));action('create',{deck,seconds:Number($('seconds').value)});};
+if(Game.multiSelect&&$('classTypes')){
+ for(const world of Game.worlds){const group=document.createElement('fieldset'),title=document.createElement('legend');title.textContent=world.name;group.append(title);for(const id of world.skills){const item=Game.skills.find(s=>s.id===id),label=document.createElement('label'),input=document.createElement('input'),text=document.createElement('span');input.type='checkbox';input.value=id;input.name='classType';input.checked=world.id===Game.worlds[0].id;text.textContent=item.label;label.title=item.description;label.append(input,text);group.append(label);}$('classTypes').append(group);}
+}
+$('hostForm').onsubmit=e=>{e.preventDefault();const selected=Game.multiSelect?[...document.querySelectorAll('[name=classType]:checked')].map(e=>e.value):$('skill').value==='mix'?pool():[$('skill').value],count=Number($('rounds').value);if(!selected.length){notice('Kies minstens één vergelijkingstype.');return;}if(Game.multiSelect&&selected.length>count){notice('Kies meer rondes of minder types, zodat elk gekozen type aan bod komt.');return;}const seeds=crypto.getRandomValues(new Uint32Array(count));const deck=Array.from({length:count},(_,i)=>({skill:selected[i%selected.length],seed:seeds[i],variant:i%4,level:1,...(Game.multiSelect?{fractions:$('classFractions').checked,decimals:$('classDecimals').checked,negative:$('classNegative').checked}:{})}));action('create',{deck,seconds:Number($('seconds').value)});};
 $('joinForm').onsubmit=e=>{e.preventDefault();action('join',{code:$('joinCode').value.trim().toUpperCase()});};
 if($('endRound'))$('endRound').onclick=()=>action('end_round');
 if($('reviewToggle'))$('reviewToggle').onclick=()=>{reviewOpen=!reviewOpen;reviewKey='';render();};
