@@ -20,7 +20,21 @@
   class Arena{
     constructor(index,canvas,notice,undo,controller){
       this.index=index;this.canvas=canvas;this.ctx=canvas.getContext('2d');this.notice=notice;this.undoButton=undo;this.controller=controller;
-      this.game=new G.Game(0);this.camera={unit:42,x:0,y:0};this.width=0;this.height=0;this.dpr=1;this.gesture=null;this.preview=null;this.hoverEdge=null;this.active=null;this.locked=true;this.winPulse=0;this.noticeTimer=0;this.renderFrame=0;
+      this.game=new G.Game(0);this.camera={unit:42,x:0,y:0};this.width=0;this.height=0;this.dpr=1;this.gesture=null;this.preview=null;this.hoverEdge=null;this.active=null;this.locked=true;this.winPulse=0;this.noticeTimer=0;this.renderFrame=0;this.mode='sum';
+      this.sideChoice=document.createElement('div');this.sideChoice.className='arenaSideChoice';this.sideChoice.setAttribute('role','group');this.sideChoice.setAttribute('aria-label',`Speler ${index+1}: aansluitende driehoekszijde`);
+      for(const [mode,label,side] of [['sum','Rechthoekszijde','M5 25V5'],['difference','Schuine zijde','M5 5L31 25']]){
+        const button=document.createElement('button');button.type='button';button.dataset.mode=mode;button.title=label;button.setAttribute('aria-label',`Speler ${index+1}: aansluiten met ${label.toLowerCase()}`);
+        button.innerHTML=`<svg viewBox="0 0 36 30" aria-hidden="true"><path d="M5 25V5L31 25Z"/><path class="knownSide" d="${side}"/><path class="angle" d="M5 19h6v6"/></svg>`;
+        button.addEventListener('click',()=>this.setMode(mode));
+        // Canvas drags can suppress the following synthesized touch click. Handle
+        // a completed tap too; click remains available for mouse and keyboard.
+        let pointer=null;
+        button.addEventListener('pointerdown',e=>{if(!button.disabled&&e.pointerType!=='mouse')pointer=e.pointerId;});
+        button.addEventListener('pointercancel',()=>{pointer=null;});
+        button.addEventListener('pointerup',e=>{const tapped=pointer===e.pointerId;pointer=null;const r=button.getBoundingClientRect();if(tapped&&!button.disabled&&e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom)this.setMode(mode);});
+        this.sideChoice.append(button);
+      }
+      canvas.closest('.arena').append(this.sideChoice);
       this.boundMove=e=>this.move(e);this.bind();
       this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(canvas);
     }
@@ -28,7 +42,12 @@
       this.canvas.addEventListener('pointerdown',e=>this.down(e));this.canvas.addEventListener('pointermove',this.boundMove);this.canvas.addEventListener('pointerup',e=>this.up(e));this.canvas.addEventListener('pointercancel',e=>this.cancel(e));this.canvas.addEventListener('lostpointercapture',e=>this.cancel(e));
       this.undoButton.addEventListener('click',()=>this.undo());
     }
-    reset(levelIndex){this.cancel();this.game.reset(levelIndex);this.active=null;this.preview=null;this.hoverEdge=null;this.locked=true;this.reframe();this.render()}
+    reset(levelIndex){this.cancel();this.game.reset(levelIndex);this.mode='sum';this.active=null;this.preview=null;this.hoverEdge=null;this.locked=true;this.reframe();this.render()}
+    setMode(mode){
+      if(this.locked||this.gesture||this.game.state.phase!=='choose'||!['sum','difference'].includes(mode))return;
+      if(mode==='difference'&&!this.game.state.objects.some(o=>o.type==='square'&&o.area>1))return;
+      this.mode=mode;this.preview=null;this.hoverEdge=null;this.render();
+    }
     setLocked(value){this.locked=!!value;this.canvas.style.cursor=this.locked?'default':this.canvas.style.cursor;this.render()}
     level(){return G.levels[this.game.state.level]}
     notify(text){clearTimeout(this.noticeTimer);this.notice.textContent=text;this.notice.hidden=false;this.noticeTimer=setTimeout(()=>this.notice.hidden=true,1700)}
@@ -42,6 +61,8 @@
       // The undo control is inside a local arena, but outside an embedded class board.
       const board=this.canvas.getBoundingClientRect(),undo=this.undoButton.getBoundingClientRect();
       if(undo.width&&undo.left<board.right&&undo.right>board.left&&undo.top<board.bottom&&undo.bottom>board.top)frame.bottom=Math.min(frame.bottom,undo.top-board.top-10);
+      const choice=this.sideChoice?.getBoundingClientRect();
+      if(choice?.width)frame.bottom=Math.min(frame.bottom,choice.top-board.top-10);
       return frame;
     }
     objectsForView(){
@@ -100,6 +121,7 @@
       const g=this.gesture;if(g?.pieces)for(const p of g.pieces){if(p.type==='triangle')this.drawTriangle(p,{valid:g.valid,alpha:.7});else this.drawField(p,{grow:g.amount||1})}
       if(!this.locked&&this.game.state.phase==='choose')for(const e of this.freeEdges())this.drawEdge(e,this.sameEdge(e,this.hoverEdge));
       if(this.winPulse&&now-this.winPulse<850){const t=clamp((now-this.winPulse)/850),a=Math.sin(Math.PI*t);c.save();c.fillStyle=`rgba(255,229,112,${.14*a})`;c.fillRect(0,0,this.width,this.height);c.restore();requestAnimationFrame(ts=>this.render(ts))}
+      for(const button of this.sideChoice.children){button.setAttribute('aria-pressed',String(button.dataset.mode===this.mode));button.disabled=this.locked||!!this.gesture||this.game.state.phase!=='choose'||(button.dataset.mode==='difference'&&!this.game.state.objects.some(o=>o.type==='square'&&o.area>1));}
       this.undoButton.disabled=this.locked||!this.game.history.length;
     }
     startAnimation(){this.winPulse=performance.now();this.canvas.closest('.arena')?.classList.remove('roundWinner');void this.canvas.offsetWidth;this.canvas.closest('.arena')?.classList.add('roundWinner');this.render()}
@@ -109,7 +131,9 @@
       if(s.phase==='start')g={type:'start',anchor:p,anchorScreen:sp};
       else if(s.phase==='choose'){
         const hit=this.nearestEdge(p,46);if(!hit){const field=s.objects.filter(o=>o.type==='square').find(o=>this.inside(p,o.points));if(field){this.active=field.id;this.notify('Kies een gouden buitenzijde.');this.render()}return}
-        const edge=hit.edge;this.active=edge.owner;const flip=len(sub(p,edge.b))<len(sub(p,edge.a)),anchor=flip?edge.b:edge.a;g={type:'triangle',edge,anchor,anchorScreen:this.screen(anchor,cam),measureUnit:cam.unit,flip};
+        const edge=hit.edge;this.active=edge.owner;
+        if(this.mode==='difference'&&s.objects.find(o=>o.id===this.active)?.area<=1){this.notify('Kies een groter veld voor de schuine zijde.');return}
+        const flip=len(sub(p,edge.b))<len(sub(p,edge.a)),anchor=flip?edge.b:edge.a;g={type:'triangle',mode:this.mode,edge,anchor,anchorScreen:this.screen(anchor,cam),measureUnit:cam.unit,flip};
       }else if(['helper','result'].includes(s.phase)){
         if(this.distanceToEdge(p,s.pending.triangle[s.phase])>28)return;g={type:s.phase};
       }
@@ -121,7 +145,9 @@
       if(g.type==='start'){
         const dx=sp.x-g.anchorScreen.x,dy=sp.y-g.anchorScreen.y,travel=Math.max(Math.abs(dx),Math.abs(dy)),step=g.camera.unit,k=clamp(Math.round(travel/step),1,G.maxLength(s));g.k=k;const sx=dx<0?-1:1,sy=dy>0?-1:1;g.x=g.anchor.x+sx*k/2;g.y=g.anchor.y+sy*k/2;g.valid=travel>=Math.min(12,step*.6);g.pieces=g.valid?[G.startSquare(k,g.x,g.y)]:[];
       }else if(g.type==='triangle'){
-        const edge=g.edge,out=mul(G.perp(G.norm(sub(edge.b,edge.a))),-1),a=this.screen(g.anchor,g.camera),b=this.screen(add(g.anchor,out),g.camera),ol=Math.hypot(b.x-a.x,b.y-a.y)||1,od={x:(b.x-a.x)/ol,y:(b.y-a.y)/ol},ds={x:sp.x-g.anchorScreen.x,y:sp.y-g.anchorScreen.y},outPx=ds.x*od.x+ds.y*od.y,k=clamp(Math.round(Math.max(0,outPx)/g.measureUnit),1,G.maxLength(s));g.k=k;let cand=G.plan(s,this.active,edge.index,k,'sum',g.flip);if(cand&&!cand.valid){const m=G.plan(s,this.active,edge.index,k,'sum',!g.flip);if(m?.valid){g.flip=!g.flip;cand=m}}g.plan=cand;this.preview=cand;g.valid=outPx>=Math.min(11,g.measureUnit*.6)&&!!cand?.valid;g.pieces=cand?[cand.triangle]:[];
+        const edge=g.edge,out=mul(G.perp(G.norm(sub(edge.b,edge.a))),-1),a=this.screen(g.anchor,g.camera),b=this.screen(add(g.anchor,out),g.camera),ol=Math.hypot(b.x-a.x,b.y-a.y)||1,od={x:(b.x-a.x)/ol,y:(b.y-a.y)/ol},ds={x:sp.x-g.anchorScreen.x,y:sp.y-g.anchorScreen.y},outPx=ds.x*od.x+ds.y*od.y;
+        const area=s.objects.find(o=>o.id===this.active).area,maximum=g.mode==='sum'?G.maxLength(s):Math.min(G.maxLength(s),Math.ceil(Math.sqrt(area))-1),magnitude=g.mode==='sum'?outPx:Math.hypot(ds.x,ds.y),k=clamp(Math.round(Math.max(0,magnitude)/g.measureUnit),1,maximum);
+        g.k=k;let cand=G.plan(s,this.active,edge.index,k,g.mode,g.flip);if(cand&&!cand.valid){const m=G.plan(s,this.active,edge.index,k,g.mode,!g.flip);if(m?.valid){g.flip=!g.flip;cand=m}}g.plan=cand;this.preview=cand;g.valid=outPx>=Math.min(11,g.measureUnit*.6)&&!!cand?.valid;g.pieces=cand?[cand.triangle]:[];
       }else{
         const edge=s.pending.triangle[g.type],tile=s.pending[g.type],mid=add(edge.a,mul(sub(edge.b,edge.a),.5)),out=G.norm(sub(center(tile.points),mid)),L=Math.sqrt(tile.area),amount=clamp(G.dot(sub(p,g.down),out)/L);g.amount=amount;g.pieces=[{...tile,points:tile.points.map(v=>sub(v,mul(out,G.dot(sub(v,mid),out)*(1-amount))))}];g.valid=amount>=.62&&g.distance>=Math.min(10,L*g.camera.unit*.4);
       }
@@ -132,7 +158,7 @@
       if(!g.valid){if(g.type==='triangle'&&g.plan&&!g.plan.valid)this.notify('Hier overlapt de bouw. Kies een andere zijde of maat.');this.render();return}
       try{
         if(g.type==='start'){this.game.commit({type:'start',k:g.k,x:g.x,y:g.y});this.active='s0';this.reframe()}
-        else if(g.type==='triangle'){this.game.commit({type:'triangle',owner:this.active,edgeIndex:g.edge.index,k:g.k,mode:'sum',flip:g.flip});this.reframe({world:g.anchor,screen:g.anchorScreen})}
+        else if(g.type==='triangle'){this.game.commit({type:'triangle',owner:this.active,edgeIndex:g.edge.index,k:g.k,mode:g.mode,flip:g.flip});this.reframe({world:g.anchor,screen:g.anchorScreen})}
         else if(g.type==='helper'){this.game.commit({type:'helper'})}
         else if(g.type==='result'){this.game.commit({type:'result'});this.reframe();setTimeout(()=>this.reveal(),180)}
       }catch(err){this.notify(err.message||'Deze stap lukt hier niet.')}

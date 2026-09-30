@@ -1,0 +1,10 @@
+/* The same side choice as solo, independently available on each build board. */
+.arenaSideChoice{position:absolute;z-index:8;bottom:6px;left:50%;transform:translateX(-50%);display:flex;gap:4px;padding:3px;background:#f4e7c9ed;border:1px solid #9d8759}
+.arenaSideChoice button{box-sizing:border-box;display:grid;place-items:center;width:44px;min-width:44px;height:44px;min-height:44px;padding:5px;border:1px solid #9d8759;border-radius:0;background:#f8edcf;color:#385a43;cursor:pointer;touch-action:manipulation}
+.arenaSideChoice button[aria-pressed=true]{background:#365b40;border-color:#365b40;color:#fff5ce}
+.arenaSideChoice button:disabled{opacity:.4;cursor:default}
+.arenaSideChoice button:focus-visible{outline:3px solid #b17c14;outline-offset:1px}
+.arenaSideChoice svg{pointer-events:none;width:32px;height:30px;fill:none;stroke:currentColor;stroke-width:1.4}
+.arenaSideChoice .knownSide{stroke:#a06b12;stroke-width:4}
+.arenaSideChoice [aria-pressed=true] .knownSide{stroke:#ffe29a}
+.arenaSideChoice .angle{stroke-width:1}

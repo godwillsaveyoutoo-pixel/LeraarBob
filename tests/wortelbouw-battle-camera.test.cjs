@@ -12,15 +12,15 @@ test('every legal triangle can be drawn within each split screen, on any free ed
  for(const [w,h] of sizes)for(const n of goals)for(let k=1;k<=G.maxLength({level:G.levels.findIndex(l=>l.n===n)});k++){
   const a=arena(n,w,h);a.game.commit({type:'start',k,x:73,y:-29});a.reframe();const s=a.game.state;
   fits(a,s.objects.flatMap(o=>o.points),'start square');
-  for(const e of G.freeEdges(s,s.objects[0]))for(const flip of [false,true])for(let leg=1;leg<=G.maxLength(s);leg++){
-   const p=G.plan(s,'s0',e.index,leg,'sum',flip);if(p?.valid)fits(a,p.triangle.points,`${w}×${h}, square ${k}, leg ${leg}, edge ${e.index}`);
+  for(const e of G.freeEdges(s,s.objects[0]))for(const flip of [false,true])for(const mode of ['sum','difference'])for(let leg=1;leg<=G.maxLength(s);leg++){
+   const p=G.plan(s,'s0',e.index,leg,mode,flip);if(p?.valid)fits(a,p.triangle.points,`${w}×${h}, square ${k}, leg ${leg}, edge ${e.index}`);
   }
  }
 });
 test('pending helper and result squares fit even when the grabbed corner would keep them off-screen',()=>{
- for(const [w,h] of sizes)for(const [n,aSide,bSide] of [[2,1,1],[5,1,2],[13,2,3],[18,3,3],[25,3,4],[100,6,8],[104,10,2],[104,2,10]])for(const edgeIndex of [0,1,2,3])for(const flip of [false,true]){
-  const a=arena(n,w,h);a.game.commit({type:'start',k:aSide,x:40,y:7});a.reframe();const p=G.plan(a.game.state,'s0',edgeIndex,bSide,'sum',flip);assert(p.valid);const anchor=p.triangle.base.a,lock={world:anchor,screen:a.screen(anchor)};
-  a.game.commit({type:'triangle',owner:'s0',edgeIndex,k:bSide,mode:'sum',flip});a.reframe(lock);
+ for(const [w,h] of sizes)for(const [n,aSide,bSide,mode='sum'] of [[2,1,1],[5,1,2],[13,2,3],[18,3,3],[25,3,4],[100,6,8],[104,10,2],[104,2,10],[5,3,2,'difference']])for(const edgeIndex of [0,1,2,3])for(const flip of [false,true]){
+  const a=arena(n,w,h);a.game.commit({type:'start',k:aSide,x:40,y:7});a.reframe();const p=G.plan(a.game.state,'s0',edgeIndex,bSide,mode,flip);assert(p.valid);const anchor=p.triangle.base.a,lock={world:anchor,screen:a.screen(anchor)};
+  a.game.commit({type:'triangle',owner:'s0',edgeIndex,k:bSide,mode,flip});a.reframe(lock);
   fits(a,[...a.game.state.objects,a.game.state.pending.helper,a.game.state.pending.result].flatMap(o=>o.points),'complete build');
   const camera=JSON.stringify(a.camera);a.gesture={camera:{...a.camera}};a.reframe();assert.equal(JSON.stringify(a.camera),camera,'camera stays stable during a drag');a.gesture=null;
   for(const type of ['helper','result','reveal'])a.game.commit({type});assert.equal(a.game.state.phase,'won');a.reframe();fits(a,a.game.state.objects.flatMap(o=>o.points),'finished');

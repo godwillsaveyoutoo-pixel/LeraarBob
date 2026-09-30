@@ -1,5 +1,6 @@
 // Exercise actual drags in both local battle halves; isolated browser, no cloud writes.
 const assert=require('node:assert/strict'),{CDP}=require('./helpers/online-cdp.cjs');
+const BattleGame=require('../games/wortelbouw_pro_v0.5.0/wortelbouw/battle-config.js');
 const PORT=process.env.VECTOR_BROWSER_PORT||9245,BASE=process.env.VECTOR_BASE_URL||'http://127.0.0.1:8775';
 const frames=c=>c.eval('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
 (async()=>{
@@ -21,17 +22,31 @@ const frames=c=>c.eval('new Promise(r=>requestAnimationFrame(()=>requestAnimatio
    assert.equal(await c.eval(`JSON.stringify(testArenas[${i}].camera)`),camera,'camera is stable while drawing');
    if(touch)await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});else await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...end,button:'left',clickCount:1});await frames(c);
   }
-  async function build(i,start,leg,edge,touch,undo=false){
+  async function build(i,start,leg,edge,touch,undo=false,mode='sum',flip=false){
    const startPoints=await c.eval(`(()=>{const a=testArenas[${i}],f=a.viewFrame(),r=a.canvas.getBoundingClientRect(),side=a.camera.unit*${start},x=(f.left+f.right-side)/2,y=(f.top+f.bottom-side)/2;return [{x:r.left+x,y:r.top+y},{x:r.left+x+side,y:r.top+y+side}]})()`);
    await drag(i,startPoints,touch);assert.equal((await state(i)).objects[0]?.area,start*start,'draw start square');
+   const untouchedMode=await c.eval(`testArenas[${1-i}].mode`);
+   const controls=await c.eval(`(()=>{const a=testArenas[${i}],button=a.sideChoice.querySelector('[data-mode="${mode}"]'),r=button.getBoundingClientRect();return {disabled:button.disabled,width:r.width,height:r.height,x:r.x+r.width/2,y:r.y+r.height/2,hit:button.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}})()`);
+   assert(!controls.disabled&&controls.hit&&controls.width>=44&&controls.height>=44,'Side choices remain reachable');
+   const at={x:controls.x,y:controls.y};
+   if(touch){await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{id:1,...at}]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});}
+   else{await c.send('Input.dispatchMouseEvent',{type:'mousePressed',...at,button:'left',clickCount:1});await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...at,button:'left',clickCount:1});}
+   assert.equal(await c.eval(`testArenas[${i}].mode`),mode);
+   assert.equal(await c.eval(`testArenas[${i}].sideChoice.querySelector('[data-mode="${mode}"]').getAttribute('aria-pressed')`),'true');
+   if(start===1)assert.equal(await c.eval(`testArenas[${i}].sideChoice.querySelector('[data-mode="difference"]').disabled`),true);
    const untouched=await c.eval(`JSON.stringify(testArenas[${1-i}].game.state)`);
-   await drag(i,await points(i,`(()=>{const e=G.edges(s.objects[0])[${edge}],p=G.add(e.a,G.mul(G.sub(e.b,e.a),.17)),out=G.mul(G.perp(G.norm(G.sub(e.b,e.a))),-${leg});return [p,G.add(p,out)]})()`),touch);
+   await drag(i,await points(i,`(()=>{const e=G.edges(s.objects[0])[${edge}],p=G.add(e.a,G.mul(G.sub(e.b,e.a),${flip?.83:.17})),out=G.mul(G.perp(G.norm(G.sub(e.b,e.a))),-${leg});return [p,G.add(p,out)]})()`),touch);
    assert.equal((await state(i)).phase,'helper','triangle is reachable');assert.equal(await c.eval(`testArenas[${i}].game.state.pending.k`),leg,'ruler uses actual camera scale');
+   assert.equal(await c.eval(`testArenas[${i}].game.state.pending.mode`),mode);
+   assert.equal(await c.eval(`testArenas[${i}].game.state.pending.flip`),flip);
+   assert.equal(await c.eval(`[...testArenas[${i}].sideChoice.children].every(b=>b.disabled)`),true,'Side choices freeze once the triangle is placed');
    for(const phase of ['helper','result']){
     await drag(i,await points(i,`(()=>{const e=s.pending.triangle[s.phase],mid=G.mul(G.add(e.a,e.b),.5),out=G.mul(G.sub(G.center(s.pending[s.phase].points),mid),1.6);return [mid,G.add(mid,out)]})()`),touch);
     if(phase==='helper')assert.equal((await state(i)).phase,'result');else await c.wait(`testArenas[${i}].game.state.phase==='won'`);
    }
    assert.equal(await c.eval(`JSON.stringify(testArenas[${1-i}].game.state)`),untouched,'other player is unchanged');
+   assert.equal(await c.eval(`testArenas[${1-i}].mode`),untouchedMode,'Side selection is independent per player');
+   const answer=await c.eval(`({level:testArenas[${i}].game.state.level,actions:testArenas[${i}].game.actions})`);assert(BattleGame.validate(answer.level,answer).ok,'Online/class answer validator accepts this construction');
    if(undo){await c.eval(`testArenas[${i}].undoButton.click()`);assert.equal((await state(i)).phase,'result');await drag(i,await points(i,"(()=>{const e=s.pending.triangle.result,mid=G.mul(G.add(e.a,e.b),.5);return [mid,G.add(mid,G.mul(G.sub(G.center(s.pending.result.points),mid),1.6))]})()"),touch);await c.wait(`testArenas[${i}].game.state.phase==='won'`);}
   }
   const cases=[[2,1,1],[5,1,2],[13,2,3],[18,3,3],[25,3,4],[100,6,8],[104,10,2]];
@@ -41,8 +56,9 @@ const frames=c=>c.eval('new Promise(r=>requestAnimationFrame(()=>requestAnimatio
     await c.eval('LeraarBobTopbar.setCollapsed('+folded+')');await frames(c);
     // Every goal on both halves; reverse the legs for player two, including 2 + 10.
     for(const [n,a,b] of cases){await reset(n);await build(0,a,b,2,w<1000,n===104);await build(1,b,a,0,w<1000);}
+    await reset(5);await build(0,3,2,2,w<1000,true,'difference');await build(1,3,2,0,w<1000,false,'difference',true);
     await c.shot('wortelbouw-battle-space-'+w+(folded?'-folded':''));
-    console.log('PASS '+w+'×'+h+' collapsed='+folded+': all 7 goals, both players, full touch/mouse construction and undo');
+    console.log('PASS '+w+'×'+h+' collapsed='+folded+': all 7 goals, both side choices, both players, full touch/mouse construction and undo');
    }
   }
   // Resizing halfway through a drag cancels only that gesture, never an existing field.
