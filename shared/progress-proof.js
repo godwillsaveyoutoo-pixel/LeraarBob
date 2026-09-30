@@ -11,10 +11,11 @@ async function dependencies(){
  ]);
 }
 function mount({container,account,onBack}){
- let active=true,busy=false,overview=null,catalog=null,controller=null,loaded=false;
- container.innerHTML='<form class="progress-proof-form"><label>Naam op het bewijs <small>Optioneel. Alleen op de PDF; je alias blijft behouden.</small><input id="proofName" name="name" type="text" autocomplete="name" maxlength="100" placeholder="Je voor- en achternaam"></label><label>Voortgang van<select id="proofGame" name="game" disabled><option value="all">Alle spellen</option></select></label><p id="proofSummary" class="progress-proof-summary" aria-live="polite">Voortgang laden…</p><div class="progress-proof-actions"><button id="proofDownload" type="submit" disabled>Download PDF</button><button id="proofRetry" type="button" hidden>Opnieuw laden</button><button id="proofBack" type="button">Terug</button></div><p id="proofMessage" class="progress-proof-message" role="status" aria-live="polite"></p></form>';
- const form=container.querySelector('form'),name=form.elements.name,select=form.elements.game,button=container.querySelector('#proofDownload'),retry=container.querySelector('#proofRetry'),summary=container.querySelector('#proofSummary'),message=container.querySelector('#proofMessage');
+ let active=true,busy=false,overview=null,catalog=null,controller=null,loaded=false,pdfURL=null;
+ container.innerHTML='<form class="progress-proof-form"><label>Naam op het bewijs <small>Optioneel. Alleen op de PDF; je alias blijft behouden.</small><input id="proofName" name="name" type="text" autocomplete="name" maxlength="100" placeholder="Je voor- en achternaam"></label><label>Voortgang van<select id="proofGame" name="game" disabled><option value="all">Alle spellen</option></select></label><p id="proofSummary" class="progress-proof-summary" aria-live="polite">Voortgang laden…</p><div class="progress-proof-actions"><button id="proofDownload" type="submit" disabled>Download PDF</button><button id="proofRetry" type="button" hidden>Opnieuw laden</button><button id="proofBack" type="button">Terug</button></div><div id="proofFile" class="progress-proof-file" hidden><strong>Je PDF is klaar</strong><a id="proofSave">PDF downloaden</a><a id="proofOpen" target="_blank" rel="noopener">PDF openen</a></div><p id="proofMessage" class="progress-proof-message" role="status" aria-live="polite"></p></form>';
+ const form=container.querySelector('form'),name=form.elements.name,select=form.elements.game,button=container.querySelector('#proofDownload'),retry=container.querySelector('#proofRetry'),summary=container.querySelector('#proofSummary'),message=container.querySelector('#proofMessage'),file=container.querySelector('#proofFile'),save=container.querySelector('#proofSave'),open=container.querySelector('#proofOpen');
  document.getElementById('authTitle').textContent='Voortgang downloaden';
+ function clearFile(){if(pdfURL)URL.revokeObjectURL(pdfURL);pdfURL=null;file.hidden=true;save.removeAttribute('href');open.removeAttribute('href');}
  const live=()=>active&&form.isConnected;
  const notify=(text,error=false)=>{message.textContent=text;message.dataset.error=String(error);};
  const state=value=>{busy=value;form.setAttribute('aria-busy',String(value));button.disabled=value||!loaded;select.disabled=value||!loaded;retry.disabled=value;button.textContent=value?'Even wachten…':'Download PDF';};
@@ -36,23 +37,26 @@ function mount({container,account,onBack}){
   try{const next=await window.AxiomaProgress.loadOverview({signal:request.signal});await sameAccount();
    // Reject partial failures before any zero counts or PDF are displayed.
    const value=window.LeraarBobProofModel.build({account,overview:next,catalog},window.LeraarBobCatalogProgress);
-   overview=next;if(!loaded){for(const entry of value.choices){const option=document.createElement('option');option.value=entry.id;option.textContent=entry.title;select.append(option);}}
+   overview=next;if(!loaded){select.replaceChildren(new Option('Alle spellen','all'));for(const entry of value.choices){const option=document.createElement('option');option.value=entry.id;option.textContent=entry.title;select.append(option);}}
    loaded=true;retry.hidden=true;preview();
   }finally{clearTimeout(timer);if(controller===request)controller=null;}
  }
  async function prepare(){if(busy)return;state(true);notify('');try{await refresh();}catch(e){if(live()){loaded=false;summary.textContent='Voortgang niet beschikbaar';notify(e.message||'Laden lukt niet. Probeer opnieuw.',true);retry.hidden=false;}}finally{if(live())state(false);}}
  form.onsubmit=async e=>{
-  e.preventDefault();if(busy||!loaded)return;state(true);notify('Je voortgang wordt opgehaald…');
+  e.preventDefault();if(busy||!loaded)return;clearFile();state(true);notify('Je voortgang wordt opgehaald…');
   try{await refresh();if(!live())return;const waiting=pending();if(waiting.length)throw Error('Synchroniseer eerst '+waiting.join(', ')+'. Open het spel en probeer daarna opnieuw.');
    const value=report(),blob=window.LeraarBobProofRender.documentPDF(value);await sameAccount();
-   const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=window.LeraarBobProofModel.filename(value);document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
-   notify('Je PDF is klaar. Je kunt het bestand nu naar je leerkracht sturen.');
+   pdfURL=URL.createObjectURL(blob);save.href=pdfURL;save.download=window.LeraarBobProofModel.filename(value);open.href=pdfURL;file.hidden=false;
+   // Keep a user-activated download/open path when a browser suppresses the automatic download.
+   try{save.click();}catch(_){}
+   notify('Geen download verschenen? Gebruik PDF downloaden of PDF openen hierboven.');
+   file.scrollIntoView({block:'nearest',behavior:'instant'});
   }catch(e){if(live())notify(e.message||'Je PDF kon niet worden gemaakt. Probeer opnieuw.',true);}
   finally{if(live())state(false);}
  };
- select.onchange=preview;retry.onclick=prepare;container.querySelector('#proofBack').onclick=onBack;
+ name.oninput=()=>{clearFile();if(!busy)preview();};select.onchange=()=>{clearFile();preview();};retry.onclick=prepare;container.querySelector('#proofBack').onclick=onBack;
  void prepare();name.focus({preventScroll:true});container.closest('.auth-sheet,dialog')?.scrollTo({top:0,behavior:'instant'});
- return {destroy(){active=false;controller?.abort();name.value='';overview=null;}};
+ return {destroy(){active=false;controller?.abort();clearFile();name.value='';overview=null;}};
 }
 window.LeraarBobProgressProof=Object.freeze({mount});
 })();

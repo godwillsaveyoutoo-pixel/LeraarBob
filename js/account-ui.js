@@ -352,7 +352,7 @@
         updateHeader();
         if (!overlay.hidden) {
           if (embedded && identityChanged && !detail.pending && ['student', 'teacher'].includes(account?.role)) completeEmbeddedLogin();
-          else if(!avatarBusy) render();
+          else if(!avatarBusy && (!proofHandle || identityChanged || detail.pending)) render();
         }
       });
 

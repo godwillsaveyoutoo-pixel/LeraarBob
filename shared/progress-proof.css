@@ -25,3 +25,9 @@
 #authOverlay .progress-proof-form{gap:12px}
 #authOverlay .progress-proof-message{font-size:12px}
 #authOverlay .progress-proof-actions{scroll-margin-block:12px}
+
+#authOverlay .progress-proof-file{display:flex;flex-wrap:wrap;gap:8px;border-left:3px solid #bd9849;padding:10px 12px;background:#71887716;scroll-margin-block:12px}
+#authOverlay .progress-proof-file[hidden]{display:none}
+#authOverlay .progress-proof-file strong{flex-basis:100%}
+#authOverlay .progress-proof-file a{display:inline-flex;align-items:center;box-sizing:border-box;min-height:44px;padding:10px 12px;border:1px solid var(--line,#80958b);color:inherit;font-weight:650;text-decoration:underline;text-underline-offset:3px}
+#authOverlay .progress-proof-file a:focus-visible{outline:3px solid #d7aa45;outline-offset:2px}

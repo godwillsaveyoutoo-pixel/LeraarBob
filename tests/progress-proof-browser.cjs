@@ -2,7 +2,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{CDP}=require('
 const base='http://127.0.0.1:8775/',sh="document.querySelector('leraarbob-topbar')?.shadowRoot";
 const overview={games:[{game_id:'rechten-trainer',updated_at:'2026-09-30T01:00:00Z',state:{rechtenV2:{platformXp:35,missions:{point:{world:'puntenbaai',completed:true},delta:{world:'hellingrug',completed:false}}}}},{game_id:'vectoren-trainer',state:{storage:{'axioma-vectorentrainer-v020':JSON.stringify({progress:{xp:120}})},completed:['point'],total:24}},{game_id:'gravity-maze',state:{completed:[1,2],total:9}}],trainer:{state:{xp:90,total:12,correct:8}}};
 (async()=>{
- const browser=new CDP(),v=await(await fetch('http://127.0.0.1:9245/json/version')).json();await browser.connect(v.webSocketDebuggerUrl);const {browserContextId}=await browser.send('Target.createBrowserContext');const tabs=[];
+ const browser=new CDP(),v=await(await fetch('http://127.0.0.1:9245/json/version')).json();await browser.connect(v.webSocketDebuggerUrl);const {browserContextId}=await browser.send('Target.createBrowserContext');const tabs=[],downloadPath=fs.mkdtempSync(process.cwd()+'/tmp-proof-download-');await browser.send('Browser.setDownloadBehavior',{behavior:'allow',downloadPath,browserContextId});
  async function open(path='index.html'){
   const {targetId}=await browser.send('Target.createTarget',{url:'about:blank',browserContextId});const c=new CDP();tabs.push(c);await c.connect('ws://127.0.0.1:9245/devtools/page/'+targetId);await c.send('Page.enable');await c.send('Runtime.enable');await c.size(1366,850);
   c.route=async p=>{const u=new URL(p.request.url),fulfill=body=>c.send('Fetch.fulfillRequest',{requestId:p.requestId,responseCode:200,responseHeaders:[{name:'Content-Type',value:'application/javascript'}],body:Buffer.from(body).toString('base64')});
@@ -12,8 +12,9 @@ const overview={games:[{game_id:'rechten-trainer',updated_at:'2026-09-30T01:00:0
     window.proofCalls=[];window.proofFail=false;window.proofDelay=0;
     const client={from(table){const filters={};let single=false;const q={select(){return q},eq(k,v){filters[k]=v;return q},maybeSingle(){single=true;return q},abortSignal(){return q},then(resolve){proofCalls.push({table,filters});const data=account?.id==='proof-student'?(table==='axioma_progress'?rows.trainer:single?rows.games.find(g=>g.game_id===filters.game_id)||null:rows.games):single?null:[];setTimeout(()=>resolve(proofFail?{error:Error('Offline')}:{data}),proofDelay);}};return q},rpc(){return Promise.resolve({data:[]});}};
     window.AxiomaAuth={CLASSES:['4TMW'],ready:async()=>({account}),getAccount:async()=>account,getSession:async()=>({user:account}),onChange:fn=>{listeners.add(fn);return()=>listeners.delete(fn)},client:()=>client};
+    window.proofRefresh=()=>listeners.forEach(fn=>fn({account}));
     window.proofSwitch=()=>{account={id:'other',role:'student',alias:'ander',class_code:'4TMW'};listeners.forEach(fn=>fn({account}));};
-    window.proofDownloads=[];HTMLAnchorElement.prototype.click=function(){if(this.download){proofDownloads.push({url:this.href,name:this.download});}else HTMLElement.prototype.click.call(this);};
+    window.proofDownloads=[];window.proofNativeClick=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){if(this.download){proofDownloads.push({url:this.href,name:this.download});}else HTMLElement.prototype.click.call(this);};
    })();`);
    if(u.origin!==new URL(base).origin)return fulfill('');return c.send('Fetch.continueRequest',{requestId:p.requestId});
   };await c.send('Fetch.enable',{patterns:[{urlPattern:'*'}]});await c.send('Page.navigate',{url:base+path});await c.wait(sh+".querySelector('.account-label')?.textContent==='muis'");return c;
@@ -27,14 +28,27 @@ const overview={games:[{game_id:'rechten-trainer',updated_at:'2026-09-30T01:00:0
    assert(await c.eval('[...document.querySelectorAll(".progress-proof-form button,.progress-proof-form input,.progress-proof-form select")].filter(e=>e.getClientRects().length).every(e=>e.getBoundingClientRect().height>=44)'));
    await c.eval('document.getElementById("proofDownload").scrollIntoView({block:"nearest",behavior:"instant"})');await c.shot("progress-proof-layout");assert(await c.eval('document.getElementById("proofDownload").getBoundingClientRect().bottom<=innerHeight+1'),JSON.stringify({w,h,rect:await c.eval('document.getElementById("proofDownload").getBoundingClientRect().toJSON()')}));await c.shot('progress-proof-form-'+w);
   }
-  await c.eval('document.getElementById("proofName").value="Élodie D’Haene"');await c.click('proofDownload');await c.wait('proofDownloads.length===1');
+  await c.eval('document.getElementById("proofName").value="Élodie D’Haene";proofRefresh()');
+  assert.equal(await c.eval('document.getElementById("proofName")?.value'),'Élodie D’Haene','Refreshing the same account must keep the export form and name');await c.click('proofDownload');await c.wait('proofDownloads.length===1');
+  assert.equal(await c.eval('document.getElementById("proofFile").hidden'),false);
   const receipt=await c.eval('proofDownloads[0]');assert.match(receipt.name,/Elodie-D-Haene.*\.pdf$/);
   const bytes=await c.eval('(async()=>Array.from(new Uint8Array(await(await fetch(proofDownloads[0].url)).arrayBuffer())))()');fs.writeFileSync('/tmp/leraarbob-progress-proof.pdf',Buffer.from(bytes));assert(Buffer.from(bytes).subarray(0,8).toString().startsWith('%PDF-1.4'));
+  // The automatic anchor click is suppressed by the fixture. Use a real pointer click on the persistent link.
+  await c.size(390,844);await c.eval('document.getElementById("proofSave").scrollIntoView({block:"nearest",behavior:"instant"});HTMLAnchorElement.prototype.click=proofNativeClick');
+  const point=await c.eval('(()=>{const r=document.getElementById("proofSave").getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()');
+  await c.send('Input.dispatchMouseEvent',{type:'mousePressed',...point,button:'left',clickCount:1});await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',...point,button:'left',clickCount:1});
+  for(let i=0;i<100&&!fs.existsSync(downloadPath+'/'+receipt.name);i++)await new Promise(r=>setTimeout(r,50));
+  assert.equal(fs.readFileSync(downloadPath+'/'+receipt.name).equals(Buffer.from(bytes)),true,'The explicit link must save the actual PDF to disk');
+  assert.equal(await c.eval('document.getElementById("proofOpen").href===proofDownloads[0].url && document.getElementById("proofOpen").target==="_blank"'),true);
+  await c.shot('progress-proof-ready-mobile');
+  await c.eval('HTMLAnchorElement.prototype.click=function(){if(this.download)proofDownloads.push({url:this.href,name:this.download});else proofNativeClick.call(this)}');
   assert.equal(await c.eval('Object.values(localStorage).some(v=>v.includes("Élodie"))'),false);
   assert.equal(await c.eval('JSON.stringify(proofCalls).includes("Élodie")'),false);
   await c.eval('document.getElementById("proofGame").value="rechtenwereld";document.getElementById("proofGame").dispatchEvent(new Event("change"))');assert.match(await c.eval('document.getElementById("proofSummary").textContent'),/1 spel · 35 XP/);
+  assert.equal(await c.eval('document.getElementById("proofFile").hidden'),true,'Changing the game invalidates the previous PDF');
+  assert.equal(await c.eval('(async()=>{try{await fetch(proofDownloads[0].url);return false}catch{return true}})()'),true,'Old PDF URLs must be revoked');
   await c.eval('proofFail=true');await c.click('proofDownload');await c.wait('document.getElementById("proofMessage").dataset.error==="true"');assert.equal(await c.eval('proofDownloads.length'),1);assert.match(await c.eval('document.getElementById("proofMessage").textContent'),/niet volledig/);
-  await c.eval('proofFail=false');await c.click('proofDownload');await c.wait('proofDownloads.length===2');
+  await c.eval('proofFail=false;proofDelay=150');await c.click('proofDownload');await c.eval('proofRefresh()');await c.wait('proofDownloads.length===2');await c.eval('proofDelay=0');
   await c.eval('localStorage.setItem("axioma:rechten:v2:"+encodeURIComponent(AXIOMA_CONFIG.url)+":student:proof-student",JSON.stringify({dirty:true}))');await c.click('proofDownload');await c.wait('document.getElementById("proofMessage").textContent.includes("Synchroniseer eerst")');assert.equal(await c.eval('proofDownloads.length'),2);
   await c.eval('localStorage.removeItem("axioma:rechten:v2:"+encodeURIComponent(AXIOMA_CONFIG.url)+":student:proof-student")');
   await c.eval('proofDelay=350');await c.click('proofDownload');await c.click('authClose');await new Promise(r=>setTimeout(r,700));assert.equal(await c.eval('proofDownloads.length'),2);
@@ -42,6 +56,6 @@ const overview={games:[{game_id:'rechten-trainer',updated_at:'2026-09-30T01:00:0
   // Embedded game profiles use the same form and assets resolved from site root.
   for(const path of ['games/gravity/','games/vectoren/classroom.html']){const game=await open(path);await picker(game);assert.match(await game.eval('document.getElementById("proofSummary").textContent'),/245 XP/);await game.size(390,844);await game.shot('progress-proof-embedded-'+(path.includes('gravity')?'gravity':'vector'));await game.click('proofBack');assert(await game.eval('!!document.getElementById("downloadProgressBtn")'));}
   for(const tab of tabs)assert.deepEqual(tab.errors,[]);
-  console.log('PASS: PDF download, name privacy, game choice, exact XP, 4 screen sizes/light-dark, embedded profiles, load errors/retry, pending saves, cancel/account switch');
- }finally{await browser.send('Target.disposeBrowserContext',{browserContextId});tabs.forEach(c=>c.ws.close());browser.ws.close();}
+  console.log('PASS: real on-disk PDF download after suppressed automatic click, same-account refresh during export, URL cleanup, PDF download, name privacy, game choice, exact XP, 4 screen sizes/light-dark, embedded profiles, load errors/retry, pending saves, cancel/account switch');
+ }finally{await browser.send('Target.disposeBrowserContext',{browserContextId});tabs.forEach(c=>c.ws.close());browser.ws.close();fs.rmSync(downloadPath,{recursive:true,force:true});}
 })().catch(e=>{console.error(e);process.exitCode=1});
