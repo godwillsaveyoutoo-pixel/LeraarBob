@@ -10,7 +10,7 @@ document.body.classList.toggle('lb-nav-pilot',navPilot);
 const isHome=script.dataset.page==='home',selector=script.dataset.header||'header';
 const KEY='leraarbob-topbar-collapsed',mounted=new WeakSet();let collapsed=false,current=null,account=null,queued=false;
 try{collapsed=localStorage.getItem(KEY)==='true';}catch{}
-const icon={account:'<circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/>',settings:'<path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="8" cy="18" r="2"/>',menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',up:'<path d="m6 15 6-6 6 6"/>',down:'<path d="m6 9 6 6 6-6"/>'};
+const icon={account:'<circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/>',menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',up:'<path d="m6 15 6-6 6 6"/>',down:'<path d="m6 9 6 6 6-6"/>'};
 Object.assign(icon,{
  home:'<path d="m3 10 9-7 9 7v10H3Z"/><path d="M9 20v-7h6v7"/>',
  compass:'<circle cx="12" cy="12" r="9"/><path d="m16 8-3 5-5 3 3-5Z"/>',
@@ -22,6 +22,10 @@ Object.assign(icon,{
  help:'<circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 1 1 5 2c-2 1-2 1-2 3M12 17h.01"/>',
  chart:'<path d="M4 3v17h17M8 16v-4M13 16V8M18 16V5"/>',
  full:'<path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/>',
+ fullExit:'<path d="M3 8h5V3M16 3v5h5M8 21v-5H3M21 16h-5v5"/>',
+ moon:'<path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/>',
+ contrast:'<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18Z" fill="currentColor"/>',
  right:'<path d="m9 5 7 7-7 7"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>'
 });
 const menuStyle={playBtn:['route','cyan'],freeBtn:['arrow','green'],canvasBtn:['pencil','violet'],battleBtn:['battle','amber'],classBtn:['classroom','blue'],helpBtn:['help','cyan'],progressBtn:['chart','green'],roomsNav:['compass','cyan'],rulesNav:['help','cyan']};
@@ -99,16 +103,63 @@ function syncProgress(){
  badge.querySelector('.progress-value').textContent=label;
  badge.title=description;badge.setAttribute('aria-label',description);
 }
+// Direct display actions reuse the engine's theme handler and never alter game state.
+let fullscreenPending=false;
+const fullscreenActive=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+function themeSource(){return document.querySelector('#themeBtn,#modeBtn[aria-pressed],#theme');}
+function syncDisplayControls(){
+ if(!current)return;
+ const s=current.host.shadowRoot,full=s.querySelector('.fullscreen'),on=fullscreenActive();
+ const label=on?'Volledig scherm verlaten':'Volledig scherm';
+ full.title=label;full.setAttribute('aria-label',label);full.setAttribute('aria-pressed',String(on));full.disabled=fullscreenPending;
+ if(full.dataset.active!==String(on)){full.dataset.active=String(on);full.innerHTML=svg(on?'fullExit':'full');}
+ const theme=s.querySelector('.theme-toggle'),source=themeSource();
+ if(current.themeSource!==source){
+  current.themeObserver?.disconnect();current.themeSource=source;
+  if(source){current.themeObserver=new MutationObserver(syncDisplayControls);current.themeObserver.observe(source,{attributes:true,attributeFilter:['aria-pressed','aria-label','title','disabled'],childList:true,subtree:true,characterData:true});}
+ }
+ theme.hidden=!source&&script.dataset.themeMode!=='site';if(theme.hidden)return;
+ const contrast=!!source&&/contrast/i.test(source.textContent+' '+source.getAttribute('aria-label'));
+ const pressed=source?.hasAttribute('aria-pressed')?source.getAttribute('aria-pressed')==='true':document.documentElement.dataset.mode==='dark';
+ const themeLabel=contrast?'Extra contrast':pressed?'Lichte weergave':'Donkere weergave';
+ theme.title=themeLabel;theme.setAttribute('aria-label',themeLabel);theme.setAttribute('aria-pressed',String(pressed));theme.disabled=source?.disabled===true;
+ const glyph=contrast?'contrast':pressed?'sun':'moon';
+ if(theme.dataset.icon!==glyph){theme.dataset.icon=glyph;theme.innerHTML=svg(glyph);}
+}
+function toggleTheme(){
+ const source=themeSource();
+ if(source)source.click();
+ else if(script.dataset.themeMode==='site'){
+  const mode=document.documentElement.dataset.mode==='dark'?'light':'dark';
+  document.documentElement.dataset.mode=mode;
+  try{localStorage.setItem('axioma-mode',mode);}catch{}
+  const color=document.querySelector('meta[name="theme-color"]');if(color)color.content=mode==='dark'?'#14241e':'#f7f8f4';
+ }
+ syncDisplayControls();
+}
+async function toggleFullscreen(){
+ if(fullscreenPending)return;
+ const s=current.host.shadowRoot,notice=s.querySelector('.display-notice');notice.hidden=true;
+ const on=fullscreenActive(),target=on?document:document.documentElement;
+ const method=on?(document.exitFullscreen||document.webkitExitFullscreen):(target.requestFullscreen||target.webkitRequestFullscreen);
+ const enabled=document.documentElement.requestFullscreen?document.fullscreenEnabled:document.webkitFullscreenEnabled;
+ const explain=message=>{notice.querySelector('span').textContent=message;notice.hidden=false;};
+ if(!method||(!on&&enabled===false)){explain('Volledig scherm is hier niet beschikbaar. Probeer de optie in het menu van je browser.');return;}
+ fullscreenPending=true;syncDisplayControls();
+ try{await method.call(target);}catch{explain(on?'Volledig scherm verlaten lukte niet. Probeer de Escape-toets of het menu van je browser.':'Volledig scherm openen lukte niet. Probeer opnieuw of gebruik het menu van je browser.');}
+ finally{fullscreenPending=false;syncDisplayControls();}
+}
+for(const event of ['fullscreenchange','webkitfullscreenchange'])document.addEventListener(event,syncDisplayControls);
+new MutationObserver(syncDisplayControls).observe(document.documentElement,{attributes:true,attributeFilter:['data-mode','class']});
 function nativeMenu(header){return header.querySelector('#trainerMenu,#main-menu,.appNav');}
 function goPlatformSection(id,hash){
  if(isHome){const node=document.getElementById(id);if(node){node.click();return;}}
  location.assign(home+(hash||''));
 }
-function showMenu(kind){
+function showMenu(){
  const {host,header}=current,s=host.shadowRoot,dialog=s.querySelector('dialog'),list=s.querySelector('.menu-list');list.replaceChildren();
- const settings=kind==='settings';dialog.dataset.kind=kind;
- s.querySelector('.menu-title').textContent=settings?'Instellingen':navPilot?(isHome?'leraarBob':title):title;
- s.querySelector('.menu-eyebrow').textContent=settings?'WEERGAVE':navPilot?'NAVIGATIE':'WAAR WIL JE HEEN?';
+ s.querySelector('.menu-title').textContent=navPilot?(isHome?'leraarBob':title):title;
+ s.querySelector('.menu-eyebrow').textContent=navPilot?'NAVIGATIE':'WAAR WIL JE HEEN?';
  const section=(label,className)=>{const group=document.createElement('section');group.className=className;if(label){const heading=document.createElement('h3');heading.textContent=label;group.append(heading);}list.append(group);return group;};
  const add=(group,label,action,{description='',glyph='arrow',tone='cyan',source}={})=>{
   const b=document.createElement('button');b.type='button';b.className='menu-card';b.dataset.tone=tone;
@@ -119,11 +170,10 @@ function showMenu(kind){
   if(source){b.dataset.source=source.id;b.disabled=source.disabled===true;}
   b.onclick=()=>{dialog.close();action();};group.append(b);return b;
  };
- if(!settings){
   if(!isHome){
    const game=section('Huidig spel','menu-options menu-game');
    const menu=nativeMenu(header);
-   const nodes=[...(menu||header).querySelectorAll(menu?'button,a':'.lb-gamebar button,.lb-gamebar a')].filter(node=>!node.hidden&&!node.matches('[data-nav-hidden],[data-collapse-topbar],#themeBtn,#fullBtn,[data-platform-home],.axiomaHome,.lb-legacy-brand,#logout')&&(menu||!node.closest('[hidden]')));
+   const nodes=[...(menu||header).querySelectorAll(menu?'button,a':'.lb-gamebar button,.lb-gamebar a')].filter(node=>!node.hidden&&!node.matches('[data-nav-hidden],[data-collapse-topbar],#themeBtn,#modeBtn[aria-pressed],#theme,#fullBtn,[data-fullscreen],[data-platform-home],.axiomaHome,.lb-legacy-brand,#logout')&&(menu||!node.closest('[hidden]')));
    const modes=window.LeraarBobPlayModes,gameId=modes?.current()?.id;
    const entries=nodes.map(node=>{const details=menuDetails(node),mode=modes?.navigation(node,gameId);if(mode)Object.assign(details,{label:mode.title,description:mode.devices,glyph:mode.glyph,group:mode.group==='battle'?'multiplayer':'learning'});return {node,details};}).filter(e=>e.details.label);
    const isBattle=e=>e.details.group==='multiplayer'||['battleBtn','classBtn'].includes(e.node.id)||/^(Duo|Groepsbattle|Online duo|Klasmodus|Battle met twee)/i.test(e.details.label);
@@ -156,16 +206,9 @@ function showMenu(kind){
   }
   const accountGroup=section('Account','menu-nav menu-account');
   add(accountGroup,account?'Profiel':'Inloggen',openAccount,{glyph:'account'});
-  add(accountGroup,'Instellingen',()=>queueMicrotask(()=>showMenu('settings')),{glyph:'settings'});
- }else{
-  const options=section('Weergave','menu-options');
-  add(options,document.fullscreenElement?'Volledig scherm verlaten':'Volledig scherm',()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();p?.catch(()=>{});},{description:'Gebruik alle schermruimte',glyph:'full'});
-  const mode=document.querySelector('#themeBtn,#modeBtn[aria-pressed],#theme');if(mode){const details=menuDetails(mode);add(options,details.label||'Weergave',()=>mode.click(),{...details,glyph:'settings',source:mode});}
- }
  const footer=section('','menu-footer');const folded=collapsed;add(footer,folded?'Bovenbalk tonen':navPilot?'Bovenbalk verbergen':'Bovenbalk inklappen',()=>setCollapsed(!folded,true),{glyph:folded?'down':'up'});
- for(const button of s.querySelectorAll('.menu,.mobile-menu'))button.setAttribute('aria-expanded',String(!settings));
- if(settings)s.querySelector('.settings').setAttribute('aria-expanded','true');
- const opener=s.querySelector(settings?'.settings':getComputedStyle(s.querySelector('.mobile-menu')).display!=='none'?'.mobile-menu':'.menu');
+ for(const button of s.querySelectorAll('.menu,.mobile-menu'))button.setAttribute('aria-expanded','true');
+ const opener=s.querySelector(getComputedStyle(s.querySelector('.mobile-menu')).display!=='none'?'.mobile-menu':'.menu');
  const r=opener.getBoundingClientRect();dialog.style.setProperty('--close-x',r.x+'px');dialog.style.setProperty('--close-y',r.y+'px');
  if(!dialog.open)dialog.showModal();
 }
@@ -226,7 +269,7 @@ function syncMobileContext(){
  detailNode.textContent=detail;detailNode.hidden=!detail;
 }
 function mount(header){
- if(mounted.has(header))return;current?.resizeObserver?.disconnect();mounted.add(header);
+ if(mounted.has(header))return;current?.resizeObserver?.disconnect();current?.themeObserver?.disconnect();mounted.add(header);
  const context=document.createElement('div');context.className='lb-gamebar';
  // Keep live nodes: game event handlers and progress updates continue to work.
  while(header.firstChild)context.append(header.firstChild);
@@ -259,7 +302,6 @@ function mount(header){
  .menu-nav .menu-card{padding:10px;gap:9px}.menu-nav .menu-mark{width:28px;height:28px;background:none;border:0}.menu-nav .menu-name{font-size:13px}.menu-nav .menu-description{font-size:11px;margin-top:3px}
  .menu-footer{margin-top:auto;padding-top:14px;border-top:1px solid var(--lb-line,#799aae35)}
  .menu-footer .menu-card{width:100%;min-height:44px;padding:2px 8px;border:0;background:none}.menu-footer .menu-mark{border:0;background:none}.menu-footer .menu-name{font-size:12px;font-weight:500;opacity:.75}.menu-footer .menu-chevron{display:block;margin-left:auto}
- dialog[data-kind=settings] .menu-options{grid-template-columns:1fr}dialog[data-kind=settings] .menu-card{flex-wrap:nowrap;min-height:76px}dialog[data-kind=settings] .menu-copy{flex-basis:auto}
  @media(max-width:500px){dialog{inset:8px;width:calc(100vw - 16px);height:calc(100dvh - 16px);border-radius:var(--lb-panel-radius,14px)}.dialog-head{padding:20px}.menu-list{padding:16px;gap:20px}.menu-options .menu-card{padding:12px;min-height:108px;flex-direction:column;align-items:flex-start;justify-content:flex-start}.menu-nav .menu-card{padding:10px 6px;gap:4px}}
  @media(max-height:550px){.dialog-head{padding:12px 20px}.menu-options .menu-card{flex-wrap:nowrap;min-height:76px}.menu-options .menu-copy{flex-basis:auto}.menu-list{gap:14px;padding:16px}}
 
@@ -275,7 +317,7 @@ function mount(header){
   :host([data-nav-pilot=true]) .mobile-title{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   :host([data-nav-pilot=true]) .mobile-detail{font-size:11px;font-weight:650;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   :host([data-nav-pilot=true]) .actions{display:flex;flex:none;gap:0;margin-left:auto}
-  :host([data-nav-pilot=true]) .teacher-link,:host([data-nav-pilot=true]) .account,:host([data-nav-pilot=true]) .settings,:host([data-nav-pilot=true]) .menu{display:none}
+  :host([data-nav-pilot=true]) .teacher-link,:host([data-nav-pilot=true]) .account,:host([data-nav-pilot=true]) .menu{display:none}
   :host([data-nav-pilot=true]) .actions button{width:44px;min-width:44px;height:44px;padding:9px}
   :host([data-nav-pilot=true]) .progress{min-height:40px;margin:0 2px 0 0;padding:5px 7px;border:0;background:none;font-size:11px}
   :host([data-nav-pilot=true]) .progress-icon{display:none}
@@ -317,22 +359,36 @@ function mount(header){
  :host([data-nav-pilot=true]) dialog .menu-description{display:none}
  :host([data-nav-pilot=true]) dialog .dialog-head{padding:8px 16px 8px 60px;min-height:52px}
  @media(max-width:650px),(max-height:500px) and (max-width:900px){
-  :host([data-nav-pilot=true]) .account,:host([data-nav-pilot=true]) .settings{display:inline-flex}
+  :host([data-nav-pilot=true]) .account{display:inline-flex}
   :host([data-nav-pilot=true]) .account .account-label{display:none}
   :host([data-nav-pilot=true]) .mobile-detail{display:none}
  }
- </style><div class="row" part="row"><button part="mobile-menu" class="mobile-menu" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Menu openen" title="Menu">${svg('menu')}</button><a part="brand" class="brand" data-platform-home href="${home}" aria-label="leraarBob, startpagina">leraarBob</a><nav part="crumbs" class="crumbs" aria-label="Je locatie"></nav><div class="mobile-context" part="mobile-context" aria-live="polite"><strong class="mobile-title">${isHome?'leraarBob':title}</strong><span class="mobile-detail" hidden></span></div><div class="actions" part="actions"><output class="progress" part="progress" hidden role="status" aria-live="polite" aria-atomic="true"><span class="progress-icon" aria-hidden="true"></span><span class="progress-value" aria-hidden="true"></span></output><a class="teacher-link" part="teacher-link" href="${new URL('teacher/',root)}" hidden>Mijn klassen</a><button part="toolbar-button account" class="account" type="button"><i class="account-mark" aria-hidden="true">${svg('account')}</i><span class="account-label" part="account-label">Inloggen</span></button><button part="toolbar-button settings" class="settings" type="button" aria-haspopup="dialog" aria-label="Instellingen" title="Instellingen">${svg('settings')}</button><button part="toolbar-button menu" class="menu" type="button" aria-haspopup="dialog" aria-label="Menu" title="Menu">${svg('menu')}</button><button part="toolbar-button collapse" class="collapse" type="button" aria-label="Bovenbalk inklappen" title="Bovenbalk inklappen" aria-controls="${header.id}">${svg('up')}</button></div></div><dialog aria-labelledby="lb-menu-title"><div class="dialog-head"><div><span class="menu-eyebrow"></span><h2 id="lb-menu-title" class="menu-title">Menu</h2></div><button class="close" type="button" aria-label="Menu sluiten" autofocus>${svg('close')}</button></div><div class="menu-list"></div></dialog>`;
+ /* Icons stay small while every action retains a 44px touch target. */
+ .fullscreen svg,.theme-toggle svg{width:20px;height:20px}
+ .actions button[hidden],.display-notice[hidden]{display:none!important}
+ .theme-toggle[aria-pressed=true]{background:var(--lb-hover,#ffffff12)}
+ .display-notice{display:flex;align-items:center;gap:12px;padding:4px 12px;border-bottom:1px solid var(--lb-line,#799aae50);font-size:13px;font-weight:500}
+ .display-notice span{flex:1}.display-notice button{min-width:44px;flex:none}
+ /* Reserve both compact rows, including games with a fixed-height ::part(row). */
+ @media(max-width:430px){
+  :host([data-nav-pilot=true]) .row:has(.theme-toggle:not([hidden])){display:grid;grid-template-columns:44px minmax(0,1fr);grid-template-rows:24px 44px;gap:0 4px!important;padding:4px 6px!important;height:auto!important;min-height:77px!important}
+  :host([data-nav-pilot=true]) .row:has(.theme-toggle:not([hidden])) .mobile-menu{grid-column:1;grid-row:1/3}
+  :host([data-nav-pilot=true]) .row:has(.theme-toggle:not([hidden])) .mobile-context{grid-column:2;grid-row:1}
+  :host([data-nav-pilot=true]) .row:has(.theme-toggle:not([hidden])) .actions{grid-column:2;grid-row:2;width:100%;justify-content:flex-end}
+  :host([data-nav-pilot=true]) .row:has(.theme-toggle:not([hidden])) .progress{margin-right:auto}
+ }
+ </style><div class="row" part="row"><button part="mobile-menu" class="mobile-menu" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Menu openen" title="Menu">${svg('menu')}</button><a part="brand" class="brand" data-platform-home href="${home}" aria-label="leraarBob, startpagina">leraarBob</a><nav part="crumbs" class="crumbs" aria-label="Je locatie"></nav><div class="mobile-context" part="mobile-context" aria-live="polite"><strong class="mobile-title">${isHome?'leraarBob':title}</strong><span class="mobile-detail" hidden></span></div><div class="actions" part="actions"><output class="progress" part="progress" hidden role="status" aria-live="polite" aria-atomic="true"><span class="progress-icon" aria-hidden="true"></span><span class="progress-value" aria-hidden="true"></span></output><a class="teacher-link" part="teacher-link" href="${new URL('teacher/',root)}" hidden>Mijn klassen</a><button part="toolbar-button account" class="account" type="button"><i class="account-mark" aria-hidden="true">${svg('account')}</i><span class="account-label" part="account-label">Inloggen</span></button><button part="toolbar-button fullscreen" class="fullscreen" type="button" aria-label="Volledig scherm" title="Volledig scherm" aria-pressed="false">${svg('full')}</button><button part="toolbar-button theme-toggle" class="theme-toggle" type="button" aria-label="Donkere weergave" title="Donkere weergave" aria-pressed="false" hidden>${svg('moon')}</button><button part="toolbar-button menu" class="menu" type="button" aria-haspopup="dialog" aria-label="Menu" title="Menu">${svg('menu')}</button><button part="toolbar-button collapse" class="collapse" type="button" aria-label="Bovenbalk inklappen" title="Bovenbalk inklappen" aria-controls="${header.id}">${svg('up')}</button></div></div><div class="display-notice" role="status" hidden><span></span><button type="button" class="dismiss-notice" aria-label="Melding sluiten">${svg('close')}</button></div><dialog aria-labelledby="lb-menu-title"><div class="dialog-head"><div><span class="menu-eyebrow"></span><h2 id="lb-menu-title" class="menu-title">Menu</h2></div><button class="close" type="button" aria-label="Menu sluiten" autofocus>${svg('close')}</button></div><div class="menu-list"></div></dialog>`;
  header.append(host,context);
  const parent=header.parentElement,layout=getComputedStyle(parent);
  if(layout.display==='grid'){const rows=layout.gridTemplateRows.split(' ').length;parent.classList.add(rows>=4?'lb-grid-four':rows===3?'lb-grid-three':'lb-grid-two');}
  const measure=()=>{if(!header.isConnected||current?.header!==header)return;const height=collapsed?0:Math.ceil(header.getBoundingClientRect().height);document.documentElement.style.setProperty('--lb-header-height',height+'px');if(header.matches('.atlas-header'))document.documentElement.style.setProperty('--header-height',height+'px');};
  const resizeObserver=new ResizeObserver(measure);resizeObserver.observe(header);
  current={header,host,context,resizeObserver,collapse:shadow.querySelector('.collapse')};
- shadow.querySelector('dialog').addEventListener('close',()=>{for(const button of shadow.querySelectorAll('.menu,.mobile-menu,.settings'))button.setAttribute('aria-expanded','false');});
- shadow.querySelector('.account').onclick=openAccount;shadow.querySelector('.settings').onclick=()=>showMenu('settings');shadow.querySelector('.menu').onclick=()=>showMenu('menu');shadow.querySelector('.mobile-menu').onclick=()=>showMenu('menu');shadow.querySelector('.close').onclick=()=>shadow.querySelector('dialog').close();current.collapse.onclick=()=>setCollapsed(true,true);
+ shadow.querySelector('dialog').addEventListener('close',()=>{for(const button of shadow.querySelectorAll('.menu,.mobile-menu'))button.setAttribute('aria-expanded','false');});
+ shadow.querySelector('.account').onclick=openAccount;shadow.querySelector('.fullscreen').onclick=toggleFullscreen;shadow.querySelector('.theme-toggle').onclick=toggleTheme;shadow.querySelector('.dismiss-notice').onclick=()=>{shadow.querySelector('.display-notice').hidden=true;shadow.querySelector('.fullscreen').focus();};shadow.querySelector('.menu').onclick=()=>showMenu();shadow.querySelector('.mobile-menu').onclick=()=>showMenu();shadow.querySelector('.close').onclick=()=>shadow.querySelector('dialog').close();current.collapse.onclick=()=>setCollapsed(true,true);
  if(navPilot){let start=null;shadow.querySelector('dialog').addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')return;start={x:e.clientX,y:e.clientY};},{passive:true});shadow.querySelector('dialog').addEventListener('pointermove',e=>{if(!start)return;const dx=e.clientX-start.x,dy=e.clientY-start.y;if(dx<-70&&Math.abs(dx)>Math.abs(dy)*1.35){start=null;shadow.querySelector('dialog').close();}else if(Math.abs(dy)>45)start=null;},{passive:true});shadow.querySelector('dialog').addEventListener('pointerup',()=>{start=null;},{passive:true});}
  // Redundant navigation is replaced; lesson controls and game indicators stay below.
- for(const node of context.querySelectorAll('.brand,.atlas-brand,.mission-breadcrumbs,.breadcrumbs,.brand-caption,#accountBtn,#guestBtn,#identity,#logout,#menuBtn,#menu,.topbar-collapse,.brandline,.rf-game-brand,#profileBtn,.atlas-actions>[data-screen=profile],.atlas-actions>[data-fullscreen]'))node.classList.add('lb-legacy-nav');
+ for(const node of context.querySelectorAll('.brand,.atlas-brand,.mission-breadcrumbs,.breadcrumbs,.brand-caption,#accountBtn,#guestBtn,#identity,#logout,#menuBtn,#menu,.topbar-collapse,.brandline,.rf-game-brand,#profileBtn,#themeBtn,#modeBtn[aria-pressed],#theme,#fullBtn,.atlas-actions>[data-screen=profile],.atlas-actions>[data-fullscreen]'))node.classList.add('lb-legacy-nav');
  for(const node of context.querySelectorAll('[data-platform-home],.axiomaHome,#axioma-home'))node.classList.add('lb-legacy-nav');
  const menu=nativeMenu(header);if(menu)menu.classList.add('lb-legacy-nav');
  context.querySelector('.topline')?.classList.add('lb-legacy-nav');
@@ -340,10 +396,10 @@ function mount(header){
  if(script.dataset.context==='none')context.classList.add('lb-empty');
  const vector=location.pathname.includes('/vectoren/');if(vector){for(const a of context.querySelectorAll('a[href*="Axioma_Vectorentrainer"]'))a.classList.add('lb-legacy-nav');for(const n of context.querySelectorAll('h1,strong,header>span'))if(!n.closest('.status-chip,.round-chip'))n.classList.add('lb-legacy-nav');}
  context.classList.toggle('lb-empty',context.classList.contains('lb-empty')||![...context.querySelectorAll('button,a,span,h1,h2,strong,select')].some(n=>!n.closest('.lb-legacy-nav,[hidden]')&&n.textContent.trim()));
- syncCrumbs();syncAccount();syncProgress();syncMobileContext();setCollapsed(collapsed);
+ syncCrumbs();syncAccount();syncProgress();syncMobileContext();syncDisplayControls();setCollapsed(collapsed);
 }
-function scan(){queued=false;if(!cssReady)return;const header=document.querySelector(selector);if(header){mount(header);if(header.inert!==collapsed)header.inert=collapsed;syncCrumbs();syncProgress();syncMobileContext();}watchAccount();watchSocial();}
+function scan(){queued=false;if(!cssReady)return;const header=document.querySelector(selector);if(header){mount(header);if(header.inert!==collapsed)header.inert=collapsed;syncCrumbs();syncProgress();syncMobileContext();syncDisplayControls();}watchAccount();watchSocial();}
 new MutationObserver(()=>{if(!queued){queued=true;requestAnimationFrame(scan);}}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','inert']});
 for(const event of ['axioma:game-ready','axioma:game-progress'])window.addEventListener(event,syncProgress);
-window.LeraarBobTopbar=Object.freeze({setCollapsed,openAccount,openMenu:()=>showMenu('menu')});scan();
+window.LeraarBobTopbar=Object.freeze({setCollapsed,openAccount,openMenu:()=>showMenu()});scan();
 })();

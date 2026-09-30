@@ -480,3 +480,14 @@ centrale en ingebedde profiel, vier schermformaten, licht/donker, naamprivacy,
 PDF-download, mislukt laden, retry, annuleren en accountwissels. Het voorbeeld-PDF
 staat in `/tmp/leraarbob-progress-proof.pdf`; screenshots in
 `/tmp/leraarbob-v10-screenshots/progress-proof-*.png`.
+
+## Directe weergaveknoppen
+
+`node tests/topbar-display-browser.cjs` controleert op de lokale webserver (8775)
+met geïsoleerde Chromium-contexten (9245) de directe scherm- en weergaveknoppen.
+Controleert echte fullscreen-overgangen, browsergestuurd verlaten, niet-ondersteunde
+of geweigerde verzoeken, bestaande themahandlers, bewaarde licht/donkerkeuze,
+XP-plaatsing, aanraakdoelen op vier schermformaten, menu en inklappen/herladen.
+De test wijzigt geen echte accounts. Screenshots: `/tmp/leraarbob-v10-screenshots/display-*.png`.
+De bredere navigatietest `tests/platform-topbar-browser.cjs` ondersteunt
+`LB_SCREENSHOT_DIR=/tmp/leraarbob-topbar/screenshots` voor tijdelijke uitvoer.
