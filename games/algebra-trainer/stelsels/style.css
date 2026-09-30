@@ -6,3 +6,4 @@
 :root{--lb-surface:#fffef9;--lb-ink:#203f43;--lb-line:#c5d1c9;--lb-hover:#e9f1eb;--lb-panel-radius:0px;--lb-control-radius:0px;--lb-tile-radius:0px;--lb-mark-radius:0px}
 body .lb-restore{border-radius:0}body:has(.lb-collapsed) .workspace-nav{padding-left:54px}
 html[data-mode=dark]{--bg:#172927;--paper:#203632;--ink:#eff4e9;--muted:#becfc6;--line:#587169;--soft:#2b4940;--accent:#357d68;color-scheme:dark}html[data-mode=dark] a,html[data-mode=dark] .eyebrow{color:#a5dfc5}
+.workspace-nav{position:sticky;top:var(--lb-header-height,60px);z-index:35;background:var(--bg)}body:has(.lb-collapsed) .workspace-nav{top:0}
