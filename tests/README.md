@@ -449,3 +449,21 @@ Zie [v10-verslag](../docs/v10-online-duo.md) voor uitrol en resterende grenzen.
 ## Algebra Trainer
 
 `node --test tests/algebra-trainer.test.cjs` controleert alle 17 vormen met exacte breuken. `node tests/algebra-trainer-browser.cjs` gebruikt dezelfde geïsoleerde browser en webserver als de Rechtenwereld-releaseproeven en controleert formaat, navigatie, hervatten, afdrukken, accountwissel en offline opslag.
+
+## Rechtenwereld: XP naar het centrale profiel
+
+`node --test tests/rechten-account-progress.test.cjs` voert de echte opslag-RPC en
+de Rechtenwereld-migratie uit in PGlite. Controleert de versiegebonden opslag,
+behoud van oude trainer-XP, revisieconflicten, accountisolatie, ongeldige data en
+herstel van lokaal bewaarde XP na een geweigerde cloudopslag.
+
+`node tests/rechten-account-progress-browser.cjs` controleert het volledige pad
+van het echte spel via de accountservice en SQL-functie naar de startpagina en
+de XP-badge, inclusief mobiel, opnieuw openen en een tweede leerling. Vereist
+de lokale webserver op poort 8775 en een geïsoleerde Chromium op poort 9245;
+`VECTOR_BASE_URL` en `VECTOR_BROWSER_PORT` kunnen deze vervangen. Beide tests
+gebruiken `@electric-sql/pglite` of `VECTOR_PGLITE_MODULE`.
+
+`tests/rechten-account-progress-database.sql` mag uitsluitend binnen
+`BEGIN`/`ROLLBACK` uitgevoerd worden. Test de gedeployde RPC met tijdelijke
+accounts, ook onder de rol `authenticated`; alle testgegevens worden teruggedraaid.
