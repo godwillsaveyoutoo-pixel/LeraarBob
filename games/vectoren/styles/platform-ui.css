@@ -47,3 +47,9 @@ body :is(button,input,select,textarea,dialog,[role=dialog],[role=menu],.trainer-
  leraarbob-topbar::part(crumb-game){font-size:14px;padding:6px 10px}
  leraarbob-topbar::part(crumb-link){font-size:11px;padding:6px}
 }
+
+/* Navigation shell rollout: avoid a second platform row on mobile. */
+@media(max-width:650px){
+ body.lb-nav-pilot leraarbob-topbar::part(row){height:52px;min-height:52px;padding:4px 6px}
+ body.lb-nav-pilot .trainer-header.lb-header{min-height:52px}
+}

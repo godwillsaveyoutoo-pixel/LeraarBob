@@ -24,7 +24,10 @@ function rpc(action,data={}){
  const expected=epoch;
  const work=chain.catch(()=>{}).then(async()=>{
   if(expected!==epoch)throw Error('Je account is gewijzigd.');
-  const {data:result,error}=await AxiomaAuth.client().rpc(Game.rpc,{p_action:action,p_data:{...data,game:Game.id}});
+  const client=AxiomaAuth.client();
+  const {data:result,error}=Game.id==='rechten'?await client.functions.invoke('rechten-class',{body:{action,data}}):await client.rpc(Game.rpc,{p_action:action,p_data:{...data,game:Game.id}});
+  if(error&&Game.id==='rechten'){let detail;try{detail=await error.context?.json();}catch{}throw Error(detail?.error||'De klasbattle is tijdelijk niet bereikbaar. Je kunt altijd alleen verder oefenen.');}
+  if(result?.error)throw Error(result.error);
   if(expected!==epoch)throw Error('Je account is gewijzigd.');if(error)throw error;return result;
  });chain=work;return work;
 }
@@ -33,7 +36,9 @@ function rank(rows,key){const sorted=[...rows].sort((a,b)=>b[key]-a[key]||a.alia
 function renderRanking(){
  const signature=JSON.stringify([state.phase,state.round,state.members]);if(signature===lastRanking)return;lastRanking=signature;
  const ranks=rank(state.members,'points'),before=rank(state.members,'previous_points');$('ranking').replaceChildren();
- for(const p of state.members){const li=document.createElement('li');if(p.user_id===account.id)li.className='mine';const movement=before.get(p.user_id)-ranks.get(p.user_id);
+ const sorted=[...state.members].sort((a,b)=>ranks.get(a.user_id)-ranks.get(b.user_id)||a.alias.localeCompare(b.alias));
+ const shown=sorted.filter((p,index)=>index<10||p.user_id===account.id);
+ for(const p of shown){const li=document.createElement('li');if(p.user_id===account.id)li.className='mine';const movement=before.get(p.user_id)-ranks.get(p.user_id);
   for(const [value,cls] of [[ranks.get(p.user_id),'place'],[p.alias,'name'],[`${p.points} punten`,'points'],[state.round>0?(movement>0?`↑ ${movement}`:movement<0?`↓ ${-movement}`:'—'):'','movement '+(movement>0?'rise':movement<0?'fall':'')]]){const span=document.createElement('span');span.textContent=value;span.className=cls;li.append(span);}$('ranking').append(li);
  }
  $('ranking').classList.remove('changed');requestAnimationFrame(()=>$('ranking').classList.add('changed'));
@@ -48,7 +53,7 @@ function accept(next){
  if(next.game&&next.game!==Game.id)throw Error('Deze sessie hoort bij een ander spel. Open de deelnamelink van je leerkracht.');state=next;if(!state.owner){const url=new URL(location.href);url.searchParams.set('code',state.code);if(url.href!==location.href){history.replaceState(null,'',url.href);updateInviteCode();}}offset=Date.parse(next.server_time)-Date.now();store(storageKey(),state.id);
  if(state.mine?.submitted||!pending||pending.id!==state.id||pending.round!==state.round||state.phase!=='question'){pending=null;store(pendingKey(),null);}
  display('session');render();schedule();
- if(state.owner&&state.phase==='grading')grade();
+ if(Game.id!=='rechten'&&state.owner&&state.phase==='grading')grade();
 }
 function render(){
  const phase=state.phase,late=waiting(),activeMembers=state.members.filter(p=>(p.eligible_from_round||0)<=state.round),ended=['finished','closed'].includes(phase),results=phase==='results'||ended;
@@ -56,9 +61,9 @@ function render(){
  $('sessionTitle').textContent=phase==='lobby'?'Wachten op de klas':ended?'Samen op koers':`Ronde ${state.round+1} van ${state.total}`;
  $('closeSession').hidden=!state.owner||ended;$('leaveSession').hidden=state.owner||phase!=='lobby';$('copyLink').hidden=!state.owner||ended;$('joinInstructions').hidden=!state.owner||phase!=='lobby';
  $('lobby').hidden=phase!=='lobby';$('playArea').hidden=late||!['question','grading'].includes(phase);$('lateWait').hidden=!late||phase==='lobby'||ended;$('lateTitle').textContent=state.round+1<state.total?'Even wachten op de volgende ronde':'De laatste ronde is bezig';$('lateHelp').textContent=state.round+1<state.total?'Je alias staat in de sessie. Je speelt mee vanaf ronde '+(state.round+2)+', zodra je leerkracht die start.':'De laatste ronde is al gestart. Je kunt de eindranglijst bekijken en bij een nieuwe battle meedoen.';$('results').hidden=!results;
- $('members').replaceChildren();for(const p of state.members){const li=document.createElement('li');li.textContent=p.alias;$('members').append(li);}
+ $('members').replaceChildren();for(const p of state.members){const li=document.createElement('li');if(window.LeraarBobAvatar)li.append(LeraarBobAvatar.create(p));li.append(document.createTextNode(p.alias));$('members').append(li);}
  $('count').textContent=`${state.members.length} ${state.members.length===1?'leerling':'leerlingen'} in de sessie`;
- $('lobbyHelp').textContent=state.owner?'Deel de code of deelnamelink. Jij kiest wanneer je start; leerlingen kunnen ook later aansluiten. Houd dit leerkrachtvenster open tijdens de sessie.':'Je doet mee! Wacht tot je leerkracht de eerste ronde start.';
+ $('lobbyHelp').textContent=state.owner?'Deel de code of deelnamelink. Jij kiest wanneer je start; leerlingen kunnen ook later aansluiten. '+(Game.id==='rechten'?'Je kunt deze sessie na herladen hervatten.':'Houd dit leerkrachtvenster open tijdens de sessie.'):'Je doet mee! Wacht tot je leerkracht de eerste ronde start.';
  $('start').hidden=!state.owner;$('start').disabled=!state.members.length||actionBusy;
  $('answered').textContent=`${activeMembers.filter(p=>p.answered).length} / ${activeMembers.length} ingediend`;
  const lateMembers=state.members.filter(p=>p.eligible_from_round>state.round);$('lateCount').hidden=!state.owner||!lateMembers.length;$('lateCount').textContent=lateMembers.length+' later aangesloten: '+lateMembers.map(p=>p.alias).join(', ');
@@ -71,7 +76,7 @@ function render(){
  if(results)renderRanking();renderBoard();tick();
 }
 function tick(){if(!state)return;const left=Math.max(0,Math.ceil((Date.parse(state.deadline)-Date.now()-offset)/1000));$('timer').textContent=state.phase==='question'?`${left} s`:'Tijd afgelopen';if(state.phase==='question'&&left===0)send({type:'vector-battle-resolved',match:state.id,index:state.round,message:'De tijd is om. Wacht op de uitslag.'});}
-function schedule(){clearTimeout(pollTimer);if(!state||['closed','finished'].includes(state.phase))return;const captured=epoch;pollTimer=setTimeout(async()=>{try{const next=await rpc('state',{id:state.id});if(captured===epoch){notice('');accept(next);}}catch(e){if(captured===epoch){notice('Verbinding onderbroken. We proberen opnieuw. '+errorText(e));schedule();}}},1500);}
+function schedule(){clearTimeout(pollTimer);if(!state||['closed','finished'].includes(state.phase))return;const captured=epoch;pollTimer=setTimeout(async()=>{try{const next=await rpc('state',{id:state.id});if(captured===epoch){notice('');accept(next);if(pending&&state.phase==='question')submit();}}catch(e){if(captured===epoch){notice('Verbinding onderbroken. We proberen opnieuw. '+errorText(e));schedule();}}},1500);}
 async function action(name,data={}){if(actionBusy)return;actionBusy=true;document.querySelectorAll('form button,#start,#next,#confirmStop').forEach(b=>b.disabled=true);try{notice('');accept(await rpc(name,{id:state?.id,...data}));}catch(e){notice(errorText(e));}finally{actionBusy=false;document.querySelectorAll('form button,#start,#next,#confirmStop').forEach(b=>b.disabled=false);if(state)render();}}
 async function grade(){
  if(grading)return;grading=true;const current=state;
@@ -88,12 +93,14 @@ async function identity(next){
  if(!account){display('login');return;}
  if(!['teacher','student'].includes(account.role)){display('login');notice('Dit account heeft geen leerling- of leerkrachtprofiel.');return;}
  display('setup');$('setupTitle').textContent=account.role==='teacher'?'Speel samen met je klas.':'Welkom, '+account.alias+'.';$('joinIdentity').textContent='Je doet mee als '+(account.alias||'leerling')+' met je leraarBob-account.';$('hostForm').hidden=account.role!=='teacher';$('joinForm').hidden=account.role!=='student';$('setupText').textContent=account.role==='teacher'?'Kies de oefeningen en de rondetijd. Je ontvangt een code die je met de klas deelt.':'Voer de code van je leerkracht in. Je naam verschijnt vanzelf in de wachtkamer.';
- const id=read(storageKey());if(id){try{const previous=await rpc('state',{id});if(account.role==='student'&&inviteCode&&previous.code!==inviteCode)return;pending=read(pendingKey());accept(previous);}catch(e){store(storageKey(),null);store(pendingKey(),null);notice('Je vorige sessie kon niet worden hervat. '+errorText(e));}}
+ const id=read(storageKey());if(id){try{const previous=await rpc('state',{id});if(account.role==='student'&&inviteCode&&previous.code!==inviteCode)return;pending=read(pendingKey());accept(previous);}catch(e){notice('Je vorige sessie kon nog niet worden hervat. Je bewaarde inzending blijft behouden. '+errorText(e));}}
 }
 for(const world of Game.worlds)$('world').append(new Option(world.name,world.id));
 $('world').append(new Option('Mixed · meerdere werelden','mixed'));
 function pool(){return $('world').value==='mixed'?Game.mixedSkills:Game.worlds.find(w=>w.id===$('world').value).skills;}
 function updateSkills(){ $('skill').replaceChildren(new Option('Mix van dit onderdeel','mix'));for(const id of pool())$('skill').append(new Option(Game.skills.find(s=>s.id===id).label,id)); }
+const requestedWorld=new URLSearchParams(location.search).get('world');
+if(Game.worlds.some(w=>w.id===requestedWorld))$('world').value=requestedWorld;
 $('world').onchange=updateSkills;updateSkills();
 $('logout').onclick=async()=>{try{await AxiomaAuth.signOut();await identity(null);}catch(e){notice(errorText(e));}};
 $('hostForm').onsubmit=e=>{e.preventDefault();const selected=$('skill').value==='mix'?pool():[$('skill').value];const seeds=crypto.getRandomValues(new Uint32Array(10));const deck=Array.from({length:Number($('rounds').value)},(_,i)=>({skill:selected[i%selected.length],seed:seeds[i],variant:i%4,level:1}));action('create',{deck,seconds:Number($('seconds').value)});};
@@ -111,6 +118,7 @@ addEventListener('message',event=>{
 });
 frame.addEventListener('load',()=>frame.contentWindow.postMessage({type:'vector-battle-ping'},target));
 setInterval(tick,250);
+addEventListener('online',()=>{if(state){schedule();if(pending)submit();}});
 addEventListener('axioma:login-complete',async event=>{await identity(event.detail.account);if(!$('setup').hidden)(account?.role==='teacher'?$('world'):$('joinCode')).focus();});
 AxiomaAuth.onChange(({account:a,pending:p})=>{if(!p)identity(a);});
 AxiomaAuth.ready().then(({account:a})=>{if(!a){display('login');return;}return identity(a);}).catch(e=>{display('login');notice(errorText(e));});

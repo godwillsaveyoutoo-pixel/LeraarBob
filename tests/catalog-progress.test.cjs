@@ -121,16 +121,17 @@ test('central XP uses saved totals once and keeps completed puzzles separate', (
   const catalog=JSON.parse(script('games.json'));
   const overview={errors:{},trainer:{state:{xp:140,total:24,correct:18}},games:[
     {game_id:'vectoren-trainer',state:{storage:{'axioma-vectorentrainer-v020':JSON.stringify({progress:{xp:320},draft:{session:{xp:90}}})},completed:['a','a','b'],total:20}},
-    {game_id:'wortelbouw',state:{completed:['one','two'],total:14}},
-    {game_id:'gravity-maze',state:{completed:[1,2,3],total:9}},
-    {game_id:'rechten-trainer',state:{xp:140,rechtenV2:{events:[],missions:{}}}}
+    {game_id:'wortelbouw',state:{completed:['one','two'],total:14,platformXp:20}},
+    {game_id:'gravity-maze',state:{completed:[1,2,3],total:9,platformXp:30}},
+    {game_id:'rechten-trainer',state:{rechtenV2:{events:[],missions:{},platformXp:50}}}
   ]};
   const total=api.aggregate([...catalog,catalog.find(g=>g.id==='vectoren-trainer')],overview);
-  assert.equal(total.xp,460);assert.equal(total.completed,7);
-  assert.equal(total.entries.find(e=>e.id==='wortelbouw').xp,null);
+  assert.equal(total.xp,560);assert.equal(total.completed,7);
+  assert.equal(total.entries.find(e=>e.id==='wortelbouw').xp,20);
   assert.equal(total.entries.find(e=>e.id==='rechtenwereld').label,'Leerroute opgeslagen');
   assert.equal(api.aggregate(catalog,{...overview,errors:{trainer:true}}),null);
   assert.equal(api.aggregate(catalog,{...overview,errors:{games:true}}),null);
   assert.equal(api.aggregate(catalog,null),null);
   assert.equal(api.earnedXP({id:'vectoren-trainer'},{state:{storage:{'axioma-vectorentrainer-v020':'invalid'}}}),null);
+  assert.equal(api.earnedXP({id:'reele-getallen-trainer',progressType:'levels'},{state:{storage:{'axioma-real-numbers-v1':JSON.stringify({progress:{xp:75}})}}}),75);
 });

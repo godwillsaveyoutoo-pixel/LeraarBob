@@ -1,0 +1,23 @@
+const fs=require('node:fs'),assert=require('node:assert/strict');
+const {createDB}=require('./helpers/rechten-online-db.cjs');
+const E=require('../shared/multiplayer/rechten-learn-engine.cjs');
+(async()=>{const h=await createDB(),{db,ids}=h;try{
+ for(const file of ['20260929235628_rechten_samen_leren.sql','20260929235633_rechten_learn_invitations.sql'])await db.exec(fs.readFileSync('supabase/migrations/'+file,'utf8'));
+ const rpc=async(action,data)=>db.transaction(async tx=>{await tx.exec('set local role service_role');return(await tx.query('select public.axioma_rechten_learn_worker($1,$2) result',[action,JSON.stringify(data)])).rows[0].result;});
+ let r=await rpc('create',{user_id:ids.alex,skill:'point_plot',capacity:2});assert.equal(r.data.phase,'lobby');await assert.rejects(rpc('read',{user_id:ids.outsider,id:r.id}),/neemt niet deel/);
+ await assert.rejects(rpc('create',{user_id:ids.teacher,skill:'point_plot',capacity:2}),/leerling/);
+ r=await rpc('join',{user_id:ids.sam,code:r.code});assert.equal(r.members.length,2);await assert.rejects(rpc('join',{user_id:ids.outsider,code:r.code}),/gestart of vol|groepje is vol/);
+ const {createHandler}=await import('../supabase/functions/rechten-learn/handler.js');
+ const handler=createHandler({url:'https://test.invalid',anonKey:'anon',serviceKey:'trusted',engine:E,fetcher:async(url,opts)=>{const token=opts.headers.Authorization.slice(7);if(url.endsWith('/user'))return new Response(JSON.stringify(ids[token]?{id:ids[token]}:{}),{status:ids[token]?200:401});assert.equal(token,'trusted');const a=JSON.parse(opts.body);try{return new Response(JSON.stringify(await rpc(a.p_action,a.p_data)));}catch(e){return new Response(JSON.stringify({message:e.message}),{status:400});}}});
+ const call=async(user,action,data)=>{const response=await handler(new Request('https://test.invalid',{method:'POST',headers:{Authorization:'Bearer '+user},body:JSON.stringify({action,data})}));const body=await response.json();if(!response.ok)throw Error(body.error);return body;};
+ let s=await call('alex','state',{id:r.id});const request=crypto.randomUUID();s=await call('alex','start',{id:r.id,request,version:s.version});assert.equal(s.phase,'idea');const version=s.version;
+ s=await call('alex','start',{id:r.id,request,version:0});assert.equal(s.version,version);
+ s=await call('alex','idea',{id:r.id,request:crypto.randomUUID(),version:s.version,answer:{steps:[]}});assert.equal(s.mine.idea,true);
+ let other=await call('sam','state',{id:r.id});assert(!other.mine.answer);assert.equal(other.ideas,null);
+ other=await call('sam','idea',{id:r.id,request:crypto.randomUUID(),version:0,answer:{steps:[]}});assert.equal(other.stale,true);assert.equal(other.mine.idea,false);
+ other=await call('sam','idea',{id:r.id,request:crypto.randomUUID(),version:other.version,answer:{steps:[]}});assert.equal(other.phase,'build');assert.equal(other.ideas.length,2);
+ await assert.rejects(call('sam','draft',{id:r.id,request:crypto.randomUUID(),version:other.version,revision:other.revision,answer:{steps:[]}}),/partner bouwt/);
+ await db.query("update public.axioma_profiles set class_code='OTHER' where user_id=$1",[ids.sam]);await assert.rejects(call('sam','state',{id:r.id}),/klas is gewijzigd|eigen klas/);
+ const grants=await db.query("select has_function_privilege('authenticated','public.axioma_rechten_learn_worker(text,jsonb)','execute') worker,has_table_privilege('authenticated','axioma_private.rechten_learn_rooms','select') rooms");assert.deepEqual(grants.rows[0],{worker:false,rooms:false});
+ console.log('PASS cooperative SQL/Edge: account and class membership, capacity, authenticated identity, private ideas, revisions, duplicate retry, role enforcement, no direct access');
+}finally{await db.close();}})().catch(e=>{console.error(e);process.exitCode=1});

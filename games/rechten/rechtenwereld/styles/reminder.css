@@ -1,13 +1,20 @@
 /* Keep lesson information reachable at every supported size and zoom level. */
-.atlas-actions .reminder-open{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:6px 12px;border:1px solid #b9b895;border-radius:12px;background:#fff9e4;color:#574d2f;font:20px/1.1 var(--hand);white-space:nowrap}
+.boundary-mission>.reminder-open{position:fixed;left:50%;bottom:96px;z-index:18;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:7px 14px;border:1px solid #b9b895;border-radius:999px;background:#fff9e4f2;color:#574d2f;font:20px/1.1 var(--hand);white-space:nowrap;box-shadow:0 5px 18px #17344428;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.boundary-mission>.reminder-open:hover{background:#fff5d2;border-color:#a79d72}.boundary-mission>.reminder-open:active{transform:translateX(-50%) scale(.97)}
 .reminder-dialog{width:min(520px,calc(100vw - 32px));max-height:calc(100dvh - 24px);margin:auto;padding:0;border:1px solid #c7bfa6;border-radius:18px;background:#fff9e9 var(--paper-texture);color:var(--atlas-ink);box-shadow:0 12px 60px #17344444;overflow:auto;overscroll-behavior:contain}
 .reminder-dialog::backdrop{background:#16344180}
 .reminder-dialog .reminder-close{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;margin:0;padding:10px 18px;border:0;border-bottom:1px solid #d4cdb7;border-radius:0;background:#fff9e9;color:#344e58;font:20px/1.1 var(--hand)}
 .reminder-content{padding:22px 28px 28px;font:24px/1.3 var(--hand)}
 .reminder-content h2{display:flex;align-items:center;gap:10px;margin:0 0 20px;font:32px/1.2 var(--hand)}
 .reminder-content p{margin:16px 0}.reminder-content strong{color:#246787;font-weight:500}.reminder-content .reminder-sketch{max-height:150px}.reminder-content .line-rules{margin-top:16px}.reminder-content .derive-rule{font-size:28px}.reminder-content .reminder-small,.reminder-content .derive-small,.reminder-content .line-small-note{font-size:22px;line-height:1.3}
-@media(max-width:900px){.boundary-mission .breadcrumbs>a:first-child,.boundary-mission .breadcrumbs>a:first-child+.ui-icon{display:none}.atlas-actions .reminder-open{font-size:17px;padding:6px 8px}.atlas-actions .reminder-open>.ui-icon{display:none}}
+@media(max-width:900px){.boundary-mission .breadcrumbs>a:first-child,.boundary-mission .breadcrumbs>a:first-child+.ui-icon{display:none}.boundary-mission>.reminder-open{font-size:17px;padding:6px 10px}.boundary-mission>.reminder-open>.ui-icon{display:inline-flex}}
 @media(max-height:760px) and (orientation:landscape),(max-height:900px) and (min-aspect-ratio:2/1){
  .boundary-mission .atlas-header{gap:14px;padding-inline:16px}.boundary-mission .brand-lettering{font-size:27px}.boundary-mission .brand-lettering small{font-size:9px}.boundary-mission .brand-pencil{width:17px;height:34px}.boundary-mission .breadcrumbs{font-size:18px;gap:5px;border:0;padding-left:0}.boundary-mission .account-stats{display:none}.boundary-mission .atlas-actions{gap:3px}.boundary-mission .icon-button{height:44px;width:44px}
 }
-@media(forced-colors:active){.reminder-dialog,.reminder-dialog .reminder-close,.atlas-actions .reminder-open{background:Canvas;color:CanvasText;border:1px solid CanvasText}.reminder-dialog::backdrop{background:Canvas;opacity:.8}}
+@media(forced-colors:active){.reminder-dialog,.reminder-dialog .reminder-close,.boundary-mission>.reminder-open{background:Canvas;color:CanvasText;border:1px solid CanvasText}.reminder-dialog::backdrop{background:Canvas;opacity:.8}}
+
+/* The reminder belongs to the exercise, not to the collapsible platform/header chrome. */
+@media(min-width:1100px) and (min-height:761px){.boundary-mission>.reminder-open{bottom:110px}}
+@media(max-height:760px) and (orientation:landscape),(max-height:900px) and (min-aspect-ratio:2/1){.boundary-mission>.reminder-open{bottom:66px;min-height:40px;padding:5px 11px;font-size:16px}}
+@media(max-width:700px) and (orientation:landscape){.boundary-mission>.reminder-open{bottom:65px;min-height:38px;padding:4px 10px;font-size:15px}}
+@media(orientation:portrait){.boundary-mission>.reminder-open{bottom:96px}}

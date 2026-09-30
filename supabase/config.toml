@@ -1,0 +1,10 @@
+project_id = "leraarbob"
+
+[functions.rechten-duo]
+verify_jwt = true
+
+[functions.rechten-class]
+verify_jwt = true
+
+[functions.rechten-learn]
+verify_jwt = true

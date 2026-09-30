@@ -3,25 +3,37 @@ const {test}=require('node:test'),assert=require('node:assert/strict'),fs=requir
 const R=require('../games/rechten/rechtenwereld/mission-runtime.js'),S=require('../games/rechten/rechtenwereld/components/shell-view.js'),G=require('../games/rechten/rechtenwereld/components/boundary-view.js'),M=require('../games/rechten/rechtenwereld/semantic-math-core.js');
 const root=path.resolve(__dirname,'..');
 function freeze(v){if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v)}return v}
-test('world-shell refactor preserves the exact v2 validators, IDs, adapters and storage bytes',()=>{
- const files=require('../docs/rechten-v2/world-shell/PRESERVED_CORE.json');assert.equal(Object.keys(files).length,7);
- for(const [file,hash] of Object.entries(files).filter(([file])=>!file.endsWith('/mission-runtime.js')))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex'),hash,file);
+test('world-shell keeps saved-evidence format, storage and skill IDs byte-identical',()=>{
+ const files=require('../docs/rechten-v2/world-shell/PRESERVED_CORE.json');
+ // The expanded exercise engine and UI have behavioral tests; persisted evidence and IDs stay stable.
+ for(const file of ['evidence-adapter.js','storage.js','content/skills.json']){
+  const name='games/rechten/rechtenwereld/'+file;
+  assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,name))).digest('hex'),files[name],name);
+ }
 });
-test('all areas open and the five Grenspas stops start their exercises, without mutating progress or unlocks',()=>{
- const state=freeze(R.start(R.initial(),'grenspas')),before=JSON.stringify(state),world=S.world(state,{}),area=S.area(state,{});
- assert.equal((world.match(/data-world-node=/g)||[]).length,5);assert.equal((world.match(/data-screen="area" data-area=/g)||[]).length,6);
- assert.equal((area.match(/data-skill=/g)||[]).length,5);assert.equal((area.match(/data-start="grenspas"/g)||[]).length,6);
+test('map shows all five destinations while unavailable worlds cannot start exercises',()=>{
+ const state=freeze(R.initial()),before=JSON.stringify(state),world=S.world(state,{});
+ assert.equal((world.match(/data-world-node=/g)||[]).length,5);
+ for(const id of ['grenspas','formulewerf','signaalstad'])assert(world.includes('place-'+id+' is-locked'));
+ assert(world.includes('Voorkennis · vrij herhalen'));assert(world.includes('Naar Hellingrug'));
+ // Catch malformed quotes that swallowed the recommendation button's content.
+ assert.match(world, /id="start-recommended"[^>]*data-screen="area" data-area="hellingrug" data-zone="route">/);
  assert.equal(JSON.stringify(state),before);
- assert(world.includes('Voorkennis · vrij herhalen'));assert(world.includes('Naar Hellingrug'));assert(world.includes('0 / 1 afgerond'));assert(area.includes('data-skill="zeroRead"'));assert(area.includes('data-skill="signchart"'));
+ const opened=freeze(R.start(R.initial(),'grenspas')),snapshot=JSON.stringify(opened),area=S.area(opened,{});
+ assert.equal((area.match(/data-skill=/g)||[]).length,5);assert.equal((area.match(/data-start="grenspas"/g)||[]).length,6);
+ assert(area.includes('data-skill="zeroRead"'));assert(area.includes('data-skill="signchart"'));assert.equal(JSON.stringify(opened),snapshot);
 });
-test('completed map status uses existing evidence and survives explicit mission replay without granting mastery',()=>{
+test('completed map status survives replay without inventing XP or mastery',()=>{
  let state=R.start(R.initial(),'grenspas');state.events.push({taskId:R.active(state).task.id,attemptId:'symbol:3',skill:'sign',phase:'execute',variant:0,correct:true,supported:true,mastery:false});
- assert(S.progress(state).complete);assert.match(S.header(state),/data-platform-progress="levels" data-value="1" data-total="21"/);const before=JSON.stringify(state.events);state=R.start(state,'grenspas',true);
- assert(S.progress(state).complete);assert.match(S.header(state),/data-platform-progress="levels" data-value="1"/);assert(S.area(state,{}).includes('skill-positive is-completed'));assert.equal(JSON.stringify(state.events),before);assert.equal(state.events[0].mastery,false);
+ assert(S.progress(state).complete);assert.match(S.header(state),/data-platform-progress="xp" data-value="0" data-total="21"/);assert(S.header(state).includes('1/21 levels afgerond'));
+ const before=JSON.stringify(state.events);state=R.start(state,'grenspas',true);
+ assert(S.progress(state).complete);assert.match(S.header(state),/data-platform-progress="xp" data-value="0"/);assert(S.area(state,{}).includes('skill-positive is-completed'));assert.equal(JSON.stringify(state.events),before);assert.equal(state.events[0].mastery,false);
 });
-test('HUD uses only actual legacy values; unknown XP/streak are not filled with mockup numbers',()=>{
- const state=R.initial();assert(!S.header(state).includes('xp-stat'));assert(!S.header(state).includes('streak'));
- const hud=S.header(state,{legacy:{state:{xp:617,streak:4}}});assert(hud.includes('617'));assert.match(hud,/data-platform-progress="xp" data-value="617"/);assert(hud.includes('4 dagen'));assert(!hud.includes('596'));assert(!hud.includes('2 dagen'));
+test('HUD reads the migrated XP ledger, without counting legacy XP twice or inventing a streak',()=>{
+ const state=R.initial();assert(!S.header(state).includes('streak'));
+ assert.match(S.header(state,{legacy:{state:{xp:617,streak:4}}}),/data-platform-progress="xp" data-value="0"/);
+ state.platformXp=617;const hud=S.header(state,{legacy:{state:{xp:999,streak:4}}});
+ assert.match(hud,/data-platform-progress="xp" data-value="617"/);assert(!hud.includes('999'));assert(!hud.includes('4 dagen'));
 });
 test('boundary rendering shows the learner pin, never a prefilled solution or automatic evidence hint',()=>{
  let state=R.start(R.initial(),'grenspas'),m=R.active(state);const empty=G.graph(m);assert(!empty.includes('class="pin-label"'));assert(!empty.includes('class="positive-line"'));

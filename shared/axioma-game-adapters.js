@@ -9,6 +9,7 @@ function indexed(key,total,field='lastLevel'){
  return {keys:[key],hydrate(state){const done=numbers(state,0,total);put(state,key,{completed:done,[field]:next(done,0,total)})}};
 }
 const adapters={
+ 'algebra-trainer':{keys:['leraarbob.algebra.v1']},
  'wortelbouw':{keys:['axioma.wortelbouw.progress.v1']},
  'pythagoras':{keys:['axioma.pythagoras.completed.v1','axioma.pythagoras.current.v1'],hydrate(state){const done=numbers(state,1,10);put(state,this.keys[0],done);put(state,this.keys[1],next(done,1,10))}},
  'stelsels':{keys:['axioma.stelsels.completed.v1','axioma.stelsels.current.v1'],hydrate(state){const done=numbers(state,0,14);put(state,this.keys[0],done);put(state,this.keys[1],next(done,0,14))}},

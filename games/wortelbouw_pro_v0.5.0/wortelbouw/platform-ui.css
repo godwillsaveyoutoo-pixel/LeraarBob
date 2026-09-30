@@ -105,3 +105,12 @@ body.topbar-collapsed #battleStage{top:calc(var(--lb-header-height,0px) + 56px)}
  leraarbob-topbar::part(crumb-game),leraarbob-topbar::part(crumb-link){padding-inline:5px}
  leraarbob-topbar::part(crumb-game)::before{display:none}
 }
+
+/* Navigation shell rollout: platform navigation becomes one compact row. */
+@media(max-width:650px){
+ body.lb-nav-pilot leraarbob-topbar::part(row){height:52px;min-height:52px;padding:4px 6px}
+ body.lb-nav-pilot #puzzleBar{top:var(--lb-header-height,52px)}
+ body.lb-nav-pilot #app #gameShell{top:calc(var(--lb-header-height,52px) + 64px)}
+}
+body.lb-nav-pilot.topbar-collapsed #puzzleBar{top:0}
+body.lb-nav-pilot.topbar-collapsed #app #gameShell{top:64px}

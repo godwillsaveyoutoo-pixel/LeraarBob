@@ -2,9 +2,9 @@
 (function(root){
 'use strict';
 function attach(app){
- const mission=app.querySelector('.boundary-mission'),source=mission?.querySelector('.boundary-workspace aside'),actions=mission?.querySelector('.atlas-actions');
- if(!source||!actions)return;
- const button=document.createElement('button');button.type='button';button.className='reminder-open';button.id='open-reminder';button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-controls','reminder-dialog');button.innerHTML=RechtenV2Shell.icon('light',20)+'<span>Herinnering</span>';actions.prepend(button);
+ const mission=app.querySelector('.boundary-mission'),source=mission?.querySelector('.boundary-workspace aside');
+ if(!source||!mission)return;
+ const button=document.createElement('button');button.type='button';button.className='reminder-open';button.id='open-reminder';button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-controls','reminder-dialog');button.innerHTML=RechtenV2Shell.icon('light',20)+'<span>Herinnering</span>';mission.append(button);
  const dialog=document.createElement('dialog');dialog.id='reminder-dialog';dialog.className='reminder-dialog';dialog.setAttribute('aria-labelledby','reminder-title');
  const content=source.cloneNode(true);content.className='reminder-content';content.querySelector('h2').id='reminder-title';
  const close=document.createElement('button');close.type='button';close.className='reminder-close';close.innerHTML=RechtenV2Shell.icon('close',20)+'<span>Terug naar oefening</span>';

@@ -13,7 +13,7 @@
   <script src="geometry.js" defer></script>
   <script src="progress.js" defer></script>
   <link rel="stylesheet" href="platform-ui.css">
-  <script src="../../../shared/leraarbob-topbar.js" data-title="Wortelbouw Pro" data-header="#topbar" data-game-href="games/wortelbouw_pro_v0.5.0/wortelbouw/index.html" defer></script>
+  <script src="../../../shared/leraarbob-topbar.js" data-title="Wortelbouw" data-nav-pilot="true" data-header="#topbar" data-game-href="games/wortelbouw_pro_v0.5.0/wortelbouw/index.html" defer></script>
   <script src="platform-ui.js" defer></script>
 </head>
 <body>
@@ -23,10 +23,10 @@
       <button id="gameMenuCrumb" data-screen="world" type="button">Wortelbouw Pro</button>
       <span class="crumb-divider" aria-hidden="true">›</span><button id="worldMenuCrumb" type="button">Konijnengrond</button>
     </nav>
-    <nav id="trainerMenu" hidden aria-label="Spelnavigatie"><a href="classroom.html"><span>Groepsbattle<small>Start een sessie of doe mee</small></span></a>
-      <button id="proLevels"><span>Opgaven<small><span id="completedCount">0/14</span> afgerond · kies je opgave</small></span></button>
-      <a id="battleBtn" href="battle.html"><span>Battle met twee<small>Bouw naast elkaar</small></span></a>
-      <button id="proOverview"><span>Je bouwwerk<small>Alles in beeld</small></span></button>
+    <nav id="trainerMenu" hidden aria-label="Spelnavigatie"><a href="classroom.html" data-nav-group="multiplayer" data-nav-group-label="Samen spelen" data-nav-icon="classroom" data-nav-tone="blue"><span>Groepsbattle<small>Start een sessie of doe mee</small></span></a>
+      <button id="proLevels" data-nav-group="learn" data-nav-group-label="Bouwen" data-nav-icon="route"><span>Opgaven<small><span id="completedCount">0/14</span> afgerond · kies je opgave</small></span></button>
+      <a id="battleBtn" href="battle.html" data-nav-group="multiplayer" data-nav-group-label="Samen spelen" data-nav-icon="battle" data-nav-tone="amber"><span>Battle met twee<small>Bouw naast elkaar</small></span></a>
+      <button id="proOverview" data-nav-hidden data-nav-group="explore" data-nav-group-label="Bouwen" data-nav-icon="compass" data-nav-tone="green"><span>Je bouwwerk<small>Alles in beeld</small></span></button>
     </nav>
   </header>
 

@@ -49,10 +49,10 @@ class CDP{
       for(const e of [...document.querySelectorAll('#gravity-tools button'),document.querySelector('.lb-restore')]){
        const r=e.getBoundingClientRect();if(!r.width||!r.height)continue;
        if(r.width<44||r.height<44||r.top<0||r.bottom>innerHeight)issues.push(e.id+' too small or outside viewport');
-       if(r.right>field.left+board.x&&r.left<field.left+board.x+board.width)issues.push(e.id+' covers centre');
+       if(r.right>field.left+board.x&&r.left<field.left+board.x+board.width&&r.bottom>field.top+board.y&&r.top<field.top+board.y+board.height)issues.push(e.id+' covers centre');
        if(!e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)))issues.push(e.id+' blocked');
       }
-     }else if(tool.bottom>field.top+1)issues.push('tools cover puzzle');
+     }else for(const e of document.querySelectorAll('#gravity-tools button')){const r=e.getBoundingClientRect();if(r.width&&r.height&&r.right>field.left+board.x&&r.left<field.left+board.x+board.width&&r.bottom>field.top+board.y&&r.top<field.top+board.y+board.height)issues.push(e.id+' covers puzzle');}
      if(document.documentElement.scrollWidth>innerWidth)issues.push('horizontal overflow');
      return issues;
     })()`);
@@ -64,8 +64,8 @@ class CDP{
     await c.click('#reset',true);assert.equal(await c.eval('gravityPrototype.snapshot().moves'),0);assert.deepEqual(await c.eval('gravityPrototype.snapshot().state'),initial,'retry restores initial puzzle');
     if(collapsed){
      await c.click('#level-menu',true);assert(await c.eval("document.getElementById('selection').open"));await c.click('[data-close=selection]',true);
-     await c.click('#help',true);assert(await c.eval("document.getElementById('instructions').open"));await c.click('[data-close=instructions]',true);
-     await c.click('.lb-restore',true);assert(!(await c.eval("document.body.classList.contains('topbar-collapsed')")));assert.deepEqual(await c.eval('gravityPrototype.snapshot().state'),initial);
+     await c.click('.lb-restore',true);await c.eval(shadow+".querySelector('.menu').click()");await c.eval(shadow+".querySelector('[data-source=rulesNav]').click()");assert(await c.eval("document.getElementById('instructions').open"));await c.click('[data-close=instructions]',true);
+     assert(!(await c.eval("document.body.classList.contains('topbar-collapsed')")));assert.deepEqual(await c.eval('gravityPrototype.snapshot().state'),initial);
      await c.eval('LeraarBobTopbar.setCollapsed(true)');await c.frames();
     }
     await c.shot('play-'+width+(collapsed?'-collapsed':''));
@@ -75,7 +75,7 @@ class CDP{
   await c.eval('LeraarBobTopbar.setCollapsed(false)');await c.frames();
   for(const [width,height] of [[1366,768],[390,844]]){
    await c.size(width,height);await c.eval(shadow+".querySelector('.menu').click()");
-   assert.deepEqual(await c.eval(shadow+".querySelectorAll('.menu-name') && [..."+shadow+".querySelectorAll('.menu-name')].map(e=>e.textContent)"),['leraarBob','Kamers kiezen','Spelregels','Bovenbalk inklappen']);
+   assert.deepEqual(await c.eval(shadow+".querySelectorAll('.menu-name') && [..."+shadow+".querySelectorAll('.menu-name')].map(e=>e.textContent)"),['Spelmenu','Spelregels','Spellen','Mijn leerpad','Inloggen','Instellingen','Bovenbalk verbergen']);
    const before=await c.eval('gravityPrototype.snapshot()');await c.send('Input.dispatchKeyEvent',{type:'keyDown',key:'ArrowLeft',code:'ArrowLeft'});await c.send('Input.dispatchKeyEvent',{type:'keyUp',key:'ArrowLeft',code:'ArrowLeft'});assert.deepEqual(await c.eval('gravityPrototype.snapshot()'),before,'navigation blocks background play');
    await c.shot('menu-'+width);await c.eval(shadow+".querySelector('[data-source=roomsNav]').click()");assert(await c.eval("document.getElementById('selection').open"));
    assert(await c.eval("(()=>{const d=document.getElementById('selection'),r=d.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.bottom<=innerHeight&&d.scrollWidth<=d.clientWidth})()"));

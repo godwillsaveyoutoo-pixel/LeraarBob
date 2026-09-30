@@ -126,3 +126,7 @@
 .journey-check{position:absolute;right:0;top:20%;transform:translate(50%,-50%);display:grid;place-items:center;width:42%;height:42%;min-width:10px;min-height:10px;border:1px solid #fffdf1;border-radius:50%;background:#24745c;color:white}
 
 .journey-check .ui-icon{width:78%;height:78%;stroke-width:2.5}
+
+/* Locked worlds remain readable in the journal but offer no bypass action. */
+.journey-area-lock{display:flex;align-items:center;justify-content:center;gap:7px;margin:10px auto;min-height:44px;padding:7px 12px;color:#61706d;font:18px var(--hand);text-align:center}
+.journey-area-lock .ui-icon{width:18px;height:18px}

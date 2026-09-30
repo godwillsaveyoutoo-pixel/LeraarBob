@@ -220,3 +220,12 @@
  .mapped-area .area-stage .skill-label .level-state{display:none}
  .mapped-area .area-stage[data-density=dense] .skill-label{min-height:calc(3.45em + 2 * var(--label-pad) + 2px)}
 }
+
+/* A locked world can only be reached by stale history/direct test markup; keep it visibly inert. */
+.mapped-area[data-world-unlocked="false"] .area-island{filter:grayscale(.45) saturate(.62);opacity:.82}
+.mapped-area[data-world-unlocked="false"] .area-paths{opacity:.48}
+.mapped-area .skill-node.is-locked{cursor:not-allowed}
+.mapped-area .skill-node.is-locked .skill-marker{background:#697977;color:#eef1ea}
+.mapped-area .skill-node.is-locked .level-state{color:#66736e}
+.area-legend .ui-icon{vertical-align:-3px;margin-right:3px}
+.area-play-link{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:4px 10px;margin-top:4px;background:#fffdf2e8;color:#245243;border-bottom:2px solid #537b63;text-decoration:none;font:18px 'Patrick Hand',sans-serif}

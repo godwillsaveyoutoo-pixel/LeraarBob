@@ -1,0 +1,6 @@
+KaTeX 0.18.9
+Source: https://cdn.jsdelivr.net/npm/katex@0.18.9/dist/
+Documentation: https://katex.org/docs/browser
+License: MIT (see LICENSE)
+JavaScript and CSS integrity checked against the official browser documentation.
+Fonts are served locally to preserve rendering without a CDN.

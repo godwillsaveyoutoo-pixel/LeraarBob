@@ -383,5 +383,30 @@ window.AXIOMA_CATALOG = [
     "subject": "Logica & zwaartekracht",
     "presentation": "gravity",
     "coverSmall": "assets/covers/modern/gravity-maze-small.webp"
+  },
+  {
+    "id": "algebra-trainer",
+    "title": "Algebra Trainer",
+    "subtitle": "Maak x vrij. Eén heldere stap tegelijk.",
+    "href": "games/algebra-trainer/",
+    "category": "Vergelijkingen",
+    "kind": "train",
+    "accent": "blue",
+    "theme": "Algebra",
+    "art": "algebra",
+    "cover": "assets/covers/modern/algebra-trainer.webp",
+    "coverSmall": "assets/covers/modern/algebra-trainer-small.webp",
+    "detail": "Vergelijkingen · 17 oefenvormen · oefenbladen",
+    "subject": "Algebra & vergelijkingen",
+    "presentation": "algebra",
+    "featured": true,
+    "featureOrder": 5,
+    "progressType": "levels",
+    "progressTotal": 17,
+    "progressUnitSingular": "oefenvorm",
+    "progressUnitPlural": "oefenvormen",
+    "teacherVisible": true,
+    "gameType": "train",
+    "tracking": "progress"
   }
 ];

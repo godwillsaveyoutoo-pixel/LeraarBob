@@ -9,7 +9,8 @@ let match=null,index=0,deck=[],scores=[0,0],passed=[false,false],resolved=false,
 const send=(i,data)=>frames[i].contentWindow.postMessage(data,target);
 $('world').append(new Option('Mixed · meerdere werelden','mixed'));
 for(const world of Game.worlds){const option=document.createElement('option');option.value=world.id;option.textContent=world.name;$('world').append(option);}
-$('world').value='mixed';
+const requestedWorld=new URLSearchParams(location.search).get('world');
+$('world').value=Game.worlds.some(w=>w.id===requestedWorld)?requestedWorld:'mixed';
 function selectedPool(){return $('world').value==='mixed'?Game.mixedSkills:Game.worlds.find(s=>s.id===$('world').value).skills;}
 function skills(){const mixed=$('world').value==='mixed';$('skill').replaceChildren(new Option(mixed?'Mixed constructies':'Mix van deze wereld','mix'));for(const id of selectedPool())$('skill').append(new Option(Game.skills.find(s=>s.id===id).label,id));$('mixedHint').hidden=!mixed;}
 $('world').onchange=skills;skills();

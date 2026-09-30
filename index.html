@@ -19,13 +19,13 @@
   <script src="js/catalog.js" defer></script>
   <script src="js/catalog-progress.js" defer></script>
   <script src="js/frontpage.js" defer></script>
-<script src="shared/leraarbob-topbar.js" data-title="Startpagina" data-page="home" defer></script></head>
+<script src="shared/leraarbob-topbar.js" data-title="Startpagina" data-page="home" data-nav-pilot="true" defer></script></head>
 <body>
   <a class="skip-link" href="#ontdek">Ga naar de onderdelen</a>
   <header class="top">
     <nav class="appNav" data-platform-sections hidden aria-label="Hoofdnavigatie">
       <button id="homeGames" type="button">Spellen</button>
-      <button id="homeProgress" type="button">Mijn voortgang</button>
+      <button id="homeProgress" type="button">Mijn leerpad</button>
       <button id="homeReserve" type="button">Reserve</button>
     </nav>
     <div class="topline container">
@@ -46,9 +46,9 @@
     </div>
   </header>
   <main class="home-main container">
-    <section id="playerProgress" class="player-progress" aria-label="Mijn voortgang" tabindex="-1">
+    <section id="playerProgress" class="player-progress" aria-label="Mijn leerpad" tabindex="-1">
       <div class="progress-overview">
-        <div class="progress-identity"><strong>Mijn voortgang</strong><span id="playerProgressStatus" role="status">Log in om je voortgang te bekijken.</span></div>
+        <div class="progress-identity"><strong>Mijn leerpad</strong><span id="playerProgressStatus" role="status">Log in om je voortgang te bekijken.</span></div>
         <dl id="playerTotals" hidden><div><dt>Totaal XP</dt><dd id="totalXP">—</dd></div><div><dt>Onderdelen afgerond</dt><dd id="totalCompleted">—</dd></div></dl>
         <button id="progressLogin" type="button">Inloggen</button>
       </div>
@@ -61,7 +61,7 @@
         <button id="retryProgress" class="progress-retry" type="button">Opnieuw proberen</button>
       </div>
       <div id="featuredGrid" class="featured-grid"></div>
-      <noscript><ul><li><a href="games/rechten/rechtenwereld/#wereld">Rechtenwereld · Rechten</a></li><li><a href="games/wortelbouw_pro_v0.5.0/wortelbouw/index.html">Wortelbouw · Pythagoras &amp; wortels</a></li><li><a href="games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html">Vectormissie · Vectoren</a></li><li><a href="games/gravity/?v=20260920-2">Gravity Maze · Logica &amp; zwaartekracht</a></li></ul></noscript>
+      <noscript><ul><li><a href="games/rechten/rechtenwereld/#wereld">Rechtenwereld · Rechten</a></li><li><a href="games/wortelbouw_pro_v0.5.0/wortelbouw/index.html">Wortelbouw · Pythagoras &amp; wortels</a></li><li><a href="games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html">Vectormissie · Vectoren</a></li><li><a href="games/gravity/?v=20260920-2">Gravity Maze · Logica &amp; zwaartekracht</a></li><li><a href="games/algebra-trainer/">Algebra Trainer · Vergelijkingen</a></li></ul></noscript>
     </section>
 
     <details id="reserve" class="reserve-library">

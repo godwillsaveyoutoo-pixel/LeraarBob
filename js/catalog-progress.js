@@ -38,14 +38,23 @@
     return game.progressType === 'trainer' ? overview?.trainer : overview?.games?.find(row => row.game_id === (game.progressGameId || game.id));
   }
   function earnedXP(game, saved) {
-    if (['world','local','none','multiplayer'].includes(game.progressType)) return null;
+    if (['local','none','multiplayer'].includes(game.progressType)) return null;
     const state = saved?.state;
     if (game.progressType === 'trainer') return count(state?.xp);
+    if (game.id === 'algebra-trainer') return null;
     if (game.id === 'vectoren-trainer') {
       try { return count(JSON.parse(state?.storage?.['axioma-vectorentrainer-v020'] || '{}').progress?.xp); }
       catch { return null; }
     }
-    return state && Object.hasOwn(state, 'xp') ? count(state.xp) : null;
+    if (game.id === 'reele-getallen-trainer') {
+      try { return count(JSON.parse(state?.storage?.['axioma-real-numbers-v1'] || '{}').progress?.xp); }
+      catch { return null; }
+    }
+    if (game.progressType === 'world') {
+      return state?.rechtenV2 && Object.hasOwn(state.rechtenV2, 'platformXp') ? count(state.rechtenV2.platformXp) : null;
+    }
+    if (state && Object.hasOwn(state, 'xp')) return count(state.xp);
+    return state && Object.hasOwn(state, 'platformXp') ? count(state.platformXp) : null;
   }
   function aggregate(catalog, overview) {
     if (!overview || overview.errors?.games || overview.errors?.trainer) return null;

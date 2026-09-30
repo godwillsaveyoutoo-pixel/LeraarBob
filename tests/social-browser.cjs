@@ -183,6 +183,7 @@ async function setup(browser,uid){
   assert.match(await a.eval(`${panel}.querySelector('.content').textContent`),/geweigerd/);
   console.log('PASS: cross-page online list, menu invitation, explicit refusal');
   if(process.env.SOCIAL_MENU_ONLY){
+    const chooseGame=async id=>a.eval(`(()=>{const root=${panel},select=root.querySelector('select[data-action=choose-game]');if(getComputedStyle(select.parentElement).display!=='none'){select.value='${id}';select.dispatchEvent(new Event('change',{bubbles:true}));}else root.querySelector('[data-action=choose-game][data-id=${id}]').click();})()`);
     await a.go('');await a.wait('window.AxiomaSocial?.state().connected');
     for(const role of ['student','teacher'])for(const mode of ['light','dark'])for(const width of [320,390,768,1440]){
       await a.eval(`testRole('${role}');AxiomaSocial.refresh()`);
@@ -191,13 +192,21 @@ async function setup(browser,uid){
       await a.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.social-entry').click()");
       await a.wait(`${panel}.querySelector('#panel').matches(':popover-open')`);
       assert.equal(await a.eval(`${dock}.querySelectorAll('button').length`),0);
-      assert.deepEqual(await a.eval(`[...${panel}.querySelectorAll('.modern-game h3')].map(n=>n.textContent)`),['Rechtenwereld','Wortelbouw','Vectormissie']);
-      assert.equal(await a.eval(`${panel}.querySelectorAll('.mode-links a').length`),6);
+      assert.deepEqual(await a.eval(`[...${panel}.querySelectorAll('.game-picker button')].map(n=>n.textContent)`),['Rechtenwereld','Wortelbouw','Vectormissie']);
+      await chooseGame('rechten');
+      assert.deepEqual(await a.eval(`[...${panel}.querySelectorAll('[data-play-mode]')].map(n=>n.dataset.playMode)`),['learn','local','online','classroom']);
       assert.equal(await a.eval(`${panel}.querySelector('.legacy').open`),false);
       assert(await a.eval(`[...${panel}.querySelectorAll('.mode-links a')].every(n=>n.getBoundingClientRect().height>=44)`));
-      assert(await a.eval(`${panel}.querySelector('.mode-links a:nth-child(2)').textContent.includes('${role==='teacher'?'Start groepsbattle':'Meedoen met code'}')`));
+      assert(await a.eval(`${panel}.querySelector('[data-play-mode=classroom]').textContent.includes('${role==='teacher'?'Start een sessie':'Voer de code van je leerkracht in'}')`));
       const hrefs=await a.eval(`[...${panel}.querySelectorAll('.mode-links a')].map(n=>n.href)`);
       for(const href of hrefs)assert.equal((await fetch(href)).status,200,href);
+      for(const id of ['wortelbouw','vectoren']){
+        await chooseGame(id);
+        assert.deepEqual(await a.eval(`[...${panel}.querySelectorAll('[data-play-mode]')].map(n=>n.dataset.playMode)`),['local','classroom']);
+        const links=await a.eval(`[...${panel}.querySelectorAll('[data-play-mode]')].map(n=>n.href)`);for(const href of links)assert.equal((await fetch(href)).status,200,href);
+        await a.eval('AxiomaSocial.refresh()');assert.equal(await a.eval(`${panel}.querySelector('[data-action=choose-game][aria-pressed=true]').dataset.id`),id);
+      }
+      await chooseGame('rechten');
       await a.eval(`${panel}.querySelector('.legacy').open=true;${panel}.querySelector('.mode-links a').focus();AxiomaSocial.refresh()`);
       assert.equal(await a.eval(`${panel}.querySelector('.legacy').open`),true,'poll retains expanded reserve');
       assert(await a.eval(`${panel}.activeElement.matches('.mode-links a')`),'poll retains focus');
@@ -208,14 +217,14 @@ async function setup(browser,uid){
       const shot=await a.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(`/tmp/social-menu-${role}-${mode}-${width}.png`,Buffer.from(shot.data,'base64'));
       await a.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
       await a.wait(`${panel}.querySelector('#panel').matches(':popover-open')===false`);
-      await a.wait("document.querySelector('leraarbob-topbar').shadowRoot.activeElement?.classList.contains('menu')");
+      await a.wait("document.querySelector('leraarbob-topbar').shadowRoot.activeElement?.matches('.menu,.mobile-menu')");
     }
     await a.eval('testLogout()');
     await a.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.menu').click()");
-    assert(await a.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.social-entry').parentElement.hidden"));
+    assert(await a.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.social-entry').hidden"));
     for(const c of [a,b])assert.deepEqual(c.errors,[]);
     for(const c of clients)c.ws.close();browser.ws.close();
-    console.log('PASS: three modern games with valid duo/group routes, student/teacher labels, retained focus and reserve state, incoming invitation, responsive light/dark panel and guest cleanup');return;
+    console.log('PASS: three games with explicit learning/local/online/class choices and valid routes, student/teacher labels, retained focus and reserve state, incoming invitation, responsive light/dark panel and guest cleanup');return;
   }
 
   await click(a,`[data-action="invite"][data-id="${B}"]`);await a.wait(`AxiomaSocial.state().invitations[0].status==='pending'`);

@@ -13,3 +13,12 @@ leraarbob-topbar::part(crumb-current){color:#536256;font-size:13px}
  leraarbob-topbar::part(crumb-game),leraarbob-topbar::part(crumb-link){padding:7px 10px;font-size:12px}
  leraarbob-topbar::part(crumb-current){font-size:12px}
 }
+
+/* Platform navigation pilot: one compact shared row; gameplay keeps its own controls. */
+@media(max-width:650px){
+ body.lb-nav-pilot .atlas-header{min-height:52px}
+ body.lb-nav-pilot .atlas-page{--header-height:52px}
+ body.lb-nav-pilot .atlas-menu{display:none!important}
+}
+body.lb-nav-pilot.topbar-collapsed .atlas-page{--header-height:0px}
+body.lb-nav-pilot.topbar-collapsed .boundary-mission{--header-height:0px}

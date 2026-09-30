@@ -581,8 +581,11 @@
   function resize() {
     cancelInput(); const rect = canvas.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
     canvas.width = Math.max(1, Math.round(rect.width * dpr)); canvas.height = Math.max(1, Math.round(rect.height * dpr));
-    const cell = Math.max(1, Math.min(rect.width / level.w, (rect.height - 24) / level.h, 56));
-    viewport = { width: rect.width, height: rect.height, cell, x: (rect.width - level.w * cell) / 2, y: (rect.height - level.h * cell) / 2 };
+    // Leave the floating 44px controls and side touch strips outside the puzzle.
+    const topSpace = document.body.classList.contains('lb-nav-pilot') ? 56 : 0;
+    const sideSpace = topSpace ? 136 : 0;
+    const cell = Math.max(1, Math.min((rect.width - sideSpace) / level.w, (rect.height - topSpace - 24) / level.h, 56));
+    viewport = { width: rect.width, height: rect.height, cell, x: (rect.width - level.w * cell) / 2, y: topSpace + (rect.height - topSpace - level.h * cell) / 2 };
     // The whole empty strip beside the room is a control, without covering the puzzle.
     document.querySelector('.play').style.setProperty('--board-inset', Math.max(0, viewport.x - 8) + 'px');
     requestDraw();

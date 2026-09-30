@@ -423,3 +423,29 @@ bepaald. Browsersuites delen een tab en moeten na elkaar draaien.
 
 `node tests/rechten-v2-formula-b-layout.cjs` controleert aanvullend 52
 werkbladfasen met langere breuken op desktop en lage laptopschermen.
+
+## v10: compact menu en Online Duo Rechtenwereld
+
+```sh
+node --test tests/rechten-online.test.cjs
+node tests/rechten-online-database.cjs
+node tests/rechten-online-browser.cjs
+LB_PAGES='Rechtenwereld,Vectormissie,Wortelbouw,Gravity Maze' node tests/platform-topbar-browser.cjs
+```
+
+De database- en browsertests gebruiken dezelfde PGlite-installatie als de bestaande
+multiplayertests (`VECTOR_PGLITE_MODULE`). De online browsertest gebruikt twee
+geïsoleerde Chromium-contexten op poort 9245 en de webserver op 8775. Hij vervangt
+alleen auth/netwerktransport; de echte Edge-handler, serverpolicy, SQL-migratie en
+spelwerkborden worden uitgevoerd. De tests maken geen echte leerlingaccounts aan.
+Zie [v10-verslag](../docs/v10-online-duo.md) voor uitrol en resterende grenzen.
+
+### Samen leren uitnodigen op alias
+
+`rechten-learn-invitations.cjs` test de echte Edge-handler en private SQL met fictieve leerlingen: uitnodigen, weigeren, intrekken, verlopen, een gereserveerde plaats, duo/trio, code als alternatief, klas/voorkennis en accountscheiding. Vereist `@electric-sql/pglite` of `VECTOR_PGLITE_MODULE`.
+
+`rechten-learn-invitations-browser.cjs` gebruikt daarnaast de lokale server op poort 8775 en geïsoleerde Chromium op 9245. De proef ontvangt uitnodigingen in het echte Vectormissie-scherm, accepteert expliciet, hervat na herladen en controleert de wachtkamer op vier schermformaten met de bovenbalk open en ingeklapt. Externe netwerkverzoeken worden geblokkeerd; er worden geen echte leerlingen uitgenodigd.
+
+## Algebra Trainer
+
+`node --test tests/algebra-trainer.test.cjs` controleert alle 17 vormen met exacte breuken. `node tests/algebra-trainer-browser.cjs` gebruikt dezelfde geïsoleerde browser en webserver als de Rechtenwereld-releaseproeven en controleert formaat, navigatie, hervatten, afdrukken, accountwissel en offline opslag.

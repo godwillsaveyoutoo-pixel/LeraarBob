@@ -28,7 +28,7 @@
 .world-page .world-stage .island-label small{font:clamp(12px,1.22cqw,19px)/1.2 var(--hand);color:#3e5c69;margin-top:5px}
 .world-page .world-stage .is-current .island-label{border-color:#d4c69e;box-shadow:0 5px 6px #18455430,0 3px 0 #e5c666}
 .world-page .world-stage .is-current .island-label small{color:#17644f}
-.world-page .world-stage .place-puntbaai{left:15%;top:67%}
+.world-page .world-stage .place-puntenbaai{left:15%;top:67%}
 .world-page .world-stage .place-hellingrug{left:41%;top:31%}
 .world-page .world-stage .place-grenspas{left:47%;top:76%}
 .world-page .world-stage .place-formulewerf{left:73%;top:74%}
@@ -65,7 +65,7 @@
 }
 @media(orientation:landscape) and (max-height:450px){
  .world-page .map-intro{top:9px}
- .world-page .world-stage .place-puntbaai{top:64%}
+ .world-page .world-stage .place-puntenbaai{top:64%}
  .world-page .world-stage .place-grenspas{top:74%}
  .world-page .world-stage .place-formulewerf{top:72%}
  .world-page .map-intro p{display:none}
@@ -94,7 +94,7 @@
  .world-page .world-stage .island-marker{top:47%;width:42px;height:42px;font-size:28px}
  .world-page .world-stage .island-label{top:70%;width:92%;font-size:clamp(21px,5.7cqw,31px);padding:8px 4px;border-radius:7px 4px 9px 5px}
  .world-page .world-stage .island-label small{font-size:clamp(11px,2.8cqw,16px);margin-top:4px}
- .world-page .world-stage .place-puntbaai{left:25%;top:16%}
+ .world-page .world-stage .place-puntenbaai{left:25%;top:16%}
  .world-page .world-stage .place-hellingrug{left:75%;top:16%}
  .world-page .world-stage .place-grenspas{left:50%;top:48%}
  .world-page .world-stage .place-formulewerf{left:25%;top:80%}
@@ -153,7 +153,7 @@
 /* Browser zoom can leave less than 320 CSS pixels of height. Give the lower
    labels enough room above the footer, including a two-line recommendation. */
 @media(orientation:landscape) and (max-height:320px){
- .world-page .world-stage .place-puntbaai{top:60%}
+ .world-page .world-stage .place-puntenbaai{top:60%}
  .world-page .world-stage .place-grenspas{top:64%}
  .world-page .world-stage .place-formulewerf{top:62%}
  .world-page .world-stage .island-label{width:135%}
@@ -181,3 +181,29 @@
 @media(orientation:portrait) and (max-width:380px){
  .world-page .atlas-footer>button{font-size:19px}
 }
+
+
+/* Restored Rechtenwereld overview: one actual world map, not five dashboard cards.
+   The background remains a separate map scene; each world is still its own control/art asset. */
+.world-page .world-stage .world-island-art{
+  background:none!important;
+  object-fit:contain;
+  object-position:center;
+  pointer-events:none;
+  filter:drop-shadow(0 10px 5px #18597035);
+}
+.world-page .world-stage .is-soon .world-island-art{filter:grayscale(.32) saturate(.72) drop-shadow(0 10px 5px #18597028);opacity:.9}
+.world-page .world-stage .is-current .world-island-art{filter:saturate(1.05) drop-shadow(0 11px 6px #815f1738)}
+.world-page .world-stage .is-completed .world-island-art,
+.world-page .world-stage .is-prior .world-island-art{filter:saturate(.94) drop-shadow(0 10px 5px #18597035)}
+
+/* Sequential world access: prior knowledge and the current world stay vivid;
+   later worlds remain visible on the map but clearly closed. */
+.world-page .world-stage .is-locked{cursor:not-allowed}
+.world-page .world-stage .is-locked .world-island-art{filter:grayscale(.72) saturate(.38) brightness(.83) drop-shadow(0 8px 3px #1845541f);opacity:.7}
+.world-page .world-stage .is-locked:hover .world-island-art{transform:translateY(-7%)}
+.world-page .world-stage .is-locked .island-marker{background:#697977;color:#edf0e9}
+.world-page .world-stage .is-locked .island-label{background:#eef0e8 var(--paper-texture);border-color:#aeb8ae;color:#485855;box-shadow:0 3px 4px #18455420}
+.world-page .world-stage .is-locked .island-label small{color:#566663}
+.world-page .island-lock{position:absolute;right:-7px;bottom:-5px;display:grid;place-items:center;width:21px;height:21px;border:2px solid #fffdf1;border-radius:50%;background:#697977;color:#fff;box-shadow:0 1px 4px #173c4938}
+.world-page .island-lock .ui-icon{width:13px;height:13px;stroke-width:2.3}

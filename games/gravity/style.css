@@ -90,3 +90,135 @@ body.topbar-collapsed .retry-label{display:none}
 body.topbar-collapsed #gravity-tools #undo{top:106px;right:2px}
 body.topbar-collapsed #gravity-tools #hint{top:156px;right:2px}
 body[data-platform-page].topbar-collapsed .lb-restore{top:calc(var(--safe-top) + 6px);right:calc(var(--safe-right) + 2px);border-radius:3px;border-color:#56747a;background:#19353d}
+
+
+/* Gravity mobile/fullscreen chrome v2: overlay controls, no bottom toolbar, no pace button. */
+#menu-handle{display:none!important}
+header#top-menu:not(.lb-header){display:none!important}
+.play{--play-top:var(--lb-header-height,60px)}
+body:has(#top-menu.lb-header) main .field,.field{inset:var(--play-top) 0 0 0;padding:0}
+#gravity-tools{position:absolute;z-index:4;inset:0;display:block;height:auto;padding:0;background:none;border:0;pointer-events:none}
+#gravity-tools button{position:absolute;pointer-events:auto;height:40px;min-width:40px;border:1px solid #56747a;background:#19353df0;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);box-shadow:0 6px 18px #06161a55}
+#gravity-tools #level-menu{top:calc(var(--play-top) + 8px);left:calc(var(--safe-left) + 8px);display:flex;align-items:center;gap:6px;height:36px;max-width:min(48vw,180px);padding:0 10px;border-radius:999px;text-align:left}
+#gravity-tools #level-number{display:inline;font-size:11px;color:#bdcfcf;white-space:nowrap}
+#gravity-tools #level-name{font:650 12px/1.15 system-ui,sans-serif;letter-spacing:.03em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#gravity-tools #level-menu span[aria-hidden="true"]{font-size:12px;opacity:.8}
+#gravity-tools #reset,#gravity-tools #undo{top:calc(var(--play-top) + 8px);width:40px;padding:0;border-radius:999px}
+#gravity-tools #reset{right:calc(var(--safe-right) + 8px);color:#f6d59d;background:#3b4138f2;border-color:#b69a69}
+#gravity-tools #undo{right:calc(var(--safe-right) + 56px)}
+#gravity-tools #pace,#gravity-tools #help,#gravity-tools #hint{display:none!important}
+.retry-label{display:none!important}
+.move{top:var(--play-top);bottom:0;transform:none;height:auto;width:56px;border:0;border-radius:0;background:none;display:flex;align-items:center;justify-content:center;z-index:2}
+#negative{left:0;border-right:0}
+#positive{right:0;border-left:0;background:none}
+.move span{display:grid;place-items:center;width:38px;height:72px;border-radius:999px;background:#19353dc9;border:1px solid #56747a88;box-shadow:0 6px 18px #06161a55;color:#f3d6a3;font-size:30px}
+.move:hover:not(:disabled),#positive:hover:not(:disabled),.move:active:not(:disabled),#positive:active:not(:disabled){background:none;border-color:transparent}
+.move:hover:not(:disabled) span{background:#24444cbf;border-color:#90aba2}
+.move:active:not(:disabled) span{background:#325760d9;border-color:#e6c184}
+.move:active span{transform:scale(.94)}
+#status-toast{left:12px;right:12px;bottom:12px}
+@media(max-width:600px){
+  .play{--play-top:var(--lb-header-height,52px)}
+  #gravity-tools #level-menu{top:calc(var(--play-top) + 6px);left:6px;max-width:min(52vw,164px);height:34px;padding-inline:8px}
+  #gravity-tools #level-name{font-size:11px}
+  #gravity-tools #level-number{font-size:10px}
+  #gravity-tools #reset,#gravity-tools #undo{top:calc(var(--play-top) + 6px);width:38px;height:38px}
+  #gravity-tools #reset{right:6px}
+  #gravity-tools #undo{right:50px}
+  .move{width:50px}
+  .move span{width:34px;height:64px;font-size:26px}
+}
+body.topbar-collapsed .play{--play-top:0px}
+body.topbar-collapsed #gravity-tools{inset:0;height:auto;padding:0;background:none;border:0;pointer-events:none}
+body.topbar-collapsed #gravity-tools button{position:absolute;pointer-events:auto}
+body.topbar-collapsed #gravity-tools #level-menu{top:calc(var(--safe-top) + 8px);left:calc(var(--safe-left) + 8px);width:auto;max-width:min(48vw,180px);height:36px;display:flex;grid-template-columns:none;align-content:center;gap:6px;padding:0 10px;text-align:left;border-radius:999px}
+body.topbar-collapsed #gravity-tools #reset,body.topbar-collapsed #gravity-tools #undo{top:calc(var(--safe-top) + 8px)}
+body.topbar-collapsed #gravity-tools #reset{right:calc(var(--safe-right) + 8px)}
+body.topbar-collapsed #gravity-tools #undo{right:calc(var(--safe-right) + 56px)}
+body.topbar-collapsed #gravity-tools #pace,body.topbar-collapsed #gravity-tools #help,body.topbar-collapsed #gravity-tools #hint{display:none!important}
+body.topbar-collapsed #gravity-tools #level-name{grid-column:auto;grid-row:auto;font-size:12px;letter-spacing:.03em}
+body.topbar-collapsed #gravity-tools #level-number{font-size:11px}
+
+/* Navigation-shell pilot: keep the phone header to one row and let the drawer own rules/navigation. */
+@media (max-width:650px),(max-height:500px) and (max-width:900px){
+ body.lb-nav-pilot:not(.topbar-collapsed){--tools-height:48px}
+ body.lb-nav-pilot:not(.topbar-collapsed) #gravity-tools{height:48px;gap:2px;padding:2px 5px}
+ body.lb-nav-pilot:not(.topbar-collapsed) #gravity-tools button{height:44px;min-height:44px}
+ body.lb-nav-pilot:not(.topbar-collapsed) #gravity-tools #level-menu{padding-inline:5px;gap:5px}
+ body.lb-nav-pilot:not(.topbar-collapsed) #level-number{display:none}
+ body.lb-nav-pilot:not(.topbar-collapsed) #level-name{font-size:12px}
+ body.lb-nav-pilot:not(.topbar-collapsed) #gravity-tools #help{display:none}
+ body.lb-nav-pilot:not(.topbar-collapsed) #gravity-tools #pace{font-size:12px}
+}
+
+/* Gravity chrome v3 — immersive board with persistent platform menu access. */
+body.lb-nav-pilot #menu-handle{display:none!important}
+body.lb-nav-pilot header#top-menu>.lb-gamebar{display:none!important}
+body.lb-nav-pilot .play{--play-top:var(--lb-header-height,60px)}
+body.lb-nav-pilot .field,
+body.lb-nav-pilot:has(#top-menu.lb-header) main .field{inset:var(--play-top) 0 0;padding:0}
+
+/* Game chrome floats over the board instead of reserving a second toolbar row. */
+body.lb-nav-pilot #gravity-tools{position:absolute;z-index:6;inset:0;height:auto;padding:0;background:none;border:0;display:block;pointer-events:none}
+body.lb-nav-pilot #gravity-tools button{position:absolute;pointer-events:auto;min-width:44px;height:44px;margin:0;padding:0;border:1px solid #6f8b8d88;background:#18343ddd;color:var(--ink);box-shadow:0 6px 18px #06161a55;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+body.lb-nav-pilot #gravity-tools #level-menu{top:calc(var(--play-top) + 8px);left:max(8px,var(--safe-left));width:auto;max-width:min(46vw,190px);height:40px;display:flex;align-items:center;gap:6px;padding:0 11px;border-radius:999px;text-align:left}
+body.lb-nav-pilot #gravity-tools #level-number{display:inline!important;flex:none;font-size:10px;color:#b9cbcc;white-space:nowrap}
+body.lb-nav-pilot #gravity-tools #level-name{min-width:0;font:700 12px/1.1 system-ui,sans-serif;letter-spacing:.025em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.lb-nav-pilot #gravity-tools #level-menu>span[aria-hidden="true"]{flex:none;font-size:11px;opacity:.75}
+body.lb-nav-pilot #gravity-tools #undo,
+body.lb-nav-pilot #gravity-tools #reset{top:calc(var(--play-top) + 8px)!important;width:44px!important;min-width:44px!important;height:44px!important;border-radius:999px!important}
+body.lb-nav-pilot #gravity-tools #undo{right:max(60px,calc(var(--safe-right) + 60px))!important}
+body.lb-nav-pilot #gravity-tools #reset{right:max(8px,var(--safe-right))!important;color:#f6d59d;background:#37433bdd;border-color:#b69a69aa}
+body.lb-nav-pilot #gravity-tools #undo:hover:not(:disabled),
+body.lb-nav-pilot #gravity-tools #reset:hover:not(:disabled){background:#2a4a50;border-color:#d8bd86}
+body.lb-nav-pilot .retry-label{display:none!important}
+body.lb-nav-pilot #gravity-tools #pace,
+body.lb-nav-pilot #gravity-tools #help,
+body.lb-nav-pilot #gravity-tools #hint{display:none!important}
+
+/* Direction controls keep large full-height touch targets, with a clear tall handle. */
+body.lb-nav-pilot .move{position:absolute;top:var(--play-top);bottom:0;transform:none;width:64px;height:auto;border:0;border-radius:0;background:none;display:flex;align-items:center;justify-content:center;z-index:5;user-select:none;touch-action:none}
+body.lb-nav-pilot #negative{left:0;border:0}
+body.lb-nav-pilot #positive{right:0;border:0;background:none}
+body.lb-nav-pilot .move span{display:grid;place-items:center;width:48px;height:clamp(118px,42dvh,176px);border-radius:24px;background:#18343dc2;border:1px solid #6f8b8d88;box-shadow:0 6px 18px #06161a55;color:#f3d6a3;font-size:32px;pointer-events:none;transition:transform .12s,background .12s,border-color .12s}
+body.lb-nav-pilot .move:hover:not(:disabled),
+body.lb-nav-pilot #positive:hover:not(:disabled),
+body.lb-nav-pilot .move:active:not(:disabled),
+body.lb-nav-pilot #positive:active:not(:disabled){background:none;border-color:transparent}
+body.lb-nav-pilot .move:hover:not(:disabled) span{background:#24454dcc;border-color:#91adaa}
+body.lb-nav-pilot .move:active:not(:disabled) span{background:#31585fd9;border-color:#e6c184;transform:scale(.95)}
+body.lb-nav-pilot #status-toast{left:72px;right:72px;bottom:10px}
+
+/* Collapsed mode keeps the same geometry. Only the platform bar disappears. */
+body.lb-nav-pilot.topbar-collapsed .play{--play-top:0px}
+body.lb-nav-pilot.topbar-collapsed #gravity-tools{inset:0;height:auto;padding:0;background:none;border:0}
+body.lb-nav-pilot.topbar-collapsed #gravity-tools #level-menu{top:max(8px,var(--safe-top));left:max(58px,calc(var(--safe-left) + 58px));width:auto;max-width:min(42vw,180px);height:40px;display:flex;grid-template-columns:none;align-content:center;gap:6px;padding:0 11px;text-align:left;border-radius:999px}
+body.lb-nav-pilot.topbar-collapsed #gravity-tools #undo,
+body.lb-nav-pilot.topbar-collapsed #gravity-tools #reset{top:max(8px,var(--safe-top))!important}
+body.lb-nav-pilot.topbar-collapsed #gravity-tools #undo{right:max(60px,calc(var(--safe-right) + 60px))!important}
+body.lb-nav-pilot.topbar-collapsed #gravity-tools #reset{right:max(8px,var(--safe-right))!important}
+body.lb-nav-pilot.topbar-collapsed #gravity-tools #level-name{grid-column:auto;grid-row:auto;font-size:12px;letter-spacing:.025em}
+body.lb-nav-pilot.topbar-collapsed #gravity-tools #level-number{display:inline!important;font-size:10px}
+body.lb-nav-pilot.topbar-collapsed #gravity-tools #pace,
+body.lb-nav-pilot.topbar-collapsed #gravity-tools #help,
+body.lb-nav-pilot.topbar-collapsed #gravity-tools #hint{display:none!important}
+
+@media (max-width:650px),(max-height:500px) and (max-width:900px){
+ body.lb-nav-pilot:not(.topbar-collapsed) .play{--play-top:52px}
+ body.lb-nav-pilot #gravity-tools #level-menu{top:calc(var(--play-top) + 6px);height:38px;max-width:min(46vw,176px);padding-inline:9px}
+ body.lb-nav-pilot #gravity-tools #undo,
+ body.lb-nav-pilot #gravity-tools #reset{top:calc(var(--play-top) + 6px)!important;width:42px!important;min-width:42px!important;height:42px!important}
+ body.lb-nav-pilot #gravity-tools #undo{right:56px!important}
+ body.lb-nav-pilot #gravity-tools #reset{right:6px!important}
+ body.lb-nav-pilot .move{width:60px}
+ body.lb-nav-pilot .move span{width:46px;height:clamp(112px,40dvh,156px);font-size:30px}
+ body.lb-nav-pilot.topbar-collapsed #gravity-tools #level-menu{top:max(6px,var(--safe-top));left:max(56px,calc(var(--safe-left) + 56px));max-width:min(44vw,170px)}
+ body.lb-nav-pilot.topbar-collapsed #gravity-tools #undo,
+ body.lb-nav-pilot.topbar-collapsed #gravity-tools #reset{top:max(6px,var(--safe-top))!important}
+ body.lb-nav-pilot.topbar-collapsed #gravity-tools #undo{right:56px!important}
+ body.lb-nav-pilot.topbar-collapsed #gravity-tools #reset{right:6px!important}
+}
+
+/* Shared navigation remains reachable after v9 integration. */
+body.lb-nav-pilot #top-menu.lb-header:not(.lb-collapsed){display:flex!important}
+body.lb-nav-pilot #gravity-tools :is(#level-menu,#undo,#reset){min-width:44px!important;min-height:44px!important;height:44px!important}

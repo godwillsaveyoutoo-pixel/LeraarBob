@@ -1,0 +1,24 @@
+/* Reuse the learning world's paper and ink; the native board stays untouched. */
+@font-face{font-family:Patrick Hand;src:url('../assets/fonts/PatrickHand-Regular.ttf') format('truetype');font-display:swap}
+body[data-battle-game=rechten]{background:#f5f3eb;color:#244641;--lb-control-radius:0px;--lb-panel-radius:0px}
+.classroom-app main{max-width:1100px;padding:12px 20px;margin:auto;width:100%}
+.classroom-app h1,.classroom-app h2{font-family:'Patrick Hand',sans-serif;letter-spacing:0;line-height:1.1}
+.classroom-app h1{font-size:clamp(28px,4vw,42px);margin:8px 0}
+.classroom-app h2{font-size:26px}
+.classroom-app :is(.card,.members li,.ranking li,dialog){border-radius:0;box-shadow:none}
+.classroom-app .setup{gap:16px}.classroom-app .setup-intro p{font-size:16px;line-height:1.4}
+.classroom-app .class-solo-link{min-height:44px;display:inline-flex;align-items:center;color:#244641;width:fit-content}
+body[data-playing=true] .class-solo-link{display:none}
+.classroom-app #notice:empty{display:none}
+.classroom-app .ranking-help{font-size:13px;margin:4px 0 12px}
+.classroom-app #session[data-phase=results],.classroom-app #session[data-phase=finished]{min-height:0}
+.classroom-app .advance{position:sticky;bottom:0;background:#faf7ed;padding:12px 0;border-top:1px solid #a5b4a6;z-index:1}
+.classroom-app #results{padding:16px}.classroom-app .ranking{margin:12px 0}
+.classroom-app .ranking li{padding:8px 12px;min-height:44px}
+.classroom-app .ranking li.mine{border-left:4px solid #287568;background:#e3ede5}
+.classroom-app .ranking .movement{min-width:40px}
+@media(max-width:600px){.classroom-app main{padding:8px 12px}.classroom-app .setup{display:block}.classroom-app .setup-intro{margin-bottom:12px}.classroom-app .card{padding:14px}.classroom-app .ranking li{gap:8px}.classroom-app .ranking .name{min-width:0;overflow-wrap:anywhere}.classroom-app .ranking .points{font-size:13px}}
+@media(max-height:500px){.classroom-app .setup-intro h1{font-size:28px}.classroom-app .setup-intro p{margin:8px 0}}
+body.classroom-app[data-playing=true].topbar-collapsed .session-bar{padding-left:52px;padding-right:4px}
+
+.members li{display:flex;gap:8px;align-items:center}.learner-avatar{display:inline-grid;place-items:center;width:32px;height:32px;flex:none;background:#deebe2;color:#235443;font-size:12px;font-weight:700}.learner-avatar img{object-fit:cover}

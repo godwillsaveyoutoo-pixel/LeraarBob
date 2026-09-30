@@ -61,21 +61,42 @@ function statuses(state,id,legacy){
  const grensDone=n=>id==='grenspas'&&(!!state.missions?.[n.key]?.completed||!!state.events?.some(e=>e.correct&&e.taskId?.startsWith('rechten-v2:grenspas:'+n.key+':')&&/:5:run\d+$/.test(e.taskId)&&e.attemptId?.startsWith(n.id==='sign'?'grens-inequality:':n.id==='signchart'?'grens-chart:':'grens-zero:')));
  const formulaDone=n=>(id==='formulewerf'||id==='signaalstad'&&n.id==='graph_from_table')&&n.playable&&(!!state.missions?.[n.id]?.completed||!!state.events?.some(e=>e.correct&&e.skill===n.id&&e.taskId?.startsWith('rechten-v2:'+id+':'+n.id+':')&&/:5:run\d+$/.test(e.taskId)&&e.attemptId?.startsWith(({graph_from_table:'formula-plot:',equation_from_ab:'formula-build:',graph_from_equation:'formula-plot:',equation_from_graph:'formula-read:',rewrite_linear_equation:'formula-rewrite:',intercept_from_point:'derive-intercept:',equation_from_point_slope:'derive-formula:',equation_from_two_points:'derive-formula:',equation_from_table:'derive-formula:'})[n.id])));
  const completed=n=>formulaDone(n)||grensDone(n)||hillDone(n)||pointsDone(n)|| (n.key==='positive'?positiveDone(state)||!!(s&&W.ready(s,n.id)):n.id==='zeroRead'?!!state.events?.some(e=>e.skill==='zeroRead'&&e.correct&&!e.taskId?.startsWith('rechten-v2:grenspas:'))||!!(s&&W.ready(s,n.id)):!!(s&&W.ready(s,n.id)));
- // Playability is a release property, never a reward or prerequisite lock.
- const available=n=>!!n.playable;
+ const released=n=>!!n.playable;
+ const open=unlocked(state,id,legacy);
+ const available=n=>open&&released(n);
  const started=n=>{const m=state.missions?.[n.key];return !!m&&m.world===id&&!m.completed};
  const recommended=nodes.find(n=>available(n)&&!completed(n)&&started(n)&&n.key===state.active)||nodes.find(n=>available(n)&&!completed(n)&&started(n))||nodes.find(n=>available(n)&&!completed(n))||null;
- const playableTotal=nodes.filter(available).length,playableCompleted=nodes.filter(n=>available(n)&&completed(n)).length;
- return {recommended,completed:nodes.filter(completed).length,total:nodes.length,playableTotal,playableCompleted,complete:playableTotal>0&&playableTotal===playableCompleted,priorKnowledge:id==='puntenbaai',nodes:nodes.map(n=>({...n,started:started(n),recommended:n===recommended,state:completed(n)?'completed':!available(n)?'soon':started(n)?'started':n===recommended?'current':'available'}))};
+ const playableTotal=nodes.filter(released).length,playableCompleted=nodes.filter(n=>released(n)&&completed(n)).length;
+ return {recommended,completed:nodes.filter(completed).length,total:nodes.length,playableTotal,playableCompleted,complete:playableTotal>0&&playableTotal===playableCompleted,priorKnowledge:id==='puntenbaai',unlocked:open,prerequisite:prerequisite[id]||null,nodes:nodes.map(n=>({...n,started:started(n),recommended:n===recommended,state:completed(n)?'completed':!released(n)?'soon':!open?'locked':started(n)?'started':n===recommended?'current':'available'}))};
 }
-// The numbered route starts after optional prior knowledge. Any released level
-// remains selectable; continuing a chosen unfinished exercise takes precedence.
+// Puntenbaai is optional prior knowledge. Hellingrug is the first required world;
+// each later world opens only after the previous required world is complete.
+// Existing work in a later world is grandfathered so an older save is never stranded.
 const routeOrder=Object.freeze(['hellingrug','grenspas','formulewerf','signaalstad']);
+const prerequisite=Object.freeze({grenspas:'hellingrug',formulewerf:'grenspas',signaalstad:'formulewerf'});
+function legacyTouched(id,legacy){
+ const raw=legacy?.state||legacy;if(!raw)return false;
+ const ids=new Set(all(get(id)).filter(n=>n.playable).map(n=>n.id));
+ if(Array.isArray(raw.access)&&raw.access.some(skill=>ids.has(skill)))return true;
+ if(!raw.skills)return false;
+ const migrated=W.migrate(raw);migrated.review||=[];migrated.skills||={};
+ return all(get(id)).some(n=>n.playable&&W.ready(migrated,n.id));
+}
+function touched(state,id,legacy){
+ return Object.values(state.missions||{}).some(m=>m?.world===id)||
+  (state.events||[]).some(e=>String(e?.taskId||'').startsWith('rechten-v2:'+id+':'))||legacyTouched(id,legacy);
+}
+function unlocked(state,id,legacy){
+ id=canonical(id);
+ if(id==='puntenbaai'||id==='hellingrug'||!prerequisite[id])return true;
+ if(touched(state,id,legacy))return true;
+ return statuses(state,prerequisite[id],legacy).complete;
+}
 function recommendation(state,legacy){
  const active=state.missions?.[state.active];
  const result=(id,node,resume=false)=>({id,node,resume,zone:get(id).zones.find(z=>z.nodes.some(n=>n.key===node?.key))?.id||get(id).zones[0].id});
- if(active&&!active.completed){const summary=statuses(state,active.world,legacy),node=summary.nodes.find(n=>n.key===state.active&&n.playable);if(node)return result(active.world,node,true)}
- for(const id of routeOrder){const summary=statuses(state,id,legacy);if(summary.recommended)return result(id,summary.recommended,summary.nodes.find(n=>n.key===summary.recommended.key).started)}
+ if(active&&!active.completed&&unlocked(state,active.world,legacy)){const summary=statuses(state,active.world,legacy),node=summary.nodes.find(n=>n.key===state.active&&n.playable&&n.state!=='locked');if(node)return result(active.world,node,true)}
+ for(const id of routeOrder){const summary=statuses(state,id,legacy);if(summary.unlocked&&summary.recommended)return result(id,summary.recommended,summary.nodes.find(n=>n.key===summary.recommended.key).started)}
  return result('hellingrug',null);
 }
 
@@ -86,5 +107,5 @@ function locationState(source,screen,{area,zone,stop}={}){
 }
 function hash(state){const {id,zone,stop}=selection(state);if(state.screen==='world'&&state.settings?.shell?.area)return '#'+id+(get(id).zones.length>1?'/'+zone.id:'')+(stop?'/halte/'+stop.key:'');return {world:'#wereld',mission:'#oefenen',book:'#voortgang',profile:'#profiel'}[state.screen]||'#wereld'}
 function fromHash(source,hash){const parts=hash.replace(/^#/,'').split('/'),id=canonical(parts[0]);if(has(id)){const a=get(id),zone=a.zones.find(z=>z.id===parts[1])||a.zones[0],stop=parts[parts.indexOf('halte')+1];return locationState(source,parts.includes('halte')&&(id==='formulewerf'?all(a):zone.nodes).some(n=>n.key===stop)?'stop':'area',{area:id,zone:zone.id,stop})}const screen={'wereld':'world','voortgang':'book','profiel':'profile'}[parts[0]];return screen?locationState(source,screen):locationState(source,'world')}
-return Object.freeze({areas,get,all,selection,statuses,routeOrder,recommendation,locationState,hash,fromHash});
+return Object.freeze({areas,get,all,selection,statuses,routeOrder,prerequisite,unlocked,recommendation,locationState,hash,fromHash});
 });

@@ -190,3 +190,5 @@ leraarbob-topbar::part(toolbar-button):hover{background:#e7eee0;border-color:#9b
 @media(max-width:850px){#progressGames{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:450px){#progressGames{gap:10px}.progress-cover{height:75px}#progressGames .progress-game>:not(img){margin-inline:10px}#progressGames .progress-game-link{font-size:15px}#progressGames .progress-game-label{font-size:12px;min-height:34px}#progressReserveGames li{grid-template-columns:1fr}#progressReserveGames li>*{grid-column:auto;grid-row:auto}}
 #progressGames .progress-subject{min-height:28px;line-height:14px}
+
+.featured-card[data-world=algebra]{--panel:#f3eddf;--card-ink:#273d52;--card-muted:#4f6272;--subject:#80611f}.featured-card[data-world=algebra] .cover-img{object-position:62% 45%}:root[data-mode=dark] .featured-card[data-world=algebra]{--panel:#243443;--card-ink:#f4f1e5;--card-muted:#d2dee7;--subject:#f0cb7c}

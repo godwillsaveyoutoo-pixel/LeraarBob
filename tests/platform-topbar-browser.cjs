@@ -26,22 +26,39 @@ try{for(const item of items.filter(x=>!process.env.LB_PAGES||process.env.LB_PAGE
  const metrics=()=>c.eval(`(()=>{const h=document.querySelector('.lb-header'),b=document.querySelector('leraarbob-topbar'),r=b.getBoundingClientRect(),buttons=[...b.shadowRoot.querySelectorAll('.row button,.row a')].filter(e=>e.getClientRects().length),issues=[];if(r.width<100||r.y<0||r.bottom>innerHeight)issues.push('bar outside '+JSON.stringify(r));for(const e of buttons){const q=e.getBoundingClientRect();if(q.right>innerWidth+1||q.left<0)issues.push('outside '+e.className);if(document.elementFromPoint(q.x+q.width/2,q.y+q.height/2)!==b)issues.push('covered '+e.className+' by '+document.elementFromPoint(q.x+q.width/2,q.y+q.height/2)?.outerHTML?.slice(0,160));if(q.height<44)issues.push('small '+e.className+' '+q.height);}const badge=b.shadowRoot.querySelector('.progress');if(badge&&!badge.hidden){const q=badge.getBoundingClientRect(),a=b.shadowRoot.querySelector('.account').getBoundingClientRect();if(q.left<0||q.right>innerWidth||q.right>a.left||Math.abs(q.y+q.height/2-a.y-a.height/2)>2)issues.push('progress not beside account');}return {issues,headerHeight:h.getBoundingClientRect().height,pageWidth:document.documentElement.scrollWidth,screen:innerWidth}})()`);
  await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.settings').click()");assert.equal(await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('dialog').open"),true);await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.close').click()");const desktop=await metrics();await c.shot('shared-topbar-'+item.title.replace(/[^a-zA-Z]/g,'')+'-desktop');await c.size(390,844);const mobile=await metrics();await c.size(320,568);assert.deepEqual((await metrics()).issues,[],'narrow phone');await c.size(390,844);await c.shot('shared-topbar-'+item.title.replace(/[^a-zA-Z]/g,'')+'-phone');
  // Preserve structured menu labels and inspect the open panel at both sizes.
- for(const [width,height] of [[1366,768],[390,844]]){
+ for(const [width,height] of [[1366,768],[780,360],[390,844]]){
   await c.size(width,height);await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.menu').click()");await c.frames();
   assert.equal(await c.eval("(()=>{const s=document.querySelector('leraarbob-topbar').shadowRoot,d=s.querySelector('dialog'),r=d.getBoundingClientRect();return d.open&&r.left>=0&&r.right<=innerWidth&&r.bottom<=innerHeight&&d.scrollWidth<=d.clientWidth})()"),true);
+  const closePosition=await c.eval(`(()=>{const s=document.querySelector('leraarbob-topbar').shadowRoot,b=s.querySelector(getComputedStyle(s.querySelector('.mobile-menu')).display!=='none'?'.mobile-menu':'.menu').getBoundingClientRect(),x=s.querySelector('.close').getBoundingClientRect();return Math.abs(b.x-x.x)<2&&Math.abs(b.y-x.y)<2&&x.width>=44&&x.height>=44})()`);assert(closePosition,'close stays at hamburger position');
   if(item.title==='Rechtenwereld'){
-   assert.deepEqual(await c.eval("[...document.querySelector('leraarbob-topbar').shadowRoot.querySelectorAll('.menu-name')].map(e=>e.textContent)"),['leraarBob','Mijn voortgang','Profiel','Bovenbalk inklappen']);
-   assert.equal(await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.menu-options h3').textContent"),'Mijn leerplek');
+   const names=await c.eval("[...document.querySelector('leraarbob-topbar').shadowRoot.querySelectorAll('.menu-name')].map(e=>e.textContent)");
+   for(const name of ['Spelmenu','Spelvoortgang','Samen leren','Online duel','Duo-battle op één toestel','Klasbattle','Spellen','Mijn leerpad','Instellingen'])assert(names.includes(name),name);
+   assert.equal(names.filter(n=>n==='Spelvoortgang').length,1);assert(!names.includes('Mijn voortgang'));assert(names.indexOf('Spelmenu')<names.indexOf('Spellen'));
+   const headings=await c.eval("[...document.querySelector('leraarbob-topbar').shadowRoot.querySelectorAll('.menu-list h3')].map(e=>e.textContent)");
+   for(const heading of ['Huidig spel','Leren','Battles','leraarBob','Account'])assert(headings.includes(heading),heading);
   }
   if(item.href.includes('Axioma_Vectorentrainer')){
    assert.equal(await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('[data-source=playBtn] .menu-name').textContent"),'Oefeningenreeks');
    assert.equal(await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('[data-source=playBtn] .menu-description').textContent"),'Volg jouw route');
+   assert.equal(await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('[data-source=playBtn]').closest('section').querySelector('h3').textContent"),'Huidig spel');
+   assert.equal(await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('[data-source=battleBtn]').closest('section').querySelector('h3').textContent"),'Battles');
+  }
+  if(item.title==='Wortelbouw'){
+   assert.equal(await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('[data-source=proLevels] .menu-name').textContent"),'Spelmenu');
+   assert.equal(await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('[data-source=proLevels]').closest('section').querySelector('h3').textContent"),'Huidig spel');
   }
   await c.shot('shared-menu-'+item.title.replace(/[^a-zA-Z]/g,'')+'-'+width);await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.close').click()");
  }
+ // The same hierarchy adapts to account role without duplicating game progress.
+ for(const role of ['student','teacher']){
+  await c.eval(`dispatchEvent(new CustomEvent('axioma:login-complete',{detail:{account:{id:'test-role',role:'${role}',alias:'Testleerling'}}}));LeraarBobTopbar.openMenu()`);
+  const names=await c.eval("[...document.querySelector('leraarbob-topbar').shadowRoot.querySelectorAll('.menu-name')].map(e=>e.textContent)");
+  assert(names.includes('Profiel'));assert.equal(names.includes('Mijn klassen'),role==='teacher');assert.equal(names.filter(x=>x==='Mijn leerpad').length,1);
+  await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.close').click()");
+ }
  const start={'Algebra Smederij':'rfHomeStart','Data Check':'homeStart','Signal Lab':'signalHomeStart','Verfwinkel':'vfStart'}[item.title];
  if(start){await c.size(1366,768);await c.click('#'+start);await c.frames();await c.shot('shared-topbar-'+item.title.replace(/[^a-zA-Z]/g,'')+'-play');assert.deepEqual((await metrics()).issues,[]);}
- if(item.title==='Rechtenwereld'){await c.eval("document.querySelector('[data-world-node=hellingrug]').click()");await c.wait("document.querySelector('.area-page leraarbob-topbar')!==null");await c.frames();assert.equal(await c.eval("document.querySelectorAll('leraarbob-topbar').length"),1);assert.match(await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.crumbs').textContent"),/Hellingrug/);await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.crumbs button').click()");await c.wait("!!document.querySelector('.world-page leraarbob-topbar')");}
+ if(item.title==='Rechtenwereld'){assert.equal(await c.eval("document.getElementById('start-recommended').dataset.zone"),'route');await c.click('#start-recommended');await c.wait("document.querySelector('.area-page leraarbob-topbar')!==null");await c.frames();assert.equal(await c.eval("document.querySelectorAll('leraarbob-topbar').length"),1);assert.match(await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.crumbs').textContent"),/Hellingrug/);await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.crumbs button').click()");await c.wait("!!document.querySelector('.world-page leraarbob-topbar')");}
 
  await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.collapse').click()");await c.frames();const folded=await c.eval("document.querySelector('.lb-header').getBoundingClientRect().height");{const previous=c.loads||0;await c.send('Page.reload');for(let i=0;i<200&&(c.loads||0)<=previous;i++)await new Promise(r=>setTimeout(r,25));}await c.wait('!!document.querySelector("leraarbob-topbar")');const saved=await c.eval("document.querySelector('.lb-header').classList.contains('lb-collapsed')");await c.eval("document.querySelector('.lb-restore').click()");await c.frames();
  assert.deepEqual(desktop.issues,[]);assert.deepEqual(mobile.issues,[]);assert.equal(folded,0);assert.equal(saved,true);assert.deepEqual(c.errors,[]);results.push({title:item.title,desktop,mobile,folded,saved,errors:c.errors});console.log(JSON.stringify(results.at(-1)));

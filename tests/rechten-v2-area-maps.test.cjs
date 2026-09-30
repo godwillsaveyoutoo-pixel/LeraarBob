@@ -26,6 +26,6 @@ test('unreleased previews never award completion; historical readiness is read o
  for(const [id,a] of Object.entries(A.areas))for(const n of A.statuses(state,id,mastered).nodes)assert.equal(n.state==='completed',W.ready(mastered,n.id));
 });
 test('a partial sign step never completes either sign stop; positive completion cannot complete the negative variant',()=>{
- const state=R.initial();state.events.push({skill:'sign',correct:true,variant:0,attemptId:'interval:2',phase:'execute'});assert.equal(A.statuses(state,'grenspas').nodes.find(n=>n.key==='positive').state,'available');
+ const state=R.start(R.initial(),'grenspas');state.events.push({skill:'sign',correct:true,variant:0,attemptId:'interval:2',phase:'execute'});assert.equal(A.statuses(state,'grenspas').nodes.find(n=>n.key==='positive').state,'available');
  state.events.push({skill:'sign',correct:true,variant:0,attemptId:'symbol:3',phase:'execute'});const status=A.statuses(state,'grenspas');assert.equal(status.nodes.find(n=>n.key==='positive').state,'completed');assert.equal(status.nodes.find(n=>n.key==='negative').state,'available');
 });
