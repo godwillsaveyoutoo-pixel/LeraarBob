@@ -8,3 +8,6 @@ verify_jwt = true
 
 [functions.rechten-learn]
 verify_jwt = true
+
+[functions.vector-class]
+verify_jwt = true

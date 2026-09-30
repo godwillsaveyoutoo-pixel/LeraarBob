@@ -232,7 +232,7 @@ function renderChoices(){
  task.options.forEach((v,i)=>{
   const b=document.createElement('button');b.className='choice-answer';b.dataset.choice=String(i);mathText(b,task.choiceFormat==='coordinates'?coord(v):`Keuze ${i+1}`);
   b.disabled=intro||done||!!battle?.cooling;
-  if(answer.choice===i)b.classList.add(M.vectorEquals(v,task.target)?'correct':'incorrect');
+  if(answer.choice===i)b.classList.add(battle?.singleAttempt&&!document.body.classList.contains('class-review')?'selected':M.vectorEquals(v,task.target)?'correct':'incorrect');
   b.onclick=()=>{answer.choice=i;commit();renderChoices()};root.append(b);
  });
 }
@@ -264,7 +264,7 @@ function commit(){
  if(reviewIndex!==null){if(reviewIndex<questionHistory.length-1)reviewQuestion(reviewIndex+1);else returnToCurrent();return;}
  if(battle){
   if(done||battle.cooling)return;
-  if(battle.singleAttempt){done=true;feedbackState={kind:'method',title:'Ingediend',text:'Je antwoord wordt verstuurd.'};updateUI(false);battle.submit(answer,false);return;}
+  if(battle.singleAttempt){done=true;feedbackState=null;updateUI(false);battle.submit(answer,false);return;}
   const result=Validator.validate(task,answer);
   if(result.ok){done=true;feedbackState={kind:'good',title:'Ingediend',text:'Je antwoord wordt nagekeken.'};updateUI(false);battle.submit(answer,false);return;}
   message(VectorMission.diagnostic(task,answer,M,result.message),'repair');
@@ -414,10 +414,10 @@ function renderBoard(drawTask=task,svg=$('board'),example=intro,step=lessonStep,
   frame.strokes.forEach((s,i)=>{const g=arrow(s.start,s,s.name||'',s.role==='result'?'result':'example');if(step<frames.length-1&&i<previous&&frame.strokes.length>previous)g.classList.add('construction-previous')});
   for(const m of frame.measurements||[])measure(m.start,m.v,m.label,m.vertical);
  }
- if(done&&task.policy==='commute'){
+ if(done&&(!battle?.singleAttempt||intro)&&task.policy==='commute'){
   arrow(task.start,task.target,'u+v','result');arrow(task.secondStart,task.target,'v+u','result');
  }
- if(done&&!intro&&task.policy==='decompose'){const label=coord(task.target);put('text',{x:16,y:view.h-12,fill:'var(--teal)',class:'vector-label'},`Δx = ${format(task.target.dx)} · Δy = ${format(task.target.dy)} → ${label}`);}
+ if(done&&!intro&&!battle?.singleAttempt&&task.policy==='decompose'){const label=coord(task.target);put('text',{x:16,y:view.h-12,fill:'var(--teal)',class:'vector-label'},`Δx = ${format(task.target.dx)} · Δy = ${format(task.target.dy)} → ${label}`);}
  for(const m of task.points)drawPoint(m.p,m.name,false,interactive&&!battle&&!intro&&['opposite','scalar'].includes(task.skill)&&M.samePoint(m.p,task.start));
  if(interactive&&guidedFlow()){const p=project(guidedStart());put('circle',{'data-guided-start':'',cx:p.x,cy:p.y,r:12,fill:'none',stroke:'var(--teal)','stroke-width':2,'stroke-dasharray':'3 3'});}
  if(interactive&&anchor){const p=project(anchor);put('circle',{cx:p.x,cy:p.y,r:9,fill:'none',stroke:'var(--selection)','stroke-width':2});}
@@ -453,7 +453,7 @@ $('board').addEventListener('keydown',e=>{if(!editable())return;if(!cursorVisibl
 $('undoBtn').onclick=()=>{if(!editable())return;if(anchor)anchor=null;else if(task.interaction==='point')answer.point=null;else answer.strokes.pop();syncGuidedStage();message('Laatste stap teruggenomen.');updateUI(false);save();renderBoard()};
 for(const [id,value] of [['vectorTool','vector'],['resultTool','result']])$(id).onclick=()=>{role=value;cancelGesture();updateUI(false)};
 $('commit').onclick=commit;
-$('skip').onclick=()=>{if(!task||done||intro)return;if(battle){done=true;feedbackState={kind:'method',title:'Gepast',text:battle.singleAttempt?'Wacht tot de ronde afgelopen is.':'Je tegenstander speelt nog verder.'};updateUI(false);battle.submit(answer,true);return;}dirty=true;errorCode=errorCode||'practice';finish(false,false);nextTask()};
+$('skip').onclick=()=>{if(!task||done||intro)return;if(battle){done=true;feedbackState=battle.singleAttempt?null:{kind:'method',title:'Gepast',text:'Je tegenstander speelt nog verder.'};updateUI(false);battle.submit(answer,true);return;}dirty=true;errorCode=errorCode||'practice';finish(false,false);nextTask()};
 function recommendedSkillId(){
  if(task&&!free)return task.skill;
  if(restored&&!restored.free)return restored.skill;
@@ -643,8 +643,13 @@ window.addEventListener('pagehide',save);
 window.AxiomaVectorTrainer=Object.freeze({inspect:()=>structuredClone({task,answer,intro,done,dirty,stage,free,session,progress,view,lessonStep}),project:p=>project(p)});
 if(battle){
  battle.connect({
-  start(spec){task=Generator.generate(spec.skill,{seed:spec.seed,variant:spec.variant,level:1});free=true;session=null;intro=false;coachCollapsed=true;resetAnswer();screen('play');updateUI();},
-  freeze(text){done=true;cancelGesture();feedbackState={kind:'good',title:'Ronde afgelopen',text};updateUI(false);},
+  start(spec){document.body.classList.remove('class-review');document.body.classList.toggle('class-projector',!!spec.projector);task=Generator.generate(spec.skill,{seed:spec.seed,variant:spec.variant,level:1});free=true;session=null;intro=false;coachCollapsed=true;resetAnswer();screen('play');updateUI();},
+  freeze(text){done=true;cancelGesture();feedbackState=battle.singleAttempt?null:{kind:'good',title:'Ronde afgelopen',text};updateUI(false);},
+  review(){
+   cancelGesture();document.body.classList.add('class-review');intro=true;done=true;feedbackState=null;
+   lessonStep=lesson(task).steps.length-1;answer={strokes:[],values:[String(task.target?.dx??''),String(task.target?.dy??'')],point:null,choice:task.options?.findIndex(v=>M.vectorEquals(v,task.target))??null};
+   updateUI(false);
+  },
   cooldown(seconds){
    if(!seconds){clearRejectedStrokes();feedbackState=null;updateUI();return;}
    $('commit').disabled=true;$('commit').textContent=`Wacht ${seconds} s`;

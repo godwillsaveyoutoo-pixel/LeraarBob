@@ -823,6 +823,12 @@ body :is(button,input,select,textarea,dialog,[role=dialog],[role=menu],.trainer-
  leraarbob-topbar::part(crumb-game){font-size:14px;padding:6px 10px}
  leraarbob-topbar::part(crumb-link){font-size:11px;padding:6px}
 }
+
+/* Navigation shell rollout: avoid a second platform row on mobile. */
+@media(max-width:650px){
+ body.lb-nav-pilot leraarbob-topbar::part(row){height:52px;min-height:52px;padding:4px 6px}
+ body.lb-nav-pilot .trainer-header.lb-header{min-height:52px}
+}
 </style><style>/* A full trainer fits in each half of the shared battle screen. */
 body.battle-player #app{grid-template-rows:minmax(0,1fr)}
 .battle-player .trainer-header,.battle-player #rotate,.battle-player .practice-labels,.battle-player #coachPanel,.battle-player #coachTab,.battle-player #earnedXP,.battle-player #feedbackReason{display:none!important}
@@ -883,6 +889,64 @@ body.battle-player #boardWrap,body.battle-player #choiceWork,body.battle-player 
 @media(max-width:500px){body.battle-player #play{grid-template-columns:46px minmax(0,1fr) 78px;gap:4px}body.battle-player #commit,body.battle-player #skip{width:78px;font-size:12px}body.battle-player .draw-tools button span{display:block;margin:0}body.battle-player .questionbar h1{font-size:15px}body.battle-player .task-givens{font-size:14px}}
 body.battle-player #commit{position:static;grid-column:3;grid-row:2;align-self:start}
 body.battle-player #skip{position:static;grid-column:3;grid-row:2;align-self:start;margin-top:52px}
+
+/* Class rounds: no verdict before closing, readable choices and phone keypad. */
+body.class-player #feedbackPanel{display:none!important}
+body.class-player #boardWrap{margin:0}
+body.class-player .choice-answer{min-height:52px;padding:10px 8px;font-size:16px;line-height:1.3;border:1px solid #588298;background:#112b3e;box-shadow:inset 0 -3px #244e63}
+body.class-player .choice-answer.selected{border:2px solid #7bddf2;background:#19475a;opacity:1}
+body.class-player #choiceWork,body.class-player #choiceWork.arrow-choices{width:210px;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:10px;align-content:start}
+body.class-player[data-interaction=choice] #play,body.class-player[data-interaction=number] #play{grid-template-columns:minmax(0,1fr) 106px}
+body.class-player[data-interaction=choice] .work,body.class-player[data-interaction=number] .work{grid-column:1}
+body.class-player[data-interaction=choice] #commit,body.class-player[data-interaction=choice] #skip,body.class-player[data-interaction=number] #commit,body.class-player[data-interaction=number] #skip{grid-column:2}
+body.class-player .symbolic #numberWork{display:flex;align-items:center;justify-content:center;gap:24px;padding:16px}
+body.class-player .symbolic #coordinateEditor{width:260px;flex-shrink:0}
+body.class-player .keypad button{min-height:44px}
+body.class-player.class-projector #play,body.class-player.class-review #play{grid-template-columns:minmax(0,1fr)}
+body.class-player.class-projector .work,body.class-player.class-review .work{grid-column:1}
+body.class-player.class-projector #play footer,body.class-player.class-review #play footer{display:none!important}
+body.class-player.class-projector:not(.class-review) #numberWork{display:none!important}
+body.class-player.class-projector:not(.class-review) .symbolic #numberWork{display:flex!important}
+body.class-player.class-projector:not(.class-review) #coordinateEditor{display:none!important}
+body.class-player.class-projector .choice-answer:disabled{opacity:1}
+body.class-player.class-review .work{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,30%);gap:12px}
+body.class-player.class-review #lessonPanel{display:flex!important;flex-direction:column;justify-content:center;width:auto;max-height:100%;overflow:auto;padding:12px}
+body.class-player.class-review :is(#lessonTrack,#lessonCount,#lessonBack,#lessonVisualKey){display:none!important}
+body.class-player.class-review #lessonTitle{font-size:17px}
+body.class-player.class-review :is(#lessonText,#lessonCalculation){font-size:14px;line-height:1.45}
+body.class-player.class-review #choiceWork{display:none!important}
+body.class-player.class-review #numberWork{display:none!important}
+body.class-player.class-review .symbolic #lessonPanel{grid-column:1/-1;align-items:center;text-align:center}
+@media(max-width:650px) and (orientation:portrait){
+ body.class-player #play,body.class-player[data-interaction=choice] #play,body.class-player[data-interaction=number] #play{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;padding:4px;gap:8px}
+ body.class-player .work,body.class-player[data-interaction=choice] .work,body.class-player[data-interaction=number] .work{grid-column:1;grid-row:2;min-width:0}
+ body.class-player #play footer{display:flex;grid-column:1;grid-row:3;gap:8px;flex-wrap:nowrap;padding:0;min-height:44px}
+ body.class-player .draw-tools{display:flex;flex-direction:row;flex:1;gap:4px}
+ body.class-player .draw-tools button{width:auto;flex:1;min-width:44px}
+ body.class-player #skip,body.class-player #commit{position:static;min-height:44px;width:auto;min-width:60px;margin:0;padding:8px;font-size:13px}
+ body.class-player #skip{margin-left:auto}
+ body.class-player .choice-grid,body.class-player .grid-number{display:flex;flex-direction:column;gap:8px}
+ body.class-player #boardWrap{flex:1;min-height:100px;width:100%}
+ body.class-player #choiceWork,body.class-player #choiceWork.arrow-choices{width:100%;flex:none;padding:8px;gap:10px}
+ body.class-player #numberWork{flex:none;width:100%;padding:6px}
+ body.class-player .grid-number .coordinate-editor{display:flex;flex-direction:column;gap:6px}
+ body.class-player .grid-number .slots{grid-template-columns:1fr 1fr;gap:8px}
+ body.class-player .slot{min-height:48px}
+ body.class-player .keypad button,body.class-player .grid-number .keypad button{min-height:44px}
+ body.class-player .symbolic #numberWork{display:flex;flex-direction:column;justify-content:center;gap:14px;padding:10px}
+ body.class-player .symbolic #coordinateEditor{width:100%}
+ body.class-player.class-projector #play,body.class-player.class-review #play{grid-template-rows:auto minmax(0,1fr)}
+ body.class-player.class-review .work{display:flex;flex-direction:column}
+ body.class-player.class-review #lessonPanel{flex:0 0 auto;max-height:42%;padding:8px}
+ body.class-player.class-review #lessonTitle{font-size:15px}
+ body.class-player.class-review :is(#lessonText,#lessonCalculation){font-size:13px;margin:3px 0}
+}
+@media(orientation:landscape) and (min-width:550px){
+ body.class-player .grid-number #numberWork{width:340px;padding:6px;flex-shrink:0}
+ body.class-player .grid-number .coordinate-editor{display:grid;grid-template-columns:66px minmax(0,1fr);gap:8px}
+ body.class-player .grid-number .slots{grid-template-columns:1fr;gap:4px}
+ body.class-player .grid-number #keyHint{display:none}
+}
 </style></head>
 <body data-screen="home" style="--night-sky:url(assets/vector-night-sky.svg)"><div id="app">
 <header class="trainer-header" data-collapsible-topbar>
@@ -1587,12 +1651,15 @@ window.VectorBattlePlayer={
   cooldown=setInterval(()=>{left--;if(left){hooks.cooldown(left);return;}clearInterval(cooldown);this.cooling=false;hooks.cooldown(0);},1000);
  },
 };
+document.body.classList.toggle('class-player',window.VectorBattlePlayer.singleAttempt);
 addEventListener('message',event=>{
  if(event.source!==parent||event.origin!==peerOrigin)return;
  const data=event.data;if(!data||typeof data!=='object'||!hooks)return;
  if(data.type==='vector-battle-ping'){send({type:'vector-battle-ready'});return;}
  if(data.type==='vector-battle-question'&&typeof data.match==='string'&&Number.isInteger(data.index)&&data.index>=0&&VectorTrainerCore.TaskGenerator.skills.some(s=>s.id===data.skill)&&Number.isInteger(data.seed)&&Number.isInteger(data.variant)){
   clearInterval(cooldown);window.VectorBattlePlayer.cooling=false;round={match:data.match,index:data.index};hooks.start(data);
+ }else if(data.type==='vector-class-review'&&window.VectorBattlePlayer.singleAttempt&&round&&data.match===round.match&&data.index===round.index){
+  hooks.review();
  }else if(data.type==='vector-battle-resolved'&&round&&data.match===round.match&&data.index===round.index){
   clearInterval(cooldown);window.VectorBattlePlayer.cooling=false;hooks.freeze(String(data.message||'Ronde afgerond'));
  }
@@ -1896,7 +1963,7 @@ function renderChoices(){
  task.options.forEach((v,i)=>{
   const b=document.createElement('button');b.className='choice-answer';b.dataset.choice=String(i);mathText(b,task.choiceFormat==='coordinates'?coord(v):`Keuze ${i+1}`);
   b.disabled=intro||done||!!battle?.cooling;
-  if(answer.choice===i)b.classList.add(M.vectorEquals(v,task.target)?'correct':'incorrect');
+  if(answer.choice===i)b.classList.add(battle?.singleAttempt&&!document.body.classList.contains('class-review')?'selected':M.vectorEquals(v,task.target)?'correct':'incorrect');
   b.onclick=()=>{answer.choice=i;commit();renderChoices()};root.append(b);
  });
 }
@@ -1928,7 +1995,7 @@ function commit(){
  if(reviewIndex!==null){if(reviewIndex<questionHistory.length-1)reviewQuestion(reviewIndex+1);else returnToCurrent();return;}
  if(battle){
   if(done||battle.cooling)return;
-  if(battle.singleAttempt){done=true;feedbackState={kind:'method',title:'Ingediend',text:'Je antwoord wordt verstuurd.'};updateUI(false);battle.submit(answer,false);return;}
+  if(battle.singleAttempt){done=true;feedbackState=null;updateUI(false);battle.submit(answer,false);return;}
   const result=Validator.validate(task,answer);
   if(result.ok){done=true;feedbackState={kind:'good',title:'Ingediend',text:'Je antwoord wordt nagekeken.'};updateUI(false);battle.submit(answer,false);return;}
   message(VectorMission.diagnostic(task,answer,M,result.message),'repair');
@@ -2078,10 +2145,10 @@ function renderBoard(drawTask=task,svg=$('board'),example=intro,step=lessonStep,
   frame.strokes.forEach((s,i)=>{const g=arrow(s.start,s,s.name||'',s.role==='result'?'result':'example');if(step<frames.length-1&&i<previous&&frame.strokes.length>previous)g.classList.add('construction-previous')});
   for(const m of frame.measurements||[])measure(m.start,m.v,m.label,m.vertical);
  }
- if(done&&task.policy==='commute'){
+ if(done&&(!battle?.singleAttempt||intro)&&task.policy==='commute'){
   arrow(task.start,task.target,'u+v','result');arrow(task.secondStart,task.target,'v+u','result');
  }
- if(done&&!intro&&task.policy==='decompose'){const label=coord(task.target);put('text',{x:16,y:view.h-12,fill:'var(--teal)',class:'vector-label'},`Δx = ${format(task.target.dx)} · Δy = ${format(task.target.dy)} → ${label}`);}
+ if(done&&!intro&&!battle?.singleAttempt&&task.policy==='decompose'){const label=coord(task.target);put('text',{x:16,y:view.h-12,fill:'var(--teal)',class:'vector-label'},`Δx = ${format(task.target.dx)} · Δy = ${format(task.target.dy)} → ${label}`);}
  for(const m of task.points)drawPoint(m.p,m.name,false,interactive&&!battle&&!intro&&['opposite','scalar'].includes(task.skill)&&M.samePoint(m.p,task.start));
  if(interactive&&guidedFlow()){const p=project(guidedStart());put('circle',{'data-guided-start':'',cx:p.x,cy:p.y,r:12,fill:'none',stroke:'var(--teal)','stroke-width':2,'stroke-dasharray':'3 3'});}
  if(interactive&&anchor){const p=project(anchor);put('circle',{cx:p.x,cy:p.y,r:9,fill:'none',stroke:'var(--selection)','stroke-width':2});}
@@ -2117,7 +2184,7 @@ $('board').addEventListener('keydown',e=>{if(!editable())return;if(!cursorVisibl
 $('undoBtn').onclick=()=>{if(!editable())return;if(anchor)anchor=null;else if(task.interaction==='point')answer.point=null;else answer.strokes.pop();syncGuidedStage();message('Laatste stap teruggenomen.');updateUI(false);save();renderBoard()};
 for(const [id,value] of [['vectorTool','vector'],['resultTool','result']])$(id).onclick=()=>{role=value;cancelGesture();updateUI(false)};
 $('commit').onclick=commit;
-$('skip').onclick=()=>{if(!task||done||intro)return;if(battle){done=true;feedbackState={kind:'method',title:'Gepast',text:battle.singleAttempt?'Wacht tot de ronde afgelopen is.':'Je tegenstander speelt nog verder.'};updateUI(false);battle.submit(answer,true);return;}dirty=true;errorCode=errorCode||'practice';finish(false,false);nextTask()};
+$('skip').onclick=()=>{if(!task||done||intro)return;if(battle){done=true;feedbackState=battle.singleAttempt?null:{kind:'method',title:'Gepast',text:'Je tegenstander speelt nog verder.'};updateUI(false);battle.submit(answer,true);return;}dirty=true;errorCode=errorCode||'practice';finish(false,false);nextTask()};
 function recommendedSkillId(){
  if(task&&!free)return task.skill;
  if(restored&&!restored.free)return restored.skill;
@@ -2307,8 +2374,13 @@ window.addEventListener('pagehide',save);
 window.AxiomaVectorTrainer=Object.freeze({inspect:()=>structuredClone({task,answer,intro,done,dirty,stage,free,session,progress,view,lessonStep}),project:p=>project(p)});
 if(battle){
  battle.connect({
-  start(spec){task=Generator.generate(spec.skill,{seed:spec.seed,variant:spec.variant,level:1});free=true;session=null;intro=false;coachCollapsed=true;resetAnswer();screen('play');updateUI();},
-  freeze(text){done=true;cancelGesture();feedbackState={kind:'good',title:'Ronde afgelopen',text};updateUI(false);},
+  start(spec){document.body.classList.remove('class-review');document.body.classList.toggle('class-projector',!!spec.projector);task=Generator.generate(spec.skill,{seed:spec.seed,variant:spec.variant,level:1});free=true;session=null;intro=false;coachCollapsed=true;resetAnswer();screen('play');updateUI();},
+  freeze(text){done=true;cancelGesture();feedbackState=battle.singleAttempt?null:{kind:'good',title:'Ronde afgelopen',text};updateUI(false);},
+  review(){
+   cancelGesture();document.body.classList.add('class-review');intro=true;done=true;feedbackState=null;
+   lessonStep=lesson(task).steps.length-1;answer={strokes:[],values:[String(task.target?.dx??''),String(task.target?.dy??'')],point:null,choice:task.options?.findIndex(v=>M.vectorEquals(v,task.target))??null};
+   updateUI(false);
+  },
   cooldown(seconds){
    if(!seconds){clearRejectedStrokes();feedbackState=null;updateUI();return;}
    $('commit').disabled=true;$('commit').textContent=`Wacht ${seconds} s`;

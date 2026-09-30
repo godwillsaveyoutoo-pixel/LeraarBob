@@ -19,12 +19,15 @@ window.VectorBattlePlayer={
   cooldown=setInterval(()=>{left--;if(left){hooks.cooldown(left);return;}clearInterval(cooldown);this.cooling=false;hooks.cooldown(0);},1000);
  },
 };
+document.body.classList.toggle('class-player',window.VectorBattlePlayer.singleAttempt);
 addEventListener('message',event=>{
  if(event.source!==parent||event.origin!==peerOrigin)return;
  const data=event.data;if(!data||typeof data!=='object'||!hooks)return;
  if(data.type==='vector-battle-ping'){send({type:'vector-battle-ready'});return;}
  if(data.type==='vector-battle-question'&&typeof data.match==='string'&&Number.isInteger(data.index)&&data.index>=0&&VectorTrainerCore.TaskGenerator.skills.some(s=>s.id===data.skill)&&Number.isInteger(data.seed)&&Number.isInteger(data.variant)){
   clearInterval(cooldown);window.VectorBattlePlayer.cooling=false;round={match:data.match,index:data.index};hooks.start(data);
+ }else if(data.type==='vector-class-review'&&window.VectorBattlePlayer.singleAttempt&&round&&data.match===round.match&&data.index===round.index){
+  hooks.review();
  }else if(data.type==='vector-battle-resolved'&&round&&data.match===round.match&&data.index===round.index){
   clearInterval(cooldown);window.VectorBattlePlayer.cooling=false;hooks.freeze(String(data.message||'Ronde afgerond'));
  }

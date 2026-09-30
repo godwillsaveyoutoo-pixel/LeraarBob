@@ -58,3 +58,61 @@ body.battle-player #boardWrap,body.battle-player #choiceWork,body.battle-player 
 @media(max-width:500px){body.battle-player #play{grid-template-columns:46px minmax(0,1fr) 78px;gap:4px}body.battle-player #commit,body.battle-player #skip{width:78px;font-size:12px}body.battle-player .draw-tools button span{display:block;margin:0}body.battle-player .questionbar h1{font-size:15px}body.battle-player .task-givens{font-size:14px}}
 body.battle-player #commit{position:static;grid-column:3;grid-row:2;align-self:start}
 body.battle-player #skip{position:static;grid-column:3;grid-row:2;align-self:start;margin-top:52px}
+
+/* Class rounds: no verdict before closing, readable choices and phone keypad. */
+body.class-player #feedbackPanel{display:none!important}
+body.class-player #boardWrap{margin:0}
+body.class-player .choice-answer{min-height:52px;padding:10px 8px;font-size:16px;line-height:1.3;border:1px solid #588298;background:#112b3e;box-shadow:inset 0 -3px #244e63}
+body.class-player .choice-answer.selected{border:2px solid #7bddf2;background:#19475a;opacity:1}
+body.class-player #choiceWork,body.class-player #choiceWork.arrow-choices{width:210px;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:10px;align-content:start}
+body.class-player[data-interaction=choice] #play,body.class-player[data-interaction=number] #play{grid-template-columns:minmax(0,1fr) 106px}
+body.class-player[data-interaction=choice] .work,body.class-player[data-interaction=number] .work{grid-column:1}
+body.class-player[data-interaction=choice] #commit,body.class-player[data-interaction=choice] #skip,body.class-player[data-interaction=number] #commit,body.class-player[data-interaction=number] #skip{grid-column:2}
+body.class-player .symbolic #numberWork{display:flex;align-items:center;justify-content:center;gap:24px;padding:16px}
+body.class-player .symbolic #coordinateEditor{width:260px;flex-shrink:0}
+body.class-player .keypad button{min-height:44px}
+body.class-player.class-projector #play,body.class-player.class-review #play{grid-template-columns:minmax(0,1fr)}
+body.class-player.class-projector .work,body.class-player.class-review .work{grid-column:1}
+body.class-player.class-projector #play footer,body.class-player.class-review #play footer{display:none!important}
+body.class-player.class-projector:not(.class-review) #numberWork{display:none!important}
+body.class-player.class-projector:not(.class-review) .symbolic #numberWork{display:flex!important}
+body.class-player.class-projector:not(.class-review) #coordinateEditor{display:none!important}
+body.class-player.class-projector .choice-answer:disabled{opacity:1}
+body.class-player.class-review .work{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,30%);gap:12px}
+body.class-player.class-review #lessonPanel{display:flex!important;flex-direction:column;justify-content:center;width:auto;max-height:100%;overflow:auto;padding:12px}
+body.class-player.class-review :is(#lessonTrack,#lessonCount,#lessonBack,#lessonVisualKey){display:none!important}
+body.class-player.class-review #lessonTitle{font-size:17px}
+body.class-player.class-review :is(#lessonText,#lessonCalculation){font-size:14px;line-height:1.45}
+body.class-player.class-review #choiceWork{display:none!important}
+body.class-player.class-review #numberWork{display:none!important}
+body.class-player.class-review .symbolic #lessonPanel{grid-column:1/-1;align-items:center;text-align:center}
+@media(max-width:650px) and (orientation:portrait){
+ body.class-player #play,body.class-player[data-interaction=choice] #play,body.class-player[data-interaction=number] #play{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;padding:4px;gap:8px}
+ body.class-player .work,body.class-player[data-interaction=choice] .work,body.class-player[data-interaction=number] .work{grid-column:1;grid-row:2;min-width:0}
+ body.class-player #play footer{display:flex;grid-column:1;grid-row:3;gap:8px;flex-wrap:nowrap;padding:0;min-height:44px}
+ body.class-player .draw-tools{display:flex;flex-direction:row;flex:1;gap:4px}
+ body.class-player .draw-tools button{width:auto;flex:1;min-width:44px}
+ body.class-player #skip,body.class-player #commit{position:static;min-height:44px;width:auto;min-width:60px;margin:0;padding:8px;font-size:13px}
+ body.class-player #skip{margin-left:auto}
+ body.class-player .choice-grid,body.class-player .grid-number{display:flex;flex-direction:column;gap:8px}
+ body.class-player #boardWrap{flex:1;min-height:100px;width:100%}
+ body.class-player #choiceWork,body.class-player #choiceWork.arrow-choices{width:100%;flex:none;padding:8px;gap:10px}
+ body.class-player #numberWork{flex:none;width:100%;padding:6px}
+ body.class-player .grid-number .coordinate-editor{display:flex;flex-direction:column;gap:6px}
+ body.class-player .grid-number .slots{grid-template-columns:1fr 1fr;gap:8px}
+ body.class-player .slot{min-height:48px}
+ body.class-player .keypad button,body.class-player .grid-number .keypad button{min-height:44px}
+ body.class-player .symbolic #numberWork{display:flex;flex-direction:column;justify-content:center;gap:14px;padding:10px}
+ body.class-player .symbolic #coordinateEditor{width:100%}
+ body.class-player.class-projector #play,body.class-player.class-review #play{grid-template-rows:auto minmax(0,1fr)}
+ body.class-player.class-review .work{display:flex;flex-direction:column}
+ body.class-player.class-review #lessonPanel{flex:0 0 auto;max-height:42%;padding:8px}
+ body.class-player.class-review #lessonTitle{font-size:15px}
+ body.class-player.class-review :is(#lessonText,#lessonCalculation){font-size:13px;margin:3px 0}
+}
+@media(orientation:landscape) and (min-width:550px){
+ body.class-player .grid-number #numberWork{width:340px;padding:6px;flex-shrink:0}
+ body.class-player .grid-number .coordinate-editor{display:grid;grid-template-columns:66px minmax(0,1fr);gap:8px}
+ body.class-player .grid-number .slots{grid-template-columns:1fr;gap:4px}
+ body.class-player .grid-number #keyHint{display:none}
+}

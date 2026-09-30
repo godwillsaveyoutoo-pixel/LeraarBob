@@ -1,0 +1,62 @@
+/* A projected lobby, one compact round bar, and an explicit discussion step. */
+.vector-classroom {--lb-control-radius:0px;--lb-panel-radius:0px}
+.vector-classroom :is(button,input,select,.card,dialog,.members li,.ranking li){border-radius:0}
+.vector-classroom main{max-width:1280px;padding:16px 24px}
+.vector-classroom .solo-link{display:inline-flex;align-items:center;min-height:44px;font-size:14px}
+.vector-classroom .setup{padding:16px 0;gap:24px 6%}
+.vector-classroom .card{padding:20px}
+.vector-classroom form{gap:16px}
+.vector-classroom .session-bar{gap:12px}
+.vector-classroom .host[data-phase=lobby]{display:grid;grid-template-columns:minmax(260px,.85fr) minmax(0,1.3fr);gap:20px;align-items:start}
+.vector-classroom .host[data-phase=lobby] .session-bar{grid-template-columns:1fr;gap:14px;margin:0}
+.vector-classroom .host[data-phase=lobby] .join-code{grid-row:auto;grid-column:1;padding:20px 12px}
+.vector-classroom .host[data-phase=lobby] #code{font-size:clamp(40px,5.5vw,74px);letter-spacing:.1em}
+.vector-classroom .host[data-phase=lobby] #closeSession{grid-row:auto;grid-column:1;justify-self:start}
+.vector-classroom #joinInstructions{font-size:14px}
+.vector-classroom .members{gap:8px;max-height:44vh;overflow:auto;align-content:start}
+.vector-classroom .members li{padding:10px 14px}
+.vector-classroom .lobby-launch{flex-wrap:wrap;gap:12px}
+.vector-classroom #start{min-width:0;width:100%}
+.vector-classroom #lobbyHelp{font-size:14px;line-height:1.5}
+.vector-classroom #results{max-width:950px;margin:auto;padding:18px 20px 0}
+.vector-classroom #resultTitle{margin-bottom:6px}
+.vector-classroom #resultSummary{font-size:14px;margin:6px 0}
+.vector-classroom #ownResult:empty{display:none}
+.vector-classroom #roundBreakdown{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.vector-classroom #roundBreakdown span{padding:8px 12px;background:#152c3d;border-left:3px solid #8fa4b7;font-weight:650;font-size:14px}
+.vector-classroom #roundBreakdown [data-kind=Juist]{border-color:#70e2ca;color:#92f1db}
+.vector-classroom #roundBreakdown [data-kind=Onjuist]{border-color:#f783d5}
+.vector-classroom .ranking{margin:14px 0;gap:6px}
+.vector-classroom .ranking li{padding:10px 12px;min-height:48px;grid-template-columns:30px minmax(0,1fr) auto 44px;gap:10px;font-size:15px}
+.vector-classroom .advance{position:sticky;bottom:0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin:12px -20px 0;padding:12px 20px;background:#102131;border-top:1px solid #4c6a80;z-index:2}
+.vector-classroom .advance button{min-width:0;min-height:48px}
+.vector-classroom #reviewHost{height:min(480px,58dvh);min-height:260px;margin-top:12px}
+.vector-classroom #reviewHost #board{height:100%;min-height:0}
+.vector-classroom[data-playing=true] .solo-link{display:none}
+.vector-classroom[data-playing=true] .session-bar{padding:0 4px}
+.vector-classroom[data-playing=true].topbar-collapsed .session-bar{padding-left:52px;padding-right:0}
+.vector-classroom[data-playing=true] #endRound{min-height:44px;padding:5px 10px;font-size:12px;margin-left:auto;order:4}
+.vector-classroom[data-playing=true] .round-status{min-height:32px;flex-wrap:wrap;gap:4px 12px}
+.vector-classroom[data-playing=true] #submissionStatus{flex-basis:auto}
+.vector-classroom[data-playing=true] #lateCount{display:none}
+.vector-classroom[data-playing=true] #retrySubmit{min-height:44px;font-size:12px;padding:4px 8px}
+@media(max-width:650px){
+ .vector-classroom main{padding:10px 12px}.vector-classroom .card{padding:16px}
+ .vector-classroom .setup{grid-template-columns:1fr;gap:16px;padding:8px 0}
+ .vector-classroom .setup-intro,.vector-classroom .setup form,.vector-classroom .rules{grid-column:1;grid-row:auto}
+ .vector-classroom h1{font-size:28px;margin:8px 0 12px}
+ .vector-classroom .host[data-phase=lobby]{grid-template-columns:1fr;gap:12px}
+ .vector-classroom .host[data-phase=lobby] .session-bar{grid-template-columns:1fr auto;gap:8px}
+ .vector-classroom .host[data-phase=lobby] #closeSession{grid-column:2;grid-row:1;font-size:12px;padding:8px}
+ .vector-classroom .host[data-phase=lobby] .join-code{grid-column:1/-1;grid-row:2;padding:12px}
+ .vector-classroom .host[data-phase=lobby] #code{font-size:42px}
+ .vector-classroom .host[data-phase=lobby] #copyLink{margin:4px 0}
+ .vector-classroom .members{max-height:28vh}
+ .vector-classroom #results{padding:14px 12px 0}
+ .vector-classroom .advance{margin-inline:-12px;padding:10px 12px}
+ .vector-classroom .advance button{flex:1;font-size:13px}
+ .vector-classroom .ranking li{font-size:13px;gap:6px;padding:9px 8px;grid-template-columns:25px minmax(0,1fr) auto 30px}
+ .vector-classroom #roundBreakdown{gap:5px}.vector-classroom #roundBreakdown span{padding:7px;font-size:12px}
+ .vector-classroom #rankingHelp{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){.vector-classroom .ranking.changed li{animation:none}}

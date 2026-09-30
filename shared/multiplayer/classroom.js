@@ -3,7 +3,8 @@
 const $=id=>document.getElementById(id),Game=window.BattleGame,frame=$('board');
 const opaque=location.protocol==='file:'||location.origin==='null',target=opaque?'*':location.origin,peerOrigin=opaque?'null':location.origin;
 let account=null,state=null,epoch=0,chain=Promise.resolve(),pollTimer,frameReady=false,frameKey='',offset=0,pending=null,grading=false,actionBusy=false,lastRanking='';
-let inviteCode='';
+let inviteCode='',reviewOpen=false,reviewKey='';
+const serverFunction=Game.classFunction||(Game.id==='rechten'?'rechten-class':null);
 function updateInviteCode(){
 const invite=new URLSearchParams(location.search).get('code');
 inviteCode=/^[A-Fa-f0-9]{6}$/.test(invite||'')?invite.toUpperCase():'';
@@ -25,8 +26,11 @@ function rpc(action,data={}){
  const work=chain.catch(()=>{}).then(async()=>{
   if(expected!==epoch)throw Error('Je account is gewijzigd.');
   const client=AxiomaAuth.client();
-  const {data:result,error}=Game.id==='rechten'?await client.functions.invoke('rechten-class',{body:{action,data}}):await client.rpc(Game.rpc,{p_action:action,p_data:{...data,game:Game.id}});
-  if(error&&Game.id==='rechten'){let detail;try{detail=await error.context?.json();}catch{}throw Error(detail?.error||'De klasbattle is tijdelijk niet bereikbaar. Je kunt altijd alleen verder oefenen.');}
+  const controller=new AbortController();let timeout;
+  const request=serverFunction?client.functions.invoke(serverFunction,{body:{action,data},signal:controller.signal}):client.rpc(Game.rpc,{p_action:action,p_data:{...data,game:Game.id}});
+  let response;try{response=await Promise.race([request,new Promise((_,reject)=>{timeout=setTimeout(()=>{controller.abort();reject(Error('Geen verbinding. Probeer opnieuw; je sessie blijft bewaard.'));},15000);})]);}finally{clearTimeout(timeout);}
+  const {data:result,error}=response;
+  if(error&&serverFunction){let detail;try{detail=await error.context?.json();}catch{}throw Error(detail?.error||'De klasbattle is tijdelijk niet bereikbaar. Je kunt altijd alleen verder oefenen.');}
   if(result?.error)throw Error(result.error);
   if(expected!==epoch)throw Error('Je account is gewijzigd.');if(error)throw error;return result;
  });chain=work;return work;
@@ -44,16 +48,18 @@ function renderRanking(){
  $('ranking').classList.remove('changed');requestAnimationFrame(()=>$('ranking').classList.add('changed'));
 }
 function renderBoard(){
- if(!state||!frameReady||!state.spec||waiting()||!['question','grading'].includes(state.phase))return;
+ if(!state||!frameReady||!state.spec||(!reviewOpen&&(waiting()||!['question','grading'].includes(state.phase))))return;
  const key=state.id+':'+state.round;
- if(frameKey!==key){frameKey=key;send({type:'vector-battle-question',match:state.id,index:state.round,...state.spec,singleAttempt:true});}
+ if(frameKey!==key){frameKey=key;send({type:'vector-battle-question',match:state.id,index:state.round,...state.spec,singleAttempt:true,projector:!!state.owner});}
+ if(reviewOpen){if(reviewKey!==key){reviewKey=key;send({type:'vector-class-review',match:state.id,index:state.round});}return;}
  if(state.owner||state.mine?.submitted||state.phase==='grading'||pending)send({type:'vector-battle-resolved',match:state.id,index:state.round,message:state.owner?'De leerlingen werken op hun eigen toestel.':state.mine?.submitted?'Antwoord ontvangen. Wacht op de uitslag.':pending?'Je inzending wordt verstuurd.':'De tijd is om. Wacht op de uitslag.'});
 }
 function accept(next){
+ if(!state||next.round!==state.round||next.phase!==state.phase){reviewOpen=false;reviewKey='';}
  if(next.game&&next.game!==Game.id)throw Error('Deze sessie hoort bij een ander spel. Open de deelnamelink van je leerkracht.');state=next;if(!state.owner){const url=new URL(location.href);url.searchParams.set('code',state.code);if(url.href!==location.href){history.replaceState(null,'',url.href);updateInviteCode();}}offset=Date.parse(next.server_time)-Date.now();store(storageKey(),state.id);
  if(state.mine?.submitted||!pending||pending.id!==state.id||pending.round!==state.round||state.phase!=='question'){pending=null;store(pendingKey(),null);}
  display('session');render();schedule();
- if(Game.id!=='rechten'&&state.owner&&state.phase==='grading')grade();
+ if(!serverFunction&&state.owner&&state.phase==='grading')grade();
 }
 function render(){
  const phase=state.phase,late=waiting(),activeMembers=state.members.filter(p=>(p.eligible_from_round||0)<=state.round),ended=['finished','closed'].includes(phase),results=phase==='results'||ended;
@@ -63,7 +69,7 @@ function render(){
  $('lobby').hidden=phase!=='lobby';$('playArea').hidden=late||!['question','grading'].includes(phase);$('lateWait').hidden=!late||phase==='lobby'||ended;$('lateTitle').textContent=state.round+1<state.total?'Even wachten op de volgende ronde':'De laatste ronde is bezig';$('lateHelp').textContent=state.round+1<state.total?'Je alias staat in de sessie. Je speelt mee vanaf ronde '+(state.round+2)+', zodra je leerkracht die start.':'De laatste ronde is al gestart. Je kunt de eindranglijst bekijken en bij een nieuwe battle meedoen.';$('results').hidden=!results;
  $('members').replaceChildren();for(const p of state.members){const li=document.createElement('li');if(window.LeraarBobAvatar)li.append(LeraarBobAvatar.create(p));li.append(document.createTextNode(p.alias));$('members').append(li);}
  $('count').textContent=`${state.members.length} ${state.members.length===1?'leerling':'leerlingen'} in de sessie`;
- $('lobbyHelp').textContent=state.owner?'Deel de code of deelnamelink. Jij kiest wanneer je start; leerlingen kunnen ook later aansluiten. '+(Game.id==='rechten'?'Je kunt deze sessie na herladen hervatten.':'Houd dit leerkrachtvenster open tijdens de sessie.'):'Je doet mee! Wacht tot je leerkracht de eerste ronde start.';
+ $('lobbyHelp').textContent=state.owner?'Deel de code of deelnamelink. Jij kiest wanneer je start; leerlingen kunnen ook later aansluiten. '+(serverFunction?'Je kunt deze sessie na herladen hervatten.':'Houd dit leerkrachtvenster open tijdens de sessie.'):'Je doet mee! Wacht tot je leerkracht de eerste ronde start.';
  $('start').hidden=!state.owner;$('start').disabled=!state.members.length||actionBusy;
  $('answered').textContent=`${activeMembers.filter(p=>p.answered).length} / ${activeMembers.length} ingediend`;
  const lateMembers=state.members.filter(p=>p.eligible_from_round>state.round);$('lateCount').hidden=!state.owner||!lateMembers.length;$('lateCount').textContent=lateMembers.length+' later aangesloten: '+lateMembers.map(p=>p.alias).join(', ');
@@ -73,6 +79,17 @@ function render(){
  $('resultSummary').textContent=state.round>=0?`${activeMembers.filter(p=>p.correct).length} van de ${activeMembers.length} leerlingen beantwoordden deze ronde juist.`:'De sessie is gesloten voordat een ronde begon.';
  $('ownResult').textContent=state.owner||late?'':state.mine?.submitted?(state.mine.correct?`Juist! +${state.mine.points} punten.`:'Deze ronde was je antwoord niet juist.'):state.round>=0?'Geen antwoord ingediend in deze ronde.':'';
  $('next').hidden=!state.owner||phase!=='results';$('next').textContent=state.round+1===state.total?'Bekijk eindranglijst →':'Volgende ronde →';$('newSession').hidden=!ended;
+ if($('endRound')){$('endRound').hidden=!state.owner||phase!=='question';$('endRound').disabled=actionBusy;}
+ if($('reviewToggle')){
+  const available=Game.classReview&&state.spec&&['results','finished'].includes(phase);
+  $('reviewToggle').hidden=!available;$('reviewToggle').textContent=reviewOpen?'Terug naar ranglijst':'Antwoord bespreken';$('reviewToggle').setAttribute('aria-expanded',String(reviewOpen));
+  $('reviewHost').hidden=!reviewOpen;$('ranking').hidden=reviewOpen;$('rankingHelp').hidden=reviewOpen;
+  // Moving an iframe reloads it; load/ready restores the current round, never its submission.
+  const parent=reviewOpen?$('reviewHost'):$('playArea');
+  if(frame.parentElement!==parent){frameReady=false;frameKey='';reviewKey='';parent.append(frame);}
+  $('roundBreakdown').replaceChildren();
+  if(results&&state.round>=0){for(const [label,count] of [['Juist',activeMembers.filter(p=>p.correct===true).length],['Onjuist',activeMembers.filter(p=>p.answered&&p.correct!==true).length],['Geen antwoord',activeMembers.filter(p=>!p.answered).length]]){const item=document.createElement('span');item.textContent=count+' '+label;item.dataset.kind=label;$('roundBreakdown').append(item);}}
+ }
  if(results)renderRanking();renderBoard();tick();
 }
 function tick(){if(!state)return;const left=Math.max(0,Math.ceil((Date.parse(state.deadline)-Date.now()-offset)/1000));$('timer').textContent=state.phase==='question'?`${left} s`:'Tijd afgelopen';if(state.phase==='question'&&left===0)send({type:'vector-battle-resolved',match:state.id,index:state.round,message:'De tijd is om. Wacht op de uitslag.'});}
@@ -105,6 +122,8 @@ $('world').onchange=updateSkills;updateSkills();
 $('logout').onclick=async()=>{try{await AxiomaAuth.signOut();await identity(null);}catch(e){notice(errorText(e));}};
 $('hostForm').onsubmit=e=>{e.preventDefault();const selected=$('skill').value==='mix'?pool():[$('skill').value];const seeds=crypto.getRandomValues(new Uint32Array(10));const deck=Array.from({length:Number($('rounds').value)},(_,i)=>({skill:selected[i%selected.length],seed:seeds[i],variant:i%4,level:1}));action('create',{deck,seconds:Number($('seconds').value)});};
 $('joinForm').onsubmit=e=>{e.preventDefault();action('join',{code:$('joinCode').value.trim().toUpperCase()});};
+if($('endRound'))$('endRound').onclick=()=>action('end_round');
+if($('reviewToggle'))$('reviewToggle').onclick=()=>{reviewOpen=!reviewOpen;reviewKey='';render();};
 $('start').onclick=()=>action('start');$('next').onclick=()=>action('next');$('retrySubmit').onclick=submit;
 $('newSession').onclick=()=>{clearTimeout(pollTimer);store(storageKey(),null);store(pendingKey(),null);state=null;pending=null;frameKey='';display('setup');};
 $('leaveSession').onclick=async()=>{try{await rpc('leave',{id:state.id});$('newSession').click();}catch(e){notice(errorText(e));}};
@@ -112,7 +131,7 @@ $('closeSession').onclick=()=>$('stopDialog').showModal();$('cancelStop').onclic
 $('copyLink').onclick=async()=>{const url=new URL(location.href);url.search='';url.searchParams.set('code',state.code);try{await navigator.clipboard.writeText(url.href);notice('Deelnamelink gekopieerd.');}catch{notice(`Deel deze code met je klas: ${state.code}`);}};
 addEventListener('message',event=>{
  if(event.source!==frame.contentWindow||event.origin!==peerOrigin)return;const data=event.data;if(!data||typeof data!=='object')return;
- if(data.type==='vector-battle-ready'){frameReady=true;frameKey='';renderBoard();return;}
+ if(data.type==='vector-battle-ready'){frameReady=true;frameKey='';reviewKey='';renderBoard();return;}
  if(data.type!=='vector-battle-answer'||!state||state.owner||waiting()||state.phase!=='question'||state.mine?.submitted||pending||data.match!==state.id||data.index!==state.round)return;
  pending={id:state.id,round:state.round,answer:data.answer,skipped:!!data.skipped};store(pendingKey(),pending);renderBoard();submit();
 });
