@@ -240,7 +240,12 @@ function applyEquation(eq,op,operand){
   let l,r;
   if(op==='+'){l=Add(eq.l,operand);r=Add(eq.r,operand)}
   else if(op==='-'){l=Add(eq.l,negExpr(operand));r=Add(eq.r,negExpr(operand))}
-  else if(op==='*'){l=Mul(eq.l,operand);r=Mul(eq.r,operand)}
+  else if(op==='*'){
+    // Apply the chosen factor to every top-level term, just as division does.
+    // Keep nested brackets from the exercise until a pupil works on them.
+    const scale=side=>{const s=simplify(side);return s.t==='add'?Add(...s.terms.map(t=>Mul(t,operand))):Mul(s,operand)};
+    l=scale(eq.l);r=scale(eq.r);
+  }
   else if(op==='/'){l=Div(eq.l,operand);r=Div(eq.r,operand)}
   else throw new Error('Onbekende bewerking');
   return simplifyEq(EQ(l,r));
@@ -631,9 +636,18 @@ function candidateOperands(ex,eq,op){
   function add(arr,e){
     e=simplify(e);
     const k=exprSig(e);
-    if(seen.has(k)||exprIsZero(e))return;
+    if(exprIsZero(e))return;
     if((op==='*'||op==='/')&&!operandIsNumeric(e))return;
-    if(!operandRepresentable(e,policy))return;
+    // Number settings constrain generated exercises, never a required choice
+    // introduced by a pupil's own equivalent intermediate step.
+    if(arr!==important&&!operandRepresentable(e,policy))return;
+    if(seen.has(k)){
+      if(arr===important){
+        const i=extra.findIndex(v=>exprSig(v)===k);
+        if(i>=0){extra.splice(i,1);important.push(e)}
+      }
+      return;
+    }
     seen.add(k);arr.push(e);
   }
 
@@ -663,35 +677,32 @@ function candidateOperands(ex,eq,op){
 
   if(op==='*'||op==='/'){
     for(const side of [eq.l,eq.r]){
-      const s=outerScalar(side);
-      if(s&&!s.isZero()&&!s.eq(1)){
-        if(op==='*'){const inv=reciprocal(s);if(inv)add(important,N(inv))}
-        else add(important,N(s));
+      for(const term of [side,...topTerms(side)]){
+        const s=outerScalar(term);
+        if(s&&!s.isZero()&&!s.eq(1)){
+          if(op==='*'){const inv=reciprocal(s);if(inv)add(important,N(inv))}
+          else add(important,N(s));
+        }
       }
     }
     if(op==='*'){
       const dens=[...collectNumericDenominators(eq.l),...collectNumericDenominators(eq.r)];
       if(dens.length){
         const common=dens.reduce((a,d)=>lcm(a,d),1);
-        if(common>1&&common<=30)add(important,N(common));
+        if(common>1&&Number.isSafeInteger(common))add(important,N(common));
       }
     }
   }
 
-  /* Structurele getallen uit de oorspronkelijke vraag + enkele neutrale alternatieven. */
+  /* Current literals first; original literals and neutral choices remain useful extras. */
   const literals=[];
-  (function walk(x){
+  function collectLiterals(x){
     if(isNum(x)){if(!x.q.isZero())literals.push(x)}
-    else if(x.t==='add')x.terms.forEach(walk);
-    else if(x.t==='mul')x.factors.forEach(walk);
-    else if(x.t==='div'){walk(x.n);walk(x.d)}
-  })(ex.start.l);
-  (function walk(x){
-    if(isNum(x)){if(!x.q.isZero())literals.push(x)}
-    else if(x.t==='add')x.terms.forEach(walk);
-    else if(x.t==='mul')x.factors.forEach(walk);
-    else if(x.t==='div'){walk(x.n);walk(x.d)}
-  })(ex.start.r);
+    else if(x.t==='add')x.terms.forEach(collectLiterals);
+    else if(x.t==='mul')x.factors.forEach(collectLiterals);
+    else if(x.t==='div'){collectLiterals(x.n);collectLiterals(x.d)}
+  }
+  [eq.l,eq.r,ex.start.l,ex.start.r].forEach(collectLiterals);
 
   literals.forEach(x=>add(extra,absExpr(x)));
   if(op==='*'||op==='/'){
@@ -702,7 +713,8 @@ function candidateOperands(ex,eq,op){
   }
   [1,2,3,4,5,6].forEach(n=>add(extra,N(n)));
 
-  return [...important,...extra].slice(0,8);
+  // Keep the usual compact picker, but never cut off a necessary current term.
+  return [...important,...extra.slice(0,Math.max(0,8-important.length))];
 }
 
 /* ============================================================

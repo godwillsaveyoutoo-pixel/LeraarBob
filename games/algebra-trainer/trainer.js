@@ -136,13 +136,20 @@ function stepText(op,operand,policy){
 }
 function renderDerivation(animateNew=false){
   const ex=currentExercise();if(!ex)return;
+  const previousScroll=derivationStack.scrollTop;
+  const atEnd=previousScroll+derivationStack.clientHeight>=derivationStack.scrollHeight-2;
   derivationStack.replaceChildren();
   trainerStates.forEach((eq,i)=>{
     const line=document.createElement('div');line.className='derivationLine '+(i===trainerStates.length-1?'current':'past');
     if(i){const action=document.createElement('div');action.className='derivationAction';action.textContent=stepText(trainerStepLog[i-1].op,trainerStepLog[i-1].operand,ex.policy);line.append(action)}
     const math=document.createElement('div');math.className='derivationMath';math.innerHTML=texHTML(latexEq(eq,ex.policy));line.append(math);derivationStack.append(line);
   });
-  if(animateNew)requestAnimationFrame(()=>{derivationStack.scrollTop=derivationStack.scrollHeight});
+  // Rebuilding the math must not jump back to the first line when an
+  // operation is selected or KaTeX refreshes. Keep the active step in view.
+  requestAnimationFrame(()=>derivationStack.scrollTo({
+    top:animateNew||atEnd?derivationStack.scrollHeight:previousScroll,
+    behavior:'instant'
+  }));
 }
 function renderTrainer(animateNew=false){
   const ex=currentExercise();if(!ex)return;
@@ -170,7 +177,7 @@ function startExercise(index){
   trainerStates=previous?.states?.length?previous.states.map(cloneEq):[cloneEq(ex.start)];trainerStepLog=previous?.log||[];selectedOp=null;currentSolved=solvedEquation(currentEquation());
   feedback.className='feedback';feedback.textContent='Kies een bewerking.';
   derivationStack.innerHTML='';
-  renderTrainer();
+  renderTrainer(true);
 }
 document.querySelectorAll('.opBtn').forEach(b=>b.onclick=()=>{
   if(currentSolved)return;

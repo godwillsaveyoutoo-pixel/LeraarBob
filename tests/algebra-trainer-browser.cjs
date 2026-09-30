@@ -22,5 +22,49 @@ const BASE='http://127.0.0.1:8775',PORT=9245;
  // Offline work is account-scoped and survives reload, then flushes once online.
  await c.eval("document.querySelector('.sectionNav [data-nav=trainer]').click()");await c.click('forwardExerciseBtn');c.offline=true;await solve();await c.eval('AxiomaGame.flush()');assert.equal(await c.eval('AxiomaGame.status'),'offline');await c.send('Page.reload');await c.wait('window.AlgebraTrainer&&AxiomaGame.active');assert.equal(await c.eval('AlgebraTrainer.snapshot().trainerIndex'),1);c.offline=false;await c.eval('AxiomaGame.flush()');assert.equal(await c.eval('AxiomaGame.status'),'saved');
  await c.eval('testSwitch()');assert.equal(await c.eval('AxiomaGame.active'),false);c.user='00000000-0000-4000-8000-000000000022';await c.send('Page.reload');await c.wait('window.AlgebraTrainer&&AxiomaGame.active');assert.deepEqual(await c.eval('AlgebraTrainer.snapshot().solvedTypes'),[]);assert.equal(await c.eval('AlgebraTrainer.snapshot().activeSet.length'),0);
- assert.deepEqual(c.errors,[]);console.log('PASS Algebra: 4 sizes/both topbar states, accessible next/previous/operations, real solve, same print set, reload, offline retry, account separation, no artificial XP');
+
+ // An integer-only exercise must remain solvable after dividing first.
+ // Seed only this isolated test account; interact with actual visible buttons.
+ async function chooseAlternative(op,operand){
+  await c.eval(`document.querySelector('[data-op="${op}"]').click()`);
+  const hit=await c.eval(`(()=>{
+   const C=AlgebraCore,s=AlgebraTrainer.snapshot(),rev=o=>o&&typeof o==='object'?(Number.isInteger(o.n)&&Number.isInteger(o.d)?C.R(o.n,o.d):Array.isArray(o)?o.map(rev):Object.fromEntries(Object.entries(o).map(([k,v])=>[k,rev(v)]))):o;
+   const ex=rev(s.activeSet[s.trainerIndex]),eq=rev(s.trainerStates.at(-1));
+   const i=C.candidateOperands(ex,eq,${JSON.stringify(op)}).findIndex(v=>C.exprSig(v)===C.exprSig(${operand}));
+   const btn=document.querySelectorAll('.valueBtn')[i];if(!btn)return null;
+   btn.scrollIntoView({block:'nearest'});const r=btn.getBoundingClientRect();
+   return {x:r.x+r.width/2,y:r.y+r.height/2,w:r.width,h:r.height,visible:r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth&&btn.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))};
+  })()`);
+  assert(hit&&hit.visible&&hit.w>=44&&hit.h>=44,'alternative operand visible: '+op+' '+operand+' '+JSON.stringify(hit));
+  await c.send('Input.dispatchMouseEvent',{type:'mousePressed',x:hit.x,y:hit.y,button:'left',clickCount:1});
+  await c.send('Input.dispatchMouseEvent',{type:'mouseReleased',x:hit.x,y:hit.y,button:'left',clickCount:1});
+  await c.eval('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+ }
+ for(const [w,h] of [[1366,768],[780,360],[390,844],[320,568]])for(const fold of [false,true]){
+  await c.size(w,h);
+  await c.eval(`(()=>{
+   const C=AlgebraCore,{N,V,Add,Mul,EQ,R}=C,policy={allowFractions:false,allowDecimals:false,allowNegative:false};
+   const start=EQ(Add(Mul(N(4),V()),N(6)),Add(Mul(N(2),V()),N(10)));
+   const steps=[{op:'-',operand:Mul(N(2),V())},{op:'-',operand:N(6)},{op:'/',operand:N(2)}],states=[start];
+   for(const st of steps)states.push(C.applyEquation(states.at(-1),st.op,st.operand));
+   const ex={id:'alternate-order',type:'E1',policy,start,steps,states,solution:R(2)};
+   AxiomaGame.storage.setItem('leraarbob.algebra.v1',JSON.stringify({version:1,settings:policy,activeSet:[ex],trainerIndex:0,perExercise:{},solvedTypes:[],screen:'trainer',activeLevel:'advanced'}));
+   LeraarBobTopbar.setCollapsed(${fold});
+  })()`);
+  await c.eval('AxiomaGame.flush()');await c.send('Page.reload');await c.wait('window.AlgebraTrainer&&AxiomaGame.active');
+  await chooseAlternative('/','C.N(4)');
+  await chooseAlternative('-','C.N(C.R(3,2))');
+  const middle=await c.eval('JSON.stringify(AlgebraTrainer.snapshot().trainerStates)');
+  await c.eval('AxiomaGame.flush()');await c.send('Page.reload');await c.wait('window.AlgebraTrainer&&AxiomaGame.active');
+  assert.equal(await c.eval('JSON.stringify(AlgebraTrainer.snapshot().trainerStates)'),middle,'alternative work survives reload');
+  await chooseAlternative('-','C.Mul(C.N(C.R(1,2)),C.V())');
+  await chooseAlternative('/','C.N(C.R(1,2))');
+  assert.equal(await c.eval('document.getElementById("feedback").textContent'),'Juist. x staat vrij.');
+  assert(await c.eval(inView('nextExerciseBtn')),'alternative next visible '+w);
+  assert(await c.eval('!document.documentElement.scrollWidth||document.documentElement.scrollWidth<=innerWidth'),'alternative overflow '+w);
+  const position=await c.eval(`(()=>{const e=document.getElementById('derivationStack'),r=document.querySelector('.derivationLine.current .derivationMath').getBoundingClientRect(),s=e.getBoundingClientRect();return {bottom:r.bottom,top:r.top,viewBottom:s.bottom,viewTop:s.top,scrollTop:e.scrollTop,scrollHeight:e.scrollHeight,height:e.clientHeight}})()`);
+  assert(position.bottom<=position.viewBottom+2&&position.top>=position.viewTop-2,'final solution visible '+w+' '+fold+' '+JSON.stringify(position));
+  await c.shot('algebra-alternative-'+w+'-'+fold);
+ }
+ assert.deepEqual(c.errors,[]);console.log('PASS Algebra: 4 sizes/both topbar states, accessible next/previous/operations, real solve, same print set, reload, offline retry, account separation, no artificial XP, alternative fraction route through visible buttons');
 }finally{for(const id of contexts)await browser.send('Target.disposeBrowserContext',{browserContextId:id});for(const c of tabs)c.ws?.close();browser.ws?.close();}})().catch(e=>{console.error(e);process.exitCode=1});

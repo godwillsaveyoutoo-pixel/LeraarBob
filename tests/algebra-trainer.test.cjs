@@ -18,3 +18,66 @@ test('breuken blijven exact en delen door nul of onveilige integergroei wordt af
  assert(R(1,3).add(R(1,6)).eq(R(1,2)));assert(R(-2,-4).eq(R(1,2)));
  assert.throws(()=>R(1).div(R(0)),/nul/);assert.throws(()=>R(Number.MAX_SAFE_INTEGER+1),/breuk/);
 });
+
+function routeFixture(start,policy={allowFractions:false,allowDecimals:false,allowNegative:false}){
+ return {start,policy,states:[start],steps:[]};
+}
+function choose(ex,eq,op,operand){
+ assert(C.candidateOperands(ex,eq,op).some(v=>C.exprSig(v)===C.exprSig(operand)),
+  `Ontbrekende keuze ${op} ${C.latexExpr(operand,ex.policy)} bij ${C.latexEq(eq,ex.policy)}`);
+ return C.applyEquation(eq,op,operand);
+}
+test('eerst delen blijft oplosbaar met afgeleide breuken, ook bij een gehele-getallenreeks',()=>{
+ const {N,V,Add,Mul,EQ}=C;
+ const ex=routeFixture(EQ(Add(Mul(N(4),V()),N(6)),Add(Mul(N(2),V()),N(10))));
+ for(const removeLeft of [false,true]){
+  let eq=choose(ex,ex.start,'/',N(4));
+  eq=choose(ex,eq,'-',N(R(3,2)));
+  eq=choose(ex,eq,'-',removeLeft?V():Mul(N(R(1,2)),V()));
+  if(removeLeft)eq=choose(ex,eq,'-',N(1));
+  eq=choose(ex,eq,'/',N(removeLeft?R(-1,2):R(1,2)));
+  assert(C.solvedEquation(eq));assert(value(eq.l,R(2)).eq(value(eq.r,R(2))));
+ }
+});
+test('delen biedt actuele coëfficiënten aan, ook als beide leden meerdere termen hebben',()=>{
+ const {N,V,Add,Mul,EQ}=C;
+ const ex=routeFixture(EQ(Add(Mul(N(4),V()),N(6)),Add(Mul(N(2),V()),N(10))));
+ const eq=C.applyEquation(ex.start,'+',Mul(N(13),V()));
+ choose(ex,eq,'/',N(17));choose(ex,eq,'/',N(15));
+});
+test('vermenigvuldigen na eerst delen werkt op elke term van beide leden',()=>{
+ const {N,V,Add,Mul,EQ}=C;
+ const ex=routeFixture(EQ(Add(Mul(N(4),V()),N(6)),Add(Mul(N(2),V()),N(10))));
+ const divided=choose(ex,ex.start,'/',N(4));
+ const restored=choose(ex,divided,'*',N(4));
+ assert.equal(C.eqSig(restored),C.eqSig(ex.start));
+});
+test('noodzakelijke actuele termen worden niet afgekapt na acht keuzeknoppen',()=>{
+ const {N,V,Add,Mul,EQ}=C;
+ // Distinct grouped terms can occur after valid operations on parenthesised equations.
+ const terms=Array.from({length:10},(_,i)=>Mul(N(i+2),Add(V(),N(i+1))));
+ const ex=routeFixture(EQ(Add(...terms),N(123)));
+ const options=C.candidateOperands(ex,ex.start,'-');
+ for(const term of [...terms,N(123)])assert(options.some(v=>C.exprSig(v)===C.exprSig(term)));
+});
+test('vergelijkingen met x aan beide kanten blijven oplosbaar na eerst delen en eerst constanten wegwerken',()=>{
+ const random=Math.random;let seed=75119;
+ Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+ try{for(const type of ['E1','E2','E3'])for(let bits=0;bits<8;bits++)for(let i=0;i<100;i++){
+  const policy={allowFractions:!!(bits&1),allowDecimals:!!(bits&2),allowNegative:!!(bits&4)};
+  const ex=C.generateExercise(type,policy,i);
+  // Choose a divisor that is actually offered; its fractions were not
+  // necessarily present in the original exercise or the standard solution.
+  const divisor=C.candidateOperands(ex,ex.start,'/').find(v=>!v.q.eq(1));
+  let eq=choose(ex,ex.start,'/',divisor);
+  const constant=C.topTerms(eq.l).find(C.isNum);
+  if(constant&&!constant.q.isZero())eq=choose(ex,eq,constant.q.n<0?'+':'-',C.N(constant.q.abs()));
+  const variable=C.topTerms(eq.r).find(t=>C.containsVar(t));
+  if(variable){const sign=C.splitSign(variable);eq=choose(ex,eq,sign.neg?'+':'-',sign.abs)}
+  if(!C.solvedEquation(eq))eq=choose(ex,eq,'/',C.N(C.outerScalar(eq.l)));
+  assert(C.solvedEquation(eq),type+' alternative route must finish');
+  const solution=eq.l.t==='var'?eq.r.q:eq.l.q;
+  assert(solution.eq(ex.solution),type+' same exact solution');
+  assert(value(ex.start.l,solution).eq(value(ex.start.r,solution)));
+ }}finally{Math.random=random;}
+});
