@@ -247,3 +247,22 @@ voltooit een halte pas na de laatste stap van de zesde opgave. De oorspronkelijk
 validators, skill-ID's, opslag en masteryregels blijven behouden.
 
 [Werking en validatie](../../../docs/rechten-v2/formulewerf-b/README.md).
+
+## Papierroute Hellingrug
+
+`worksheets.html` maakt A4-oefenbladen en een afzonderlijke verbetersleutel. De route is **Hellingrug → Leren, spelen of papier → Oefenblad maken**; het spelmenu heeft ook een directe ingang. Zes selecteerbare vraagtypen dekken Δx/Δy, helling uit grafiek of punten, lijnverloop, bijzondere rechten en foutanalyse. Kies 6, 8, 12, 16 of 24 vragen en begeleiding (`Met tussenstappen`, `Opbouwend`, `Zelfstandig`).
+
+De papieradapter gebruikt `RechtenWave.generate`, exacte breukrekenfuncties en `model`. Gecontroleerde vertalingen houden punten binnen het rooster en leveren verschillende opgaven. De geordende reeks wordt uit versie, seed en instellingen gereconstrueerd; de reekscode bevat ook opbouw, aantal en leerdoelselectie. Bij wijzigingen die dezelfde seed andere opgaven geven moet `HellingrugWorksheet.VERSION` omhoog. De generator beloont geen downloads en schrijft geen leerprogressie. De bestaande `account-progress.js` toont alleen de echte XP. Een gast kan eveneens werkbladen maken.
+
+`shared/worksheet-layout.js` verdeelt vragen zonder herschikking over fysieke A4-rijen. `shared/worksheet-layout.css` bewaakt de papiermaten. Dit is de eerste gedeelde papiercomponent; Algebra en Vectormissie zijn er nog niet op aangesloten. Hun inhoud en engines blijven ongewijzigd.
+
+Het scherm schaalt de complete pagina als afdrukvoorbeeld; roosters en tekst worden in de PDF scherp afgedrukt. **PDF / afdrukken** opent het browserafdrukvenster: kies daar `Opslaan als PDF`. Oefenblad en sleutel worden afzonderlijk afgedrukt. Het laatst bevestigde werkblad wordt lokaal hervat, onafhankelijk van de spelvoortgang. Niet-bevestigde wijzigingen worden niet in het bestaande afdrukvoorbeeld verwerkt.
+
+Controles:
+
+```sh
+node --test tests/hellingrug-worksheets.test.cjs tests/rechten-v2-area-maps.test.cjs tests/rechten-v2-shell-preservation.test.cjs
+node tests/hellingrug-worksheets-browser.cjs
+```
+
+De browserproef gebruikt een geïsoleerde sessie en fictieve voortgang. Hij controleert 24 indelingen met lange vraag-/antwoordteksten, werkelijke A4-PDF-paginering, scheiding van vragen en antwoorden, echte afdrukklikken, vier schermformaten, beide balkstanden, herladen, gastgebruik en de kaartingang. Voorbeeldbestanden worden naar `/tmp/leraarbob-hellingrug-worksheets/` geschreven. De test vereist de lokale server op 8775, Chromium CDP op 9245 en `pdfinfo`/`pdftotext`.
