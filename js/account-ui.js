@@ -1,7 +1,18 @@
 (() => {
   'use strict';
 
+  const root = new URL('../', document.currentScript.src);
   const $ = id => document.getElementById(id);
+  const avatarCSS = document.createElement('link');
+  avatarCSS.rel = 'stylesheet'; avatarCSS.href = new URL('shared/avatar-picker.css', root); document.head.append(avatarCSS);
+  async function avatarsReady() {
+    if (window.LeraarBobAvatar) return;
+    window.LeraarBobAvatarReady ||= new Promise((resolve,reject) => {
+      const script = document.createElement('script');script.src = new URL('shared/learner-avatar.js',root);
+      script.onload = resolve;script.onerror = () => {window.LeraarBobAvatarReady=null;reject(Error('De avatars konden niet laden. Probeer opnieuw.'));};document.head.append(script);
+    });
+    await window.LeraarBobAvatarReady;
+  }
   const overlay = $('authOverlay');
   const content = $('authContent');
   const embedded = overlay?.dataset.authContext === 'embedded';
@@ -15,6 +26,7 @@
   let message = '';
   let busy = false;
   let returnFocus = null;
+  let avatarExpanded = false, avatarDraft = null, avatarBusy = false, avatarMessage = '', avatarError = false, avatarTurn = 0;
 
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
@@ -53,18 +65,19 @@
   function updateHeader() {
     if (embedded) return;
     if (!account) {
-      accountLabel.textContent = 'Inloggen';
+      if(accountLabel) accountLabel.textContent = 'Inloggen';
       accountBtn.classList.remove('signed-in','teacher');
       return;
     }
     accountBtn.classList.add('signed-in');
     accountBtn.classList.toggle('teacher', account.role === 'teacher');
-    accountLabel.textContent = account.role === 'student'
+    if(accountLabel) accountLabel.textContent = account.role === 'student'
       ? account.alias
       : account.role === 'teacher' ? 'Leerkracht' : 'Account';
   }
 
   function open(trigger) {
+    avatarExpanded=false;avatarMessage='';avatarError=false;avatarDraft=account?.avatar_id||null;
     const active = document.activeElement?.shadowRoot?.activeElement || document.activeElement;
     const opener = trigger instanceof HTMLElement ? trigger : trigger?.currentTarget;
     returnFocus = opener instanceof HTMLElement ? opener
@@ -125,6 +138,52 @@
       <div class="auth-actions"><button id="logoutBtn" class="auth-secondary" type="button">Uitloggen</button></div>`;
   }
 
+  function mountAvatarPicker() {
+    const section=document.createElement('section');section.className='avatar-section';section.setAttribute('aria-label','Mijn avatar');
+    section.innerHTML='<div class="avatar-current"><div id="accountAvatarPreview"></div><div class="avatar-caption">Mijn avatar<small id="avatarCurrentName"></small></div><button type="button" id="changeAvatar" aria-expanded="false" aria-controls="avatarPicker">Kiezen</button></div><div id="avatarPicker" class="avatar-picker" hidden><div id="avatarGrid" class="avatar-grid" role="group" aria-label="Kies een dier"></div><div class="avatar-actions"><button type="button" id="clearAvatar">Initialen</button><button type="button" id="cancelAvatar">Annuleren</button><button type="button" id="saveAvatar">Bewaren</button></div></div><p id="avatarMessage" class="avatar-message" role="status" aria-live="polite"></p>';
+    content.querySelector('.account-summary').after(section);
+    const paint=()=>{
+      if(!section.isConnected)return;
+      const api=window.LeraarBobAvatar,selected=avatarExpanded?avatarDraft:account?.avatar_id;
+      $('accountAvatarPreview').replaceChildren(api.create({...account,avatar_id:selected}));
+      $('avatarCurrentName').textContent=api.valid(selected)?api.catalog[selected].label:'Je initialen';
+      $('authTitle').textContent=avatarExpanded?'Kies je avatar':'Je leraarBob-account';
+      $('avatarPicker').hidden=!avatarExpanded;$('changeAvatar').setAttribute('aria-expanded',String(avatarExpanded));$('changeAvatar').textContent=avatarExpanded?'Kiezen…':'Wijzigen';
+      $('avatarMessage').textContent=avatarMessage;$('avatarMessage').dataset.error=String(avatarError);
+      for(const button of section.querySelectorAll('button'))button.disabled=avatarBusy;
+      $('saveAvatar').textContent=avatarBusy?'Bewaren…':'Bewaren';
+      for(const button of $('avatarGrid').children)button.setAttribute('aria-pressed',String(button.dataset.avatarId===avatarDraft));
+      $('clearAvatar').setAttribute('aria-pressed',String(avatarDraft===null));
+    };
+    const fill=()=>{
+      if(!section.isConnected)return;
+      const api=window.LeraarBobAvatar;
+      if(!$('avatarGrid').children.length)for(const entry of Object.values(api.catalog)){
+        const button=document.createElement('button');button.type='button';button.dataset.avatarId=entry.id;button.setAttribute('aria-label',entry.label);button.setAttribute('aria-pressed','false');
+        button.append(api.create({avatar_id:entry.id}));const label=document.createElement('span');label.textContent=entry.label;button.append(label);
+        button.onclick=()=>{avatarDraft=entry.id;avatarMessage='';paint();};$('avatarGrid').append(button);
+      }
+      paint();
+    };
+    $('changeAvatar').onclick=async()=>{
+      try{await avatarsReady();if(!section.isConnected)return;avatarExpanded=!avatarExpanded;avatarDraft=account?.avatar_id||null;avatarMessage='';avatarError=false;fill();if(avatarExpanded)($('avatarGrid').querySelector('[aria-pressed=true]')||$('avatarGrid').firstElementChild).focus();}
+      catch(e){$('avatarMessage').textContent=e.message;}
+    };
+    $('cancelAvatar').onclick=()=>{avatarExpanded=false;avatarMessage='';paint();$('changeAvatar').focus();};
+    $('clearAvatar').onclick=()=>{avatarDraft=null;paint();};
+    $('saveAvatar').onclick=async()=>{
+      if(avatarBusy)return;const turn=++avatarTurn,owner=account.id;
+      avatarBusy=true;avatarMessage='';avatarError=false;paint();
+      try{
+        const updated=await window.AxiomaAuth.setAvatar(avatarDraft);
+        if(turn!==avatarTurn||account?.id!==owner)return;
+        account=updated;avatarExpanded=false;avatarMessage='Je avatar is bewaard.';
+      }catch(e){if(turn!==avatarTurn||account?.id!==owner)return;avatarError=true;avatarMessage='Bewaren lukte niet. Je vorige avatar blijft staan. Probeer opnieuw.';}
+      finally{if(turn===avatarTurn){avatarBusy=false;render();$(avatarExpanded?'saveAvatar':'changeAvatar')?.focus();}}
+    };
+    avatarsReady().then(()=>{if(avatarExpanded)fill();else paint();}).catch(()=>{if(section.isConnected)$('avatarMessage').textContent='De avatars konden niet laden. Klik op Kiezen om opnieuw te proberen.';});
+  }
+
   function loginView() {
     const reg = mode === 'register';
     const teacher = mode === 'teacher';
@@ -159,6 +218,7 @@
     content.innerHTML = account ? accountView() : loginView();
 
     if (account) {
+      if(['student','teacher'].includes(account.role)) mountAvatarPicker();
       $('continueAccountBtn')?.addEventListener('click', completeEmbeddedLogin);
       $('browseGamesBtn')?.addEventListener('click', () => {
         close();
@@ -264,11 +324,13 @@
       account = result.account;
       updateHeader();
       window.AxiomaAuth.onChange(detail => {
+        const identityChanged = account?.id !== detail.account?.id || account?.role !== detail.account?.role;
+        if(identityChanged || detail.pending){avatarTurn++;avatarExpanded=false;avatarBusy=false;avatarMessage='';}
         account = detail.account;
         updateHeader();
         if (!overlay.hidden) {
-          if (embedded && !detail.pending && ['student', 'teacher'].includes(account?.role)) completeEmbeddedLogin();
-          else render();
+          if (embedded && identityChanged && !detail.pending && ['student', 'teacher'].includes(account?.role)) completeEmbeddedLogin();
+          else if(!avatarBusy) render();
         }
       });
 

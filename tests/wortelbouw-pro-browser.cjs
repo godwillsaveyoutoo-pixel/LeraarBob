@@ -61,7 +61,7 @@ const mock=`(()=>{
   const c=await open(info,{remote});await c.wait('!!window.Wortelbouw && !!document.querySelector("leraarbob-topbar")');await size(c,1366,768);
   assert.equal(await c.eval('Wortelbouw.inspect().state.phase'),'won');await c.wait(shadow+".querySelector('.progress-value').textContent==='1/14 levels'");await c.wait('!document.getElementById("speechBubble").hidden');
   assert.match(await c.eval('document.getElementById("speechText").textContent'),/104/);
-  assert.equal(await c.eval(shadow+".querySelector('.account span').textContent"),'Leerling B');
+  assert.equal(await c.eval(shadow+".querySelector('.account-label').textContent"),'Leerling B');
   assert.equal(await c.eval('document.getElementById("gameShell").getBoundingClientRect().top>=document.getElementById("topbar").getBoundingClientRect().bottom'),true);await shot(c,'solo-feedback');
   await c.wait("document.getElementById('compactGoalValue').textContent==='√104'");
   assert.equal(await c.eval(shadow+".querySelector('[part=crumb-current]')===null"),true);
@@ -101,7 +101,7 @@ const mock=`(()=>{
   // Hit-test the real controls: a programmatic click on a hidden original is not sufficient.
   async function clickVisible(client,id){
    const p=await client.eval(`(()=>{const e=document.getElementById(${JSON.stringify(id)}),r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2,w:r.width,h:r.height,hit:e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}})()`);
-   assert(p.w>=44&&p.h>=44&&p.hit,id+' is visible and touch-sized');
+   assert(p.w>=44&&p.h>=44&&p.hit,id+' is visible and touch-sized: '+JSON.stringify(p));
    await client.send('Input.dispatchMouseEvent',{type:'mousePressed',x:p.x,y:p.y,button:'left',clickCount:1});
    await client.send('Input.dispatchMouseEvent',{type:'mouseReleased',x:p.x,y:p.y,button:'left',clickCount:1});
   }

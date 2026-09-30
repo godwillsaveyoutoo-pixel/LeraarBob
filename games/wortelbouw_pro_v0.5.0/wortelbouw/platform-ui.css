@@ -79,7 +79,7 @@ leraarbob-topbar::part(crumb-link):hover{background:#dde8cc;border-color:#849e6e
 #puzzleBar #rootAxisPanel{position:relative!important;inset:auto;display:block!important;flex:1;min-width:0;height:64px!important;min-height:0;padding:0!important;border:0;border-radius:0;background:none;box-shadow:none;backdrop-filter:none;overflow:hidden;animation:none;transition:none}
 #puzzleBar #rootAxisCanvas{display:block;width:100%;height:64px!important;transition:none}
 body:has(#puzzleBar).topbar-collapsed #puzzleBar{padding-right:66px}
-body:has(#puzzleBar)>.lb-restore{top:10px;right:10px;border:0;border-radius:4px;background:transparent;color:#294e36;box-shadow:none}
+body:has(#puzzleBar)>.lb-restore{top:10px;left:auto;right:10px;border:0;border-radius:4px;background:transparent;color:#294e36;box-shadow:none}
 body:has(#puzzleBar)>.lb-restore:hover{background:#ffffff60}
 leraarbob-topbar::part(collapse){border:0;border-radius:4px;background:transparent}
 @media(min-width:901px) and (min-height:521px){#bottomDock{grid-template-columns:minmax(350px,1fr) minmax(180px,230px)}}

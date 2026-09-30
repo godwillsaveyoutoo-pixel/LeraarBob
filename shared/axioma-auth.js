@@ -64,6 +64,11 @@
     window.dispatchEvent(new CustomEvent('axioma:auth', { detail }));
   }
 
+  function avatarFrom(user) {
+    const value=user?.user_metadata?.leraarbob_avatar;
+    return typeof value==='string' && /^[a-z][a-z-]{1,23}$/.test(value) ? value : null;
+  }
+
   async function resolveAccount(session) {
     const request = ++resolution;
     if(currentAccount && currentAccount.id !== session?.user?.id){
@@ -101,14 +106,16 @@
       currentAccount = Object.freeze({
         id: userId,
         role: 'teacher',
-        email: session.user.email || ''
+        email: session.user.email || '',
+        avatar_id: avatarFrom(session.user)
       });
     } else if (profile) {
       currentAccount = Object.freeze({
         id: userId,
         role: 'student',
         alias: profile.alias,
-        class_code: profile.class_code
+        class_code: profile.class_code,
+        avatar_id: avatarFrom(session.user)
       });
     } else {
       currentAccount = Object.freeze({
@@ -218,6 +225,24 @@
     return currentAccount;
   }
 
+  // Presentation metadata only: it never changes roles, aliases or learning progress.
+  async function setAvatar(avatarId) {
+    if (avatarId !== null && !window.LeraarBobAvatar?.valid(avatarId)) throw new Error('Kies een avatar uit de lijst.');
+    const userId = currentAccount?.id;
+    if (!userId || !['student','teacher'].includes(currentAccount.role)) throw new Error('Meld je eerst aan.');
+    const { data, error } = await getClient().auth.updateUser({ data: { leraarbob_avatar: avatarId } });
+    if (error) throw error;
+    if (currentSession?.user?.id !== userId || currentAccount?.id !== userId || data?.user?.id !== userId) {
+      throw new Error('Je account is gewijzigd. Open je profiel opnieuw.');
+    }
+    // Invalidate older profile reads; a late response must not put the previous picture back.
+    resolution++;
+    currentSession = { ...currentSession, user: data.user };
+    currentAccount = Object.freeze({ ...currentAccount, avatar_id: avatarFrom(data.user) });
+    emit();
+    return currentAccount;
+  }
+
   async function signOut() {
     const sb = getClient();
     const { error } = await sb.auth.signOut({ scope: 'local' });
@@ -254,6 +279,7 @@
     signInTeacher,
     registerStudent,
     signOut,
+    setAvatar,
     onChange,
     aliasEmail
   });

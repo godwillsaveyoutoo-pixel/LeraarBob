@@ -1,0 +1,31 @@
+/* Shared account control; native artwork keeps its chalkboard background. */
+#authOverlay .avatar-section{margin:18px 0;padding:16px 0;border-block:1px solid var(--line,#80958b);color:inherit;min-width:0}
+#authOverlay .avatar-current{display:flex;gap:12px;align-items:center;min-width:0}
+#authOverlay .avatar-current .learner-avatar{--avatar-size:48px}
+#authOverlay .avatar-caption{flex:1;min-width:0;font:600 15px/1.4 system-ui,sans-serif}
+#authOverlay .avatar-caption small{display:block;font-size:12px;font-weight:400;margin-top:3px;opacity:.85}
+#authOverlay .avatar-section button{font:600 13px/1.3 system-ui,sans-serif;min-height:44px;min-width:44px;border:1px solid var(--line,#80958b);border-radius:0;padding:8px 12px;color:inherit;background:transparent;cursor:pointer}
+#authOverlay .avatar-section button:hover{background:var(--soft,#71887720)}
+#authOverlay .avatar-section button:focus-visible{outline:3px solid #d7aa45;outline-offset:2px}
+#authOverlay .avatar-section button:disabled{opacity:.55;cursor:wait}
+#authOverlay .avatar-picker{margin-top:14px}
+#authOverlay .avatar-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;max-height:40dvh;overflow:auto;overscroll-behavior:contain;padding:4px;margin:0 -4px;scrollbar-gutter:stable}
+#authOverlay .avatar-grid button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 3px;min-width:0;font-size:12px;font-weight:500;position:relative;box-shadow:none}
+#authOverlay .avatar-grid .learner-avatar{--avatar-size:54px}
+#authOverlay .avatar-grid button[aria-pressed=true]{border:2px solid #bc943a;padding:7px 2px;background:#b69a3c1c}
+#authOverlay .avatar-grid button[aria-pressed=true]::after{content:'✓';position:absolute;top:2px;right:3px;background:#f4d47c;color:#20352d;padding:1px 4px;font-size:13px;font-weight:bold}
+#authOverlay .avatar-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px}
+#authOverlay .avatar-actions #saveAvatar{background:#2c5d4b;border-color:#2c5d4b;color:#fff;margin-left:auto}
+#authOverlay .avatar-message{font:13px/1.4 system-ui,sans-serif;margin:8px 0 0;color:inherit}
+#authOverlay .avatar-message:empty{display:none}
+#authOverlay .avatar-message[data-error=true]{color:var(--error,#a13732)}
+#authOverlay .avatar-section[hidden],#authOverlay .avatar-picker[hidden]{display:none!important}
+#authOverlay .account-summary strong{overflow-wrap:anywhere}
+@media(max-width:360px){#authOverlay .avatar-grid{gap:5px}#authOverlay .avatar-grid .learner-avatar{--avatar-size:46px}#authOverlay .avatar-actions button{padding:8px;font-size:12px}}
+
+/* While choosing, give the animals and save action the whole account sheet. */
+#authOverlay,#authOverlay :is(button,input,select){border-radius:0!important}
+#authContent:has(.avatar-picker:not([hidden]))>:is(.account-summary,.auth-actions,#continueAccountBtn,#logoutBtn){display:none!important}
+#authOverlay:has(.avatar-picker:not([hidden])) .avatar-section{margin:0;padding:10px 0;border-top:0}
+#authOverlay .avatar-grid{max-height:min(42dvh,calc(100dvh - 270px));min-height:80px}
+#authOverlay .avatar-message[data-error=true]{color:inherit;border-left:3px solid #c16b57;padding-left:8px}
