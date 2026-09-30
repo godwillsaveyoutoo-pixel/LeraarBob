@@ -173,7 +173,7 @@ tokenDrag=RechtenV2TokenDrag.create({app,
 app.addEventListener('pointerup',e=>{const svg=e.target.closest('[data-axis-picker]');if(!svg||!store.writable)return;const m=R.active(state);if(m?.feedback)return;const point=new DOMPoint(e.clientX,e.clientY).matrixTransform(svg.getScreenCTM().inverse()),{xMin,xMax}=m.task.bounds;const x=Math.max(xMin,Math.min(xMax,Math.round(xMin+(point.x-Number(svg.dataset.plotStart||42))/Number(svg.dataset.plotWidth||520)*(xMax-xMin))));edit('root',String(x),true)});
 document.addEventListener('keydown',e=>{if(document.querySelector('#derive-answer-dialog[open],#reminder-dialog[open]'))return;if(e.key==='Escape'&&menuOpen){menuOpen=false;render();document.getElementById('menu')?.focus();e.preventDefault()}else if(e.key==='Escape'&&hintOpen){const next=copy(state);R.active(next).hintOpen=false;apply(next,{focus:'#hint'});e.preventDefault()}});
 window.addEventListener('online',()=>store.sync());
-window.RechtenV2App=Object.freeze({snapshot:()=>copy(state)});
+window.RechtenV2App=Object.freeze({snapshot:()=>copy(state),sync:()=>store.sync()});
 function stateForHash(source){if(!location.hash)return source;if(location.hash==='#oefenen'){const active=R.active(source),world=active?.world;if(!world||!A.unlocked(source,world,store.legacy))return A.locationState(source,'world');return R.start(source,source.active||'grenspas')}const next=A.fromHash(source,location.hash),selected=A.selection(next);if(next.screen==='world'&&next.settings?.shell?.area&&!A.unlocked(source,selected.id,store.legacy))return A.locationState(source,'world');return next}
 window.addEventListener('popstate',()=>{if(legacySlice||!store.writable)return;menuOpen=false;apply(stateForHash(state));focusHeading()});
 if(battle){

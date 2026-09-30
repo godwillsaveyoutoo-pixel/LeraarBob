@@ -13,6 +13,21 @@
     });
     await window.LeraarBobAvatarReady;
   }
+  const proofCSS=document.createElement('link');proofCSS.rel='stylesheet';proofCSS.href=new URL('shared/progress-proof.css',root);document.head.append(proofCSS);
+  let proofHandle=null, proofTurn=0, proofLoading=null;
+  function stopProof(){proofTurn++;proofHandle?.destroy();proofHandle=null;}
+  async function openProof(button){
+    const turn=++proofTurn,owner=account?.id;button.disabled=true;
+    try{
+      if(!window.LeraarBobProgressProof){
+        proofLoading ||= new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=new URL('shared/progress-proof.js',root);script.onload=resolve;script.onerror=()=>{proofLoading=null;script.remove();reject(Error('Het bewijs kon niet laden. Probeer opnieuw.'));};document.head.append(script);});
+        await proofLoading;
+      }
+      if(turn!==proofTurn||account?.id!==owner||account?.role!=='student'||overlay.hidden)return;
+      proofHandle=window.LeraarBobProgressProof.mount({container:content,account,onBack:()=>{render();$('downloadProgressBtn')?.focus();}});
+    }catch(e){if(turn===proofTurn&&button.isConnected){button.textContent='Laden lukt niet · opnieuw proberen';}}
+    finally{if(button.isConnected)button.disabled=false;}
+  }
   const overlay = $('authOverlay');
   const content = $('authContent');
   const embedded = overlay?.dataset.authContext === 'embedded';
@@ -77,6 +92,7 @@
   }
 
   function open(trigger) {
+    stopProof();
     avatarExpanded=false;avatarMessage='';avatarError=false;avatarDraft=account?.avatar_id||null;
     const active = document.activeElement?.shadowRoot?.activeElement || document.activeElement;
     const opener = trigger instanceof HTMLElement ? trigger : trigger?.currentTarget;
@@ -90,6 +106,7 @@
   }
 
   function close() {
+    stopProof();
     if (nativeDialog && overlay.open) overlay.close();
     overlay.hidden = true;
     document.body.classList.remove('auth-open');
@@ -214,11 +231,16 @@
   }
 
   function render() {
+    stopProof();
     $('authTitle').textContent = account ? 'Je leraarBob-account' : embedded ? 'Aanmelden bij leraarBob' : 'Neem je leerroute mee.';
     content.innerHTML = account ? accountView() : loginView();
 
     if (account) {
       if(['student','teacher'].includes(account.role)) mountAvatarPicker();
+      if(account.role==='student'){
+        const button=document.createElement('button');button.type='button';button.id='downloadProgressBtn';button.className='progress-proof-entry';button.textContent='Voortgang downloaden';button.onclick=()=>openProof(button);
+        content.querySelector('.avatar-section').after(button);
+      }
       $('continueAccountBtn')?.addEventListener('click', completeEmbeddedLogin);
       $('browseGamesBtn')?.addEventListener('click', () => {
         close();

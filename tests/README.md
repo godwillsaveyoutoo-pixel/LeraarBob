@@ -467,3 +467,16 @@ gebruiken `@electric-sql/pglite` of `VECTOR_PGLITE_MODULE`.
 `tests/rechten-account-progress-database.sql` mag uitsluitend binnen
 `BEGIN`/`ROLLBACK` uitgevoerd worden. Test de gedeployde RPC met tijdelijke
 accounts, ook onder de rol `authenticated`; alle testgegevens worden teruggedraaid.
+
+## Centraal voortgangsbewijs
+
+`node --test tests/progress-proof.test.cjs tests/rechten-training-proof.test.cjs`
+controleert de overgenomen XP, spelkeuze, accountisolatie, foutafhandeling,
+lokaal wachtende opslag en de gedeelde PDF-schrijver.
+
+`node tests/progress-proof-browser.cjs` gebruikt fictieve leerlingen op de
+lokale webserver (8775) en een eigen Chromium-context (9245). Controleert het
+centrale en ingebedde profiel, vier schermformaten, licht/donker, naamprivacy,
+PDF-download, mislukt laden, retry, annuleren en accountwissels. Het voorbeeld-PDF
+staat in `/tmp/leraarbob-progress-proof.pdf`; screenshots in
+`/tmp/leraarbob-v10-screenshots/progress-proof-*.png`.
