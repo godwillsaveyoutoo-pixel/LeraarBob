@@ -16,3 +16,4 @@ h1,h2{font-family:'Patrick Hand',sans-serif}h1{font-size:36px}h2{font-size:26px;
 #learnSession:has(#learnBoard[hidden]) .learn-actions{height:100%;display:flex;flex-direction:column;overflow:hidden}
 #learnSession:has(#learnBoard[hidden]) .learn-content{flex:1;min-height:0;overflow:auto;scrollbar-gutter:stable}
 #learnSession:has(#learnBoard[hidden]) .learn-buttons{position:static;flex:none;background:transparent;margin-top:4px;padding:8px 0 0}
+#learnAvailability{grid-column:1/-1;margin:0}

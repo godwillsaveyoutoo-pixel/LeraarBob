@@ -1,0 +1,81 @@
+/* Cooperative calculations use native whiteboards, with reachable steps in a smaller frame. */
+.cooperative-player .derive-workspace{grid-template-columns:minmax(0,1.6fr) minmax(180px,.8fr);grid-template-rows:auto minmax(0,1fr);align-items:stretch;overflow:auto}
+.cooperative-player .derive-paper{border-radius:0;box-shadow:none}
+.cooperative-player .derive-work{overflow:auto;min-height:0}
+.cooperative-player .derive-working{flex:none;min-height:min-content;margin-block:auto}
+.cooperative-player .derive-heading h1{font-size:24px}
+.cooperative-player .derive-heading p,.cooperative-player .derive-reminder{display:none}
+.cooperative-player .derive-token-bank,.cooperative-player .derive-point-choice{flex-wrap:wrap}
+.cooperative-player .derive-point-pair{flex:none}
+.cooperative-player .derive-undo{position:static;align-self:flex-start;flex:none}
+.cooperative-player .hill-builder-mission .boundary-workspace{display:flex!important;align-items:safe center;justify-content:center;overflow:auto}
+.cooperative-player .hill-stepper{display:none}
+.cooperative-player .hill-construction{max-width:800px;flex:none;gap:10px}
+.cooperative-player #learnPrevious{flex:none;font:16px var(--hand);padding:4px 10px}
+.cooperative-player #commit{flex:none;margin-left:auto}
+@media(max-height:350px){
+ .cooperative-player .derive-heading{display:none}
+ .cooperative-player .derive-workspace{grid-template-rows:minmax(0,1fr)}
+ .cooperative-player .derive-work{padding:4px 8px}
+ .cooperative-player .derive-work .derive-working{gap:4px}
+ .cooperative-player .derive-source{padding:2px 4px;gap:2px}
+ .cooperative-player .derive-source-label,.cooperative-player .derive-instruction,.cooperative-player .table-road{display:none}
+ .cooperative-player .table-source{overflow:auto;justify-content:safe center;gap:6px;padding:4px}
+ .cooperative-player .derive-task>h2{font-size:16px}
+ .cooperative-player .derive-data-table button{min-height:44px}
+ .cooperative-player .derive-undo{align-self:flex-start;margin-top:4px}
+ .cooperative-player .hill-construction-heading>span{display:none}
+}
+@media(max-width:500px){
+ .cooperative-player .derive-workspace{display:flex!important;flex-direction:column;gap:10px;padding:8px;overflow:auto}
+ .cooperative-player .derive-heading{flex:none;order:0}
+ .cooperative-player .table-source{order:1;flex:none;padding:8px;gap:8px}
+ .cooperative-player .derive-work{order:2;flex:none;overflow:visible;padding:10px 8px;gap:8px}
+ .cooperative-player .derive-steps{display:none}
+ .cooperative-player .derive-working,.cooperative-player .derive-work .derive-working{flex:none;gap:12px;min-height:0;margin:0}
+ .cooperative-player .derive-source{padding:8px;gap:6px}
+ .cooperative-player .derive-source .derive-source-label{font-size:16px}
+ .cooperative-player .derive-task{gap:8px}
+ .cooperative-player .derive-task>h2{font-size:20px}
+ .cooperative-player .derive-math,.cooperative-player .derive-source .derive-point-pair{font-size:28px;gap:6px}
+ .cooperative-player .derive-token{font-size:24px;min-width:44px;min-height:44px;height:auto;padding:4px;gap:4px}
+ .cooperative-player .derive-slot{min-width:48px;min-height:44px;height:auto;padding:4px;font-size:28px}
+ .cooperative-player .derive-fraction>span{gap:8px;padding:4px}
+ .cooperative-player .derive-point-bank{gap:8px}
+ .cooperative-player .derive-instruction,.cooperative-player .table-road{display:none}
+ .cooperative-player .derive-data-table{font-size:25px}
+ .cooperative-player .derive-data-table button{min-height:44px}
+ .cooperative-player .derive-source .derive-previous,.cooperative-player .derive-source .derive-known-equation{font-size:26px}
+ .cooperative-player .derive-answer-open{font-size:28px;min-height:50px}
+ .cooperative-player .derive-answer-dialog{max-height:calc(100dvh - 16px);overflow:auto;padding:12px}
+ .cooperative-player .derive-answer-options button{min-height:50px;font-size:27px}
+ .cooperative-player .hill-construction-heading h1{font-size:23px}
+ .cooperative-player .hill-construction-heading>span{display:none}
+ .cooperative-player .hill-point-cards{flex-wrap:wrap;gap:6px}
+ .cooperative-player .hill-point-card{flex:1 1 100%;padding:4px;font-size:28px;gap:8px}
+ .cooperative-player .coordinate-token{min-width:44px;min-height:44px;font-size:25px;padding:2px 5px}
+ .cooperative-player .hill-builder-instruction{font-size:18px}
+ .cooperative-player .hill-builder{min-width:0;padding:8px;font-size:27px;gap:8px;flex-wrap:wrap}
+ .cooperative-player .coordinate-slot{min-width:60px;min-height:44px;font-size:27px;padding:3px}
+ .cooperative-player .hill-result{margin:0}
+ .cooperative-player .boundary-footer .feedback-bubble{display:none}
+}
+.cooperative-player .hill-builder-mission .boundary-workspace{display:block!important}
+.cooperative-player .hill-construction{width:auto;margin:auto}
+@media(max-width:500px){
+ .cooperative-player .table-source h2{font-size:21px}
+ .cooperative-player .table-selection-note{font-size:15px;line-height:1.2}
+ .cooperative-player .table-source{gap:4px;padding:5px}
+ .cooperative-player .derive-data-table thead th{height:24px;font-size:13px}
+}
+.cooperative-player .boundary-mission{grid-template-rows:minmax(0,1fr) auto}
+.cooperative-player .boundary-footer{height:auto;min-height:50px}
+.cooperative-player .boundary-footer:has(.learn-step-error){flex-wrap:wrap}
+.cooperative-player .boundary-footer .learn-step-error{display:flex!important;flex-basis:100%;order:-1}
+.cooperative-player .learn-step-error #feedback{color:#87381f;font-size:14px}
+.cooperative-player .boundary-mission{grid-template-columns:minmax(0,1fr);width:100%}
+.cooperative-player .boundary-footer{min-width:0;max-width:100%}
+@media(max-width:500px) and (orientation:portrait){
+ .cooperative-player :is(.points-mission,.formula-mission,.lines-mission,.grens-mission) .boundary-workspace{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(120px,1fr) minmax(100px,.8fr)}
+ .cooperative-player .answer-tray{max-height:100%}
+}

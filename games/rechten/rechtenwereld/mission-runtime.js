@@ -62,6 +62,6 @@ function selectTableColumn(state,index){
  for(const k of D.slots(m.phase)){delete m.values[k];delete m.locks[k]}
  m.values.deriveSlot=D.slots(m.phase)[0];return s;
 }
-function battle(world,skill,seed,variant){const s=initial();s.active=skill;s.screen='mission';s.missions[skill]=mission(world,1+(seed>>>0)%97,variant%4,skill);s.settings={reducedMotion:true,autoAdvance:false,shell:{area:world}};return s;}
+function battle(world,skill,seed,variant,{fullSequence=false}={}){const s=initial();s.active=skill;s.screen='mission';s.missions[skill]=mission(world,1+(seed>>>0)%97,variant%(fullSequence?(H.skills.includes(skill)?H.taskCount(skill):6):4),skill);s.settings={reducedMotion:true,autoAdvance:false,shell:{area:world}};return s;}
 return Object.freeze({battle,selectTableColumn,putDeriveToken,selectDerivePoint,putFormulaToken,operateFormula,putSign,placeLinePoint,clearLinePoints,beginHills,putCoordinate,initial,start,active,edit,undo,hint,commit,advance,newAfterExample,worlds:WORLDS});
 });

@@ -6,7 +6,7 @@
   const worlds = ['puntenbaai','hellingrug','grenspas','formulewerf','signaalstad'];
   const definitions = {
     solo: {id:'solo',group:'learning',title:'Alleen leren',devices:'1 leerling',description:'Volg je eigen leerroute, in je eigen tempo.',access:'Ook zonder aanmelding',file:'index.html',glyph:'route'},
-    learn: {id:'learn',group:'learning',title:'Samen leren',devices:'2–3 leerlingen · elk een toestel',description:'Eerst je eigen idee, daarna samen bouwen en controleren.',access:'Leerlingaccounts · groepscode',file:'learn.html',glyph:'classroom'},
+    learn: {id:'learn',group:'learning',title:'Samen leren',devices:'2–3 leerlingen · elk een toestel',description:'Eerst je eigen idee, daarna samen bouwen en controleren.',access:'Leerlingaccounts · uitnodigen op alias',file:'learn.html',glyph:'classroom'},
     local: {id:'local',group:'battle',title:'Duo-battle op één toestel',devices:'2 spelers · één scherm',description:'Speel tegen elkaar op twee werkborden naast elkaar.',access:'Ook zonder aanmelding',file:'battle.html',glyph:'battle'},
     online: {id:'online',group:'battle',title:'Online duel',devices:'2 leerlingen · elk een toestel',description:'Daag een klasgenoot uit. Jullie hebben dezelfde wereld afgerond.',access:'Leerlingaccounts · uitnodiging',file:'online.html',glyph:'battle'},
     classroom: {id:'classroom',group:'battle',title:'Klasbattle',devices:'De hele klas · elk een toestel',description:'De leerkracht start een sessie; leerlingen doen mee met de code.',teacherDescription:'Start een sessie, deel de code en kies wanneer de ronde begint.',studentDescription:'Voer de code van je leerkracht in en speel mee met de klas.',access:'leraarBob-account · sessiecode',file:'classroom.html',glyph:'classroom'}

@@ -2,7 +2,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
 const {createDB}=require('./helpers/rechten-online-db.cjs');
 const E=require('../shared/multiplayer/rechten-learn-engine.cjs');
 (async()=>{const h=await createDB(),{db,ids}=h;try{
- for(const file of ['20260929235628_rechten_samen_leren.sql','20260929235633_rechten_learn_invitations.sql'])await db.exec(fs.readFileSync('supabase/migrations/'+file,'utf8'));
+ for(const file of ['20260929235628_rechten_samen_leren.sql','20260929235633_rechten_learn_invitations.sql','20260930161209_rechten_learn_full_route.sql'])await db.exec(fs.readFileSync('supabase/migrations/'+file,'utf8'));
  const rpc=async(action,data)=>db.transaction(async tx=>{await tx.exec('set local role service_role');return(await tx.query('select public.axioma_rechten_learn_worker($1,$2) result',[action,JSON.stringify(data)])).rows[0].result;});
  let r=await rpc('create',{user_id:ids.alex,skill:'point_plot',capacity:2});assert.equal(r.data.phase,'lobby');await assert.rejects(rpc('read',{user_id:ids.outsider,id:r.id}),/neemt niet deel/);
  await assert.rejects(rpc('create',{user_id:ids.teacher,skill:'point_plot',capacity:2}),/leerling/);

@@ -41,4 +41,4 @@ function fixtures(){const rows=[];const add=(state,family,kind)=>{const m=R.acti
   }add(s,family,'completed');
  }return rows;
 }
-module.exports={fixtures,families};
+module.exports={fixtures,families,fill};

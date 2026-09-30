@@ -2,7 +2,7 @@
 const fs=require('node:fs'),assert=require('node:assert/strict');
 const {createDB}=require('./helpers/rechten-online-db.cjs');const engine=require('../shared/multiplayer/rechten-learn-engine.cjs');
 (async()=>{const {db,ids,progress}=await createDB();try{
-for(const file of ['20260929235628_rechten_samen_leren.sql','20260929235633_rechten_learn_invitations.sql'])await db.exec(fs.readFileSync('supabase/migrations/'+file,'utf8'));
+for(const file of ['20260929235628_rechten_samen_leren.sql','20260929235633_rechten_learn_invitations.sql','20260930161209_rechten_learn_full_route.sql'])await db.exec(fs.readFileSync('supabase/migrations/'+file,'utf8'));
 let serial=Promise.resolve();const as=(user,role,sql,args=[])=>{const task=serial.catch(()=>{}).then(()=>db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[ids[user]||'']);await tx.exec('set local role '+role);return (await tx.query(sql,args)).rows[0]?.result;}));serial=task;return task;};
 const rpc=(action,data)=>as(null,'service_role','select public.axioma_rechten_learn_worker($1,$2) result',[action,JSON.stringify(data)]);
 const {createHandler}=await import('../supabase/functions/rechten-learn/handler.js');
@@ -41,7 +41,12 @@ console.log('PASS offline retry, expiration, cancellation, other classes and off
 
 await reset();r=await create(3);inv=await call('alex','invite',{id:r.id,target:ids.sam});member=await call('sam','join',{code:r.code});assert.equal(member.members.length,2);assert.equal((await social('sam')).invitations[0].status,'accepted');
 let later=await call('alex','invite',{id:r.id,target:ids.outsider});host=await call('alex','state',{id:r.id});await call('alex','start',{id:r.id,version:host.version,request:crypto.randomUUID()});assert.equal((await social('outsider')).invitations[0].status,'cancelled');await assert.rejects(call('outsider','accept',{invite:later.invitation}),/verlopen/);
-await reset();const all=['delta','slope','slope_from_two_points','line_behavior','special_lines','zeroRead','zero','signchart','positive','negative'];await progress('alex',all);r=await create(2,'graph_from_equation');assert.equal(r.peers.length,0);await assert.rejects(call('alex','invite',{id:r.id,target:ids.sam}),/Formulewerf/);await progress('sam',all);assert.equal((await call('alex','state',{id:r.id})).peers.length,1);
+await reset();const all=['delta','slope','slope_from_two_points','line_behavior','special_lines','zeroRead','zero','signchart','positive','negative'];await progress('alex',all);r=await create(2,'graph_from_equation');assert.equal(r.peers.length,0);await assert.rejects(call('alex','invite',{id:r.id,target:ids.sam}),/wereld openen/);await progress('sam',all);assert.equal((await call('alex','state',{id:r.id})).peers.length,1);
 const grants=(await db.query("select has_function_privilege('authenticated','public.axioma_rechten_learn_worker(text,jsonb)','execute') rpc,has_function_privilege('service_role','axioma_private.rechten_learn_worker_v1(text,jsonb)','execute') old,has_table_privilege('authenticated','axioma_private.game_invitations','select') invites")).rows[0];assert.deepEqual(grants,{rpc:false,old:false,invites:false});
+await reset();const catalog=await call('alex','catalog');assert.equal(catalog.skills.length,21);assert.equal(catalog.skills.filter(s=>s.available).length,7);
+for(const item of catalog.skills.filter(s=>!s.available))await assert.rejects(create(2,item.skill),/Open eerst/);
+await progress('alex',engine.skills);assert((await call('alex','catalog')).skills.every(s=>s.available));
+for(const skill of engine.skills){await db.exec('delete from axioma_private.rechten_learn_rooms');const session=await create(2,skill);assert.equal(session.skill,skill);const row=(await db.query('select data from axioma_private.rechten_learn_rooms where id=$1',[session.id])).rows[0];assert.equal(row.data.sequence,2);}
+console.log('PASS 21-skill catalog, prerequisite gates and room creation across all released worlds');
 console.log('PASS code fallback, pending third cancelled on start, prerequisites and private function/table access');
 }finally{await db.close();}})().catch(e=>{console.error(e);process.exitCode=1});

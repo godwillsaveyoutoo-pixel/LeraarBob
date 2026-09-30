@@ -1,6 +1,10 @@
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  try {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  } catch (e) {
+    throw mod = 0, e;
+  }
 };
 
 // games/rechten/core/transfer-workbench-core.js
@@ -1008,7 +1012,7 @@ var require_semantic_math_core = __commonJS({
           features.push("parameter-role-swap", !t.model.a.n ? "horizontal" : t.model.a.d > 1 ? "fractional" : t.model.a.n < 0 ? "negative" : "positive", "probe-choice", "hidden-input");
           t.contrast_case = { world, variant: mod(variant + 1, 4), feature: "parameter-sign-or-constant-rate" };
         }
-        const claims = { grenspas: "Koppel nulwaarde en teken van f(x) aan een strikt x-interval.", hellingrug: "Construeer een exacte gerichte rate uit twee punten en voorspel een derde punt.", signaalstad: "Diagnosticeer verwisselde helling en y-afsnede met een gekozen probe en herstel de koppeling." };
+        const claims = { grenspas: "Koppel nulwaarde en teken van f(x) aan een strikt x-interval.", hellingrug: "Construeer een exacte gerichte rate uit twee punten en voorspel een derde punt.", signaalstad: "Diagnosticeer verwisselde a en b met een gekozen probe en herstel de koppeling." };
         Object.assign(t, { profile: { contentVersion: 1, stage: world === "signaalstad" ? "diagnose" : "predict" }, curriculum_claim: claims[world], primary_cognitive_action: world === "grenspas" ? "construeer x-interval" : world === "hellingrug" ? "bouw gerichte ratio" : "diagnosticeer en herstel parameterkoppeling", given_representations: world === "grenspas" ? ["graph"] : world === "hellingrug" ? mod(variant, 2) ? ["table"] : ["points", "graph"] : ["formula", "table", "graph"], target_representation: world === "grenspas" ? "interval-and-inequality" : world === "hellingrug" ? "rational-rate" : "corrected-parameter-coupling", task_features: [...features], visible_case: { model: t.model, ...t.points ? { points: t.points } : {}, ...t.rows ? { rows: t.rows, faultModel: t.faultModel } : {} }, hidden_cases: [{ kind: world === "hellingrug" ? "third-point" : "new-input", ...t.hidden }], primary_action: "Test", response_component: world === "grenspas" ? ["AxisAnchorPicker", "IntervalSelector"] : world === "hellingrug" ? ["DirectedDeltaBuilder", "RateFractionBuilder"] : ["RepresentationPins", "FunctionProbe", "FaultLocator"], allowed_alternatives: world === "hellingrug" ? ["AB", "BA", "equivalent-rationals"] : world === "signaalstad" ? ["zero-probe", "difference-probe"] : ["tap-region", "keyboard-region"], commit_policy: { reveal: "after-explicit-commit", liveCorrectness: false }, feedback_model: "exact-causal-probes-and-first-divergence", misconception_hypotheses: world === "grenspas" ? ["zero.output_zero", "zero.sign", "sign.side_reversed", "sign.boundary_included", "sign.horizontal_all_none"] : world === "hellingrug" ? ["delta.orientation_mixed", "delta.swap_axes", "slope.reciprocal", "slope.sign"] : ["param.slope_intercept_swap", "param.a_sign", "param.b_sign"], repair_policy: { preserveCorrect: true, unit: world === "signaalstad" ? "atomic-coupling" : "incorrect-component" }, worked_example_ref: `hints:${world}:4-5`, difficulty_features: [...features], units: { x: "x-eenheden", y: "y-eenheden", rate: "y-eenheden per x-eenheid" }, language_load: { locale: "nl-BE", level: "low", instructionLimit: "one-sentence" }, accessibility: { input: ["keyboard", "single-pointer"], targetMin: 44, colorOnly: false, reducedMotion: true, maxPinnedViews: 2 }, evidence_events: ["prediction", "commit", "result", "repair", "hint", "hidden-result"], asset_slots: [`${world}-semantic-workspace`], validator: "RechtenV2Math/v1 + unchanged RechtenWave" });
         return freeze(t);
       }
@@ -1988,65 +1992,15 @@ var require_mission_runtime = __commonJS({
         m.values.deriveSlot = D.slots(m.phase)[0];
         return s;
       }
-      function battle(world, skill, seed, variant) {
+      function battle(world, skill, seed, variant, { fullSequence = false } = {}) {
         const s = initial();
         s.active = skill;
         s.screen = "mission";
-        s.missions[skill] = mission(world, 1 + (seed >>> 0) % 97, variant % 4, skill);
+        s.missions[skill] = mission(world, 1 + (seed >>> 0) % 97, variant % (fullSequence ? H.skills.includes(skill) ? H.taskCount(skill) : 6 : 4), skill);
         s.settings = { reducedMotion: true, autoAdvance: false, shell: { area: world } };
         return s;
       }
       return Object.freeze({ battle, selectTableColumn, putDeriveToken, selectDerivePoint, putFormulaToken, operateFormula, putSign, placeLinePoint, clearLinePoints, beginHills, putCoordinate, initial, start, active, edit, undo, hint, commit, advance, newAfterExample, worlds: WORLDS });
-    });
-  }
-});
-
-// games/rechten/rechtenwereld/battle-config.js
-var require_battle_config = __commonJS({
-  "games/rechten/rechtenwereld/battle-config.js"(exports, module) {
-    (function(root, factory) {
-      if (typeof module === "object") module.exports = factory(require_mission_runtime());
-      else root.BattleGame = factory(root.RechtenV2Runtime);
-    })(globalThis, function(R) {
-      const worlds = [{ id: "puntenbaai", name: "Puntenbaai", skills: ["point", "point_plot"] }, { id: "hellingrug", name: "Hellingrug", skills: ["delta", "slope", "line_behavior", "special_lines"] }, { id: "grenspas", name: "Grenspas", skills: ["zeroRead", "zero", "signchart", "positive", "negative"] }, { id: "formulewerf", name: "Formulewerf", skills: ["equation_from_ab", "graph_from_equation", "equation_from_graph"] }, { id: "signaalstad", name: "Signaalstad", skills: ["graph_from_table"] }];
-      const labels = { point: "Co\xF6rdinaten lezen", point_plot: "Punten plaatsen", delta: "\u0394x en \u0394y", slope: "Richtingsco\xEBffici\xEBnt", line_behavior: "Stijgen en dalen", special_lines: "Bijzondere rechten", zeroRead: "Nulwaarde aflezen", zero: "Nulwaarde berekenen", signchart: "Tekenschema", positive: "Waar is f(x) > 0?", negative: "Waar is f(x) < 0?", equation_from_ab: "Voorschrift bouwen", graph_from_equation: "Rechte tekenen", equation_from_graph: "Voorschrift aflezen", graph_from_table: "Rechte uit tabel" };
-      function generate(spec) {
-        const world = worlds.find((w) => w.skills.includes(spec.skill));
-        if (!world || !Number.isInteger(spec.seed) || !Number.isInteger(spec.variant)) throw Error("Onbekende battleopgave");
-        return R.battle(world.id, spec.skill, spec.seed, spec.variant);
-      }
-      function validate(initial, answer) {
-        try {
-          if (!Array.isArray(answer?.steps) || !answer.steps.length || answer.steps.length > 8) return { ok: false };
-          let s = structuredClone(initial);
-          for (let i = 0; i < answer.steps.length; i++) {
-            const step = answer.steps[i], m = R.active(s);
-            if (step.phase !== m.phase || !step.values || typeof step.values !== "object") return { ok: false };
-            for (const [key, value] of Object.entries(step.values)) s = R.edit(s, key, value);
-            s = R.commit(s);
-            const f = R.active(s).feedback;
-            if (!f?.result.ok) return { ok: false };
-            if (f.next === "next-task") return { ok: i === answer.steps.length - 1 };
-            s = R.advance(s);
-          }
-          return { ok: false };
-        } catch {
-          return { ok: false };
-        }
-      }
-      function nextPhase(state) {
-        return { "hill-dx": "hill-dy", "line-plot": "line-behavior", "grens-root": "grens-inequality" }[R.active(state).phase] || null;
-      }
-      function nextInput(state) {
-        const s = structuredClone(state), m = R.active(s), next = nextPhase(s);
-        if (!next) return s;
-        m.phase = next;
-        m.feedback = null;
-        m.history = [];
-        m.locks = {};
-        return s;
-      }
-      return { nextPhase, nextInput, id: "rechten", title: "Rechtenwereld", rpc: "axioma_game_class", playerURL: "battle-player.html", worlds, skills: Object.entries(labels).map(([id, label]) => ({ id, label })), mixedSkills: ["point_plot", "delta", "zeroRead", "graph_from_equation", "graph_from_table"], generate, validate };
     });
   }
 });
@@ -2073,7 +2027,7 @@ var require_area_maps = __commonJS({
           node("special_lines", "Bijzondere rechten", "Bijzondere<br>rechten", 90, 19, { playable: true })
         ] }] },
         signaalstad: { name: "Signaalstad", caption: "Functies, grafieken en tabellen", intro: "Volg het signaal. Lees en controleer.", art: "signaalstad", zones: [{ id: "route", name: "Het signaalnetwerk", nodes: [
-          node("intercept", "y-afsnede b aflezen", "y-afsnede b<br>aflezen", 18, 30),
+          node("intercept", "Snijpunt met de y-as aflezen", "Snijpunt met<br>de y-as", 18, 30),
           node("ab", "a en b herkennen", "a en b<br>herkennen", 39, 30),
           node("fx", "Functiewaarde f(x)", "Bereken<br>f(x)", 60, 30),
           node("table", "Tabel aanvullen", "Tabel<br>aanvullen", 81, 30),
@@ -2127,7 +2081,7 @@ var require_area_maps = __commonJS({
         const m = state.missions?.grenspas;
         return !!m?.completed || !!m?.completion?.some((c) => c.variant === 0 || c.variant === 1) || !!state.events?.some((e) => e.skill === "sign" && e.correct && (e.variant === 0 && e.attemptId?.startsWith("symbol:") || e.variant === 1 && e.phase === "transfer"));
       }
-      function statuses(state, id, legacy) {
+      function statuses(state, id, legacy, account) {
         const a = get(id), nodes = all(a), raw = legacy?.state || legacy;
         let s = null;
         if (raw?.skills) {
@@ -2141,7 +2095,7 @@ var require_area_maps = __commonJS({
         const formulaDone = (n) => (id === "formulewerf" || id === "signaalstad" && n.id === "graph_from_table") && n.playable && (!!state.missions?.[n.id]?.completed || !!state.events?.some((e) => e.correct && e.skill === n.id && e.taskId?.startsWith("rechten-v2:" + id + ":" + n.id + ":") && /:5:run\d+$/.test(e.taskId) && e.attemptId?.startsWith({ graph_from_table: "formula-plot:", equation_from_ab: "formula-build:", graph_from_equation: "formula-plot:", equation_from_graph: "formula-read:", rewrite_linear_equation: "formula-rewrite:", intercept_from_point: "derive-intercept:", equation_from_point_slope: "derive-formula:", equation_from_two_points: "derive-formula:", equation_from_table: "derive-formula:" }[n.id])));
         const completed = (n) => formulaDone(n) || grensDone(n) || hillDone(n) || pointsDone(n) || (n.key === "positive" ? positiveDone(state) || !!(s && W.ready(s, n.id)) : n.id === "zeroRead" ? !!state.events?.some((e) => e.skill === "zeroRead" && e.correct && !e.taskId?.startsWith("rechten-v2:grenspas:")) || !!(s && W.ready(s, n.id)) : !!(s && W.ready(s, n.id)));
         const released = (n) => !!n.playable;
-        const open = unlocked(state, id, legacy);
+        const open = unlocked(state, id, legacy, account);
         const available = (n) => open && released(n);
         const started = (n) => {
           const m = state.missions?.[n.key];
@@ -2167,21 +2121,22 @@ var require_area_maps = __commonJS({
       function touched(state, id, legacy) {
         return Object.values(state.missions || {}).some((m) => m?.world === id) || (state.events || []).some((e) => String(e?.taskId || "").startsWith("rechten-v2:" + id + ":")) || legacyTouched(id, legacy);
       }
-      function unlocked(state, id, legacy) {
+      function unlocked(state, id, legacy, account) {
+        if (account?.role === "teacher") return true;
         id = canonical(id);
         if (id === "puntenbaai" || id === "hellingrug" || !prerequisite[id]) return true;
         if (touched(state, id, legacy)) return true;
         return statuses(state, prerequisite[id], legacy).complete;
       }
-      function recommendation(state, legacy) {
+      function recommendation(state, legacy, account) {
         const active = state.missions?.[state.active];
         const result = (id, node2, resume = false) => ({ id, node: node2, resume, zone: get(id).zones.find((z) => z.nodes.some((n) => n.key === node2?.key))?.id || get(id).zones[0].id });
-        if (active && !active.completed && unlocked(state, active.world, legacy)) {
-          const summary = statuses(state, active.world, legacy), node2 = summary.nodes.find((n) => n.key === state.active && n.playable && n.state !== "locked");
+        if (active && !active.completed && unlocked(state, active.world, legacy, account)) {
+          const summary = statuses(state, active.world, legacy, account), node2 = summary.nodes.find((n) => n.key === state.active && n.playable && n.state !== "locked");
           if (node2) return result(active.world, node2, true);
         }
         for (const id of routeOrder) {
-          const summary = statuses(state, id, legacy);
+          const summary = statuses(state, id, legacy, account);
           if (summary.unlocked && summary.recommended) return result(id, summary.recommended, summary.nodes.find((n) => n.key === summary.recommended.key).started);
         }
         return result("hellingrug", null);
@@ -2211,51 +2166,107 @@ var require_area_maps = __commonJS({
   }
 });
 
-// shared/multiplayer/rechten-online-policy.cjs
-var require_rechten_online_policy = __commonJS({
-  "shared/multiplayer/rechten-online-policy.cjs"(exports, module) {
-    var Game = require_battle_config();
-    var Areas = require_area_maps();
-    function learned(state, worldId) {
-      if (!state || !state.missions || !Array.isArray(state.events)) return [];
-      const skills = [];
-      for (const world of Game.worlds.filter((w) => w.id !== "puntenbaai")) {
-        const status = Areas.statuses(state, world.id);
-        if (!status.unlocked || !status.complete || worldId && world.id !== worldId) continue;
-        for (const skill of world.skills) if (status.nodes.some((n) => n.key === skill && n.state === "completed")) skills.push(skill);
+// games/rechten/rechtenwereld/learn-config.js
+var require_learn_config = __commonJS({
+  "games/rechten/rechtenwereld/learn-config.js"(exports, module) {
+    (function(root, factory) {
+      if (typeof module === "object") module.exports = factory(require_mission_runtime(), require_area_maps(), require_derive_core(), require_hills_core());
+      else {
+        root.RechtenLearnGame = factory(root.RechtenV2Runtime, root.RechtenV2Areas, root.RechtenV2Derive, root.RechtenV2Hills);
+        if (new URLSearchParams(location.search).get("mode") === "learn") {
+          root.BattleGame = root.RechtenLearnGame;
+          document.body.classList.add("cooperative-player");
+        }
       }
-      return skills;
-    }
-    function pool(a, b, worldId) {
-      const other = new Set(learned(b, worldId));
-      return learned(a, worldId).filter((s) => other.has(s));
-    }
-    function grade(spec, answer) {
-      try {
-        return Game.validate(Game.generate(spec), answer).ok === true;
-      } catch {
-        return false;
+    })(globalThis, (R, A, D, H) => {
+      const order = ["puntenbaai", "hellingrug", "grenspas", "formulewerf", "signaalstad"];
+      const worlds = order.map((id) => ({ id, name: A.get(id).name, skills: A.all(A.get(id)).filter((n) => n.playable).map((n) => n.key) }));
+      const skills = order.flatMap((world) => A.all(A.get(world)).filter((n) => n.playable).map((n) => ({ id: n.key, label: n.name, world })));
+      function generate(spec) {
+        const item = skills.find((s) => s.id === spec.skill);
+        if (!item || !Number.isInteger(spec.seed) || !Number.isInteger(spec.variant)) throw Error("Onbekende samen-leeropgave");
+        const variant = item.id === "line_behavior" ? [0, 1, 3, 5, 7, 8][spec.variant % 6] : spec.variant;
+        let state = R.battle(item.world, item.id, spec.seed, variant, { fullSequence: true });
+        const m = R.active(state);
+        if (m.phase === "hill-inspect") state = R.beginHills(state);
+        R.active(state).blindBattle = true;
+        return state;
       }
-    }
-    module.exports = { pool, learned, grade };
+      function nextPhase(state) {
+        const m = R.active(state);
+        const phase = D.skills.includes(m.skill) ? D.nextPhase(m.skill, m.phase) : { "hill-dx": "hill-dy", "hill-fill": "hill-calculate", "line-plot": "line-behavior", "grens-root": "grens-inequality" }[m.phase];
+        return phase && phase !== "next-task" ? phase : null;
+      }
+      function nextInput(state) {
+        const next = nextPhase(state);
+        if (!next) return state;
+        const result = R.active(R.commit(state)).feedback?.result;
+        if (!result || result.kind === "interaction_error") throw Error(result?.message || "Vul deze stap eerst in.");
+        const copy = structuredClone(state), m = R.active(copy);
+        m.phase = next;
+        m.feedback = null;
+        m.history = [];
+        m.locks = {};
+        m.values.deriveSlot = D.slots(next)[0] || "";
+        return copy;
+      }
+      function restore(spec, answer) {
+        let state = generate(spec);
+        const steps = Array.isArray(answer?.steps) ? answer.steps : [], history = [];
+        for (let i = 0; i < steps.length && i < 8; i++) {
+          const step = steps[i];
+          if (step.phase !== R.active(state).phase) break;
+          for (const [k, v] of Object.entries(step.values || {})) state = R.edit(state, k, v);
+          if (i < steps.length - 1 && nextPhase(state)) {
+            try {
+              state = nextInput(state);
+              history.push(structuredClone(step));
+            } catch {
+              break;
+            }
+          }
+        }
+        return { state, history };
+      }
+      function validate(initial, answer) {
+        try {
+          if (!Array.isArray(answer?.steps) || !answer.steps.length || answer.steps.length > 8) return { ok: false };
+          let state = structuredClone(initial);
+          for (let i = 0; i < answer.steps.length; i++) {
+            const step = answer.steps[i], m = R.active(state);
+            if (step.phase !== m.phase || !step.values || typeof step.values !== "object") return { ok: false };
+            for (const [k, v] of Object.entries(step.values)) state = R.edit(state, k, v);
+            state = R.commit(state);
+            const f = R.active(state).feedback;
+            if (!f?.result.ok) return { ok: false, step: i + 1, message: f?.result.message || "Bekijk deze stap opnieuw." };
+            if (f.next === "next-task") return { ok: i === answer.steps.length - 1 };
+            state = R.advance(state);
+          }
+          return { ok: false };
+        } catch {
+          return { ok: false };
+        }
+      }
+      return Object.freeze({ id: "rechten-learn", worlds, skills, generate, validate, nextPhase, nextInput, restore });
+    });
   }
 });
 
 // shared/multiplayer/rechten-learn-engine.cjs
 var require_rechten_learn_engine = __commonJS({
   "shared/multiplayer/rechten-learn-engine.cjs"(exports, module) {
-    var Game = require_battle_config();
-    var policy = require_rechten_online_policy();
-    var skills = Object.freeze(["point_plot", "delta", "graph_from_equation"]);
+    var Game = require_learn_config();
+    var policy = { grade: (spec2, answer2) => Game.validate(Game.generate(spec2), answer2).ok === true };
+    var skills = Object.freeze(Game.skills.map((s) => s.id));
     var copy = (v) => JSON.parse(JSON.stringify(v));
     var live = (r) => r.members.filter((m) => !(r.data.left || []).includes(m.id));
     var builder = (r) => {
       const people = live(r);
       return people[r.data.round % people.length]?.id;
     };
-    var spec = (r, user) => ({ skill: r.data.skill, seed: r.data.seed + r.data.round * 104729 + (user ? 1 + r.members.findIndex((m) => m.id === user) : 0) * 7919 >>> 0, variant: r.data.round % 4 });
+    var spec = (r, user) => ({ skill: r.data.skill, seed: r.data.seed + r.data.round * 104729 + (user ? 1 + r.members.findIndex((m) => m.id === user) : 0) * 7919 >>> 0, variant: r.data.round % (r.data.sequence === 2 ? 6 : 4) });
     var answer = (a) => {
-      if (!a || typeof a !== "object" || Array.isArray(a) || JSON.stringify(a).length > 16e3 || !Array.isArray(a.steps) || a.steps.length > 4) throw Error("Ongeldig voorstel.");
+      if (!a || typeof a !== "object" || Array.isArray(a) || JSON.stringify(a).length > 16e3 || !Array.isArray(a.steps) || a.steps.length > 8) throw Error("Ongeldig voorstel.");
       return copy(a);
     };
     function settleMembers(r) {
@@ -2330,14 +2341,15 @@ var require_rechten_learn_engine = __commonJS({
       }
       if (action === "check") {
         if (s.phase !== "build" || !own || input.revision !== s.revision || !people.every((m) => s.approvals.includes(m.id))) throw Error("Iedereen moet dit voorstel eerst goedkeuren.");
-        s.correct = policy.grade(spec(r), s.draft);
+        const checked = Game.validate(Game.generate(spec(r)), s.draft);
+        s.correct = checked.ok;
+        s.feedback = checked.ok ? null : { step: checked.step || null, message: checked.message || "Vul alle stappen in en bespreek jullie voorstel." };
         s.phase = "result";
         return s;
       }
       if (action === "retry") {
         if (s.phase !== "result" || !own || s.correct) throw Error("Herwerken kan nu niet.");
         s.phase = "build";
-        s.draft = { steps: [] };
         s.approvals = [];
         s.revision++;
         return s;
@@ -2356,7 +2368,7 @@ var require_rechten_learn_engine = __commonJS({
       if (action === "individual") {
         if (!["individual", "finished"].includes(s.phase)) throw Error("De eigen eindcheck is nog niet begonnen.");
         s.checks ||= {};
-        if (!s.checks[uid]) s.checks[uid] = { correct: policy.grade(spec(r, uid), answer(input.answer)) };
+        if (!s.checks[uid]) s.checks[uid] = { correct: policy.grade(spec(r, uid), answer(input.answer)), answer: answer(input.answer) };
         if (people.every((m) => s.checks[m.id])) s.phase = "finished";
         return s;
       }
@@ -2384,6 +2396,7 @@ var require_rechten_learn_engine = __commonJS({
         ideas: participating && ["build", "result"].includes(s.phase) ? people.map((m) => ({ alias: m.alias, ...s.ideas?.[m.id] })) : null,
         mine: participating ? { idea: !!myIdea, answer: s.phase === "idea" ? myIdea?.answer : null, check: s.checks?.[uid] || null } : null,
         correct: s.phase === "result" ? s.correct : null,
+        feedback: s.phase === "result" ? s.feedback || null : null,
         continueVotes: s.continueVotes || [],
         server_time: r.now
       };

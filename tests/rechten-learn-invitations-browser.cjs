@@ -4,7 +4,7 @@ const {createDB}=require('./helpers/rechten-online-db.cjs'),{CDP}=require('./hel
 const engine=require('../shared/multiplayer/rechten-learn-engine.cjs');
 const BASE='http://127.0.0.1:8775',PORT=9245;
 (async()=>{const {db,ids}=await createDB(),contexts=[],tabs=[],browser=new CDP();try{
- for(const file of ['20260929235628_rechten_samen_leren.sql','20260929235633_rechten_learn_invitations.sql'])await db.exec(fs.readFileSync('supabase/migrations/'+file,'utf8'));
+ for(const file of ['20260929235628_rechten_samen_leren.sql','20260929235633_rechten_learn_invitations.sql','20260930161209_rechten_learn_full_route.sql'])await db.exec(fs.readFileSync('supabase/migrations/'+file,'utf8'));
  let serial=Promise.resolve();const as=(user,role,sql,args)=>{const work=serial.catch(()=>{}).then(()=>db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[ids[user]||'']);await tx.exec('set local role '+role);return(await tx.query(sql,args)).rows[0]?.result;}));serial=work;return work;};
  const {createHandler}=await import('../supabase/functions/rechten-learn/handler.js');
  const handler=createHandler({url:'https://test.invalid',anonKey:'anon',serviceKey:'trusted',engine,fetcher:async(url,opts)=>{const token=opts.headers.Authorization.slice(7);if(url.endsWith('/user'))return new Response(JSON.stringify(ids[token]?{id:ids[token]}:{}),{status:ids[token]?200:401});assert.equal(token,'trusted');const a=JSON.parse(opts.body);try{return new Response(JSON.stringify(await as(null,'service_role','select public.axioma_rechten_learn_worker($1,$2) result',[a.p_action,JSON.stringify(a.p_data)])));}catch(e){return new Response(JSON.stringify({message:e.message}),{status:400});}}});

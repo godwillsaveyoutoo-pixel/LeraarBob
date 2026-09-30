@@ -11,7 +11,7 @@ export function createHandler({url,anonKey,serviceKey,engine,fetcher=fetch}){
    const auth=await fetcher(url+'/auth/v1/user',{headers:{apikey:anonKey,Authorization:bearer}});if(!auth.ok)return reply({error:'Meld je opnieuw aan.'},401);
    const user=await auth.json();if(!user.id)return reply({error:'Meld je opnieuw aan.'},401);
    const params={...data,user_id:user.id};
-   if(['invite','decline','cancel'].includes(action))return reply(await rpc(action,params));
+   if(['catalog','invite','decline','cancel'].includes(action))return reply(await rpc(action,params));
    let board=await rpc(['create','join','accept'].includes(action)?action:'read',params);
    if(!['create','join','accept','state'].includes(action)){
     if(!/^[a-f0-9-]{36}$/i.test(data.request||''))throw Error('Verzoeknummer ontbreekt.');

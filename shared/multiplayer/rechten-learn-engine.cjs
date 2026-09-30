@@ -1,12 +1,12 @@
 /* Trusted cooperative session engine. Mathematics stays in the native game validator. */
-const Game=require('../../games/rechten/rechtenwereld/battle-config.js');
-const policy=require('./rechten-online-policy.cjs');
-const skills=Object.freeze(['point_plot','delta','graph_from_equation']);
+const Game=require('../../games/rechten/rechtenwereld/learn-config.js');
+const policy={grade:(spec,answer)=>Game.validate(Game.generate(spec),answer).ok===true};
+const skills=Object.freeze(Game.skills.map(s=>s.id));
 const copy=v=>JSON.parse(JSON.stringify(v));
 const live=r=>r.members.filter(m=>!(r.data.left||[]).includes(m.id));
 const builder=r=>{const people=live(r);return people[r.data.round%people.length]?.id;};
-const spec=(r,user)=>({skill:r.data.skill,seed:(r.data.seed+r.data.round*104729+(user?1+r.members.findIndex(m=>m.id===user):0)*7919)>>>0,variant:r.data.round%4});
-const answer=a=>{if(!a||typeof a!=='object'||Array.isArray(a)||JSON.stringify(a).length>16000||!Array.isArray(a.steps)||a.steps.length>4)throw Error('Ongeldig voorstel.');return copy(a);};
+const spec=(r,user)=>({skill:r.data.skill,seed:(r.data.seed+r.data.round*104729+(user?1+r.members.findIndex(m=>m.id===user):0)*7919)>>>0,variant:r.data.round%(r.data.sequence===2?6:4)});
+const answer=a=>{if(!a||typeof a!=='object'||Array.isArray(a)||JSON.stringify(a).length>16000||!Array.isArray(a.steps)||a.steps.length>8)throw Error('Ongeldig voorstel.');return copy(a);};
 function settleMembers(r){const s=r.data,people=live(r);if(people.length<2&&!['lobby','finished'].includes(s.phase)){s.phase='paused';return;}if(s.phase==='idea'&&people.every(m=>s.ideas?.[m.id])){s.phase='build';s.draft=s.ideas[builder(r)].answer;}if(s.phase==='individual'&&people.every(m=>s.checks?.[m.id]))s.phase='finished';}
 function change(raw,uid,action,input={}){
  const r=copy(raw),s=r.data,people=live(r),mine=people.some(m=>m.id===uid);if(!mine)throw Error('Je neemt niet meer deel. Je kunt alleen verder leren.');
@@ -44,10 +44,10 @@ function change(raw,uid,action,input={}){
  }
  if(action==='check'){
   if(s.phase!=='build'||!own||input.revision!==s.revision||!people.every(m=>s.approvals.includes(m.id)))throw Error('Iedereen moet dit voorstel eerst goedkeuren.');
-  s.correct=policy.grade(spec(r),s.draft);s.phase='result';return s;
+  const checked=Game.validate(Game.generate(spec(r)),s.draft);s.correct=checked.ok;s.feedback=checked.ok?null:{step:checked.step||null,message:checked.message||'Vul alle stappen in en bespreek jullie voorstel.'};s.phase='result';return s;
  }
  if(action==='retry'){
-  if(s.phase!=='result'||!own||s.correct)throw Error('Herwerken kan nu niet.');s.phase='build';s.draft={steps:[]};s.approvals=[];s.revision++;return s;
+  if(s.phase!=='result'||!own||s.correct)throw Error('Herwerken kan nu niet.');s.phase='build';s.approvals=[];s.revision++;return s;
  }
  if(action==='next'){
   if(s.phase!=='result'||!own||!s.correct)throw Error('Rond eerst de opgave samen af.');
@@ -55,7 +55,7 @@ function change(raw,uid,action,input={}){
  }
  if(action==='individual'){
   if(!['individual','finished'].includes(s.phase))throw Error('De eigen eindcheck is nog niet begonnen.');
-  s.checks||={};if(!s.checks[uid])s.checks[uid]={correct:policy.grade(spec(r,uid),answer(input.answer))};
+  s.checks||={};if(!s.checks[uid])s.checks[uid]={correct:policy.grade(spec(r,uid),answer(input.answer)),answer:answer(input.answer)};
   if(people.every(m=>s.checks[m.id]))s.phase='finished';return s;
  }
  throw Error('Onbekende leeractie.');
@@ -68,6 +68,6 @@ function project(r,uid){
   draft:participating&&['build','result'].includes(s.phase)?s.draft:null,
   ideas:participating&&['build','result'].includes(s.phase)?people.map(m=>({alias:m.alias,...s.ideas?.[m.id]})):null,
   mine:participating?{idea:!!myIdea,answer:s.phase==='idea'?myIdea?.answer:null,check:s.checks?.[uid]||null}:null,
-  correct:s.phase==='result'?s.correct:null,continueVotes:s.continueVotes||[],server_time:r.now};
+  correct:s.phase==='result'?s.correct:null,feedback:s.phase==='result'?s.feedback||null:null,continueVotes:s.continueVotes||[],server_time:r.now};
 }
 module.exports={skills,change,project,spec,builder};

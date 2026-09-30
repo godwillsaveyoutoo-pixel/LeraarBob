@@ -37,10 +37,12 @@ Gecontroleerd met de sociale menuproef (leerling/leerkracht, licht/donker, 320�
 
 [Centraal paneel op smartphone](release-preview/samen-spelen-smartphone.png) · [Centraal paneel op desktop](release-preview/samen-spelen-desktop.png)
 
-### Samen Leren: afgebakende eerste versie
+### Samen Leren: volledige uitgewerkte leerroute
 
 - Twee of drie leerlingen uit dezelfde klas vormen een groepje via uitnodigingen op alias. De maker kiest een oefening en nodigt beschikbare klasgenoten uit; de ontvanger kiest **Meedoen** of **Niet nu**. De groepscode blijft beschikbaar als alternatief.
-- Beschikbaar voor punten plaatsen, Δx/Δy en een rechte tekenen uit een voorschrift. Formulewerf vraagt passende voorkennis.
+- Beschikbaar voor alle **21 uitgewerkte onderdelen**: Puntenbaai (2), Hellingrug (5), Grenspas (5), Formulewerf (8) en Signaalstad (1). De keuzelijst groepeert ze per wereld. De server controleert welke werelden voor beide leerlingen geopend zijn. Toekomstige haltes worden niet aangeboden.
+- Lange uitwerkingen behouden hun eigen tussenstappen. **Vorige stap** werkt ook na herladen. Onvolledige invoer kan niet ongemerkt doorgaan; een inhoudelijk fout voorstel wordt pas gezamenlijk beoordeeld. Bij herwerken blijft het voorstel staan en verschijnt feedback over de betreffende stap.
+- Smartphonewerkborden houden de actieknop bereikbaar. Lange berekeningen kunnen binnen het werkbord verticaal scrollen, zonder overlappende velden of een tweede platformbalk.
 - Iedereen geeft eerst een eigen idee, zonder het antwoord van de anderen te zien. ‘Nog geen idee’ is toegestaan.
 - Daarna één bouwer en één of twee controleurs. Eigen ideeën kunnen op het native bord vergeleken worden.
 - Iedereen bevestigt hetzelfde voorstel. Een wijziging maakt oude goedkeuringen ongeldig. Alleen de bouwer start de gezamenlijke controle.
@@ -55,7 +57,7 @@ De server controleert klas, voorkennis, beschikbaarheid en de vrije plaatsen. Ee
 
 De wachtkamer houdt de startknop bereikbaar op smalle en lage schermen. Ontvangen uitnodigingen staan ook op de instelpagina van Samen leren. Alleen verder leren blijft bereikbaar wanneer er niemand beschikbaar is of het netwerk uitvalt. Deze actie meldt je ook af bij het groepje. Bij netwerkverlies blijft het afmeldverzoek per account bewaard en probeert de sociale service het op de solopagina opnieuw; de leerling hoeft daarop niet te wachten.
 
-Deze pilot schrijft nog **geen individuele mastery of voltooiing van leerhaltes** vanuit Samen Leren weg. De eigen eindcheck geeft wel feedback binnen de sessie. Verdergaan op de bestaande individuele leerroute blijft mogelijk. Een gezamenlijk goed antwoord is geen automatische ontgrendeling en geen XP voor alle deelnemers.
+Deze versie schrijft nog **geen individuele mastery of voltooiing van leerhaltes** vanuit Samen Leren weg. De eigen eindcheck geeft wel feedback binnen de sessie. Verdergaan op de bestaande individuele leerroute blijft mogelijk. Een gezamenlijk goed antwoord is geen automatische ontgrendeling en geen XP voor alle deelnemers.
 
 ### Klasbattle
 
@@ -107,7 +109,7 @@ Toegepast op het bestaande Supabase-project:
 4. `20260929235633_rechten_learn_invitations.sql`.
 5. `20260929235636_algebra_trainer_catalog.sql`: registratie van 17 oefenvormen in de bestaande spelcatalogus.
 
-Edge Functions `rechten-duo`, `rechten-class` en `rechten-learn` zijn actief, versie 1, met JWT-verificatie en extra gebruikerscontrole bij Auth. De SQL-workers zijn alleen uitvoerbaar door `service_role`; `anon` en `authenticated` hebben geen rechtstreekse workerrechten. Alle negen live verzoeken zonder sessie, met ongeldig token of met alleen de publieke anonieme sleutel geven 401.
+Edge Functions `rechten-duo` en `rechten-class` zijn actief op versie 1; `rechten-learn` is uitgebreid naar versie 3, met JWT-verificatie en extra gebruikerscontrole bij Auth. De SQL-workers zijn alleen uitvoerbaar door `service_role`; `anon` en `authenticated` hebben geen rechtstreekse workerrechten. Alle negen live verzoeken zonder sessie, met ongeldig token of met alleen de publieke anonieme sleutel geven 401.
 
 De veiligheidscontrole vermeldt de bewuste, afgesloten [RLS-tabellen zonder directe policies](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy). De al bestaande waarschuwingen over [privileged RPC-toegang](https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable) en [wachtwoordlekbescherming](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection) zijn niet als onderdeel van deze uitrol gewijzigd.
 
@@ -138,3 +140,18 @@ SOCIAL_MENU_ONLY=1 node tests/social-browser.cjs
 node tests/rechten-online-browser.cjs
 LB_PAGES=Rechtenwereld node tests/platform-topbar-browser.cjs
 ```
+
+
+### Uitbreiding Samen leren — 30 september 2026
+
+Migratie `20260930161209_rechten_learn_full_route.sql` voegt de volledige onderdelencatalogus en toegangscontrole toe. Nieuwe sessies gebruiken zes opgavevarianten; bestaande sessies behouden hun vier-variantenindeling. De aparte leerconfiguratie verandert de competitieve battlepools niet. De migratie is toegepast en `rechten-learn` versie 3 is actief met JWT-verificatie. Bestaande leerlingresultaten zijn niet gewijzigd. De Edge Function wordt samen met de oorspronkelijke rekenvalidators gebouwd via `scripts/build-rechten-learn-worker.cjs`.
+
+Controle van deze uitbreiding:
+
+- 142 reken-, route-, opslag- en regressietests voor Rechtenwereld, inclusief behoud van foutieve voorstellen en een evenwichtige reeks stijgende, dalende en constante rechten.
+- Alle 21 onderdelen × 6 opgaven × 3 seeds: nakijken, herstellen van iedere tussenstap en weigeren van onvolledige oplossingen.
+- Lokale PostgreSQL/Edge-tests: catalogus, ontgrendelingen, aanmaken van alle 21 sessietypen, aliasuitnodigingen, privé-antwoorden en toegangsrechten.
+- Volledige browserreeks met twee geïsoleerde leerlingaccounts: zes uitwerkingen uit twee punten, teruggaan, herladen, gezamenlijke goedkeuring, rolwissels en afzonderlijke eindchecks. Een verlopen sessie keert terug naar de instappagina.
+- Werkborden op 1121×580, 570×235, 390×510 en 320×420 pixels; wachtkamers op vier schermformaten met open en ingeklapte bovenbalk.
+
+De samenwerking beoordeelt leerwerk, maar schrijft nog geen zelfstandige mastery of leer-XP toe. Daarvoor blijft de bestaande individuele route leidend. Klasleren met docentregie valt buiten deze uitbreiding.
