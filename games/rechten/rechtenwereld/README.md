@@ -301,3 +301,19 @@ node tests/rechten-teacher-paper-browser.cjs
 ```
 
 De controles omvatten alle 255 vraagtypeselecties, exacte modelconsistentie, 54 fysieke papierindelingen, werkelijke A4-paginering, vier schermformaten, beide balkstanden en herladen. De toegangstest gebruikt een fictief docentaccount zonder cloudschrijfacties en controleert directe toegang, halve coördinaten, afmelden en de centrale papierroute.
+
+## Papierroute Signaalstad
+
+`worksheets.html?world=signaalstad` biedt uitsluitend het uitgewerkte onderdeel `graph_from_table`: een rechte tekenen vanuit drie tabelkolommen. De overige Signaalstad-stops staan nog in voorbereiding en zijn niet toegevoegd als papierleerdoel. Zowel de centrale oefenbladenpagina als het contextmenu en de speelkeuze van Signaalstad openen deze route.
+
+De generator gebruikt de digitale tabelmodellen, vertaalt ze exact en kiest drie verschillende x-waarden waarvan de punten binnen het papierrooster vallen. De eerste begeleide vragen hebben gehele waarden; daarna zijn ook halve waarden en horizontale rechten mogelijk. Opbouwende hulp verdwijnt geleidelijk. De leerling krijgt een leeg rooster; de aparte sleutel toont de lijn en drie punten en accepteert elk correct tweetal. Reeks `SS1-…` is reproduceerbaar zonder leerlingvoortgang te schrijven.
+
+```sh
+node --test tests/signaalstad-worksheets.test.cjs
+node tests/signaalstad-worksheets-browser.cjs
+node tests/rechten-teacher-paper-browser.cjs
+```
+
+De inhoudstest toetst 120 seeds in drie hulpvormen aan de bestaande digitale tekenvalidator, inclusief alle drie de puntparen, negatieve/gehele/halve waarden en de roostergrenzen. De browserproef controleert A4-paginering, vragen/sleutel, vier schermformaten, inklappen/heropenen en bewaarbehoud. PDF-voorbeelden staan na de test in `/tmp/leraarbob-signaalstad-worksheets/`.
+
+Leerlingteksten gebruiken ‘snijpunt met de y-as’; waar een getal gevraagd wordt, is b de y-coördinaat van dat snijpunt (0; b).

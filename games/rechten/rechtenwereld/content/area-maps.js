@@ -17,7 +17,7 @@ const areas={
   node('special_lines','Bijzondere rechten','Bijzondere<br>rechten',90,19,{playable:true})
  ]}]},
  signaalstad:{name:'Signaalstad',caption:'Functies, grafieken en tabellen',intro:'Volg het signaal. Lees en controleer.',art:'signaalstad',zones:[{id:'route',name:'Het signaalnetwerk',nodes:[
-  node('intercept','y-afsnede b aflezen','y-afsnede b<br>aflezen',18,30),
+  node('intercept','Snijpunt met de y-as aflezen','Snijpunt met<br>de y-as',18,30),
   node('ab','a en b herkennen','a en b<br>herkennen',39,30),
   node('fx','Functiewaarde f(x)','Bereken<br>f(x)',60,30),
   node('table','Tabel aanvullen','Tabel<br>aanvullen',81,30),

@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const subjects={hellingrug:{title:'Hellingrug',intro:'Van veranderingen aflezen naar zelf de helling bepalen.',core:HellingrugWorksheet,view:HellingrugWorksheetView},grenspas:{title:'Grenspas',intro:'Van de nulwaarde naar tekens en x-gebieden.',core:GrenspasWorksheet,view:GrenspasWorksheetView},formulewerf:{title:'Formulewerf',intro:'Van a en b naar zelf voorschriften bepalen en rechten tekenen.',core:FormulewerfWorksheet,view:FormulewerfWorksheetView}};
+const subjects={signaalstad:{title:'Signaalstad',intro:'Van een tabel naar punten en een rechte. Oefen het al uitgewerkte onderdeel van deze wereld.',core:SignaalstadWorksheet,view:SignaalstadWorksheetView},hellingrug:{title:'Hellingrug',intro:'Van veranderingen aflezen naar zelf de helling bepalen.',core:HellingrugWorksheet,view:HellingrugWorksheetView},grenspas:{title:'Grenspas',intro:'Van de nulwaarde naar tekens en x-gebieden.',core:GrenspasWorksheet,view:GrenspasWorksheetView},formulewerf:{title:'Formulewerf',intro:'Van a en b naar zelf voorschriften bepalen en rechten tekenen.',core:FormulewerfWorksheet,view:FormulewerfWorksheetView}};
 const requested=new URLSearchParams(location.search).get('world'),world=Object.hasOwn(subjects,requested)?requested:'hellingrug';
 const {title,core:C,view:V}=subjects[world],KEY=`leraarbob.worksheets.${world}.v1`;
 const $=id=>document.getElementById(id),form=$('worksheetForm'),preview=$('worksheetPreview');

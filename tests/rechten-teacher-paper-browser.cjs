@@ -11,7 +11,11 @@ const BASE='http://127.0.0.1:8775',PATH='/games/rechten/rechtenwereld/';
   if(u.hostname!=='127.0.0.1')return c.send('Fetch.failRequest',{requestId:p.requestId,errorReason:'BlockedByClient'});return c.send('Fetch.continueRequest',{requestId:p.requestId});
  };await c.send('Fetch.enable',{patterns:[{urlPattern:'*'}]});await c.size(1366,900);
  const go=async route=>{await c.send('Page.navigate',{url:BASE+PATH+route});await c.wait("document.querySelector('#app[data-ready=true]')&&window.LeraarBobTopbar");};
- for(const area of ['grenspas','formulewerf','signaalstad']){await go('index.html#'+area);assert.equal(await c.eval('RechtenV2Areas.selection(RechtenV2App.snapshot()).id'),area);assert.equal(await c.eval('RechtenV2App.snapshot().platformXp'),0);}
+ for(const area of ['grenspas','formulewerf','signaalstad']){await go('index.html#'+area);assert.equal(await c.eval('RechtenV2Areas.selection(RechtenV2App.snapshot()).id'),area);assert.equal(await c.eval('RechtenV2App.snapshot().platformXp'),0);
+  await c.eval("document.querySelector('.area-play-link').click()");await c.wait("document.getElementById('openWorksheets')&&!document.getElementById('paperChoice').hidden");
+  assert.equal(await c.eval("document.getElementById('openWorksheets').getAttribute('href')"),'worksheets.html?world='+area);
+  await c.click('openWorksheets');await c.wait('window.RechtenWorksheetApp');assert.equal(await c.eval("document.getElementById('worksheetWorld').value"),area);
+ }
  await go('index.html?practice=graph_from_equation');assert.equal(await c.eval('RechtenV2App.snapshot().active'),'graph_from_equation');
  // Advance a local teacher fixture to the half-unit exercise without marking it complete.
  await c.eval(`(()=>{const k=Object.keys(localStorage).find(k=>k.endsWith(':teacher:teacher-paper-test')),r=JSON.parse(localStorage[k]),m=r.state.missions.graph_from_equation;m.index=3;m.task=RechtenV2Formula.makeTask(m.skill,3,m.run||1);localStorage[k]=JSON.stringify(r)})()`);
