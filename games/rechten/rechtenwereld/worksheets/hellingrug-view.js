@@ -1,4 +1,4 @@
-(function(root,factory){if(typeof module==='object')module.exports=factory(require('../../core/wave-core.js'),require('./hellingrug-core.js'),require('../../../../shared/worksheet-layout.js'));else root.HellingrugWorksheetView=factory(root.RechtenWave,root.HellingrugWorksheet,root.LeraarBobWorksheetLayout)})(globalThis,(W,C,L)=>{
+(function(root,factory){if(typeof module==='object')module.exports=factory(require('../../core/wave-core.js'),require('./hellingrug-core.js'),require('../../../../shared/worksheet-render.js'));else root.HellingrugWorksheetView=factory(root.RechtenWave,root.HellingrugWorksheet,root.LeraarBobWorksheetRender)})(globalThis,(W,C,L)=>{
 'use strict';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const number=W.html,coordinate=p=>`(${number(p.x)}; ${number(p.y)})`,term=q=>q.n<0?'('+number(q)+')':number(q);
@@ -47,11 +47,6 @@ function answer(t){
  case 'error_analysis':return `<p>De y-waarden staan in de volgorde B − A, maar de x-waarden in A − B. Gebruik <strong>dezelfde volgorde</strong> in teller en noemer.</p>${deltas}${slope}<p>A − B in beide aftrekkingen is eveneens correct.</p>`;
  }
 }
-function render(doc,kind='questions'){
- if(!['questions','key'].includes(kind))throw Error('Onbekend document');
- const key=kind==='key';
- const items=doc.tasks.map(t=>({...t,height:key&&!t.graph?64:t.height})),pages=L.paginate(items);
- return {count:pages.length,html:pages.map((rows,i)=>`<section class="worksheet-page" aria-label="${key?'Verbetersleutel':'Oefenblad'} pagina ${i+1}"><header class="sheet-heading"><div><span class="sheet-brand">leraarBob · Rechtenwereld</span><h2>Hellingrug${key?' · verbetersleutel':''}</h2></div><div class="sheet-identity">${key?`Reeks ${esc(doc.code)}<br>${esc(C.modes[doc.config.mode])}`:'Naam: ___________________<br>Klas: ______ &nbsp; Datum: __________'}</div></header><div class="sheet-content">${rows.map(row=>`<div class="worksheet-row" style="height:${row.height}mm">${row.items.map(t=>`<article class="worksheet-question span-${t.span}" data-question="${t.number}" data-skill="${t.skill}"><h3><span class="question-number">${t.number}</span>${esc(C.types.find(c=>c.id===t.type).label)}${!key&&t.guided?'<small>Met tussenstappen</small>':''}</h3><div class="question-body${t.graph?' has-graph':''}">${t.graph?graph(t,key):''}<div class="question-work">${key?answer(t):student(t)}</div></div></article>`).join('')}</div>`).join('')}</div><footer class="sheet-footer"><span>${key?'Verbetersleutel':'Oefenblad'} · ${esc(doc.code)} · ${esc(C.modes[doc.config.mode])}</span><span>${i+1} / ${pages.length}</span></footer></section>`).join('')};
-}
+function render(doc,kind='questions'){return L.render(doc,kind,{title:'Hellingrug',types:C.types,modes:C.modes,graph,student,answer})}
 return Object.freeze({render,graph,student,answer});
 });

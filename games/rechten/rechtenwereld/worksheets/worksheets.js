@@ -1,8 +1,16 @@
 (()=>{
 'use strict';
-const C=HellingrugWorksheet,V=HellingrugWorksheetView,KEY='leraarbob.worksheets.hellingrug.v1';
+const world=new URLSearchParams(location.search).get('world')==='grenspas'?'grenspas':'hellingrug';
+const border=world==='grenspas',title=border?'Grenspas':'Hellingrug';
+const C=border?GrenspasWorksheet:HellingrugWorksheet,V=border?GrenspasWorksheetView:HellingrugWorksheetView,KEY=`leraarbob.worksheets.${world}.v1`;
 const $=id=>document.getElementById(id),form=$('worksheetForm'),preview=$('worksheetPreview');
 let doc,kind='questions',dirty=false;
+$('worksheetWorld').value=world;
+$('worksheetWorld').onchange=()=>{const url=new URL(location.href);url.searchParams.set('world',$('worksheetWorld').value);location.assign(url)};
+for(const id of ['worksheetWorldLink','worksheetMenuBack']){$(id).href='index.html#'+world;$(id).textContent=id==='worksheetMenuBack'?'Terug naar '+title:title;}
+$('worksheetPlayLink').href='play.html?world='+world;
+const intro=document.querySelector('.worksheet-intro');intro.querySelector('h1').textContent=title;intro.querySelector('p').textContent=border?'Van de nulwaarde naar tekens en x-gebieden.':'Van veranderingen aflezen naar zelf de helling bepalen.';intro.querySelector('.back-link').href='index.html#'+world;intro.querySelector('.back-link').textContent='← Naar '+title;
+
 $('worksheetTypes').innerHTML=C.types.map(t=>`<label class="worksheet-type"><input type="checkbox" value="${t.id}" checked><span><strong>${t.label}</strong><small>${t.example}</small></span></label>`).join('');
 const seed=()=>{const values=new Uint32Array(1);crypto.getRandomValues(values);return values[0]||1};
 function save(){try{localStorage.setItem(KEY,JSON.stringify({version:C.VERSION,config:doc.config,kind}))}catch{$('worksheetNotice').textContent='Je kunt dit blad gebruiken. Bewaren op dit toestel is niet beschikbaar.'}}
@@ -16,15 +24,16 @@ function render(){
  $('worksheetCode').textContent=`Reeks ${doc.code} · ${C.modes[doc.config.mode]}`;
  $('showQuestions').setAttribute('aria-pressed',String(kind==='questions'));$('showKey').setAttribute('aria-pressed',String(kind==='key'));
  $('printWorksheet').textContent=kind==='key'?'Sleutel: PDF / afdrukken':'Oefenblad: PDF / afdrukken';
- document.title=`Hellingrug ${doc.code} · ${kind==='key'?'verbetersleutel':'oefenblad'} · leraarBob`;
+ document.title=`${title} ${doc.code} · ${kind==='key'?'verbetersleutel':'oefenblad'} · leraarBob`;
  fit();save();
 }
 try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved){doc=C.restore(saved);kind=saved.kind==='key'?'key':'questions'}}catch{$('worksheetNotice').textContent='De vorige reeks kon niet worden hervat. Er staat een nieuw voorbeeld klaar.'}
 doc||=C.generate({seed:seed()});syncForm();render();
-form.addEventListener('change',()=>{dirty=true;$('worksheetNotice').textContent='Je keuzes zijn aangepast. Klik op ‘Maak een nieuwe reeks’ om ze te gebruiken.';$('printWorksheet').disabled=true});
+form.addEventListener('change',event=>{if(event.target.id==='worksheetWorld')return;dirty=true;$('worksheetNotice').textContent='Je keuzes zijn aangepast. Klik op ‘Maak een nieuwe reeks’ om ze te gebruiken.';$('printWorksheet').disabled=true});
 form.addEventListener('submit',e=>{e.preventDefault();try{doc=C.generate({types:[...form.querySelectorAll('input:checked')].map(i=>i.value),mode:$('worksheetMode').value,count:Number($('worksheetCount').value),seed:seed()});dirty=false;kind='questions';$('printWorksheet').disabled=false;$('worksheetNotice').textContent='Nieuwe reeks klaar. Het voorbeeld en de sleutel horen bij dezelfde opgaven.';render()}catch(error){dirty=true;$('printWorksheet').disabled=true;$('worksheetNotice').textContent=error.message}});
 $('showQuestions').onclick=()=>{kind='questions';render()};$('showKey').onclick=()=>{kind='key';render()};
 $('printWorksheet').onclick=async()=>{if(dirty)return;await document.fonts.ready;window.print()};
 new ResizeObserver(fit).observe(preview);addEventListener('afterprint',fit);
-window.HellingrugWorksheetApp=Object.freeze({snapshot:()=>JSON.parse(JSON.stringify({doc,kind,dirty}))});
+window.RechtenWorksheetApp=Object.freeze({snapshot:()=>JSON.parse(JSON.stringify({doc,kind,dirty}))});
+window[border?'GrenspasWorksheetApp':'HellingrugWorksheetApp']=window.RechtenWorksheetApp;
 })();

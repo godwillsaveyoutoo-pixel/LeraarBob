@@ -10,3 +10,9 @@
  .page-wrapper:last-child .worksheet-page{break-after:auto;page-break-after:auto}
  .worksheet-page header,.worksheet-page footer{display:flex!important}.worksheet-row,.worksheet-question{break-inside:avoid}
 }
+
+.worksheet-signchart{width:100%;table-layout:fixed;border-collapse:collapse;margin:3mm 0 4mm;font-size:11pt;text-align:center}
+.worksheet-signchart th,.worksheet-signchart td{height:11mm;padding:1mm;border-bottom:.25mm solid #66777b}
+.worksheet-signchart th{width:15mm;border-right:.25mm solid #66777b;font-weight:600}
+.worksheet-signchart td:nth-child(3){border-inline:.25mm solid #8b999c}
+.worksheet-signchart .answer-blank{min-width:10mm;max-width:100%}

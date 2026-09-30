@@ -266,3 +266,22 @@ node tests/hellingrug-worksheets-browser.cjs
 ```
 
 De browserproef gebruikt een geïsoleerde sessie en fictieve voortgang. Hij controleert 24 indelingen met lange vraag-/antwoordteksten, werkelijke A4-PDF-paginering, scheiding van vragen en antwoorden, echte afdrukklikken, vier schermformaten, beide balkstanden, herladen, gastgebruik en de kaartingang. Voorbeeldbestanden worden naar `/tmp/leraarbob-hellingrug-worksheets/` geschreven. De test vereist de lokale server op 8775, Chromium CDP op 9245 en `pdfinfo`/`pdftotext`.
+
+
+## Papierroute Grenspas
+
+`worksheets.html?world=grenspas` gebruikt dezelfde generatorinterface en A4-opmaak. De ingang is **Grenspas → Leren, spelen of papier → Oefenblad maken**, of rechtstreeks via het spelmenu. De wereldkeuze boven de leerdoelen wisselt tussen Hellingrug en Grenspas. De laatst bevestigde reeks en de documentkeuze worden per wereld afzonderlijk bewaard.
+
+De vijf leerdoelen sluiten aan op `RechtenV2Grens`: nulwaarde aflezen, nulwaarde berekenen, tekenschema, positief gebied en negatief gebied. Papier geeft geen meerkeuzeopties: leerlingen schrijven nulwaarden, vullen tekenschema’s in, formuleren strikte ongelijkheden en verklaren of de grens erbij hoort. Tekenschema’s wisselen grafieken en voorschriften af. Alle getekende rechten zijn niet-constante lineaire functies, overeenkomstig deze vijf digitale oefenreeksen; horizontale en verticale uitzonderingen blijven bij Hellingrug.
+
+`grenspas-core.js` hergebruikt de hellingen uit de digitale opgaven en verschuift de nulwaarde gecontroleerd binnen −3 tot 3. De eerste opgaven per type gebruiken gehele nulwaarden; verdere herhalingen kunnen halve waarden bevatten. Berekeningen, tekens en grenzen gebruiken de exacte breukenkern. Elke reeks is reproduceerbaar uit versie, seed, opbouw, aantal en leerdoelselectie (`GP1-…`). Wijzig de versie bij veranderingen die dezelfde instellingen andere opgaven laten opleveren.
+
+`shared/worksheet-render.js` verzorgt nu voor beide werelden de paginakop, vraagvolgorde, paginering en voettekst; de inhoud blijft per wereld gescheiden. De PDF bevat vectorroosters en echte tekst, met een afzonderlijke verbetersleutel. Er worden geen XP of beheersingsresultaten toegekend voor het genereren of afdrukken.
+
+```sh
+node --test tests/grenspas-worksheets.test.cjs tests/hellingrug-worksheets.test.cjs
+node tests/grenspas-worksheets-browser.cjs
+node tests/hellingrug-worksheets-browser.cjs
+```
+
+De Grenspas-controles toetsen de antwoorden aan de bestaande nulwaarde-, teken- en intervalvalidators, inclusief foutief gesloten grenzen, beide hellingtekens en negatieve/gehele/halve nulwaarden. Alle 31 leerdoelselecties worden met 24 vragen en drie begeleidingsvormen getest. De browsercontrole meet 36 fysieke indelingen, maakt beide PDF’s, controleert vier schermformaten en beide kopbalkstanden, wisselt tussen werelden en volgt de kaartingang met geïsoleerde testvoortgang. Voorbeelden staan na de test in `/tmp/leraarbob-grenspas-worksheets/`.
