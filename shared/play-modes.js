@@ -15,6 +15,7 @@
     {id:'rechten',name:'Rechtenwereld',subject:'Rechten',path:'games/rechten/rechtenwereld/',cover:'rechtenwereld',modes:['learn','local','online','classroom']},
     {id:'wortelbouw',name:'Wortelbouw',subject:'Pythagoras & wortels',path:'games/wortelbouw_pro_v0.5.0/wortelbouw/',cover:'wortelbouw',modes:['local','classroom']},
     {id:'vectoren',name:'Vectormissie',subject:'Vectoren',path:'games/vectoren/',cover:'vectormissie',modes:['local','classroom']},
+    {id:'bewerkingen',name:'Bewerkingentrainer',subject:'Machten & wortels',path:'games/bewerkingen-trainer/',cover:'bewerkingen',modes:['local','classroom']},
     {id:'algebra',name:'Algebra Trainer',subject:'Vergelijkingen',path:'games/algebra-trainer/',cover:'algebra-trainer',modes:['classroom']}
   ];
   const escape = text => String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

@@ -1,0 +1,4 @@
+@import url('../algebra-trainer/classroom.css');
+#classTypes fieldset{min-width:0;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+#classTypes label{min-width:0;overflow-wrap:break-word}
+@media(max-width:440px){#classTypes fieldset{grid-template-columns:minmax(0,1fr)}}

@@ -504,3 +504,19 @@ benen, op vijf formaten en met de bovenbalk open/ingeklapt. Controleert ook undo
 rotatie tijdens tekenen, onafhankelijke spelers en de echte puntentelling.
 Gebruikt de lokale server (8775) en geïsoleerde Chromium-context (9245), zonder
 cloudgegevens te wijzigen. Screenshots staan in `/tmp/leraarbob-v10-screenshots/wortelbouw-battle-space-*.png`.
+
+## Bewerkingentrainer
+
+`node tests/bewerkingen-trainer.test.cjs` controleert alle aangeleverde voorbeelden,
+4.800 gegenereerde opgaven met onafhankelijke rekencontrole, invoernotatie en
+verplicht vereenvoudigen. `tests/bewerkingen-class.test.cjs` gebruikt PGlite voor
+de echte migratie, Edge-handler, serverbeoordeling, accountscheiding, herhaalde
+inzendingen en afgeschermde workers (`VECTOR_PGLITE_MODULE` zoals hierboven).
+
+`node tests/bewerkingen-trainer-browser.cjs` controleert vier schermformaten,
+beide balkstanden, bewaarde invoer, licht/donker, afdrukken, leraarstappen,
+bordduo, offline hervatten en accountwisseling. `tests/bewerkingen-class-browser.cjs`
+test twee fictieve leerlingen in dezelfde sessie: code, concept na herladen,
+mislukte inzending en retry, score, bespreking, late deelname en sluiten.
+Beide gebruiken de lokale server (8775) en geïsoleerde Chromium (9245).
+Zie `games/bewerkingen-trainer/README.md` voor de afzonderlijke online uitrol.

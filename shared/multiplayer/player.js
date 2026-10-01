@@ -2,7 +2,7 @@
 (function(){
  const opaque=location.protocol==='file:'||location.origin==='null',origin=opaque?'null':location.origin,target=opaque?'*':location.origin;
  let hooks,round,locked=true,timer;const send=data=>parent.postMessage(data,target);
- const api=window.BattlePlayer={classroom:new URLSearchParams(location.search).get('mode')==='class',cooperative:new URLSearchParams(location.search).get('mode')==='learn',online:['online','learn'].includes(new URLSearchParams(location.search).get('mode'))||(['rechten','algebra'].includes(window.BattleGame?.id)&&new URLSearchParams(location.search).get('mode')==='class'),singleAttempt:['class','online','learn'].includes(new URLSearchParams(location.search).get('mode')),
+ const api=window.BattlePlayer={classroom:new URLSearchParams(location.search).get('mode')==='class',cooperative:new URLSearchParams(location.search).get('mode')==='learn',online:['online','learn'].includes(new URLSearchParams(location.search).get('mode'))||(['rechten','algebra','bewerkingen'].includes(window.BattleGame?.id)&&new URLSearchParams(location.search).get('mode')==='class'),singleAttempt:['class','online','learn'].includes(new URLSearchParams(location.search).get('mode')),
  connect(value){hooks=value;send({type:'vector-battle-ready'});},
  submit(answer,skipped=false){if(!round||locked)return;const correct=!api.online&&!skipped&&BattleGame.validate(BattleGame.generate(round),answer).ok;
   if(api.singleAttempt||correct||skipped){locked=true;hooks.freeze(api.online?'Bevestigd · wachten op de uitslag.':api.singleAttempt?'Antwoord verstuurd.':'Wacht op de volgende ronde.');send({type:'vector-battle-answer',match:round.match,index:round.index,answer,skipped});}

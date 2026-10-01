@@ -408,5 +408,26 @@ window.AXIOMA_CATALOG = [
     "teacherVisible": true,
     "gameType": "train",
     "tracking": "progress"
+  },
+  {
+    "id": "bewerkingen-trainer",
+    "title": "Bewerkingentrainer",
+    "subtitle": "Machten, wetenschappelijke schrijfwijze en wortels. Stap voor stap.",
+    "href": "games/bewerkingen-trainer/",
+    "category": "Machten & wortels",
+    "kind": "train",
+    "accent": "green",
+    "theme": "Algebra",
+    "art": "trainer",
+    "cover": "assets/covers/bewerkingen.svg",
+    "detail": "16 vraagvormen · solo, bordduo, klasbattle en leraarmodus",
+    "subject": "Machten & wortels",
+    "progressType": "levels",
+    "progressTotal": 16,
+    "progressUnitSingular": "vraagvorm",
+    "progressUnitPlural": "vraagvormen",
+    "teacherVisible": true,
+    "gameType": "train",
+    "tracking": "progress"
   }
 ];

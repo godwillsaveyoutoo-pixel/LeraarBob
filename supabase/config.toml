@@ -11,3 +11,6 @@ verify_jwt = true
 
 [functions.vector-class]
 verify_jwt = true
+
+[functions.bewerkingen-class]
+verify_jwt = true
