@@ -277,7 +277,7 @@ Bronbasis: user masterprompt v2/v2.1 hoofdstukken 8–14 en 17–20; huidige bes
 ## fx
 
 **Actuele generator:** Rechtenwereld values-core.js: makeTask(fx), zes voorschriften met negatieve/gehele invoer, halve/negatieve coëfficiënten en een constante functie. De oudere trainer behoudt generate(fx).
-**Actuele validator / UI:** values-core.js check en components/values-view.js: exact product ax en functiewaarde f(x), met behoud van correcte onderdelen en open getalinvoer. De oudere trainer behoudt renderFx/numericChoices/fxError.
+**Actuele validator / UI:** values-core.js check en components/values-view.js: eerst x vervangen in het voorschrift (fx-substitute), daarna exact product ax en functiewaarde f(x) (fx-calculate), met behoud van correcte onderdelen en open getalinvoer. De oudere trainer behoudt renderFx/numericChoices/fxError.
 **Nog niet ondersteund / migratiegrens:** Level 3 voegt geen hidden-case of grafiektransfer toe. Uitgebreidere mechanics hieronder blijven voorstellen; de oudere trainer blijft bewaard.
 
 | Veld | Ontwerp en toetsbare claim |

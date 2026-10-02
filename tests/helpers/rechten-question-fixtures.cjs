@@ -17,7 +17,7 @@ function fill(s,wrong=false){if(R.active(s).task.table&&R.active(s).phase==='der
   else if(p==='grens-inequality')v={inequality:(m.skill==='positive')===(t.model.a.n>0)?'>':'<'};
   else v={answer:String(t.options.findIndex(q=>W.eq(q,t.root)))};
  }
- if(['fx-calculate','table-fill'].includes(p)){const V=require('../../games/rechten/rechtenwereld/values-core.js');v=Object.fromEntries(V.fields(t).map(name=>[name,W.text(V.expected(t,name))]));}
+ if(['fx-substitute','fx-calculate','table-fill'].includes(p)){const V=require('../../games/rechten/rechtenwereld/values-core.js');v=Object.fromEntries(V.fields(t,p).map(name=>[name,W.text(V.expected(t,name))]));}
  if(p==='ab-intercept')v={b:W.text(t.model.b)};
  if(p==='ab-slope')v={a:W.text(t.model.a)};
  if(p==='formula-build'||p==='ab-rule')v={factor:W.text(t.model.a),variable:'x',operator:t.model.b.n<0?'−':'+',constant:W.text(W.mul(t.model.b.n<0?-1:1,t.model.b))};
