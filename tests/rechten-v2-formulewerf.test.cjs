@@ -50,5 +50,5 @@ test('map preserves destinations, accessible locks, home navigation and actual p
  const world=S.world(R.initial(),{});
  for(const place of S.places)assert(world.includes(`data-world-node="${place.id}"`));
  assert.equal((world.match(/data-world-node=/g)||[]).length,5);
- assert.match(world,/id="start-recommended"[^>]*data-zone="route">/);assert(world.includes('data-screen="book"'));assert(world.includes('aria-valuemax="21"'));
+ assert.match(world,/id="start-recommended"[^>]*data-zone="route">/);assert(world.includes('data-screen="book"'));assert(world.includes('aria-valuemax="23"'));
 });

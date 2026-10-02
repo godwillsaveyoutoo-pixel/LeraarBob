@@ -17,8 +17,8 @@ const areas={
   node('special_lines','Bijzondere rechten','Bijzondere<br>rechten',90,19,{playable:true})
  ]}]},
  signaalstad:{name:'Signaalstad',caption:'Functies, grafieken en tabellen',intro:'Volg het signaal. Lees en controleer.',art:'signaalstad',zones:[{id:'route',name:'Het signaalnetwerk',nodes:[
-  node('intercept','Snijpunt met de y-as aflezen','Snijpunt met<br>de y-as',18,30),
-  node('ab','a en b herkennen','a en b<br>herkennen',39,30),
+  node('intercept','Snijpunt met de y-as aflezen','Snijpunt met<br>de y-as',18,30,{playable:true,soloOnly:true}),
+  node('ab','a en b herkennen','a en b<br>herkennen',39,30,{playable:true,soloOnly:true}),
   node('fx','Functiewaarde f(x)','Bereken<br>f(x)',60,30),
   node('table','Tabel aanvullen','Tabel<br>aanvullen',81,30),
   node('input_from_output','Welke x hoort bij deze functiewaarde?','Welke x bij<br>deze f(x)?',73,61),
@@ -59,7 +59,7 @@ function statuses(state,id,legacy,account){
  const pointsDone=n=>id==='puntenbaai'&&(!!state.missions?.[n.id]?.completed||!!state.events?.some(e=>e.skill===n.id&&e.correct&&e.taskId?.startsWith('rechten-v2:puntenbaai:')&&/:5:run\d+$/.test(e.taskId)));
  const hillDone=n=>id==='hellingrug'&&n.playable&&(!!state.missions?.[n.id]?.completed||!!state.events?.some(e=>e.skill===n.id&&e.correct&&e.taskId?.startsWith('rechten-v2:hellingrug:')&&(n.id==='line_behavior'?/:8:run\d+$/:/:5:run\d+$/).test(e.taskId)&&e.attemptId?.startsWith(({delta:'hill-dy:',slope:'hill-rate:',slope_from_two_points:'hill-calculate:',line_behavior:'line-behavior:',special_lines:'line-special:'})[n.id])));
  const grensDone=n=>id==='grenspas'&&(!!state.missions?.[n.key]?.completed||!!state.events?.some(e=>e.correct&&e.taskId?.startsWith('rechten-v2:grenspas:'+n.key+':')&&/:5:run\d+$/.test(e.taskId)&&e.attemptId?.startsWith(n.id==='sign'?'grens-inequality:':n.id==='signchart'?'grens-chart:':'grens-zero:')));
- const formulaDone=n=>(id==='formulewerf'||id==='signaalstad'&&n.id==='graph_from_table')&&n.playable&&(!!state.missions?.[n.id]?.completed||!!state.events?.some(e=>e.correct&&e.skill===n.id&&e.taskId?.startsWith('rechten-v2:'+id+':'+n.id+':')&&/:5:run\d+$/.test(e.taskId)&&e.attemptId?.startsWith(({graph_from_table:'formula-plot:',equation_from_ab:'formula-build:',graph_from_equation:'formula-plot:',equation_from_graph:'formula-read:',rewrite_linear_equation:'formula-rewrite:',intercept_from_point:'derive-intercept:',equation_from_point_slope:'derive-formula:',equation_from_two_points:'derive-formula:',equation_from_table:'derive-formula:'})[n.id])));
+ const formulaDone=n=>(id==='formulewerf'||id==='signaalstad'&&['graph_from_table','intercept','ab'].includes(n.id))&&n.playable&&(!!state.missions?.[n.id]?.completed||!!state.events?.some(e=>e.correct&&e.skill===n.id&&e.taskId?.startsWith('rechten-v2:'+id+':'+n.id+':')&&/:5:run\d+$/.test(e.taskId)&&e.attemptId?.startsWith(({ab:'ab-rule:',intercept:'formula-read:',graph_from_table:'formula-plot:',equation_from_ab:'formula-build:',graph_from_equation:'formula-plot:',equation_from_graph:'formula-read:',rewrite_linear_equation:'formula-rewrite:',intercept_from_point:'derive-intercept:',equation_from_point_slope:'derive-formula:',equation_from_two_points:'derive-formula:',equation_from_table:'derive-formula:'})[n.id])));
  const completed=n=>formulaDone(n)||grensDone(n)||hillDone(n)||pointsDone(n)|| (n.key==='positive'?positiveDone(state)||!!(s&&W.ready(s,n.id)):n.id==='zeroRead'?!!state.events?.some(e=>e.skill==='zeroRead'&&e.correct&&!e.taskId?.startsWith('rechten-v2:grenspas:'))||!!(s&&W.ready(s,n.id)):!!(s&&W.ready(s,n.id)));
  const released=n=>!!n.playable;
  const open=unlocked(state,id,legacy,account);

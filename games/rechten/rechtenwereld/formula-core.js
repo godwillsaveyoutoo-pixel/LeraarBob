@@ -1,13 +1,14 @@
 /* Exact construction and algebra adapters, including Signaalstad table plots. No new mastery rules. */
 (function(root,factory){if(typeof module==='object')module.exports=factory(require('../core/wave-core.js'),require('./semantic-math-core.js'));else root.RechtenV2Formula=factory(root.RechtenWave,root.RechtenV2Math)})(globalThis,function(W,M){
 'use strict';
-const skills=['equation_from_ab','graph_from_equation','equation_from_graph','rewrite_linear_equation','graph_from_table'],count=6;
-const worldFor=skill=>skill==='graph_from_table'?'signaalstad':'formulewerf';
-const titles={graph_from_table:'Rechte uit tabel',equation_from_ab:'Voorschrift uit a en b',graph_from_equation:'Rechte uit voorschrift',equation_from_graph:'Voorschrift uit grafiek',rewrite_linear_equation:'Vergelijking herschrijven'};
+const skills=['equation_from_ab','graph_from_equation','equation_from_graph','rewrite_linear_equation','graph_from_table','intercept'],count=6;
+const worldFor=skill=>['graph_from_table','intercept'].includes(skill)?'signaalstad':'formulewerf';
+const titles={intercept:'Snijpunt met de y-as',graph_from_table:'Rechte uit tabel',equation_from_ab:'Voorschrift uit a en b',graph_from_equation:'Rechte uit voorschrift',equation_from_graph:'Voorschrift uit grafiek',rewrite_linear_equation:'Vergelijking herschrijven'};
 const slots=['factor','variable','operator','constant'];
-const phases={graph_from_table:'formula-plot',equation_from_ab:'formula-build',graph_from_equation:'formula-plot',equation_from_graph:'formula-read',rewrite_linear_equation:'formula-rewrite'};
+const phases={intercept:'formula-read',graph_from_table:'formula-plot',equation_from_ab:'formula-build',graph_from_equation:'formula-plot',equation_from_graph:'formula-read',rewrite_linear_equation:'formula-rewrite'};
 const firstPhase=skill=>phases[skill];
 const hints={
+ intercept:['Zoek waar de rechte de verticale y-as raakt. Lees daar de hoogte af.','De y-as is de verticale as door 0. Op die as is x altijd 0.','Volg de rechte tot op de y-as. Tel vanaf 0 omhoog of omlaag.','Boven 0 is de hoogte positief, onder 0 negatief. Door de oorsprong geeft hoogte 0.','Ander voorbeeld: een rechte door (0; 4) snijdt de y-as op hoogte 4. Die hoogte noemen we b. Probeer een nieuw geval.'],
  graph_from_table:['Elke kolom geeft een punt: (x; f(x)).','Lees x in de bovenste rij en y in dezelfde kolom eronder.','Plaats eerst één punt. Kies daarna een andere kolom voor het tweede punt.','De rechte door je punten moet bij alle kolommen passen. Let op negatieve getallen en halve stappen.','Ander voorbeeld: de kolommen (0; 1) en (2; 3) geven twee punten op dezelfde rechte. Probeer een nieuw geval.'],
  equation_from_ab:['Gebruik de vorm y = ax + b.','De coëfficiënt van x is a. De constante term is b.','Kies het teken en het getal zo dat ze samen b voorstellen.','Ook 0 en negatieve coëfficiënten zijn mogelijk. Een bouwsteen mag je meermaals gebruiken.','Ander voorbeeld: a = −3 en b = 4 geven y = −3x + 4. Probeer een nieuw geval.'],
  graph_from_equation:['Bepaal zelf a en b uit het voorschrift.','b geeft de y-coördinaat van het snijpunt met de y-as.','a vertelt hoe y verandert als x met één toeneemt. Let op het teken.','Je kunt ook twee x-waarden kiezen en hun y-waarden berekenen. Gebruik twee verschillende punten.','Ander voorbeeld: bij y = −3x + 4 liggen (0, 4) en (1, 1) op de rechte. Probeer een nieuw geval.'],
@@ -16,7 +17,7 @@ const hints={
 };
 function makeTask(skill,index=0,run=1){
  if(!skills.includes(skill))throw Error('Onbekende Formulewerf-vaardigheid');
- const rows=skill==='graph_from_table'?[[1,1],[-1,2],[2,-1],[.5,1],[-.5,-1],[0,2]]:skill==='equation_from_ab'?[[2,2],[-1,3],[1,-2],[.5,0],[-.5,-1],[0,2]]:skill==='rewrite_linear_equation'?[[2,3],[-1,-2],[.5,1],[-.5,-1],[0,2],[1,0]]:[[2,1],[1,-1],[-1,2],[.5,-2],[-.5,1],[0,-1]];
+ const rows=skill==='intercept'?[[1,2],[2,1],[-1,3],[1,-2],[-2,0],[0,-1]]:skill==='graph_from_table'?[[1,1],[-1,2],[2,-1],[.5,1],[-.5,-1],[0,2]]:skill==='equation_from_ab'?[[2,2],[-1,3],[1,-2],[.5,0],[-.5,-1],[0,2]]:skill==='rewrite_linear_equation'?[[2,3],[-1,-2],[.5,1],[-.5,-1],[0,2],[1,0]]:[[2,1],[1,-1],[-1,2],[.5,-2],[-.5,1],[0,-1]];
  const [slope,intercept]=rows[index%count],model={kind:'affine',a:W.fromNumber(slope),b:W.fromNumber(intercept+[0,1,-1][(run-1)%3])};
  const tableXs=Array.from({length:11},(_,i)=>i-5).filter(x=>Math.abs(W.num(W.add(W.mul(model.a,x),model.b)))<=5);
  const table=skill==='graph_from_table'?[tableXs[0],tableXs[index%count===0?1:Math.floor(tableXs.length/2)],tableXs.at(-1)].map(x=>({x:W.q(x),y:W.add(W.mul(model.a,x),model.b)})):null;
@@ -25,7 +26,7 @@ function makeTask(skill,index=0,run=1){
  const tokens=[model.a,W.q(Math.abs(model.b.n),model.b.d),W.mul(-1,model.a),model.b,W.q(0),W.q(1),W.q(-1),W.q(2)].map(W.text).filter((v,i,a)=>a.indexOf(v)===i);
  // Shuffle only the number tiles; their order must not encode the solution.
  let seed=run*31+index*19;for(let i=tokens.length-1;i>0;i--){seed=(seed*1664525+1013904223)>>>0;const j=seed%(i+1);[tokens[i],tokens[j]]=[tokens[j],tokens[i]]}tokens.push('x','+','−');
- return {id:`rechten-v2:${world}:${skill}:${run}:${index}`,world,skill_id:skill,family_id:table?'F5':'F7',index,count,model,equation,tokens,...(table?{table}:{}),gridStep:model.a.d>1?.5:1,parameterStep:.5,bounds:{xMin:-5,xMax:5,yMin:-5,yMax:5},mode:index===0?'discover':'practice',variant:!model.a.n?'horizontal':model.a.d>1?(model.a.n<0?'negative-fraction':'positive-fraction'):model.a.n<0?'negative':'positive',given_representations:[table?'table':skill==='equation_from_ab'?'coefficients':skill==='equation_from_graph'?'graph':'equation'],hints:[...hints[skill]],legacy:{skill:skill==='equation_from_graph'?'equation_from_ab':skill,params:{model,equation,scaleX:W.q(1),scaleY:W.q(1)}}};
+ return {id:`rechten-v2:${world}:${skill}:${run}:${index}`,world,skill_id:skill,family_id:skill==='intercept'?'F3':table?'F5':'F7',index,count,model,equation,tokens,...(table?{table}:{}),gridStep:model.a.d>1?.5:1,parameterStep:skill==='intercept'?1:.5,bounds:{xMin:-5,xMax:5,yMin:-5,yMax:5},mode:index===0?'discover':'practice',variant:!model.a.n?'horizontal':model.a.d>1?(model.a.n<0?'negative-fraction':'positive-fraction'):model.a.n<0?'negative':'positive',given_representations:[table?'table':skill==='equation_from_ab'?'coefficients':['equation_from_graph','intercept'].includes(skill)?'graph':'equation'],hints:[...hints[skill]],legacy:{skill:skill==='equation_from_graph'?'equation_from_ab':skill,params:{model,equation,scaleX:W.q(1),scaleY:W.q(1)}}};
 }
 const syntax=message=>({ok:false,kind:'interaction_error',code:'input.missing',message,keep:{}});
 const result=(ok,code,message,keep={})=>({ok,kind:ok?'correct':'hypothesis',code:ok?null:code,message,keep});
@@ -48,6 +49,11 @@ function check(t,v,phase){
   const points=[rationalPoint(v.plotA),rationalPoint(v.plotB)],r=W.constructionCheck(t.legacy,points),same=W.eq(points[0].x,points[1].x)&&W.eq(points[0].y,points[1].y),keep={plotA:W.onLine(points[0],t.model),plotB:!same&&W.onLine(points[1],t.model)};
   const message=t.table?(r.ok?'Juist: jouw rechte past bij alle kolommen uit de tabel.':same?'Twee gelijke punten bepalen geen rechte. Verplaats één punt.':!keep.plotA?'Punt A past niet bij de tabel. Lees x en f(x) in dezelfde kolom.':'Punt A klopt. Controleer de coördinaten van B met de tabel.'):r.ok?'Juist: de rechte door jouw punten hoort bij het voorschrift.':r.message;
   return result(r.ok,r.code,message,keep);
+ }
+ if(phase==='formula-read'&&t.skill_id==='intercept'){
+  const b=M.parse(v.b);if(!b)return syntax('Vul de hoogte van het snijpunt op de y-as in.');
+  const correct=W.eq(b,t.model.b);
+  return result(correct,'intercept.read',correct?'Juist: het snijpunt is (0; '+W.text(b)+'). Deze hoogte noemen we b.':'Zoek het snijpunt op de verticale y-as. Lees de hoogte vanaf 0; onder 0 is die negatief.',{b:correct});
  }
  if(phase==='formula-read'){
   const a=M.parse(v.a),b=M.parse(v.b);if(!a||!b)return syntax('Vul a en b in. Een breuk of decimaal mag ook.');

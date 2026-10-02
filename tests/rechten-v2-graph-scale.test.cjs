@@ -12,7 +12,7 @@ test('half-unit grids preserve their value, and construction grids keep their co
 test('all given points fit the adaptive frame and rendered views use the shared scale',()=>{
  for(const row of fixtures().filter(r=>r.label.endsWith('/ready'))){const t=row.m.task;
   if(t.points){const s=K.points(t.points);for(const p of Object.values(t.points))for(const n of [s.X(p.x),s.Y(p.y)])assert(n>=50&&n<=450,row.label)}
-  const V=require('../games/rechten/rechtenwereld/components/'+({Points:'points',Hills:'hills',Lines:'lines',Grens:'grens',Formula:'formula',Derive:'derive'}[row.family])+'-view.js'),html=V.render(row.m,'');
+  const V=require('../games/rechten/rechtenwereld/components/'+({Points:'points',Hills:'hills',Lines:'lines',Grens:'grens',Formula:'formula',Derive:'derive',AB:'ab'}[row.family])+'-view.js'),html=V.render(row.m,'');
   if(html.includes('class="math-graph'))assert(html.includes('data-axis-radius='),row.label);
  }
 });

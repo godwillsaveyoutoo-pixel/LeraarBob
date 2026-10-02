@@ -53,7 +53,7 @@
       "id": "ab",
       "family_id": "F3",
       "active": true,
-      "pilot": true
+      "pilot": false
     },
     {
       "id": "fx",
