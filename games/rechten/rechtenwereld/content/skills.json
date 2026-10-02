@@ -160,7 +160,7 @@
     {
       "id": "equation_from_context",
       "family_id": "F7",
-      "active": false,
+      "active": true,
       "pilot": false
     }
   ]

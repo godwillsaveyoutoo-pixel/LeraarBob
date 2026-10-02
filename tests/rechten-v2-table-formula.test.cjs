@@ -38,7 +38,7 @@ test('repair retains correct numerator until columns change; checked points cann
 });
 test('table stop is playable and final recorded evidence survives a replay without fabricating completion',()=>{
  let s=R.start(R.initial(),skill);assert.equal(A.statuses(s,'formulewerf').nodes.find(n=>n.id===skill).state,'started');
- assert.equal(A.statuses(s,'formulewerf').playableTotal,8);
+ assert.equal(A.statuses(s,'formulewerf').playableTotal,9);
  const html=V.render(R.active(s),'');assert(html.includes('Gegeven tabel'));assert(html.includes('Kies twee kolommen'));assert(!html.includes('derive-found'));
  // Actual final event, using a non-adjacent pair.
  R.active(s).task=D.makeTask(skill,5);R.active(s).index=5;s=R.selectTableColumn(R.selectTableColumn(s,0),2);s=next(put(s,coord));

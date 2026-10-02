@@ -14,14 +14,14 @@ test('the graph entry contract explicitly forbids hidden advanced requirements; 
  const n=A.all(A.get('formulewerf'))[2];assert.deepEqual(n.entryPolicy,{difficultyLayers:[0,1],readableSlope:true,visibleIntercept:true,requiresInterceptFromArbitraryPoint:false,requiresExtendedTwoPointCalculation:false});assert(n.playable);assert(Object.isFrozen(n.entryPolicy));
 });
 test('Formulewerf stays locked until Grenspas is complete, then recommendations follow route order',()=>{
- const state=R.initial(),fresh=A.statuses(state,'formulewerf');assert.equal(fresh.unlocked,false);assert.equal(fresh.recommended,null);assert(fresh.nodes.slice(0,8).every(n=>n.state==='locked'));assert.equal(fresh.nodes.at(-1).state,'soon');
+ const state=R.initial(),fresh=A.statuses(state,'formulewerf');assert.equal(fresh.unlocked,false);assert.equal(fresh.recommended,null);assert(fresh.nodes.slice(0,8).every(n=>n.state==='locked'));assert.equal(fresh.nodes.at(-1).state,'locked');
  for(let index=0;index<8;index++){
   const raw=legacy(order.slice(0,8),order.slice(0,index)),before=JSON.stringify(raw);const result=A.statuses(state,'formulewerf',raw);assert(result.unlocked);assert.equal(result.recommended.id,order[index]);assert.equal(result.nodes.find(n=>n.recommended).state,'current');assert.equal(JSON.stringify(raw),before);
  }
- const open=A.statuses(state,'formulewerf',legacy(order.slice(0,8)));assert.equal(open.recommended.id,order[0]);assert(open.nodes.slice(0,8).every(n=>n.playable&&n.state!=='locked'));assert(open.nodes.slice(8).every(n=>n.state==='soon'));
+ const open=A.statuses(state,'formulewerf',legacy(order.slice(0,8)));assert.equal(open.recommended.id,order[0]);assert(open.nodes.slice(0,8).every(n=>n.playable&&n.state!=='locked'));assert(open.nodes.slice(8).every(n=>n.playable&&n.state==='available'));
  const html=S.area(A.locationState(state,'area',{area:'formulewerf'}),{legacy:legacy(order.slice(0,8))});assert(html.includes('data-formula-skill="equation_from_ab"'));assert(html.includes('aria-current="step"'));
  // Finishing released content never recommends an unreleased or already completed level.
- const done=A.statuses(state,'formulewerf',legacy(order,order.slice(0,8)));assert.equal(done.recommended,null);assert(done.complete);assert.equal(done.nodes.at(-1).state,'soon');
+ const done=A.statuses(state,'formulewerf',legacy(order,order.slice(0,8)));assert.equal(done.recommended.id,'equation_from_context');assert(!done.complete);assert.equal(done.nodes.at(-1).state,'current');
  const raw=legacy([order[0],order[6]]);assert.equal(A.statuses(state,'formulewerf',raw).recommended.id,order[0]);
 });
 test('the zone footer respects the world lock and points across A/B once Formulewerf is open',()=>{
@@ -50,5 +50,5 @@ test('map preserves destinations, accessible locks, home navigation and actual p
  const world=S.world(R.initial(),{});
  for(const place of S.places)assert(world.includes(`data-world-node="${place.id}"`));
  assert.equal((world.match(/data-world-node=/g)||[]).length,5);
- assert.match(world,/id="start-recommended"[^>]*data-zone="route">/);assert(world.includes('data-screen="book"'));assert(world.includes('aria-valuemax="27"'));
+ assert.match(world,/id="start-recommended"[^>]*data-zone="route">/);assert(world.includes('data-screen="book"'));assert(world.includes('aria-valuemax="28"'));
 });

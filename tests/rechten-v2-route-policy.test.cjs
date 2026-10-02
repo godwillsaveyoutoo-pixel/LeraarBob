@@ -33,7 +33,7 @@ test('worlds unlock in sequence while every released level inside an unlocked wo
 
  s=finished(['hellingrug','grenspas']);const formula=A.statuses(s,'formulewerf',legacy);assert(formula.unlocked);assert.equal(A.statuses(s,'signaalstad',legacy).unlocked,false);
  html=S.area(A.locationState(s,'area',{area:'formulewerf',zone:'bouwen'}),{legacy});assert((html.match(/data-start="formulewerf"/g)||[]).length>=4);
- html=S.area(A.locationState(s,'area',{area:'formulewerf',zone:'omzetten'}),{legacy});assert((html.match(/data-start="formulewerf"/g)||[]).length>=4);assert(html.includes('data-state="soon"'));
+ html=S.area(A.locationState(s,'area',{area:'formulewerf',zone:'omzetten'}),{legacy});assert((html.match(/data-start="formulewerf"/g)||[]).length>=4);assert(!html.includes('data-state="soon"'));assert(html.includes('data-formula-skill="equation_from_context"'));
 
  s=finished(['hellingrug','grenspas','formulewerf']);const signal=A.statuses(s,'signaalstad',legacy);assert(signal.unlocked);assert.equal(signal.nodes.filter(n=>n.playable).length,7);assert.equal(signal.nodes.find(n=>n.playable).state,'current');assert(signal.nodes.filter(n=>!n.playable).every(n=>n.state==='soon'));
  assert.equal(JSON.stringify(legacy),before);
@@ -45,8 +45,8 @@ test('route advances through required worlds and ends without requiring optional
  assert.equal(A.recommendation(finished(['hellingrug','grenspas','formulewerf'])).node.key,'intercept');
  const s=finished(['hellingrug','grenspas','formulewerf','signaalstad']),r=A.recommendation(s);
  assert.equal(r.node,null);assert.equal(A.statuses(s,'puntenbaai').completed,0);
- const f=A.statuses(s,'formulewerf');assert(f.complete);assert.equal(f.playableCompleted,8);assert.equal(f.recommended,null);assert(f.nodes.slice(8).every(n=>n.state==='soon'));
- const p=S.journeyProgress(s);assert.equal(p.completed,25);assert.equal(p.total,27);assert(S.world(s).includes('Vrij oefenen'));
+ const f=A.statuses(s,'formulewerf');assert(f.complete);assert.equal(f.playableCompleted,9);assert.equal(f.recommended,null);assert(f.nodes.every(n=>n.state==='completed'));
+ const p=S.journeyProgress(s);assert.equal(p.completed,26);assert.equal(p.total,28);assert(S.world(s).includes('Vrij oefenen'));
 });
 
 test('existing later-world work is grandfathered and resumes exactly instead of being stranded',()=>{
@@ -60,7 +60,7 @@ test('existing later-world work is grandfathered and resumes exactly instead of 
  r=A.recommendation(s);assert(r.resume);assert.equal(r.node.key,s.active);assert.equal(r.node.state,'completed');
  const html=S.world(s),cta=html.match(/<button[^>]*id="start-recommended"[^>]*>/)[0];
  assert(cta.includes('data-formula-skill="equation_from_two_points"'));assert(!cta.includes('data-screen="area"'));
- assert.equal(S.journeyProgress(s).completed,8);
+ assert.equal(S.journeyProgress(s).completed,9);
 });
 
 test('completed levels retain their numbers and prior knowledge only gains a check after it is actually completed',()=>{

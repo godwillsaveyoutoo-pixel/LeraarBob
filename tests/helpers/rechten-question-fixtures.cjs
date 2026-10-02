@@ -2,7 +2,8 @@
 const assert=require('node:assert/strict');
 const R=require('../../games/rechten/rechtenwereld/mission-runtime.js'),W=require('../../games/rechten/core/wave-core.js');
 const F=require('../../games/rechten/rechtenwereld/formula-core.js'),D=require('../../games/rechten/rechtenwereld/derive-core.js'),L=require('../../games/rechten/rechtenwereld/lines-core.js');
-const families={Points:['point','point_plot'],Hills:['delta','slope','slope_from_two_points'],Lines:L.skills,Grens:['zeroRead','zero','positive','negative','signchart'],Formula:F.skills,Derive:D.skills,AB:['ab'],Values:['fx','table'],Checks:['input_from_output','point_on_line']};
+const X=require('../../games/rechten/rechtenwereld/context-core.js');
+const families={Points:['point','point_plot'],Hills:['delta','slope','slope_from_two_points'],Lines:L.skills,Grens:['zeroRead','zero','positive','negative','signchart'],Formula:F.skills,Derive:D.skills,Context:['equation_from_context'],AB:['ab'],Values:['fx','table'],Checks:['input_from_output','point_on_line']};
 function fill(s,wrong=false){if(R.active(s).task.table&&R.active(s).phase==='derive-fill'){s=R.selectTableColumn(s,0);s=R.selectTableColumn(s,1)}const m=R.active(s),t=D.workTask(m.task,m.values),p=m.phase;let v={};
  if(m.skill==='point')v={answer:String(t.options.findIndex(q=>W.eq(q.x,t.target.x)&&W.eq(q.y,t.target.y)))};
  if(m.skill==='point_plot')v={point:{x:W.num(t.target.x),y:W.num(t.target.y)}};
@@ -32,6 +33,9 @@ function fill(s,wrong=false){if(R.active(s).task.table&&R.active(s).phase==='der
  if(p==='derive-product')v={product:W.text(W.mul(t.model.a,t.points.A.x))};
  if(p==='derive-intercept')v={b:W.text(t.model.b)};
  if(p==='derive-formula')v={answerFactor:W.text(t.model.a),answerSign:t.model.b.n<0?'−':'+',answerConstant:W.text(W.mul(t.model.b.n<0?-1:1,t.model.b))};
+ if(m.skill==='equation_from_context'){
+  v={'context-start':{openingCost:String(t.gateFee)},'context-add':{onePrice:String(X.total(t,1))},'context-table':{twoPrice:String(X.total(t,2)),threePrice:String(X.total(t,3))},'context-rule':{perUnit:String(t.perUnit),gateFee:String(t.gateFee)},'context-plot':{plotY1:String(X.total(t,1)),plotY2:String(X.total(t,3))},'context-check':{caravanTotal:String(X.total(t,t.groupSize))}}[p];
+ }
 
  if(wrong){const key=Object.keys(v)[0],value=v[key];if(key==='answer'||key.endsWith('Choice'))v[key]=String((Number(value)+1)%4);else if(typeof value==='object')v[key]={x:value.x===0?1:0,y:0};else if(value==='B.y'||value==='A.y')v[key]='A.x';else if(key==='behavior')v[key]=value==='stijgend'?'dalend':'stijgend';else if(key==='lineKind')v[key]=value==='horizontal'?'vertical':'horizontal';else if(key==='inequality')v[key]='=';else if(key==='chartLeft')v[key]='0';else v[key]=W.parse(value)?W.text(W.add(W.parse(value),1)):'x';}
  for(const [k,value]of Object.entries(v))s=R.edit(s,k,value);return s;

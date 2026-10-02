@@ -3,7 +3,8 @@ const G=require('../games/rechten/rechtenwereld/learn-config.js'),C=require('../
 const {fill}=require('./helpers/rechten-question-fixtures.cjs');
 function solve(spec){let state=G.generate(spec);const steps=[];while(true){state=fill(state);const m=R.active(state);steps.push({phase:m.phase,values:structuredClone(m.values)});if(!G.nextPhase(state))break;state=G.nextInput(state);assert(steps.length<8);}return {steps};}
 module.exports={solve};
-test('catalog matches every released map node and all six questions are solvable',()=>{
+test('catalog matches every released cooperative map node and all six questions are solvable',()=>{
+ assert(!G.skills.some(s=>s.id==='equation_from_context'),'solo context never enters the cooperative pool');assert(require('../games/rechten/rechtenwereld/content/area-maps.js').all(require('../games/rechten/rechtenwereld/content/area-maps.js').get('formulewerf')).find(n=>n.id==='equation_from_context').soloOnly);
  assert.equal(G.skills.length,21);assert.deepEqual(C.worlds,G.worlds);assert.deepEqual(C.skills,G.skills);
  for(const {id} of G.skills)for(const seed of [1,19,812723])for(let variant=0;variant<6;variant++){
   const spec={skill:id,seed,variant},answer=solve(spec);assert(G.validate(G.generate(spec),answer).ok,JSON.stringify(spec));

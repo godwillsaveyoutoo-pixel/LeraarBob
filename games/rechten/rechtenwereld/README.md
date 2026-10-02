@@ -355,3 +355,77 @@ Controle: `node --test --test-isolation=none tests/rechten-v2-signaalstad-checks
 De open antwoordvakken van levels 3 tot en met 6 tonen ingevoerde breuken direct met een horizontale breukstreep, ook tijdens bewerken, na controle en bij herladen. Het getallenbord gebruikt een breuksjabloon voor de breuktoets. Tik op teller of noemer om alleen dat deel te vervangen; toetsenbord, selecteren, backspace, ongedaan maken en het teken wisselen blijven werken. De oorspronkelijke invoer wordt bewaard zonder de breuk automatisch te vereenvoudigen of de opgave te berekenen. Onvolledige breuken tonen een leeg invuldeel; decimalen behouden hun decimale vorm.
 
 Controle: `node --test --test-isolation=none tests/rechten-v2-signaalstad-fractions.test.cjs` en `node tests/rechten-v2-signaalstad-fraction-browser.cjs`. De browserproef controleert alle vier levels op desktop en mobiel, inclusief afzonderlijke teller/noemer, negatieve tekens, lange breuken, herstel, bewaren, beide balkstanden en hoog contrast. Screenshots: `/tmp/rechten-signaalstad-fraction-screenshots/`.
+
+## Contextmissie: De tolpoort naar Signaalstad
+
+Formulewerf B, halte 9 (`equation_from_context`), gebruikt de overgang naar de
+volgende wereld als doel: **Bereken de tol voor je karavaan zodat de poort naar
+Signaalstad open kan.** Het tolbord vraagt 2 munten voor het openen van de poort
+en 3 munten voor elke kar. De karavaan heeft vier zichtbare karren.
+
+De zes stappen blijven bij dezelfde poort en dezelfde tol:
+
+1. Lees hoeveel munten het openen van de poort kost.
+2. Reken de tol voor één kar met het openen erbij uit.
+3. Vul de tolbedragen bij twee en drie karren aan.
+4. Bereken de tol voor alle vier karren.
+5. Bouw de regel: tol = per kar × karren + openen.
+6. Zet de tabelwaarden bij één en drie karren in de grafiek met assen Karren en Tol (munten).
+
+Het vaste bedrag opent de poort één keer voor de hele karavaan. Het bedrag per
+kar wordt voor elke kar gerekend. De tol voor de eigen karavaan wordt berekend
+vóór de rekenregel en grafiek; die beschrijven vervolgens hetzelfde tolbord.
+De wachter controleert het volledige werk. Na afronden staat de poort open en
+leidt de knop rechtstreeks naar Signaalstad wanneer de bestaande wereldroute
+dat toestaat. Als andere haltes van Formulewerf nog ontbreken, gaat de leerling
+terug naar de kaart om die af te werken. De bestaande toegangseisen blijven gelden.
+
+Nieuwe karavanen variëren beide tolbedragen. De totale tol blijft geheel en
+maximaal 14 munten. De munten zijn de rekeneenheid van de opgave; er is geen nieuwe
+portemonnee of omzetting van XP naar munten. De betaalbaarheidsvraag van het vorige
+scenario is vervangen door het berekenen van de tol. De letters x en y verschijnen
+pas bij de afronding, met hun betekenis erbij. De grafiekstap geeft twee tabelwaarden
+en vaste aantallen karren; cijferknoppen bieden een alternatief voor tekenen met
+aanraking. Horizontale roosterlijntjes betekenen één munt; alleen de even aantallen
+krijgen een aslabel.
+
+Deze versie is een **eerste begeleide toepassing van een lineair verband**.
+Het leerdoel blijft het onderscheid tussen een vast bedrag en een bedrag per
+eenheid, verbonden met een tabel, rekenregel en grafiek. Het scenario is deel van
+de spelwereld en de afronding sluit aan op het verdergaan naar de volgende wereld.
+Dit is geen zelfstandige modelleringstoets; geschiktheid en doorlooptijd moeten
+nog met leerlingen worden bekeken.
+
+`context-core.js` bevat tolbedragen, exacte controles en drie hints per stap.
+`components/context-view.js` en `styles/context.css` tonen het tolbord, de karren,
+poort, tabel en grafiek. Correcte deelantwoorden blijven bij herstel staan.
+Pauzeren, herladen en de gedeelde inklapbare navigatie behouden het werk.
+
+De karavaantol alleen voltooit de missie niet en geeft geen XP: ook de regel en
+grafiek moeten afgewerkt worden. De bestaande XP-regels blijven gelden: eenmaal
+5 of 10 XP voor een volledige missie, met maximaal verbeteren tot 10 XP. Er wordt
+geen productie-mastery toegekend. De activiteit is solo; battle-, samen-leer- en
+papieraanbod houden hun bestaande catalogus.
+
+Een opgeslagen missie uit een vorig scenario blijft exact bewaard in
+`contextArchive`: het oude scoreonderzoek onder `scoreInvestigation`, de
+stickerkraam onder `sticker-kraam`, de taxirit onder `taxi-ride` en de filmboeking
+onder `cinema-booking`. Bestaande archieven worden niet overschreven. De nieuwe
+tolopdracht begint bij het tolbord. Eerder behaalde XP, voltooiingen, evidence en
+andere oefeningen blijven behouden. Een begonnen tolopdracht wordt gewoon hervat.
+
+Validatie:
+
+```sh
+node --test tests/rechten-v2-*.test.cjs tests/rechten-xp.test.cjs tests/rechten-learn-route.test.cjs
+node tests/rechten-v2-context-browser.cjs
+```
+
+De browsertest vereist Playwright als testgereedschap (geen speldependency).
+Een lokale Chromium-installatie kan met `CHROMIUM_PATH` opgegeven worden.
+De test start zelf een lokale server, gebruikt een fictieve docent en blokkeert
+externe requests. Hij controleert zes stappen op 1366×768, 780×360 en 640×360,
+met cijfers, aanraken, toetsenbord, herstel, pauze, herladen, beide balkstanden en
+de doorgang naar Signaalstad. Er worden geen echte account- of leerlinggegevens
+gebruikt. De inhoudstest controleert tevens de gewone leerlingroute: pas na alle
+Formulewerf-haltes kan de tolpoort naar de volgende wereld leiden.

@@ -1,0 +1,83 @@
+/* A full-screen worktable, with a built-in keypad and no exercise dialogs. */
+.context-mission{grid-template-rows:var(--header-height,64px) minmax(0,1fr) 76px}
+.context-workspace{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);grid-template-rows:auto minmax(0,1fr);gap:16px 28px;padding:16px 28px;align-items:stretch;font-family:var(--hand)}
+.context-heading{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.context-heading h1{font:clamp(24px,2.8vw,40px)/1.1 var(--hand);margin:0;color:#284c54}
+.context-heading>span{white-space:nowrap;font-size:18px;color:#506768}
+.context-evidence,.context-work{min-width:0;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:16px}
+.context-story strong{font-size:30px}.context-story p,.context-task-note,.context-decisions>p{font-size:24px;line-height:1.2;margin:0}
+.context-table{border-collapse:collapse;width:100%;font-size:30px;text-align:center}
+.context-table caption{font-size:20px;text-align:left;margin:8px 0}
+.context-table th,.context-table td{padding:8px;border-bottom:1px solid #b4c7c5}
+.context-player-a{color:#176d9f}.context-player-b{color:#a44c19}
+.context-axis-note{font-size:18px;line-height:1.2;margin:0;color:#506768}
+.context-input-area{display:flex;flex-direction:column;gap:20px;align-items:center;justify-content:center;min-height:0}
+.context-proof{display:flex;justify-content:center;gap:6px;width:100%}
+.context-proof .context-number{flex:1;min-width:0;max-width:150px}
+.context-proof .context-number small{white-space:nowrap}
+.context-equation{display:flex;align-items:center;justify-content:center;gap:8px;font-size:36px;white-space:nowrap}
+.context-number{border:2px solid #91aaa7;border-radius:5px;background:#fffef6;min-width:68px;min-height:60px;padding:2px 8px;font-family:var(--hand);display:inline-flex;flex-direction:column;align-items:center;justify-content:center;color:#244451}
+.context-number small{font-size:17px;line-height:1}.context-number strong{font-size:30px;line-height:1.15;font-weight:400}
+.context-number[aria-pressed=true]{border-color:#267b75;background:#e2eee3;box-shadow:0 0 0 2px #267b7528}
+.context-number:focus-visible,.context-keypad button:focus-visible,.context-choices button:focus-visible{outline:3px solid #245e87;outline-offset:2px}
+.context-keypad{display:grid;grid-template-columns:repeat(6,minmax(44px,1fr));gap:6px;width:min(100%,410px)}
+.context-keypad button,.context-choices button{min-height:48px;min-width:44px;border:1px solid #a1b5ae;border-radius:5px;background:#fffdf4;font:26px var(--hand);padding:2px 8px;color:#244451;touch-action:manipulation}
+.context-keypad button:active{background:#d6e7dd}
+.context-coordinates{display:flex;gap:12px;justify-content:center}.context-coordinates>div{display:flex;gap:5px;align-items:center;font-size:24px}.context-coordinates .context-number{min-width:55px}
+.context-graph-wrap{min-width:0;min-height:0;display:grid;grid-template-rows:minmax(0,1fr) auto;justify-items:center;gap:4px}
+.context-graph{display:block;width:100%;height:100%;min-height:0;max-height:550px;touch-action:none}
+.context-grid path{fill:none;stroke:#c3d4d2;stroke-width:1}.context-grid text,.context-graph>text{fill:#244451;font:22px var(--hand)}
+.context-axes{stroke:#244451;stroke-width:2;fill:none}
+.context-line-a{stroke:#176d9f;fill:#176d9f}.context-line-b{stroke:#a44c19;fill:#a44c19}
+.context-line{fill:none;stroke-width:3.5}.context-line-b .context-line{stroke-dasharray:10 5}.context-line.is-draft{opacity:.65}
+.context-line-a text,.context-line-b text{stroke:none;font:22px var(--hand);paint-order:stroke;stroke:#fffef6;stroke-width:3}
+.context-legend{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:center;font-size:24px;line-height:1.3}
+.context-choices{border:0;padding:0;margin:0;display:flex;gap:8px}.context-choices legend{font-size:24px;margin-bottom:6px}.context-choices button{flex:1;font-size:22px}.context-choices button[aria-pressed=true]{background:#d9eadc;border:2px solid #2b7864}
+.context-mission .boundary-footer{gap:12px;padding:4px 20px 12px}.context-mission .boundary-footer .paper-pill{min-width:90px;min-height:44px;font-size:20px}.context-mission .boundary-footer .paint-button{min-width:125px;min-height:44px;font-size:23px}
+.context-mission .feedback-bubble{gap:8px}.context-mission .feedback-bubble .feedback{font-size:20px;padding:5px 10px;line-height:1.1}
+.context-finish{grid-column:1/-1;grid-row:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;max-width:850px;margin:auto}
+.context-finish h1{font:38px var(--hand);margin:0}.context-finish p{font:24px/1.2 var(--hand);margin:0}.context-finish-rules{display:flex;gap:24px;font-size:28px}.context-finish button{min-height:44px}
+@media(max-height:540px) and (orientation:landscape){
+ .context-mission{grid-template-rows:52px minmax(0,1fr) 66px}
+ .context-workspace{padding:5px 12px;gap:4px 16px;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+ .context-heading h1{font-size:24px}.context-heading>span{font-size:16px}
+ .context-evidence,.context-work{gap:8px}.context-story strong{font-size:22px}.context-story p,.context-task-note,.context-decisions>p{font-size:18px;line-height:1.12}
+ .context-table{font-size:24px}.context-table caption{font-size:17px;margin:2px 0}.context-table td,.context-table th{padding:3px}
+ .context-axis-note{font-size:15px}.context-input-area{gap:8px}.context-number{min-width:55px;min-height:48px;padding:1px 4px}.context-number small{font-size:15px}.context-number strong{font-size:25px}
+ .context-equation{font-size:27px;gap:5px}.context-keypad{gap:4px;max-width:320px}.context-keypad button{min-height:44px;font-size:23px;padding:1px}
+ .context-coordinates{gap:10px}.context-coordinates>div{gap:3px;font-size:20px}.context-coordinates .context-number{min-width:48px}
+ .context-legend{font-size:19px;gap:3px 12px}.context-grid text,.context-graph>text{font-size:27px}
+ .context-choices{gap:5px}.context-choices legend{font-size:19px;margin-bottom:2px}.context-choices button{font-size:19px;min-height:44px;padding:2px 4px}
+ .context-mission .boundary-footer{padding:4px 10px 8px;gap:8px}.context-mission .feedback-bubble .feedback{font-size:17px;padding:4px 6px}.context-mission .boundary-footer .paper-pill{min-width:72px;font-size:18px}.context-mission .boundary-footer .paint-button{min-width:105px;font-size:21px}
+ .context-finish{gap:8px}.context-finish h1{font-size:27px}.context-finish p{font-size:20px}.context-finish-rules{font-size:23px}
+}
+body.lb-nav-pilot.topbar-collapsed .context-mission{grid-template-rows:0 minmax(0,1fr) 66px}
+.context-table{line-height:1.1}.context-table caption{line-height:1.15}.context-story{line-height:1.1}
+@media(max-height:540px) and (orientation:landscape){
+ .context-story strong{display:none}
+ .context-evidence{gap:6px}
+ .context-table{font-size:22px}
+ .context-table th,.context-table td{padding:3px;line-height:1.1}
+}
+.context-heading h1{line-height:1.3}
+body.topbar-collapsed .context-heading{margin-left:52px;min-height:44px}
+body.topbar-collapsed .context-finish{padding-top:44px}
+/* A caravan waits at the toll gate to the next world. */
+.toll-goal{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;font-size:23px;line-height:1.2;padding:7px 10px;background:#e8eee5;border-radius:6px;color:#284c54}
+.toll-pricecards{display:flex;gap:12px;justify-content:center}
+.toll-fee,.toll-unit{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border:2px solid #8fa79e;border-radius:8px;background:#fffdf4;text-align:center}
+.toll-fee{background:#e8eee5}.toll-unit{background:#fff3d7;border-color:#ccb77e}
+.toll-pricecards span{font-size:26px;line-height:1.1}.toll-pricecards strong{font-size:38px;line-height:1}.toll-pricecards small{font-size:18px;line-height:1.2}
+.toll-caravan{display:flex;align-items:center;justify-content:center;gap:12px}
+.toll-carts{display:flex;justify-content:center;gap:5px}.toll-cart{width:55px;height:36px}.toll-gate{width:72px;height:64px;flex-shrink:0}.toll-gate.is-open .toll-barrier{transform:rotate(-65deg);transform-origin:19px 38px}.toll-coin{color:#a98227;font-size:.65em}.context-finish h1{display:flex;align-items:center;justify-content:center;gap:12px}.context-finish h1 .toll-gate{width:48px;height:44px}
+.toll-rule{display:flex;align-items:center;justify-content:center;gap:7px;font-size:27px;white-space:nowrap}.toll-rule .context-number{min-width:76px}
+.toll-guide{stroke:#567e72;stroke-width:2;stroke-dasharray:5 5;fill:none}.context-grid .toll-minor-grid{stroke:#dce5e0}
+.context-finish .toll-formula-note{font-size:20px;line-height:1.3}
+@media(max-height:540px) and (orientation:landscape){
+ .toll-goal{font-size:17px;gap:3px 6px;padding:3px 5px}
+ .toll-pricecards{gap:6px}.toll-fee,.toll-unit{padding:5px 4px;gap:3px}.toll-pricecards span{font-size:20px}.toll-pricecards strong{font-size:26px}.toll-pricecards small{font-size:15px}
+ .toll-caravan{gap:8px}.toll-cart{width:35px;height:24px}.toll-carts{gap:3px}.toll-gate{width:44px;height:38px}.context-finish h1 .toll-gate{width:36px;height:32px}
+ .toll-rule{font-size:20px;gap:4px}.toll-rule .context-number{min-width:56px}
+ .context-table{font-size:20px}.context-table th,.context-table td{padding:1px 4px}.context-table .context-number{min-height:44px}.context-table .context-number strong{font-size:22px;line-height:1}
+ .context-finish{gap:4px}.context-finish p{font-size:18px}.context-finish .toll-formula-note{font-size:17px}
+}

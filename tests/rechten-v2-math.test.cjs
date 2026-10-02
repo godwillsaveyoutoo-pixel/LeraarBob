@@ -11,8 +11,8 @@ const value=(m,x)=>plus(times(R(m.a),R(x)),R(m.b));
 const fields=['id','skill_id','family_id','world_id','mode','profile','curriculum_claim','primary_cognitive_action','given_representations','target_representation','task_features','visible_case','contrast_case','hidden_cases','primary_action','response_component','allowed_alternatives','commit_policy','feedback_model','misconception_hypotheses','repair_policy','hints','worked_example_ref','difficulty_features','units','language_load','accessibility','evidence_events','asset_slots','validator'];
 function correctInterval(t){const expected=M.intervalExpected(t);return {boundary:t.root?string(t.root):'',side:expected.side,closed:false,symbol:expected.symbol};}
 function slopeResponse(t,direction='AB'){const A=direction==='AB'?t.points.A:t.points.B,B=direction==='AB'?t.points.B:t.points.A;return {direction,dx:string(W.sub(B.x,A.x)),dy:string(W.sub(B.y,A.y)),numerator:string(t.model.a),denominator:'1'};}
-test('exactly 27 preserved IDs, context remains paused, every matrix record has all 21 contract fields',()=>{
- assert.deepEqual(skills.map(s=>s.id),ids);assert.equal(skills.filter(s=>s.active).length,26);assert.equal(skills.find(s=>s.id==='equation_from_context').active,false);
+test('exactly 27 preserved IDs, context is released, every matrix record has all 21 contract fields',()=>{
+ assert.deepEqual(skills.map(s=>s.id),ids);assert.equal(skills.filter(s=>s.active).length,27);assert.equal(skills.find(s=>s.id==='equation_from_context').active,true);
  assert.deepEqual(new Set([...W.order,...W.disabledSkills]),new Set(ids));
  const doc=fs.readFileSync(path.join(__dirname,'../docs/rechten-v2/QUESTION_MECHANICS_MATRIX.md'),'utf8');
  for(const id of ids){const section=doc.split('\n## '+id+'\n')[1]?.split('\n## ')[0];assert(section,id);const rows=section.split('\n').filter(s=>s.startsWith('| ')&&!s.startsWith('| Veld'));assert.equal(rows.length,21,id);assert(section.includes('Actuele generator:'));assert(section.includes('Actuele validator / UI:'));assert(section.includes('Nog niet ondersteund / migratiegrens:'));}

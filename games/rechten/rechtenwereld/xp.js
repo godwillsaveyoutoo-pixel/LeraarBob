@@ -14,7 +14,7 @@
   }
   const ledger=s.xpLedger;
   function award(id,supported){if(!id)return;const k=key(id),value=points(supported),previous=ledger.awards[k]||0;if(value>previous){ledger.total+=value-previous;ledger.awards[k]=value;}}
-  for(const m of Object.values(s.missions||{})){
+  for(const m of [...Object.values(s.missions||{}),...Object.values(s.contextArchive||{})]){
    for(const done of m.completion||[])award(done.taskId,done.supported!==false);
    if(m.feedback?.result?.ok&&m.feedback.next==='next-task')award(m.task?.id,m.hints>0||m.errors>0||m.task?.mode==='discover');
   }
