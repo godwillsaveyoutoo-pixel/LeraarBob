@@ -44,11 +44,15 @@ function check(t,v,phase){
  return {ok:!wrong,kind:wrong?'hypothesis':'correct',code,message,keep};
 }
 function selected(m){const names=fields(m.task,m.phase),name=m.values.valueField;return names.includes(name)&&!m.locks[name]?name:names.find(name=>!m.locks[name])||null}
-function enter(m,key){
- if(m.feedback||m.completed)return null;const name=selected(m);if(!name)return null;
- let value=String(m.values[name]??'');
- if(key==='clear')value='';else if(key==='back')value=value.slice(0,-1);else if(key==='minus')value=value.startsWith('-')||value.startsWith('−')?value.slice(1):'-'+value;else if(/^[0-9]$/.test(key)||key==='/'||key===',')value+=key;else return null;
- return value.length<=16?{name,value}:null;
+function editText(raw,key,selection){
+ let value=String(raw??''),start=Math.max(0,Math.min(value.length,selection?.start??value.length)),end=Math.max(start,Math.min(value.length,selection?.end??start)),caret=start;
+ if(key==='clear'){value='';caret=0;}
+ else if(key==='back'){if(start===end)start=Math.max(0,start-1);value=value.slice(0,start)+value.slice(end);caret=start;}
+ else if(key==='minus'){const signed=value.startsWith('-')||value.startsWith('−');value=signed?value.slice(1):'-'+value;caret=Math.max(0,start+(signed?-1:1));}
+ else if(/^[0-9]$/.test(key)||key==='/'||key===','){value=value.slice(0,start)+key+value.slice(end);caret=start+1;}
+ else return null;
+ return value.length<=16?{value,caret}:null;
 }
-return Object.freeze({skills,count,firstPhase,nextPhase,retainedFields,makeTask,fields,output,expected,check,selected,enter});
+function enter(m,key,selection){if(m.feedback||m.completed)return null;const name=selected(m);if(!name)return null;const next=editText(m.values[name],key,selection);return next?selection?{name,...next}:{name,value:next.value}:null;}
+return Object.freeze({skills,count,firstPhase,nextPhase,retainedFields,makeTask,fields,output,expected,check,selected,enter,editText});
 });

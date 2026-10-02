@@ -1,5 +1,5 @@
 /* Exact inverse inputs and point membership, with independently retained steps. */
-(function(root,factory){if(typeof module==='object')module.exports=factory(require('../core/wave-core.js'),require('./semantic-math-core.js'));else root.RechtenV2Checks=factory(root.RechtenWave,root.RechtenV2Math)})(globalThis,function(W,M){
+(function(root,factory){if(typeof module==='object')module.exports=factory(require('../core/wave-core.js'),require('./semantic-math-core.js'),require('./values-core.js'));else root.RechtenV2Checks=factory(root.RechtenWave,root.RechtenV2Math,root.RechtenV2Values)})(globalThis,function(W,M,V){
 'use strict';
 const skills=['input_from_output','point_on_line'],count=6;
 const output=(t,x)=>W.add(W.mul(t.model.a,x),t.model.b);
@@ -60,10 +60,6 @@ function check(t,v,phase){
  return {ok:!wrong,kind:wrong?'hypothesis':'correct',code:wrong?'check.'+wrong:null,message:wrong?messages[wrong]:success[phase],keep};
 }
 function selected(m){const names=numericFields(m.task,m.phase),name=m.values.valueField;return names.includes(name)&&!m.locks[name]?name:names.find(name=>!m.locks[name])||null}
-function enter(m,key){
- if(m.feedback||m.completed)return null;const name=selected(m);if(!name)return null;let value=String(m.values[name]??'');
- if(key==='clear')value='';else if(key==='back')value=value.slice(0,-1);else if(key==='minus')value=value.startsWith('-')||value.startsWith('−')?value.slice(1):'-'+value;else if(/^[0-9]$/.test(key)||key==='/'||key===',')value+=key;else return null;
- return value.length<=16?{name,value}:null;
-}
+function enter(m,key,selection){if(m.feedback||m.completed)return null;const name=selected(m);if(!name)return null;const next=V.editText(m.values[name],key,selection);return next?selection?{name,...next}:{name,value:next.value}:null;}
 return Object.freeze({skills,count,makeTask,output,firstPhase,phases,nextPhase,fields,numericFields,expected,check,selected,enter});
 });

@@ -1,7 +1,7 @@
 /* Levels 5 and 6 reuse the formula heading and right-hand number keyboard. */
 .check-found .frac,.check-point .frac,.check-answer .value-request .frac,.check-comparison .frac{font-size:.65em}
 .check-equation{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.check-equation .value-input{width:120px;flex:none}
+.check-equation .value-entry{width:120px;flex:none}
 .check-operation{align-self:flex-start;padding:8px 14px;background:#e7eef7;border-radius:8px;font-size:15px}
 .check-found{font:28px/1.3 var(--hand);color:#276e53}
 .check-quotient{display:inline-flex;flex-direction:column;align-items:center;font-size:.8em;line-height:1.2;vertical-align:middle;min-width:34px}
@@ -24,7 +24,7 @@
  .check-mission[data-phase=input-isolate] .value-request,.check-mission[data-phase=input-solve] .value-request{display:none}
  .check-mission[data-phase=point-verdict] .check-point{display:none}
  .check-answer.answer-tray{gap:6px}.check-equation{gap:6px}
- .check-equation .value-input{width:70px}.check-operation{font-size:11px;padding:3px 8px}
+ .check-equation .value-entry{width:70px}.check-operation{font-size:11px;padding:3px 8px}
  .check-found{font-size:21px}.check-point{padding:3px 9px;font-size:21px}
  .check-quotient{font-size:.75em;min-width:24px}.check-quotient>span{padding:1px 4px}
  .check-choices{gap:8px}.check-choices button{font-size:16px;min-height:44px;padding:5px 9px}
@@ -36,7 +36,7 @@
  .check-mission .value-heading>div:first-child>span{font-size:8px}
  .check-mission .value-formula{font-size:30px}
  .check-answer h2{font-size:18px}.check-answer .value-substitution{font-size:20px}
- .check-answer .value-replace .value-input{width:55px}
+ .check-answer .value-replace .value-entry{width:55px}
  .check-choices button{font-size:14px;padding-inline:7px}
  .check-comparison strong{font-size:21px}
 }
