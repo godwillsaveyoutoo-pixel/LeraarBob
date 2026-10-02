@@ -10,6 +10,40 @@ vm.runInNewContext(script('js/catalog-progress.js'), context);
 const summary = context.window.LeraarBobCatalogProgress.summarize;
 const game = { progressType: 'levels', progressTotal: 10, progressUnitSingular: 'stap', progressUnitPlural: 'stappen' };
 
+test('algebra XP reads topic awards across the separate trainers once, without converting old forms', () => {
+  const api=context.window.LeraarBobCatalogProgress;
+  const awarded={answers:['one','two','three'],rewarded:true,xp:30};
+  const games=[{id:'algebra-trainer',progressType:'levels'},{id:'bewerkingen-trainer',progressType:'levels'}];
+  const overview={errors:{games:false,trainer:false},games:[
+    {game_id:'algebra-trainer',state:{storage:{
+      'leraarbob.algebra.v1':JSON.stringify({solvedTypes:['A1','A2'],journey:{topics:{'eq-A2':awarded}}}),
+      'leraarbob.stelsels.workshop.v1':JSON.stringify({journey:{topics:{'sys-unique':awarded}}})
+    }}},
+    {game_id:'bewerkingen-trainer',state:{storage:{'leraarbob.bewerkingen.v1':JSON.stringify({journey:{topics:{'op-power-power':awarded,'op-power-product':{answers:['one'],rewarded:false,xp:0}}}})}}}
+  ]};
+  assert.equal(api.aggregate(games,overview).xp,90);
+  assert.equal(api.earnedXP(games[0],{state:{completed:['A1','A2'],storage:{'leraarbob.algebra.v1':JSON.stringify({solvedTypes:['A1','A2']})}}}),null);
+  assert.equal(api.earnedXP(games[1],{state:{storage:{'leraarbob.bewerkingen.v1':'invalid'}}}),null);
+});
+
+test('new algebra missions contribute actual XP only after all five tasks', () => {
+  const api=context.window.LeraarBobCatalogProgress,game={id:'algebra-trainer',progressType:'levels'};
+  const evidence=Array.from({length:5},(_,i)=>({done:true,supported:i<2,kind:'solve'}));
+  const record=entry=>({state:{storage:{'leraarbob.algebra.v1':JSON.stringify({journey:{topics:{'eq-B1':entry}}})}}});
+  assert.equal(api.earnedXP(game,record({answers:[],finished:true,evidence,rewarded:true,xp:30})),30);
+  assert.equal(api.earnedXP(game,record({answers:[],finished:true,evidence:evidence.slice(0,4),rewarded:true,xp:30})),0);
+  assert.equal(api.earnedXP(game,record({answers:[],finished:true,evidence:evidence.map((e,i)=>({...e,done:i!==4})),rewarded:true,xp:30})),0);
+});
+
+test('algebra route completion excludes earlier practiced-form counts', () => {
+  const game={id:'algebra-trainer',progressType:'levels',progressTotal:23};
+  const evidence=Array.from({length:5},()=>({done:true}));
+  const legacy={state:{completed:['A1','A2'],total:17,storage:{'leraarbob.algebra.v1':JSON.stringify({solvedTypes:['A1','A2'],journey:{topics:{'eq-A2':{answers:['a','b','c'],rewarded:true,xp:30}}}})}}};
+  assert.equal(summary(game,legacy).completed,0);
+  legacy.state.storage['leraarbob.stelsels.workshop.v1']=JSON.stringify({journey:{topics:{'sys-graphic':{finished:true,evidence}}}});
+  assert.equal(summary(game,legacy).completed,1);assert.equal(summary(game,legacy).max,23);
+});
+
 test('counts distinct completed units and distinguishes new, active and finished', () => {
   assert.equal(summary(game, null).label, '0 van 10 stappen');
   assert.equal(summary(game, null).status, 'new');

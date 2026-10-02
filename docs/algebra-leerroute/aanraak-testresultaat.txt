@@ -1,0 +1,1 @@
+PASS touch, point undo, dark graph and theme reload

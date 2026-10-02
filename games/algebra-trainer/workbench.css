@@ -1,0 +1,129 @@
+/* The Formulewerf paper workflow, scoped to the solo equation trainer. */
+@font-face{font-family:AlgebraHand;src:url('../rechten/rechtenwereld/assets/fonts/PatrickHand-Regular.ttf') format('truetype');font-display:swap}
+body[data-screen=trainer] .sectionNav{display:none}
+.trainer{
+  --hand:AlgebraHand,'Segoe Print',cursive;
+  --grain:url('../rechten/rechtenwereld/assets/paper-grain.svg');
+  display:grid;grid-template-columns:minmax(0,1.35fr) minmax(270px,1fr);
+  grid-template-rows:64px minmax(0,1fr) 72px;gap:12px 18px;
+  padding:10px 24px 0;background:#f7f4eb var(--grain);color:#193e53;
+}
+.trainer button{border-radius:12px!important;min-height:44px;min-width:44px}
+.trainer .trainHead{
+  grid-column:1/-1;display:flex;flex-wrap:nowrap;gap:12px;position:relative;
+  padding:0 8px;isolation:isolate;min-height:0;
+}
+.trainHead::before{content:'';position:absolute;inset:5px 0;background:#dfedfb;z-index:-1;clip-path:polygon(0 8%,40% 1%,99% 0,100% 83%,65% 98%,1% 91%,3% 55%)}
+.trainer .trainHead h1{font:34px/1.15 var(--hand);margin:0;flex:1;text-align:center;white-space:nowrap}
+.trainer .trainHead .progress{font-size:14px;color:#38596c;white-space:nowrap;flex:none}
+.trainer .trainHead #backSetupBtn{display:block;background:#fffdfa;padding:0 12px}
+.trainer .exerciseNav{gap:4px;flex:none}
+.trainer .exerciseNav button{background:#fffdfa;border:1px solid #c4d5da;padding:0;font-size:26px}
+.topbar-collapsed .trainer .trainHead{padding-left:46px}
+.trainer .trainStage{
+  display:grid;grid-template-rows:auto minmax(0,1fr);gap:10px;
+  padding:20px;min-height:0;background:#fffdfa var(--grain);
+  border:1px solid #c4d5da;border-radius:14px;overflow:hidden;
+}
+.givenRow{display:flex;align-items:center;gap:10px;min-width:0}
+.givenRow>span{font:24px var(--hand);background:#ede9fc;border-radius:10px;padding:8px;flex:none}
+#givenEquation{flex:1;min-width:0;font-size:clamp(24px,2.8vw,38px);line-height:2.2;text-align:center;overflow-x:auto;overflow-y:hidden;background:#f3f8ff;border:1px solid #d1e1ed;border-radius:10px;padding:4px 8px}
+#givenEquation .katex{font-size:1em}
+.trainer .mathArea{display:block;min-height:0}
+.trainer .equationWrap{display:block;height:100%;min-height:0}
+.trainer .derivationStack{height:100%;padding:8px 0;gap:10px}
+.derivationEmpty{font:clamp(22px,2.2vw,30px)/1.35 var(--hand);color:#537181;text-align:center;max-width:440px;margin:auto;align-self:center}
+.trainer .derivationLine{padding:4px 6px;border-bottom:1px solid #dde5e5;overflow:visible}
+.trainer .derivationLine.current{border-bottom-color:#98bacb;background:#edf6fc80;border-radius:10px}
+.trainer .derivationMath{font-size:clamp(24px,3vw,40px);padding:3px 0;line-height:2.2}
+.trainer .derivationLine.past .derivationMath{font-size:clamp(22px,2.4vw,32px)}
+.trainer .derivationAction{font-size:13px;line-height:1.3;min-height:18px}
+.trainer .opRail{display:flex;justify-content:center;gap:12px;padding:22px;min-height:0;overflow:hidden;background:#fffdfa var(--grain);border:1px solid #c4d5da;border-radius:14px}
+.operationHead{display:flex;align-items:center;gap:8px;flex:none}
+.operationHead h2{font:30px/1.12 var(--hand);margin:0;flex:1;text-align:center;background:#e8f2ff;border-radius:14px;padding:8px}
+.operationHead button{background:#fffdfa;border:1px solid #c4d5da;padding:0 10px;font-size:13px}
+.contextOperations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.contextOp{height:76px;border:1px solid #bed9ec;background:#e4f1fe;font-size:clamp(23px,2.7vw,36px);padding:4px;overflow:hidden;color:#193e53;-webkit-text-fill-color:currentColor}
+.contextOp.is-scale{background:#e0f2eb;border-color:#b5dacb}
+.contextOp:hover:not(:disabled){filter:brightness(.97)}
+.contextOp .katex{font-size:1em}
+.manualOperations{display:flex;flex-direction:column;gap:10px;min-height:0}
+.trainer .ops{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.trainer .opBtn{height:48px;padding:0;font-size:28px}
+.trainer .valueZone{padding:0;border:0;overflow:hidden;flex:none;min-height:0}
+.trainer #valueGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:0}
+.trainer .valueBtn{height:66px;min-height:44px;padding:2px;font-size:24px;overflow:hidden}
+.valuePages{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:8px;min-height:44px}
+.valuePages button{padding:0;width:44px;flex:none}
+.valuePages output{font-size:13px;color:#486676;min-width:48px;text-align:center}
+.algebraReminder{background:#fff7df;border-radius:12px;padding:14px;min-height:0;overflow:auto}
+.algebraReminder h2{font:28px var(--hand);margin:0}
+.algebraReminder p{font:23px/1.25 var(--hand);margin:12px 0 0}
+.solvedNote{text-align:center;color:#28664d;font:25px/1.3 var(--hand)}
+.solvedNote>span{font:48px/1 var(--hand)}.solvedNote p{margin:6px 0}
+.trainer .trainFooter{grid-column:1/-1;display:flex;gap:10px;align-items:center;min-width:0;padding:8px 0}
+.trainFooter #undoBtn{font-size:30px;width:48px;padding:0;background:#fffdfa;flex:none}
+.trainFooter #reminderBtn{font:22px var(--hand);background:#fff8e1;border-color:#c7bb8d;padding:0 14px;flex:none}
+.trainer .feedback{flex:1;min-width:0;min-height:44px;padding:4px 10px;font:23px/1.15 var(--hand);background:transparent;border:0;text-align:center;justify-content:center}
+.trainFooter .primarybtn{font:24px var(--hand);background:#2e8068;border-color:#276851;padding:0 18px;min-height:52px;white-space:nowrap;flex:none}
+.trainer .nextBox{margin:0;padding:0;display:block;flex:none}
+.trainer .nextBox button{font:24px var(--hand);min-height:52px;padding:0 18px;width:auto}
+@media(max-height:600px) and (min-width:601px){
+  .trainer{grid-template-columns:minmax(0,1.3fr) minmax(260px,1fr);grid-template-rows:44px minmax(0,1fr) 52px;padding:2px 8px 0;gap:4px 8px}
+  .trainer .trainHead{gap:8px;padding-right:4px;padding-left:4px}
+  .trainer .trainHead h1{font-size:25px}
+  .trainer .trainHead .progress{font-size:12px}
+  .trainer .trainHead #backSetupBtn{font-size:12px;padding:0 8px}
+  .topbar-collapsed .trainer .trainHead{padding-left:46px}
+  .trainer .trainStage{padding:6px;gap:2px;border-radius:10px}
+  .givenRow{gap:5px}.givenRow>span{font-size:17px;padding:3px}
+  #givenEquation{font-size:22px;line-height:2.2;padding:0 4px}
+  .trainer .derivationStack{gap:3px;padding:3px 0}
+  .derivationEmpty{font-size:20px}
+  .trainer .derivationLine{padding:1px 3px}
+  .trainer .derivationMath,.trainer .derivationLine.past .derivationMath{font-size:23px;padding:0;line-height:2.2}
+  .trainer .derivationAction{font-size:11px;line-height:1.2;min-height:14px}
+  .trainer .opRail{padding:5px;gap:4px;border-radius:10px}
+  .operationHead{gap:4px;min-height:44px}
+  .operationHead h2{font-size:20px;padding:2px}
+  .operationHead button{padding:0 6px;font-size:12px}
+  .contextOperations{gap:4px}.contextOp{height:44px;font-size:21px;padding:1px}
+  .manualOperations{gap:4px}.trainer .opBtn{height:44px;font-size:24px}
+  .trainer #valueGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:3px}
+  .trainer .valueBtn{height:44px;font-size:17px;padding:0}
+  .valuePages{margin-top:4px;gap:8px}
+  .algebraReminder{padding:6px}.algebraReminder h2{font-size:21px}.algebraReminder p{font-size:18px;margin-top:6px}
+  .trainer .trainFooter{gap:6px;padding:4px 0}
+  .trainFooter #undoBtn{width:44px}
+  .trainFooter #reminderBtn{font-size:17px;padding:0 8px}
+  .trainer .feedback{font-size:16px;padding:2px}
+  .trainFooter .primarybtn,.trainer .nextBox button{font-size:19px;min-height:44px;padding:0 9px}
+}
+@media(max-width:600px){
+  .trainer{grid-template-columns:minmax(0,1fr);grid-template-rows:44px minmax(0,1fr) auto 96px;padding:4px 8px 0;gap:6px}
+  .trainer .trainHead{gap:5px;padding:0}.trainer .trainHead h1{font-size:23px}
+  .trainer .trainHead .progress{font-size:12px}.trainer .trainHead #backSetupBtn{padding:0 6px;font-size:12px}
+  .topbar-collapsed .trainer .trainHead{padding-left:46px}
+  .topbar-collapsed .trainer .trainHead .progress{display:none}
+  .trainer .trainStage{padding:8px;gap:4px}
+  .givenRow>span{font-size:17px;padding:4px}#givenEquation{font-size:23px;padding:0 4px}
+  .trainer .derivationMath,.trainer .derivationLine.past .derivationMath{font-size:23px}
+  .derivationEmpty{font-size:21px}
+  .trainer .opRail{padding:6px;gap:5px;max-height:none}
+  .operationHead h2{font-size:23px;padding:2px}.operationHead button{font-size:12px;padding:0 6px}
+  .contextOperations{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+  .contextOp{height:48px;font-size:22px;padding:2px}
+  .manualOperations{gap:5px}.trainer .opBtn{height:44px}
+  .trainer #valueGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+  .trainer .valueBtn{height:48px;font-size:18px;padding:1px}
+  .valuePages{margin-top:4px}
+  .algebraReminder{max-height:180px;padding:8px}.algebraReminder h2{font-size:23px}.algebraReminder p{font-size:19px;margin-top:6px}
+  .trainer .trainFooter{display:grid;grid-template-columns:44px minmax(0,1fr) auto;grid-template-rows:44px 44px;gap:2px 6px;padding:0 0 4px}
+  .trainer .feedback{grid-column:1/-1;grid-row:1;font-size:17px;padding:2px}
+  .trainFooter #undoBtn{grid-column:1;grid-row:2;width:44px}
+  .trainFooter #reminderBtn{grid-column:2;grid-row:2;font-size:18px;padding:0 4px;justify-self:start}
+  .trainFooter .primarybtn,.trainer .nextBox button{min-height:44px;padding:0 8px;font-size:19px}
+  .trainFooter #checkBtn,.trainer .nextBox{grid-column:3;grid-row:2}
+}
+@media(max-width:400px){.trainer .trainHead h1{font-size:20px}}
+@media(forced-colors:active){.trainer .trainHead::before{background:Canvas}.contextOp,.givenRow>span,#givenEquation,.algebraReminder{background:Canvas;color:CanvasText}.contextOp{border:1px solid ButtonText}}

@@ -1,0 +1,6029 @@
+{
+  "checks": 753,
+  "report": [
+    {
+      "label": "system start 640 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "real touch graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "touch graph undo",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "dark graph",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 640 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "previous system step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 640 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method combination",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase combine",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination with intermediate calculation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combined",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "previous system step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 640 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method graphic",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph checked",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 640 true",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "previous system step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 640 true",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method combination",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase combine",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination with intermediate calculation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combined",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "previous system step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 640 true",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method graphic",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph checked",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 780 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "previous system step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 780 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method combination",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase combine",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination with intermediate calculation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combined",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "previous system step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 780 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method graphic",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph checked",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 780 true",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "previous system step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 780 true",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method combination",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase combine",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination with intermediate calculation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combined",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "previous system step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 780 true",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method graphic",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph checked",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 1366 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "previous system step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 1366 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method combination",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase combine",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination with intermediate calculation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combined",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "previous system step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 1366 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method graphic",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph checked",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 1366 true",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "previous system step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 1366 true",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method combination",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase combine",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination with intermediate calculation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combined",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "previous system step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination history intermediate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 1366 true",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system help",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "toggle topbar",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method graphic",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph checked",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system full history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 640 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 640 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method combination",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase combine",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination with intermediate calculation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combined",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 640 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method graphic",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph checked",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 640 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 640 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method combination",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase combine",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination with intermediate calculation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combined",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system start 640 false",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method graphic",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph checked",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method graphic",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph checked",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method graphic",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph checked",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method graphic",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph checked",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method graphic",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph checked",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method graphic",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph point",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "graph checked",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system mission summary",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "system summary reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution mission summary",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method combination",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase combine",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination with intermediate calculation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combined",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method combination",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase combine",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination with intermediate calculation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combined",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method combination",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase combine",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination with intermediate calculation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combined",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method combination",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase combine",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination with intermediate calculation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combined",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase substitute",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "substitution preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "raw grouped substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "simplified substitution",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase operate",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation preview",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "operation committed",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "method combination",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase combine",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination with intermediate calculation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combined",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "phase answer",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "solution feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "combination mission summary",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    }
+  ]
+}

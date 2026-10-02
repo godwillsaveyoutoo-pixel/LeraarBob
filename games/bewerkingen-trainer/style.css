@@ -7,3 +7,7 @@
 @media print{html{background:white;color:black;color-scheme:light}body{background:white!important;color:black!important}header,.lb-restore,.section-nav,#setupScreen,#playScreen,.sheet-toolbar{display:none!important}main{max-width:none;padding:0}#sheetScreen{display:block!important}.paper{background:white;color:black;border:0;margin:0;padding:5mm 8mm;max-width:none}.paper+.paper{break-before:page}.paper li{break-inside:avoid}.paper .step{color:black}.answer-space{height:28mm}.sheet-condition{color:#333}}
 
 .task-instruction{max-width:700px;margin:0 auto 12px;text-align:center;color:var(--ink);font-weight:600}.sheet-instruction{font-size:14px;color:inherit}
+
+#worldMission{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--pale);margin:16px 0}#worldMission p{margin:8px 0}#worldMission small{display:block;color:var(--muted)}.world-return{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;background:var(--paper);border:1px solid var(--line);color:var(--ink);text-decoration:none;border-radius:6px}.topbar-collapsed #worldMission{margin-top:55px}@media print{#worldMission{display:none!important}}
+
+body[data-world-mission=true] .section-nav{display:none}

@@ -7,3 +7,7 @@
 body .lb-restore{border-radius:0}body:has(.lb-collapsed) .workspace-nav{padding-left:54px}
 html[data-mode=dark]{--bg:#172927;--paper:#203632;--ink:#eff4e9;--muted:#becfc6;--line:#587169;--soft:#2b4940;--accent:#357d68;color-scheme:dark}html[data-mode=dark] a,html[data-mode=dark] .eyebrow{color:#a5dfc5}
 .workspace-nav{position:sticky;top:var(--lb-header-height,60px);z-index:35;background:var(--bg)}body:has(.lb-collapsed) .workspace-nav{top:0}
+
+#worldMission{padding:16px;border:1px solid var(--line);background:var(--paper);margin-bottom:18px}#worldMission p{margin:8px 0}.world-return{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid var(--line);color:var(--ink);text-decoration:none}.topbar-collapsed #worldMission{padding-top:55px}@media print{#worldMission{display:none!important}}
+
+body[data-world-mission=true] .workspace-nav{display:none}

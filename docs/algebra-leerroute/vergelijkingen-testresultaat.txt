@@ -1,0 +1,18 @@
+PLAY A1
+PLAY A2
+PLAY A3
+PLAY A4
+PLAY B1
+PLAY B2
+PLAY B3
+PLAY B4
+PLAY B5
+PLAY C1
+PLAY C2
+PLAY D1
+PLAY D2
+PLAY D3
+PLAY E1
+PLAY E2
+PLAY E3
+PASS 507 equation layout/flow checks; screenshots: /home/johan/Documenten/GitHub/LeraarBob/docs/algebra-leerroute/screenshots

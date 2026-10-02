@@ -4,6 +4,16 @@
 
   function summarize(game, saved) {
     const state = saved?.state;
+    if (game.id === 'algebra-trainer') {
+      const completed=new Set();
+      for(const key of ['leraarbob.algebra.v1','leraarbob.stelsels.workshop.v1']){
+        try{const journey=JSON.parse(state?.storage?.[key]||'null')?.journey;
+          for(const [id,e] of Object.entries(journey?.topics||{}))if(/^(eq-|sys-)/.test(id)&&e.finished===true&&Array.isArray(e.evidence)&&e.evidence.length===5&&e.evidence.every(r=>r.done===true))completed.add(id);
+        }catch{}
+      }
+      const total=count(game.progressTotal)||23,done=Math.min(total,completed.size);
+      return {status:done===total?'complete':done?'started':state?'saved':'new',label:`${done} van ${total} haltes`,detail:done===total?'✓ Afgerond':state?'Nieuwe missies tellen na vijf opdrachten; eerdere oefeningen blijven bewaard.':'Begin je eerste missie.',completed:done,value:done,max:total};
+    }
     if (game.progressType === 'world') {
       const savedWorld = state?.rechtenV2;
       return { status: savedWorld ? 'saved' : 'new', label: savedWorld ? 'Leerroute opgeslagen' : 'Nog niet gestart', detail: savedWorld ? 'Ga verder waar je was' : 'Ontdek je eerste eiland' };
@@ -41,7 +51,21 @@
     if (['local','none','multiplayer'].includes(game.progressType)) return null;
     const state = saved?.state;
     if (game.progressType === 'trainer') return count(state?.xp);
-    if (game.id === 'algebra-trainer') return null;
+    if (['algebra-trainer','bewerkingen-trainer'].includes(game.id)) {
+      // Read actual topic awards. Older solved-form counts are never converted to XP.
+      const keys=game.id==='algebra-trainer'?['leraarbob.algebra.v1','leraarbob.stelsels.workshop.v1']:['leraarbob.bewerkingen.v1'];
+      const awards=new Map();let hasJourney=false;
+      for(const key of keys){
+        try{const journey=JSON.parse(state?.storage?.[key]||'null')?.journey;if(!journey)continue;hasJourney=true;
+          for(const [id,entry] of Object.entries(journey.topics||{})){
+            const answers=Array.isArray(entry.answers)?new Set(entry.answers.filter(a=>typeof a==='string'&&a.length>0)):new Set();
+            const mission=entry.finished===true&&Array.isArray(entry.evidence)&&entry.evidence.length===5&&entry.evidence.every(e=>e.done===true);
+            if(entry.rewarded===true&&(answers.size>=3||mission)&&Number.isFinite(entry.xp))awards.set(id,count(entry.xp));
+          }
+        }catch{}
+      }
+      return hasJourney?[...awards.values()].reduce((sum,n)=>sum+n,0):null;
+    }
     if (game.id === 'vectoren-trainer') {
       try { return count(JSON.parse(state?.storage?.['axioma-vectorentrainer-v020'] || '{}').progress?.xp); }
       catch { return null; }

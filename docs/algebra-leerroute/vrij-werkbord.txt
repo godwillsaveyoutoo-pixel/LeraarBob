@@ -1,0 +1,1 @@
+PASS: 5 sizes × both topbar states, reminder/check/undo/reload, divide-first fractions, 17 forms × 3 number policies, visible paged operands, preserved sheet. Screenshots: /tmp/algebra-workbench-screenshots

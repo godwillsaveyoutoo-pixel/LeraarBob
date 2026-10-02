@@ -1,0 +1,4061 @@
+{
+  "checks": 507,
+  "report": [
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "topbar toggle",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "first hint",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "second hint",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "earlier history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "compare routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "route feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "prediction error",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "reload production",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "build equation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission summary",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "summary reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "topbar toggle",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "first hint",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "second hint",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "earlier history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "compare routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "route feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "prediction error",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "reload production",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "build equation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission summary",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "summary reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "topbar toggle",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "first hint",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "second hint",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "earlier history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "compare routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "route feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "prediction error",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "reload production",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "build equation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission summary",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "summary reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "topbar toggle",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "first hint",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "second hint",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "earlier history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "compare routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "route feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "prediction error",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "reload production",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "build equation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission summary",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "summary reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "topbar toggle",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "first hint",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "second hint",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "earlier history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "compare routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "route feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "prediction error",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "reload production",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "build equation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission summary",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "summary reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "topbar toggle",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "first hint",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "second hint",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "earlier history",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "compare routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "route feedback",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "prediction error",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "reload production",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "build equation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission summary",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "summary reload",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A1 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A1 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A1 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A1 routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A1 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A1 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A1 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A1 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A1 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A1 build",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A2 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A2 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A2 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A2 routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A2 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A2 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A2 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A2 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A2 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A2 build",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A3 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A3 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A3 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A3 routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A3 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A3 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A3 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A3 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A3 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A3 build",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A4 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A4 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A4 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A4 routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A4 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A4 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A4 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A4 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "A4 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct A4 verify",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B1 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B1 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B1 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B1 routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B1 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B1 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B1 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B1 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B1 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B1 build",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B2 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B2 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B2 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B2 routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B2 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B2 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B2 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B2 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B2 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B2 build",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B3 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B3 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B3 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B3 routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B3 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B3 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B3 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B3 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B3 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B3 verify",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B4 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B4 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B4 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B4 routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B4 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B4 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B4 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B4 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B4 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B4 verify",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B5 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B5 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B5 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B5 routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B5 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B5 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B5 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B5 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "B5 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct B5 verify",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "C1 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct C1 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "C1 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct C1 repair",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "C1 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct C1 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "C1 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct C1 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "C1 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct C1 expand",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "C2 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct C2 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "C2 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct C2 repair",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "C2 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct C2 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "C2 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct C2 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "C2 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct C2 expand",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D1 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D1 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D1 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D1 repair",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D1 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D1 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D1 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D1 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D1 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D1 expand",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D2 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D2 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D2 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D2 routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D2 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D2 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D2 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D2 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D2 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D2 verify",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D3 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D3 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D3 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D3 repair",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D3 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D3 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D3 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D3 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "D3 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct D3 expand",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E1 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E1 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E1 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E1 routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E1 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E1 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E1 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E1 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E1 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E1 verify",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E2 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E2 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E2 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E2 routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E2 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E2 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E2 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E2 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E2 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E2 verify",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "mission start",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E3 task 0",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E3 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E3 task 1",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E3 routes",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E3 task 2",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E3 predict",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E3 task 3",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "before operation",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "manual picker",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "after step",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E3 solve",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "E3 task 4",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    },
+    {
+      "label": "correct E3 verify",
+      "bad": [],
+      "scroll": [],
+      "clipped": [],
+      "covered": [],
+      "bodyScroll": false
+    }
+  ]
+}

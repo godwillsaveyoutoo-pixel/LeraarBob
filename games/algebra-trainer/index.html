@@ -1,17 +1,26 @@
-<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f7f4ec"><title>Algebra Trainer · leraarBob</title><link rel="icon" href="../../assets/favicon.svg"><link rel="stylesheet" href="../../shared/vendor/katex/katex.min.css"><link rel="stylesheet" href="style.css"><script src="../../shared/vendor/katex/katex.min.js" defer></script><script src="../../shared/vendor/supabase.js" defer></script><script src="../../shared/supabase-config.js" defer></script><script src="../../shared/axioma-auth.js" defer></script><script src="../../shared/axioma-progress.js" defer></script><script src="../../shared/axioma-game-adapters.js" defer></script><script src="../../shared/axioma-game.js" data-game-id="algebra-trainer" defer></script><script src="../../shared/leraarbob-topbar.js" data-title="Algebra Trainer" data-game-href="games/algebra-trainer/" data-nav-pilot="true" data-context="none" defer></script></head><body>
+<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f7f4ec"><script>try{document.documentElement.dataset.mode=localStorage.getItem("axioma-mode")==="dark"?"dark":"light"}catch(_){}</script><title>Algebrawereld · leraarBob</title><link rel="icon" href="../../assets/favicon.svg"><link rel="stylesheet" href="../../shared/vendor/katex/katex.min.css"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="workbench.css"><link rel="stylesheet" href="world.css"><link rel="stylesheet" href="learning.css"><script src="../../shared/vendor/katex/katex.min.js" defer></script><script src="../../shared/vendor/supabase.js" defer></script><script src="../../shared/supabase-config.js" defer></script><script src="../../shared/axioma-auth.js" defer></script><script src="../../shared/axioma-progress.js" defer></script><script src="../../shared/axioma-game-adapters.js" defer></script><script src="../../shared/axioma-game.js" data-game-id="algebra-trainer" defer></script><script src="../../shared/leraarbob-topbar.js" data-title="Algebrawereld" data-game-href="games/algebra-trainer/" data-nav-pilot="true" data-context="none" data-theme-mode="site" defer></script></head><body>
 <div class="app">
 <header class="topbar" data-collapsible-topbar>
   <output id="algebraProgress" data-platform-progress="levels" data-value="0" data-total="17" data-unit="vormen" hidden></output>
-  <nav class="topnav" id="trainerMenu" hidden><a href="classroom.html" data-nav-group="multiplayer">Klasbattle</a>
-    <button class="navbtn active" data-nav="setup">Instellen</button>
-    <button class="navbtn" data-nav="trainer">Trainer</button>
-    <button class="navbtn" data-nav="preview">Oefenblad</button>
+  <nav class="topnav" id="trainerMenu" hidden>
+    <button class="navbtn" data-nav="world">Wereldkaart</button>
+    <button class="navbtn" data-nav="tools">Werkvormen</button>
   </nav>
 </header>
 
 <main class="main">
-<nav class="sectionNav" aria-label="Algebra Trainer"><button data-nav="setup">Reeks kiezen</button><button data-nav="trainer">Oefenen</button><button data-nav="preview">Oefenblad</button><a class="class-entry" href="classroom.html">Klasbattle →</a><a class="class-entry" href="stelsels.html">Stelsels →</a><span id="savedHint" role="status"></span></nav>
-<section id="setupScreen" class="screen setup">
+<nav class="sectionNav" aria-label="Algebrawereld"><button data-nav="world">Wereldkaart</button><button data-nav="tools">Werkvormen</button><span id="savedHint" role="status"></span></nav>
+<section id="worldScreen" class="screen worldScreen"><div id="worldHost"></div></section>
+<section id="toolsScreen" class="screen toolsScreen hidden">
+  <div class="worldHero"><div><div class="kicker">Samen, op papier of op maat</div><h1>Werkvormen</h1><p>Kies eerst wat je wilt doen. Op de wereldkaart volg je je eigen leerroute.</p></div></div>
+  <div class="toolGrid">
+    <article class="toolCard"><h2>Vrij oefenen</h2><p>Stel zelf een reeks samen. Alle oefenvormen blijven hier beschikbaar.</p><div class="toolLinks"><button class="softbtn" data-nav="setup">Vergelijkingen</button><a class="softbtn" href="../bewerkingen-trainer/?mode=solo">Machten &amp; wortels</a><a class="softbtn" href="stelsels.html">Stelsels</a></div></article>
+    <article class="toolCard"><h2>Oefenblad</h2><p>Maak een reeks op maat en druk die af met een verbetersleutel.</p><div class="toolLinks"><button class="softbtn" data-nav="setup">Kies opgaven</button><button class="softbtn" data-nav="preview">Huidige reeks</button></div></article>
+    <article class="toolCard"><h2>Met de klas</h2><p>Speel een klasbattle met een sessiecode.</p><div class="toolLinks"><a class="softbtn" href="classroom.html">Vergelijkingen</a><a class="softbtn" href="../bewerkingen-trainer/classroom.html">Machten &amp; wortels</a></div></article>
+    <article class="toolCard"><h2>Verder oefenen</h2><p>Je bevestigde reeks en je tussenstappen blijven bewaard.</p><div class="toolLinks"><button class="softbtn" data-nav="trainer">Hervat huidig werk</button><button id="resumeFreeBtn" class="softbtn" hidden>Hervat mijn vrije reeks</button></div></article>
+  </div>
+</section>
+<section id="setupScreen" class="screen setup hidden">
   <div class="panel builderHead">
     <div>
       <div class="kicker">Reeks instellen</div>
@@ -68,44 +77,56 @@
 </section>
 
 <section id="trainerScreen" class="screen trainer hidden">
-  <div class="trainStage">
-    <div class="trainHead">
-      <div class="exerciseNav"><button id="prevExerciseBtn" class="softbtn" aria-label="Vorige oefening">←</button><button id="forwardExerciseBtn" class="softbtn" aria-label="Volgende oefening">→</button></div>
-      <span id="trainProgress" class="progress"></span>
-      <span class="spacer"></span>
-      <button id="undoBtn" class="softbtn">↶ Ongedaan</button>
-      <button id="backSetupBtn" class="softbtn">Reeks wijzigen</button>
-    </div>
-    <div class="mathArea">
+  <header class="trainHead">
+    <div class="exerciseNav"><button id="prevExerciseBtn" class="softbtn" aria-label="Vorige oefening">←</button><button id="forwardExerciseBtn" class="softbtn" aria-label="Volgende oefening">→</button></div>
+    <h1 id="taskGoal">Maak x vrij</h1>
+    <span id="trainProgress" class="progress"></span>
+    <button id="backSetupBtn" class="softbtn" aria-label="Terug naar de wereldkaart">Wereld</button>
+  </header>
+  <div class="trainStage" aria-label="Jouw uitwerking">
+    <div class="givenRow"><span>Gegeven</span><div id="givenEquation"></div></div>
+    <div id="taskPrompt" class="taskPrompt">Werk tot x alleen staat.</div><div class="mathArea">
       <div class="equationWrap">
-        <div class="prompt">Maak x vrij</div>
         <div id="derivationStack" class="derivationStack" aria-live="polite" aria-atomic="true"></div>
       </div>
     </div>
-    <div id="feedback" class="feedback" role="status">Kies een bewerking.</div>
   </div>
 
   <aside class="opRail">
-    <div class="railLabel">Bewerking op beide leden</div>
-    <div class="ops">
-      <button class="opBtn" data-op="+">+</button>
-      <button class="opBtn" data-op="-">−</button>
-      <button class="opBtn" data-op="*">×</button>
-      <button class="opBtn" data-op="/">÷</button>
+    <div class="operationHead"><h2 id="operationTitle">Kies een bewerking</h2><button id="moreOperationsBtn" class="softbtn" aria-expanded="false" aria-controls="manualOperations">Andere</button></div>
+    <form id="production" class="production hidden" novalidate></form><div id="contextOperations" class="contextOperations"></div>
+    <div id="manualOperations" class="manualOperations hidden">
+      <div class="ops" aria-label="Bewerking op beide leden">
+        <button class="opBtn" data-op="+">+</button>
+        <button class="opBtn" data-op="-">−</button>
+        <button class="opBtn" data-op="*">×</button>
+        <button class="opBtn" data-op="/">÷</button>
+      </div>
+      <div id="valueZone" class="valueZone hidden">
+        <div id="valueGrid" class="valueGrid"></div>
+        <div id="valuePages" class="valuePages" hidden><button id="prevValuesBtn" class="softbtn" aria-label="Vorige waarden">←</button><output id="valuePageLabel"></output><button id="nextValuesBtn" class="softbtn" aria-label="Volgende waarden">→</button></div>
+      </div>
     </div>
-
-    <div id="valueZone" class="valueZone hidden">
-      <div class="railLabel">Waarmee?</div>
-      <div id="valueGrid" class="valueGrid"></div>
+    <div id="algebraReminder" class="algebraReminder hidden">
+      <h2>Een aanwijzing</h2><p id="hintText"></p><button id="moreHintBtn" class="softbtn">Meer hulp</button>
     </div>
-
-    <div id="nextBox" class="nextBox hidden">
-      <button id="nextExerciseBtn" class="primarybtn">Volgende oefening →</button>
-    </div>
-
-    <div class="railHint">Dezelfde bewerking, aan beide kanten.</div>
+    <div id="solvedNote" class="solvedNote hidden"><span aria-hidden="true">✓</span><p>x staat vrij.<br>Je kan naar de volgende oefening.</p></div>
   </aside>
+  <footer class="trainFooter">
+    <button id="undoBtn" class="softbtn" aria-label="Laatste stap ongedaan maken">↶</button>
+    <button id="reminderBtn" class="softbtn" aria-expanded="false" aria-controls="algebraReminder">Hulp</button><button id="historyBtn" class="softbtn" aria-label="Bekijk volledige uitwerking">Stappen</button>
+    <div id="feedback" class="feedback" role="status">Kies een bewerking.</div>
+    <button id="checkBtn" class="primarybtn">Controleer →</button>
+    <div id="nextBox" class="nextBox hidden"><button id="nextExerciseBtn" class="primarybtn">Volgende oefening →</button></div>
+  </footer>
 </section>
+
+<section id="historyScreen" class="screen historyScreen hidden" aria-label="Volledige uitwerking">
+ <header><button id="closeHistoryBtn" class="softbtn">← Werkbord</button><h1>Jouw stappen</h1><output id="historyPosition"></output></header>
+ <p id="historyAction"></p><div id="historyEquation" class="historyEquation"></div>
+ <footer><button id="historyPrevBtn" class="softbtn" aria-label="Vorige uitwerkingsstap">←</button><button id="historyNextBtn" class="softbtn" aria-label="Volgende uitwerkingsstap">→</button></footer>
+</section>
+<section id="summaryScreen" class="screen summaryScreen hidden" aria-label="Missie afgerond"><div id="summaryContent"></div><footer><button id="summaryWorldBtn" class="softbtn">Leerroute</button><button id="summaryNextBtn" class="primarybtn">Verder →</button></footer></section>
 
 <section id="previewScreen" class="screen preview hidden">
   <div class="previewHead">
@@ -122,4 +143,4 @@
 </main>
 </div>
 
-<script type="text/axioma-game" data-src="core.js"></script><script type="text/axioma-game" data-src="trainer.js"></script></body></html>
+<script type="text/axioma-game" data-src="core.js"></script><script type="text/axioma-game" data-src="workbench-core.js"></script><script type="text/axioma-game" data-src="world-core.js"></script><script type="text/axioma-game" data-src="learning-core.js"></script><script type="text/axioma-game" data-src="world-view.js"></script><script type="text/axioma-game" data-src="trainer.js"></script></body></html>

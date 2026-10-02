@@ -1,0 +1,1 @@
+PASS: 6 equation areas, 39 total topics, 5 screen sizes × 2 topbar states, real equation/powers/stelsels routes, locks, XP once, undo, offline/reload, unfinished-task gates, legacy and account isolation. Screenshots: /tmp/algebra-world-screenshots

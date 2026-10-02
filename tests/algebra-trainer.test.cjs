@@ -1,6 +1,6 @@
 const {test}=require('node:test'),assert=require('node:assert/strict');
 const C=require('../games/algebra-trainer/core.js');
-const {R}=C;
+const {R}=C;const W=require('../games/algebra-trainer/workbench-core.js');
 function value(e,x){switch(e.t){case 'num':return R(e.q.n,e.q.d);case 'var':return x;case 'add':return e.terms.reduce((s,t)=>s.add(value(t,x)),R(0));case 'mul':return e.factors.reduce((s,t)=>s.mul(value(t,x)),R(1));case 'div':return value(e.n,x).div(value(e.d,x));default:throw Error('node')}}
 test('17 oefenvormen blijven exact equivalent en de afdruksleutel eindigt bij dezelfde oplossing',()=>{
  const random=Math.random;let seed=982731;Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
@@ -17,6 +17,49 @@ test('17 oefenvormen blijven exact equivalent en de afdruksleutel eindigt bij de
 test('breuken blijven exact en delen door nul of onveilige integergroei wordt afgewezen',()=>{
  assert(R(1,3).add(R(1,6)).eq(R(1,2)));assert(R(-2,-4).eq(R(1,2)));
  assert.throws(()=>R(1).div(R(0)),/nul/);assert.throws(()=>R(Number.MAX_SAFE_INTEGER+1),/breuk/);
+});
+
+test('contextknoppen bieden tegengestelde bewerkingen en eerst delen zonder oplossingsroute af te dwingen',()=>{
+ const {N,V,Add,Mul,EQ}=C;
+ const ex=routeFixture(EQ(Add(Mul(N(4),V()),N(6)),Add(Mul(N(2),V()),N(10))));
+ const choices=W.contextOperations(ex,ex.start);
+ assert.equal(choices.length,6);
+ for(const [op,operand] of [['+',Mul(N(2),V())],['-',Mul(N(2),V())],['+',N(6)],['-',N(6)],['/',N(4)],['*',N(4)]]){
+  assert(choices.some(s=>s.op===op&&C.exprSig(s.operand)===C.exprSig(operand)));
+ }
+ const divided=C.applyEquation(ex.start,'/',N(4));
+ assert(W.contextOperations(ex,divided).some(s=>s.op==='-'&&C.exprSig(s.operand)===C.exprSig(N(R(3,2)))), 'actuele breuk blijft direct bereikbaar');
+});
+
+test('contextkeuzes bewaren voor alle 17 vormen de exacte oplossing en sluiten nul uit',()=>{
+ for(const t of C.TYPES)for(let bits=0;bits<8;bits++)for(let i=0;i<3;i++){
+  const ex=C.generateSeeded(t.id,{allowFractions:!!(bits&1),allowDecimals:!!(bits&2),allowNegative:!!(bits&4)},i,912+i);
+  for(const eq of ex.states.slice(0,-1)){
+   const choices=W.contextOperations(ex,eq);assert(choices.length>0&&choices.length<=6);
+   assert.equal(new Set(choices.map(s=>s.op+C.exprSig(s.operand))).size,choices.length);
+   for(const s of choices){const after=C.applyEquation(eq,s.op,s.operand);assert(value(after.l,ex.solution).eq(value(after.r,ex.solution)),t.id+' equivalente keuze');}
+  }
+ }
+});
+
+test('controle beschrijft de actuele vergelijking, ook met x rechts, zonder werk te veranderen',()=>{
+ const {N,V,Add,Mul,Div,EQ}=C;
+ const examples=[
+  [EQ(Add(Mul(N(4),V()),N(6)),Add(Mul(N(2),V()),N(10))),'beide kanten'],
+  [EQ(Add(Mul(N(4),V()),N(6)),N(14)),'iets bij'],
+  [EQ(Mul(N(4),V()),N(8)),'product'],
+  [EQ(Div(V(),N(4)),N(2)),'breuk'],
+  [EQ(Mul(N(4),Add(V(),N(3))),N(28)),'product']
+ ];
+ for(const [eq,text] of examples)for(const current of [eq,EQ(eq.r,eq.l)]){
+  const before=JSON.stringify(current),checked=W.checkProgress(current);
+  assert.equal(checked.solved,false);assert(checked.message.includes(text));assert.equal(JSON.stringify(current),before);
+ }
+ for(const type of C.TYPES)for(const policy of [{allowFractions:false,allowDecimals:false,allowNegative:false},{allowFractions:true,allowDecimals:true,allowNegative:true}]){
+  const ex=C.generateSeeded(type.id,policy,0,9721);
+  for(const eq of ex.states){const checked=W.checkProgress(eq);assert.equal(checked.solved,C.solvedEquation(eq),type.id);}
+  assert.equal(W.checkProgress(ex.states.at(-1)).message,'Juist. x staat vrij.');
+ }
 });
 
 function routeFixture(start,policy={allowFractions:false,allowDecimals:false,allowNegative:false}){

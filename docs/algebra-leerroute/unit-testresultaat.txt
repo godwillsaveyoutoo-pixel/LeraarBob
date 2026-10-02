@@ -1,0 +1,16 @@
+✔ tests/algebra-class.test.cjs (391.079504ms)
+✔ tests/algebra-learning.test.cjs (250.981652ms)
+✔ tests/algebra-trainer.test.cjs (2992.133802ms)
+✔ tests/algebra-world.test.cjs (78.430664ms)
+✔ tests/bewerkingen-trainer.test.cjs (1164.04044ms)
+✔ tests/catalog-progress.test.cjs (70.495196ms)
+✔ tests/catalog.test.cjs (69.282765ms)
+✔ tests/stelsels-workshop.test.cjs (210.511248ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3010.542542
