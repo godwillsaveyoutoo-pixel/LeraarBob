@@ -25,7 +25,7 @@ test('map shows all five destinations while unavailable worlds cannot start exer
 });
 test('completed map status survives replay without inventing XP or mastery',()=>{
  let state=R.start(R.initial(),'grenspas');state.events.push({taskId:R.active(state).task.id,attemptId:'symbol:3',skill:'sign',phase:'execute',variant:0,correct:true,supported:true,mastery:false});
- assert(S.progress(state).complete);assert.match(S.header(state),/data-platform-progress="xp" data-value="0" data-total="25"/);assert(S.header(state).includes('1/25 levels afgerond'));
+ assert(S.progress(state).complete);assert.match(S.header(state),/data-platform-progress="xp" data-value="0" data-total="27"/);assert(S.header(state).includes('1/27 levels afgerond'));
  const before=JSON.stringify(state.events);state=R.start(state,'grenspas',true);
  assert(S.progress(state).complete);assert.match(S.header(state),/data-platform-progress="xp" data-value="0"/);assert(S.area(state,{}).includes('skill-positive is-completed'));assert.equal(JSON.stringify(state.events),before);assert.equal(state.events[0].mastery,false);
 });

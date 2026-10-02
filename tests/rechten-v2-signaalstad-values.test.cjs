@@ -49,7 +49,7 @@ test('both six-task rounds resume independently and complete their own map stop 
   const xp=s.platformXp;s=R.start(s,skill,true);while(!R.active(s).completed)s=solve(s);assert.equal(s.platformXp,xp);
  }
  assert.equal(s.platformXp,110);assert.deepEqual(s.missions.intercept,other);assert(s.events.every(e=>!e.mastery));
- assert.equal(A.statuses(s,'signaalstad').playableTotal,5);assert(!Learn.skills.some(s=>V.skills.includes(s.id)));
+ assert.equal(A.statuses(s,'signaalstad').playableTotal,7);assert(!Learn.skills.some(s=>V.skills.includes(s.id)));
 });
 test('number keyboard never computes an answer and edits only the selected unlocked field',()=>{
  let m=R.active(solve(R.start(R.initial(),'fx')));assert.deepEqual(V.enter(m,'minus'),{name:'product',value:'-'});m.values.product='-3';assert.deepEqual(V.enter(m,'/'),{name:'product',value:'-3/'});assert.equal(V.enter(m,'='),null);

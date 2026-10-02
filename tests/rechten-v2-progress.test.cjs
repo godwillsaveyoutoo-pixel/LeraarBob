@@ -4,8 +4,8 @@ const R=require('../games/rechten/rechtenwereld/mission-runtime.js'),S=require('
 const node=(p,area,key)=>p.areas.find(a=>a.id===area).nodes.find(n=>n.key===key);
 function point(s){const t=R.active(s).task;return R.commit(R.edit(s,'answer',String(t.options.findIndex(p=>W.eq(p.x,t.target.x)&&W.eq(p.y,t.target.y)))))}
 function sign(s){const m=R.active(s);return R.advance(R.commit(R.edit(s,m.phase==='grens-root'?'answer':'inequality',m.phase==='grens-root'?String(m.task.options.findIndex(q=>W.eq(q,m.task.root))):M.intervalExpected(m.task).symbol)))}
-test('guest overview lists all five islands and 25 available levels and 3 future stops without invented progress',()=>{
- const s=R.initial(),p=S.journeyProgress(s);assert.equal(p.total,25);assert.equal(p.areas.flatMap(a=>a.nodes).length,28);assert.equal(p.completed,0);assert.equal(p.started,0);assert.equal(p.areas.length,5);
+test('guest overview lists all five islands and 27 available levels and 1 future stops without invented progress',()=>{
+ const s=R.initial(),p=S.journeyProgress(s);assert.equal(p.total,27);assert.equal(p.areas.flatMap(a=>a.nodes).length,28);assert.equal(p.completed,0);assert.equal(p.started,0);assert.equal(p.areas.length,5);
  for(const a of p.areas)for(const n of a.nodes)assert.equal(n.done,false);
  const html=S.book(s,{status:'Bewaard op dit toestel'});for(const a of p.areas)assert(html.includes(`data-progress-island="${a.id}"`));assert(html.includes('bewaard in deze browser op dit toestel'));
  assert(S.profile(s,{}).includes('data-screen="book"'));assert(!S.profile(s,{}).includes('id="sync"'));assert(S.profile(s,{account:{role:'student'}}).includes('id="sync"'));

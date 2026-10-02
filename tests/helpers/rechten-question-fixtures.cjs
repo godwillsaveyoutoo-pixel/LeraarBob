@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict');
 const R=require('../../games/rechten/rechtenwereld/mission-runtime.js'),W=require('../../games/rechten/core/wave-core.js');
 const F=require('../../games/rechten/rechtenwereld/formula-core.js'),D=require('../../games/rechten/rechtenwereld/derive-core.js'),L=require('../../games/rechten/rechtenwereld/lines-core.js');
-const families={Points:['point','point_plot'],Hills:['delta','slope','slope_from_two_points'],Lines:L.skills,Grens:['zeroRead','zero','positive','negative','signchart'],Formula:F.skills,Derive:D.skills,AB:['ab'],Values:['fx','table']};
+const families={Points:['point','point_plot'],Hills:['delta','slope','slope_from_two_points'],Lines:L.skills,Grens:['zeroRead','zero','positive','negative','signchart'],Formula:F.skills,Derive:D.skills,AB:['ab'],Values:['fx','table'],Checks:['input_from_output','point_on_line']};
 function fill(s,wrong=false){if(R.active(s).task.table&&R.active(s).phase==='derive-fill'){s=R.selectTableColumn(s,0);s=R.selectTableColumn(s,1)}const m=R.active(s),t=D.workTask(m.task,m.values),p=m.phase;let v={};
  if(m.skill==='point')v={answer:String(t.options.findIndex(q=>W.eq(q.x,t.target.x)&&W.eq(q.y,t.target.y)))};
  if(m.skill==='point_plot')v={point:{x:W.num(t.target.x),y:W.num(t.target.y)}};
@@ -17,6 +17,7 @@ function fill(s,wrong=false){if(R.active(s).task.table&&R.active(s).phase==='der
   else if(p==='grens-inequality')v={inequality:(m.skill==='positive')===(t.model.a.n>0)?'>':'<'};
   else v={answer:String(t.options.findIndex(q=>W.eq(q,t.root)))};
  }
+ const K=require('../../games/rechten/rechtenwereld/checks-core.js');if(K.skills.includes(m.skill))v=Object.fromEntries(K.fields(t,p).map(name=>{const q=K.expected(t,name);return [name,typeof q==='string'?q:W.text(q)]}));
  if(['fx-substitute','fx-calculate','table-fill'].includes(p)){const V=require('../../games/rechten/rechtenwereld/values-core.js');v=Object.fromEntries(V.fields(t,p).map(name=>[name,W.text(V.expected(t,name))]));}
  if(p==='ab-intercept')v={b:W.text(t.model.b)};
  if(p==='ab-slope')v={a:W.text(t.model.a)};

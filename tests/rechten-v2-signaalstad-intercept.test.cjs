@@ -34,7 +34,7 @@ test('repair, pause, reload and completion preserve the other missions and award
  const before=structuredClone(R.active(s));s=R.start(R.start(s,'point'),'intercept');assert.deepEqual(R.active(s),before);s=JSON.parse(JSON.stringify(s));
  while(!R.active(s).completed){s=R.commit(R.edit(R.edit(s,'x','0'),'b',W.text(R.active(s).task.model.b)));assert(R.active(s).feedback.result.ok);s=XP.update(R.advance(s));}
  assert.equal(s.platformXp,55);assert.equal(s.events.filter(e=>e.correct).length,6);assert(s.events.every(e=>!e.mastery));assert.deepEqual(s.missions.point,other);
- const summary=A.statuses(s,'signaalstad');assert.equal(summary.nodes.find(n=>n.id==='intercept').state,'completed');assert.equal(summary.nodes.find(n=>n.id==='ab').state,'current');assert.equal(summary.playableTotal,5);
+ const summary=A.statuses(s,'signaalstad');assert.equal(summary.nodes.find(n=>n.id==='intercept').state,'completed');assert.equal(summary.nodes.find(n=>n.id==='ab').state,'current');assert.equal(summary.playableTotal,7);
  s=R.start(s,'intercept',true);while(!R.active(s).completed)s=XP.update(R.advance(R.commit(R.edit(R.edit(s,'x','0'),'b',W.text(R.active(s).task.model.b)))));assert.equal(s.platformXp,55,'replaying does not double XP');
  assert.equal(A.statuses(s,'signaalstad').nodes.find(n=>n.id==='intercept').state,'completed');
 });

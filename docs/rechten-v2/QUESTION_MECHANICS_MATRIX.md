@@ -426,9 +426,9 @@ Bronbasis: user masterprompt v2/v2.1 hoofdstukken 8–14 en 17–20; huidige bes
 
 ## input_from_output
 
-**Actuele generator:** wave-core.js: algebraGenerate; negative/fraction/all/none.
-**Actuele validator / UI:** subOutput/algebra/verifyInput or constantSolutions/constantVerify.
-**Nog niet ondersteund / migratiegrens:** Geen domeingebonden context; parser lineair beperkt; all/none ondersteund.
+**Actuele generator:** checks-core.js: zes exacte opgaven met gehele, negatieve en gebroken oplossingen en constante all/none-gevallen.
+**Actuele validator / UI:** checks-core.js / checks-view.js vraagt input-equation → input-isolate → input-solve → input-verify, of input-equation → input-constant bij a = 0. Correct deelwerk blijft behouden; XP volgt uitsluitend na de verificatie of constante conclusie. De bestaande wave-core-algebraroute blijft behouden.
+**Nog niet ondersteund / migratiegrens:** De nieuwe halte gebruikt een voorschrift en gegeven uitvoer, zonder domeingebonden context, grafiekprobe of vrije bewerkingsketen. De uitgebreidere ontwerpvelden hieronder blijven voorstellen.
 
 | Veld | Ontwerp en toetsbare claim |
 |---|---|
@@ -456,9 +456,9 @@ Bronbasis: user masterprompt v2/v2.1 hoofdstukken 8–14 en 17–20; huidige bes
 
 ## point_on_line
 
-**Actuele generator:** wave-core.js: algebraGenerate; on/off/constant and representation variants.
-**Actuele validator / UI:** subPoint/pointValue/pointVerdict via algebraCheck.
-**Nog niet ondersteund / migratiegrens:** Geen vrije keuze reparatiecoördinaat; dichtbij liggend verkeerd punt wel exact beoordeeld.
+**Actuele generator:** checks-core.js: zes exacte on/off-opgaven, inclusief halve waarden en constante functies.
+**Actuele validator / UI:** checks-core.js / checks-view.js vraagt point-substitute → point-calculate → point-verdict. De uitspraak over P verschijnt pas na de eigen berekening; een punt dat een halve eenheid afwijkt wordt exact afgewezen. Correcte berekeningen blijven behouden bij herstel van de uitspraak. De bestaande wave-core-algebraroute blijft behouden.
+**Nog niet ondersteund / migratiegrens:** De nieuwe halte biedt substitutie en vergelijking, zonder grafiekprobe of vrije reparatie van een coördinaat. De uitgebreidere ontwerpvelden hieronder blijven voorstellen.
 
 | Veld | Ontwerp en toetsbare claim |
 |---|---|

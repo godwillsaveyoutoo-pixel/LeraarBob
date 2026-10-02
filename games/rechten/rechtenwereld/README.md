@@ -304,7 +304,7 @@ De controles omvatten alle 255 vraagtypeselecties, exacte modelconsistentie, 54 
 
 ## Papierroute Signaalstad
 
-`worksheets.html?world=signaalstad` biedt uitsluitend het uitgewerkte onderdeel `graph_from_table`: een rechte tekenen vanuit drie tabelkolommen. De overige Signaalstad-stops staan nog in voorbereiding en zijn niet toegevoegd als papierleerdoel. Zowel de centrale oefenbladenpagina als het contextmenu en de speelkeuze van Signaalstad openen deze route.
+`worksheets.html?world=signaalstad` biedt uitsluitend het uitgewerkte onderdeel `graph_from_table`: een rechte tekenen vanuit drie tabelkolommen. De overige Signaalstad-stops zijn digitaal speelbaar en zijn niet toegevoegd als papierleerdoel. Zowel de centrale oefenbladenpagina als het contextmenu en de speelkeuze van Signaalstad openen deze route.
 
 De generator gebruikt de digitale tabelmodellen, vertaalt ze exact en kiest drie verschillende x-waarden waarvan de punten binnen het papierrooster vallen. De eerste begeleide vragen hebben gehele waarden; daarna zijn ook halve waarden en horizontale rechten mogelijk. Opbouwende hulp verdwijnt geleidelijk. De leerling krijgt een leeg rooster; de aparte sleutel toont de lijn en drie punten en accepteert elk correct tweetal. Reeks `SS1-…` is reproduceerbaar zonder leerlingvoortgang te schrijven.
 
@@ -337,3 +337,14 @@ Controle: `node --test tests/rechten-v2-signaalstad-*.test.cjs`. De bijbehorende
 Het voorschrift staat prominent boven het werkblad; de getallenknoppen staan rechts van de berekening of tabel. De tabel gebruikt hetzelfde groene horizontale/verticale lijnenkruis als de andere functietabellen. De ingebouwde getallenknoppen en native tekstvelden ondersteunen aanraken en toetsenbord; `inputmode=none` houdt de werktafel zichtbaar op smartphones. Selecteren verandert geen antwoord. Pauzeren, herladen, ongedaan maken, herhalen en inklappen gebruiken de bestaande opslag en echte XP. Alleen volledig correcte opgaven leveren XP op, zonder dubbele beloning bij herhalen. De haltes zijn individueel speelbaar; duo-, battle- en papierroutes blijven bij hun bestaande onderdelen.
 
 Controle: `node --test tests/rechten-v2-signaalstad-values.test.cjs` en `node tests/rechten-v2-signaalstad-values-browser.cjs`. De browserproef controleert alle twaalf opgaven op desktop en liggende smartphones, inclusief getallenknoppen, breuken, herstel, echte kaartnavigatie, beide balkstanden, herladen en rotatie. Screenshots: `/tmp/rechten-signaalstad-values-screenshots/`.
+
+
+## Signaalstad: levels 5 en 6 — invoer vinden en punten controleren
+
+`?practice=input_from_output` opent level 5. De leerling vult eerst de gegeven functiewaarde in voor f(x), werkt b aan beide kanten weg, deelt door a en controleert de gevonden x in het oorspronkelijke voorschrift. De zes opgaven bevatten een positieve en negatieve gehele oplossing, een gebroken oplossing, een negatieve halve coëfficiënt en twee constante functies. Bij a = 0 berekent de leerling de vaste uitvoer en bepaalt of elke x of geen enkele x mogelijk is; delen door nul wordt niet aangeboden.
+
+`?practice=point_on_line` opent level 6. De leerling vervangt x door de x-coördinaat van P, berekent het product en f(x), en vergelijkt daarna de berekende waarde met de gegeven y-coördinaat. Een uitspraak over het punt verschijnt pas na de berekening. De zes opgaven bevatten punten op en naast de rechte, negatieve en halve waarden, een punt dat slechts een halve eenheid afwijkt en constante functies.
+
+Beide levels hergebruiken het grote functievoorschrift bovenaan, de getallenknoppen rechts en de gedeelde inklapbare platformbalk. De stap, invoer en correcte onderdelen blijven bewaard bij herstel, pauzeren, herladen en schermrotatie. XP wordt alleen toegekend na de laatste stap van een volledige opgave. Elke ronde telt zes opgaven en een herhaling telt alleen een verbetering. Alle zeven Signaalstad-stops zijn nu digitaal speelbaar; deze twee nieuwe stops zijn voor zelfstandig oefenen en worden niet in de bestaande battles of samenleerroute opgenomen.
+
+Controle: `node --test --test-isolation=none tests/rechten-v2-signaalstad-checks.test.cjs` en `node tests/rechten-v2-signaalstad-checks-browser.cjs`. De inhoudstest vergelijkt inverse oplossingen en puntlidmaatschap met een onafhankelijke rationale rekenproef. De browserproef doorloopt beide rondes op 1366 × 768, 780 × 360 en 640 × 360 pixels, inclusief touch, breuken, constante functies, herstel, kaartnavigatie, XP, beide balkstanden, herladen en rotatie. Screenshots: `/tmp/rechten-signaalstad-checks-screenshots/`.
