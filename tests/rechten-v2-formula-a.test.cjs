@@ -4,7 +4,7 @@ const F=require('../games/rechten/rechtenwereld/formula-core.js'),R=require('../
 const built=t=>({factor:W.text(t.model.a),variable:'x',operator:t.model.b.n<0?'−':'+',constant:W.text(W.mul(t.model.b.n<0?-1:1,t.model.b))});
 function solve(s,reverse=false){const m=R.active(s),t=m.task;
  if(m.phase==='formula-build')for(const [k,v]of Object.entries(built(t)))s=R.putFormulaToken(s,k,v);
- if(m.phase==='formula-read')for(const k of ['a','b'])s=R.edit(s,k,W.text(t.model[k]));
+ if(m.phase==='formula-read'){if(m.skill==='intercept')s=R.edit(s,'x','0');for(const k of ['a','b'])s=R.edit(s,k,W.text(t.model[k]));}
  if(m.phase==='formula-plot'){s=R.placeLinePoint(s,'A',{x:0,y:W.num(t.model.b)});const x=W.num(t.model.b)>3?-1:1;s=R.placeLinePoint(s,'B',{x,y:W.num(W.add(W.mul(t.model.a,x),t.model.b))})}
  if(m.phase==='formula-rewrite'){if(reverse)s=R.operateFormula(s,4);let e=F.currentEquation(t,R.active(s).values);if(e.left.x.n)s=R.operateFormula(s,e.left.x.n<0?0:1);e=F.currentEquation(t,R.active(s).values);if(!W.eq(e.left.y,1))s=R.operateFormula(s,4)}
  s=R.commit(s);assert(R.active(s).feedback.result.ok,JSON.stringify(R.active(s).feedback));return R.advance(s)

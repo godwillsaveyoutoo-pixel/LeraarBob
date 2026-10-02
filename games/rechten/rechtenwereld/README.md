@@ -321,7 +321,7 @@ Leerlingteksten gebruiken ‘snijpunt met de y-as’; waar een getal gevraagd wo
 
 ## Signaalstad levels 1 en 2
 
-Level 1 (`?practice=intercept`) leert het snijpunt met de y-as aflezen in zes grafieken.
+Level 1 (`?practice=intercept`) leert het volledige snijpunt P = (x; y) met de y-as aflezen in zes grafieken. Beide coördinaten beginnen leeg: leerlingen bepalen zelf x = 0 en de y-coördinaat. Bij herstel blijft een juiste coördinaat bewaard.
 Level 2 (`?practice=ab`) laat de leerling eerst b aflezen, daarna a meten bij één stap in x, en vervolgens het functievoorschrift bouwen. De zes grafieken bevatten stijgende, dalende, horizontale en halve hellingen.
 Beide levels zijn individueel speelbaar op de Signaalstadkaart. De bestaande toegang tot de wereld blijft gelden. Correcte tussenstappen, voortgang en de inklapkeuze blijven bewaard. Alleen een volledige opgave levert de bestaande 5 of 10 XP op.
 

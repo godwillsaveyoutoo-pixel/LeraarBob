@@ -8,7 +8,7 @@ const slots=['factor','variable','operator','constant'];
 const phases={intercept:'formula-read',graph_from_table:'formula-plot',equation_from_ab:'formula-build',graph_from_equation:'formula-plot',equation_from_graph:'formula-read',rewrite_linear_equation:'formula-rewrite'};
 const firstPhase=skill=>phases[skill];
 const hints={
- intercept:['Zoek waar de rechte de verticale y-as raakt. Lees daar de hoogte af.','De y-as is de verticale as door 0. Op die as is x altijd 0.','Volg de rechte tot op de y-as. Tel vanaf 0 omhoog of omlaag.','Boven 0 is de hoogte positief, onder 0 negatief. Door de oorsprong geeft hoogte 0.','Ander voorbeeld: een rechte door (0; 4) snijdt de y-as op hoogte 4. Die hoogte noemen we b. Probeer een nieuw geval.'],
+ intercept:['Zoek het snijpunt P met de y-as. Vul beide coördinaten in: eerst x, dan y.','De y-as is de verticale as door 0. Welke x-coördinaat hebben punten op die as?','Op de y-as is x altijd 0. Lees daarna de y-coördinaat van P af.','Boven 0 is y positief, onder 0 negatief. De oorsprong heeft coördinaten (0; 0).','Ander voorbeeld: P = (0; 4) ligt op de y-as op hoogte 4. Die y-coördinaat noemen we b. Probeer een nieuw geval.'],
  graph_from_table:['Elke kolom geeft een punt: (x; f(x)).','Lees x in de bovenste rij en y in dezelfde kolom eronder.','Plaats eerst één punt. Kies daarna een andere kolom voor het tweede punt.','De rechte door je punten moet bij alle kolommen passen. Let op negatieve getallen en halve stappen.','Ander voorbeeld: de kolommen (0; 1) en (2; 3) geven twee punten op dezelfde rechte. Probeer een nieuw geval.'],
  equation_from_ab:['Gebruik de vorm y = ax + b.','De coëfficiënt van x is a. De constante term is b.','Kies het teken en het getal zo dat ze samen b voorstellen.','Ook 0 en negatieve coëfficiënten zijn mogelijk. Een bouwsteen mag je meermaals gebruiken.','Ander voorbeeld: a = −3 en b = 4 geven y = −3x + 4. Probeer een nieuw geval.'],
  graph_from_equation:['Bepaal zelf a en b uit het voorschrift.','b geeft de y-coördinaat van het snijpunt met de y-as.','a vertelt hoe y verandert als x met één toeneemt. Let op het teken.','Je kunt ook twee x-waarden kiezen en hun y-waarden berekenen. Gebruik twee verschillende punten.','Ander voorbeeld: bij y = −3x + 4 liggen (0, 4) en (1, 1) op de rechte. Probeer een nieuw geval.'],
@@ -51,9 +51,10 @@ function check(t,v,phase){
   return result(r.ok,r.code,message,keep);
  }
  if(phase==='formula-read'&&t.skill_id==='intercept'){
-  const b=M.parse(v.b);if(!b)return syntax('Vul de hoogte van het snijpunt op de y-as in.');
-  const correct=W.eq(b,t.model.b);
-  return result(correct,'intercept.read',correct?'Juist: het snijpunt is (0; '+W.text(b)+'). Deze hoogte noemen we b.':'Zoek het snijpunt op de verticale y-as. Lees de hoogte vanaf 0; onder 0 is die negatief.',{b:correct});
+  const x=M.parse(v.x),y=M.parse(v.b),keep={x:!!x&&W.eq(x,0),b:!!y&&W.eq(y,t.model.b)};
+  if(!x||!y)return {...syntax('Vul beide coördinaten van P in: x en y.'),keep};
+  const correct=keep.x&&keep.b;
+  return result(correct,!keep.x?'intercept.x':'intercept.read',correct?'Juist: P = (0; '+W.text(y)+'). Op de y-as is x = 0. De y-coördinaat noemen we b.':!keep.x?'P ligt op de y-as. Daar is x = 0.'+(keep.b?' Je y-coördinaat klopt en blijft staan.':' Controleer daarna ook de y-coördinaat.'):'Je x-coördinaat klopt. Lees de y-coördinaat af waar de rechte de y-as snijdt; onder 0 is die negatief.',keep);
  }
  if(phase==='formula-read'){
   const a=M.parse(v.a),b=M.parse(v.b);if(!a||!b)return syntax('Vul a en b in. Een breuk of decimaal mag ook.');

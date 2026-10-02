@@ -21,7 +21,7 @@ function fill(s,wrong=false){if(R.active(s).task.table&&R.active(s).phase==='der
  if(p==='ab-slope')v={a:W.text(t.model.a)};
  if(p==='formula-build'||p==='ab-rule')v={factor:W.text(t.model.a),variable:'x',operator:t.model.b.n<0?'−':'+',constant:W.text(W.mul(t.model.b.n<0?-1:1,t.model.b))};
  if(p==='formula-plot')v={plotA:{x:0,y:W.num(t.model.b)},plotB:{x:1,y:W.num(W.add(t.model.a,t.model.b))}};
- if(p==='formula-read')v=m.skill==='intercept'?{b:W.text(t.model.b)}:{a:W.text(t.model.a),b:W.text(t.model.b)};
+ if(p==='formula-read')v=m.skill==='intercept'?{x:'0',b:W.text(t.model.b)}:{a:W.text(t.model.a),b:W.text(t.model.b)};
  if(p==='formula-rewrite'){
   if(wrong)return R.operateFormula(s,1);
   let e=F.currentEquation(t,m.values);if(e.left.x.n)s=R.operateFormula(s,e.left.x.n<0?0:1);e=F.currentEquation(t,R.active(s).values);if(!W.eq(e.left.y,1))s=R.operateFormula(s,4);return s;

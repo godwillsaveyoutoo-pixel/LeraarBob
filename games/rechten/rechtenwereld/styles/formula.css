@@ -30,12 +30,13 @@
 .formula-parameter{container-type:inline-size}
 .formula-parameter input{font-size:clamp(20px,42cqw,38px)}
 
-.signal-intercept-answer{justify-content:center;gap:12px}.signal-intercept-answer .formula-parameter>span{font-size:16px}.signal-intercept-answer .formula-parameter{min-width:92px}
+.signal-intercept-answer{justify-content:center;gap:8px}.signal-intercept-answer .formula-parameter>span{font-size:16px}.signal-intercept-answer .formula-parameter{min-width:92px}
 /* Leave space for the shared restore button without covering the graph or undo. */
 .topbar-collapsed .formula-mission[data-skill=intercept] .formula-heading{margin-left:44px;min-height:50px}
 @media(max-height:760px) and (orientation:landscape),(max-height:900px) and (min-aspect-ratio:2/1){
  .formula-mission[data-skill=intercept] .formula-answer>p:not(.formula-side-note){display:none}
- .signal-intercept-answer .formula-parameter{display:grid;grid-template-columns:minmax(44px,1fr) 44px;grid-template-rows:44px 44px;column-gap:4px;min-width:132px;max-width:145px}
+ .signal-intercept-answer{gap:4px;font-size:24px}.signal-intercept-answer .signal-point-name{display:none}
+ .signal-intercept-answer .formula-parameter{display:grid;grid-template-columns:minmax(44px,1fr) 44px;grid-template-rows:44px 44px;column-gap:4px;min-width:88px;max-width:100px}
  .signal-intercept-answer .formula-parameter input{grid-column:1;grid-row:1/3;height:88px;border:1px solid #a7b3d0;border-radius:8px;font-size:34px}
  .signal-intercept-answer .formula-parameter button{grid-column:2;grid-row:1;border-radius:8px}
  .signal-intercept-answer .formula-parameter button:last-child{grid-row:2}
