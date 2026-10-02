@@ -38,7 +38,7 @@ test('all 18 stages complete level 2 once, resume/replay safely, and leave other
  let s=R.edit(R.start(R.initial(),'intercept'),'b','3');s=R.start(s,'signaalstad');const other=structuredClone(s.missions);s=R.start(s,'ab');const initial=structuredClone(R.active(s));s=R.start(R.start(s,'point'),'ab');assert.deepEqual(R.active(s),initial);
  while(!R.active(s).completed){s=JSON.parse(JSON.stringify(s));s=solve(s)}assert.equal(R.active(s).completion.length,6);assert.equal(s.events.length,18);assert.equal(s.platformXp,55);assert(s.events.every(e=>e.skill==='ab'&&e.representation==='graph'&&e.mastery===false));
  for(const[key,value]of Object.entries(other))assert.deepEqual(s.missions[key],value);
- const summary=A.statuses(s,'signaalstad');assert.equal(summary.playableTotal,3);assert.equal(summary.nodes.find(n=>n.id==='ab').state,'completed');
+ const summary=A.statuses(s,'signaalstad');assert.equal(summary.playableTotal,5);assert.equal(summary.nodes.find(n=>n.id==='ab').state,'completed');
  s=R.start(s,'ab',true);assert.equal(A.statuses(s,'signaalstad').nodes.find(n=>n.id==='ab').state,'completed');while(!R.active(s).completed)s=solve(s);assert.equal(s.platformXp,55);
  const fresh=R.start(R.initial(),'ab');for(let i=0;i<5;i++)Object.assign(fresh,R.hint(fresh));const helped=R.newAfterExample(fresh);assert.equal(R.active(helped).run,2);assert.equal(R.active(helped).hints,0);assert.notDeepEqual(R.active(helped).task.model.b,initial.task.model.b);
 });

@@ -326,3 +326,14 @@ Level 2 (`?practice=ab`) laat de leerling eerst b aflezen, daarna a meten bij é
 Beide levels zijn individueel speelbaar op de Signaalstadkaart. De bestaande toegang tot de wereld blijft gelden. Correcte tussenstappen, voortgang en de inklapkeuze blijven bewaard. Alleen een volledige opgave levert de bestaande 5 of 10 XP op.
 
 Controle: `node --test tests/rechten-v2-signaalstad-*.test.cjs`. De bijbehorende `*-browser.cjs` scripts controleren alle opgaven, mobiele bediening, pauzeren, herladen en inklappen/terug openen.
+
+
+## Signaalstad: levels 3 en 4 — functiewaarden en tabellen
+
+`?practice=fx` geeft zes voorschriften en een concrete invoer. De leerling vult het product ax en de functiewaarde f(x) in. Beide antwoorden worden exact gecontroleerd; bij herstel blijft een correcte tussenstap of uitvoer staan.
+
+`?practice=table` geeft zes voorschriften met vijf x-waarden per tabel. Eén kolom bij x = 0 is gegeven; de leerling berekent de vier overige outputs. Latere opgaven hebben onregelmatige x-afstanden. Correcte cellen blijven vergrendeld bij herstel. Beide levels bevatten negatieve invoer, negatieve/halve coëfficiënten en een constante functie. Breuken en equivalente decimalen zijn geldig.
+
+De ingebouwde getallenknoppen en native tekstvelden ondersteunen aanraken en toetsenbord; `inputmode=none` houdt de werktafel zichtbaar op smartphones. Selecteren verandert geen antwoord. Pauzeren, herladen, ongedaan maken, herhalen en inklappen gebruiken de bestaande opslag en echte XP. Alleen volledig correcte opgaven leveren XP op, zonder dubbele beloning bij herhalen. De haltes zijn individueel speelbaar; duo-, battle- en papierroutes blijven bij hun bestaande onderdelen.
+
+Controle: `node --test tests/rechten-v2-signaalstad-values.test.cjs` en `node tests/rechten-v2-signaalstad-values-browser.cjs`. De browserproef controleert alle twaalf opgaven op desktop en liggende smartphones, inclusief getallenknoppen, breuken, herstel, echte kaartnavigatie, beide balkstanden, herladen en rotatie. Screenshots: `/tmp/rechten-signaalstad-values-screenshots/`.

@@ -35,7 +35,7 @@ test('worlds unlock in sequence while every released level inside an unlocked wo
  html=S.area(A.locationState(s,'area',{area:'formulewerf',zone:'bouwen'}),{legacy});assert((html.match(/data-start="formulewerf"/g)||[]).length>=4);
  html=S.area(A.locationState(s,'area',{area:'formulewerf',zone:'omzetten'}),{legacy});assert((html.match(/data-start="formulewerf"/g)||[]).length>=4);assert(html.includes('data-state="soon"'));
 
- s=finished(['hellingrug','grenspas','formulewerf']);const signal=A.statuses(s,'signaalstad',legacy);assert(signal.unlocked);assert.equal(signal.nodes.filter(n=>n.playable).length,3);assert.equal(signal.nodes.find(n=>n.playable).state,'current');assert(signal.nodes.filter(n=>!n.playable).every(n=>n.state==='soon'));
+ s=finished(['hellingrug','grenspas','formulewerf']);const signal=A.statuses(s,'signaalstad',legacy);assert(signal.unlocked);assert.equal(signal.nodes.filter(n=>n.playable).length,5);assert.equal(signal.nodes.find(n=>n.playable).state,'current');assert(signal.nodes.filter(n=>!n.playable).every(n=>n.state==='soon'));
  assert.equal(JSON.stringify(legacy),before);
 });
 
@@ -46,7 +46,7 @@ test('route advances through required worlds and ends without requiring optional
  const s=finished(['hellingrug','grenspas','formulewerf','signaalstad']),r=A.recommendation(s);
  assert.equal(r.node,null);assert.equal(A.statuses(s,'puntenbaai').completed,0);
  const f=A.statuses(s,'formulewerf');assert(f.complete);assert.equal(f.playableCompleted,8);assert.equal(f.recommended,null);assert(f.nodes.slice(8).every(n=>n.state==='soon'));
- const p=S.journeyProgress(s);assert.equal(p.completed,21);assert.equal(p.total,23);assert(S.world(s).includes('Vrij oefenen'));
+ const p=S.journeyProgress(s);assert.equal(p.completed,23);assert.equal(p.total,25);assert(S.world(s).includes('Vrij oefenen'));
 });
 
 test('existing later-world work is grandfathered and resumes exactly instead of being stranded',()=>{

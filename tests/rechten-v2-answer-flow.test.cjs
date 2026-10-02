@@ -4,7 +4,7 @@ const {fixtures}=require('./helpers/rechten-question-fixtures.cjs');
 const state=m=>({screen:'mission',active:m.skill,missions:{[m.skill]:structuredClone(m)},settings:{}});
 const all=fixtures();
 test('only correct feedback in each released exercise can advance; mistakes and unsubmitted work stay',()=>{
- const skills=new Set();for(const {m}of all){const s=state(m),ms=Flow.delay(s);if(m.feedback?.result.ok&&!m.completed){assert(ms>=1800&&ms<=6000);skills.add(m.skill)}else assert.equal(ms,0)}assert.equal(skills.size,23);
+ const skills=new Set();for(const {m}of all){const s=state(m),ms=Flow.delay(s);if(m.feedback?.result.ok&&!m.completed){assert(ms>=1800&&ms<=6000);skills.add(m.skill)}else assert.equal(ms,0)}assert.equal(skills.size,25);
  const s=state(all.find(r=>r.m.feedback?.result.ok).m);s.settings.autoAdvance=false;assert.equal(Flow.delay(s),0);s.settings.autoAdvance=true;s.screen='profile';assert.equal(Flow.delay(s),0);
 });
 test('one advance per fresh submission; pause, stale callbacks and navigation cannot skip work',()=>{

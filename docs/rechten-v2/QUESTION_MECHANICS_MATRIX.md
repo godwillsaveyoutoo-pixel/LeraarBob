@@ -276,9 +276,9 @@ Bronbasis: user masterprompt v2/v2.1 hoofdstukken 8–14 en 17–20; huidige bes
 
 ## fx
 
-**Actuele generator:** index.html: generate(fx); bounded x, nonzero slopes, optional visual probe.
-**Actuele validator / UI:** renderFx/numericChoices/fxError.
-**Nog niet ondersteund / migratiegrens:** Geen constante a=0 in pool; MC; basisgrafiek kan output tonen.
+**Actuele generator:** Rechtenwereld values-core.js: makeTask(fx), zes voorschriften met negatieve/gehele invoer, halve/negatieve coëfficiënten en een constante functie. De oudere trainer behoudt generate(fx).
+**Actuele validator / UI:** values-core.js check en components/values-view.js: exact product ax en functiewaarde f(x), met behoud van correcte onderdelen en open getalinvoer. De oudere trainer behoudt renderFx/numericChoices/fxError.
+**Nog niet ondersteund / migratiegrens:** Level 3 voegt geen hidden-case of grafiektransfer toe. Uitgebreidere mechanics hieronder blijven voorstellen; de oudere trainer blijft bewaard.
 
 | Veld | Ontwerp en toetsbare claim |
 |---|---|
@@ -302,13 +302,13 @@ Bronbasis: user masterprompt v2/v2.1 hoofdstukken 8–14 en 17–20; huidige bes
 | taallast | Laag: één korte nl-BE opdrachtzin; exacte wiskunde met verticale breuken, spreeklabel en komma. Definitie op verzoek, niet als permanente uitleg. |
 | UI-ruis die evidence niet mag beïnvloeden | Tikmisser, ongeldige syntax, afgekapt label, annulering, viewport/rotatie of assistieve bediening → interaction_error; geen foutcode of masteryverlies. Geen tijd/click/pointertracking als begrip. |
 | events/evidence | commit(fx, taskFeature, semanticResponse), test(result), repair(component), hint(level), hidden_commit, transfer_result; task/commit-idempotent; zelfstandig alleen eerste niet-ondersteunde nieuwe variant; production planner ongewijzigd. |
-| kill criteria | Herontwerp bij >30% blind tunen, >10% accidental actions, geen betere transfer dan eenvoudige controle, antwoordlekkage, scroll op 640×360, of verlies van correct deelwerk. Specifieke auditkloof: Geen constante a=0 in pool; MC; basisgrafiek kan output tonen. |
+| kill criteria | Herontwerp bij >30% blind tunen, >10% accidental actions, geen betere transfer dan eenvoudige controle, antwoordlekkage, scroll op 640×360, of verlies van correct deelwerk. Specifieke auditkloof: Grafiek-/tabeltransfer en hidden-case ontbreken in dit level. |
 
 ## table
 
-**Actuele generator:** index.html: generate(table); fixed xs [0,1,2]/[-1,0,1]/[-2,0,2].
-**Actuele validator / UI:** renderTable/numericChoices/tableError.
-**Nog niet ondersteund / migratiegrens:** Geen onregelmatige afstanden of inverse cel; slechts één outputgat.
+**Actuele generator:** Rechtenwereld values-core.js: makeTask(table), vijf inputs en vier outputgaten per tabel; negatieve en onregelmatige x-afstanden. De oudere trainer behoudt generate(table).
+**Actuele validator / UI:** values-core.js check en components/values-view.js: exacte controle per cel, open getalinvoer en behoud van correcte cellen. De oudere trainer behoudt renderTable/numericChoices/tableError.
+**Nog niet ondersteund / migratiegrens:** Level 4 heeft meerdere outputgaten en onregelmatige inputs; inverse cellen en hidden rijen blijven voorstellen. De oudere trainer blijft bewaard.
 
 | Veld | Ontwerp en toetsbare claim |
 |---|---|
@@ -332,7 +332,7 @@ Bronbasis: user masterprompt v2/v2.1 hoofdstukken 8–14 en 17–20; huidige bes
 | taallast | Laag: één korte nl-BE opdrachtzin; exacte wiskunde met verticale breuken, spreeklabel en komma. Definitie op verzoek, niet als permanente uitleg. |
 | UI-ruis die evidence niet mag beïnvloeden | Tikmisser, ongeldige syntax, afgekapt label, annulering, viewport/rotatie of assistieve bediening → interaction_error; geen foutcode of masteryverlies. Geen tijd/click/pointertracking als begrip. |
 | events/evidence | commit(table, taskFeature, semanticResponse), test(result), repair(component), hint(level), hidden_commit, transfer_result; task/commit-idempotent; zelfstandig alleen eerste niet-ondersteunde nieuwe variant; production planner ongewijzigd. |
-| kill criteria | Herontwerp bij >30% blind tunen, >10% accidental actions, geen betere transfer dan eenvoudige controle, antwoordlekkage, scroll op 640×360, of verlies van correct deelwerk. Specifieke auditkloof: Geen onregelmatige afstanden of inverse cel; slechts één outputgat. |
+| kill criteria | Herontwerp bij >30% blind tunen, >10% accidental actions, geen betere transfer dan eenvoudige controle, antwoordlekkage, scroll op 640×360, of verlies van correct deelwerk. Specifieke auditkloof: Inverse cel en hidden rij ontbreken in dit level. |
 
 ## graph_from_equation
 
