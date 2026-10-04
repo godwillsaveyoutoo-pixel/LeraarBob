@@ -1,16 +1,16 @@
-<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f7f4ec"><script>try{document.documentElement.dataset.mode=localStorage.getItem("axioma-mode")==="dark"?"dark":"light"}catch(_){}</script><title>Algebrawereld · leraarBob</title><link rel="icon" href="../../assets/favicon.svg"><link rel="stylesheet" href="../../shared/vendor/katex/katex.min.css"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="workbench.css"><link rel="stylesheet" href="world.css"><link rel="stylesheet" href="learning.css"><link rel="stylesheet" href="journey.css"><link rel="stylesheet" href="motion.css"><link rel="stylesheet" href="touch.css"><script src="../../shared/vendor/katex/katex.min.js" defer></script><script src="../../shared/vendor/supabase.js" defer></script><script src="../../shared/supabase-config.js" defer></script><script src="../../shared/axioma-auth.js" defer></script><script src="../../shared/axioma-progress.js" defer></script><script src="../../shared/axioma-game-adapters.js" defer></script><script src="../../shared/axioma-game.js" data-game-id="algebra-trainer" defer></script><script src="../../shared/leraarbob-topbar.js" data-title="Algebrawereld" data-game-href="games/algebra-trainer/" data-nav-pilot="true" data-context="none" data-theme-mode="site" defer></script></head><body class="journeyGame">
+<!doctype html><html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f7f4ec"><script>try{document.documentElement.dataset.mode=localStorage.getItem("axioma-mode")==="dark"?"dark":"light"}catch(_){}</script><title>Algebrawereld · leraarBob</title><link rel="icon" href="../../assets/favicon.svg"><link rel="stylesheet" href="../../shared/vendor/katex/katex.min.css"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="workbench.css"><link rel="stylesheet" href="world.css"><link rel="stylesheet" href="learning.css"><script src="../../shared/vendor/katex/katex.min.js" defer></script><script src="../../shared/vendor/supabase.js" defer></script><script src="../../shared/supabase-config.js" defer></script><script src="../../shared/axioma-auth.js" defer></script><script src="../../shared/axioma-progress.js" defer></script><script src="../../shared/axioma-game-adapters.js" defer></script><script src="../../shared/axioma-game.js" data-game-id="algebra-trainer" defer></script><script src="../../shared/leraarbob-topbar.js" data-title="Algebrawereld" data-game-href="games/algebra-trainer/" data-nav-pilot="true" data-context="none" data-theme-mode="site" defer></script></head><body>
 <div class="app">
 <header class="topbar" data-collapsible-topbar>
-  <output id="algebraProgress" data-platform-progress="levels" data-value="0" data-total="13" data-unit="haltes" hidden></output>
+  <output id="algebraProgress" data-platform-progress="levels" data-value="0" data-total="17" data-unit="vormen" hidden></output>
   <nav class="topnav" id="trainerMenu" hidden>
-
-    <button class="navbtn" data-nav="world">Werelden</button>
+    <a class="navbtn" href="index.html">Algebra home</a>
+    <button class="navbtn" data-nav="world">Wereldkaart</button>
     <button class="navbtn" data-nav="tools">Werkvormen</button>
   </nav>
 </header>
 
 <main class="main">
-<nav class="sectionNav" aria-label="Algebrawereld"><button data-nav="world">Werelden</button><button data-nav="tools">Werkvormen</button><span id="savedHint" role="status"></span></nav>
+<nav class="sectionNav" aria-label="Algebrawereld"><button data-nav="world">Wereldkaart</button><button data-nav="tools">Werkvormen</button><span id="savedHint" role="status"></span></nav>
 <section id="worldScreen" class="screen worldScreen"><div id="worldHost"></div></section>
 <section id="toolsScreen" class="screen toolsScreen hidden">
   <div class="worldHero"><div><div class="kicker">Samen, op papier of op maat</div><h1>Werkvormen</h1><p>Kies eerst wat je wilt doen. Op de wereldkaart volg je je eigen leerroute.</p></div></div>
@@ -82,23 +82,18 @@
     <div class="exerciseNav"><button id="prevExerciseBtn" class="softbtn" aria-label="Vorige oefening">←</button><button id="forwardExerciseBtn" class="softbtn" aria-label="Volgende oefening">→</button></div>
     <h1 id="taskGoal">Maak x vrij</h1>
     <span id="trainProgress" class="progress"></span>
-    <button id="watchDemoBtn" class="softbtn" aria-label="Bekijk een live voorbeeld met andere getallen">Kijk even mee</button><button id="backSetupBtn" class="softbtn" aria-label="Terug naar de wereldkaart">← Werelden</button>
+    <button id="backSetupBtn" class="softbtn" aria-label="Terug naar de wereldkaart">Wereld</button>
   </header>
   <div class="trainStage" aria-label="Jouw uitwerking">
     <div class="givenRow"><span>Gegeven</span><div id="givenEquation"></div></div>
     <div id="taskPrompt" class="taskPrompt">Werk tot x alleen staat.</div><div class="mathArea">
       <div class="equationWrap">
-        <div id="touchAnswer" hidden aria-label="Bouw je antwoord"></div><div id="derivationStack" class="derivationStack" aria-live="polite" aria-atomic="true"></div>
+        <div id="derivationStack" class="derivationStack" aria-live="polite" aria-atomic="true"></div>
       </div>
     </div>
   </div>
 
   <aside class="opRail">
-    <section id="liveLessonPanel" hidden aria-label="Live voorbeeld">
-      <p class="lessonLabel">VOORBEELD · ANDERE GETALLEN</p><p id="lessonCaption" role="status"></p><output id="lessonPhase"></output>
-      <div class="lessonPlayback"><button id="lessonPauseBtn" class="softbtn">Pauze</button><button id="lessonReplayBtn" class="softbtn">Herhaal</button></div>
-      <button id="lessonReturnBtn" class="primarybtn">Mijn opgave →</button>
-    </section>
     <div class="operationHead"><h2 id="operationTitle">Kies een bewerking</h2><button id="moreOperationsBtn" class="softbtn" aria-expanded="false" aria-controls="manualOperations">Andere</button></div>
     <form id="production" class="production hidden" novalidate></form><div id="contextOperations" class="contextOperations"></div>
     <div id="manualOperations" class="manualOperations hidden">
@@ -132,7 +127,7 @@
  <p id="historyAction"></p><div id="historyEquation" class="historyEquation"></div>
  <footer><button id="historyPrevBtn" class="softbtn" aria-label="Vorige uitwerkingsstap">←</button><button id="historyNextBtn" class="softbtn" aria-label="Volgende uitwerkingsstap">→</button></footer>
 </section>
-<section id="summaryScreen" class="screen summaryScreen hidden" aria-label="Missie afgerond"><div id="summaryContent"></div><footer><button id="summaryWorldBtn" class="softbtn">Leerroute</button><button id="summaryReplayBtn" class="softbtn">Nieuwe reeks ↻</button><button id="summaryNextBtn" class="primarybtn">Verder →</button></footer></section>
+<section id="summaryScreen" class="screen summaryScreen hidden" aria-label="Missie afgerond"><div id="summaryContent"></div><footer><button id="summaryWorldBtn" class="softbtn">Leerroute</button><button id="summaryNextBtn" class="primarybtn">Verder →</button></footer></section>
 
 <section id="previewScreen" class="screen preview hidden">
   <div class="previewHead">
@@ -149,4 +144,4 @@
 </main>
 </div>
 
-<script type="text/axioma-game" data-src="core.js"></script><script type="text/axioma-game" data-src="workbench-core.js"></script><script type="text/axioma-game" data-src="world-core.js"></script><script type="text/axioma-game" data-src="learning-core.js"></script><script type="text/axioma-game" data-src="journey-core.js"></script><script type="text/axioma-game" data-src="journey-paper.js"></script><script type="text/axioma-game" data-src="journey-view.js"></script><script type="text/axioma-game" data-src="motion-core.js"></script><script type="text/axioma-game" data-src="touch-core.js"></script><script type="text/axioma-game" data-src="trainer.js"></script></body></html>
+<script type="text/axioma-game" data-src="core.js"></script><script type="text/axioma-game" data-src="workbench-core.js"></script><script type="text/axioma-game" data-src="world-core.js"></script><script type="text/axioma-game" data-src="learning-core.js"></script><script type="text/axioma-game" data-src="world-view.js"></script><script type="text/axioma-game" data-src="trainer-legacy.js"></script></body></html>

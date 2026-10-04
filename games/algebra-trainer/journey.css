@@ -1,0 +1,84 @@
+/* Worlds and stops share one viewport. The illustration is decorative only. */
+.journeyGame .app{height:100dvh;min-height:0;grid-template-rows:auto minmax(0,1fr)}
+.journeyGame .main{height:100%;min-height:0;overflow:auto;display:block}
+.journeyGame .sectionNav{display:none}
+.journeyGame .screen{height:100%;min-height:0}
+.journeyGame .worldScreen{padding:0;overflow:hidden}
+#worldHost{height:100%;min-height:0}
+.journeyMap{height:100%;min-height:0;display:grid;grid-template-rows:35% 44px minmax(0,1fr) 72px 28px;background:#f7edda url('art/archipelago.png') center/100% 100% no-repeat;color:#234e51;padding:0 24px 4px}
+.worldShelf{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;min-height:0}
+/* Keep the fixed 44px restore control outside every world's touch target. */
+.journeyGame.topbar-collapsed .worldShelf{padding-top:max(52px,calc(env(safe-area-inset-top) + 50px))}
+.worldChoice{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;padding:4px 2px 0;border:0;background:transparent;position:relative;isolation:isolate;color:inherit;min-width:0}
+.worldChoice::before{content:'';position:absolute;inset:14% 3% 24%;border:2px solid transparent;border-radius:50%;z-index:-1}
+.worldChoice.selected::before{border-color:#b58b38;box-shadow:0 0 25px #c7a84b20}
+.worldName{font:600 clamp(13px,1.65vw,22px)/1.12 Georgia,serif;text-align:center;padding:2px 4px;background:#fff8e6a6;border-radius:3px}
+.worldChoice.selected .worldName{color:#64490f}
+.worldCount{font:12px/1.2 system-ui;color:#426263}
+.worldMeter{width:70%;max-width:130px;height:4px;background:#75979238;border-radius:10px;overflow:hidden}
+.worldMeter i{height:100%;display:block;background:#347467}
+.routeHeading{display:flex;align-items:center;gap:12px;border-bottom:1px solid #7d988333;margin:0 22px;min-width:0}
+.routeHeading h1{font:500 clamp(21px,2.2vw,30px)/1.15 Georgia,serif;margin:0;flex:1}
+.routeHeading span,.routeHeading output{font:13px system-ui;white-space:nowrap}
+.routeHeading output{color:#786020;margin-left:14px}
+.routeField{position:relative;min-height:0}
+.routeTrail{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.routeTrail path{fill:none;stroke:#496d65;stroke-width:2;stroke-dasharray:5 7;opacity:.55;vector-effect:non-scaling-stroke}
+.routeStops{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));height:100%;gap:6px;position:relative;align-items:start}
+.routeStops:has(li:nth-child(6):last-child){grid-template-columns:repeat(6,minmax(0,1fr))}
+.routeStops li{position:relative;height:100%;min-width:0}
+.routeStop{position:absolute;top:calc(29.5% - 28px + var(--rise)*19%);width:100%;padding:0 2px;display:flex;flex-direction:column;align-items:center;gap:6px;background:transparent;border:0;color:inherit;min-height:116px}
+.stopStone{width:56px;height:56px;border-radius:48% 53% 47% 52%;background:#fcf8ee;border:2px solid #66857b;box-shadow:2px 4px 0 #658b7933;display:grid;place-items:center;font:600 23px Georgia,serif;color:#31584e}
+.routeStop.selected .stopStone{background:#f4d98d;border-color:#b68a36;outline:3px solid #b58b3838;outline-offset:4px;color:#755322}
+.routeStop.finished .stopStone{background:#dfeadb;border-color:#507d66}
+.routeStop.independent .stopStone{color:#87651d;background:#ecdfae}
+.routeStop strong{font:600 clamp(12px,1.25vw,17px)/1.15 Georgia,serif;max-width:132px;text-align:center;background:#fff7e7bd;padding:2px 3px;border-radius:3px}
+.stopStatus{font:11px/1.2 system-ui;color:#446057;background:#fff7e7bd;padding:1px 3px;border-radius:3px;text-align:center}
+.routeDock{display:flex;align-items:center;gap:20px;background:#fbf7ecdf;border-top:1px solid #819c853d;padding:8px 18px;border-radius:3px;min-width:0}
+.chosenStop{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
+.chosenStop strong{font:600 19px/1.15 Georgia,serif}.chosenStop span{font:13px/1.25 system-ui}
+.routeDock .primarybtn{min-height:48px;background:#275f59;border-color:#275f59;flex:none;font-size:15px;border-radius:10px}
+.routeLegend{display:flex;justify-content:center;gap:24px;align-items:center;font:11px/1.2 system-ui;color:#416058}
+.comingWorld{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px}
+.comingWorld h2{font:500 26px Georgia;margin:0 0 8px}.comingWorld p{margin:0 0 16px;font:15px/1.35 system-ui;max-width:460px}
+.journeyGame .trainer .trainHead h1{font-family:Georgia,serif;font-weight:500}
+.journeyGame .trainHead h1 small{display:block;font:11px/1.25 system-ui;color:#637c75;margin-bottom:2px}
+.journeyGame .trainer{background:#f8f4e9 url('../rechten/rechtenwereld/assets/paper-grain.svg')}
+.journeyGame .summaryScreen{background:#f8f4e9}
+.summarySeal{font:28px Georgia;color:#986e1e;margin-right:10px}
+.summaryEvidence p{font-size:13px}
+.journeyGame .summaryTitle h1{font-family:Georgia,serif;font-weight:500}
+.summaryFacts{color:#426458;font:14px system-ui;margin:6px 0}
+.summaryScreen footer button{min-height:44px}
+html[data-mode=dark] .journeyMap{background-image:linear-gradient(#0d272bbb,#0d272bbb),url('art/archipelago.png');color:#ecf3df}
+html[data-mode=dark] .worldName,html[data-mode=dark] .routeStop strong,html[data-mode=dark] .stopStatus{background:#193a37dd;color:#ecf3df}
+html[data-mode=dark] .routeDock{background:#193a37ed}html[data-mode=dark] .worldCount,html[data-mode=dark] .routeLegend{color:#d0e3d7}
+html[data-mode=dark] .journeyGame .trainer,html[data-mode=dark] .journeyGame .summaryScreen{background:var(--paper)}
+@media(max-height:500px) and (min-width:601px){
+ .journeyMap{grid-template-rows:31% 32px minmax(0,1fr) 54px 22px;padding:0 8px 2px;background-size:100% 112%;background-position:center 40%}
+ .worldShelf{gap:4px}.worldName{font-size:14px}.worldCount{font-size:11px}.worldChoice{gap:2px}.worldChoice::before{inset:5% 2% 35%}
+ .routeHeading{margin:0 12px;gap:8px}.routeHeading h1{font-size:21px}.routeHeading span,.routeHeading output{font-size:11px}
+ .routeStop{gap:3px;min-height:90px}.stopStone{width:44px;height:44px;font-size:19px}.routeStop strong{font-size:13px}.stopStatus{font-size:11px}
+ .routeStop{top:calc(25% - 22px + var(--rise)*12%)}.stopStatus{display:none}.routeTrail{transform:scaleY(.632);transform-origin:center 17.3%}
+ .chosenStop strong{font-size:16px}.chosenStop span{font-size:12px}.routeDock{padding:4px 10px;gap:12px}.routeDock .primarybtn{min-height:44px;font-size:13px;padding:0 10px}
+ .routeLegend{font-size:10px;gap:16px}.comingWorld h2{font-size:21px}.comingWorld p{margin:0 0 8px;font-size:13px}
+ .summaryEvidence{gap:12px}.summaryEvidence p{font-size:11px;line-height:1.2;margin:4px 0}.summaryFacts{font-size:12px}
+ .journeyGame .trainer .trainHead{gap:6px}.journeyGame .trainHead h1 small{font-size:10px;margin:0}
+ .journeyGame .trainer .trainHead h1{font-size:17px}
+}
+@media(max-width:600px){
+ .journeyMap{grid-template-rows:18% 40px minmax(0,1fr) 106px 36px;padding:0 6px 4px;background-size:100% auto;background-position:center top}.routeField::before{content:"";position:absolute;left:0;right:0;bottom:0;height:130px;background:url("art/archipelago.png") center bottom/100% auto no-repeat;pointer-events:none}
+ .worldShelf{gap:2px}.worldName{font-size:12px;padding:2px 0}.worldCount{font-size:10px}.worldMeter{width:80%}.worldChoice{gap:3px}
+ .routeHeading{margin:0 6px;gap:6px}.routeHeading h1{font-size:clamp(17px,5vw,20px)}.routeHeading span,.routeHeading output{font-size:11px}.routeHeading output{margin-left:0}
+ .routeTrail{display:none}.routeStops,.routeStops:has(li:nth-child(6):last-child){grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:1fr 1fr;align-items:center;gap:4px 2px}
+ .routeStops li{height:auto}.routeStop{position:static}.routeStop{min-height:108px;gap:4px}.stopStone{width:44px;height:44px;font-size:19px}.routeStop strong{font-size:12px}.stopStatus{font-size:10px}
+ .routeDock{flex-direction:column;justify-content:center;gap:6px;padding:6px 10px}.chosenStop{flex:0;width:100%;text-align:center;gap:3px}.chosenStop strong{font-size:17px}.chosenStop span{font-size:11px;line-height:1.15}
+ .routeDock .primarybtn{min-height:44px;font-size:13px}.routeLegend{display:grid;grid-template-columns:1fr 1fr;gap:2px 12px;font-size:10px;text-align:center}
+ .worldChoice::before{inset:15% 0 35%}.comingWorld h2{font-size:23px}.comingWorld p{font-size:14px}
+}
+@media(prefers-reduced-motion:no-preference){.stopStone{transition:background .15s,outline .15s}.worldChoice::before{transition:border-color .15s}}
+@media print{.journeyGame .app,.journeyGame .main{height:auto!important;overflow:visible!important}.journeyGame .screen{height:auto!important}.journeyGame #worldScreen{display:none!important}}
+
+.missionQuestions,.missionAnswers{display:grid;gap:20px}.missionQuestions article{min-height:210px}.missionQuestions h3,.missionAnswers h3{font:600 14px/1.3 system-ui;margin:0 0 10px}.missionQuestions p,.missionAnswers p{font:12px/1.4 system-ui}.missionQuestions [data-tex],.missionAnswers [data-tex]{font-size:20px;line-height:1.7}.missionPaper .writeLines{margin-top:12px}
+.missionPaper .sheetHeader>div:first-child{flex:1;min-width:0}.missionPaper .sheetHeader h2{font-size:17pt;line-height:1.15}.missionPaper .sheetMeta{flex:none;font-size:8.5pt}.missionQuestions,.missionAnswers{padding-top:6mm}
+@media print{.journeyGame #leraarbob-header,.journeyGame leraarbob-topbar,.journeyGame .lb-header{display:none!important}.journeyGame .paperPage{height:266mm!important;min-height:0!important}.journeyGame .missionQuestions article{break-inside:avoid}.journeyGame .paperPage .pageFoot{left:0;right:0;bottom:0}}

@@ -1,0 +1,68 @@
+/* Whole terms on the workboard; no character keyboard. */
+#touchAnswer[hidden]{display:none!important}
+#touchAnswer{height:100%;display:flex;flex-direction:column;justify-content:center;gap:8px;min-width:0}
+.touch-writing .derivationStack{display:none}
+.touch-writing .equationWrap{display:block}
+.touch-writing .operationHead{display:none}
+.touchFields{display:flex;align-items:center;justify-content:center;gap:6px;min-width:0}
+.touchField{flex:1;min-width:0;max-width:48%;min-height:64px;padding:4px;background:transparent;border:0;border-bottom:2px solid #adbfb9;color:var(--ink)}
+.touchField[aria-pressed=true]{border-bottom-color:var(--blue);background:#d8eaf23d}
+.touchField small{display:block;font:12px system-ui;color:var(--muted);margin-bottom:2px}
+.touchFieldMath{display:block;font-size:32px;line-height:1.8}
+.touchFieldMath>.katex{font-size:1em}
+.touchEquals{font-size:30px}
+.touchContext{font-size:20px;text-align:center;line-height:1.8}
+.touchContext small{font:12px system-ui;color:var(--muted);margin-right:8px}
+.touchPrompt{font:12px/1.2 system-ui;text-align:center;color:var(--muted);margin:0}
+.production.touchProduction{gap:6px;width:100%}
+.touchProduction .faultChoices,.touchProduction .verifyChoice{gap:4px}
+.touchProduction>.primarybtn{width:100%;height:44px}
+@media(max-height:500px) and (min-width:601px){
+ body.touch-writing .trainer .opRail{padding:2px 4px}
+ .touchFieldMath{font-size:27px}.touchField{min-height:52px}.touchContext{font-size:17px}
+ #touchAnswer{gap:3px}.touchPrompt{font-size:11px}
+}
+@media(max-width:600px){
+ .touch-writing .opRail{max-height:none;overflow:visible}.touchFieldMath{font-size:27px}
+}
+@media(max-width:380px){
+ .trainer .trainHead{display:grid;grid-template-columns:88px minmax(0,1fr) 90px;gap:6px}
+ .trainer .trainHead h1{display:none}
+ .trainer .exerciseNav{gap:0}.trainer .exerciseNav button{width:44px;padding:0}
+ .trainer .trainHead #watchDemoBtn,.trainer .trainHead #backSetupBtn{width:100%;min-width:0;padding:0 4px;font-size:12px}
+ body.demonstrating .trainer .trainHead{grid-template-columns:minmax(0,1fr) 90px}
+ body.demonstrating .exerciseNav{display:none}
+ body.demonstrating .trainer .trainHead h1{display:block;font-size:17px}
+}
+@media print{#touchAnswer{display:none!important}}
+
+/* Contextual terms replace the character palette. */
+.termHead{display:flex;align-items:center;justify-content:space-between;gap:8px;font:14px system-ui}
+.termHead button{min-height:44px;font-size:13px!important;padding:0 8px!important}
+.termPalette{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.production .termTile{min-width:0;min-height:56px;padding:3px;font-size:27px}
+.termTile .katex{font-size:1em}
+.termLabel{font:14px/1.2 system-ui;margin:0;color:var(--muted)}
+.verifyCandidate{font-size:36px;text-align:center;line-height:1.8}
+.verifyCandidate small{display:block;font:12px system-ui;color:var(--muted)}
+#substituteBtn{min-height:64px;line-height:1.4;font:600 18px system-ui}
+.verifyProof{display:flex;flex-direction:column;gap:8px;min-width:0}
+.proofLine{display:flex;align-items:center;gap:10px;padding:2px 8px;border-left:3px solid transparent;min-width:0}
+.proofLine.active{border-color:var(--blue);background:#d8eaf23d}
+.proofLine small{flex:none;width:46px;font:13px system-ui;color:var(--muted)}
+.proofLine .touchFieldMath{min-width:0;flex:1;text-align:center;font-size:30px;line-height:1.8}
+.verifyChoice{display:flex;flex-direction:column;gap:8px}
+.production .verifyChoice button{min-height:56px;font-size:19px}
+.faultChoices{display:flex;flex-direction:column;gap:8px}
+.production .faultChoices button{min-height:56px;font-size:17px}
+@media(max-height:500px) and (min-width:601px){
+ body.touch-writing .trainer{grid-template-columns:minmax(0,1fr) minmax(240px,1fr)}
+ .production .termTile{min-height:44px;height:44px;font-size:22px}
+ .termPalette{gap:4px}.termHead{font-size:12px}.termHead button{font-size:12px!important}
+ .verifyProof{gap:3px}.proofLine .touchFieldMath{font-size:25px;line-height:1.7}
+ .verifyCandidate{font-size:28px}.production .verifyChoice button,.production .faultChoices button{min-height:44px}
+}
+@media(max-width:600px){
+ .production .termTile{height:48px;min-height:44px;font-size:24px}
+ .verifyCandidate{font-size:30px}.proofLine .touchFieldMath{font-size:27px}
+}

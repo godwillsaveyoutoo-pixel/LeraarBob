@@ -24,7 +24,7 @@ test('contextknoppen bieden tegengestelde bewerkingen en eerst delen zonder oplo
  const ex=routeFixture(EQ(Add(Mul(N(4),V()),N(6)),Add(Mul(N(2),V()),N(10))));
  const choices=W.contextOperations(ex,ex.start);
  assert.equal(choices.length,6);
- for(const [op,operand] of [['+',Mul(N(2),V())],['-',Mul(N(2),V())],['+',N(6)],['-',N(6)],['/',N(4)],['*',N(4)]]){
+ for(const [op,operand] of [['+',Mul(N(2),V())],['-',Mul(N(2),V())],['+',N(6)],['-',N(6)],['/',N(4)],['*',N(R(1,4))]]){
   assert(choices.some(s=>s.op===op&&C.exprSig(s.operand)===C.exprSig(operand)));
  }
  const divided=C.applyEquation(ex.start,'/',N(4));

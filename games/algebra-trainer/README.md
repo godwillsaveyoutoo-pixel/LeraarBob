@@ -1,118 +1,95 @@
-# Algebrawereld — leerlingenroute en werkvormen
+# Algebrawereld v0.4
 
-De leerling begint op de leerroute. De bestaande 17 vergelijkingstypes zijn
-verdeeld over zes leergebieden. Machtenberg, Wortelwoud en Getallensterren uit
-de bestaande lokale implementatie blijven afzonderlijk bereikbaar. De route
-bevat 39 haltes: 17 vergelijkingen, 6 stelsels en 16 bewerkingen.
+De platformversie uit `Axioma_Algebrawereld_v0.4 (3).zip` vervangt het eerdere
+algebraspel op dezelfde ingang: `games/algebra-trainer/`. De spel-id
+`algebra-trainer`, het centrale account en de bestaande opslagsleutels blijven
+behouden. De catalogus toont één hoofdkaart voor Algebrawereld.
 
-| Leergebied | Haltes, in volgorde | Wat de leerling oefent |
-| --- | --- | --- |
-| Inverse bewerkingen — Balansbaai | A2, A3, A1, A4 | Optellen, aftrekken, vermenigvuldigen en delen ongedaan maken op beide leden. |
-| Twee stappen plannen — Vergelijkingenstad | B1, B2 | Losse term en factor onderscheiden, een volgorde kiezen en de volgende regel produceren. |
-| Tekens begrijpen — Tekenatelier | B3 | Een negatieve x-term herkennen in b − ax = c; het teken van de factor behouden. |
-| Haakjes en groepen — Haakjeswerkplaats | C1, C2, D1, D3 | Een groep delen, distributiviteit uitvoeren, en binnen- en buitenfactoren onderscheiden. |
-| Breuken en delingsstructuur — Breukenbrug | B4, B5, D2 | Onderscheid tussen x/a + b en (ax+b)/c; de juiste termen met de noemer vermenigvuldigen. |
-| x aan beide leden — Overkant | E3, E2, E1 | x-termen verzamelen en verschillende geldige routes vergelijken. |
-| Stelsels — Kruispunt | Grafisch, substitutie, combinatie; één, geen en oneindig veel oplossingen | Twee vergelijkingen als één geheel behandelen en het gezamenlijke resultaat controleren. |
+## Speelbare route
 
-Elke vergelijkinghalte heeft vijf opdrachten: ontdekken met ondersteuning,
-begeleid kiezen of herstellen, zelf de volgende regel schrijven, zelfstandig
-oplossen en toepassen in een bouw-, distributie- of invulcontrole. Bij B1
-wordt na −6 op beide leden van 3x + 6 = 18 de regel 3x = 12 geproduceerd.
-Bij x aan beide leden is het strategische doel breuken vermijden. Beide
-voorgestelde bewerkingen blijven wiskundig geldig.
+De kaart toont vijf werelden. **Vergelijkingen** bevat zeven speelbare haltes;
+**Stelsels** bevat de bestaande zes haltes. Letters begrijpen, Rekenen met
+letters en Formules zijn zichtbaar als **Binnenkort** en tellen niet mee in
+de voortgang. Alle speelbare haltes zijn direct toegankelijk.
 
-C1 kan worden opgelost door de buitenfactor weg te delen. Dat is geen bewijs
-van uitgevoerde distributiviteit: de herstelopdracht en de transferopdracht
-vragen afzonderlijk om het uitwerken van elke term. De controle vergelijkt
-exacte lineaire coëfficiënten en constante termen, per lid. Een vergelijking
-met dezelfde oplossing alleen volstaat niet als antwoord op een voorspelling.
-Een nog gegroepeerd antwoord volstaat niet bij distributiviteit.
+| Vergelijkingenhalte | Oefenvormen |
+| --- | --- |
+| Eén bewerking | A2, A3, A1, A4 |
+| Twee stappen | B1, B2 |
+| Negatieve x-term | B3 |
+| x aan beide leden | E3, E2 |
+| Haakjes | C1, C2, D1, D3 |
+| Breuken | B4, B5, D2 |
+| Routes en controle | E1 |
 
-De route begint met gehele getallen. B3 introduceert negatieve termen en
-factoren; de breukenroute introduceert rationale getallen. De laatste B5-
-opdracht controleert een kommagetal door invullen. Vrij oefenen behoudt alle
-bestaande getalinstellingen en moeilijkheden.
+Elke nieuwe vergelijkinghalte bevat zes opdrachten: eerst ondersteuning,
+daarna zelf bouwen, oplossen, herstellen of controleren. De zeventien
+bestaande vergelijkingstypes blijven beschikbaar. Antwoorden worden exact
+gecontroleerd: dezelfde oplossing hebben volstaat niet als gevraagde
+tussenstap of uitwerking van haakjes.
 
-## Werkbord en ondersteuning
+Leerlingen bouwen tussenstappen met contextuele bouwstenen. Bij controle
+vervangen ze x door een voorgestelde waarde, berekenen beide leden en
+vergelijken de uitkomsten. **Kijk even mee** toont een bewegend voorbeeld met
+andere getallen; pauzeren, herhalen en terugkeren bewaren de eigen opgave.
+Een nieuwe ronde vermijdt de getoonde vragen van de vorige ronde.
 
-Tijdens actief oefenen passen opgave, opdracht, huidige toestand, bediening,
-hulp, stap terug en missiepositie in de viewport. De vorige stap staat erbij
-als de ruimte en de uitdrukking dat toelaten. Lange vergelijkingen kunnen met
-behoud van leesbaarheid over twee regels worden gezet. Het volledige werk
-staat in **Stappen**, als aparte schermtoestand met stapnavigatie.
+**Werkvormen** in het gedeelde menu biedt vrije reeksen, oefenbladen met
+verbetersleutel, stelsels, machten en wortels en de bestaande klasbattles.
+De stelselsmodule behoudt grafisch oplossen, substitutie en combinatie.
+De oudere wereldkaart blijft beschikbaar via `legacy.html`.
 
-Begeleide vergelijkingen bieden contextuele bewerkingen zonder ze op een
-juiste route te rangschikken. Bij zelfstandig oplossen kiest de leerling eerst
-een bewerking en daarna een waarde. Waardelijsten hebben paginering. Hulp
-begint klein en kan worden uitgebreid; gebruikte hulp wordt geregistreerd.
-Productievelden beginnen leeg. Een fout antwoord blijft herstelbaar.
+## Account, voortgang en navigatie
 
-Bij stelsels selecteert de leerling de actieve vergelijking door op haar
-regel te tikken. Bewerkingen, substitutie, combinatie en resultaatcontrole
-hebben aparte bedieningsfasen. Het oorspronkelijke stelsel blijft staan;
-beide actuele vergelijkingen blijven samen zichtbaar. Combinatie bewaart ook
-de geschaalde tussenberekening in de volledige uitwerking. Het grafiekvak is
-vierkant; I en II corresponderen met kleur, lijnpatroon en vergelijkinglabels.
-Coördinaten kunnen exact worden ingevoerd via één gekozen punt tegelijk;
-stap terug herstelt ook grafiekpunten. Een methodehalte registreert pas
-afronding na een daadwerkelijke grafische, substitutie- of combinatiestap.
+De ongewijzigde platformlaag laadt en bewaart spelgegevens via
+`AxiomaGame.storage`. Vergelijkingen gebruiken `leraarbob.algebra.v1`;
+stelsels gebruiken `leraarbob.stelsels.workshop.v1`.
 
-De gedeelde platformbalk behoudt account, XP, volledig scherm, weergave,
-menu en inklappen. De herstelknop heeft gereserveerde ruimte en de gekozen
-stand blijft behouden. Vrije reeksen, oefenbladen en klasbattles staan bij
-**Werkvormen**. De stelselbouwer en het huidige stelseloefenblad staan ook in
-het gedeelde menu.
+`chapterJourney` bewaart de nieuwe zeven haltes. Oude `journey`-records,
+missies met vijf opdrachten, tussenstappen en eerder verdiende XP blijven
+leesbaar. Begonnen oude missies worden hervat met hun eigen opdrachten.
+Vrije reeksen worden geparkeerd wanneer een leerling een missie begint en
+kunnen met hun uitwerking worden hervat.
 
-## Voortgang en opslag
+Een nieuwe halte levert eenmaal 30 XP op. Herhalen verdubbelt geen beloning.
+Een nieuwe halte waarvoor al een oude deelhalte is beloond geeft geen tweede
+beloning; de oude XP blijven behouden. Geoefend en zelfstandig gelukt blijven
+verschillende statussen. De catalogus telt 13 speelbare haltes zodra het
+nieuwe voortgangsrecord bestaat; oude records behouden hun eerdere telling
+tot de leerling de nieuwe versie opent.
 
-Bestaande sleutels en de accountbinding via `AxiomaGame.storage` blijven:
+De gedeelde `leraarbob-topbar` toont het account en echte XP, met directe
+knoppen voor volledig scherm, licht/donker, menu en inklappen. Inklappen en
+opnieuw openen bewaren de oefening; de keuze blijft bij herladen behouden.
+De herstelknop heeft eigen ruimte op de wereldkaart, ook in een korte
+liggende viewport.
 
-- `leraarbob.algebra.v1`: oude selectie, getalinstellingen, uitwerking,
-  `solvedTypes`, `worldLegacy`, `journey`, nieuwe `runs` en `freeSession`.
-- `leraarbob.stelsels.workshop.v1`: oude reeks en papierinstellingen,
-  `journey`, nieuwe `systemRuns`, actieve rij, bedieningsfase en invoer.
-- `leraarbob.bewerkingen.v1`: ongewijzigde bewerkingenengine en haar voortgang.
-
-Nieuwe missies hebben vijf bewijsregistraties met opdrachtvorm, leerdoel,
-afronding, fouten en hulp. Het eindscherm onderscheidt zelfstandig werk van
-ondersteund werk en beveelt herhalen of de volgende halte aan. Afronding wordt
-niet als beheersing aangeduid. Tijd en aantallen klikken spelen geen rol.
-
-Een halte geeft eenmaal de bestaande 30 XP. Een oude beloning blijft behouden
-en wordt bij een nieuwe missie niet verdubbeld. Oude geoefende vormen en
-oudere reeksen van drie oefeningen blijven toegankelijk, maar krijgen geen
-nieuw bewijslabel. Oude registraties worden niet tot beheersing gepromoveerd.
-De platformcatalogus en het gedeelde spelrecord tellen 23 vergelijking- en
-stelselhaltes alleen na vijf afgeronde opdrachten. De 16 bewerkingenhaltes
-blijven in hun bestaande afzonderlijke spelrecord. De XP-lezer behoudt ook de
-eerder verdiende beloningen.
-
-Een begonnen missie wordt rechtstreeks hervat bij de eerste onafgewerkte
-opdracht. Meerdere begonnen haltes blijven bewaard. Een bestaande vrije
-vergelijkingenreeks wordt apart geparkeerd wanneer de leerling een missie
-begint; **Hervat mijn vrije reeks** herstelt ook haar stappen en papierkeuzes.
-
-## Controle
+## Verificatie
 
 ```sh
-node --test tests/algebra-learning.test.cjs tests/algebra-trainer.test.cjs tests/algebra-world.test.cjs tests/algebra-class.test.cjs tests/bewerkingen-trainer.test.cjs tests/stelsels-workshop.test.cjs tests/catalog-progress.test.cjs tests/catalog.test.cjs
+node --test tests/algebra-v04-journey.test.cjs tests/algebra-v04-motion.test.cjs tests/algebra-v04-choices.test.cjs tests/algebra-trainer.test.cjs tests/algebra-learning.test.cjs tests/algebra-world.test.cjs tests/algebra-class.test.cjs tests/bewerkingen-trainer.test.cjs tests/stelsels-workshop.test.cjs tests/catalog.test.cjs tests/catalog-progress.test.cjs
 node scripts/build-catalog.cjs --check
 ```
 
-De browserproeven starten zelf een tijdelijke lokale server en gebruiken
-geïsoleerde fictieve accounts. Stel `NODE_PATH` in op de map met Playwright en
-`CHROMIUM_PATH` op de Chromium-binary:
+Browserproeven starten een tijdelijke lokale server en blokkeren externe
+verzoeken. Installeer Playwright of stel `NODE_PATH` in op de map waarin het
+beschikbaar is. `ALGEBRA_CHROMIUM_PATH` kan een bestaande Chromium-binary
+aanwijzen; `ALGEBRA_SCREENSHOTS` kiest de uitvoermap onder `/tmp`.
 
 ```sh
-node tests/algebra-learning-browser.cjs
-node tests/algebra-workbench-browser.cjs
-node tests/algebra-world-browser.cjs
-node tests/stelsels-workshop-browser.cjs
+node tests/algebra-v04-browser.cjs
+node tests/algebra-v04-touch-browser.cjs
+node tests/algebra-v04-lesson-browser.cjs
+node tests/algebra-v04-platform-browser.cjs
 ```
 
-De laatste ingang voert `stelsels-layout-browser.cjs` uit. Die controleert de
-fasebediening, drie methodes, bijzondere oplossingen, tussenberekeningen,
-herladen, oefenbladen en PDF. De nieuwe schermcontrole controleert ook
-scrollende deelvakken, afgeknipte wiskunde, overlappende bediening, 44px-
-aanraakdoelen en de herstelknop. Zie het [opleververslag](../../docs/algebra-leerroute/README.md).
+De proeven controleren alle zeven haltes via echte bediening, correcte en
+foute antwoorden, herladen, oude voortgang, eenmalige XP, nieuwe vragen,
+oefenbladen en live voorbeelden. De platformproef controleert ook de
+startpagina, de toegang tot Stelsels en beide standen van de bovenbalk op
+1280×800, 780×360, 640×360, 390×844 en 320×700.
+
+Alleen de productiebron en vereiste spelassets zijn geïmporteerd. De losse
+offline-HTML, screenshots en vervangingspagina's voor andere spellen uit de
+zip horen niet bij deze publicatie. Er zijn geen nieuwe backendfuncties of
+databasemigraties nodig.

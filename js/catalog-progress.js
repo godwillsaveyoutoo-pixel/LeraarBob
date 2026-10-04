@@ -5,13 +5,25 @@
   function summarize(game, saved) {
     const state = saved?.state;
     if (game.id === 'algebra-trainer') {
+      try{
+        const a=JSON.parse(state?.storage?.['leraarbob.algebra.v1']||'null');
+        if(a?.chapterJourney?.version===1){
+          const groups=[['route-inverse',['A2','A3','A1','A4']],['route-two',['B1','B2']],['route-sign',['B3']],['route-both',['E3','E2']],['route-brackets',['C1','C2','D1','D3']],['route-fractions',['B4','B5','D2']],['route-check',['E1']]];
+          const completed=new Set();
+          for(const [id,skills] of groups){const e=a.chapterJourney.stops?.[id];if(e?.finished===true&&e.evidence?.length===6&&e.evidence.every(r=>r.done===true)||skills.every(k=>a.journey?.topics?.['eq-'+k]?.finished===true))completed.add(id);}
+          const sys=JSON.parse(state?.storage?.['leraarbob.stelsels.workshop.v1']||'null');
+          for(const [id,e] of Object.entries(sys?.journey?.topics||{}))if(id.startsWith('sys-')&&e.finished===true&&e.evidence?.length===5&&e.evidence.every(r=>r.done===true))completed.add(id);
+          const done=completed.size,total=13,started=Object.values(a.runs||{}).some(r=>r?.results?.some(e=>e.done))||(a.solvedTypes||[]).length>0||Object.keys(a.journey?.topics||{}).length>0;
+          return {status:done===total?'complete':done||started?'started':'saved',label:`${done} van ${total} haltes`,detail:'Vergelijkingen en Stelsels. Geoefend en zelfstandig gelukt zijn apart zichtbaar op de kaart.',completed:done,value:done,max:total};
+        }
+      }catch{}
       const completed=new Set();
       for(const key of ['leraarbob.algebra.v1','leraarbob.stelsels.workshop.v1']){
         try{const journey=JSON.parse(state?.storage?.[key]||'null')?.journey;
           for(const [id,e] of Object.entries(journey?.topics||{}))if(/^(eq-|sys-)/.test(id)&&e.finished===true&&Array.isArray(e.evidence)&&e.evidence.length===5&&e.evidence.every(r=>r.done===true))completed.add(id);
         }catch{}
       }
-      const total=count(game.progressTotal)||23,done=Math.min(total,completed.size);
+      const total=23,done=Math.min(total,completed.size);
       return {status:done===total?'complete':done?'started':state?'saved':'new',label:`${done} van ${total} haltes`,detail:done===total?'✓ Afgerond':state?'Nieuwe missies tellen na vijf opdrachten; eerdere oefeningen blijven bewaard.':'Begin je eerste missie.',completed:done,value:done,max:total};
     }
     if (game.progressType === 'world') {
@@ -64,6 +76,7 @@
           }
         }catch{}
       }
+      if(game.id==='algebra-trainer')try{const c=JSON.parse(state?.storage?.['leraarbob.algebra.v1']||'null')?.chapterJourney;if(c?.version===1){hasJourney=true;for(const [id,e] of Object.entries(c.stops||{}))if(e?.rewarded===true&&e.finished===true&&e.xp===30&&e.evidence?.length===6&&e.evidence.every(r=>r.done===true))awards.set(id,30);}}catch{}
       return hasJourney?[...awards.values()].reduce((sum,n)=>sum+n,0):null;
     }
     if (game.id === 'vectoren-trainer') {

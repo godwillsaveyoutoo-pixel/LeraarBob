@@ -40,21 +40,20 @@ function mission(skill,seed=Date.now()){
   guided.kind='routes';const st=guided.ex.steps[0],other={op:st.op==='/'?'*':st.op==='*'?'/':st.op==='-'?'+':'-',operand:st.operand};
   guided.routes=[st,other];guided.prompt='Welke eerste stap maakt de structuur eenvoudiger?';guided.goal='Kies een doelgerichte stap; beide bewerkingen zijn geldig.';
  }
- predict.kind='predict';predict.operation=predict.ex.steps[0];predict.expected=applyEquation(predict.ex.start,predict.operation.op,predict.operation.operand);predict.prompt='Schrijf de regel na '+operationText(predict.operation,predict.ex.policy)+' op beide leden.';predict.goal='Produceer beide leden van de volgende regel.';
+ predict.kind='predict';predict.operation=predict.ex.steps[0];predict.expected=applyEquation(predict.ex.start,predict.operation.op,predict.operation.operand);predict.prompt='Bouw de regel na '+operationText(predict.operation,predict.ex.policy)+' op beide leden.';predict.goal='Produceer beide leden van de volgende regel.';
  tasks[3].prompt='Los op via een geldige route die jij kiest.';
  if(['B1','B2','A1','A2','A3'].includes(skill)){
-  transfer.kind='build';transfer.x=R(skill==='B1'?3:2+seed%4);transfer.factor=R(skill==='B1'?4:2+seed%3);transfer.sign=['B2','A3'].includes(skill)?-1:1;transfer.expectedNumber=R(skill==='B1'?6:1+seed%6);transfer.rhs=transfer.factor.mul(transfer.x).add(transfer.expectedNumber.mul(R(transfer.sign)));transfer.prompt='Vul het vak zodat x = '+transfer.x.n+' de oplossing is.';transfer.display=transfer.factor.n+'x '+(transfer.sign===-1?'−':'+')+' \\square = '+transfer.rhs.n;transfer.goal='Bouw een vergelijking met de gevraagde oplossing.';
+  transfer.kind='build';transfer.x=R(2+seed%4);transfer.factor=R(2+Math.floor(seed/4)%4);transfer.sign=['B2','A3'].includes(skill)?-1:1;transfer.expectedNumber=R(1+Math.floor(seed/16)%9);transfer.rhs=transfer.factor.mul(transfer.x).add(transfer.expectedNumber.mul(R(transfer.sign)));transfer.prompt='Vul het vak zodat x = '+transfer.x.n+' de oplossing is.';transfer.display=transfer.factor.n+'x '+(transfer.sign===-1?'−':'+')+' \\square = '+transfer.rhs.n;transfer.goal='Bouw een vergelijking met de gevraagde oplossing.';
  }else if(['C1','C2','D1','D3'].includes(skill)){
-  transfer.kind='expand';transfer.expected=expandEquation(transfer.ex.start);transfer.prompt='Werk de haakjes uit. Schrijf de volledige nieuwe regel.';transfer.goal='Voer distributiviteit zelf uit; alleen oplossen is hier onvoldoende.';
+  transfer.kind='expand';transfer.expected=expandEquation(transfer.ex.start);transfer.prompt='Werk de haakjes uit. Bouw de volledige nieuwe regel.';transfer.goal='Voer distributiviteit zelf uit; alleen oplossen is hier onvoldoende.';
  }else{
-  transfer.kind='verify';transfer.proposed=transfer.ex.solution.add(R(seed%2?1:0));transfer.prompt=skill==='B5'?'Controleer het kommagetal: bereken beide leden.':'Klopt deze voorgestelde oplossing? Bereken beide leden.';transfer.goal='Controleer een oplossing door exact in te vullen.';
- }
- // Predict after −6 in the reference stop. Keep discovery/guided/solo varied.
- if(skill==='B1'){
-  const p=predict.ex.policy,start=EQ(Add(Mul(N(3),V()),N(6)),N(18));const steps=[{op:'-',operand:N(6)},{op:'/',operand:N(3)}],states=[start];for(const st of steps)states.push(applyEquation(states.at(-1),st.op,st.operand));predict.ex={...predict.ex,start,steps,states,solution:R(4),policy:p};predict.operation={op:'-',operand:N(6)};predict.expected=applyEquation(start,'-',N(6));predict.prompt='Schrijf de regel na −6 op beide leden.';
+  transfer.kind='verify';transfer.proposed=transfer.ex.solution.add(R(seed%2?1:0));transfer.prompt='Is deze x-waarde een oplossing? Vul haar in en vergelijk links en rechts.';transfer.goal='Controleer een oplossing door exact in te vullen.';
  }
  if(['E1','E2','E3'].includes(skill)){
-  guided.ex.start=EQ(Add(Mul(N(4),V()),N(6)),Add(Mul(N(2),V()),N(10)));guided.routes=[{op:'/',operand:N(4)},{op:'-',operand:Mul(N(2),V())}];guided.goal='Kies een eerste stap die breuken vermijdt.';guided.prompt='Welke route houdt alle coëfficiënten geheel?';guided.strategy='integers';
+  const a=3+seed%4,b=1+Math.floor(seed/4)%(a-1),left=1+Math.floor(seed/16)%8,x=R(2+Math.floor(seed/128)%5);
+  const start=EQ(Add(Mul(N(a),V()),N(left)),Add(Mul(N(b),V()),N(R(a-b).mul(x).add(R(left)))));
+  const steps=[{op:'-',operand:Mul(N(b),V())},{op:'-',operand:N(left)},{op:'/',operand:N(a-b)}],states=[start];for(const st of steps)states.push(applyEquation(states.at(-1),st.op,st.operand));
+  guided.ex={...guided.ex,start,steps,states,solution:x};guided.routes=[{op:'/',operand:N(a)},{op:'-',operand:Mul(N(b),V())}];guided.goal='Kies een eerste stap die breuken vermijdt.';guided.prompt='Welke route houdt alle coëfficiënten geheel?';guided.strategy='integers';
  }
  return {version:2,skill,seed,index:0,tasks,results:tasks.map(t=>({kind:t.kind,goal:t.goal,done:false,supported:t.guided,errors:0,hints:0,input:'',left:'',right:'',choice:''})),completed:false};
 }
@@ -66,7 +65,7 @@ function validate(task,values){
   return {ok:true,message:task.kind==='predict'?causal(task.ex.start,task.expected,task.operation.op,task.operation.operand): 'Juist. Elke term van de groep is correct vermenigvuldigd.'};
  }
  if(task.kind==='routes'){
-  const st=task.routes[Number(values.choice)];if(!st)return {ok:false,message:'Kies een route.'};const after=applyEquation(task.ex.start,st.op,st.operand);
+  if(!/^[01]$/.test(String(values.choice)))return {ok:false,message:'Kies een route.'};const st=task.routes[Number(values.choice)];if(!st)return {ok:false,message:'Kies een route.'};const after=applyEquation(task.ex.start,st.op,st.operand);
   const integral=eq=>[...Object.values(affine(eq.l)),...Object.values(affine(eq.r))].every(q=>q.d===1);
   const ok=task.strategy==='integers'?integral(after):C.equationComplexity(after)<C.equationComplexity(task.ex.start);
   return {ok,valid:true,message:ok?'Deze geldige stap past bij je doel.':'Dit is een geldige bewerking. Ze past minder goed bij het gevraagde doel.'};

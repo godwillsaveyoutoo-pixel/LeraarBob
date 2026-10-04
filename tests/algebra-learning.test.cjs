@@ -7,7 +7,7 @@ test('six areas cover the 17 existing equation forms with explicit learning goal
  for(const t of C.TYPES){assert(L.goals[t.id]);const run=L.mission(t.id,556);assert.equal(run.tasks.length,5);assert.equal(run.tasks[0].kind,'solve');assert.equal(run.tasks[3].kind,'solve');assert.equal(run.tasks[2].kind,'predict');assert(run.tasks.some(t=>!['solve','predict'].includes(t.kind)));assert(!run.tasks[2].guided);assert(!run.results[2].input);}
 });
 test('prediction checks members, not just the solution set',()=>{
- const task=L.mission('B1',88).tasks[2];assert(L.validate(task,{input:'3x=12'}).ok);assert(L.validate(task,{input:'12=3*x'}).ok);assert(!L.validate(task,{input:'x=4'}).ok);assert(!L.validate(task,{input:'3x=18'}).ok);
+ const task=L.mission('B1',88).tasks[2];task.ex={...task.ex,start:L.parseEquation('3x+6=18')};task.operation={op:'-',operand:C.N(6)};task.expected=L.parseEquation('3x=12');assert(L.validate(task,{input:'3x=12'}).ok);assert(L.validate(task,{input:'12=3*x'}).ok);assert(!L.validate(task,{input:'x=4'}).ok);assert(!L.validate(task,{input:'3x=18'}).ok);
  assert(L.sameExpr(L.parseExpression('(3x+6)/2'),L.parseExpression('1,5x+3')));
  assert(!L.sameExpr(L.parseExpression('x/2+3'),L.parseExpression('(x+3)/2')));
  assert.throws(()=>L.parseExpression('x/0'));assert.throws(()=>L.parseExpression('x*x'));assert.throws(()=>L.parseExpression('x/x'));assert.throws(()=>L.parseExpression('alert(1)'));

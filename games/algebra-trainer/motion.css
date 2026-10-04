@@ -1,0 +1,53 @@
+/* The lesson uses the existing workboard; it never owns pupil progress. */
+.trainer .motion-new{color:#126b91;background:#d8eaf280;border-radius:3px}
+.trainer .motion-zero{color:#946214;animation:zero-away 1.05s ease both}
+.trainer .motion-zero-kept{color:#946214}
+html[data-mode=dark] .trainer .motion-new{color:#96d8ef;background:#214a5770}
+html[data-mode=dark] .trainer .motion-zero{color:#e6c278}
+html[data-mode=dark] .trainer .motion-zero-kept{color:#e6c278}
+.trainer .derivationStack{gap:8px}
+.trainer .previousEquation{width:100%;opacity:.74;font-size:24px;line-height:1.6}
+.trainer .previousEquation>.katex{display:inline-block;font-size:1em;line-height:inherit}
+.trainer .motion-current .derivationMath{animation:math-settle .2s ease both}
+.trainer .motion-shift{animation:step-up .38s ease both}
+.trainer .motion-arrive{animation:step-in .38s ease both}
+@keyframes step-up{from{transform:translateY(var(--step-distance,55px))}to{transform:translateY(0)}}
+@keyframes step-in{from{translate:0 24px}to{translate:0 0}}
+@keyframes math-settle{from{opacity:.55}to{opacity:1}}
+@keyframes zero-away{0%,65%{opacity:1;transform:scale(1)}100%{opacity:.22;transform:scale(.85)}}
+#watchDemoBtn{font:600 14px system-ui;min-height:44px;padding:0 9px;white-space:nowrap}
+#liveLessonPanel{display:flex;flex-direction:column;gap:10px;min-width:0}
+#liveLessonPanel[hidden]{display:none!important}
+.lessonLabel{font:600 12px system-ui;color:var(--muted);letter-spacing:.03em;margin:0}
+#lessonCaption{font:17px/1.3 system-ui;margin:0;min-height:44px}
+#lessonPhase{font:12px/1.25 system-ui;color:var(--muted)}
+.lessonPlayback{display:flex;gap:6px;flex-wrap:wrap}
+.lessonPlayback button{font:14px system-ui;min-height:44px;padding:0 8px}
+#lessonReturnBtn{min-height:44px;font:600 15px system-ui;padding:0 8px}
+body.demonstrating .opRail>:not(#liveLessonPanel){display:none!important}
+body.demonstrating .trainFooter{display:none}
+body.demonstrating .exerciseNav{visibility:hidden}
+body.demonstrating .givenRow{display:none}
+body.demonstrating .trainStage{grid-template-rows:auto minmax(0,1fr)}
+body.demonstrating #derivationStack{pointer-events:none}
+body.demonstrating .trainer{grid-template-rows:48px minmax(0,1fr) 8px}
+body.step-playing .opRail{pointer-events:none;opacity:.65}
+body.step-playing #checkBtn,body.step-playing #nextBox{visibility:hidden}
+body.lesson-paused .motion-zero,body.lesson-paused .motion-current .derivationMath,body.lesson-paused .motion-shift,body.lesson-paused .motion-arrive{animation-play-state:paused}
+@media(max-height:500px) and (min-width:601px){
+ #watchDemoBtn{font-size:12px;padding:0 6px}.trainer .trainHead{gap:6px}
+ body.demonstrating .trainer{grid-template-columns:minmax(0,1.65fr) minmax(215px,1fr);grid-template-rows:44px minmax(0,1fr) 8px}
+ #liveLessonPanel{gap:6px}#lessonCaption{font-size:15px;min-height:38px}.lessonPlayback button{font-size:12px}
+ #lessonReturnBtn{font-size:13px}.lessonLabel,#lessonPhase{font-size:11px}
+ body.demonstrating .trainer .derivationMath{font-size:32px;line-height:1.8}
+ body.demonstrating .previousEquation{font-size:22px;line-height:1.7}
+}
+@media(max-width:600px){
+ .trainer .trainHead #trainProgress{display:none}#watchDemoBtn{font-size:12px;padding:0 6px}
+ body.demonstrating .trainer{grid-template-rows:44px minmax(0,1fr) auto 8px}
+ #liveLessonPanel{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+ #lessonCaption{grid-column:1/-1;min-height:0;font-size:16px}.lessonLabel{grid-column:1}#lessonPhase{grid-column:2;text-align:right}
+ .lessonPlayback{grid-column:1}#lessonReturnBtn{grid-column:2;min-width:0;font-size:13px}.lessonPlayback button{font-size:12px;padding:0 6px}
+}
+@media(prefers-reduced-motion:reduce){.trainer .motion-zero,.trainer .motion-current .derivationMath,.trainer .motion-shift,.trainer .motion-arrive{animation:none!important}}
+@media print{#liveLessonPanel,#watchDemoBtn{display:none!important}}

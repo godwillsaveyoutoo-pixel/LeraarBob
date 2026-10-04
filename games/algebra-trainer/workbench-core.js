@@ -23,8 +23,11 @@ function contextOperations(ex,eq){
     if(usedShifts.size===2)break;
   }
   const scalars=[...left,...right].filter(containsVar).map(outerScalar).filter(q=>q&&!q.isZero()&&!q.eq(1));
-  const scalar=scalars[0]||R(2);
-  add('/',N(scalar));add('*',N(scalar));
+  const scalar=scalars[0];
+  // Undo a factor in either notation: ÷ a and × (1/a).
+  // Reserve both places before filling the compact menu with extra choices.
+  if(scalar){add('/',N(scalar));add('*',N(C.reciprocal(scalar)));}
+  else{add('/',N(2));add('*',N(2));}
   for(const op of ['/','*','-','+'])for(const operand of candidateOperands(ex,eq,op)){
     if(choices.length>=6)break;
     if(isNum(operand)&&operand.q.eq(1))continue;

@@ -2,7 +2,7 @@
 'use strict';
 const {gcd,lcm,Rat,R,ratKey,reciprocal,terminatingPlaces,N,V,Add,Mul,Div,EQ,cloneExpr,cloneEq,isNum,isVar,num,linearCoeff,makeLinearTerm,simplify,negExpr,simplifyEq,exprSig,eqSig,exprNodeCount,equationComplexity,containsVar,countType,solvedEquation,operandIsNumeric,applyEquation,decimalText,hashRat,autoNumberFormat,ratLatex,splitSign,latexExpr,latexEq,operationLatex,fallbackText,texHTML,renderMathNodes,TYPES,LEVEL_META,INT_COEFF,INT_SHIFT,FRAC_COEFF,FRAC_SHIFT,DEC_COEFF,DEC_SHIFT,pick,chance,currentPolicy,pickFmt,pickParam,pickSolution,numNodeFromParam,nice,rhsFmt,positiveDifferentCoeffs,step,generateExercise,topTerms,absExpr,exprIsZero,collectNumericDenominators,outerScalar,operandRepresentable,canonicalStepAt,candidateOperands}=window.AlgebraCore;
 const {contextOperations,checkProgress}=window.AlgebraWorkbench;
-const L=AlgebraLearning;let runs={},learningRun=null,freeSession=null,historyIndex=0;
+const L=AlgebraLearning,J=AlgebraJourney;let chapterJourney=J.normalize(null);let runs={},learningRun=null,freeSession=null,historyIndex=0;
 const selection={};
 TYPES.forEach(t=>selection[t.id]={checked:t.level==='beginner',count:t.level==='beginner'?2:1});
 let activeLevel='beginner';
@@ -18,6 +18,10 @@ let settingsDirty=true;
 let screen='world',restoring=false,perExercise={},solvedTypes=new Set();
 let journey=AlgebraWorld.normalize(null),mission=null,worldView=null,worldLegacy=[],mapLocation=null;
 const SAVE_KEY='leraarbob.algebra.v1';
+let lesson=null,motionFrame=null;
+let touchField="lhs";
+const touchKinds=["predict","repair","expand","build","verify"];
+const motionPlayer=new AlgebraMotion.Player(onMotionFrame,onMotionFinished);
 
 const $=s=>document.querySelector(s);
 const setupScreen=$('#setupScreen'),trainerScreen=$('#trainerScreen'),previewScreen=$('#previewScreen');
@@ -85,10 +89,15 @@ function makeSet(){
   const chosen=TYPES.filter(t=>selection[t.id].checked);
   if(!chosen.length){showSetupMessage('Kies minstens één vraagtype.',true);return null}
   if(chosen.reduce((n,t)=>n+selection[t.id].count,0)>60){showSetupMessage('Kies maximaal 60 oefeningen per reeks.',true);return null}
-  const policy=currentSettings(),out=[];
+  const policy=currentSettings(),out=[],oldQuestions=new Set(activeSet.map(e=>eqSig(e.start)));
   try{
     chosen.forEach(t=>{
-      for(let i=0;i<selection[t.id].count;i++)out.push(generateExercise(t.id,policy,i));
+      for(let i=0;i<selection[t.id].count;i++){
+        let ex;
+        for(let tries=0;tries<256;tries++){ex=generateExercise(t.id,policy,i);if(!oldQuestions.has(eqSig(ex.start)))break;}
+        if(oldQuestions.has(eqSig(ex.start)))throw Error('Geen nieuwe combinatie.');
+        out.push(ex);
+      }
     });
   }catch(err){
     showSetupMessage('De generator vond geen nette combinatie. Probeer opnieuw of kies minder uitzonderlijke opties.',true);
@@ -107,6 +116,7 @@ function makeSet(){
    9. NAVIGATIE
    ============================================================ */
 function showScreen(name){
+  if(lesson||motionPlayer.active){stopPresentation();if(trainerStates.length)renderTrainer();}
   screen=name;document.body.dataset.screen=name;
   $('#worldScreen').classList.toggle('hidden',name!=='world');
   $('#toolsScreen').classList.toggle('hidden',name!=='tools');
@@ -150,35 +160,181 @@ function actionLatex(op,operand,policy){
 }
 function task(){return learningRun?.tasks[trainerIndex]||null}
 function result(){return learningRun?.results[trainerIndex]||null}
-function renderDerivation(){
-  const ex=currentExercise();if(!ex)return;const t=task(),eq=currentEquation();
-  $('#givenEquation').dataset.mathTex=t?.display||latexEq(ex.start,ex.policy);$('#givenEquation').innerHTML=texHTML($('#givenEquation').dataset.mathTex);
-  const shown=t?.kind==='repair'?t.fault:t?.kind==='build'?null:eq;
-  const previous=trainerStates.length>1?trainerStates.at(-2):null;
-  derivationStack.innerHTML=(previous?`<div class="previousEquation"><span>Vorige · ${escapeHTML(stepText(trainerStepLog.at(-1).op,trainerStepLog.at(-1).operand,ex.policy))}</span>${texHTML(latexEq(previous,ex.policy))}</div>`:'')+`<div class="derivationLine current"><div class="derivationAction">${t?.kind==='repair'?'Foute regel':t?.kind==='verify'?'Voorgesteld: x = '+fallbackText(ratLatex(t.proposed,ex.policy)):t?.kind==='predict'?escapeHTML(stepText(t.operation.op,t.operation.operand,ex.policy)):'Nu'}</div><div class="derivationMath">${shown?texHTML(latexEq(shown,ex.policy)):texHTML(t.display)}</div></div>`;
-  derivationStack.querySelector('.derivationMath').dataset.mathTex=shown?latexEq(shown,ex.policy):t.display;fitMath();
+function motionHTML(tex){
+ if(window.katex)return window.katex.renderToString(tex,{throwOnError:false,strict:'ignore',trust:context=>context.command==='\\htmlClass'});
+ return texHTML(tex);
 }
-function fitMath(){requestAnimationFrame(()=>{for(const el of document.querySelectorAll('#givenEquation,.derivationMath,.previousEquation,#historyEquation')){
+function renderDerivation(animateNew=false){
+ const ex=currentExercise();if(!ex)return;const t=task(),eq=currentEquation();
+ $('#givenEquation').dataset.mathTex=t?.display||latexEq(ex.start,ex.policy);$('#givenEquation').innerHTML=texHTML($('#givenEquation').dataset.mathTex);
+ if(t&&touchKinds.includes(t.kind)&&!reminderOpen){renderTouchAnswer();return;}
+ $('#touchAnswer').hidden=true;
+ const shown=t?.kind==='repair'?t.fault:t?.kind==='build'?null:eq;
+ const previous=trainerStates.length>1?trainerStates.at(-2):null;
+ const tex=motionFrame?.tex||(shown?latexEq(shown,ex.policy):t.display);
+ const previousTex=previous?latexEq(previous,ex.policy):null;
+ drawSteps(previousTex,tex,motionFrame?'Nieuwe stap':t?.kind==='repair'?'Foute regel':t?.kind==='verify'?'Voorgestelde oplossing':t?.kind==='predict'?stepText(t.operation.op,t.operation.operand,ex.policy):'Stap '+(trainerStates.length-1),animateNew);
+}
+function drawSteps(previous,tex,label,shift=false){
+ const old=derivationStack.querySelector('.derivationMath')?.getBoundingClientRect();
+ derivationStack.innerHTML=(previous?'<div class="previousEquation'+(shift?' motion-shift':'')+'"><span>Vorige stap</span>'+motionHTML(previous)+'</div>':'')+'<div class="derivationLine current motion-current'+(shift?' motion-arrive':'')+'"><div class="derivationAction">'+escapeHTML(label)+'</div><div class="derivationMath"></div></div>';
+ const math=derivationStack.querySelector('.derivationMath');math.dataset.mathTex=tex;math.innerHTML=motionHTML(tex);
+ if(shift&&old){const previousNode=derivationStack.querySelector('.previousEquation');if(previousNode)previousNode.style.setProperty('--step-distance',Math.max(0,old.top-previousNode.getBoundingClientRect().top)+'px');}
+ fitMath();
+}
+function stopPresentation(){
+ motionPlayer.cancel();lesson=null;motionFrame=null;document.body.classList.remove('demonstrating','step-playing','lesson-paused');$('#liveLessonPanel').hidden=true;derivationStack.setAttribute('aria-live','polite');$('#watchDemoBtn').hidden=false;
+}
+function onMotionFrame(frame,index){
+ motionFrame=frame;
+ if(lesson){lesson.frame=frame;renderLesson(!!frame.shift);}
+ else{feedback.className='feedback';feedback.textContent=frame.caption;renderDerivation(index===0);}
+}
+function onMotionFinished(){
+ if(lesson){lesson.finished=true;renderLesson();return;}
+ motionFrame=null;document.body.classList.remove('step-playing');derivationStack.setAttribute('aria-live','polite');
+ const st=trainerStepLog.at(-1);feedback.className='feedback'+(currentSolved?' good':'');feedback.textContent=L.causal(trainerStates.at(-2),currentEquation(),st.op,st.operand);renderTrainer();
+ (currentSolved?$('#nextExerciseBtn'):$('#contextOperations button'))?.focus({preventScroll:true});
+}
+function startLesson(){
+ if(motionPlayer.active&&!lesson)return;
+ let example=lesson?.ex;
+ if(!example){
+  const own=currentExercise();if(!own)return;
+  for(let i=0;i<8;i++){example=AlgebraCore.generateSeeded(own.type,own.policy,0,crypto.getRandomValues(new Uint32Array(1))[0]);if(eqSig(example.start)!==eqSig(own.start))break;}
+  if(result()){result().hints=Math.max(1,result().hints);result().supported=true;persist();}
+ }
+ motionPlayer.cancel();lesson={ex:example,frame:null,finished:false};document.body.classList.add('demonstrating');document.body.classList.remove('step-playing');$('#liveLessonPanel').hidden=false;$('#watchDemoBtn').hidden=true;derivationStack.setAttribute('aria-live','off');
+ let timeline=[{tex:latexEq(example.start,example.policy),previous:null,caption:'We maken x vrij. De gelijkheid blijft behouden.',step:0,delay:1600}];
+ example.steps.forEach((st,i)=>{const record=AlgebraMotion.frames(example.states[i],st.op,st.operand,example.policy);record.frames.forEach((f,j)=>timeline.push({...f,previous:latexEq(example.states[i],example.policy),step:i+1,shift:j===0}));});
+ if(task()?.kind==='verify'){timeline=AlgebraTouch.verifyDemo(example,example.solution.add(R(1)));lesson.total=timeline.at(-1).step;}
+ motionPlayer.start(timeline);
+}
+function renderLesson(shift=false){
+ if(!lesson)return;const frame=lesson.frame,ex=lesson.ex;
+ document.body.classList.remove('touch-writing');$('#touchAnswer').hidden=true;
+ document.body.classList.toggle('lesson-paused',motionPlayer.paused);
+ $('#taskGoal').textContent='Kijk even mee';$('#trainProgress').textContent='Voorbeeld';$('#taskPrompt').textContent='Andere getallen · dezelfde aanpak';
+ $('#givenEquation').dataset.mathTex=latexEq(ex.start,ex.policy);$('#givenEquation').innerHTML=texHTML($('#givenEquation').dataset.mathTex);
+ drawSteps(frame?.previous||null,frame?.tex||latexEq(ex.start,ex.policy),'Stap '+(frame?.step||0),shift);
+ $('#lessonCaption').textContent=lesson.finished?'Nu jij. Pas deze aanpak toe op je eigen opgave.':frame?.caption||'We beginnen met de opgave.';
+ $('#lessonPhase').textContent='Stap '+(frame?.step||0)+' / '+(lesson.total||ex.steps.length)+' · '+(lesson.finished?'Voorbeeld klaar':motionPlayer.paused?'Gepauzeerd':'Live uitvoering');
+ $('#lessonPauseBtn').textContent=motionPlayer.paused?'Verder':'Pauze';$('#lessonPauseBtn').disabled=lesson.finished;
+ $('#lessonReturnBtn').textContent=lesson.finished?'Zelf proberen →':'Mijn opgave →';
+}
+$('#watchDemoBtn').onclick=startLesson;
+$('#lessonReplayBtn').onclick=startLesson;
+$('#lessonReturnBtn').onclick=()=>{stopPresentation();renderTrainer();$('#watchDemoBtn').focus({preventScroll:true});};
+$('#lessonPauseBtn').onclick=()=>{if(motionPlayer.paused)motionPlayer.resume();else motionPlayer.pause();renderLesson();};
+// Moving away never lets an unseen demo complete or a timer write to another task.
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&lesson&&motionPlayer.active){motionPlayer.pause();renderLesson();}});
+function fitMath(){requestAnimationFrame(()=>{for(const el of document.querySelectorAll('#givenEquation,.derivationMath,.previousEquation,#historyEquation,.touchFieldMath')){
  if(!el.getClientRects().length)continue;
- el.style.fontSize='';const base=parseFloat(getComputedStyle(el).fontSize);if(el.dataset.mathTex)el.innerHTML=texHTML(el.dataset.mathTex);el.style.fontSize=base+'px';
+ el.style.fontSize='';const base=parseFloat(getComputedStyle(el).fontSize);if(el.dataset.mathTex)el.innerHTML=motionHTML(el.dataset.mathTex);el.style.fontSize=base+'px';
  const m=el.querySelector('.katex');if(!m)continue;const width=m.getBoundingClientRect().width,limit=el.clientWidth-8;
- if(width>limit){el.style.fontSize=Math.max(16,base*limit/width)+'px';if(m.getBoundingClientRect().width>limit&&el.classList.contains('previousEquation')){el.hidden=true;continue;}if(m.getBoundingClientRect().width>limit&&el.dataset.mathTex){const parts=el.dataset.mathTex.split(' = ');if(parts.length===2){el.innerHTML=texHTML('\\begin{aligned}&'+parts[0]+'\\\\={}&'+parts[1]+'\\end{aligned}');const previous=$('.previousEquation');if(previous)previous.hidden=true;}}}
+ if(width>limit){el.style.fontSize=Math.max(el.classList.contains('previousEquation')?12:16,base*limit/width)+'px';if(m.getBoundingClientRect().width>limit&&el.dataset.mathTex){const parts=el.dataset.mathTex.split(' = ');if(parts.length===2)el.innerHTML=motionHTML('\\begin{aligned}&'+parts[0]+'\\\\={}&'+parts[1]+'\\end{aligned}');}}
  }});}
+function touchNames(t){return t.kind==='verify'?['left','right']:t.kind==='build'?['input']:['lhs','rhs'];}
+function touchValue(name){
+ const t=task(),r=result();if(t.kind==='verify'||t.kind==='build')return r[name]||'';
+ const p=(r.input||'').split('=');return p[name==='lhs'?0:1]||'';
+}
+function touchSet(name,value){
+ const t=task(),r=result();if(t.kind==='verify'||t.kind==='build'){r[name]=value;return;}
+ const p=[touchValue('lhs'),touchValue('rhs')];p[name==='lhs'?0:1]=value;r.input=p.join('=');
+}
+function touchBlocks(){
+ const t=task(),r=result();if(!r.blocks)r.blocks=Object.fromEntries(touchNames(t).map(name=>[name,AlgebraTouch.blocksFromText(touchValue(name))]));return r.blocks;
+}
+function rememberBuild(){
+ const r=result();r.buildHistory=r.buildHistory||[];r.buildHistory.push(JSON.parse(JSON.stringify({input:r.input,left:r.left,right:r.right,choice:r.choice,location:r.location,blocks:r.blocks,verifyPhase:r.verifyPhase})));if(r.buildHistory.length>24)r.buildHistory.shift();
+}
+function renderTouchAnswer(){
+ const t=task(),r=result(),host=$('#touchAnswer');host.hidden=false;
+ if(t.kind==='verify'){renderVerification();return;}
+ const names=touchNames(t),blocks=touchBlocks();if(!names.includes(touchField))touchField=names[0];
+ if(t.kind==='repair'&&r.location!=='group'&&!r.done){host.innerHTML='<div class="verifyCandidate"><small>Foute regel</small>'+texHTML(latexEq(t.fault,t.ex.policy))+'</div><p class="touchPrompt">Vergelijk met de haakjes bovenaan.</p>';return;}
+ const labels={lhs:'Links',rhs:'Rechts',input:'Ontbrekend getal'};
+ const context=t.kind==='repair'?'<div class="touchContext"><small>Foute regel</small>'+texHTML(latexEq(t.fault,t.ex.policy))+'</div>':'';
+ host.innerHTML=context+'<div class="touchFields">'+names.map((name,i)=>(i?'<span class="touchEquals">=</span>':'')+'<button type="button" class="touchField" data-edit-field="'+name+'" aria-label="'+labels[name]+'" aria-pressed="'+(name===touchField)+'" '+(r.done?'disabled':'')+'><small>'+labels[name]+'</small><span class="touchFieldMath" data-answer-name="'+name+'"></span></button>').join('')+'</div><p class="touchPrompt">'+(r.done?'Jouw regel klopt.':'Kies links of rechts. Voeg hele termen toe.')+'</p>';
+ if(t.kind==='build')host.querySelector('.touchPrompt').textContent=r.done?'Het getal klopt.':'Kies het getal dat in het vak past.';
+ host.querySelectorAll('[data-answer-name]').forEach(el=>{const name=el.dataset.answerName,items=blocks[name]||[],tex=items.length?AlgebraTouch.blockTex(items,t.ex.policy):touchValue(name)?AlgebraTouch.preview(touchValue(name)):'\\square';el.dataset.mathTex=tex;el.innerHTML=texHTML(tex);});
+ host.querySelectorAll('[data-edit-field]').forEach(el=>el.onclick=()=>{touchField=el.dataset.editField;renderTouchAnswer();renderProduction();});fitMath();
+}
+function addTerm(item){
+ const t=task(),r=result(),blocks=touchBlocks();if(t.kind!=='build'&&(blocks[touchField]||[]).length>=4){feedback.textContent='Gebruik ↶ of wis dit lid om een term te vervangen.';return;}
+ rememberBuild();blocks[touchField]=t.kind==='build'?[cloneExpr(item.expr)]:[...(blocks[touchField]||[]),cloneExpr(item.expr)];touchSet(touchField,AlgebraTouch.blockText(blocks[touchField]));renderTouchAnswer();renderProduction();persist();
+}
+function clearTerms(){rememberBuild();touchBlocks()[touchField]=[];touchSet(touchField,'');renderTouchAnswer();renderProduction();persist();}
+function verifyPhase(){return result().done?4:result().verifyPhase||0;}
+function renderVerification(){
+ const t=task(),r=result(),host=$('#touchAnswer'),phase=verifyPhase(),p=t.ex.policy,x=AlgebraCore.ratLatex(t.proposed,'auto',p);
+ if(phase===0){host.innerHTML='<div class="verifyCandidate">'+texHTML('x = '+x)+'</div><p class="touchPrompt">Vul deze waarde in voor elke x.</p>';return;}
+ const left=phase>=2||r.done?AlgebraCore.ratLatex(L.evaluate(t.ex.start.l,t.proposed),'auto',p):AlgebraTouch.substitution(t.ex.start.l,t.proposed,p);
+ const right=phase>=3||r.done?AlgebraCore.ratLatex(L.evaluate(t.ex.start.r,t.proposed),'auto',p):AlgebraTouch.substitution(t.ex.start.r,t.proposed,p);
+ host.innerHTML='<div class="verifyProof '+(phase===1||phase===2?'substituting':'')+'"><div class="proofLine '+(phase===1?'active':'')+'"><small>Links</small><span class="touchFieldMath" data-proof="left"></span></div><div class="proofLine '+(phase===2?'active':'')+'"><small>Rechts</small><span class="touchFieldMath" data-proof="right"></span></div></div><p class="touchPrompt">'+(phase>=3?'Testwaarde: x = '+escapeHTML(fallbackText(x)):'Dezelfde x-waarde is links en rechts ingevuld.')+'</p>';
+ for(const [name,tex] of [['left',left],['right',right]]){const el=host.querySelector('[data-proof="'+name+'"]');el.dataset.mathTex=tex;el.innerHTML=motionHTML(tex);}fitMath();
+}
+function startVerification(){
+ rememberBuild();const t=task(),r=result();r.verifyPhase=containsVar(t.ex.start.l)?1:containsVar(t.ex.start.r)?2:3;
+ if(!containsVar(t.ex.start.l))r.left=AlgebraTouch.expressionText(N(L.evaluate(t.ex.start.l,t.proposed)));
+ if(!containsVar(t.ex.start.r))r.right=AlgebraTouch.expressionText(N(L.evaluate(t.ex.start.r,t.proposed)));
+ r.choice='';renderTrainer();
+}
+function chooseProofValue(item){
+ const t=task(),r=result(),side=verifyPhase()===1?'left':'right',eqSide=side==='left'?'l':'r',actual=L.evaluate(t.ex.start[eqSide],t.proposed),value=item.expr.q;
+ if(!value.eq(actual)){
+  r.errors++;const a=L.affine(t.ex.start[eqSide]);
+  const product=a.a.mul(t.proposed),other=L.evaluate(t.ex.start[side==='left'?'r':'l'],t.proposed);
+  feedback.className='feedback bad';feedback.textContent=!a.b.isZero()&&value.eq(product)?'De vermenigvuldiging klopt. Reken ook de losse term mee.':value.eq(other)?'Die waarde hoort bij '+(side==='left'?'rechts':'links')+'. Reken het ingevulde '+(side==='left'?'linker':'rechter')+' lid uit.':a.a.n<0&&t.proposed.n<0&&value.eq(a.a.mul(t.proposed.neg()).add(a.b))?'Let op: min maal min geeft plus. Reken daarna verder.':'Controleer het teken en reken het volledige lid uit.';persist();return;
+ }
+ rememberBuild();r[side]=item.text;r.verifyPhase=side==='left'&&containsVar(t.ex.start.r)?2:3;r.choice='';feedback.className='feedback';feedback.textContent=side==='left'?'Links is uitgerekend.':'Rechts is uitgerekend.';renderTrainer();
+}
+function productionMessage(t,r,checked){
+ if(t.kind==='verify'){
+  if(!checked.ok)return 'Bekijk de twee waarden. Zijn ze hetzelfde?';
+  const p=t.ex.policy,l=L.evaluate(t.ex.start.l,t.proposed),right=L.evaluate(t.ex.start.r,t.proposed),x=fallbackText(AlgebraCore.ratLatex(t.proposed,'auto',p));
+  return 'Links: '+fallbackText(AlgebraCore.ratLatex(l,'auto',p))+'. Rechts: '+fallbackText(AlgebraCore.ratLatex(right,'auto',p))+'. '+(l.eq(right)?'Gelijk: x = '+x+' is een oplossing.':'Verschillend: x = '+x+' is geen oplossing.');
+ }
+ if(!checked.ok&&t.kind==='predict'&&r.input){try{const a=L.parseEquation(r.input);if(L.sameExpr(a.l,t.expected.l)&&L.sameExpr(a.r,t.ex.start.r)&&!L.sameExpr(t.expected.r,t.ex.start.r))return 'Je hebt links veranderd. Voer dezelfde bewerking ook rechts uit.';const own=L.affine(a.l),expected=L.affine(t.expected.l);if(!expected.a.isZero()&&own.a.eq(expected.a.neg()))return 'Behoud het minteken van de x-term.';}catch{}}
+ return checked.message;
+}
 function renderProduction(){
- const t=task(),r=result(),form=$('#production');if(!t||t.kind==='solve'){form.classList.add('hidden');return}form.classList.remove('hidden');
- let fields='';
+ const t=task(),r=result(),form=$('#production');if(!t||t.kind==='solve'){form.classList.add('hidden');return;}form.classList.remove('hidden');
+ const touch=touchKinds.includes(t.kind);form.classList.toggle('touchProduction',touch);let fields='';
  if(t.kind==='routes')fields=t.routes.map((st,i)=>`<button type="button" data-route="${i}" aria-pressed="${r.choice===String(i)}">${escapeHTML(L.operationText(st,t.ex.policy))} op beide leden</button>`).join('');
- else if(t.kind==='verify')fields=`<div class="verifyValues"><label>Links<input name="left" aria-label="Waarde linker lid" value="${escapeHTML(r.left)}" placeholder="getal"></label><label>Rechts<input name="right" aria-label="Waarde rechter lid" value="${escapeHTML(r.right)}" placeholder="getal"></label></div><div class="verifyChoice"><button type="button" data-answer="yes" aria-pressed="${r.choice==='yes'}">Klopt</button><button type="button" data-answer="no" aria-pressed="${r.choice==='no'}">Klopt niet</button></div>`;
- else {if(t.kind==='repair')fields=`<div class="faultChoices"><button type="button" data-location="group" aria-pressed="${r.location==='group'}">Term in groep</button><button type="button" data-location="both" aria-pressed="${r.location==='both'}">Rechter lid</button></div>`;fields+=`<label>${t.kind==='build'?'Getal in het vak':'Jouw volledige regel'}<input name="input" aria-label="${t.kind==='build'?'Getal in het vak':'Jouw nieuwe vergelijking'}" value="${escapeHTML(r.input)}" placeholder="${t.kind==='build'?'getal':'linker lid = rechter lid'}" autocomplete="off" spellcheck="false"></label>`;}
- form.innerHTML=fields+(r.done?'<p class="productionSuccess">✓ Opdracht afgerond</p>':'<button class="primarybtn" type="submit">Controleer →</button>');
- form.querySelectorAll('input').forEach(inp=>{inp.disabled=r.done;inp.oninput=()=>{r[inp.name]=inp.value;persist()}});
- form.querySelectorAll('[data-route],[data-answer],[data-location]').forEach(b=>{b.disabled=r.done;b.onclick=()=>{if(b.dataset.location)r.location=b.dataset.location;else r.choice=b.dataset.route??b.dataset.answer;renderTrainer()}});
- form.onsubmit=e=>{e.preventDefault();if(r.done)return;try{const checked=L.validate(t,r);feedback.className='feedback '+(checked.ok?'good':checked.valid?'warn':'bad');feedback.textContent=checked.message;if(checked.ok){r.done=true;currentSolved=true;}else r.errors++;renderTrainer();if(checked.ok)$('#nextExerciseBtn').focus({preventScroll:true});}catch(err){r.errors++;feedback.className='feedback bad';feedback.textContent=err.message;persist();}};
+ else if(!r.done){
+  if(t.kind==='verify'){
+   const phase=verifyPhase();
+   if(phase===0)fields='<button type="button" id="substituteBtn" class="primarybtn">Vervang x door '+texHTML(AlgebraCore.ratLatex(t.proposed,'auto',t.ex.policy))+'</button>';
+   else if(phase===3)fields='<div class="verifyChoice"><button type="button" data-answer="yes">Gelijk '+texHTML('=')+'</button><button type="button" data-answer="no">Verschillend '+texHTML('\\ne')+'</button></div>';
+   else{const options=AlgebraTouch.valueChoices(t,phase===1?'left':'right');fields='<p class="termLabel">Kies de uitkomst '+(phase===1?'links':'rechts')+'</p><div class="termPalette">'+options.map((item,i)=>'<button type="button" class="termTile" data-proof-value="'+i+'">'+texHTML(item.tex)+'</button>').join('')+'</div>';}
+  }else if(t.kind==='repair'&&r.location!=='group'){fields='<p class="termLabel">Waar zit de fout?</p><div class="faultChoices"><button type="button" data-location="group">Term uit de haakjes</button><button type="button" data-location="both">Rechter lid</button></div>';}else{
+   const options=AlgebraTouch.palette(t),name=t.kind==='build'?'dit vak':touchField==='lhs'?'links':'rechts';
+   fields='<div class="termHead"><span>Bouwstenen</span><button type="button" data-edit-action="clear">Wis '+name+'</button></div><div class="termPalette">'+options.map((item,i)=>'<button type="button" class="termTile" data-term="'+item.key+'" data-term-index="'+i+'" aria-label="Bouwsteen '+escapeHTML(fallbackText(item.tex))+'">'+texHTML(item.tex)+'</button>').join('')+'</div>';
+  }
+ }
+ form.innerHTML=fields+(r.done?'<p class="productionSuccess">✓ Opdracht afgerond</p>':touch?'':'<button class="primarybtn" type="submit">Controleer →</button>');
+ form.querySelectorAll('[data-location]').forEach(b=>b.onclick=()=>{r.location=b.dataset.location;if(r.location!=='group'){r.errors++;feedback.className='feedback bad';feedback.textContent='Vergelijk elke term met de oorspronkelijke haakjes.';}renderTrainer();});
+ form.querySelectorAll('[data-route],[data-answer]').forEach(b=>{b.disabled=r.done;b.onclick=()=>{r.choice=b.dataset.route??b.dataset.answer;if(t.kind==='verify')form.requestSubmit();else renderTrainer();};});
+ form.querySelectorAll('[data-term-index]').forEach(b=>b.onclick=()=>addTerm(AlgebraTouch.palette(t)[Number(b.dataset.termIndex)]));
+ form.querySelector('[data-edit-action]')?.addEventListener('click',clearTerms);
+ form.querySelector('#substituteBtn')?.addEventListener('click',startVerification);
+ form.querySelectorAll('[data-proof-value]').forEach(b=>b.onclick=()=>chooseProofValue(AlgebraTouch.valueChoices(t,verifyPhase()===1?'left':'right')[Number(b.dataset.proofValue)]));
+ form.onsubmit=e=>{e.preventDefault();if(r.done)return;try{
+  if(t.kind==='verify'&&verifyPhase()!==3)return;
+  if(['predict','repair','expand'].includes(t.kind)&&(!touchValue('lhs')||!touchValue('rhs'))){feedback.textContent='Vul links en rechts met bouwstenen.';return;}
+  const checked=L.validate(t,r);feedback.className='feedback '+(checked.ok?'good':checked.valid?'warn':'bad');feedback.textContent=productionMessage(t,r,checked);
+  if(checked.ok){r.done=true;currentSolved=true;}else if(!checked.valid)r.errors++;renderTrainer();if(checked.ok)$('#nextExerciseBtn').focus({preventScroll:true});
+ }catch(err){r.errors++;feedback.className='feedback bad';feedback.textContent=err.message;persist();}};
 }
 function renderTrainer(animateNew=false){
+  if(lesson){renderLesson();return;}
+  $('#watchDemoBtn').disabled=!!motionFrame;
   const ex=currentExercise();if(!ex)return;
   const eq=currentEquation(),t=task(),r=result(),production=!!t&&t.kind!=='solve';if(production)currentSolved=!!r.done;
-  $('#taskGoal').textContent=t?t.stage:'Maak x vrij';$('#taskPrompt').textContent=t?t.prompt:'Doel: maak x vrij met dezelfde bewerking op beide leden.';
+  document.body.classList.toggle('touch-writing',!!t&&touchKinds.includes(t.kind)&&!reminderOpen);
+  const title=J.stop(mission)?.title||AlgebraWorld.topic(mission)?.title;$('#taskGoal').innerHTML=(title?'<small>'+escapeHTML(title)+'</small>':'')+escapeHTML(t?.kind==='verify'?'Test een x-waarde':t?t.stage.replace(/Schrijf/g,'Bouw'):'Maak x vrij');$('#solvedNote p').textContent=t&&t.kind!=='solve'?'Opdracht afgerond. Ga verder.':'x staat vrij. Ga verder.';$('#taskPrompt').textContent=t?.kind==='verify'?AlgebraTouch.verifyPrompt(t,verifyPhase()):t?.kind==='repair'?(r.location==='group'?'Herstel de volledige regel met de bouwstenen.':'Welke term is fout uitgewerkt?'):t?t.prompt.replace(/Schrijf/g,'Bouw'):'Doel: maak x vrij met dezelfde bewerking op beide leden.';
   $('#trainProgress').textContent=`${trainerIndex+1} / ${activeSet.length}`;
   renderDerivation(animateNew);
   trainProgress.textContent=`${trainerIndex+1} / ${activeSet.length}`;
@@ -211,17 +367,19 @@ function renderTrainer(animateNew=false){
   }else valueZone.classList.add('hidden');
 
   nextBox.classList.toggle('hidden',!currentSolved);
-  $('#checkBtn').hidden=currentSolved||production;$('#production').classList.toggle('hidden',!production||reminderOpen);if(production&&!reminderOpen)renderProduction();
+  $('#checkBtn').hidden=currentSolved||t?.kind==='verify'||t?.kind==='repair'&&r.location!=='group'||(production&&!touchKinds.includes(t.kind))||(production&&reminderOpen);$('#production').classList.toggle('hidden',!production||reminderOpen);if(production&&!reminderOpen)renderProduction();
   if(reminderOpen){$('#hintText').textContent=t?L.hint(t,eq,Math.max(1,r.hints)):'Doe dezelfde bewerking op beide leden. Vermenigvuldig of deel met een getal dat niet nul is.';}
-  $('#undoBtn').disabled=production?!r.done&&!r.input&&!r.choice:trainerStates.length<=1;$('#prevExerciseBtn').disabled=trainerIndex===0;$('#forwardExerciseBtn').disabled=trainerIndex>=activeSet.length-1||!!learningRun&&!r.done;
+  $('#undoBtn').disabled=production?!r.done&&!r.input&&!r.choice&&!r.buildHistory?.length:trainerStates.length<=1;$('#prevExerciseBtn').disabled=trainerIndex===0;$('#forwardExerciseBtn').disabled=trainerIndex>=activeSet.length-1||!!learningRun&&!r.done;
   document.querySelectorAll('.opBtn').forEach(b=>{b.disabled=currentSolved;b.setAttribute('aria-pressed',String(b.dataset.op===selectedOp));b.setAttribute('aria-label',({'+' :'Optellen','-':'Aftrekken','*':'Vermenigvuldigen','/':'Delen'})[b.dataset.op]+' aan beide kanten')});
   $('#nextExerciseBtn').textContent=trainerIndex===activeSet.length-1?(learningRun?'Missie afronden →':'Bekijk je reeks →'):'Volgende oefening →';
   persist();
 }
 function startExercise(index){
+  stopPresentation();
   rememberExercise();trainerIndex=index;const ex=currentExercise(),previous=perExercise[index];
   trainerStates=previous?.states?.length?previous.states.map(cloneEq):[cloneEq(ex.start)];trainerStepLog=previous?.log||[];selectedOp=null;currentSolved=task()&&task().kind!=='solve'?!!result().done:solvedEquation(currentEquation());
   manualOpen=false;reminderOpen=false;valuePage=0;
+  touchField=task()?touchNames(task())[0]:'lhs';
   feedback.className='feedback'+(currentSolved?' good':'');feedback.textContent=currentSolved?'Opdracht afgerond.':task()?.guided?'Je begint met zichtbare ondersteuning.':task()?'Probeer zelfstandig. Hulp blijft bereikbaar.':'Werk tot x alleen staat.';
   derivationStack.innerHTML='';
   renderTrainer(true);
@@ -240,32 +398,41 @@ $('#nextValuesBtn').onclick=()=>{valuePage++;renderTrainer()};
 $('#reminderBtn').onclick=()=>{reminderOpen=!reminderOpen;if(reminderOpen&&result()){result().hints=Math.max(1,result().hints);result().supported=true;}renderTrainer()};
 $('#moreHintBtn').onclick=()=>{if(result()){result().hints++;result().supported=true;}renderTrainer()};
 $('#checkBtn').onclick=()=>{
+  if(task()&&touchKinds.includes(task().kind)){$('#production').requestSubmit();return;}
   const checked=checkProgress(currentEquation());
   feedback.className='feedback'+(checked.solved?' good':'');feedback.textContent=checked.message;
 };
 function performOperation(op,operand){
+  if(lesson||motionPlayer.active)return;
   const before=currentEquation();
   try{
-    const after=applyEquation(before,op,operand);
+    const record=AlgebraMotion.frames(before,op,operand,currentExercise().policy),after=record.after;
     trainerStates.push(after);trainerStepLog.push({op,operand:cloneExpr(operand)});selectedOp=null;manualOpen=false;reminderOpen=false;valuePage=0;
     currentSolved=solvedEquation(after);
 
     feedback.className='feedback'+(currentSolved?' good':'');feedback.textContent=L.causal(before,after,op,operand);
     if(currentSolved){solvedTypes.add(currentExercise().type);if(result())result().done=true;}
-    renderTrainer(true);
+    document.body.classList.add('step-playing');derivationStack.setAttribute('aria-live','off');
+    motionFrame=record.frames[0];renderTrainer(true);motionPlayer.start(record.frames);
     (currentSolved?$('#nextExerciseBtn'):$('#contextOperations button'))?.focus({preventScroll:true});
   }catch(err){
-    feedback.className='feedback bad';feedback.textContent=err.message;selectedOp=null;renderTrainer();
+    if(result())result().errors++;feedback.className='feedback bad';feedback.textContent=err.message;selectedOp=null;renderTrainer();
   }
 }
 $('#undoBtn').onclick=()=>{
-  if(task()&&task().kind!=='solve'){result().done=false;result().input='';result().left='';result().right='';result().choice='';result().location='';currentSolved=false;feedback.textContent='Antwoord teruggenomen.';renderTrainer();return;}
+  stopPresentation();
+  if(task()&&task().kind!=='solve'){
+   const r=result(),old=r.buildHistory?.pop();if(old){Object.assign(r,old);if(r.blocks)for(const name of Object.keys(r.blocks))r.blocks[name]=r.blocks[name].map(cloneExpr);}
+   else{r.input='';r.left='';r.right='';r.choice='';r.location='';delete r.blocks;r.verifyPhase=0;}
+   r.done=false;currentSolved=false;feedback.textContent='Laatste keuze teruggenomen.';renderTrainer();return;
+  }
   if(trainerStates.length<=1)return;
   if(result())result().done=false;trainerStates.pop();trainerStepLog.pop();selectedOp=null;manualOpen=false;reminderOpen=false;valuePage=0;currentSolved=solvedEquation(currentEquation());
   feedback.className='feedback';feedback.textContent='Laatste stap ongedaan gemaakt.';
   renderTrainer();
 };
 $('#nextExerciseBtn').onclick=()=>{
+  if(learningRun&&!result()?.done)return;
   if(trainerIndex<activeSet.length-1)startExercise(trainerIndex+1);
   else{
     if(learningRun){finishMission();}
@@ -273,8 +440,8 @@ $('#nextExerciseBtn').onclick=()=>{
   }
 };
 $('#prevExerciseBtn').onclick=()=>{if(trainerIndex>0)startExercise(trainerIndex-1)};
-$('#forwardExerciseBtn').onclick=()=>{if(trainerIndex<activeSet.length-1)startExercise(trainerIndex+1)};
-$('#backSetupBtn').onclick=()=>{if(mission)worldView?.open(AlgebraWorld.topic(mission)?.world);showScreen('world');};
+$('#forwardExerciseBtn').onclick=()=>{if((!learningRun||result()?.done)&&trainerIndex<activeSet.length-1)startExercise(trainerIndex+1)};
+$('#backSetupBtn').onclick=()=>{if(mission)worldView?.open(J.stop(mission)?'equations':AlgebraWorld.topic(mission)?.world);showScreen('world');};
 
 /* ============================================================
    11. OEFENBLAD + VERBETERSLEUTEL
@@ -317,6 +484,7 @@ function keyPage(items,page,total,startNo){
 function renderPreview(){
   const host=$('#previewStack');
   if(!activeSet.length){host.innerHTML='';return}
+  if(learningRun){renderMissionPaper(host);return;}
   const qs=chunks(activeSet,12);
   let html=qs.map((c,i)=>qPage(c,i+1,qs.length,i*12)).join('');
   if($('#includeKey').checked){
@@ -324,6 +492,13 @@ function renderPreview(){
     html+=ks.map((c,i)=>keyPage(c,i+1,ks.length,i*6)).join('');
   }
   host.innerHTML=html;renderMathNodes(host);
+}
+function renderMissionPaper(host){
+ const tasks=learningRun.tasks,title=J.stop(mission)?.title||AlgebraWorld.topic(mission)?.title||'Vergelijkingen';
+ const header=(key)=>`<div class="sheetHeader"><div><h2>${key?'Verbetersleutel':'Vergelijkingen'} · ${escapeHTML(title)}</h2><p>${key?'De antwoorden horen bij deze opdrachten. Andere geldige oplosroutes zijn mogelijk.':'Lees elke opdracht. Schrijf je uitwerking en controle op.'}</p></div><div class="sheetMeta">Naam: __________________<br>Klas: ______ Datum: ______</div></div>`;
+ let html=chunks(tasks,3).map((items,p)=>`<section class="paperPage missionPaper">${header(false)}<div class="missionQuestions">${items.map((t,i)=>{const q=AlgebraJourneyPaper.question(t);return `<article><h3>${p*3+i+1}. ${escapeHTML(q.prompt)}</h3><div data-tex="${escapeHTML(q.math)}"></div>${q.extra?'<p>'+escapeHTML(q.extra)+'</p>':''}<div class="writeLines"><span></span><span></span><span></span></div></article>`}).join('')}</div><div class="pageFoot">leraarBob · Opgaven ${p+1}/${Math.ceil(tasks.length/3)}</div></section>`).join('');
+ if($('#includeKey').checked)html+=chunks(tasks,3).map((items,p)=>`<section class="paperPage missionPaper">${header(true)}<div class="missionAnswers">${items.map((t,i)=>{const a=AlgebraJourneyPaper.answer(t);return `<article><h3>${p*3+i+1}. ${escapeHTML(t.stage)}</h3>${a.lines.map(l=>'<div data-tex="'+escapeHTML(l)+'"></div>').join('')}<p>${escapeHTML(a.note)}</p></article>`}).join('')}</div><div class="pageFoot">leraarBob · Sleutel ${p+1}/${Math.ceil(tasks.length/3)}</div></section>`).join('');
+ host.innerHTML=html;renderMathNodes(host);
 }
 $('#printBtn').onclick=()=>{renderMathNodes(previewScreen);setTimeout(()=>window.print(),50)};
 $('#regenBtn').onclick=()=>{
@@ -351,9 +526,9 @@ function rememberExercise(){if(learningRun){learningRun.index=trainerIndex;learn
 function persist(){
  if(restoring||!window.AxiomaGame?.active)return;
  rememberExercise();
- const save={version:1,runs,freeSession,journey,worldLegacy,mission,mapLocation,activeLevel,selection,settings:currentSettings(),includeKey:$('#includeKey').checked,shuffle:$('#shuffleQuestions').checked,activeSet,trainerIndex,perExercise,solvedTypes:[...solvedTypes],screen,settingsDirty};
- AxiomaGame.storage.setItem(SAVE_KEY,JSON.stringify(save));let systems=null;try{systems=JSON.parse(AxiomaGame.storage.getItem('leraarbob.stelsels.workshop.v1')||'null')}catch{}const routeProgress=AlgebraWorld.platformProgress(AlgebraWorld.merge(journey,systems?.journey));AxiomaGame.report(routeProgress.completed,routeProgress.total);
- const badge=$('#algebraProgress');badge.dataset.platformProgress='xp';badge.dataset.value=String(AlgebraWorld.xp(worldView?.progress()||journey));badge.textContent=badge.dataset.value+' XP';
+ const save={version:1,chapterJourney,runs,freeSession,journey,worldLegacy,mission,mapLocation,activeLevel,selection,settings:currentSettings(),includeKey:$('#includeKey').checked,shuffle:$('#shuffleQuestions').checked,activeSet,trainerIndex,perExercise,solvedTypes:[...solvedTypes],screen,settingsDirty};
+ AxiomaGame.storage.setItem(SAVE_KEY,JSON.stringify(save));let systems=null;try{systems=JSON.parse(AxiomaGame.storage.getItem('leraarbob.stelsels.workshop.v1')||'null')}catch{}const routeProgress=J.platform(chapterJourney,journey,systems?.journey);AxiomaGame.report(routeProgress.completed,routeProgress.total);
+ const badge=$('#algebraProgress');badge.dataset.platformProgress='xp';badge.dataset.value=String(AlgebraWorld.xp(worldView?.progress()||journey)+J.xp(chapterJourney));badge.textContent=badge.dataset.value+' XP';
  AxiomaGame.emit(routeProgress.completed,routeProgress.total);
 }
 function restore(){
@@ -363,7 +538,7 @@ function restore(){
   const saved=JSON.parse(raw,(k,v)=>v&&typeof v==='object'&&Object.keys(v).length===2&&Number.isSafeInteger(v.n)&&Number.isSafeInteger(v.d)?new Rat(v.n,v.d):v);
   if(saved.version!==1)return;
   runs=saved.runs&&typeof saved.runs==='object'?saved.runs:{};freeSession=saved.freeSession||null;
-  mapLocation=AlgebraWorld.world(saved.mapLocation)?.id||null;journey=AlgebraWorld.normalize(saved.journey);worldLegacy=(Array.isArray(saved.worldLegacy)?saved.worldLegacy:saved.solvedTypes||[]).filter(id=>TYPES.some(t=>t.id===id));mission=AlgebraWorld.topic(saved.mission)?.engine==='equations'?saved.mission:null;
+  chapterJourney=J.normalize(saved.chapterJourney);mapLocation=J.worldFor(saved.mapLocation);journey=AlgebraWorld.normalize(saved.journey);worldLegacy=(Array.isArray(saved.worldLegacy)?saved.worldLegacy:saved.solvedTypes||[]).filter(id=>TYPES.some(t=>t.id===id));mission=J.stop(saved.mission)||AlgebraWorld.topic(saved.mission)?.engine==='equations'?saved.mission:null;
   learningRun=mission&&runs[mission]?.version===2?runs[mission]:null;
   for(const t of TYPES){const s=saved.selection?.[t.id];if(s)selection[t.id]={checked:!!s.checked,count:Math.max(1,Math.min(20,Number(s.count)||1))}}
   activeLevel=Object.hasOwn(LEVEL_META,saved.activeLevel)?saved.activeLevel:'beginner';
@@ -378,29 +553,40 @@ function restore(){
  }catch{activeSet=[];perExercise={};trainerStates=[];screen='world';showSetupMessage('Je reeks kon niet worden hervat. Kies een nieuwe reeks.',true)}finally{restoring=false}
 }
 function startTopic(id){
- const t=AlgebraWorld.topic(id);if(!t||t.engine!=='equations'||!AlgebraWorld.unlocked(worldView.progress(),id,worldView.legacy()))return;
+ const t=J.stop(id)||AlgebraWorld.topic(id);if(!t||(!J.stop(id)&&t.engine!=='equations'))return;
  rememberExercise();if(learningRun)learningRun.work=perExercise;else if(!mission&&activeSet.length)freeSession={activeSet,perExercise,trainerIndex};
  mission=id;learningRun=runs[id];
- if(!learningRun||learningRun.completed){learningRun=L.mission(t.skill,crypto.getRandomValues(new Uint32Array(1))[0]);learningRun.work={};runs[id]=learningRun;}
+ if(!learningRun||learningRun.completed){const seed=crypto.getRandomValues(new Uint32Array(1))[0];learningRun=J.freshMission(id,learningRun,seed);learningRun.work={};runs[id]=learningRun;}
  activeSet=learningRun.tasks.map(t=>t.ex);perExercise=learningRun.work||{};trainerStates=[];
- const i=learningRun.results.findIndex(r=>!r.done);startExercise(i<0?4:i);showScreen('trainer');
+ const i=learningRun.results.findIndex(r=>!r.done);startExercise(i<0?activeSet.length-1:i);showScreen('trainer');
 }
 function finishMission(){
  if(!learningRun||learningRun.results.some(r=>!r.done))return;learningRun.completed=true;
- const reward=AlgebraWorld.recordMission(journey,mission,learningRun.results,worldView.legacy());journey=reward.progress;renderSummary();showScreen('summary');
+ const reward=J.stop(mission)?J.record(chapterJourney,mission,learningRun.results,journey):AlgebraWorld.recordMission(journey,mission,learningRun.results,worldView.legacy());if(J.stop(mission))chapterJourney=reward.progress;else journey=reward.progress;learningRun.lastReward=reward.xp;renderSummary();showScreen('summary');
 }
-function recommended(){const next=AlgebraWorld.topics.find(t=>t.engine==='equations'&&t.requires.includes(mission)&&AlgebraWorld.unlocked(worldView.progress(),t.id,worldView.legacy())&&!worldView.progress().topics[t.id]?.finished);if(next)return next;return AlgebraWorld.topics.find(t=>t.engine==='equations'&&AlgebraWorld.unlocked(worldView.progress(),t.id,worldView.legacy())&&!worldView.progress().topics[t.id]?.finished);}
-function renderSummary(){if(!learningRun)return;const independent=learningRun.results.filter(r=>!r.supported),aided=learningRun.results.filter(r=>r.supported);$('#summaryContent').innerHTML=`<div class="summaryTitle"><h1>Missie afgerond</h1><p>${escapeHTML(AlgebraWorld.topic(mission).title)} · 5 opdrachten</p></div><div class="summaryEvidence"><section><h2>Zelfstandig · ${independent.length}</h2>${independent.map(r=>`<p>✓ ${escapeHTML(r.goal)}${r.errors?' · na verbetering':''}</p>`).join('')||'<p>Deze ronde werkte je met ondersteuning.</p>'}</section><section><h2>Met ondersteuning · ${aided.length}</h2>${aided.map(r=>`<p>${escapeHTML(r.goal)}</p>`).join('')}</section></div><p class="summaryRecommendation">${independent.length<2?'Aanbevolen: herhaal deze halte met minder hulp.':recommended()?'Volgende halte: '+escapeHTML(recommended().title):'Je vergelijkingroute is afgerond. Ontdek nu stelsels.'}</p>`;}
-$('#summaryWorldBtn').onclick=()=>{worldView.open(AlgebraWorld.topic(mission).world);showScreen('world')};
-$('#summaryNextBtn').onclick=()=>{const repeat=learningRun.results.filter(r=>!r.supported).length<2,t=repeat?AlgebraWorld.topic(mission):recommended();if(t)startTopic(t.id);else{worldView.open('systems');showScreen('world')}};
-function renderHistory(){const ex=currentExercise();historyIndex=Math.max(0,Math.min(trainerStates.length-1,historyIndex));$('#historyPosition').textContent=`${historyIndex+1} / ${trainerStates.length}`;$('#historyEquation').dataset.mathTex=latexEq(trainerStates[historyIndex],ex.policy);$('#historyEquation').innerHTML=texHTML($('#historyEquation').dataset.mathTex);$('#historyAction').textContent=historyIndex?stepText(trainerStepLog[historyIndex-1].op,trainerStepLog[historyIndex-1].operand,ex.policy):'Oorspronkelijke opgave';$('#historyPrevBtn').disabled=historyIndex===0;$('#historyNextBtn').disabled=historyIndex===trainerStates.length-1;fitMath();}
-$('#historyBtn').onclick=()=>{historyIndex=trainerStates.length-1;renderHistory();showScreen('history')};$('#closeHistoryBtn').onclick=()=>showScreen('trainer');$('#historyPrevBtn').onclick=()=>{historyIndex--;renderHistory()};$('#historyNextBtn').onclick=()=>{historyIndex++;renderHistory()};
+function recommended(){return J.next(chapterJourney,runs,journey,worldLegacy);}
+function renderSummary(){
+ if(!learningRun)return;
+ const clean=learningRun.results.filter(r=>!r.supported&&!r.hints&&!r.errors),aided=learningRun.results.filter(r=>r.supported||r.hints),corrected=learningRun.results.filter(r=>r.errors),practice=learningRun.results.filter(r=>r.supported||r.hints||r.errors);
+ const title=J.stop(mission)?.title||AlgebraWorld.topic(mission)?.title||'Vergelijkingen';
+ const independent=J.independently(learningRun.results),next=recommended();
+ $('#summaryContent').innerHTML=`<div class="summaryTitle"><h1><span class="summarySeal" aria-hidden="true">${independent?'★':'✓'}</span>${independent?'Zelfstandig gelukt':'Halte geoefend'}</h1><p>${escapeHTML(title)} · ${learningRun.tasks.length} opdrachten</p></div><p class="summaryFacts">${clean.length} zonder hulp of verbetering · ${aided.length} met hulp · ${corrected.length} antwoord${corrected.length===1?'':'en'} verbeterd${learningRun.lastReward?' · +'+learningRun.lastReward+' XP':''}</p><div class="summaryEvidence"><section><h2>Zelfstandig gelukt</h2>${clean.map(r=>`<p>✓ ${escapeHTML(r.goal)}</p>`).join('')||'<p>Herhaal om met minder hulp te oefenen.</p>'}</section><section><h2>Verder oefenen</h2>${practice.map(r=>`<p>${escapeHTML(r.goal)}${r.supported||r.hints?' · met hulp':''}${r.errors?' · na verbetering':''}</p>`).join('')||'<p>Alle opdrachten lukten zelfstandig.</p>'}</section></div><p class="summaryRecommendation">${!independent?'Je mag verder. Herhalen met minder hulp blijft beschikbaar.':next?'Volgende halte: '+escapeHTML(next.title):'Alle haltes voor vergelijkingen zijn geoefend. Ontdek Stelsels.'}</p>`;
+ $('#summaryNextBtn').textContent=next?'Volgende halte →':'Naar Stelsels →';
+}
+$('#summaryReplayBtn').onclick=()=>startTopic(mission);
+$('#summaryWorldBtn').onclick=()=>{worldView.open('equations');showScreen('world')};
+$('#summaryNextBtn').onclick=()=>{const t=recommended();if(t)startTopic(t.id);else{worldView.open('systems');showScreen('world')}};
+function historyEntries(){const t=task(),ex=currentExercise();return t&&touchKinds.includes(t.kind)?AlgebraTouch.history(t,result()):trainerStates.map((eq,i)=>({tex:latexEq(eq,ex.policy),caption:i?stepText(trainerStepLog[i-1].op,trainerStepLog[i-1].operand,ex.policy):'Oorspronkelijke opgave'}));}
+function renderHistory(){const entries=historyEntries();historyIndex=Math.max(0,Math.min(entries.length-1,historyIndex));$('#historyPosition').textContent=`${historyIndex+1} / ${entries.length}`;$('#historyEquation').dataset.mathTex=entries[historyIndex].tex;$('#historyEquation').innerHTML=motionHTML(entries[historyIndex].tex);$('#historyAction').textContent=entries[historyIndex].caption;$('#historyPrevBtn').disabled=historyIndex===0;$('#historyNextBtn').disabled=historyIndex===entries.length-1;fitMath();}
+$('#historyBtn').onclick=()=>{historyIndex=historyEntries().length-1;renderHistory();showScreen('history')};$('#closeHistoryBtn').onclick=()=>showScreen('trainer');$('#historyPrevBtn').onclick=()=>{historyIndex--;renderHistory()};$('#historyNextBtn').onclick=()=>{historyIndex++;renderHistory()};
 $('#resumeFreeBtn').onclick=()=>{rememberExercise();if(learningRun)learningRun.work=perExercise;mission=null;learningRun=null;activeSet=freeSession.activeSet;perExercise=freeSession.perExercise;trainerStates=[];startExercise(freeSession.trainerIndex);showScreen('trainer')};
 window.addEventListener('resize',fitMath);
 function init(){
   restore();
-  worldView=AlgebraWorldView.mount({progress:()=>journey,solved:()=>worldLegacy,location:()=>mapLocation,remember:id=>{mapLocation=id;persist();},run:id=>runs[id],canResume:()=>activeSet.length>0&&(!learningRun||!learningRun.completed),start:startTopic,resume:()=>{if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer')}});
-  const requestedWorld=new URLSearchParams(location.search).get('world');if(AlgebraWorld.world(requestedWorld)){worldView.open(requestedWorld);if(performance.getEntriesByType('navigation')[0]?.type!=='reload')screen='world';}
+  worldView=AlgebraWorldView.mount({progress:()=>journey,chapter:()=>chapterJourney,runs:()=>runs,current:()=>mission,solved:()=>worldLegacy,location:()=>mapLocation,remember:id=>{mapLocation=id;persist();},run:id=>runs[id],canResume:()=>activeSet.length>0&&(!learningRun||!learningRun.completed),start:startTopic,resume:()=>{if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer')}});
+  const params=new URLSearchParams(location.search),requestedWorld=params.get('world');if(J.world(requestedWorld)||AlgebraWorld.world(requestedWorld)){worldView.open(requestedWorld);if(performance.getEntriesByType('navigation')[0]?.type!=='reload')screen='world';}
+  const requestedTopic=J.stop(params.get('topic'))||AlgebraWorld.topic(params.get('topic'));if((J.stop(requestedTopic?.id)||requestedTopic?.engine==='equations')&&performance.getEntriesByType('navigation')[0]?.type!=='reload'){startTopic(requestedTopic.id);screen='trainer';}
+  if(['setup','preview'].includes(params.get('screen'))&&performance.getEntriesByType('navigation')[0]?.type!=='reload')screen=params.get('screen');
   renderTypeLevel();updateTotal();refreshNav();if(screen==='summary')renderSummary();if(screen==='history'&&activeSet.length)renderHistory();showScreen(screen);
   /* Wanneer KaTeX later klaar is dan de app, render nogmaals zonder de toestand te wijzigen. */
   setTimeout(()=>{
@@ -412,6 +598,6 @@ function init(){
   },500);
 }
 init();
-window.AlgebraTrainer=Object.freeze({snapshot:()=>JSON.parse(JSON.stringify({screen,trainerIndex,activeSet,trainerStates,solvedTypes:[...solvedTypes],journey,mission,runs,learningRun}))});
+window.AlgebraTrainer=Object.freeze({animationSnapshot:()=>({active:motionPlayer.active,paused:motionPlayer.paused,index:motionPlayer.index||0,demo:!!lesson,finished:!!lesson?.finished,tex:motionFrame?.tex||null,example:lesson?{start:latexEq(lesson.ex.start,lesson.ex.policy),type:lesson.ex.type,steps:lesson.total||lesson.ex.steps.length}:null}),snapshot:()=>JSON.parse(JSON.stringify({screen,trainerIndex,activeSet,trainerStates,solvedTypes:[...solvedTypes],journey,chapterJourney,mission,runs,learningRun}))});
 
 })();
