@@ -147,13 +147,13 @@ function logicalToSvgFloat(p){const m=48,span=424,step=span/8;return {x:m+(p.x-G
 function placementCandidates(start,def){if(!start||!def)return[];const occupied=new Set(S.ownFleet.filter(s=>s.name!==placement.editing).flatMap(s=>s.cells.map(cellKey))),out=[];for(const sl of ALLOWED_SLOPES){if(!shootableIntercept(sl.a,start))continue;for(const sign of [-1,1]){const sx=sl.dx*sign,sy=sl.dy*sign;const cells=Array.from({length:def.length},(_,i)=>({x:start.x+i*sx,y:start.y+i*sy}));if(cells.some(p=>p.x<GRID_MIN||p.x>GRID_MAX||p.y<GRID_MIN||p.y>GRID_MAX||occupied.has(cellKey(p))))continue;out.push({end:cells[cells.length-1],cells,slope:sl.a})}}return out}
 function baseGridSvg(interactive=false,radar=false){
   const id=radar?'radar':'fleet';
-  let h=`<defs><pattern id="${id}Water" width="40" height="24" patternUnits="userSpaceOnUse"><path d="M0 12 Q10 8 20 12 T40 12" fill="none" stroke="#6f9a9c" stroke-opacity=".065"/></pattern></defs><rect x="2" y="2" width="516" height="516" rx="12" fill="${radar?'#e4eef0':'#e6efea'}" stroke="#627d82" stroke-width="2"/><rect x="10" y="10" width="500" height="500" rx="6" fill="url(#${id}Water)" stroke="#9fb8b5" stroke-opacity=".6"/>`;
+  let h=`<defs><pattern id="${id}Water" width="40" height="24" patternUnits="userSpaceOnUse"><path d="M0 12 Q10 8 20 12 T40 12" fill="none" stroke="#6f9a9c" stroke-opacity=".065"/></pattern></defs><rect x="2" y="2" width="516" height="516" rx="12" fill="${radar?'#19383d':'#203e40'}" stroke="#b48d59" stroke-width="2"/><rect x="10" y="10" width="500" height="500" rx="6" fill="url(#${id}Water)" stroke="#ab976d" stroke-opacity=".6"/>`;
   if(radar)h+='<g fill="none" stroke="#789ba7" stroke-opacity=".085"><circle cx="260" cy="260" r="100"/><circle cx="260" cy="260" r="200"/></g>';
   const m=48,span=424,step=span/8;
-  for(let i=0;i<9;i++){const pos=m+i*step,axis=i===4;h+=`<path d="M${m} ${pos}H${m+span} M${pos} ${m}V${m+span}" fill="none" stroke="${axis?'#405e6a':'#9ab0b7'}" stroke-width="${axis?2.2:.85}" opacity="${axis?1:.65}"/>`}
-  h+='<path d="M466 256 L473 260 L466 264 M256 54 L260 47 L264 54" fill="none" stroke="#405e6a" stroke-width="2"/><circle cx="260" cy="260" r="8" fill="none" stroke="#987839" stroke-width="1.5" opacity=".7"/>';
+  for(let i=0;i<9;i++){const pos=m+i*step,axis=i===4;h+=`<path d="M${m} ${pos}H${m+span} M${pos} ${m}V${m+span}" fill="none" stroke="${axis?'#eadabd':'#b4c7b9'}" stroke-width="${axis?2.2:.85}" opacity="${axis?1:.65}"/>`}
+  h+='<path d="M466 256 L473 260 L466 264 M256 54 L260 47 L264 54" fill="none" stroke="#eadabd" stroke-width="2"/><circle cx="260" cy="260" r="8" fill="none" stroke="#e2b879" stroke-width="1.5" opacity=".7"/>';
   for(let v=-4;v<=4;v++){const px=m+(v+4)*step,py=m+(4-v)*step,label=String(v).replace('-','−');h+=`<text class="axisLabel" x="${px}" y="497" text-anchor="middle">${label}</text><text class="axisLabel" x="26" y="${py+5}" text-anchor="middle">${label}</text>`}
-  h+='<text class="axisName" x="484" y="266">x</text><text class="axisName" x="255" y="32">y</text><text x="273" y="280" font-size="13" fill="#786431" style="paint-order:stroke;stroke:#e6efea;stroke-width:3">O</text>';
+  h+='<text class="axisName" x="484" y="266">x</text><text class="axisName" x="255" y="32">y</text><text x="273" y="280" font-size="13" fill="#f2c882" style="paint-order:stroke;stroke:#203e40;stroke-width:3">O</text>';
   for(let x=-4;x<=4;x++)for(let y=-4;y<=4;y++){const p=gridPointToSvg({x,y});h+=`<circle class="gridPoint" cx="${p.x}" cy="${p.y}" r="2.5"/>`;if(interactive)h+=`<circle data-grid="${x},${y}" cx="${p.x}" cy="${p.y}" r="21" fill="transparent"/>`}
   return h;
 }
@@ -167,13 +167,13 @@ function shipSvg(ship,enemy=false,mode=''){
   if(!ship.cells?.length)return '';
   const pts=ship.cells.map(gridPointToSvg),first=pts[0],last=pts[pts.length-1],length=Math.hypot(last.x-first.x,last.y-first.y),angle=Math.atan2(last.y-first.y,last.x-first.x)*180/Math.PI;
   const reveal=mode==='reveal';
-  const hull=`<path class="shipHull" d="M-10 -7 Q-13 0 -10 7 Q${length*.45} 13 ${length-6} 8 Q${length+8} 4 ${length+14} 0 Q${length+8} -4 ${length-6} -8 Q${length*.45} -13 -10 -7 Z"/><path class="shipDeck" d="M3 0 H${length-6}" fill="none"/>`;
+  const hull=`<image class="arcadeShip" href="../arcade/assets/ship.webp" x="-22" y="-32" width="${length+44}" height="64" preserveAspectRatio="none"/>`;
   let body=hull;
   if(reveal){
     // Fade adjacent hull sections in order, in the ship's own rotated coordinates.
     // The complete damaged hull is rendered after the short reveal finishes.
     const step=length/(pts.length-1),id=`reveal${first.x}_${first.y}_${pts.length}`;
-    body=pts.map((_,i)=>{const left=i===0?-15:(i-.5)*step,right=i===pts.length-1?length+15:(i+.5)*step;return `<defs><clipPath id="${id}_${i}"><rect x="${left}" y="-14" width="${right-left}" height="28"/></clipPath></defs><g clip-path="url(#${id}_${i})"><g class="revealHull" style="animation-delay:${i*85}ms">${hull}</g></g>`}).join('');
+    body=pts.map((_,i)=>{const left=i===0?-15:(i-.5)*step,right=i===pts.length-1?length+15:(i+.5)*step;return `<defs><clipPath id="${id}_${i}"><rect x="${left}" y="-36" width="${right-left}" height="72"/></clipPath></defs><g clip-path="url(#${id}_${i})"><g class="revealHull" style="animation-delay:${i*85}ms">${hull}</g></g>`}).join('');
   }
   let h=`<g class="ship ${enemy?'enemyShip':''} ${mode==='ghost'?'ghostShip':''} ${mode==='editing'?'editingShip':''} ${mode==='drop'?'dropShip':''}" data-ship="${escapeHtml(ship.name||'preview')}"><g transform="translate(${first.x} ${first.y}) rotate(${angle})">${body}</g>`;
   for(const [i,p] of pts.entries())h+=`<circle class="shipNode ${reveal?'revealNode':''}" style="--delay:${i*85}ms" cx="${p.x}" cy="${p.y}" r="5"/>`;
@@ -212,11 +212,11 @@ function renderGameUI(){
   $('#meName').textContent=S.profile?.alias||'Jij'; $('#opponentName').textContent=S.opponent?.alias||'Tegenstander';
   const placed=S.ownFleet.length,def=placementDef();
   const attacking=S.phase==='battle'&&(S.myTurn||V.firing)&&!S.finished;
-  $('#ownBoard').toggleAttribute('hidden',attacking);
-  $('#aimComposer').hidden=!attacking;
-  $('#leftBoardTitle').textContent=attacking?'Aanvalconsole':'Jouw vloot';
+  $('#ownBoard').toggleAttribute('hidden',attacking&&!window.RechtenArcade);
+  $('#aimComposer').hidden=window.RechtenArcade?S.phase!=='battle':!attacking;
+  $('#leftBoardTitle').textContent=attacking&&!window.RechtenArcade?'Aanvalconsole':'Jouw vloot';
   $('#ownBoardSub').textContent=attacking?(V.firing?'schot vastgelegd':'jij bepaalt de koers'):'jouw verdedigingszone';
-  $('#bottomBar')?.toggleAttribute('hidden',S.phase!=='placing');
+  $('#bottomBar')?.toggleAttribute('hidden',S.phase!=='placing'&&(!window.RechtenArcade||S.phase!=='battle'));
   $('#fleetCount').innerHTML=`${placed} / 3<small>schepen geplaatst</small>`;
   if(S.phase==='placing'){
     $('#placementBar').hidden=false;$('#attackBoardSub').textContent='vijandelijke vloot verborgen';
@@ -268,6 +268,7 @@ function applyMyShotResult(shot,result){
   shot._presenting=true;
   return enqueueVisual(async epoch=>{
     if(!await presentShot(shot,result,false,epoch))return;
+    window.RechtenArcade?.record({id:shot.id,kind:'naval-shot',answer:{a:shot.a,b:shot.b},hits:result.points?.length||0,sunk:result.sunk?.length||0});
     if(result.allSunk){finishGame(true);return}
     S.myTurn=!!result.points?.length;V.lastTurn=null;renderGameUI();
     if(!S.myTurn&&S.demo)later(demoBotTurn,1000);
@@ -365,6 +366,7 @@ async function settleMatch(){
 }
 function finishGame(won,forfeit=false){
   const wasBattle=S.phase==='battle';
+  if(wasBattle){window.RechtenArcade?.record({kind:'outcome',won,forfeit});window.RechtenArcade?.finish({complete:!forfeit});}
   resetVisuals();S.finished=true;S.phase='over';S.myTurn=false;
   S.winnerId=forfeit&&!wasBattle?null:won?S.me?.id:S.opponent?.id;
   S.resultTitle=forfeit?'Tegenstander heeft de partij verlaten':won?'Gewonnen!':'Verloren';
@@ -416,7 +418,7 @@ async function enterMatch({matchId,opponent,hostId}){
   S.matchId=matchId;S.opponent=opponent;S.hostId=hostId;S.persistentRegistered=false;
   // resetGameState renders, so read the saved state before resetting.
   let saved;try{saved=sessionStorage.getItem(storageKey())}catch{}
-  showScreen('gameScreen');resetGameState();
+  showScreen('gameScreen');resetGameState();window.RechtenArcade?.start({expected:1,mode:'online'});
   if(saved){try{sessionStorage.setItem(storageKey(),saved)}catch{}restoreMatch();renderGameUI();renderBoards()}
   await registerPersistentMatch();await setupMatchChannel();
 }
@@ -501,7 +503,7 @@ function initSolo(){
   S.demo=true;S.me={id:account?.id||'solo-player'};
   S.profile={alias:account?.alias||'Jij',class_code:account?.class_code||''};
   S.opponent={id:'computer',alias:'Computer'};S.matchId='solo';S.hostId=S.me.id;S.unranked=true;
-  resetGameState();S.demoEnemyFleet=randomFleet();S.oppReady=true;
+  resetGameState();window.RechtenArcade?.start({expected:1});S.demoEnemyFleet=randomFleet();S.oppReady=true;
   $('#whoBtn').hidden=false;$('#whoBtn').textContent=S.profile.alias;setConnection('Solo · computer','on');
   $('#soloNote').hidden=false;showScreen('gameScreen');renderGameUI();renderBoards();
 }

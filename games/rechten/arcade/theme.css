@@ -1,0 +1,96 @@
+/* One skin for the original engines. Geometry stays in world coordinates. */
+html:has(body[data-arcade]),body[data-arcade]{width:100%;height:100%;overflow:hidden}
+body[data-arcade]{--paper:#132b31;--ink:#f2e6ce;--muted:#abc0ba;--line:#92724f;--a:#f2c477;--b:#95d5c6;--blue:#e6bf78;--green:#a9d6bf;--gold:#eec386;--red:#d3958a;--lb-surface:#183137;--lb-ink:#f2e6ce;--lb-line:#92724f;--lb-hover:#284149;background:var(--paper);color:var(--ink);font-family:system-ui,sans-serif;color-scheme:dark}
+body[data-arcade] [hidden]{display:none!important}body[data-arcade] #app{background:var(--paper);height:100dvh;min-height:0}
+body[data-arcade] button{min-width:44px;min-height:44px;border-color:#9e7950;touch-action:manipulation}
+body[data-arcade] button:focus-visible,body[data-arcade] a:focus-visible{outline:3px solid #f7d496;outline-offset:2px}
+body[data-arcade] .topbar{background:#102329;border-color:#92724f;color:var(--ink)}body[data-arcade] .brand{font-family:Georgia,serif;color:var(--ink)}
+body[data-arcade] :is(dialog,.dialog,.matchResultCard){background:#172f35;color:var(--ink);border:1px solid #bf9967;border-radius:12px;max-height:calc(100dvh - 20px);overflow:auto}
+body[data-arcade] :is(.primary,.fireBtn,.readyBtn){background:linear-gradient(#8c3836,#622629);color:#fff0d6;border:2px solid #d9ad70;box-shadow:inset 0 0 0 2px #291616,0 3px 0 #090d10}
+body.arcade-embedded[data-arcade] #app.arcade-frame{grid-template-rows:minmax(0,1fr)}
+.arcade-sessionbar{position:absolute;top:var(--lb-header-height,56px);left:0;right:0;display:flex;gap:12px;align-items:center;padding:0 12px;height:44px;background:#102329;z-index:3;font-size:13px;border-bottom:1px solid #93744e}
+.arcade-return{color:#eeca92;display:flex;align-items:center;min-height:44px;text-decoration:none}.arcade-caption{flex:1}#arcadeScore{font-variant-numeric:tabular-nums;color:#f3cb8a;white-space:nowrap}
+.arcade-tools{position:absolute;right:8px;top:4px;z-index:4;display:flex;align-items:center;gap:4px;font-size:12px;color:#e9d9b9}
+body[data-arcade] .arcade-tools button{background:#122a2de8;color:#ead7b3;border:1px solid #826f52;border-radius:6px;padding:4px 8px;font:12px system-ui}
+.arcade-tools .progressDots,.arcade-tools .progress{display:flex;gap:4px;min-width:0}.arcade-tools .progressHeart{width:16px;height:16px}
+.arcade-more{position:relative}.arcade-more summary{display:grid;place-items:center;list-style:none;min-width:44px;min-height:44px;border:1px solid #826f52;border-radius:6px;background:#122a2de8;color:#ead7b3;font-size:26px;cursor:pointer}.arcade-more summary::-webkit-details-marker{display:none}.arcade-more summary:focus-visible{outline:3px solid #f7d496}.arcade-more>div{position:absolute;right:0;top:48px;width:160px;padding:6px;display:grid;gap:6px;background:#132b31;border:1px solid #aa895e;border-radius:8px;box-shadow:0 8px 24px #0008}
+.arcade-scored{animation:arcade-score .5s ease-out}@keyframes arcade-score{0%{filter:brightness(1.3)}100%{filter:brightness(1)}}
+.arcade-score-pop{position:absolute;right:24px;bottom:20px;color:#ffdc9a;font:700 32px Georgia,serif;text-shadow:0 2px 4px #08171b;pointer-events:none;animation:arcade-points 1.2s ease-out forwards;z-index:5}@keyframes arcade-points{0%{opacity:0;transform:translateY(10px) scale(.8)}20%,60%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-20px)}}
+.arcade-fraction{display:inline-flex!important;flex-direction:column;vertical-align:middle;text-align:center;font-size:.8em;line-height:1.05;margin:0 3px}.arcade-fraction>span:first-child{border-bottom:1.5px solid currentColor;padding:0 3px 2px}.arcade-fraction>span:last-child{padding-top:2px}
+/* Rescue: full stage and one horizontal control row. */
+body[data-arcade=redding] .world{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;position:relative;min-height:0;padding-top:44px}
+body.arcade-embedded[data-arcade=redding] .world{padding-top:0}body[data-arcade=redding] #stage{background:radial-gradient(ellipse at 55% 25%,#304a4d,#132b31 80%)}
+body[data-arcade=redding] .controlBoard{padding:8px 12px;display:grid;grid-template-columns:100px minmax(0,1fr) auto;grid-template-rows:auto;gap:10px;align-items:center;background:#eedab7;color:#2b2720;border:2px solid #715434;border-radius:10px 10px 0 0;font-family:Georgia,serif}
+body[data-arcade=redding] .controlBoard>*{grid-row:1;grid-column:auto}body[data-arcade=redding] .mission{display:block;min-width:0;align-self:center}
+body[data-arcade=redding] :is(.mission h1,.mission>.eyebrow,.classPrompt,#lastPlan,.phaseBadge,.formulaContext,.consoleNote,.actionHint,.targetIcon){display:none}
+body[data-arcade=redding] .targetCard{display:block;border:0;padding:0;background:none}body[data-arcade=redding] .targetCard small{display:block;font:11px system-ui;color:#514b3f}body[data-arcade=redding] #targetLabel{font-size:24px}
+body[data-arcade=redding] .missionText{position:absolute;top:44px;left:12px;z-index:2;max-width:min(390px,46%);margin:0;font:14px/1.3 system-ui;color:#f1e5cb;background:#12282de8;padding:5px 10px;border-left:2px solid #d7ad70;pointer-events:none}
+body.arcade-embedded[data-arcade=redding] .missionText{top:8px}
+body[data-arcade=redding] .missionText .infoBlock,body[data-arcade=redding] .missionText .infoBlock>*{margin:0}body[data-arcade=redding] .missionText .infoPrompt{font-size:14px}
+body[data-arcade=redding] #console{grid-column:2;padding:0;background:none;border:0;min-width:0}body[data-arcade=redding] .formulaWrap{border:0;padding:0;background:none}
+body[data-arcade=redding] .formula{display:flex;align-items:center;justify-content:center;font-size:32px;color:#28261f;gap:7px;line-height:1;white-space:nowrap}
+body[data-arcade=redding] .term{display:grid;grid-template-columns:44px minmax(44px,auto) 44px;grid-template-rows:48px;gap:2px;align-items:center;justify-items:center}
+body[data-arcade=redding] .paramArrow{width:44px;height:44px;min-height:44px;background:#e0c7a1;color:#342a20;border:1px solid #a8875a;padding:3px;border-radius:6px}
+body[data-arcade=redding] .term .down{grid-column:1;grid-row:1}body[data-arcade=redding] .term .up{grid-column:3;grid-row:1}
+body[data-arcade=redding] .value{grid-column:2;grid-row:1;width:auto;min-width:44px;height:48px;min-height:44px;font-size:inherit;background:none}
+body[data-arcade=redding] .aColor{color:#6b3924}body[data-arcade=redding] .bColor{color:#275f59}body[data-arcade=redding] .choices{display:none}
+body[data-arcade=redding] #actions{grid-column:3;display:flex;flex-direction:row;gap:6px;align-items:center;padding:0;margin:0}
+body[data-arcade=redding] .roleLine{display:none}body[data-arcade=redding] .actionButton{width:auto;min-height:48px;padding:6px 12px;font:600 15px/1.2 system-ui;border-radius:7px}
+body[data-arcade=redding] #planBtn:not([hidden]){display:block}
+body[data-arcade=redding] .dockPanel{grid-column:2/4;grid-row:1;display:flex;justify-content:flex-end;gap:8px;align-items:center;min-width:0;background:none;padding:0;border:0;color:#30291f}
+body[data-arcade=redding] .panelCopy{display:none}body[data-arcade=redding] .panelButtons{display:flex;gap:6px;flex-shrink:0;grid-row:auto}
+body[data-arcade=redding] #app:not([data-state=planning]):not([data-state=review]):not([data-state=executing]) #console{display:none}
+body[data-arcade=redding] :is(.axisStroke,.axisTick){stroke:#e8dabc}body[data-arcade=redding] .gridLine{stroke:#9fbcb9;opacity:.2}body[data-arcade=redding] .mathLine{stroke:#f7d49a;stroke-width:2}body[data-arcade=redding] .guide{stroke:#d7a761}
+body[data-arcade=redding] #axisLayer text{fill:#e6dcc5}body[data-arcade=redding] #worldSvg #axisArrow path{stroke:#eadabd}
+/* Clay: the 360-degree range fills the playfield. */
+body[data-arcade=kleiduiven] .game{padding:44px 0 0;gap:0;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto}body.arcade-embedded[data-arcade=kleiduiven] .game{padding-top:0}
+body[data-arcade=kleiduiven] .arena{display:block;position:relative;min-height:0;background:radial-gradient(ellipse at center,#30454a,#112b32)}body[data-arcade=kleiduiven] #field{width:100%;height:100%;min-height:0}
+body[data-arcade=kleiduiven] .fieldLabel{position:absolute;top:8px;left:12px;right:12px;height:auto;padding:0;pointer-events:none;z-index:2;font-size:12px}body[data-arcade=kleiduiven] .fieldLabel span:last-child{display:none}
+body[data-arcade=kleiduiven] .caption{position:absolute;bottom:6px;left:12px;right:12px;height:auto;pointer-events:none;z-index:2;font-size:12px}
+body[data-arcade=kleiduiven] .console{display:grid;grid-template-columns:80px minmax(0,1fr) 80px;grid-template-rows:auto;align-items:center;gap:10px;padding:6px 12px;background:#ecd6b1;color:#28251d;border:2px solid #715434;border-radius:10px 10px 0 0}
+body[data-arcade=kleiduiven] .consoleTop{display:none}body[data-arcade=kleiduiven] .deadline{padding:0;border:0}body[data-arcade=kleiduiven] .deadline>span{display:none}body[data-arcade=kleiduiven] #timer{color:#453b2b;font-size:22px;margin:0 0 4px}body[data-arcade=kleiduiven] #timer.urgent{color:#a23328}
+body[data-arcade=kleiduiven] #choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-height:none;gap:8px}
+body[data-arcade=kleiduiven] .choice{background:#f6e6ca;border:2px solid #9d794e;color:#372719;font:30px/1 Georgia,serif;height:50px;min-height:50px;padding:3px 12px;border-radius:8px;box-shadow:inset 0 0 0 1px #fffbda,0 3px 0 #a88d67}
+body[data-arcade=kleiduiven] .choice.correct{background:#c4dbc7;border-color:#3e8065}body[data-arcade=kleiduiven] .choice.wrong{background:#e6b5a2;border-color:#984a37}body[data-arcade=kleiduiven] .choiceKey{color:#705842}
+body[data-arcade=kleiduiven] .consoleFoot{margin:0;color:#554838;padding:0;display:grid;gap:4px;font-size:12px}
+body[data-arcade=kleiduiven] .consoleFoot #progress{display:flex;gap:3px;min-width:0}body[data-arcade=kleiduiven] .consoleFoot .dot{width:7px;height:5px;flex:none}
+body[data-arcade=kleiduiven] .axes{stroke:#e6d9bd;stroke-opacity:.75}body[data-arcade=kleiduiven] .outer,body[data-arcade=kleiduiven] .rim{stroke:#d1a56c}
+/* The rotation attribute already contains the origin; a CSS origin adds it twice. */
+body[data-arcade=kleiduiven] #turretBarrel{transform-origin:0 0}
+body[data-arcade=redding] #targetCallout{display:none}
+body[data-arcade=redding] .missionText{max-width:min(240px,30%)}
+/* Naval: two seas with the attack console underneath. */
+body[data-arcade=zeeslag] main{padding-top:44px;min-height:0}body.arcade-embedded[data-arcade=zeeslag] main{padding-top:0}
+body[data-arcade=zeeslag] .screen.active#gameScreen{display:grid;grid-template-rows:32px minmax(0,1fr) auto;align-content:stretch;overflow:hidden}
+body[data-arcade=zeeslag] .matchbar{height:32px;min-height:0;padding:0 12px;gap:10px;background:#10262c;overflow:hidden;font-size:13px}body[data-arcade=zeeslag] .backLobby{display:none}body[data-arcade=zeeslag] .matchTitle{font-size:14px}
+body[data-arcade=zeeslag] .boards{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:0;padding:2px 12px;gap:12px}
+body[data-arcade=zeeslag] .boardSide{display:grid;grid-template-rows:22px minmax(0,1fr) 18px;min-height:0;min-width:0;align-items:stretch}
+body[data-arcade=zeeslag] .boardTitle{width:100%;min-height:0;max-width:none;display:flex;align-items:center;justify-content:center;gap:12px}body[data-arcade=zeeslag] .boardTitle strong{font-size:15px}body[data-arcade=zeeslag] .boardTitle span{font-size:11px}
+body[data-arcade=zeeslag] .boardFrame{display:grid;place-items:center;min-height:0;width:100%;height:100%;max-width:none;aspect-ratio:auto;container-type:size}
+body[data-arcade=zeeslag] .boardSvg{width:min(100cqw,100cqh);height:min(100cqw,100cqh);max-width:none;max-height:none;aspect-ratio:1;align-self:center;overflow:visible}
+body[data-arcade=zeeslag] .bottom{display:flex;align-items:center;padding:6px 12px;gap:8px;background:#ead5b3;color:#342b20;border:2px solid #715434;border-radius:10px 10px 0 0;min-height:64px}
+body[data-arcade=zeeslag] .bottom>div:empty{display:none}body[data-arcade=zeeslag] .placementBar{flex-wrap:nowrap;width:100%;max-width:none;gap:10px}body[data-arcade=zeeslag] .placementInfo{min-width:0}body[data-arcade=zeeslag] .placementInfo span{font-size:12px;line-height:1.2}
+body[data-arcade=zeeslag] .fleetCount{font-size:22px;color:#4c6150}body[data-arcade=zeeslag] .fleetCount small{font-size:9px;color:#655c4a}
+body[data-arcade=zeeslag] .aimComposer{position:static;inset:auto;width:100%;height:auto;min-height:0;display:block;transform:none;z-index:auto;aspect-ratio:auto;padding:0;border:0;border-radius:0;background:none;overflow:visible}body[data-arcade=zeeslag] .aimComposer:before{display:none}
+body[data-arcade=zeeslag] .aimCard{width:100%;max-width:none;display:flex;justify-content:center;align-items:center;gap:18px;padding:0;background:none;border:0;box-shadow:none;color:#342b20}
+body[data-arcade=zeeslag] :is(.aimEyebrow,.concealHint,.chartLegend,.paramCaption){display:none}body[data-arcade=zeeslag] .equationBuilder{display:flex;align-items:center;gap:8px;font-size:28px;background:none;padding:0;border:0;margin:0}
+body[data-arcade=zeeslag] .paramControl{display:flex;flex-direction:row;align-items:center;gap:4px;min-width:0}body[data-arcade=zeeslag] .paramBtn{width:44px;height:44px;background:#dfc5a0;color:#392c1d;border:1px solid #9d774e;border-radius:6px;font-size:25px}
+body[data-arcade=zeeslag] .paramValue{font-size:28px;min-width:44px;min-height:44px;background:none;border:0;padding:0;color:#342b20}body[data-arcade=zeeslag] .paramBtn[id$=DownBtn]{order:-1}body[data-arcade=zeeslag] .paramBtn[id$=UpBtn]{order:1}
+body[data-arcade=zeeslag] .fireBtn{width:auto;min-width:100px;min-height:48px;font-size:20px;margin:0;padding:6px 20px}
+body[data-arcade=zeeslag] .turnPill{background:#365349;color:#f3e6c8;padding:4px 8px;font-size:12px}body[data-arcade=zeeslag] .turnPill.mine{background:#722f30;color:#f6d095}
+body[data-arcade=zeeslag] .axisLabel{fill:#ebddbf;stroke:#132b31}body[data-arcade=zeeslag] .axisName{fill:#ebddbf}body[data-arcade=zeeslag] .gridPoint{fill:#a7c6be;opacity:.4}body[data-arcade=zeeslag] .shipNode{fill:#ffebba;stroke:#412c1c;stroke-width:1.5}body[data-arcade=zeeslag] .shotLine{stroke:#eec78b}
+body[data-arcade=zeeslag] .history{width:100%;min-height:0;max-width:none;font-size:11px;padding:0;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+body[data-arcade=zeeslag] .matchResult{inset:32px 0 0;background:#10242af0}body[data-arcade=zeeslag] :is(.rankBtn,.smallBtn){background:#213b3e;color:#efddba}body[data-arcade=zeeslag] :is(.rankTable,.rankTable th,.rankTable td){color:#f1e1c1;border-color:#896e4c}body[data-arcade=zeeslag] .rankTable tr.me{background:#5b3531}
+@media(max-height:500px){body[data-arcade=redding] .controlBoard{padding:4px 8px;gap:6px;grid-template-columns:80px minmax(0,1fr) auto}body[data-arcade=redding] .formula{font-size:27px;gap:4px}body[data-arcade=redding] #targetLabel{font-size:20px}body[data-arcade=redding] .missionText,body[data-arcade=redding] .missionText .infoPrompt{font-size:12px;line-height:1.25}body[data-arcade=redding] .actionButton{font-size:13px;padding:4px 8px}body[data-arcade=kleiduiven] .console{padding:4px 8px;gap:8px}body[data-arcade=kleiduiven] .caption,body[data-arcade=kleiduiven] .fieldLabel{font-size:10px}body[data-arcade=zeeslag] .boardTitle span,body[data-arcade=zeeslag] .placementInfo span{display:none}body[data-arcade=zeeslag] .boards{gap:6px;padding:2px 6px}body[data-arcade=zeeslag] .boardSide{grid-template-rows:20px minmax(0,1fr) 14px}body[data-arcade=zeeslag] .boardTitle strong{font-size:12px}body[data-arcade=zeeslag] .history{font-size:9px}body[data-arcade=zeeslag] .equationBuilder{font-size:23px;gap:4px}body[data-arcade=zeeslag] .paramValue{font-size:23px}body[data-arcade=zeeslag] .aimCard{gap:8px}body[data-arcade=zeeslag] .bottom{padding:4px 8px;min-height:60px}}
+@media(prefers-reduced-motion:reduce){.arcade-scored,.arcade-score-pop{animation:none}}
+@media(max-height:500px) and (min-width:600px){
+ body[data-arcade=zeeslag] .screen.active#gameScreen{grid-template-rows:minmax(0,1fr) auto}
+ body[data-arcade=zeeslag] .matchbar{display:none}
+ body[data-arcade=zeeslag] .boards{grid-row:1}
+ body[data-arcade=zeeslag] .bottom{grid-row:2}
+ body[data-arcade=zeeslag] .boardSide{grid-template-rows:20px minmax(0,1fr)}
+ body[data-arcade=zeeslag] .history{display:none}
+}
+
+body.topbar-collapsed[data-arcade] .lb-restore{top:0!important}
+body.topbar-collapsed[data-arcade] .arcade-sessionbar{padding-left:58px}

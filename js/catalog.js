@@ -25,6 +25,25 @@ window.AXIOMA_CATALOG = [
     "progressGameId": "rechten-trainer"
   },
   {
+    "title": "Rechtenarcade",
+    "subtitle": "Speel Zeeslag, brandweer, kabelbaan en kleiduiven. Ontwerp je eigen glasraam.",
+    "href": "games/rechten/arcade/",
+    "category": "Eerstegraadsfuncties",
+    "kind": "arcade",
+    "accent": "gold",
+    "theme": "Functies",
+    "art": "naval",
+    "cover": "games/rechten/arcade/assets/ship.webp",
+    "detail": "Solo en duo · Glasraam · topscores",
+    "id": "rechten-arcade",
+    "progressType": "none",
+    "teacherVisible": false,
+    "gameType": "arcade",
+    "tracking": "none",
+    "featured": false,
+    "subject": "Rechten"
+  },
+  {
     "title": "Rechtentrainer",
     "subtitle": "Oefen met rechten en zie jezelf vooruitgaan.",
     "href": "games/rechten/trainer/",

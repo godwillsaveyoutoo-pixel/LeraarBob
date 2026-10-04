@@ -162,8 +162,12 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 @media(orientation:portrait) and (max-width:900px){.topbar{grid-template-columns:1fr auto auto}.topbar .progress,.topbar .total,.topbar #mute,.topbar #restart{display:none}}
 </style>
 <script src="../../../shared/axioma-platform.js"></script>
-<script src="../../../shared/leraarbob-topbar.js" data-title="Kleiduifschieten" defer></script></head>
-<body>
+<script src="../../../shared/leraarbob-topbar.js" data-title="Kleiduifschieten" defer></script>
+<link rel="stylesheet" href="../arcade/theme.css">
+<script src="../arcade/core.js"></script>
+<script src="../arcade/bridge.js" data-arena="kleiduiven"></script>
+</head>
+<body data-arcade="kleiduiven">
 <div id="app">
 <header class="topbar">
   <a class="brand axiomaHome" href="../../../" aria-label="Naar leraarBob startpagina">leraarBob <small>KLEIDUIVEN 01</small></a>

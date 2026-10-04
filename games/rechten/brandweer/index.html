@@ -153,8 +153,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  -->
 <script src="../../../shared/axioma-platform.js"></script>
-<script src="../../../shared/leraarbob-topbar.js" data-title="Brandweer" defer></script></head>
-<body>
+<script src="../../../shared/leraarbob-topbar.js" data-title="Brandweer" defer></script>
+<link rel="stylesheet" href="../arcade/theme.css">
+<script src="../arcade/core.js"></script>
+<script src="../arcade/bridge.js" data-arena="redding"></script>
+</head>
+<body data-arcade="redding">
 <div id="app">
   <header class="topbar">
     <a class="brand axiomaHome" href="../../../" aria-label="Naar leraarBob startpagina">leraarBob<small>Rechtenspel</small></a>
@@ -242,11 +246,11 @@ const LEVELS = [
 ];
 // Zet hier later data:image/png;base64,... neer om het bestand zelfstandig te houden.
 // Alle boxes zijn wereldcoördinaten, onafhankelijk van de oorspronkelijke PNG-afmetingen.
-const ART = Object.freeze({truck:'',ladder:'',lift:'',building:'',window:'',person:'',smoke:'',light:''});
+const ART = Object.freeze({truck:'../arcade/assets/truck.webp',ladder:'',lift:'',building:'',window:'',person:'',smoke:'',light:''});
 const $=id=>document.getElementById(id);
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const portrait=matchMedia('(orientation: portrait)');
-let levelIndex=Math.max(0,Math.min(LEVELS.length-1,Number(window.AxiomaGame.storage.getItem('axioma.brandweer.current.v1'))||0)), level=LEVELS[levelIndex], mode='solo', clockSeconds=0;
+let levelIndex=Math.max(0,Math.min(LEVELS.length-1,new URLSearchParams(location.search).get('level')==='1'?0:(Number(window.AxiomaGame.storage.getItem('axioma.brandweer.current.v1'))||0))), level=LEVELS[levelIndex], mode=new URLSearchParams(location.search).get('mode')==='duo'?'together':'solo', clockSeconds=0;
 const AXIOMA_GAME_ID='brandweer';
 const axiomaTrackedLevels=new Set(window.AxiomaGame.state.completed||[]);
 function trackAxiomaLevel(){
@@ -379,26 +383,14 @@ function sketchText(g,x,y,value,size=18,anchor='middle',opts={}){
   return t;
 }
 function P(x,y){return{x:M.ox+x*M.unit,y:M.oy-y*M.unit};}
-function cameraFit(yMax=11.4){if(isGorge())return{xMin:-2.5,xMax:level.targetX+3.5,yMin:Math.min(-7,level.targetY-1.7,yMax<0?yMax-1.5:-7),yMax:1.2};return{xMin:-3.1,xMax:level.targetX+4.3,yMin:-2,yMax:Math.max(11.4,yMax)};}
+function cameraFit(yMax=Math.max(6.5,level.targetY+1.4)){if(isGorge())return{xMin:-2.5,xMax:level.targetX+3.5,yMin:Math.min(-7,level.targetY-1.7,yMax<0?yMax-1.5:-7),yMax:1.2};return{xMin:-3.1,xMax:level.targetX+4.3,yMin:-2,yMax:Math.max(level.targetY+1.4,yMax)};}
 function metrics(){
  const w=$('stage').clientWidth,h=$('stage').clientHeight,c=camera||cameraFit();
- if(isGorge()){
-  const font=Math.max(17,Math.min(38,w*.030)),calloutFont=Math.max(20,Math.min(42,w*.032)),padTop=calloutFont*1.5+25;
-  let unit=Math.min((w-44)/(c.xMax-c.xMin),(h-padTop-20)/(c.yMax-c.yMin)),gorgeGutter=0;
-  // Reserve pixel space for negative tick labels before fitting the artwork.
-  for(let i=0;i<10;i++){gorgeGutter=Math.max(0,font*1.9+12-.78*unit);unit=Math.min((w-44-gorgeGutter)/(c.xMax-c.xMin),(h-padTop-20)/(c.yMax-c.yMin));}
-  const ox=18+gorgeGutter+(w-44-gorgeGutter-(c.xMax-c.xMin)*unit)/2-c.xMin*unit,oy=padTop+c.yMax*unit;
-  M={w,h,unit,ox,oy,...c,font,calloutFont,padTop,gorgeGutter};$('worldSvg').setAttribute('viewBox',`0 0 ${w} ${h}`);
-  Object.entries({x:0,y:0,width:w,height:h}).forEach(([k,v])=>$('clipRect').setAttribute(k,v));return;
- }
- const font=Math.max(17,Math.min(38,w*.030)),calloutFont=Math.max(20,Math.min(42,w*.032));
- const padTop=calloutFont*1.5+25,padBottom=18,safeLeft=18,padRight=26;
- const availW=Math.max(1,w-safeLeft-padRight),availH=Math.max(1,h-padTop-padBottom);
- // Reserve a vehicle lane below the axis independent of camera zoom.
- const unit=Math.max(1,Math.min(availW/(c.xMax-c.xMin),availH/(c.yMax+1.37)));
- const spareX=Math.max(0,availW-(c.xMax-c.xMin)*unit),spareY=Math.max(0,availH-(c.yMax+1.37)*unit);
- const ox=safeLeft+spareX*.5-c.xMin*unit,oy=padTop+spareY*.4+c.yMax*unit;
- M={w,h,unit,ox,oy,...c,safeLeft,font,calloutFont,padTop};
+ const padTop=30,padBottom=isGorge()?12:Math.max(34,Math.min(70,h*.17));
+ const unit=Math.max(1,Math.min((w-56)/(c.xMax-c.xMin),(h-padTop-padBottom)/(isGorge()?c.yMax-c.yMin:c.yMax)));
+ const font=Math.max(11,Math.min(24,unit*.72)),calloutFont=Math.max(14,Math.min(28,unit*.9));
+ const ox=w*.5-(c.xMax+c.xMin)*unit*.5,oy=padTop+c.yMax*unit;
+ M={w,h,unit,ox,oy,...c,safeLeft:20,font,calloutFont,padTop,gorgeGutter:0};
  $('worldSvg').setAttribute('viewBox',`0 0 ${w} ${h}`);
  Object.entries({x:0,y:0,width:w,height:h}).forEach(([k,v])=>$('clipRect').setAttribute(k,v));
 }
@@ -429,12 +421,12 @@ function renderGorge(){
   for(let i=1;i<points.length;i++){const a=point(...points[i-1]),b=point(...points[i]);rLine(g,...a,...b,{seed:seed+i,stroke,strokeWidth:width,roughness:.35});}
  };
  // Warm front faces, cool side facets and broken strata make this a rock ledge.
- poly([[-2.25,-.25],[-1.7,-.21],[-1.22,-.3],[-.9,-.23],[-.82,-.48],[-1.08,-1.55],[-.87,-2.6],[-1.2,-3.1],[-.96,-4.4],[-1.28,-5.3],[-1.03,bottom],[-2.25,bottom]],9100,'#f0ede3');
- poly([[-1.22,-.3],[-.9,-.23],[-.82,-.48],[-1.08,-1.55],[-.87,-2.6],[-1.2,-3.1],[-.96,-4.4],[-1.28,-5.3],[-1.03,bottom],[-1.6,bottom],[-1.48,-4.3],[-1.65,-2.7],[-1.44,-1.4]],9120,'#e0e4dc','#8d9a92',1.1);
+ poly([[-2.25,-.25],[-1.7,-.21],[-1.22,-.3],[-.9,-.23],[-.82,-.48],[-1.08,-1.55],[-.87,-2.6],[-1.2,-3.1],[-.96,-4.4],[-1.28,-5.3],[-1.03,bottom],[-2.25,bottom]],9100,'#736756');
+ poly([[-1.22,-.3],[-.9,-.23],[-.82,-.48],[-1.08,-1.55],[-.87,-2.6],[-1.2,-3.1],[-.96,-4.4],[-1.28,-5.3],[-1.03,bottom],[-1.6,bottom],[-1.48,-4.3],[-1.65,-2.7],[-1.44,-1.4]],9120,'#46554e','#8d9a92',1.1);
  g.children[0].setAttribute('data-left-cliff','');g.children[1].setAttribute('data-left-cliff','');
- poly([[5.62,-.72],[6.15,-.59],[6.5,-.8],[7.05,-.61],[7.68,-.8],[7.68,bottom],[5.73,bottom],[5.55,-5.62],[4.76,-5.43],[4.82,-5.24],[5.57,-5.09],[5.79,-4.63],[5.64,-3.87],[5.94,-3.12],[5.54,-2.46],[5.69,-1.45]],9200,'#eee9dc');
- poly([[6.15,-.59],[6.5,-.8],[6.25,-1.72],[6.43,-2.45],[6.13,-3.16],[6.38,-4.25],[6.12,-5.32],[6.45,bottom],[5.73,bottom],[5.55,-5.62],[4.76,-5.43],[4.82,-5.24],[5.57,-5.09],[5.79,-4.63],[5.64,-3.87],[5.94,-3.12],[5.54,-2.46],[5.69,-1.45],[5.62,-.72]],9220,'#e0e4dc','#84988f',1.1);
- poly([[4.82,-5.24],[5.57,-5.09],[6.1,-5.26],[5.55,-5.47],[4.76,-5.43]],9240,'#faf5e5','#657d77',1.6);
+ poly([[5.62,-.72],[6.15,-.59],[6.5,-.8],[7.05,-.61],[7.68,-.8],[7.68,bottom],[5.73,bottom],[5.55,-5.62],[4.76,-5.43],[4.82,-5.24],[5.57,-5.09],[5.79,-4.63],[5.64,-3.87],[5.94,-3.12],[5.54,-2.46],[5.69,-1.45]],9200,'#85735b');
+ poly([[6.15,-.59],[6.5,-.8],[6.25,-1.72],[6.43,-2.45],[6.13,-3.16],[6.38,-4.25],[6.12,-5.32],[6.45,bottom],[5.73,bottom],[5.55,-5.62],[4.76,-5.43],[4.82,-5.24],[5.57,-5.09],[5.79,-4.63],[5.64,-3.87],[5.94,-3.12],[5.54,-2.46],[5.69,-1.45],[5.62,-.72]],9220,'#46554e','#84988f',1.1);
+ poly([[4.82,-5.24],[5.57,-5.09],[6.1,-5.26],[5.55,-5.47],[4.76,-5.43]],9240,'#baa17a','#657d77',1.6);
  const strata=[[[6.49,-1.5],[6.84,-1.63],[7.46,-1.49]],[[6.47,-2.7],[6.89,-2.54],[7.55,-2.75]],[[6.64,-3.53],[6.98,-3.72],[7.45,-3.62]],[[6.46,-4.52],[7.04,-4.37],[7.5,-4.53]],[[6.57,-5.7],[7,-5.9],[7.5,-5.82]],[[-2.15,-1.2],[-1.84,-1.34],[-1.55,-1.27]],[[-2.15,-2.3],[-1.9,-2.18],[-1.65,-2.4]],[[-2.15,-4.1],[-1.83,-4.3],[-1.63,-4.21]]];
  strata.forEach((points,i)=>path(points,9300+i*10));
  path([[7.02,-1.61],[6.94,-2.07],[7.14,-2.38]],9420,'#87988f');
@@ -447,14 +439,14 @@ function renderGorge(){
  poly([[6.45,-.73],[6.52,-.57],[6.7,-.6],[6.79,-.78]],9480,'#d5dcd4','#8d9a92',1);
  mapRocks=false;
  // Bolted launch platform and a winch frame, connected directly to the origin.
- poly([[-2.13,-.12],[-.85,-.12],[-.74,-.24],[-2.13,-.24]],9500,'#dce7e8','#24495f',1.8);
- poly([[-1.32,-.12],[-1.06,.65],[-.66,-.12]],9520,'#f7f7ed','#24495f',2.1);
+ poly([[-2.13,-.12],[-.85,-.12],[-.74,-.24],[-2.13,-.24]],9500,'#73614b','#b59a70',1.8);
+ poly([[-1.32,-.12],[-1.06,.65],[-.66,-.12]],9520,'#bc9b64','#b59a70',2.1);
  path([[-1.06,.65],[-.85,-.12]],9530,'#8dabb3',2);
- path([[-.85,-.18],[0,-.08],[0,0]],9540,'#24495f',3);
+ path([[-.85,-.18],[0,-.08],[0,0]],9540,'#b59a70',3);
  const wheel=P(-1.08,.20);wheel.x-=M.gorgeGutter||0;
- rEllipse(g,wheel.x,wheel.y,.42*u,.42*u,{seed:9550,stroke:'#24495f',strokeWidth:2,fill:'#e7eff0',roughness:.25});
- rEllipse(g,wheel.x,wheel.y,.24*u,.24*u,{seed:9551,stroke:'#839eaa',strokeWidth:1.3,fill:'#d3dfe3',roughness:.2});
- path([[-1.08,.20],[-.89,.27],[-.83,.16]],9552,'#24495f',1.8);
+ rEllipse(g,wheel.x,wheel.y,.42*u,.42*u,{seed:9550,stroke:'#b59a70',strokeWidth:2,fill:'#bd9457',roughness:.25});
+ rEllipse(g,wheel.x,wheel.y,.24*u,.24*u,{seed:9551,stroke:'#839eaa',strokeWidth:1.3,fill:'#826446',roughness:.2});
+ path([[-1.08,.20],[-.89,.27],[-.83,.16]],9552,'#b59a70',1.8);
  const kit=P(-2.04,.20);kit.x-=M.gorgeGutter||0;
  rRect(g,kit.x,kit.y,.41*u,.27*u,{seed:9560,stroke:'#8c4147',strokeWidth:1.5,fill:'#c97971',roughness:.3});
  path([[-1.89,.16],[-1.89,-.01]],9562,'#fff9ed',2);path([[-1.98,.075],[-1.80,.075]],9563,'#fff9ed',2);
@@ -462,7 +454,7 @@ function renderGorge(){
  const o=P(0,0);circle(g,o.x,o.y,Math.max(6,u*.13),'pivot');
  // The receiving clamp is centred on the exact target, with the walkway below it.
  const t=P(level.targetX,level.targetY);
- path([[level.targetX,level.targetY-.02],[level.targetX,level.targetY-.28]],9600,'#24495f',2.4);
+ path([[level.targetX,level.targetY-.02],[level.targetX,level.targetY-.28]],9600,'#b59a70',2.4);
  circle(g,t.x,t.y,Math.max(9,u*.25),'',{fill:'#fff1c6',stroke:'#d29a27','stroke-width':2});
  circle(g,t.x,t.y,3,'',{id:'gorgeTarget','data-world-x':level.targetX,'data-world-y':level.targetY,fill:'#b67e13'});
 }
@@ -483,13 +475,13 @@ function drawGorgeHiker(g,x,y,u,crew=false,seated=false){
 
 function drawGorgeCabin(g,p,occupied){
  const u=M.unit,worldX=(p.x-M.ox)/u,dock=Math.max(0,Math.min(1,(1.5-worldX)/1.5));
- const offset=-.7+1.12*(dock*dock*(3-2*dock)),x=p.x+offset*u,y=p.y,ink='#24495f';
+ const offset=-.7+1.12*(dock*dock*(3-2*dock)),x=p.x+offset*u,y=p.y,ink='#b59a70';
  g=svgEl('g',{'data-gorge-cabin':occupied?'occupied':'empty'},g);
  const ln=(x1,y1,x2,y2,n,color=ink,width=1.8)=>rLine(g,x+x1*u,y+y1*u,x+x2*u,y+y2*u,{seed:9800+n,stroke:color,strokeWidth:width,roughness:.2});
  // The offset suspension keeps the carrier to the right of the y-axis at arrival.
  ln(-offset,0,0,.18,1);ln(0,.18,0,.25,2);
  rEllipse(g,p.x,p.y,.17*u,.17*u,{seed:9803,fill:'#f9f7ee',stroke:ink,strokeWidth:1.5,roughness:.2});
- rRect(g,x-.31*u,y+.27*u,.64*u,.50*u,{seed:9810,fill:'#e6eff0',stroke:ink,strokeWidth:1.8,roughness:.25});
+ rRect(g,x-.31*u,y+.27*u,.64*u,.50*u,{seed:9810,fill:'#873d35',stroke:ink,strokeWidth:1.8,roughness:.25});
  if(occupied)drawGorgeHiker(g,x,y+.69*u,u*.55,false,true);
  ln(-.35,.25,.35,.25,11);ln(-.31,.57,.33,.57,12,'#61909c');
  ln(-.31,.75,.33,.75,13,ink,2.2);ln(-.17,.59,-.17,.74,14);ln(.02,.59,.02,.74,15);ln(.20,.59,.20,.74,16);
@@ -498,7 +490,7 @@ function drawGorgeCabin(g,p,occupied){
 function renderGrid(){
  if(isGorge()){renderGorgeGrid();return;}
  clear(layers.grid);clear(layers.axis);
- const xmax=level.targetX+3,ymax=Math.max(10,Math.floor(M.yMax-1.1+1e-6));
+ const xmax=level.targetX+3,ymax=Math.max(level.targetY,Math.floor(M.yMax-.4));
  const stride=M.unit<M.font*1.55||ymax>14?2:1,seed=sketchHash(level.id,'grid');
  for(let y=1;y<=ymax;y++){
   const a=P(0,y),b=P(xmax+.15,y);
@@ -524,7 +516,7 @@ function renderBuilding(){
   clear(layers.building);
   const u=M.unit;
   const left=P(level.targetX-.50,0).x;
-  const top=P(0,10.55).y;
+  const top=P(0,Math.min(10.55,M.yMax-.7)).y;
   const bottom=P(0,.16).y;
   const width=2.82*u;
   const h=bottom-top;
@@ -535,8 +527,8 @@ function renderBuilding(){
   }else{
     // Main flat: calm white marker fill with a genuinely sketchy outline.
     rRect(layers.building,left,top,width,h,{
-      seed:baseSeed,stroke:'#102d4f',strokeWidth:2.7,roughness:.78,bowing:.55,
-      fill:'#fffef9',fillStyle:'solid'
+      seed:baseSeed,stroke:'#251e19',strokeWidth:2.7,roughness:.78,bowing:.55,
+      fill:'#8c8069',fillStyle:'solid'
     });
     // Side wall hatching gives a hand-drawn marker/shadow cue.
     rPolygon(layers.building,[
@@ -544,14 +536,14 @@ function renderBuilding(){
       [left+width,bottom],[left+width-.22*u,bottom-.02*u]
     ],{
       seed:baseSeed+1,stroke:'#27465f',strokeWidth:1.8,roughness:.68,
-      fill:'#e9f0f3',fillStyle:'hachure',hachureGap:6,fillWeight:1.1
+      fill:'#465954',fillStyle:'hachure',hachureGap:6,fillWeight:1.1
     });
     // Warm roof band echoes the target mockup's red/orange marker accents.
     rPolygon(layers.building,[
       [left-.08*u,top+.02*u],[left+.05*u,top-.16*u],
       [left+width+.08*u,top-.12*u],[left+width+.03*u,top+.06*u]
     ],{
-      seed:baseSeed+2,stroke:'#102d4f',strokeWidth:2.2,roughness:.85,
+      seed:baseSeed+2,stroke:'#251e19',strokeWidth:2.2,roughness:.85,
       fill:'#ff836d',fillStyle:'solid'
     });
 
@@ -578,8 +570,8 @@ function renderBuilding(){
       }
       if(!asset(layers.building,'window',p.x-ww/2,p.y-wh/2,ww,wh)){
         rRect(layers.building,p.x-ww/2,p.y-wh/2,ww,wh,{
-          seed,stroke:target?'#e3a000':'#102d4f',strokeWidth:target?3.3:2.0,roughness:target?.88:.68,bowing:.55,
-          fill:target?'#fff3a7':'#d8f1ff',fillStyle:'solid'
+          seed,stroke:target?'#e3a000':'#251e19',strokeWidth:target?3.3:2.0,roughness:target?.88:.68,bowing:.55,
+          fill:target?'#ffe0a0':'#405853',fillStyle:'solid'
         });
         // Two calm marker panes.
         rLine(layers.building,p.x,p.y-wh*.46,p.x,p.y+wh*.46,{
@@ -589,7 +581,7 @@ function renderBuilding(){
           seed:seed+3,stroke:target?'#d69a00':'#6d9ab2',strokeWidth:1.25,roughness:.55,bowing:.35
         });
         rLine(layers.building,p.x-ww*.60,p.y+wh*.55,p.x+ww*.60,p.y+wh*.55,{
-          seed:seed+4,stroke:'#102d4f',strokeWidth:1.6,roughness:.72,bowing:.45
+          seed:seed+4,stroke:'#251e19',strokeWidth:1.6,roughness:.72,bowing:.45
         });
       }
     }
@@ -606,8 +598,9 @@ function renderTruck(){
  clear(layers.truck);
  const {u,left,right,bodyY}=vehicleMetrics(),seed=sketchHash('truck');
  const g=svgEl('g',{id:'vehicleArtwork'},layers.truck);
- if(asset(g,'truck',left,bodyY-.25*u,right-left,1.15*u))return;
- const outline={stroke:'#183751',strokeWidth:Math.max(1.25,Math.min(2.5,u*.048)),roughness:.4,bowing:.15};
+ const artWidth=Math.max(110,Math.min(240,3.6*u)),artHeight=artWidth/3,artX=M.ox-artWidth*.84,artY=M.oy+4;
+ if(asset(g,'truck',artX,artY,artWidth,artHeight)){line(g,M.ox+.23*u,M.oy,M.ox+.23*u,artY+artHeight*.36,'',{stroke:'#bc8b55','stroke-width':Math.max(3,u*.14)});return;}
+ const outline={stroke:'#1e2422',strokeWidth:Math.max(1.25,Math.min(2.5,u*.048)),roughness:.4,bowing:.15};
  // The rear equipment deck lies directly beneath the mathematical pivot.
  rRect(g,left+.84*u,bodyY,right-left-.84*u,.61*u,{...outline,seed,fill:'#df514b'});
  rPolygon(g,[[left+.88*u,bodyY],[left+.64*u,bodyY-.17*u],[left+.30*u,bodyY-.17*u],[left+.09*u,bodyY+.04*u],[left,bodyY+.37*u],[left+.12*u,bodyY+.62*u],[left+.90*u,bodyY+.62*u]],{...outline,seed:seed+1,fill:'#ef6b5b'});
@@ -632,7 +625,7 @@ function renderTruck(){
  rLine(g,left-.17*u,road,right+.22*u,road,{seed:seed+35,stroke:'#acb7b9',strokeWidth:1.2,roughness:.2});
  // Separate mount: the zero label occupies the other side of the vertical axis.
  const mount=svgEl('g',{id:'vehicleMount'},layers.truck);
- rPolygon(mount,[[M.ox+.12*u,bodyY],[M.ox+.40*u,bodyY],[M.ox+.34*u,M.oy+.12*u],[M.ox+.16*u,M.oy+.12*u]],{...outline,seed:seed+40,fill:'#e6eceb'});
+ rPolygon(mount,[[M.ox+.12*u,bodyY],[M.ox+.40*u,bodyY],[M.ox+.34*u,M.oy+.12*u],[M.ox+.16*u,M.oy+.12*u]],{...outline,seed:seed+40,fill:'#b89461'});
  rLine(mount,M.ox+.23*u,M.oy+.13*u,M.ox,M.oy,{...outline,seed:seed+41});
 }
 
@@ -653,15 +646,26 @@ function renderLift(){
  // A narrow telescoping mast to the right leaves the y-axis and its labels clear.
  if(mech.b>.025){
   const g=svgEl('g',{id:'liftMast'},layers.lift),left=o.x+.19*u,right=o.x+.43*u;
-  rRect(g,left,p.y+.16*u,right-left,o.y-p.y,{seed,stroke:'#788e99',strokeWidth:1.6,roughness:.25,fill:'#edf1ee'});
-  rLine(g,left+.065*u,p.y+.17*u,left+.065*u,o.y+.16*u,{seed:seed+1,stroke:'#b1c0c4',strokeWidth:1.2,roughness:.15});
+  rRect(g,left,p.y+.16*u,right-left,o.y-p.y,{seed,stroke:'#342c23',strokeWidth:1.6,roughness:.25,fill:'#b5905a'});
+  rLine(g,left+.065*u,p.y+.17*u,left+.065*u,o.y+.16*u,{seed:seed+1,stroke:'#e0c695',strokeWidth:1.2,roughness:.15});
   // Collars have fixed world spacing, so sections don't jump as the height changes.
   for(let height=1;height<mech.b;height++){
    const y=P(0,height).y;
-   rLine(g,left-.025*u,y,right+.025*u,y,{seed:seed+10+height,stroke:'#7d929a',strokeWidth:1.5,roughness:.2});
+   rLine(g,left-.025*u,y,right+.025*u,y,{seed:seed+10+height,stroke:'#6e5539',strokeWidth:1.5,roughness:.2});
   }
  }
- rPolygon(layers.lift,[[p.x-.10*u,p.y+.09*u],[p.x+.49*u,p.y+.09*u],[p.x+.43*u,p.y+.22*u],[p.x-.10*u,p.y+.22*u]],{seed:seed+90,stroke:'#456476',strokeWidth:1.7,roughness:.25,fill:'#e6eceb'});
+ rPolygon(layers.lift,[[p.x-.10*u,p.y+.09*u],[p.x+.49*u,p.y+.09*u],[p.x+.43*u,p.y+.22*u],[p.x-.10*u,p.y+.22*u]],{seed:seed+90,stroke:'#456476',strokeWidth:1.7,roughness:.25,fill:'#b89461'});
+}
+
+function renderArcadeLadderSections(g,s,e,u){
+ const len=Math.hypot(e.x-s.x,e.y-s.y),angle=Math.atan2(e.y-s.y,e.x-s.x)*180/Math.PI,sep=Math.max(3,.105*u);
+ const parts=svgEl('g',{id:'arcadeLadderSections',transform:`translate(${s.x} ${s.y}) rotate(${angle})`},g);
+ for(const [i,part] of RechtenArcadeCore.ladderSections(len,u).entries()){
+  const y=sep*(1-i*.16),section=svgEl('g',{'data-section':i,transform:`translate(${part.offset} 0)`},parts);
+  for(const sign of [-1,1]){line(section,0,sign*y,part.length,sign*y,'',{stroke:'#171919','stroke-width':Math.max(4,u*.095),'stroke-linecap':'round'});line(section,0,sign*y,part.length,sign*y,'',{stroke:i===1?'#d8bd8c':'#bc8c50','stroke-width':Math.max(2,u*.055),'stroke-linecap':'round'});}
+  for(let x=Math.min(u*.28,part.length*.3);x<part.length-u*.12;x+=u*.32)line(section,x,-y,x,y,'',{stroke:'#e3c999','stroke-width':Math.max(1.2,u*.027)});
+  svgEl('rect',{x:Math.max(0,part.length-u*.16),y:-y-2,width:Math.max(3,u*.16),height:y*2+4,rx:2,fill:'#c09456',stroke:'#241e18','stroke-width':1},section);
+ }
 }
 
 function renderLadder(){
@@ -670,18 +674,18 @@ function renderLadder(){
   const dx=e.x-s.x,dy=e.y-s.y,len=Math.hypot(dx,dy)||1,nx=-dy/len,ny=dx/len,sep=.105*u;
   const seed=sketchHash(level.id,'ladder');
 
-  if(!asset(layers.ladder,'ladder',0,-sep,len,sep*2,{transform:`translate(${s.x} ${s.y}) rotate(${Math.atan2(dy,dx)*180/Math.PI})`})){
+  if(!isGorge()){renderArcadeLadderSections(layers.ladder,s,e,u);}else if(!asset(layers.ladder,'ladder',0,-sep,len,sep*2,{transform:`translate(${s.x} ${s.y}) rotate(${Math.atan2(dy,dx)*180/Math.PI})`})){
     rLine(layers.ladder,s.x+nx*sep,s.y+ny*sep,e.x+nx*sep,e.y+ny*sep,{
-      seed,stroke:'#2167ae',strokeWidth:Math.max(1.7,Math.min(3.2,u*.06)),roughness:.18,bowing:.05
+      seed,stroke:'#c99b60',strokeWidth:Math.max(1.7,Math.min(3.2,u*.06)),roughness:.18,bowing:.05
     });
     rLine(layers.ladder,s.x-nx*sep,s.y-ny*sep,e.x-nx*sep,e.y-ny*sep,{
-      seed:seed+1,stroke:'#2167ae',strokeWidth:Math.max(1.7,Math.min(3.2,u*.06)),roughness:.18,bowing:.05
+      seed:seed+1,stroke:'#c99b60',strokeWidth:Math.max(1.7,Math.min(3.2,u*.06)),roughness:.18,bowing:.05
     });
     const spacing=u*.38;
     for(let i=1;!isGorge()&&i*spacing<len-spacing*.2;i++){
       const t=i*spacing/len,px=s.x+dx*t,py=s.y+dy*t;
       rLine(layers.ladder,px-nx*sep,py-ny*sep,px+nx*sep,py+ny*sep,{
-        seed:seed+10+i,stroke:'#6d94b1',strokeWidth:Math.max(1.2,Math.min(2,u*.04)),roughness:.15,bowing:.05
+        seed:seed+10+i,stroke:'#dbc798',strokeWidth:Math.max(1.2,Math.min(2,u*.04)),roughness:.15,bowing:.05
       });
     }
   }
@@ -692,7 +696,7 @@ function renderLadder(){
   const math=line(layers.ladder,s.x,s.y,e.x,e.y,'mathLine',{'data-world-a':mech.a,'data-world-b':mech.b,'data-world-x':x});
   math.id='ladderMathLine';
   rEllipse(layers.ladder,s.x,s.y,Math.max(9,.24*u),Math.max(9,.24*u),{
-    seed:seed+90,stroke:'#176dcc',strokeWidth:2,roughness:.15,fill:'#fffef9',fillStyle:'solid'
+    seed:seed+90,stroke:'#eac58c',strokeWidth:2,roughness:.15,fill:'#fffef9',fillStyle:'solid'
   });
 }
 function drawPerson(x,y,opacity=1){
@@ -700,16 +704,16 @@ function drawPerson(x,y,opacity=1){
   const g=svgEl('g',{opacity},layers.person);
   if(asset(g,'person',p.x-.18*u,p.y-.35*u,.36*u,.66*u))return;
   // Small rescue figure with a marker-drawn head/body.
-  rEllipse(g,p.x,p.y-.16*u,.22*u,.22*u,{seed,stroke:'#102d4f',strokeWidth:1.6,roughness:.8,fill:'#f4c9a8',fillStyle:'solid'});
+  rEllipse(g,p.x,p.y-.16*u,.22*u,.22*u,{seed,stroke:'#251e19',strokeWidth:1.6,roughness:.8,fill:'#f4c9a8',fillStyle:'solid'});
   rPolygon(g,[
     [p.x-.12*u,p.y-.02*u],[p.x+.12*u,p.y-.02*u],
     [p.x+.10*u,p.y+.28*u],[p.x-.10*u,p.y+.28*u]
-  ],{seed:seed+1,stroke:'#102d4f',strokeWidth:1.7,roughness:.78,fill:'#3a7f9b',fillStyle:'solid'});
-  rLine(g,p.x-.10*u,p.y+.03*u,p.x-.23*u,p.y-.11*u,{seed:seed+2,stroke:'#102d4f',strokeWidth:1.7,roughness:.7});
-  rLine(g,p.x+.10*u,p.y+.03*u,p.x+.23*u,p.y-.13*u,{seed:seed+3,stroke:'#102d4f',strokeWidth:1.7,roughness:.7});
+  ],{seed:seed+1,stroke:'#251e19',strokeWidth:1.7,roughness:.78,fill:'#3a7f9b',fillStyle:'solid'});
+  rLine(g,p.x-.10*u,p.y+.03*u,p.x-.23*u,p.y-.11*u,{seed:seed+2,stroke:'#251e19',strokeWidth:1.7,roughness:.7});
+  rLine(g,p.x+.10*u,p.y+.03*u,p.x+.23*u,p.y-.13*u,{seed:seed+3,stroke:'#251e19',strokeWidth:1.7,roughness:.7});
   const stride=rescued&&!reducedMotion.matches?Math.sin(rescueProgress*Math.PI*12)*.075*u:0;
-  rLine(g,p.x-.06*u,p.y+.27*u,p.x-.10*u+stride,p.y+.34*u,{seed:seed+4,stroke:'#102d4f',strokeWidth:2,roughness:.4});
-  rLine(g,p.x+.06*u,p.y+.27*u,p.x+.10*u-stride,p.y+.34*u,{seed:seed+5,stroke:'#102d4f',strokeWidth:2,roughness:.4});
+  rLine(g,p.x-.06*u,p.y+.27*u,p.x-.10*u+stride,p.y+.34*u,{seed:seed+4,stroke:'#251e19',strokeWidth:2,roughness:.4});
+  rLine(g,p.x+.06*u,p.y+.27*u,p.x+.10*u-stride,p.y+.34*u,{seed:seed+5,stroke:'#251e19',strokeWidth:2,roughness:.4});
 }
 let rescueProgress=0;
 function drawCoordinateBubble(x,y,label){
@@ -902,8 +906,8 @@ function renderUI(){
  else $('missionText').innerHTML=infoBlock('Wat vertelt a over de richting?','Waar zie je b in de grafiek?',`${resultRecord.filter(r=>r&&!r.modeled).length} zelf opgelost · ${resultRecord.filter(r=>r?.modeled).length} voorgedaan`);
  $('missionText').querySelector('.infoPrompt')?.classList.toggle('hint',hintOpen&&isPlan);
  renderFormula();
- $('planBtn').hidden=true;$('swapBtn').hidden=true;
- $('executeBtn').disabled=state!=='planning'||!complete();$('executeBtn').textContent=state==='executing'?`${mechanism()} beweegt…`:'Uitvoeren →';
+ $('planBtn').hidden=mode!=='together';$('planBtn').textContent=state==='review'?'Plan aanpassen':'Plan klaar';$('swapBtn').hidden=mode!=='together';
+ $('executeBtn').disabled=!complete()||(mode==='together'?(state!=='review'||!armed):state!=='planning');$('executeBtn').textContent=state==='executing'?`${mechanism()} beweegt…`:'Uitvoeren →';
  $('consoleNote').textContent=state==='executing'?'Je formule wordt uitgevoerd.':state==='debrief'?'De uitgevoerde formule':state==='feedback'?(invalidGiven?'De ladder blijft staan.':'De uitgevoerde formule'):lastCommand?'Nieuw plan · de vorige ladder blijft staan.':'Gebruik de pijlen of veeg over a en b.';
  $('helpBtn').hidden=hintOpen||invalidGiven;$('teacherBtn').disabled=state==='executing';$('modeBtn').disabled=state==='executing';$('pauseBtn').disabled=state==='executing';
  $('nextBtn').textContent=levelIndex===LEVELS.length-1?'Afronden →':levelIndex===7?'Naar de kloof →':'Volgende redding →';$('nextBtn').disabled=!explained;$('explainBtn').hidden=explained;
@@ -917,13 +921,14 @@ function animate(duration,fn,token=runToken){if(reducedMotion.matches){if(token=
 const ease=t=>t*t*(3-2*t);
 async function tweenCamera(target,duration=450){const from={...camera},token=runToken;return animate(duration,t=>{const k=ease(t);for(const key in target)camera[key]=from[key]+(target[key]-from[key])*k;renderWorld();},token);}
 async function execute(model=false){
- if(!model&&(blocked()||!complete()||state!=='planning'))return;
+ if(!model&&(blocked()||!complete()||(mode==='together'?(state!=='review'||!armed):state!=='planning')))return;
  attempts++;modeled=model;invalidGiven=(level.aFixed!=null&&plan.a!==level.aFixed)||(level.bFixed!=null&&plan.b!==level.bFixed);
- if(invalidGiven){state='feedback';renderResult();renderUI();announce('Fout. De gegeven waarde klopt niet. De ladder blijft staan.');$('retryBtn').focus({preventScroll:true});return;}
+ if(invalidGiven){window.RechtenArcade?.record({id:window.RechtenArcade.run().id+':'+level.id+':'+attempts,kind:'attempt',task:String(level.id),skill:'gegeven',attempt:attempts,answer:{a:plan.a,b:plan.b},correct:false,modeled:model});state='feedback';renderResult();renderUI();announce('Fout. De gegeven waarde klopt niet. De ladder blijft staan.');$('retryBtn').focus({preventScroll:true});return;}
  const token=++runToken;state='executing';
  const command=Object.freeze({a:plan.a,b:plan.b,y:plan.a*level.targetX+plan.b,ok:correct(plan.a,plan.b)});
+ window.RechtenArcade?.record({id:window.RechtenArcade.run().id+':'+level.id+':'+attempts,kind:'attempt',task:String(level.id),skill:level.aFixed==null?'helling':'startwaarde',attempt:attempts,answer:{a:plan.a,b:plan.b},correct:command.ok,modeled:model,scene:isGorge()?'kabelbaan':'brandweer'});
  lastCommand=command;renderUI();announce('De ladder voert het plan uit.');await nextPaint();if(token!==runToken)return;
- const targetCamera=isGorge()?cameraFit(command.y):cameraFit(Math.max(10.8,command.y+1.3));
+ const targetCamera=isGorge()?cameraFit(command.y):cameraFit(Math.max(level.targetY+1.4,command.y+1.3));
  if(Object.keys(targetCamera).some(k=>Math.abs(camera[k]-targetCamera[k])>.01))await tweenCamera(targetCamera,420);
  if(token!==runToken)return;
  // Retract only for a change in direction, then set the pivot and angle, then extend.
@@ -954,8 +959,8 @@ function showHelp(){if(state!=='feedback'||blocked())return;guided=true;hintOpen
 
 function renderReflection(){$('reflectionTitle').textContent='Kijk!';$('reflectionText').innerHTML=reflectionStructured(level.id,explained);}
 function reveal(){if(state!=='debrief'||blocked())return;explained=true;renderReflection();renderUI();$('nextBtn').focus({preventScroll:true});announce($('reflectionText').textContent);}
-function reset(index=levelIndex){invalidGiven=false;hintOpen=false;runToken++;clearTimeout(armTimer);levelIndex=index;window.AxiomaGame.storage.setItem('axioma.brandweer.current.v1',String(index));level=LEVELS[index];state='planning';plan={a:null,b:null};mech={...level.start};lastCommand=null;failures=0;attempts=0;guided=false;explained=false;modeled=false;armed=false;rescued=false;rescueProgress=0;remaining=clockSeconds;clockStarted=false;clockExpired=false;lastTick=performance.now();camera=cameraFit();makeChoices();renderUI();renderWorld();}
-function next(){if(state!=='debrief'||!explained||blocked())return;if(levelIndex===LEVELS.length-1){state='complete';renderUI();renderWorld();announce('Klasronde afgerond. Vertel wat a en b veranderen.');return;}swapped=!swapped;reset(levelIndex+1);announce(`Redding ${levelIndex+1}. Maak een nieuw plan.`);}
+function reset(index=levelIndex){invalidGiven=false;hintOpen=false;runToken++;clearTimeout(armTimer);levelIndex=index;window.AxiomaGame.storage.setItem('axioma.brandweer.current.v1',String(index));level=LEVELS[index];state='planning';plan={a:null,b:null};mech={...level.start};lastCommand=null;failures=0;attempts=0;guided=false;explained=false;modeled=false;armed=false;rescued=false;rescueProgress=0;remaining=clockSeconds;clockStarted=false;clockExpired=false;lastTick=performance.now();camera=cameraFit();makeChoices();renderUI();renderWorld();if(!window.RechtenArcade?.run())window.RechtenArcade?.start({expected:16});}
+function next(){if(state!=='debrief'||!explained||blocked())return;if(levelIndex===LEVELS.length-1){state='complete';window.RechtenArcade?.finish({complete:resultRecord.filter(Boolean).length===16});renderUI();renderWorld();announce('Klasronde afgerond. Vertel wat a en b veranderen.');return;}swapped=!swapped;reset(levelIndex+1);announce(`Redding ${levelIndex+1}. Maak een nieuw plan.`);}
 function openSettings(){if(state==='executing')return;settingsDraft={mode,time:clockSeconds,index:levelIndex};$('levelSelect').value=levelIndex;renderSettings();$('teacherDialog').showModal();lastTick=performance.now();}
 function renderSettings(){document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===settingsDraft.mode)));document.querySelectorAll('[data-time]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.time)===settingsDraft.time)));$('modeNote').textContent='Pas a en b rechtstreeks aan en voer daarna je plan uit.';}
 function closeSettings(){$('teacherDialog').close();lastTick=performance.now();}
@@ -1042,7 +1047,7 @@ $('formula').addEventListener('keydown',e=>{
 $('choices').addEventListener('click',e=>{const b=e.target.closest('button[data-value]');if(b&&!b.disabled)setPlan(b.dataset.param,Number(b.dataset.value));});
 $('planBtn').addEventListener('click',approvePlan);$('executeBtn').addEventListener('click',()=>execute());$('retryBtn').addEventListener('click',retry);$('helpBtn').addEventListener('click',showHelp);$('explainBtn').addEventListener('click',reveal);$('nextBtn').addEventListener('click',next);
 $('swapBtn').addEventListener('click',()=>{if(blocked()||state==='executing')return;swapped=!swapped;if(state==='review'){state='planning';armed=false;clearTimeout(armTimer);}renderUI();announce('Rollen gewisseld. Het plan blijft staan en moet opnieuw bevestigd worden.');});
-$('modeBtn').addEventListener('click',openSettings);$('teacherBtn').addEventListener('click',openSettings);$('chooseLevelBtn').addEventListener('click',openSettings);$('settingsCancel').addEventListener('click',closeSettings);$('settingsApply').addEventListener('click',applySettings);$('modelBtn').addEventListener('click',modelSolution);$('pauseBtn').addEventListener('click',pause);$('resumeBtn').addEventListener('click',resume);$('restartBtn').addEventListener('click',()=>{resultRecord=Array(LEVELS.length).fill(null);swapped=false;reset(0);});
+$('modeBtn').addEventListener('click',openSettings);$('teacherBtn').addEventListener('click',openSettings);$('chooseLevelBtn').addEventListener('click',openSettings);$('settingsCancel').addEventListener('click',closeSettings);$('settingsApply').addEventListener('click',applySettings);$('modelBtn').addEventListener('click',modelSolution);$('pauseBtn').addEventListener('click',pause);$('resumeBtn').addEventListener('click',resume);$('restartBtn').addEventListener('click',()=>{window.RechtenArcade?.start({expected:16});resultRecord=Array(LEVELS.length).fill(null);swapped=false;reset(0);});
 $('teacherDialog').addEventListener('click',e=>{const b=e.target.closest('.setting');if(!b||!settingsDraft)return;if(b.dataset.mode)settingsDraft.mode=b.dataset.mode;if(b.dataset.time!=null)settingsDraft.time=Number(b.dataset.time);renderSettings();});
 for(const d of [$('teacherDialog'),$('pauseDialog')])d.addEventListener('close',()=>{lastTick=performance.now();});
 $('fullscreenBtn').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{announce('Volledig scherm is niet beschikbaar. Gebruik de schermknop van de browser.');}});

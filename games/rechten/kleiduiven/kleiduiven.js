@@ -14,7 +14,7 @@ const questions=window.AxiomaClayQuestions;
 let rounds=legacyRounds,groupTask=null;
 const STORE='axioma.rechten.kleiduiven.standalone.v12';
 const SHOT_MS=320,GAP_MS=400;
-let speed=5,duration=5,queue=[],retry=[],mastered=new Set(),attempt=null,roundNo=1,state='lobby';
+let speed=[3,5,8].includes(Number(window.RechtenArcade?.params.get('tempo')))?Number(window.RechtenArcade.params.get('tempo')):5,duration=5,queue=[],retry=[],mastered=new Set(),attempt=null,roundNo=1,state='lobby';
 const AXIOMA_GAME_ID='kleiduifschieten';
 let axiomaSeriesTracked=(window.AxiomaGame?.state.completed||[]).includes('reeks');
 function trackAxiomaSeries(){
@@ -79,9 +79,10 @@ function updateHud(){
   for(const [index,r] of rounds.entries()){const e=document.createElement('span');e.className='dot'+((groupMode?index<mastered.size:mastered.has(r.id))?' hit':(groupMode?index===mastered.size:attempt?.id===r.id)?' current':retry.includes(r.id)?' retry':'');$('progress').append(e)}
   if(groupMode){$('reserve').textContent='Foutloos: '+mastered.size+' / 7';$('wave').textContent='GROEPSWEDSTRIJD · 7 OP RIJ'}
 }
+function fractionChoice(value,den){return (value<0?'−':'')+'<span class="arcade-fraction" aria-label="'+Math.abs(Math.round(value*den))+' gedeeld door '+den+'"><span>'+Math.abs(Math.round(value*den))+'</span><span>'+den+'</span></span>';}
 function renderChoices(r){
   $('choices').replaceChildren();
-  r.choices.forEach((v,i)=>{const b=document.createElement('button');b.className='choice';b.dataset.a=String(v);b.innerHTML=`<span>${r.labels?.[i]||fmt(v)}</span><span class="choiceKey">${i+1}</span>`;b.onclick=()=>{if(state!=='playing'||busy||!attempt||attempt.resolved)return;selected=v;fire()};$('choices').append(b)})
+  r.choices.forEach((v,i)=>{const b=document.createElement('button');b.className='choice';b.dataset.a=String(v);b.innerHTML=`<span>${r.labels?.[i]?.includes('⅓')?fractionChoice(v,3):r.labels?.[i]?.includes('¼')?fractionChoice(v,4):r.labels?.[i]?.includes('½')?fractionChoice(v,2):fmt(v)}</span><span class="choiceKey">${i+1}</span>`;b.onclick=()=>{if(state!=='playing'||busy||!attempt||attempt.resolved)return;selected=v;fire()};$('choices').append(b)})
 }
 function burst(x,y){
   impactAt=performance.now();$('impact').setAttribute('cx',x);$('impact').setAttribute('cy',y);$('particles').replaceChildren();particles=[];
@@ -133,14 +134,14 @@ function fire(){
 }
 function hit(){
   if(groupMode){finishGroupVisual(true);return}
-  const A=attempt;if(!A||A.resolved)return;A.resolved=true;state='gap';mastered.add(A.id);$('target').style.opacity='0';$('wake').style.opacity='0';$('approachRing').style.opacity='0';resetProjectile();burst(A.shot.end.x,A.shot.end.y);sHit();
+  const A=attempt;if(!A||A.resolved)return;A.resolved=true;window.RechtenArcade?.record({kind:'attempt',task:A.id,skill:'helling',attempt:roundNo,answer:{a:selected},correct:true});state='gap';mastered.add(A.id);$('target').style.opacity='0';$('wake').style.opacity='0';$('approachRing').style.opacity='0';resetProjectile();burst(A.shot.end.x,A.shot.end.y);sHit();
   $('choices').querySelectorAll('button').forEach(b=>{b.classList.remove('selected');b.classList.toggle('correct',Number(b.dataset.a)===A.r.a)});updateHud();$('status').textContent='Raak. Deze richting is binnen.';
   if(mastered.size===rounds.length){elapsed=performance.now()-started;finish();return}
   later(()=>{attempt=null;beginAttempt()},GAP_MS)
 }
 function fail(kind){
   if(groupMode){if(attempt?.shot)finishGroupVisual(false);else submitGroupAnswer(null);return}
-  const A=attempt;if(!A||A.resolved)return;A.resolved=true;state='gap';misses++;if(!retry.includes(A.id)&&!mastered.has(A.id))retry.push(A.id);
+  const A=attempt;if(!A||A.resolved)return;A.resolved=true;window.RechtenArcade?.record({kind:'attempt',task:A.id,skill:'helling',attempt:roundNo,answer:{a:kind==='tijd'?null:selected},correct:false});state='gap';misses++;if(!retry.includes(A.id)&&!mastered.has(A.id))retry.push(A.id);
   $('target').style.opacity='0';$('wake').style.opacity='0';$('approachRing').style.opacity='0';resetProjectile();sTimeout();
   $('choices').querySelectorAll('button').forEach(b=>{b.disabled=true;b.classList.remove('selected');if(kind==='mis'&&Number(b.dataset.a)===selected)b.classList.add('wrong')});
   updateHud();$('status').textContent=kind==='tijd'?'Te laat. Deze richting komt terug.':'Mis. Deze richting komt terug.';kind==='tijd'?sTimeout():sMiss();
@@ -148,7 +149,7 @@ function fail(kind){
 }
 function startGame(){
   if(groupMode){openGroupMenu();return}stopGame();
-  const seed=crypto.randomUUID();rounds=Array.from({length:7},(_,i)=>questions.round(questions.question(seed,i)));
+  const seed=window.RechtenArcade?.params.get('seed')||crypto.randomUUID();window.RechtenArcade?.start({seed,tempo:speed,expected:7});rounds=Array.from({length:7},(_,i)=>questions.round(questions.question(seed,i)));
   duration=speed;misses=0;shots=0;retry=[];mastered=new Set();roundNo=1;queue=rounds.map(r=>r.id);attempt=null;elapsed=0;started=0;impactAt=0;particles=[];busy=false;selected=null;
   runId=Date.now()+'-'+Math.random().toString(36).slice(2,7);team=window.AxiomaGame?.account?.alias||'Jij';
   $('lobby').hidden=true;$('results').hidden=true;$('target').style.opacity='0';$('wake').style.opacity='0';$('particles').replaceChildren();$('impact').style.opacity='0';resetProjectile();$('total').textContent=clockText(0);updateHud();setTimer(duration);
@@ -157,7 +158,7 @@ function startGame(){
 }
 function finish(){
   if(state==='done'||mastered.size!==7)return;state='done';cancelAnimationFrame(raf);started=0;attempt=null;busy=true;$('total').textContent=clockText(elapsed);
-  saveResult();trackAxiomaSeries();$('resultName').textContent=team+' · alles geraakt.';$('finalTime').textContent=clockText(elapsed);$('resultStats').textContent=`${shots} schoten · ${misses} ${misses===1?'misser':'missers'} · ${roundNo===1?'zonder herkansing':(roundNo-1)+' '+(roundNo===2?'herkansing':'herkansingen')}`;
+  saveResult();window.RechtenArcade?.finish({elapsedMs:elapsed});trackAxiomaSeries();$('resultName').textContent=team+' · alles geraakt.';$('finalTime').textContent=clockText(elapsed);$('resultStats').textContent=`${shots} schoten · ${misses} ${misses===1?'misser':'missers'} · ${roundNo===1?'zonder herkansing':(roundNo-1)+' '+(roundNo===2?'herkansing':'herkansingen')}`;
   showTimes();$('results').hidden=false
 }
 function readHistory(){try{const x=JSON.parse(window.AxiomaGame.storage.getItem(STORE)||'[]');if(Array.isArray(x))history=x.filter(r=>r&&typeof r.name==='string'&&Number.isFinite(r.ms)&&[3,5,8].includes(r.tempo)).slice(-100)}catch{persistent=false}}
@@ -358,4 +359,6 @@ function connectGroups(){
 if(window.AxiomaGroups)connectGroups();else window.addEventListener('axioma:groups-ready',connectGroups,{once:true});
 
 initField();readHistory();updateHud();setTimer(speed);
+if(window.RechtenArcade){const locked=RechtenArcade.params.get('mode')==='class'||RechtenArcade.params.get('lockTempo')==='1';document.querySelectorAll('[data-speed]').forEach(b=>{b.disabled=locked;b.setAttribute('aria-pressed',String(Number(b.dataset.speed)===speed));});}
+window.AxiomaClay=Object.freeze({snapshot:()=>({state,speed,barrelAngle,wantedAngle,origin:{x:500,y:310},target:attempt?targetAt(attempt,performance.now()):null,mastered:mastered.size,misses,shots})});
 })();

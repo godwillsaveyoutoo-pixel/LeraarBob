@@ -1,0 +1,44 @@
+:root{--paper:#132b31;--ink:#f3e5c9;--muted:#b2c5bd;--line:#9c7951;--lb-ink:var(--ink);--lb-surface:#163138;--lb-line:var(--line);--lb-hover:#2a4547;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--paper);color:var(--ink);font:16px system-ui,sans-serif}button,input,select{font:inherit;color:inherit}button,a{touch-action:manipulation}button{min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:7px;background:#1e373a;padding:8px 14px;cursor:pointer}button:disabled{opacity:.5;cursor:default}button:focus-visible,a:focus-visible{outline:3px solid #f4d695;outline-offset:2px}[hidden]{display:none!important}a{color:#edc993}.topbar{height:56px;display:flex;align-items:center;gap:14px;padding:0 16px;background:#10262c;border-bottom:1px solid var(--line)}.brand{font:26px Georgia,serif;text-decoration:none;color:var(--ink)}.brand small{font-size:15px;color:#e4bd80}.spacer{flex:1}#arcadeApp{height:calc(100dvh - var(--lb-header-height,56px));min-height:0;position:relative}
+.menu-screen{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:16px;padding:clamp(12px,3vw,36px);background:radial-gradient(ellipse at 50% 35%,#304e50,#132b31 75%)}.menu-heading{display:flex;align-items:center;gap:10px}.menu-heading>div{flex:1}.eyebrow{font-size:12px;letter-spacing:.12em;color:#c8b792}h1{font:clamp(26px,4vw,52px)/1.1 Georgia,serif;margin:4px 0}.arenas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;min-height:0}.arena-choice{display:grid;grid-template-rows:minmax(0,1fr) auto auto;gap:10px;overflow:hidden;border:2px solid #6e6350;border-radius:12px;background:linear-gradient(160deg,#244146,#132e32);padding:14px;align-items:center;justify-items:center;color:var(--ink);position:relative;box-shadow:inset 0 0 0 3px #101e23}.arena-choice.selected{border-color:#f1c588;background:linear-gradient(160deg,#385350,#143337)}.arena-choice.selected::after{content:'✓';position:absolute;right:10px;top:6px;color:#f6d194;font-size:22px}.arena-choice img{width:100%;height:100%;min-height:0;object-fit:contain;max-height:320px}.arena-choice strong{font:clamp(18px,2vw,28px) Georgia,serif}.arena-choice span{font-size:13px;color:#bbc8bb}.launch-bar{display:flex;align-items:center;gap:16px;border-top:1px solid #9c795160;padding-top:12px}.mode-pills{display:flex;gap:6px}.mode-pills button[aria-pressed=true]{background:#e8cca3;color:#30291f;border-color:#f2d8aa}.launch-bar p{font-size:14px;color:var(--muted);flex:1;margin:0}.primary{background:linear-gradient(#8b3b36,#60282d);border:2px solid #d4a772;color:#fff0d4;box-shadow:inset 0 0 0 2px #321d1c,0 3px 0 #080e10;font-weight:700;min-height:48px;padding-inline:24px}.play-screen{display:grid;grid-template-rows:44px minmax(0,1fr);height:100%}.play-hud{display:flex;align-items:center;gap:12px;padding:0 12px;background:#183238;border-bottom:1px solid var(--line);font-size:14px}.play-hud button{background:none;border:0;padding:0}.play-hud strong{flex:1}#liveScore{color:#f2ca86;min-width:65px;text-align:right;font-variant-numeric:tabular-nums}iframe{border:0;width:100%;height:100%;min-height:0;background:#132b31}
+dialog{max-width:min(760px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;padding:24px;background:#173138;color:var(--ink);border:2px solid #c59b62;border-radius:12px}dialog::backdrop{background:#071416cc}dialog h2{font:30px Georgia,serif;margin:0 0 12px}dialog p{color:var(--muted);line-height:1.4}form{display:grid;gap:12px;margin:12px 0}label{display:grid;gap:5px;font-size:14px}input,select{min-height:44px;border:1px solid #a08258;border-radius:5px;background:#10262c;padding:8px 12px;width:100%}.dialog-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.score-filters{display:flex;gap:12px}.score-list{list-style:none;padding:0;margin:18px 0}.score-list li{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:12px;padding:12px;border-bottom:1px solid #92704e}.score-list li:first-child{background:linear-gradient(90deg,#77513850,transparent);border-color:#d2a065}.score-list b{font:30px Georgia,serif;color:#e9c28d}.score-list strong{display:block}.score-list small{display:block;font-size:12px;color:var(--muted);margin-top:3px}.score-list output{font-variant-numeric:tabular-nums;color:#e8c186}.session-list{display:grid;gap:10px;max-height:45vh;overflow:auto}.session-row{display:flex;gap:12px;align-items:center;justify-content:space-between;border-bottom:1px solid #8e7254;padding:8px}.session-row strong{display:block}.session-row small{display:block;color:var(--muted);font-size:12px}.class-screen{height:100%;padding:16px;overflow:auto}.class-heading{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.class-heading h1{flex:1;font-size:28px}#classCode{font:28px ui-monospace,monospace;letter-spacing:.1em;color:#f2cb8b}.class-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.class-member{display:flex;gap:14px;align-items:center;padding:12px;border-bottom:1px solid #82684a}.class-member strong{flex:1}.class-member small{color:var(--muted)}.notice{position:fixed;bottom:10px;left:10px;right:10px;z-index:90;background:#502b28;border:1px solid #d6ac73;padding:12px;border-radius:7px;margin:0;font-size:14px}
+@media(max-height:500px){.menu-screen{padding:8px 12px;gap:8px}.menu-heading h1{font-size:26px}.eyebrow{font-size:10px}.arenas{gap:8px}.arena-choice{padding:8px;gap:4px}.arena-choice strong{font-size:18px}.arena-choice span{font-size:11px}.launch-bar{padding-top:6px;gap:8px}.launch-bar p{font-size:12px}.primary{padding-inline:14px}.menu-heading button{font-size:13px;padding:6px 10px}}
+@media(orientation:portrait){.menu-screen{padding:12px;gap:12px}.arenas{grid-template-columns:1fr;grid-template-rows:repeat(4,minmax(0,1fr));gap:10px}.arena-choice{grid-template-columns:110px minmax(0,1fr);grid-template-rows:1fr 1fr;text-align:left;justify-items:start;padding:10px;gap:2px 12px}.arena-choice img{grid-row:1/3}.arena-choice strong{font-size:20px;align-self:end}.arena-choice span{align-self:start}.launch-bar{flex-wrap:wrap;gap:8px}.launch-bar p{order:3;flex-basis:100%}.menu-heading{flex-wrap:wrap}.menu-heading>div{flex-basis:100%}.play-hud{font-size:12px;gap:8px}.play-hud #actorLabel{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* The atelier opens directly; solo/duo/class still belong to the three arenas. */
+.atelier-choice{text-decoration:none;text-align:center;background:radial-gradient(ellipse at 50% 35%,#425456,#17343a 75%)}
+.atelier-choice:hover,.atelier-choice:focus-visible{border-color:#e8c681;background:radial-gradient(ellipse at 50% 35%,#53675e,#1c3b3e 75%)}
+.atelier-choice strong b{font:16px system-ui,sans-serif;color:#edc993;margin-left:3px}
+.menu-action-icon{display:none}
+@media(orientation:landscape) and (max-width:1100px){
+ .arenas{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr))}
+ .arena-choice{grid-template-columns:minmax(60px,30%) minmax(0,1fr);grid-template-rows:1fr 1fr;gap:2px 10px;text-align:left;justify-items:start;padding:8px 12px}
+ .arena-choice img{grid-row:1/3;max-height:130px}
+ .arena-choice strong{align-self:end;font-size:18px}
+ .arena-choice span{align-self:start;font-size:12px}
+}
+@media(orientation:portrait){
+ .menu-heading{flex-wrap:nowrap;gap:6px}
+ .menu-heading>div{flex-basis:auto;min-width:0}
+ .menu-heading h1{font-size:clamp(22px,6vw,32px)}
+ .menu-heading .eyebrow{font-size:9px;letter-spacing:.04em}
+ .menu-heading button{width:44px;padding:0;flex-shrink:0}
+ .menu-action-label{display:none}.menu-action-icon{display:inline;font-size:20px}
+ .atelier-choice{text-align:left}
+}
+@media(orientation:portrait) and (max-width:360px){
+ .menu-screen{gap:8px;padding:10px}
+ .arenas{gap:6px}
+ .arena-choice{grid-template-columns:80px minmax(0,1fr);gap:2px 8px;padding:6px 8px}
+ .arena-choice strong{font-size:17px;line-height:1.1}
+ .arena-choice span{font-size:11px;line-height:1.15}
+ .launch-bar{padding-top:6px}
+ .launch-bar .primary{padding-inline:14px}
+ .launch-bar p{font-size:12px}
+}
+
+/* Keep the 44px restore control clear of the heading and return action. */
+body.topbar-collapsed .lb-restore{top:0!important}
+body.topbar-collapsed .menu-heading{padding-left:48px;min-height:44px}
+body.topbar-collapsed .play-hud{padding-left:58px}

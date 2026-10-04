@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="nl-BE" data-mode="light">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+ <meta name="theme-color" content="#f7f4ed">
+ <title>Glasraam · Rechtenwereld · leraarBob</title>
+ <link rel="icon" href="../../../assets/favicon.svg">
+ <link rel="stylesheet" href="../../../shared/leraarbob-topbar.css">
+ <link rel="stylesheet" href="glasatelier/style.css">
+ <script src="glasatelier/core.js" defer></script>
+ <script src="glasatelier/app.js" defer></script>
+ <script src="../../../shared/leraarbob-topbar.js" data-title="Rechtenarcade" data-game-href="games/rechten/arcade/" data-header="#atelier-header" data-context="none" data-nav-pilot="true" data-social="false" defer></script>
+</head>
+<body>
+ <header id="atelier-header" data-collapsible-topbar>
+  <nav class="breadcrumbs" aria-label="Broodkruimelpad"><a href="../arcade/">Rechtenarcade</a><span aria-current="page">Glasraam</span></nav>
+  <output id="atelier-progress" hidden data-platform-progress="levels" data-value="0" data-total="8" data-unit="ramen">0/8 ramen</output>
+  <button id="themeBtn" type="button" aria-pressed="false">Donkere weergave</button>
+  <nav id="main-menu" hidden aria-label="Glasraam"><a href="../arcade/" data-nav-icon="compass">Rechtenarcade</a><a href="./#wereld" data-nav-icon="route">Rechtenwereld</a><a href="glasatelier.html" data-nav-icon="pencil">Glasraam</a></nav>
+ </header>
+ <main class="atelier" aria-label="Glasraam">
+  <section class="glass-stage" aria-label="Je glasraam">
+   <svg id="glass-board" viewBox="0 0 800 560" tabindex="0" role="group" aria-label="Tik twee punten. Sleep een punt om het te verplaatsen." aria-describedby="keyboard-help"></svg>
+   <p id="keyboard-help" class="sr-only">Pijltjestoetsen verplaatsen de cursor. Enter plaatst of verwijdert een punt. Backspace maakt de vorige stap ongedaan. Escape wist je lijnvoorstel.</p>
+  </section>
+  <aside class="work-panel" aria-label="Opdracht">
+   <button id="gallery-open" type="button" aria-haspopup="dialog" aria-controls="gallery-dialog"><span class="gallery-icon" aria-hidden="true">▦</span><span id="window-name">Zonneroos</span><span aria-hidden="true">⌄</span></button>
+   <div id="line-progress" class="line-progress" aria-label="Getekende lijnen"></div>
+   <div class="task">
+    <h1 id="task-title">Teken deze lijn</h1>
+    <p id="target-formula" class="formula"></p>
+    <p id="task-copy" class="task-copy">Tik twee punten. <br>Sleep om te verplaatsen.</p>
+   </div>
+   <div id="draw-actions" class="draw-actions">
+    <button id="check" type="button" class="primary" disabled>Teken</button>
+    <button id="undo" type="button" class="icon-button" aria-label="Vorige stap ongedaan maken" title="Ongedaan maken">↶</button>
+    <button id="clear-points" type="button" class="icon-button" aria-label="Deze lijn opnieuw proberen" title="Lijn opnieuw proberen">↺</button>
+   </div>
+   <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+   <div id="palette-panel" class="palette-panel" hidden><p>Kies een kleur. Tik op het glas.</p><div id="palette" class="palette" aria-label="Glaskleur"></div></div>
+   <div class="panel-tools">
+    <button id="paint-toggle" type="button" aria-label="Glas kleuren" title="Glas kleuren" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c-2 4-7 8-7 12a7 7 0 0 0 14 0c0-4-5-8-7-12Z"/></svg></button>
+    <button id="light-toggle" type="button" aria-label="Licht aan" title="Licht aan" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg></button>
+    <button id="more-open" type="button" aria-label="Meer opties" title="Meer opties" aria-haspopup="dialog" aria-controls="options-dialog">•••</button>
+   </div>
+  </aside>
+ </main>
+ <dialog id="gallery-dialog" class="gallery-dialog" aria-labelledby="gallery-title">
+  <div class="dialog-heading"><div><p class="eyebrow">GLASRAAM</p><h2 id="gallery-title">Kies een raam</h2></div><button type="button" data-close="gallery-dialog" aria-label="Raamkeuze sluiten">×</button></div>
+  <div id="gallery-grid" class="gallery-grid"></div>
+  <button id="design-mode" type="button" class="design-choice"><span aria-hidden="true">＋</span><span>Je eigen glasraam<small>Teken zelf de lijnen. Jij kiest de vorm.</small></span><span aria-hidden="true">→</span></button>
+ </dialog>
+ <dialog id="options-dialog" class="options-dialog" aria-labelledby="options-title">
+  <div class="dialog-heading"><h2 id="options-title">Je raam</h2><button type="button" data-close="options-dialog" aria-label="Opties sluiten">×</button></div>
+  <button id="grid-toggle" type="button" aria-pressed="true">Rooster tonen</button>
+  <button id="download" type="button">Bewaar als afbeelding <span aria-hidden="true">↓</span></button>
+  <button id="formula-open" type="button" aria-haspopup="dialog" aria-controls="formula-dialog">Een voorschrift invoeren</button>
+  <button id="hint" type="button" aria-expanded="false" aria-controls="hint-text">Een kleine aanwijzing</button>
+  <p id="hint-text" hidden></p>
+  <a href="../arcade/">Terug naar Rechtenarcade →</a><a href="./#wereld">Rechtenwereld →</a>
+  <p id="save-status" class="save-status">Automatisch bewaard op dit toestel.</p>
+ </dialog>
+ <dialog id="formula-dialog" class="options-dialog" aria-labelledby="formula-title">
+  <div class="dialog-heading"><h2 id="formula-title">Een eigen voorschrift</h2><button type="button" data-close="formula-dialog" aria-label="Voorschrift sluiten">×</button></div>
+  <form id="line-form">
+   <label for="line-type">Soort rechte<select id="line-type"><option value="function">y = ax + b</option><option value="vertical">x = c</option></select></label>
+   <div class="design-fields"><label id="slope-field" for="slope">Helling a<input id="slope" value="1/2" maxlength="16" autocomplete="off"></label><label for="intercept"><span id="intercept-label">Verschuiving b</span><input id="intercept" value="-2" maxlength="16" autocomplete="off"></label></div>
+   <p id="design-preview" class="formula">y = ½x − 2</p><p id="formula-feedback" class="feedback" role="status"></p><button id="add-line" class="primary" type="submit">Teken deze lijn →</button>
+  </form>
+ </dialog>
+ <noscript>Voor het Glasraam is JavaScript nodig. <a href="./">Terug naar Rechtenwereld</a>.</noscript>
+</body>
+</html>

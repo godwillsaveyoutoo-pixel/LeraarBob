@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#132b31">
+<title>leraarBob · Rechtenarcade</title>
+<link rel="stylesheet" href="arcade.css">
+<script src="../../../shared/axioma-platform.js"></script>
+<script src="../../../shared/vendor/supabase.js"></script><script src="../../../shared/supabase-config.js"></script><script src="../../../shared/axioma-auth.js"></script>
+<script src="../../../shared/leraarbob-topbar.js" data-title="Rechtenarcade" data-context="none" data-nav-pilot="true" defer></script>
+<script src="core.js"></script><script src="hub.js" defer></script>
+</head>
+<body>
+<header class="topbar" data-collapsible-topbar><a class="brand" href="../../../">leraarBob <small>Rechtenarcade</small></a><button id="gameHomeBtn" type="button" hidden data-nav-hidden>Rechtenarcade</button><nav class="breadcrumbs" aria-label="Broodkruimelpad"><span id="arcade-current" hidden></span></nav><nav id="main-menu" hidden aria-label="Arcademenu"><button id="arcadeMenu" type="button" data-nav-icon="compass">Spelmenu</button><a href="../rechtenwereld/#wereld" data-nav-icon="route">Rechtenwereld</a></nav><output id="arcade-progress" hidden></output></header>
+<main id="arcadeApp">
+ <section id="menuScreen" class="menu-screen" aria-labelledby="arcadeTitle">
+  <div class="menu-heading"><div><span class="eyebrow">SPEEL MET RECHTEN</span><h1 id="arcadeTitle">Rechtenarcade</h1></div><button id="scoresBtn" aria-label="Topscore" title="Topscore"><span class="menu-action-icon" aria-hidden="true">★</span><span class="menu-action-label">Topscore</span></button><button id="archiveBtn" aria-label="Mijn sessies" title="Mijn sessies"><span class="menu-action-icon" aria-hidden="true">☷</span><span class="menu-action-label">Mijn sessies</span></button></div>
+  <div class="arenas" role="group" aria-label="Kies een spel">
+   <button class="arena-choice selected" data-game="zeeslag" aria-pressed="true"><img src="assets/ship.webp" alt="" width="900" height="300"><strong>Zeeslag</strong><span>Plaats je vloot. Vuur een rechte.</span></button>
+   <button class="arena-choice" data-game="redding" aria-pressed="false"><img src="assets/truck.webp" alt="" width="1000" height="334"><strong>Brandweer & kabelbaan</strong><span>Verander a en b. Bereik je doel.</span></button>
+   <button class="arena-choice" data-game="kleiduiven" aria-pressed="false"><img src="assets/gun.webp" alt="" width="640" height="640"><strong>Kleiduifschieten</strong><span>Richt in 360°. Lees de helling.</span></button>
+   <a class="arena-choice atelier-choice" href="../rechtenwereld/glasatelier.html" aria-label="Glasraam openen: acht ontwerpen en je eigen glasraam"><img src="assets/glasraam.svg" alt="" width="480" height="480"><strong>Glasraam <b aria-hidden="true">↗</b></strong><span>Teken en kleur je glasraam.</span></a>
+  </div>
+  <div class="launch-bar"><div class="mode-pills" role="group" aria-label="Spelmodus"><button data-mode="solo" aria-pressed="true">Solo</button><button data-mode="duo" aria-pressed="false">Duo</button></div><p id="modeHelp">Tegen de computer · ook zonder account</p><button id="launchBtn" class="primary">Spelen →</button></div>
+ </section>
+ <section id="playScreen" class="play-screen" hidden><div class="play-hud"><button id="backBtn" aria-label="Terug naar de arcade">← Arcade</button><strong id="gameTitle"></strong><span id="actorLabel"></span><output id="liveScore">0 pt</output></div><iframe id="gameFrame" title="Rechtenspel" allow="fullscreen" src="about:blank"></iframe></section>
+ <p id="notice" class="notice" role="status" hidden></p>
+</main>
+<dialog id="duoDialog"><h2>Samen spelen</h2><form id="duoForm"><label>Speler 1<input name="actor1" value="Speler 1" maxlength="40" required></label><label>Speler 2<input name="actor2" value="Speler 2" maxlength="40" required></label><label id="duoTempoLabel">Tempo voor beide spelers<select name="tempo"><option value="5">5 seconden</option><option value="8">8 seconden</option><option value="3">3 seconden</option></select></label><p id="duoHelp"></p><div class="dialog-actions"><button type="button" data-close="duoDialog">Terug</button><button class="primary">Beginnen →</button></div></form></dialog>
+<dialog id="scoresDialog"><h2>Topscore</h2><div class="score-filters"><label>Spel<select id="scoreGame"><option value="kleiduiven">Kleiduifschieten</option><option value="redding">Brandweer & kabelbaan</option><option value="zeeslag">Zeeslag</option></select></label><label id="tempoFilter">Tempo<select id="scoreTempo"><option value="5">5 s</option><option value="8">8 s</option><option value="3">3 s</option></select></label></div><p id="scoreNote"></p><ol id="scoreList" class="score-list"></ol><button data-close="scoresDialog">Sluiten</button></dialog>
+<dialog id="archiveDialog"><h2>Mijn sessies</h2><p>Je spelresultaten op dit toestel.</p><div id="sessionList" class="session-list"></div><div class="dialog-actions"><button id="exportResults">Resultaten CSV</button><button id="exportAttempts">Pogingen CSV</button><button data-close="archiveDialog">Sluiten</button></div></dialog>
+<dialog id="handoverDialog"><h2 id="handoverTitle"></h2><p id="handoverText"></p><div class="dialog-actions"><button id="handoverNext" class="primary">Verder →</button><button data-close="handoverDialog">Resultaat bekijken</button></div></dialog>
+</body></html>
