@@ -89,7 +89,7 @@ leerlingresultaten toe. Bouwcontrole: `node scripts/build-catalog.cjs --check` e
 
 ## Publicatie
 
-De gerichte migratie `20261005161648_algebra_systems_class_battle.sql` voegt `S1`,
+De gerichte migratie `20261005171003_algebra_systems_class_battle.sql` voegt `S1`,
 drie rondes en 180 seconden uitsluitend voor Algebra toe. Ze controleert eerst
 de verwachte bestaande functie en behoudt de bestaande rechten. Publiceer daarna
 `algebra-class` met `index.ts`, `handler.js` en de gegenereerde `policy.js`, met
@@ -112,6 +112,19 @@ er kwamen geen nieuwe bevindingen bij. De bestaande meldingen gaan over
 [vier niet-geïndexeerde foreign keys](https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys)
 en [twee ongebruikte indices](https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index).
 Deze bestaande platformconfiguratie is geen onderdeel van deze battle-uitbreiding.
+
+De frontend is gepubliceerd op GitHub Pages. Zeventien centrale publieke
+bestanden zijn inhoudelijk gelijk aan de gecontroleerde commit `a45e141`.
+De volledige centrale Stelselsflow is daarna op de publieke site geslaagd op
+1280 × 800, 780 × 360, 640 × 360, 390 × 844 en 320 × 700, met fictieve
+authenticatie en geblokkeerde echte resultaatwrites. De test controleert ook
+terug/vooruit tussen live, simulatie, Vergelijkingen en Stelsels en expliciet
+stoppen/opnieuw instellen/herladen. De gepubliceerde Edge Function weigert
+anonieme verzoeken met HTTP 401.
+
+De lokale nieuwe migratie heeft de door de publicatie geregistreerde versie
+`20261005171003`; zo blijft deze wijziging gelijk aan de productiemigratiehistorie.
+De oude, al bestaande verschillen in migratietijdstempels zijn niet herschreven.
 
 ## Wat fase 2 nog vraagt
 
@@ -179,7 +192,7 @@ wijzigingen is behouden in de oorspronkelijke checkout.
 - `shared/worksheet-hub.js`
 - `supabase/config.toml`
 - `supabase/functions/algebra-class/policy.js`
-- `supabase/migrations/20261005161648_algebra_systems_class_battle.sql`
+- `supabase/migrations/20261005171003_algebra_systems_class_battle.sql`
 - `teacher/index.html`
 - `teacher/teacher.js`
 - `tests/algebra-battle-player-browser.cjs`

@@ -3,7 +3,7 @@ const {createDB,ids}=require('./vector-class-db.cjs');
 const nativePolicy=require('../../shared/multiplayer/algebra-class-policy.cjs');
 async function createServer({policy=nativePolicy}={}){
  const {db,rpc}=await createDB();await db.exec('create role service_role');
- for(const file of ['20260929235623_rechten_class_server_grading.sql','20260930003138_vector_kahoot_server.sql','20260930163951_algebra_class_battle.sql','20261005161648_algebra_systems_class_battle.sql'])await db.exec(fs.readFileSync('supabase/migrations/'+file,'utf8'));
+ for(const file of ['20260929235623_rechten_class_server_grading.sql','20260930003138_vector_kahoot_server.sql','20260930163951_algebra_class_battle.sql','20261005171003_algebra_systems_class_battle.sql'])await db.exec(fs.readFileSync('supabase/migrations/'+file,'utf8'));
  const {createHandler}=await import('../../supabase/functions/algebra-class/handler.js');
  const worker=(action,data)=>db.transaction(async tx=>{await tx.exec('set local role service_role');return(await tx.query('select public.axioma_algebra_class_worker($1,$2) result',[action,JSON.stringify(data)])).rows[0].result;});
  const handler=createHandler({url:'https://test.invalid',anonKey:'anon',serviceKey:'server',policy,fetcher:async(url,opts)=>{
