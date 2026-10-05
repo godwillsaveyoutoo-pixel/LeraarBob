@@ -14,7 +14,7 @@ async function loadXP(){if(!account||simulation)return;try{const data=await rpc(
 function notice(s=''){$('spaceNotice').textContent=s;}
 function title(s){$('spaceTitle').textContent=s;$('spaceCrumb').textContent=s;}
 function setView(next,{url=true}={}){view=next;document.body.dataset.view=next;boardKey='';$('spaceContent').replaceChildren();notice();if(url){const u=new URL(location.href);u.searchParams.set('view',next);if(state)u.searchParams.set('session',state.id);else u.searchParams.delete('session');history.replaceState(null,'',u);}render();}
-function login(){window.LeraarBobAccount?.open();}
+function login(){window.LeraarBobTopbar?.openAccount();}
 const needsAccount=()=>{if(account)return false;notice('Meld je aan om samen te spelen en je klasresultaten te bekijken.');login();return true;};
 function routeNative(intent,mode='solo'){
  const url=new URL('./',location.href);url.searchParams.set('screen','setup');url.searchParams.set('mode',mode);url.searchParams.set('world',group);url.searchParams.set('returnTo',LeraarBobRoutes.safeReturn(q.get('returnTo'),'games/getallenwereld/'));url.searchParams.set('skills',selected.join(','));url.searchParams.set('level',level);url.searchParams.set('count',count);if(intent)url.searchParams.set('intent',intent);location.href=url;
