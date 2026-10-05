@@ -10,7 +10,7 @@
   const script=existing||document.createElement('script');
   const complete=()=>{try{registry=factory(root.AXIOMA_CATALOG,{baseURL:base.href});resolve();}catch(e){reject(e);}};
   script.addEventListener('load',complete,{once:true});script.addEventListener('error',()=>reject(Error('Het spelregister kon niet laden.')),{once:true});
-  if(!existing){script.dataset.gameCatalog='true';script.src=new URL('js/catalog.js?v=0.6.1',base).href;document.head.append(script);}
+  if(!existing){script.dataset.gameCatalog='true';script.src=new URL('js/catalog.js?v=20261006-platform',base).href;document.head.append(script);}
  });
  root.LeraarBobGameRegistry=Object.freeze({ready:()=>ready.then(()=>root.LeraarBobGameRegistry),list:options=>registry?.list(options)||[],game:id=>registry?.game(id)||null,presentation:id=>registry?.presentation(id)||null,components:id=>registry?.components(id)||[],modes:(id,options)=>registry?.modes(id,options)||[],worksheets:(id,options)=>registry?.worksheets(id,options)||[],destination:(...args)=>registry?.destination(...args)||null,current:(path,options)=>registry?.current(path||location.href,options)||null,baseURL:base.href});
 })(typeof globalThis==='object'?globalThis:this,function createRegistry(catalog,{baseURL='http://localhost/'}={}){

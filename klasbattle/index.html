@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="nl-BE"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#163b51"><title>Klasbattle · leraarBob</title><link rel="icon" href="../assets/favicon.svg">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#163b51"><title>Samen spelen · leraarBob</title><link rel="icon" href="../assets/favicon.svg">
 <script>try{document.documentElement.dataset.mode=localStorage.getItem('axioma-mode')==='dark'?'dark':'light'}catch{}</script>
-<link rel="stylesheet" href="hub.css?v=phase1"><script src="../shared/vendor/supabase.js" defer></script><script src="../shared/supabase-config.js" defer></script><script src="../shared/axioma-auth.js" defer></script><script src="../shared/axioma-progress.js?v=20261005-smart" defer></script><script src="../shared/learner-avatar.js" defer></script><script src="../shared/leraarbob-topbar.js?v=0.6.1" data-title="Klasbattle" data-game-href="klasbattle/" data-context="none" data-nav-pilot="true" data-theme-mode="site" data-menu-overview="false" defer></script><script src="../js/account-ui.js" defer></script><script src="../shared/platform-routes.js?v=0.6.0" defer></script><script src="../shared/game-registry.js?v=0.6.1" defer></script><script src="hub.js?v=20261005-smart" defer></script>
+<link rel="stylesheet" href="hub.css?v=20261006-platform"><script src="../shared/vendor/supabase.js" defer></script><script src="../shared/supabase-config.js" defer></script><script src="../shared/axioma-auth.js" defer></script><script src="../shared/axioma-progress.js?v=20261005-smart" defer></script><script src="../shared/learner-avatar.js" defer></script><script src="../shared/leraarbob-topbar.js?v=20261006-platform" data-title="Samen spelen" data-game-href="klasbattle/" data-context="none" data-nav-pilot="true" data-theme-mode="site" data-menu-overview="false" defer></script><script src="../js/account-ui.js" defer></script><script src="../shared/platform-routes.js?v=0.6.0" defer></script><script src="../shared/game-registry.js?v=20261006-platform" defer></script><script src="../shared/play-modes.js?v=20261006-platform" defer></script><script src="hub.js?v=20261006-platform" defer></script>
 </head><body>
-<header class="hubTopbar" data-collapsible-topbar><button id="gameHomeBtn" type="button">Klasbattle</button><nav class="breadcrumbs" hidden><span id="hubCrumb">Overzicht</span></nav><nav class="appNav" hidden><button type="button" data-view="overview">Battleoverzicht</button><button type="button" data-view="rankings">Ranglijsten</button><button type="button" data-view="session" id="savedBattleMenu" hidden>Lopende battle</button></nav></header>
-<nav class="hubNav" aria-label="Klasbattle"><button type="button" data-view="overview" aria-current="page">Overzicht</button><button type="button" data-view="rankings">Ranglijsten</button><button type="button" data-view="session" id="savedBattleNav" hidden>Lopende battle</button><a id="originGame" hidden>Terug naar je wereld →</a></nav>
+<header class="hubTopbar" data-collapsible-topbar><button id="gameHomeBtn" type="button">Samen spelen</button><nav class="breadcrumbs" hidden><span id="hubCrumb">Overzicht</span></nav><nav class="appNav" hidden><button type="button" data-view="overview">Battleoverzicht</button><button type="button" data-view="learn">Samen leren</button><button type="button" data-view="rankings">Ranglijsten</button><button type="button" data-view="session" id="savedBattleMenu" hidden>Lopende battle</button></nav></header>
+<nav class="hubNav" aria-label="Samen spelen"><button type="button" data-view="learn">Samen leren</button><button type="button" data-view="overview" aria-current="page">Battles</button><button type="button" data-view="rankings">Ranglijsten</button><button type="button" data-view="session" id="savedBattleNav" hidden>Lopende battle</button><a id="originGame" hidden>Terug naar je wereld →</a></nav>
 <main>
 <p id="notice" class="notice" role="status" aria-live="polite"></p>
 <section id="overviewView">
@@ -14,6 +14,12 @@
 <aside class="panel"><h2 id="insightTitle">Je eigen battleoverzicht</h2><p id="insight">Na het aanmelden vind je hier je deelname en resultaten per wereld.</p><p id="accountScope" class="muted"></p><button type="button" data-view="rankings">Bekijk ranglijsten →</button></aside></div>
 <section aria-labelledby="gamesTitle"><div class="sectionHead"><h2 id="gamesTitle">Kies je wereld</h2><p id="gamesHint">Open de battle van je wereld.</p></div><div id="gameCards" class="gameCards"></div></section>
 <section id="recentSection" hidden aria-labelledby="recentTitle"><div class="sectionHead"><h2 id="recentTitle">Mijn battles</h2><button type="button" id="refreshBtn">Vernieuwen</button></div><div id="recentRooms" class="roomList"></div></section>
+</section>
+<section id="learnView" hidden aria-labelledby="learnTitle">
+<div class="pageHeading"><p class="eyebrow">Samen spelen bij leraarBob</p><h1 id="learnTitle">Samen leren</h1><p>Duo, klas of samen aan het bord.</p></div>
+<div id="learnFilters" class="learnFilters" role="group" aria-label="Wereld kiezen"></div>
+<div id="learnCards" class="learnCards"></div>
+<div class="learnFooter"><button type="button" data-view="overview">Deelnemen met een code</button><span id="learnScope" class="muted"></span></div>
 </section>
 <section id="rankingsView" hidden>
 <div class="pageHeading"><p class="eyebrow">Resultaten per wereld</p><h1>Ranglijsten</h1><p>Resultaten van je klas, per wereld.</p></div>

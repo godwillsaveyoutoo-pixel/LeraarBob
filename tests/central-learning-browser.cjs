@@ -1,0 +1,32 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),http=require('node:http'),{chromium}=require('playwright');
+const root=path.resolve(__dirname,'..'),out='/tmp/leraarbob-central-learning';fs.mkdirSync(out,{recursive:true});
+const server=http.createServer((req,res)=>{let f=path.join(root,new URL(req.url,'http://x').pathname);try{if(fs.statSync(f).isDirectory())f=path.join(f,'index.html');res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.woff2':'font/woff2'})[path.extname(f)]||'application/octet-stream');res.end(fs.readFileSync(f));}catch{res.writeHead(404).end();}});
+(async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;try{
+ const base=(process.env.LB_SITE_URL||'http://127.0.0.1:'+server.address().port).replace(/\/$/,''),origin=new URL(base).origin,prefix=new URL(base).pathname.replace(/\/$/,'');browser=await chromium.launch({headless:true,executablePath:process.env.ALGEBRA_CHROMIUM_PATH,args:['--no-sandbox','--disable-dev-shm-usage']});
+ for(const role of ['teacher','student','guest']){
+  const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.route('**/*',r=>{const u=new URL(r.request().url());if(u.origin!==origin)return r.fulfill({body:''});if(u.pathname.endsWith('/shared/axioma-social.js'))return r.fulfill({contentType:'text/javascript',body:'window.AxiomaSocial={state:()=>({}),onChange:()=>()=>{}};'});if(u.pathname.endsWith('/shared/axioma-auth.js'))return r.fulfill({contentType:'text/javascript',body:`const account=${role==='guest'?'null':JSON.stringify({id:'qa-'+role,role,alias:'Voorbeeld',class_code:'3A'})};window.AxiomaAuth={CLASSES:['3A'],ready:async()=>({account}),getAccount:async()=>account,getSession:async()=>null,onChange:()=>{},client:()=>({rpc:async(n)=>{if(n!=='axioma_class_battle_hub')throw Error('write forbidden');return{data:{rooms:[],leaderboards:[],stats:[],classes:['3A']}}},functions:{invoke:async(n,{body})=>{if(body.action!=='overview')throw Error('write forbidden');return{data:{rooms:[]}}}}})};`});
+   if(u.pathname.endsWith('/games/bewerkingen-trainer/start.html')||u.pathname.endsWith('/games/rechten/rechtenwereld/learn.html'))return r.fulfill({contentType:'text/html',body:'<!doctype html><title>Destination</title>'});return r.continue();});
+  const returnTo=prefix+'/games/bewerkingen-trainer/?world=wortels&screen=setup&skills=root-sum';
+  const route=base+'/klasbattle/?view=learn&game=getallenwereld&world=wortels&skills=root-sum&returnTo='+encodeURIComponent(returnTo);
+  await page.goto(route);await page.waitForFunction(()=>window.LeraarBobClassHub?.snapshot().view==='learn').catch(async e=>{console.error(errors,await page.locator('body').innerText(),await page.evaluate(()=>window.LeraarBobClassHub?.snapshot()));throw e;});
+  if(role!=='guest')await page.waitForFunction(r=>LeraarBobClassHub.snapshot().account===r,role);
+  assert.equal(await page.locator('[data-learn-world]').count(),2);assert.equal(await page.locator('[data-learn-mode=learn]').count(),1);assert.equal(await page.locator('[data-learn-mode=classlearn]:not([data-learn-simulation])').count(),role==='teacher'?1:0);assert.equal(await page.locator('[data-learn-mode=teacher]').count(),role==='teacher'?1:0);
+  assert.doesNotMatch(await page.locator('#learnCards').innerText(),/2–3|alias|undefined/);
+  await page.goto(base+'/klasbattle/?view=learn&game=algebra-trainer');await page.waitForFunction(()=>window.LeraarBobClassHub?.snapshot().view==='learn');assert.equal(await page.locator('[data-learn-world=algebra-trainer]').getAttribute('aria-pressed'),'true');assert.match(await page.locator('#learnCards').innerText(),/Algebrawereld.*nog niet beschikbaar/s);assert.equal(await page.locator('[data-learn-mode]').count(),0,'An unsupported world never silently switches to another world');await page.goto(route);await page.waitForFunction(()=>window.LeraarBobClassHub?.snapshot().view==='learn');
+  for(const [width,height]of [[1280,800],[640,360],[390,844],[320,700]]){
+   await page.setViewportSize({width,height});
+   for(const collapsed of[false,true]){
+    if(collapsed)await page.locator('leraarbob-topbar .collapse').click();
+    await page.screenshot({path:`${out}/${role}-${width}-${collapsed}.png`});
+    const issues=await page.evaluate(()=>{const bad=[];if(document.documentElement.scrollWidth>innerWidth+1||document.documentElement.scrollHeight>innerHeight+1)bad.push('document scroll');for(const e of document.querySelectorAll('#learnView button,.hubNav button')){if(!e.getClientRects().length)continue;const r=e.getBoundingClientRect();if(r.width<43.5||r.height<43.5)bad.push('small '+e.textContent);}return bad;});assert.deepEqual(issues,[],role+' '+width+' '+collapsed);
+    if(collapsed){await page.reload();await page.waitForFunction(()=>window.LeraarBobClassHub?.snapshot().view==='learn');assert.equal(await page.locator('.lb-restore').isVisible(),true);await page.locator('.lb-restore').click();}
+   }
+  }
+  await page.setViewportSize({width:1280,height:800});await page.locator('[data-learn-world=rechtenwereld]').click();await page.reload();await page.waitForFunction(()=>window.LeraarBobClassHub?.snapshot().view==='learn');assert.equal(await page.locator('[data-learn-world=rechtenwereld]').getAttribute('aria-pressed'),'true');assert.match(await page.locator('#learnCards').innerText(),/2–3/);await page.locator('[data-learn-world=getallenwereld]').click();
+  if(role==='guest'){await page.locator('[data-learn-mode=learn]').click();await page.locator('#authOverlay[open]').waitFor();}
+  else{await page.locator(role==='teacher'?'[data-learn-simulation]':'[data-learn-mode=learn]').click();await page.waitForURL('**/games/bewerkingen-trainer/start.html?**');const u=new URL(page.url());assert.equal(u.searchParams.get('view'),'learn');assert.equal(u.searchParams.get('audience'),role==='teacher'?'class':'duo');assert.equal(u.searchParams.get('world'),'wortels');assert.equal(u.searchParams.get('skills'),'root-sum');assert.equal(u.searchParams.get('returnTo'),returnTo);assert.equal(u.searchParams.get('simulation'),role==='teacher'?'1':null);}
+  assert.deepEqual(errors,[]);await page.close();console.log('PASS central Learn: '+role+', 4 screens, collapse/reload, exact return and real role-specific destinations');
+ }
+ }finally{await browser?.close();server.close();}})().catch(e=>{console.error(e);process.exit(1)});

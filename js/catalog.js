@@ -1422,7 +1422,10 @@ window.AXIOMA_CATALOG = [
             "wortels",
             "wetenschappelijk"
           ],
-          "topicParam": "world"
+          "topicParam": "world",
+          "devices": "2 spelers · elk een toestel",
+          "description": "Los zelf op en bespreek daarna samen de antwoorden.",
+          "access": "leraarBob-account · link of sessiecode"
         },
         {
           "id": "online",
@@ -1440,7 +1443,10 @@ window.AXIOMA_CATALOG = [
             "wortels",
             "wetenschappelijk"
           ],
-          "topicParam": "world"
+          "topicParam": "world",
+          "devices": "2 spelers · elk een toestel",
+          "description": "Beantwoord dezelfde vragen binnen de rondetijd.",
+          "access": "leraarBob-account · link of sessiecode"
         },
         {
           "id": "classlearn",
@@ -1457,7 +1463,10 @@ window.AXIOMA_CATALOG = [
             "wortels",
             "wetenschappelijk"
           ],
-          "topicParam": "world"
+          "topicParam": "world",
+          "devices": "De klas · elk een toestel",
+          "description": "Eigen antwoorden, samen bespreken; de leerkracht kan meedoen.",
+          "access": "Leerkracht start · leerlingen sluiten aan met een code"
         }
       ],
       "worksheets": [

@@ -158,7 +158,7 @@
   }
   let selectedGame = null;
   const modesReady = window.LeraarBobPlayModes ? Promise.resolve() : new Promise(resolve => {
-    const script=document.createElement('script');script.src=new URL('shared/play-modes.js?v=0.6.1',base).href;
+    const script=document.createElement('script');script.src=new URL('shared/play-modes.js?v=20261006-platform',base).href;
     script.onload=resolve;script.onerror=resolve;document.head.append(script);
   });
   function modernChooser() {

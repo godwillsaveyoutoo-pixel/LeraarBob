@@ -55,7 +55,7 @@ restore.onclick=()=>setCollapsed(false,true);
 addEventListener('storage',e=>{if(e.key===KEY)setCollapsed(e.newValue==='true');});
 function load(src){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=new URL(src,root);s.onload=resolve;s.onerror=reject;document.head.append(s);});}
 if(!window.LeraarBobAvatar){window.LeraarBobAvatarReady ||= load('shared/learner-avatar.js');window.LeraarBobAvatarReady.then(()=>syncAccount()).catch(()=>{window.LeraarBobAvatarReady=null;});}
-const modesReady=(window.LeraarBobPlayModes?Promise.resolve():load('shared/play-modes.js?v=0.6.1')).then(()=>window.LeraarBobPlayModes.ready()).catch(()=>{});
+const modesReady=(window.LeraarBobPlayModes?Promise.resolve():load('shared/play-modes.js?v=20261006-platform')).then(()=>window.LeraarBobPlayModes.ready()).catch(()=>{});
 const routesReady=window.LeraarBobRoutes?Promise.resolve():load('shared/platform-routes.js').catch(()=>{});
 let loginLoading;
 async function openAccount(){
@@ -215,11 +215,13 @@ async function showMenu(){
    if(destination){location.assign(destination);return;}
    const hub=new URL('klasbattle/',root);hub.searchParams.set('returnTo',window.LeraarBobRoutes.safeReturn(location.href));location.assign(hub);
   },{glyph:'classroom',description:'Battles en ranglijsten voor alle spellen',source:classroomEntry?.node});
+  add(platform,'Samen leren',()=>location.assign(window.LeraarBobPlayModes.hubDestination('learn')),{glyph:'classroom',description:'Duo Learn, Klaslearn en borduitleg'});
   add(platform,'Alle oefenbladen',()=>location.assign(new URL('oefenbladen.html',root)),{glyph:'pencil'});
+  add(platform,'Alle ranglijsten',()=>location.assign(window.LeraarBobPlayModes.hubDestination('rankings')),{glyph:'chart',description:'Resultaten per klas en wereld'});
   add(platform,'Mijn leerpad',()=>goPlatformSection('homeProgress','#playerProgress'),{glyph:'chart'});
   if(account?.role==='teacher'&&script.dataset.page!=='teacher')add(platform,'Mijn klassen',()=>location.assign(new URL('teacher/',root)),{glyph:'classroom'});
   if(window.AxiomaSocial&&script.dataset.social!=='false'){
-   const entry=add(platform,'Samen spelen',()=>window.AxiomaSocial.open(s.querySelector(getComputedStyle(s.querySelector('.mobile-menu')).display!=='none'?'.mobile-menu':'.menu')),{description:'Samen leren, battles en uitnodigingen',glyph:'battle'});
+   const entry=add(platform,'Uitnodigingen',()=>window.AxiomaSocial.open(s.querySelector(getComputedStyle(s.querySelector('.mobile-menu')).display!=='none'?'.mobile-menu':'.menu')),{description:'Een leerling uitnodigen of reageren',glyph:'battle'});
    entry.classList.add('social-entry');entry.setAttribute('aria-haspopup','dialog');syncSocialMenu();
   }
   const accountGroup=section('Account','menu-nav menu-account');
@@ -245,8 +247,8 @@ function syncSocialMenu(){
  restore.setAttribute('aria-label',restore.title);
  const entry=current.host.shadowRoot.querySelector('.social-entry');if(!entry)return;
  entry.hidden=!signedIn;if(!signedIn)return;
- entry.querySelector('.menu-name').textContent=invitations?'Uitnodigingen · '+invitations:'Samen spelen';
- const description=invitations?`${invitations} uitnodigingen · bekijk en antwoord`:social.connected?'Samen leren, battles en uitnodigingen':'Verbinding herstellen…';
+ entry.querySelector('.menu-name').textContent=invitations?'Uitnodigingen · '+invitations:'Uitnodigingen';
+ const description=invitations?`${invitations} uitnodigingen · bekijk en antwoord`:social.connected?'Een leerling uitnodigen of reageren':'Verbinding herstellen…';
  const node=entry.querySelector('.menu-description');if(node&&node.textContent!==description)node.textContent=description;
 }
 function watchSocial(){

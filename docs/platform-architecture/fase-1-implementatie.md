@@ -381,3 +381,50 @@ hiermee nog niet volledig omgebouwd.
 Controle: 11.941 antwoorddelen uit beide opgave-edities, 92 werkborden op
 klein liggend en staand scherm, de volledige bestaande Getallenwereld-routes
 en de online sessietests met fictieve accounts.
+
+
+## Platformbreed vervolg: centrale Learn-ingang en betrouwbare menulabels
+
+Het gedeelde platformmenu heeft nu vaste ingangen voor Samen leren en alle
+ranglijsten. Het bestaande Klasbattle-pad behoudt de oorspronkelijke handlers
+voor opslaan en vertrekken. De sociale accountfunctie heet Uitnodigingen.
+
+De centrale pagina `klasbattle/?view=learn` toont beschikbare leervormen uit het
+spelregister. Rechtenwereld biedt de bestaande route voor 2–3 deelnemers;
+Getallenwereld biedt Duo Learn en voor leerkrachten Borduitleg, Klaslearn en
+een klas-simulatie. Leerlingen krijgen geen aanmaakknoppen voor leerkrachtmodi.
+Er zijn hiermee geen nieuwe leermotoren voor andere spellen geïntroduceerd.
+
+Speelvormbeschrijvingen komen uit de juiste provider. Getallenwereld vermeldt
+een link/sessiecode, Rechtenwereld zijn aliasuitnodigingen. De navigatie
+onderscheidt nu ook routeparameters: een ranglijst, oefenblad en duo-sessie
+mogen niet dezelfde menunaam krijgen alleen omdat hun URL-pad gelijk is.
+De centrale Learn-pagina bewaart de wereldkeuze bij herladen en de terugweg,
+het onderwerp en expliciet meegegeven vraagvormen bij doorsturen.
+
+Validatie van deze deelstap: de gedeelde menubalk is op 26 bestaande pagina's
+gecontroleerd (desktop, telefoon, menu, rolweergave, inklappen en herladen).
+De centrale Learn-ingang is voor drie rollen op vier schermformaten getoetst;
+de bestaande klasbattles op vijf formaten. Routes en voortgang binnen
+Getallenwereld zijn opnieuw gecontroleerd. Alle tests gebruiken fictieve
+accounts en maken geen echte leerlingresultaten.
+
+## Open werk voor de volledige leraarBob-site
+
+Een gepubliceerde deelstap betekent niet dat de platformopdracht klaar is.
+De verdere uitvoering blijft hieronder afgebakend.
+
+| Werkpakket | Wat er nog moet gebeuren | Klaar wanneer |
+| --- | --- | --- |
+| Navigatie en schermopbouw | Lokale keuzeschermen en centrale overzichtspagina's verder op dezelfde structuur brengen | De leerling kiest leerstof, selecteert een level en start bewust; heen/terug bewaart het werk; hoofdacties blijven bereikbaar op kleine schermen |
+| Algebrawereld | Stelsels en de bewerkingskeuze inhoudelijk en visueel verder vereenvoudigen | Tekens, coëfficiënten en bewerkingen zijn intuïtief te kiezen, met begrijpelijke stappen en compacte werkborden |
+| Learn/Battle | Gemeenschappelijke sessieafspraken ook op de overige motoren aansluiten | Aangeboden solo-, duo- en klasvormen werken echt; leerkrachtdeelname en simulatie tonen hetzelfde leerlingwerkbord |
+| Getallenwereld | Begeleide onderdelen en gegenereerde reeksen verder als één leerroute presenteren; XP voor nieuwe begeleide activiteit ontwerpen | Er is geen concurrerende routekeuze en geen fictieve omzetting van historische voltooiingen naar XP |
+| Oefenbladen | De provider-ingangen uitbreiden naar één samenstel-, voorbeeld- en afdrukflow | Leerdoel, moeilijkheid, aantal, vragen en sleutel blijven coherent; afdrukken wijzigt geen oefenvoortgang |
+| Leerlingoverzicht | Datums, actieve tijd en sessieresultaten over alle spellen aansluiten | Filters en export hebben dezelfde definities; ontbrekende historische data blijven zichtbaar als ontbrekend |
+| XP, ranglijsten en profielen | Resultaatbronnen samenbrengen; klasbevoegdheden en publieke/private presentatie uitwerken | Oefen-XP, battlepunten en beheersing blijven onderscheiden; zichtbaarheid volgt de afgesproken rollen |
+| Praktijkcontrole | Volledige leerling- en leerkrachtroutes met echte lesscenario's nalopen | Solo oefenen, papier maken, duo/klas starten, meedoen en opvolgen zijn snel en zonder onverwachte routewissels uitvoerbaar |
+
+Volgende inhoudelijke prioriteit: Algebrawereld/stelsels en de gezamenlijke
+Learn/Battle-aansluiting. De bestaande data en werkborden blijven daarbij
+het vertrekpunt; een nieuw menu alleen voltooit die werkpakketten niet.

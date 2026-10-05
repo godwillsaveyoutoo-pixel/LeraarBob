@@ -15,3 +15,18 @@ body[data-view=session][data-playing=true] .sessionHeading{display:none}
 body[data-view=session][data-playing=true] .simulationNote{display:none}
 .gameCard>p:empty{display:none}
 .notice:empty{display:none}
+.learnFilters{display:flex;gap:8px;overflow-x:auto;overscroll-behavior:contain;padding:4px 0 12px}
+.learnFilters button{flex:none}.learnFilters [aria-pressed=true]{background:var(--soft);border:2px solid #d5721c}
+.learnCards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.learnCard{display:flex;flex-direction:column;gap:10px}.learnCard h2{font-size:22px;margin:0}.learnCard p{margin:0;font-size:14px}
+.learnCard .cardActions{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:8px}.learnCard .cardActions button{flex:1;white-space:nowrap}
+.learnFooter{display:flex;gap:12px;align-items:center;margin-top:16px}
+body[data-view=learn]{height:100dvh;overflow:hidden;display:flex;flex-direction:column}
+body[data-view=learn] main{display:flex;flex:1;min-height:0;width:100%;padding-bottom:12px}
+#learnView{display:flex;flex:1;min-height:0;min-width:0;flex-direction:column}
+#learnView .pageHeading{padding-block:12px;margin-bottom:8px;flex:none}
+#learnView .pageHeading h1{font-size:28px;margin-bottom:4px}.learnCards{min-height:0;overflow:auto;overscroll-behavior:contain;flex:1;align-content:start}
+#learnView .learnFilters,#learnView .learnFooter{flex:none}
+@media(max-width:600px){.learnCards{grid-template-columns:1fr;gap:8px}.learnCard{padding:12px;gap:5px}.learnCard h2{font-size:19px}.learnCard p{font-size:13px}.learnCard .cardActions{padding-top:4px}.learnFooter{margin-top:8px}.learnFooter .muted{display:none}body[data-view=learn] .hubNav #originGame{display:none}#learnView .pageHeading>p{display:none}#learnView .pageHeading h1{font-size:23px;margin:0}}
+@media(min-width:601px) and (max-height:500px){#learnView .pageHeading{display:none}.learnCard{padding:10px;gap:4px}.learnCard h2{font-size:19px}.learnCard p{font-size:12px}.learnFooter{margin-top:6px}.learnCard .cardActions{padding-top:3px}}
+@media(max-height:500px) and (min-width:601px),(max-width:600px) and (max-height:740px){.learnCard .muted{display:none}.learnCard .cardActions button{font-size:12px;padding:5px 7px}.learnCard{padding:10px;gap:4px}.learnFooter .muted{display:none}}
