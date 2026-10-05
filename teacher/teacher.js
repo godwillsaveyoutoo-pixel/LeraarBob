@@ -17,7 +17,7 @@ const featuredCatalog=catalog.filter(g=>g.featured).sort((a,b)=>(a.featureOrder|
 const featuredIds=featuredCatalog.map(g=>g.id);
 let collection='featured';
 let sb=null,account=null,students=[],games=[],genericProgress=[];
-let classFilter='',themeFilter='',gameFilter='',query='',selectedStudent=null,loadVersion=0;
+let classFilter='',themeFilter='',gameFilter=registry.presentation(new URLSearchParams(location.search).get('game'))?.id||'',query='',selectedStudent=null,loadVersion=0,sortBy='alias';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=v=>Number.isFinite(Number(v))?Number(v):0;
@@ -119,9 +119,15 @@ function filteredGames(){
   return games.filter(g=>g.teacher_visible && (collection==='all'||featuredIds.includes(g.id)) && (!themeFilter||g.theme===themeFilter) && (!gameFilter||g.id===gameFilter));
 }
 
+function studentMetric(row,kind){
+ const components=filteredGames().flatMap(g=>registry.components(g.id));
+ if(kind==='xp')return components.reduce((sum,g)=>sum+(window.LeraarBobCatalogProgress?.earnedXP(g,genericFor(row.user_id,g.id))||0),0);
+ if(kind==='recent')return Math.max(0,...components.map(g=>Date.parse(genericFor(row.user_id,g.id)?.updated_at)||0));
+ return 0;
+}
 function filteredStudents(){
   const q=query.toLowerCase().trim();
-  return students.filter(r=>(!classFilter||r.class_code===classFilter)&&(!q||String(r.alias||'').toLowerCase().includes(q)));
+  return students.filter(r=>(!classFilter||r.class_code===classFilter)&&(!q||String(r.alias||'').toLowerCase().includes(q))).sort((a,b)=>sortBy==='alias'?a.alias.localeCompare(b.alias,'nl'):studentMetric(b,sortBy)-studentMetric(a,sortBy)||a.alias.localeCompare(b.alias,'nl'));
 }
 
 function csvCell(v){return '"'+String(v??'').replace(/^[=+\-@\t\r]/,"'$&").replace(/"/g,'""')+'"'}
@@ -133,7 +139,7 @@ function renderShell(){
     <div class="toolbar">
       <label>Klas<select id="classFilter"><option value="">Alle klassen</option>${CLASSES.map(c=>`<option ${c===classFilter?'selected':''}>${c}</option>`).join('')}</select></label>
       <label class="wide">Zoek alias<input id="searchStudent" type="search" value="${esc(query)}" placeholder="Zoek een leerling"></label>
-      <button id="refresh" class="btn" type="button">Vernieuwen</button>
+      <label>Sorteren<select id="studentSort"><option value="alias">Alias A–Z</option><option value="xp">Meeste XP</option><option value="recent">Recent actief</option></select></label><button id="refresh" class="btn" type="button">Vernieuwen</button><a class="btn" href="../games/bewerkingen-trainer/start.html?view=students">Getallenwereld: oefeningen en klasresultaten</a>
       <details class="extra-filters" ${themeFilter?'open':''}><summary>Meer filters en export</summary><div>
       <label>Thema<select id="themeFilter"><option value="">Alle thema's</option>${themes.map(t=>`<option ${t===themeFilter?'selected':''}>${esc(t)}</option>`).join('')}</select></label>
       <label>Onderdeel<select id="gameFilter"><option value="">Alle onderdelen</option>${games.filter(g=>g.teacher_visible&&(collection==='all'||featuredIds.includes(g.id))).map(g=>`<option value="${esc(g.id)}" ${g.id===gameFilter?'selected':''}>${esc(g.title)}</option>`).join('')}</select></label>
@@ -150,6 +156,7 @@ function renderShell(){
   $('themeFilter').onchange=e=>{themeFilter=e.target.value;gameFilter='';renderShell()};
   $('gameFilter').onchange=e=>{gameFilter=e.target.value;draw()};
   $('searchStudent').oninput=e=>{query=e.target.value;draw()};
+  $('studentSort').value=sortBy;$('studentSort').onchange=e=>{sortBy=e.target.value;draw()};
   $('refresh').onclick=loadAll;
   $('export').onclick=exportCSV;
   draw();

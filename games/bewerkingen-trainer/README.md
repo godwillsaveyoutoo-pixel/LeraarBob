@@ -25,9 +25,14 @@ positieve letters en gelijksoortige/gemengde worteltermen, en getallen ontbinden
 - Klasbattle: centrale leerling-/leerkrachtaccounts, sessiecode, rondetijd,
   servercontrole, uitslag en bespreking via de bestaande gedeelde klaslaag.
 
-Invoer gebruikt `x^2`, `1/x^2`, `4sqrt(5)` en `1,7*10^8`; √ en superscripts
-worden ook herkend. Knoppen voegen machten, wortels en breuktekens in. De
-voorbeeldweergave gebruikt lokale KaTeX. De rekenkern vergelijkt exacte
+Antwoorden bestaan uit aanklikbare wiskundige delen: voorgetal, exponent,
+teken, teller, noemer en getal onder een wortel. `smart-answer.js/.css` tonen
+contextkeuzes direct onder de formule, zonder antwoordtekstveld, keyboard of
+zijpaneel. Een deel blijft aanklikbaar om de keuze te verbeteren. Dezelfde
+component werkt in solo, Bordduo, nieuwe online sessies en oude klaswerkborden.
+De opgebouwde uitdrukking gaat naar de bestaande exacte rekenkern. Bewaarde
+oude tekstconcepten blijven zichtbaar tot de leerling nieuwe keuzes maakt.
+Lokale KaTeX verzorgt de opgave en uitwerking. De rekenkern vergelijkt exacte
 breuken, machten van positieve letters en vierkantswortels met BigInt. Bij ontbinden worden alle juiste producten van twee natuurlijke factoren met
 minstens één volkomen kwadraat aanvaard, in beide volgordes (ook 3 · 4 of 3 · 2²).
 Bij de andere rekenvragen moet een antwoord ook vereenvoudigd zijn; negatieve exponenten worden herschreven
@@ -37,7 +42,7 @@ De ingevoerde tussenstapnotities worden bewaard, maar niet automatisch beoordeel
 
 Voortgang en alle drie lokale reeksen gebruiken `AxiomaGame.storage`, met de
 accountscheiding, offline cache en revisiecontrole van het platform. De
-gedeelde topbar toont het echte aantal zelfstandig geoefende vraagvormen.
+gedeelde topbar toont echte verdiende XP, of het aantal geoefende vraagvormen als er nog geen XP zijn.
 Inklappen, licht/donker en volledig scherm veranderen geen opgave of invoer.
 Bordbattle en leraarmodus vervangen de bewaarde zelfstandige reeks niet.
 `?world=machten|wortels|wetenschappelijk&mode=solo|duo|teacher&screen=setup`
@@ -78,6 +83,7 @@ de vertrouwde beoordelingsfunctie in de database aanroepen.
 ```sh
 node tests/bewerkingen-trainer.test.cjs
 VECTOR_PGLITE_MODULE=/pad/naar/@electric-sql/pglite node tests/bewerkingen-class.test.cjs
+node tests/smart-answer.test.cjs
 node tests/bewerkingen-trainer-browser.cjs
 VECTOR_PGLITE_MODULE=/pad/naar/@electric-sql/pglite node tests/bewerkingen-class-browser.cjs
 node scripts/build-catalog.cjs --check
@@ -88,3 +94,65 @@ webserver op 8775. `VECTOR_BROWSER_PORT` en `VECTOR_BASE_URL` overschrijven die.
 Externe requests worden geblokkeerd; accounts en inzendingen zijn fictief. De
 klasproef voert de echte migraties en Edge-handler uit in lokale PGlite.
 Screenshots staan in `/tmp/leraarbob-v10-screenshots/`.
+
+## Oefenen en samen: pilot machten, wortels en wetenschappelijke schrijfwijze
+
+`start.html` biedt Solo, Oefenblad, Duo Learn, Duo Battle, Ranglijsten en Bordduo;
+leerkrachten krijgen daarnaast Klaslearn, Klasbattle, Leerlingen en Borduitleg.
+Keuzes maken start geen oefening. In solo blijven niveau, selectie, bestaande
+reeksen en hun historische opslag-ID behouden. Op compacte schermen gebruikt
+Bordduo één werkbord met twee spelerknoppen; beide conceptantwoorden blijven
+apart bewaard. Hint en Uitwerking zijn terugkeerbare werkbordtoestanden.
+
+De nieuwe online sessies lopen via `numbers-session`, met een eigen toestel en
+centraal account per deelnemer. Een code of link verbindt deelnemers. Klaslearn
+heeft herhaalbare eigen antwoorden en leerkrachtsturing; Duo Learn vraagt na
+beide juiste antwoorden een afzonderlijke bevestiging van hun bespreking.
+Battle heeft één inzending per ronde en een serverdeadline (standaard 3 minuten).
+Een leerkracht kan meedoen. Simulatie gebruikt dezelfde antwoordkeuzes maar
+alleen lokale voorbeelddeelnemers en schrijft geen resultaten naar de server.
+Het centrale battleoverzicht toont en hervat ook deze nieuwe sessies; oude
+zescijferige codes en oude sessies gebruiken hun bestaande provider.
+
+XP: 10 voor een eerste zelfstandig juist antwoord, 5 na hulp/verbetering,
+0 na de volledige uitwerking of overslaan. Een afgeronde oefening krijgt maar
+één beloning; nieuwe opgaven in een nieuwe reeks kunnen weer XP opleveren.
+Historische Algebra-missies houden hun bestaande beloningsregel. Bordduo met
+alleen twee namen geeft geen persoonlijke leerling-XP. Server-XP uit online
+sessies telt één keer mee naast opgeslagen solo-XP op de startpagina.
+
+Het overzicht filtert op datum (Europe/Brussels), klas en alias, sorteert op XP,
+battlepunten, juiste antwoorden, activiteit en actieve tijd, en exporteert CSV.
+Leerlingen zien hun eigen klas; actieve tijd van anderen is alleen voor de
+leerkracht. Actieve tijd is een schatting bij een zichtbaar, recent bediend
+scherm. Solo-periodes gebruiken de beschikbare historie (maximaal 250
+opgeslagen opdrachten); oude ontbrekende gebeurtenissen worden niet verzonnen.
+Oudere klasbattles blijven via hun eigen historisch overzicht bereikbaar.
+
+Dit is de Getallenwereld-pilot. Platformbrede uitnodigingen aan online aliases,
+publieke profielen, één nieuwe printmotor en aansluiting van alle andere
+werelden zijn afzonderlijk vervolgwerk. Duo Learn registreert eigen oplossingen
+plus bespreking; dit is nog geen gedeeld, stap-voor-stap bewerkingsbord.
+
+Backend: gerichte additive migratie `numbers_learn_battle`, vier private tabellen
+met RLS, uitsluitend via een service-rolefunctie na identiteitcontrole in de
+Edge-handler. Nakijken gebruikt dezelfde exacte kern op de server. Herhaalde
+inzendingen gebruiken dezelfde request-ID, zodat reconnect geen dubbele XP geeft.
+Geen brede `supabase db push`: bestaande productiemigraties hebben deels andere
+tijdstempels. Deploy daarna `numbers-session` met `verify_jwt=true` en de bestanden
+`index.ts`, `handler.js`, `core.js`; publiceer vervolgens de frontend.
+
+Aanvullende controle:
+
+```sh
+LB_ESBUILD_MODULE=/pad/naar/esbuild node scripts/build-numbers-session.cjs
+VECTOR_PGLITE_MODULE=/pad/naar/@electric-sql/pglite node tests/numbers-session.test.cjs
+NODE_PATH=/pad/naar/node_modules node tests/numbers-space-browser.cjs
+NODE_PATH=/pad/naar/node_modules node tests/numbers-smart-layout.cjs
+NODE_PATH=/pad/naar/node_modules node tests/getallen-unified-browser.cjs
+NODE_PATH=/pad/naar/node_modules node tests/classroom-simulation-browser.cjs
+```
+
+De nieuwe browsersuites starten zelf lokale servers. Ze gebruiken geïsoleerde
+browsercontexten en fictieve accounts. De online controle draait de echte
+Edge-handler met lokale PostgreSQL (PGlite), geen productie-inzendingen.

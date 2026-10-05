@@ -125,14 +125,20 @@ async function loadOverview({signal}={}){
     sb.from('axioma_game_progress').select('game_id,state,updated_at').eq('user_id',account.id),
     sb.from('axioma_progress').select('state,updated_at').eq('user_id',account.id).maybeSingle()
   ];
-  const [games,trainer]=await Promise.allSettled(queries.map(query=>signal?query.abortSignal(signal):query));
+  const requests=queries.map(query=>signal?query.abortSignal(signal):query);
+  // Online awards live in a server ledger; add only that part to locally saved solo XP.
+  requests.push(sb.functions?.invoke
+    ? sb.functions.invoke('numbers-session',{body:{action:'summary',data:{}},signal})
+    : Promise.resolve({data:null,error:null}));
+  const [games,trainer,numbers]=await Promise.allSettled(requests);
   if((await window.AxiomaAuth.getAccount())?.id!==account.id) throw new Error('Leerlingaccount gewijzigd.');
   const failed=result=>result.status==='rejected'||!!result.value.error;
   return {
     accountId:account.id,
     games:failed(games)?[]:games.value.data||[],
     trainer:failed(trainer)?null:trainer.value.data,
-    errors:{games:failed(games),trainer:failed(trainer)}
+    numbers:failed(numbers)?null:numbers.value.data,
+    errors:{games:failed(games),trainer:failed(trainer),numbers:failed(numbers)||!!numbers.value?.data?.error}
   };
 }
 

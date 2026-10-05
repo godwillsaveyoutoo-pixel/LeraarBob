@@ -1335,9 +1335,9 @@ window.AXIOMA_CATALOG = [
             "student",
             "teacher"
           ],
-          "title": "Reeks samenstellen",
-          "description": "Kies vraagvormen, moeilijkheid en aantal opgaven.",
-          "href": "games/bewerkingen-trainer/?mode=solo&screen=setup",
+          "title": "Oefenen & samen",
+          "description": "Solo, papier, samen leren, battles en resultaten.",
+          "href": "games/bewerkingen-trainer/start.html",
           "providerId": "bewerkingen-trainer",
           "topics": [
             "machten",
@@ -1396,13 +1396,66 @@ window.AXIOMA_CATALOG = [
           ],
           "href": "games/bewerkingen-trainer/?mode=teacher&screen=setup",
           "providerId": "bewerkingen-trainer",
-          "title": "Samen leren op het klasbord",
+          "title": "Borduitleg",
           "description": "Begeleid een uitwerking samen met je klas.",
           "devices": "Leerkracht en klas · één scherm",
           "topics": [
             "machten",
             "wetenschappelijk",
             "wortels"
+          ],
+          "topicParam": "world"
+        },
+        {
+          "id": "learn",
+          "participation": "duo",
+          "purpose": "learn",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "title": "Duo Learn",
+          "href": "games/bewerkingen-trainer/start.html?view=learn&audience=duo",
+          "providerId": "bewerkingen-trainer",
+          "topics": [
+            "machten",
+            "wortels",
+            "wetenschappelijk"
+          ],
+          "topicParam": "world"
+        },
+        {
+          "id": "online",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "title": "Duo Battle",
+          "href": "games/bewerkingen-trainer/start.html?view=battle&audience=duo",
+          "providerId": "bewerkingen-trainer",
+          "topics": [
+            "machten",
+            "wortels",
+            "wetenschappelijk"
+          ],
+          "topicParam": "world"
+        },
+        {
+          "id": "classlearn",
+          "participation": "group",
+          "purpose": "learn",
+          "roles": [
+            "teacher"
+          ],
+          "title": "Klaslearn",
+          "href": "games/bewerkingen-trainer/start.html?view=learn&audience=class",
+          "providerId": "bewerkingen-trainer",
+          "topics": [
+            "machten",
+            "wortels",
+            "wetenschappelijk"
           ],
           "topicParam": "world"
         }

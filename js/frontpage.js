@@ -144,7 +144,7 @@ await window.LeraarBobGameRegistry.ready();
         action.textContent = game.kind === 'learn' ? 'Opnieuw bekijken' : game.kind === 'train' ? 'Opnieuw oefenen' : 'Opnieuw spelen';
       }
     }
-    const failed = student && (progressState === 'error' || overview?.errors.games || overview?.errors.trainer);
+    const failed = student && (progressState === 'error' || overview?.errors.games || overview?.errors.trainer || overview?.errors.numbers);
     $('progressNotice').hidden = !failed;
     $('progressMessage').textContent = failed ? 'Een deel van je voortgang kon niet worden geladen. Je kunt de onderdelen wel openen.' : '';
   }

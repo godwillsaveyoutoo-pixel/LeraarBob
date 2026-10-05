@@ -18,7 +18,7 @@ function scientificLink(){return providerPath('games/bewerkingen-trainer/',{topi
 function worldLinks(){
  const registry=window.LeraarBobGameRegistry;if(!registry)return '';
  const role=AxiomaGame.account?.role||'guest';
- const entries=[...registry.modes('getallenwereld',{topicId:state.theme}).filter(e=>e.id!=='solo'&&(e.id!=='teacher'||role==='teacher')),...registry.worksheets('getallenwereld').map(e=>({...e,worksheet:true}))];
+ const entries=[...registry.modes('getallenwereld',{topicId:state.theme}).filter(e=>!['solo','learn','online','classlearn'].includes(e.id)&&(e.id!=='teacher'||role==='teacher')),...registry.worksheets('getallenwereld').map(e=>({...e,worksheet:true}))];
  return entries.map(e=>{
   const key=e.worksheet?'worksheet':e.id;
   let destination=e.worksheet?providerPath(e.href,{worksheet:true}):registry.destination('getallenwereld',e.id,{topicId:state.theme,hub:e.id==='classroom',returnTo:returnPath()});

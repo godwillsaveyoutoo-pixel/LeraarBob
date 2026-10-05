@@ -93,6 +93,7 @@
         const ledger=JSON.parse(state?.storage?.[key]||'null')?.[field];if(ledger?.version!==1)continue;hasJourney=true;
         for(const [run,e] of Object.entries(ledger.roundRewards||{}))if(run.length<=500&&/^(route-|eq-|sys-)/.test(e?.level||'')&&e.xp===30)awards.set('round:'+run,30);
       }catch{}
+      if(game.id==='bewerkingen-trainer')try{const practice=JSON.parse(state?.storage?.['leraarbob.bewerkingen.v1']||'null')?.practiceXP;if(Number.isFinite(practice)&&practice>=0){hasJourney=true;awards.set('practice',count(practice));}}catch{}
       return hasJourney?[...awards.values()].reduce((sum,n)=>sum+n,0):null;
     }
     if (game.id === 'vectoren-trainer') {
@@ -110,7 +111,7 @@
     return state && Object.hasOwn(state, 'platformXp') ? count(state.platformXp) : null;
   }
   function aggregate(catalog, overview) {
-    if (!overview || overview.errors?.games || overview.errors?.trainer) return null;
+    if (!overview || overview.errors?.games || overview.errors?.trainer || overview.errors?.numbers) return null;
     const seen = new Set(), entries = [];
     for (const game of catalog) {
       if (['none','local','multiplayer'].includes(game.progressType)) continue;
@@ -121,7 +122,8 @@
       const saved = savedFor(game, overview), progress = summarize(game, saved);
       const parent=game.parentId&&catalog.find(g=>g.id===game.parentId);
       // Component histories remain separate units; their real XP remains part of the platform total.
-      entries.push({ id: game.id, title: parent?parent.title+' · '+game.componentTitle:game.title, href: game.href, xp: earnedXP(game, saved), completed: progress.completed || 0, label: progress.label });
+      const soloXP=earnedXP(game,saved),onlineXP=game.id==='bewerkingen-trainer'?count(overview.numbers?.online_xp):0;
+      entries.push({ id: game.id, title: parent?parent.title+' · '+game.componentTitle:game.title, href: game.href, xp: onlineXP?(soloXP||0)+onlineXP:soloXP, completed: progress.completed || 0, label: progress.label });
     }
     return { xp: entries.reduce((sum, e) => sum + (e.xp || 0), 0), completed: entries.reduce((sum, e) => sum + e.completed, 0), entries };
   }

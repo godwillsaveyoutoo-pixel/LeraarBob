@@ -17,3 +17,6 @@ verify_jwt = true
 
 [functions.algebra-class]
 verify_jwt = true
+
+[functions.numbers-session]
+verify_jwt = true

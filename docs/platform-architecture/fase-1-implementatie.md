@@ -321,3 +321,42 @@ wijzigingen is behouden in de oorspronkelijke checkout.
 - `tests/platform-pilots-browser.cjs`
 - `tests/platform-routes.test.cjs`
 - `tests/stelsels-layout-browser.cjs`
+
+
+## Vervolgaanpassing: aanklikbare antwoorden en echte Getallenwereld-sessies
+
+De reekscomponent heeft nu één gedeelde wiskundige antwoordbediening voor solo,
+Bordduo, Duo Learn/Battle, Klaslearn/Battle en de historische battlewerkborden.
+De leerling tikt een antwoorddeel aan en kiest uit passende waarden. Het
+antwoordtekstveld, het virtuele keyboard en het zijpaneel zijn vervangen.
+De app heeft directe acties voor oefenen, papier, duo, klas en resultaten.
+
+Nieuwe sessies gebruiken een servergecontroleerde, aanvullende resultaatlaag.
+De centrale battlepagina kan ze terugvinden en hervatten. Historische
+progress-ID's en sessies blijven behouden. De startpagina telt werkelijke
+online-XP één keer mee naast solo-XP. Datumfilters en exports gebruiken alleen
+beschikbare geregistreerde gebeurtenissen; oude solo-historie is niet volledig.
+
+Zie `games/bewerkingen-trainer/README.md` voor gedrag, XP-regels, grenzen en
+publicatiestappen. Dit is de prioritaire pilot voor machten, wortels en
+wetenschappelijke schrijfwijze; de eerdere platformbrede vervolgfases blijven
+relevant. Een beknopte bespreekbevestiging in Duo Learn vervangt nog geen
+uitgebreide beoordeling van elkaars wiskundige tussenstappen.
+
+Validatie: 5.760 gegenereerde antwoordtemplates tegen de exacte kern; 64
+solo-/Bordduo-werkborden zonder keyboard op 640×360 en 390×844; nieuwe online
+Klaslearn, Duo Learn en Duo Battle met aparte browsercontexten; verbeteren,
+reconnect, éénmalige XP, filters en export; oude klasbattle, accountisolatie en
+offline opslaan; vijf schermformaten met open/dichte bovenbalk, terugkeer en
+herladen. De toetsen gebruiken fictieve accounts zonder productieresultaten.
+
+
+Backend gepubliceerd op 5 oktober 2026: migratie
+`20261005202025_numbers_learn_battle` en `numbers-session` versie 1 met JWT-controle.
+De publieke RPC is alleen door service_role uitvoerbaar. Alle vier nieuwe
+private tabellen hebben RLS. Er zijn geen nieuwe securitywaarschuwingen; de
+[vier informatieve RLS-meldingen zonder directe policies](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy)
+horen bij de bewuste toegang uitsluitend via de serverfunctie. De
+[drie nog ongebruikte indices](https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index)
+zijn nieuw en bedoeld voor eigen sessies, deelnemers en datumfilters. Bestaande
+platformadviezen blijven ongewijzigd.

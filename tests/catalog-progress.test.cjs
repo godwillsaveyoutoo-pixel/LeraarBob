@@ -184,3 +184,11 @@ test('Getallenwereld keeps its guided route and historical series separate while
   assert.equal(api.savedFor(family[0],overview).game_id,'getallenwereld');assert.equal(api.savedFor(family[1],overview).game_id,'bewerkingen-trainer');
   overview.games[0].state.completed.push('machten-macht');assert.equal(api.summarize(family[1],api.savedFor(family[1],overview)).completed,3,'Guided work never rewrites the historical series total');
 });
+
+test('online numbers awards add once to saved solo XP, never to duplicated component routes',()=>{
+ const api=context.window.LeraarBobCatalogProgress;
+ const catalog=[{id:'getallenwereld',progressType:'levels'},{id:'bewerkingen-trainer',progressType:'levels'},{id:'old-route',progressId:'bewerkingen-trainer',progressType:'levels'}];
+ const overview={errors:{},numbers:{solo_xp:10,online_xp:25,xp:35},games:[{game_id:'bewerkingen-trainer',state:{storage:{'leraarbob.bewerkingen.v1':JSON.stringify({practiceXP:10})}}}]};
+ assert.equal(api.aggregate(catalog,overview).xp,35);
+ assert.equal(api.aggregate(catalog,{...overview,errors:{numbers:true}}),null,'Unavailable online XP must not be reported as zero');
+});

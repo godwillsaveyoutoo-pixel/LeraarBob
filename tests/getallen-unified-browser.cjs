@@ -34,7 +34,7 @@ const auth=`(()=>{
  const data=${roleScript};
  const query=table=>{const q={select(){return q},eq(){return q},order(){return q},then(resolve){return Promise.resolve(resolve({data:structuredClone(data[table]||[]),error:null}));}};return q;};
  window.__writes=0;
- window.AxiomaAuth={CLASSES:['3TBO'],ready:async()=>({account,pending:false}),getAccount:async()=>account,getSession:async()=>null,onChange:()=>()=>{},client:()=>({from:query,auth:{},rpc:async(name)=>{if(name==='axioma_class_battle_hub')return{data:{teacher:true,classes:['3TBO'],rooms:[],stats:[],leaderboards:[]},error:null};window.__writes++;throw Error('Live RPC forbidden: '+name);},functions:{invoke:async()=>{window.__writes++;throw Error('Live Edge invocation forbidden');}}})};
+ window.AxiomaAuth={CLASSES:['3TBO'],ready:async()=>({account,pending:false}),getAccount:async()=>account,getSession:async()=>null,onChange:()=>()=>{},client:()=>({from:query,auth:{},rpc:async(name)=>{if(name==='axioma_class_battle_hub')return{data:{teacher:true,classes:['3TBO'],rooms:[],stats:[],leaderboards:[]},error:null};window.__writes++;throw Error('Live RPC forbidden: '+name);},functions:{invoke:async(n,{body})=>{if(n==='numbers-session'&&body.action==='summary')return{data:{online_xp:0,xp:30}};window.__writes++;throw Error('Live Edge invocation forbidden');}}})};
 })();`;
 async function main(){
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
@@ -69,7 +69,7 @@ async function main(){
   const seriesReady=()=>page.waitForFunction(()=>window.BewerkingenTrainer&&AxiomaGame.active);
   const getLive=()=>page.evaluate(()=>{const s=GetallenWorld.snapshot();return{entries:s.entries,runs:s.runs,mission:s.mission};});
   const getSeries=()=>page.evaluate(()=>BewerkingenTrainer.snapshot());
-  const seriesProgress=s=>({sessions:s.sessions,solved:s.solved,history:s.history,journey:s.journey,mission:s.mission});
+  const seriesProgress=s=>({sessions:JSON.parse(JSON.stringify(s.sessions,(k,v)=>k==='activeSeconds'?undefined:v)),solved:s.solved,history:s.history,journey:s.journey,mission:s.mission});
   async function topbarFit(label){
    await page.evaluate(()=>document.fonts.ready);
    await page.screenshot({path:path.join(screenshots,label+'.png')});
@@ -78,7 +78,7 @@ async function main(){
     const problems=await page.evaluate(()=>{
      const bad=[];
      if(document.documentElement.scrollHeight>innerHeight+1)bad.push('page needs vertical scrolling');
-     for(const e of document.querySelectorAll('#playHost .answer-row input,#playHost .answer-row button,#playHost .keys button')){
+     for(const e of document.querySelectorAll('#playHost [data-smart-slot],#playHost [data-smart-value],#playHost .smart-submit')){
       if(!e.getClientRects().length)continue;
       const r=e.getBoundingClientRect();
       if(r.width<43.5||r.height<43.5)bad.push('small input target '+(e.id||e.textContent));
@@ -154,19 +154,18 @@ async function main(){
   const classroomURL=new URL(actionLinks.find(link=>link.mode==='classroom').href);
   assert.equal(classroomURL.searchParams.get('game'),'getallenwereld');
   assert.equal(classroomURL.searchParams.get('world'),'machten');
-  await page.locator('.world-actions [data-world-mode=series]').click();await seriesReady();
+  await page.locator('.world-actions [data-world-mode=series]').click();await page.locator('[data-go=solo]').click();await seriesReady();
   assert.equal(await page.locator('#axioma-game-status').evaluate(e=>e.shadowRoot.querySelector('.dock').hidden),true,'The shared topbar owns the account and progress controls');
   assert.match(await page.locator('leraarbob-topbar [part=crumb-game]').textContent(),/Getallenwereld/);
   assert.doesNotMatch(await page.locator('leraarbob-topbar [part=crumb-game]').textContent(),/Bewerkingentrainer/);
   const beforeSelection=seriesProgress(await getSeries());
   assert.deepEqual(beforeSelection.sessions,{});
   assert(await page.locator('#setupScreen').isVisible());
-  await page.locator('[data-mode=teacher]').click();
-  await page.locator('[data-mode=duo]').click();
-  await page.locator('[data-mode=solo]').click();
+  for(const mode of ['teacher','duo','solo']){const u=new URL(page.url());u.searchParams.set('mode',mode);u.searchParams.set('screen','setup');await page.goto(u.href);await seriesReady();}
   assert.deepEqual(seriesProgress(await getSeries()),beforeSelection,'Mode selection creates no questions, attempts or XP');
   await page.locator('#startBtn').click();
-  await page.locator('#answer0').fill('unfinished^(');
+  await page.locator('[data-smart-player="0"] [data-smart-value]').first().click();
+  const savedSmart=await page.locator('[data-smart-player="0"]').innerText();
   await page.locator('.scratch summary').click();
   await page.locator('[data-notes="0"]').fill('Mijn bewaarde tussenstap');
   const seriesWork=seriesProgress(await getSeries());
@@ -196,7 +195,7 @@ async function main(){
   assert.deepEqual(seriesProgress(await getSeries()),seriesWork);
   await page.goto(new URL(scientificURL,base).href);await seriesReady();
   await page.locator('#resumeBtn').click();
-  assert.equal(await page.locator('#answer0').inputValue(),'unfinished^(');
+  assert.equal(await page.locator('[data-smart-player="0"]').innerText(),savedSmart);
   assert.deepEqual((await getSeries()).selected,['scientific'],'The next series selection remains separate');
   assert.equal(await page.locator('#crumbGroup').textContent(),'Machten & letters','The resumed exercise shows its actual topic rather than the next selection');
   const activeBattleURL=new URL(await page.locator('[data-getallen-class]').first().getAttribute('href'),base);
@@ -214,7 +213,7 @@ async function main(){
    assert.equal(await page.locator('.lb-restore').getAttribute('aria-expanded'),'false');
    assert.deepEqual(seriesProgress(await getSeries()),seriesWork);
    await page.locator('.lb-restore').click();
-   assert.equal(await page.locator('#answer0').inputValue(),'unfinished^(');
+   assert.equal(await page.locator('[data-smart-player="0"]').innerText(),savedSmart);
   }
   await page.setViewportSize({width:1280,height:800});
   // A worksheet uses separate generated questions and leaves all play modes intact.
@@ -248,10 +247,9 @@ async function main(){
   assert.deepEqual((await getSeries()).sessions.teacher,teacherWork.sessions.teacher);
   await page.locator('#startBtn').click();
   assert.equal(await page.locator('[data-answer]').count(),2);
-  await page.locator('#answer0').fill('one');await page.locator('#answer1').fill('two');
-  assert.equal((await getSeries()).sessions.duo.work['0:0'].value,'one');
-  assert.equal((await getSeries()).sessions.duo.work['0:1'].value,'two');
-  assert.deepEqual((await getSeries()).sessions.solo,seriesWork.sessions.solo);
+  await page.locator('[data-smart-player="0"] [data-smart-value]').first().click();await page.locator('[data-smart-player="1"] [data-smart-value]').last().click();
+  const drafts=(await getSeries()).sessions.duo.work;assert.notDeepEqual(drafts['0:0'].smart.values,drafts['0:1'].smart.values);
+  assert.deepEqual(seriesProgress(await getSeries()).sessions.solo,seriesWork.sessions.solo);
   assert.deepEqual((await getSeries()).history,seriesWork.history);
   assert.deepEqual((await getSeries()).solved,seriesWork.solved);
   const duoWork=(await getSeries()).sessions.duo;
