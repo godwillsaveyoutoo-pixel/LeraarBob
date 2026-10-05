@@ -10,8 +10,9 @@ const TRAINER_SKILLS={
 };
 
 const detailCache=new WeakMap();
-const featuredIds=['rechtenwereld','wortelbouw','vectoren-trainer','gravity-maze'];
 const catalog=window.AXIOMA_CATALOG||[];
+const featuredCatalog=catalog.filter(g=>g.featured).sort((a,b)=>(a.featureOrder||0)-(b.featureOrder||0));
+const featuredIds=featuredCatalog.length?featuredCatalog.map(g=>g.id):['rechtenwereld','wortelbouw','vectoren-trainer','gravity-maze'];
 let collection='featured';
 let sb=null,account=null,students=[],games=[],genericProgress=[];
 let classFilter='',themeFilter='',gameFilter='',query='',selectedStudent=null,loadVersion=0;

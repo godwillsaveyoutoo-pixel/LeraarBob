@@ -9,13 +9,15 @@ class CDP{
  async eval(expression){const r=await this.send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value}
  async until(expression){for(let i=0;i<100;i++){if(await this.eval(expression))return;await wait(40)}throw Error('Timeout '+expression)}
 }
-const catalog=JSON.parse(fs.readFileSync('games.json')),ids=['rechten-trainer','vectoren-trainer','reele-getallen-trainer'];
+const catalog=JSON.parse(fs.readFileSync('games.json'));
+const featuredIds=catalog.filter(g=>g.featured).sort((a,b)=>(a.featureOrder||0)-(b.featureOrder||0)).map(g=>g.id);
 const games=catalog.filter(g=>g.teacherVisible||g.id==='rechtenwereld').map(g=>({id:g.id,title:g.title,theme:g.theme,teacher_visible:true,progress_type:g.progressType,metadata:{}}));
 const vp=V.TrainerScheduler.freshState();for(let i=0;i<3;i++)V.TrainerScheduler.record(vp,V.TaskGenerator.generate('props'),{clean:true,now:1700000000000+i});
 V.TrainerScheduler.record(vp,V.TaskGenerator.generate('equal'),{clean:false,solved:true,code:'xy',now:1700000001000});
 const rp=R.Progress.fresh();R.Progress.record(rp,R.generate('rootcalc'),{clean:false,solved:true,code:'root-value',now:1700000002000});delete rp.activity;
 const rows=[{user_id:'alice',game_id:'vectoren-trainer',updated_at:'2026-09-21T10:00:00Z',state:{storage:{'axioma-vectorentrainer-v020':JSON.stringify({progress:vp,draft:{skill:'equal',done:true}})}}},{user_id:'alice',game_id:'reele-getallen-trainer',updated_at:'2026-09-21T10:00:00Z',state:{storage:{'axioma-real-numbers-v1':JSON.stringify({progress:rp,draft:{skill:'rootcalc',phase:'feedback',dirty:true,errorCode:'root-value'}})}}}];
 rows.push({user_id:'alice',game_id:'rechten-trainer',state:{rechtenV2:{missions:{slope:{completed:true,world:'hellingrug'}},events:[]}}},{user_id:'bob',game_id:'wortelbouw',state:{completed:['length-2'],total:14}});
+rows.push({user_id:'alice',game_id:'getallenwereld',updated_at:'2026-10-05T14:10:00Z',state:{completed:['machten-product','wortels-vereenvoudigen'],total:15,storage:{'leraarbob.getallenwereld.v1':JSON.stringify({version:1,entries:{'machten-product':{done:['1:0','1:1','1:2','1:3','1:4','1:5'],independent:['1:0','1:1','1:2','1:3','1:4','1:5']},'wortels-vereenvoudigen':{done:['2:0','2:1','2:2','2:3','2:4','2:5'],independent:['2:0','2:1','2:2','2:3','2:4']}}})}}});
 const profiles=[{user_id:'alice',alias:'alice <img src=x onerror=alert(1)>',class_code:'3TBO',axioma_progress:{state:{total:5,correct:4,xp:40}}},{user_id:'bob',alias:'bob',class_code:'4TMW'}];
 const mock=`(()=>{let account={id:'teacher',role:'teacher',email:'test@example.invalid'};const listeners=new Set();window.testQueries=[];window.testDelay=0;
 const data=${JSON.stringify({axioma_games:games,axioma_profiles:profiles,axioma_game_progress:rows})};
@@ -32,10 +34,20 @@ window.AxiomaAuth={getAccount:async()=>account,ready:async()=>({account}),client
   await c.send('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});
   await c.send('Page.navigate',{url:BASE+'/teacher/'});await c.until('!!document.querySelector(".view")');
   await c.until('!!document.querySelector("leraarbob-topbar")?.shadowRoot.querySelector(".collapse")');
-  assert.equal(await c.eval('document.querySelectorAll("#groupBattles a").length'),3);
-  assert(await c.eval('[...document.querySelectorAll(".gameChip")].every(b=>["rechtenwereld","wortelbouw","vectoren-trainer","gravity-maze"].includes(b.dataset.game))'));
-  assert.equal(await c.eval('document.querySelectorAll(".gameChip").length'),4);
-  assert.match(await c.eval('document.querySelector("[data-label=Rechtenwereld]").textContent'),/1\/21/);
+  assert.equal(await c.eval('document.querySelectorAll("#groupBattles a").length'),5);
+  assert.equal(await c.eval('document.querySelectorAll("main a[href*=klasbattle]").length'),6);
+  assert.deepEqual(await c.eval('[...document.querySelectorAll("#groupBattles a")].map(a=>new URL(a.href).searchParams.get("game"))'),['rechten','wortelbouw','vectoren','algebra','bewerkingen']);
+  assert.deepEqual(await c.eval('[...document.querySelectorAll(".gameChip")].map(b=>b.dataset.game)'),featuredIds);
+  assert.equal(await c.eval('document.querySelectorAll(".gameChip").length'),6);
+  assert.match(await c.eval('document.querySelector("[data-label=Getallenwereld]").textContent'),/2\/15/);
+  await c.eval('document.querySelector("[data-game=getallenwereld]").click();document.querySelector("[data-id=alice]").click()');
+  assert.equal(await c.eval('document.querySelectorAll("tbody tr:first-child td[data-label]").length'),1);
+  assert.match(await c.eval('document.querySelector("#detail").innerText'),/Getallenwereld/);
+  assert.match(await c.eval('document.querySelector("#detail").innerText'),/2\/15/);
+  assert.match(await c.eval('document.querySelector("#detail").innerText'),/2 onderdelen voltooid/);
+  assert.equal(await c.eval('document.querySelector("#detail progress").value'),2/15);
+  await c.eval('document.querySelector("[data-game=getallenwereld]").click();document.querySelector("#closeDetail").click()');
+  assert.match(await c.eval('document.querySelector("[data-label=Rechtenwereld]").textContent'),/1\/28/);
   for(const mode of ['light','dark'])for(const width of [320,390,780,1366]){
    await c.send('Emulation.setDeviceMetricsOverride',{width,height:850,deviceScaleFactor:1,mobile:width<700});
    await c.eval(`document.documentElement.dataset.mode='${mode}';scrollTo(0,0)`);await wait(120);
@@ -51,7 +63,7 @@ window.AxiomaAuth={getAccount:async()=>account,ready:async()=>({account}),client
   await c.eval('document.querySelector(".lb-restore").click();document.querySelector("[data-game=wortelbouw]").click()');
   assert.equal(await c.eval('document.querySelectorAll("tbody tr:first-child td[data-label]").length'),1);
   await c.eval('document.querySelector("[data-game=wortelbouw]").click()');
-  assert.equal(await c.eval('document.querySelectorAll("tbody tr:first-child td[data-label]").length'),4);
+  assert.equal(await c.eval('document.querySelectorAll("tbody tr:first-child td[data-label]").length'),6);
   await c.eval('document.querySelector(".extra-filters").open=true');
   assert(await c.eval('document.querySelector("#export").getBoundingClientRect().height>=44'));
   await c.send('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});
@@ -74,6 +86,6 @@ window.AxiomaAuth={getAccount:async()=>account,ready:async()=>({account}),client
   await c.until('document.querySelector("#app").innerText.includes("Leerkrachtlogin nodig")');await wait(300);
   assert(!await c.eval('document.querySelector("#app").innerText.includes("alice")'),'late teacher request cannot restore pupil details');
   const queries=await c.eval('testQueries.length');await c.eval('testAccount(null)');await wait(80);assert.equal(await c.eval('testQueries.length'),queries,'guest does not query pupils');
-  assert.deepEqual(c.errors,[]);console.log('PASS: readable trainer details, error advice, planned review, new/legacy activity, mobile layout, filters, pupil isolation, escaped aliases and account-change race');
+  assert.deepEqual(c.errors,[]);console.log('PASS: six current catalog games including filtered Getallenwereld progress, central plus five battle links, readable trainer details, error advice, planned review, new/legacy activity, mobile layout, filters, pupil isolation, escaped aliases and account-change race');
  }finally{await browser.send('Target.disposeBrowserContext',{browserContextId});c.ws.close();browser.ws.close()}
 })().catch(e=>{console.error(e);process.exit(1)});

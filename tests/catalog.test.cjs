@@ -31,6 +31,6 @@ test('featured games have subject, responsive artwork and an explicit ordering',
   assert.doesNotThrow(() => render([complete]));
   assert.throws(() => render([{ ...complete, featureOrder: 0 }]), /featureOrder/);
   const catalog = JSON.parse(fs.readFileSync(path.join(root, 'games.json'), 'utf8'));
-  assert.deepEqual(catalog.filter(g => g.featured).sort((a,b) => a.featureOrder-b.featureOrder).map(g => g.id), ['rechtenwereld','wortelbouw','vectoren-trainer','gravity-maze','algebra-trainer']);
+  assert.deepEqual(catalog.filter(g => g.featured).sort((a,b) => a.featureOrder-b.featureOrder).map(g => g.id), ['rechtenwereld','wortelbouw','vectoren-trainer','gravity-maze','algebra-trainer','getallenwereld']);
   for (const g of catalog.filter(g => g.featured)) for (const key of ['cover','coverSmall']) assert(fs.existsSync(path.join(root,g[key])),g[key]);
 });

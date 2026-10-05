@@ -1,5 +1,34 @@
 # Browsercontrole Pythagoras
 
+## Getallenwereld en het structuurvoorstel
+
+```sh
+node --test tests/getallenwereld.test.cjs tests/catalog.test.cjs tests/catalog-progress.test.cjs
+VECTOR_PGLITE_MODULE=/pad/naar/@electric-sql/pglite \
+  node --test tests/getallenwereld-account-db.test.cjs
+NODE_PATH=/pad/naar/node_modules ALGEBRA_CHROMIUM_PATH=/pad/naar/chromium \
+  node tests/getallenwereld-browser.cjs
+NODE_PATH=/pad/naar/node_modules ALGEBRA_CHROMIUM_PATH=/pad/naar/chromium \
+  node tests/account-progress-reload-browser.cjs
+python3 scripts/build-platform-report.py --check
+```
+
+De Getallenwereld-controle genereert 2700 exacte vragen en speelt alle vijftien
+routes met de echte interface. De zelfstandige browsertests starten en stoppen
+hun eigen server en Chromium; ze gebruiken fictieve accounts en blokkeren
+productieverkeer. De databasecontrole gebruikt uitsluitend een geïsoleerde
+PGlite-database: aparte saves van Getallenwereld/Bewerkingen, accountrechten,
+revisieconflicten en idempotente spelregistratie.
+
+De herlaadregressie laat de server een save vastleggen zonder het antwoord terug
+te geven. Alleen exact gelijke persistente inhoud mag daarna de nieuwe revisie
+erkennen. Afwijkende inhoud, extra lokale invoer, ander schema of arrayvolgorde
+blijven een conflict. Account- en spelgrenzen blijven behouden.
+
+Het structuurvoorstel staat in [docs/platform-architecture](../docs/platform-architecture/README.md).
+Wijzig de Markdown-bron en bouw daarna de webversie met
+`python3 scripts/build-platform-report.py` (Python-Markdown vereist).
+
 Cataloguscontrole zonder browser:
 
 ```sh

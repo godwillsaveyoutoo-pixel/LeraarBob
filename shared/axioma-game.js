@@ -125,6 +125,13 @@ function snapshot(){
  state.schemaVersion=2;
  return state;
 }
+function sameJSON(a,b){
+ if(a===b)return true;
+ if(!a||!b||typeof a!=='object'||typeof b!=='object'||Array.isArray(a)!==Array.isArray(b))return false;
+ if(Array.isArray(a)&&a.length!==b.length)return false;
+ const keys=Object.keys(a);
+ return keys.length===Object.keys(b).length&&keys.every(key=>Object.hasOwn(b,key)&&sameJSON(a[key],b[key]));
+}
 function conflict(){
  active=false;setStatus('conflict');
  notice('Dit spel is ook op een ander tabblad of toestel gewijzigd. Je werk op dit toestel blijft apart bewaard. Laad de online versie om verder te gaan.',[['Laad online voortgang',()=>{
@@ -178,8 +185,14 @@ async function boot(){
     setStatus('offline');
    }
    if(remote){
-    if(record.dirty&&record.revision!==remote.revision){conflict();return}
-    if(!record.dirty){record={state:remote.state||{storage:{}},revision:remote.revision,dirty:false};record.state.storage ||= {}}
+    let acknowledged=false;
+    if(record.dirty&&record.revision!==remote.revision){
+     // A save can commit before reload aborts its reply. Acknowledge only an
+     // identical account-bound persisted payload; retain local-only engine keys.
+     if(sameJSON(snapshot(),remote.state)){record.revision=remote.revision;record.dirty=false;acknowledged=true}
+     else{conflict();return}
+    }
+    if(!record.dirty&&!acknowledged){record={state:remote.state||{storage:{}},revision:remote.revision,dirty:false};record.state.storage ||= {}}
     setStatus(record.dirty?'pending':'saved');
    }
   }else setStatus(config.external?(account?.role==='student'?'loading':account?'teacher':'guest'):config.tracking===false?(config.multiplayer?'multiplayer':'untracked'):account?'teacher':'guest');

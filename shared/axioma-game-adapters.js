@@ -10,6 +10,7 @@ function indexed(key,total,field='lastLevel'){
 }
 const adapters={
  'bewerkingen-trainer':{keys:['leraarbob.bewerkingen.v1']},
+ 'getallenwereld':{keys:['leraarbob.getallenwereld.v1']},
  'algebra-trainer':{keys:['leraarbob.algebra.v1','leraarbob.stelsels.workshop.v1']},
  'wortelbouw':{keys:['axioma.wortelbouw.progress.v1']},
  'pythagoras':{keys:['axioma.pythagoras.completed.v1','axioma.pythagoras.current.v1'],hydrate(state){const done=numbers(state,1,10);put(state,this.keys[0],done);put(state,this.keys[1],next(done,1,10))}},

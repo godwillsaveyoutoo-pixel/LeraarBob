@@ -1,0 +1,976 @@
+<!doctype html>
+<html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#193b4e">
+<title>Structuurvoorstel · leraarBob</title><link rel="icon" href="../../assets/favicon.svg">
+<script>try{document.documentElement.dataset.mode=localStorage.getItem('axioma-mode')==='dark'?'dark':'light';}catch{}</script>
+<link rel="stylesheet" href="../../shared/collapsible-topbar.css"><link rel="stylesheet" href="../../shared/leraarbob-topbar.css">
+<style>
+:root{color-scheme:light;--paper:#fffdf8;--page:#f3f0e7;--ink:#173b50;--text:#253b47;--muted:#526877;--line:#ccd6d9;--tint:#e2edf2;--accent:#a94e06}
+html[data-mode=dark]{color-scheme:dark;--paper:#162834;--page:#0f1d27;--ink:#d2e7f3;--text:#e1e9ed;--muted:#b7cbd5;--line:#3f5868;--tint:#203c4d;--accent:#ffb778}
+*{box-sizing:border-box}html{scroll-padding-top:100px}body{margin:0;background:var(--page);color:var(--text);font:17px/1.65 system-ui,-apple-system,sans-serif}
+header{background:#193b4e;color:white;min-height:52px}a{color:var(--accent);text-underline-offset:3px;overflow-wrap:anywhere}a:hover{text-decoration-thickness:2px}
+.skip{position:absolute;top:-80px;left:12px;padding:12px;background:var(--paper);z-index:1000}.skip:focus{top:8px}
+.page-layout{max-width:1440px;margin:auto;display:grid;grid-template-columns:270px minmax(0,1fr);gap:28px;padding:28px}
+.contents{position:sticky;top:96px;align-self:start;max-height:calc(100vh - 120px);overflow:auto;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px;font-size:14px}
+.contents summary{font-weight:750;color:var(--ink);cursor:pointer;min-height:44px;display:flex;align-items:center}.contents ul{list-style:none;padding:0;margin:0}.contents li+li{border-top:1px solid var(--line)}.contents a{display:flex;align-items:center;min-height:44px;padding:8px 4px;line-height:1.45;color:var(--ink);text-decoration:none}
+article{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:clamp(18px,3vw,46px);box-shadow:0 2px 8px #00000008}article>h1{font-size:clamp(28px,4vw,42px);line-height:1.18;margin:8px 0 18px;color:var(--ink)}
+h2{font-size:27px;line-height:1.3;margin:56px 0 18px;border-top:2px solid var(--line);padding-top:25px;color:var(--ink);scroll-margin-top:100px}h3{font-size:21px;color:var(--ink);margin-top:30px}p{margin:16px 0}li{margin:7px 0}strong{color:var(--ink)}code{font-size:.88em;overflow-wrap:anywhere}pre{max-width:100%;overflow:auto;background:var(--tint);padding:18px;border-radius:6px;line-height:1.6}pre code{overflow-wrap:normal}
+.table-scroll{max-width:100%;overflow:auto;margin:24px 0;border:1px solid var(--line);border-radius:6px;outline-offset:3px}table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.55;min-width:640px}th,td{padding:12px 14px;vertical-align:top;text-align:left;border-bottom:1px solid var(--line)}th{background:var(--tint);color:var(--ink)}tbody tr:last-child td{border-bottom:none}
+.eyebrow{font-size:12px;font-weight:750;letter-spacing:.13em;color:var(--muted);text-transform:uppercase}.report-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px}.report-actions a{display:inline-flex;align-items:center;min-height:44px;padding:8px 13px;border:1px solid var(--line);border-radius:5px;color:var(--ink);text-decoration:none;font-size:14px}
+.architecture{margin:30px 0;padding:20px;background:var(--tint);border:1px solid var(--line);border-radius:8px}.architecture h2{border:0;margin:0 0 15px;padding:0;font-size:22px}.architecture .engine,.architecture .reports{background:var(--paper);padding:13px;border:1px solid var(--line);border-radius:5px;text-align:center}.architecture small{display:block;font-size:13px;line-height:1.5;color:var(--muted)}.architecture .branches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}.architecture .branch{padding:12px;background:var(--paper);border:1px solid var(--line);border-radius:5px;text-align:center}.architecture .arrow{text-align:center;line-height:1.3;color:var(--muted);font-size:22px}.architecture .footnote{font-size:13px;margin:12px 0 0}
+.technical{border:1px solid var(--line);border-radius:6px;padding:12px 18px;margin-top:36px}.technical summary{min-height:44px;cursor:pointer;font-weight:750;color:var(--ink)}.technical h2{margin-top:12px}footer{max-width:1000px;margin:10px auto 30px;padding:0 24px;color:var(--muted);font-size:14px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}html:has(.lb-collapsed){scroll-padding-top:60px}body.topbar-collapsed .contents{top:64px}body.topbar-collapsed .page-layout{padding-top:64px}
+@media(max-width:980px){.page-layout{display:block;padding:16px}.contents{position:static;max-height:none;margin-bottom:16px}.contents ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}.contents li{border-top:1px solid var(--line)}}
+@media(max-width:560px){body{font-size:16px}.page-layout{padding:10px}.contents ul{display:block}article{padding:18px 15px}h2{font-size:23px;margin-top:38px}.architecture{padding:14px}.architecture .branches{grid-template-columns:1fr}.technical{padding:10px}pre{padding:12px}footer{padding:0 16px}}
+@media print{header,.lb-restore,.contents,.report-actions,.skip{display:none!important}.page-layout{display:block;padding:0}body,article{background:white;color:#111}article{border:0;box-shadow:none;padding:0}a{color:#111}h2{break-after:avoid}.table-scroll{overflow:visible}table{min-width:0;font-size:10px}th,td{padding:5px}pre{white-space:pre-wrap}.architecture,.technical{break-inside:avoid}}
+</style><script src="../../shared/leraarbob-topbar.js" data-title="Structuurvoorstel" data-game-href="docs/platform-architecture/" data-context="none" data-theme-mode="site" data-nav-pilot="true" defer></script>
+</head><body><a class="skip" href="#report">Naar het rapport</a><header data-collapsible-topbar><span>leraarBob · Structuurvoorstel</span></header>
+<div class="page-layout"><nav class="contents" aria-label="Inhoud van het rapport"><details open><summary>Inhoud · 19 onderdelen</summary><div class="toc">
+<ul>
+<li><a href="#1-wat-de-huidige-website-al-kan">1 Wat de huidige website al kan</a></li>
+<li><a href="#2-maak-de-betekenis-van-de-onderdelen-vast">2 Maak de betekenis van de onderdelen vast</a></li>
+<li><a href="#3-een-globale-navigatie-en-een-lokale-leerroute">3 Eén globale navigatie en één lokale leerroute</a></li>
+<li><a href="#4-maak-links-en-terugwegen-voorspelbaar">4 Maak links en terugwegen voorspelbaar</a></li>
+<li><a href="#5-spelvormen-met-twee-afzonderlijke-keuzes">5 Spelvormen met twee afzonderlijke keuzes</a></li>
+<li><a href="#6-de-leerkracht-kan-begeleiden-en-meedoen">6 De leerkracht kan begeleiden én meedoen</a></li>
+<li><a href="#7-een-centrale-oefenbladmotor">7 Een centrale oefenbladmotor</a></li>
+<li><a href="#8-maak-van-voortgang-en-activiteiten-twee-gegevenslagen">8 Maak van voortgang en activiteiten twee gegevenslagen</a></li>
+<li><a href="#9-definieer-de-metingen-voor-je-er-grafieken-van-maakt">9 Definieer de metingen vóór je er grafieken van maakt</a></li>
+<li><a href="#10-oefentijd-zorgvuldig-meten">10 Oefentijd zorgvuldig meten</a></li>
+<li><a href="#11-een-leerkrachtdashboard-dat-begint-bij-een-vraag">11 Een leerkrachtdashboard dat begint bij een vraag</a></li>
+<li><a href="#12-priveprofiel-en-publiek-profiel-zijn-verschillende-weergaven">12 Privéprofiel en publiek profiel zijn verschillende weergaven</a></li>
+<li><a href="#13-ranglijsten-die-leerdoelen-niet-door-elkaar-halen">13 Ranglijsten die leerdoelen niet door elkaar halen</a></li>
+<li><a href="#14-technische-onderdelen-die-bij-elkaar-moeten-passen">14 Technische onderdelen die bij elkaar moeten passen</a></li>
+<li><a href="#15-bouw-dit-in-fasen-met-een-toetsbaar-resultaat">15 Bouw dit in fasen met een toetsbaar resultaat</a></li>
+<li><a href="#16-vaste-acceptatievoorwaarden">16 Vaste acceptatievoorwaarden</a></li>
+<li><a href="#17-beslissingen-om-voor-de-volgende-implementatie-vast-te-leggen">17 Beslissingen om vóór de volgende implementatie vast te leggen</a></li>
+<li><a href="#18-concrete-voorbeelden-van-de-voorgestelde-contracten">18 Concrete voorbeelden van de voorgestelde contracten</a></li>
+<li><a href="#19-onderzoeksbasis-en-grenzen">19 Onderzoeksbasis en grenzen</a></li>
+</ul>
+</div>
+</details></nav>
+<article id="report"><div class="eyebrow">Analyse en ontwikkelvoorstel · 5 oktober 2026</div><div class="report-actions"><a href="../../index.html">Naar leraarBob</a><a href="../../games/getallenwereld/">Getallenwereld openen</a><a href="https://github.com/godwillsaveyoutoo-pixel/LeraarBob/blob/main/docs/platform-architecture/README.md">Bronversie op GitHub</a></div>
+<h1 id="structuurvoorstel-voor-leraarbob">Structuurvoorstel voor leraarBob</h1>
+<p>Analyse van de bestaande website en voorstel voor verdere ontwikkeling, 5 oktober 2026.</p>
+<p>De aanbevolen richting is één platform met gedeelde accounts, navigatie, sessies,
+activiteitenregistratie en oefenbladen, waarop verschillende wiskundemotoren
+aansluiten. De spellen behouden hun eigen leerstof en werkborden. Een leerling
+kiest een wereld en een level; daarna kiest die hoe er geoefend wordt. Dezelfde
+oefening kan vervolgens op een solowerkbord, in een gezamenlijke les, in een
+battle of op papier verschijnen.</p>
+<p>Dit rapport scheidt <strong>wat al bestaat</strong>, <strong>wat nu met Getallenwereld wordt
+toegevoegd</strong> en <strong>wat een voorstel voor later is</strong>. De voorgestelde dataverzameling,
+publieke profielen, leerkrachtdeelname en nieuwe lesmodi zijn nog niet ingevoerd.
+Uitgangspunt voor dit voorstel is een privé leerlingprofiel met resultaten binnen
+de eigen klas. Publieke profielen vormen een afzonderlijke, beperkte mogelijkheid.</p>
+<section class="architecture" aria-label="Voorgestelde architectuur"><h2>De samenhang in één overzicht</h2><div class="engine"><strong>Wereld → onderwerp → level → opgave</strong><small>Gedeelde inhoudsdefinitie, met een eigen generator en validator per vak</small></div><div class="arrow" aria-hidden="true">↓</div><div class="branches"><div class="branch"><strong>Solo-werkbord</strong><small>Eigen poging, feedback en echte spelvoortgang</small></div><div class="branch"><strong>Samen met de klas</strong><small>Leren of battle · host, leerling en leerkracht-deelnemer</small></div><div class="branch"><strong>Oefenblad</strong><small>Vaste vragen, A4 en aparte sleutel · geen XP-poging</small></div></div><div class="arrow" aria-hidden="true">↓</div><div class="reports"><strong>Privé voortgang en bevoegde rapportage</strong><small>Spelstand + afzonderlijke activiteiten en resultaten; publieke kaart met eigen veldselectie</small></div><p class="footnote">Eén platform voor routes, accounts, rollen en presentatie. Vakmotoren bewaren de inhoudelijke correctheid. Papier blijft een document; een papieren leerresultaat ontstaat pas bij een afzonderlijk geregistreerde poging.</p></section><h2 id="1-wat-de-huidige-website-al-kan">1 Wat de huidige website al kan</h2>
+<p>De website heeft al veel bouwstenen. Het grootste probleem is dat dezelfde
+begrippen op verschillende plaatsen anders worden geregistreerd en aangeboden.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Vergelijkingstabel, horizontaal te verschuiven"><table>
+<thead>
+<tr>
+<th>Bouwsteen</th>
+<th>Huidige situatie</th>
+<th>Gevolg voor de volgende stap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Account en avatar</td>
+<td>Gedeelde accountservice, leerlingalias, klascode, leerkrachtrol en centrale avatarkeuze</td>
+<td>Hergebruiken; geen nieuw account per spel</td>
+</tr>
+<tr>
+<td>Spelvoortgang</td>
+<td>Accountgebonden spelopslag met revisies, lokale bewaring en cloudopslag</td>
+<td>Behouden als hervatbare spelstand</td>
+</tr>
+<tr>
+<td>Leerkrachtoverzicht</td>
+<td>Zoeken op alias, klas/thema/spel kiezen, CSV, individuele voortgang</td>
+<td>Uitbreiden met echte activiteiten en een datumbereik</td>
+</tr>
+<tr>
+<td>Activiteitenhistoriek</td>
+<td>Enkele trainers bewaren een beperkte laatste lijst; andere vooral totalen of voltooiingen</td>
+<td>Nog geen volledige tijdlijn over alle spellen</td>
+</tr>
+<tr>
+<td>Oefentijd</td>
+<td>Geen gedeelde meting van actieve interactietijd</td>
+<td>Niet reconstrueren uit een opgeslagen tijdstip</td>
+</tr>
+<tr>
+<td>Klasbattle</td>
+<td>Centrale ingang voor vijf spellen, echte nagekeken punten, ranglijsten per spel en klas</td>
+<td>Goede basis; nog geen periodefilter of meespelende leerkracht</td>
+</tr>
+<tr>
+<td>Samen leren</td>
+<td>Rechtenwereld heeft een eigen samenwerkingsroute met rollen en afzonderlijke ideeën</td>
+<td>Waardevolle eerste adapter, nog geen algemene klassikale lesmotor</td>
+</tr>
+<tr>
+<td>Afdrukken</td>
+<td>Centrale oefenbladpagina en gedeelde A4-componenten, met verschillende vakgebonden printpaden</td>
+<td>Gemeenschappelijke documentmotor uitbouwen</td>
+</tr>
+<tr>
+<td>Bovenbalk</td>
+<td>Gedeelde locatie, account, scherm/weergave, menu en blijvende inklapkeuze</td>
+<td>Deze afspraak verplicht maken voor nieuwe aansluitingen</td>
+</tr>
+</tbody>
+</table></div>
+<p>De actuele code is hier leidend. Oudere opleverdocumenten beschrijven soms een
+vroegere toestand, bijvoorbeeld vóór de centrale avatars, directe schermknoppen
+of centrale Klasbattle.</p>
+<p>De belangrijkste bronnen in de repository zijn <a href="https://github.com/godwillsaveyoutoo-pixel/LeraarBob/blob/main/shared/axioma-auth.js">account en rollen</a>,
+<a href="https://github.com/godwillsaveyoutoo-pixel/LeraarBob/blob/main/shared/axioma-game.js">hervatbare opslag</a>, <a href="https://github.com/godwillsaveyoutoo-pixel/LeraarBob/blob/main/shared/axioma-progress.js">cloudvoortgang</a>,
+<a href="https://github.com/godwillsaveyoutoo-pixel/LeraarBob/blob/main/teacher/teacher.js">leerkrachtconsole</a>, <a href="https://github.com/godwillsaveyoutoo-pixel/LeraarBob/blob/main/teacher/trainer-details.js">trainerdetails</a>,
+<a href="https://github.com/godwillsaveyoutoo-pixel/LeraarBob/blob/main/klasbattle/hub.js">Klasbattle</a>, <a href="https://github.com/godwillsaveyoutoo-pixel/LeraarBob/blob/main/shared/play-modes.js">gedeelde spelvormen</a>
+en <a href="https://github.com/godwillsaveyoutoo-pixel/LeraarBob/blob/main/shared/worksheet-render.js">de A4-renderer</a>.</p>
+<h3 id="beschikbare-functies-zijn-nog-niet-overal-gelijk">Beschikbare functies zijn nog niet overal gelijk</h3>
+<p>Dit is de inventaris van de actieve routes, inclusief de nieuwe aansluiting van
+Getallenwereld. <strong>Niet aangesloten</strong> betekent dat de centrale route/provider
+ontbreekt; het zegt niet dat de wiskundige inhoud ongeschikt is voor die vorm.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Vergelijkingstabel, horizontaal te verschuiven"><table>
+<thead>
+<tr>
+<th>Onderdeel</th>
+<th>Solo</th>
+<th>Duo</th>
+<th>Groepsbattle</th>
+<th>Samen leren</th>
+<th>Papier</th>
+<th>Leerkracht</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rechtenwereld</td>
+<td>Eigen leerroute</td>
+<td>Lokaal en online, met eigen toelatingsregels</td>
+<td>Ja</td>
+<td>Bestaande route voor 2–3 leerlingen met ideeën, bouwen en eigen eindcheck</td>
+<td>Vier werkbladwerelden</td>
+<td>Oefenen en lokale battle-simulatie</td>
+</tr>
+<tr>
+<td>Algebrawereld</td>
+<td>Levels, expliciet starten, herhaal-XP</td>
+<td>Niet aangesloten</td>
+<td>Vergelijkingen; niet automatisch alle stelselopgaven</td>
+<td>Niet aangesloten</td>
+<td>Vergelijkingen en stelsels</td>
+<td>Oefenen en lokale simulatie</td>
+</tr>
+<tr>
+<td>Vectormissie</td>
+<td>Adaptieve leerroute</td>
+<td>Lokaal</td>
+<td>Ja</td>
+<td>Niet aangesloten</td>
+<td>Niet aangesloten</td>
+<td>Oefenen en lokale simulatie</td>
+</tr>
+<tr>
+<td>Bewerkingentrainer</td>
+<td>Eigen route</td>
+<td>Lokaal</td>
+<td>Ja</td>
+<td>Niet aangesloten</td>
+<td>Eigen oefenbladen</td>
+<td>Bespreekmodus met stappen en lokale simulatie</td>
+</tr>
+<tr>
+<td>Wortelbouw</td>
+<td>Eigen bouwpuzzels</td>
+<td>Eigen lokale arena</td>
+<td>Ja</td>
+<td>Niet aangesloten</td>
+<td>Niet aangesloten</td>
+<td>Oefenen en lokale simulatie</td>
+</tr>
+<tr>
+<td>Reële-getallentrainer</td>
+<td>Eigen leerroute</td>
+<td>Niet centraal aangesloten</td>
+<td>Niet aangesloten</td>
+<td>Niet aangesloten</td>
+<td>Niet centraal aangesloten</td>
+<td>Lokaal oefenen</td>
+</tr>
+<tr>
+<td>Getallenwereld, nu toegevoegd</td>
+<td>15 onderdelen, elk zes opgaven</td>
+<td>Verwijzing naar Bewerkingentrainer</td>
+<td>Verwijzing naar Bewerkingentrainer</td>
+<td>Niet aangesloten</td>
+<td>Verwijzing naar Bewerkingentrainer</td>
+<td>Gewone route lokaal oefenen</td>
+</tr>
+</tbody>
+</table></div>
+<p>Getallenwereld heeft een eigen tegel, accountgebonden spelstand en teller van
+<strong>15 onderdelen</strong>, zonder verzonnen XP. De verwijzingen naar printen en battles
+noemen Bewerkingentrainer expliciet. Het zijn bestaande mogelijkheden van die
+trainer, geen nieuwe Getallenwereld-provider. De standaardselectie <strong>Actuele
+spellen</strong> in het leerkrachtoverzicht volgt voortaan dezelfde catalogus als de
+homepage, zodat nieuwe werelden daar niet door een tweede vaste lijst ontbreken.</p>
+<p>De historische bronnen hebben ook verschillende dekking. De oorspronkelijke
+Rechtentrainer bewaart maximaal 360 telemetriegebeurtenissen, met datum,
+vaardigheid en verstreken taakduur. Vectoren en reële getallen hebben recente
+activiteit en rijke docentdetails; Bewerkingentrainer bewaart een laatste lijst
+antwoordevents. Algebra heeft oplossingsbewijzen en een XP-boek zonder uniforme
+activiteitdatums. Deze bronnen vragen adapters en een zichtbaar label over hun
+dekking. Verstreken taakduur is geen al gemeten actieve interactietijd.</p>
+<h2 id="2-maak-de-betekenis-van-de-onderdelen-vast">2 Maak de betekenis van de onderdelen vast</h2>
+<p>Voorstel: gebruik deze begrippen overal met dezelfde betekenis.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Vergelijkingstabel, horizontaal te verschuiven"><table>
+<thead>
+<tr>
+<th>Begrip</th>
+<th>Betekenis</th>
+<th>Voorbeeld</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wereld</td>
+<td>De herkenbare omgeving waarin een leerling leerstof kiest</td>
+<td>Algebrawereld, Getallenwereld</td>
+</tr>
+<tr>
+<td>Onderwerp</td>
+<td>Een inhoudelijke groepering binnen een wereld</td>
+<td>Vergelijkingen, machten, wortels</td>
+</tr>
+<tr>
+<td>Level</td>
+<td>Een afgebakende oefenroute met een leerdoel</td>
+<td>Twee stappen, macht van een macht</td>
+</tr>
+<tr>
+<td>Opgave</td>
+<td>Eén concrete, gegenereerde vraag</td>
+<td>Een bepaalde vergelijking met haar tussenstappen</td>
+</tr>
+<tr>
+<td>Poging</td>
+<td>Het werk van één deelnemer aan één opgave</td>
+<td>Eerste antwoord, hints en verbeteringen</td>
+</tr>
+<tr>
+<td>Speelronde</td>
+<td>Een nieuwe reeks binnen hetzelfde level</td>
+<td>Opnieuw zes oefeningen spelen</td>
+</tr>
+<tr>
+<td>Sessie</td>
+<td>De context waarin iemand of een groep werkt</td>
+<td>Solo, duo, klassikale les of groepsbattle</td>
+</tr>
+<tr>
+<td>Resultaat</td>
+<td>Afzonderlijke waarnemingen over een poging of sessie</td>
+<td>Correct, geholpen, tijd, XP, battlepunten</td>
+</tr>
+</tbody>
+</table></div>
+<p>Een level afronden, XP verdienen en een leerdoel beheersen zijn drie verschillende
+zaken. XP beloont deelname volgens de regels van het spel. Voltooiing zegt dat
+een route is afgewerkt. Beheersing vraagt aanvullend bewijs, zoals zelfstandig
+oplossen, variatie en later opnieuw slagen. Een battleplaats vervangt dat bewijs
+evenmin.</p>
+<p>Getallenwereld en Bewerkingentrainer gebruiken dezelfde rekenkern voor machten
+en wortels. Het blijven afzonderlijke spelstanden. Later kunnen hun opgaven
+wel naar dezelfde leerdoel-ID verwijzen. Daarmee kun je leerstof over spellen
+heen bekijken zonder twee voltooiingen als twee verschillende beheersingen
+van dezelfde rekenregel te presenteren.</p>
+<h2 id="3-een-globale-navigatie-en-een-lokale-leerroute">3 Eén globale navigatie en één lokale leerroute</h2>
+<p>Voorstel voor de vaste platformbestemmingen:</p>
+<ul>
+<li><strong>Spellen:</strong> de werelden en trainers.</li>
+<li><strong>Klasruimte:</strong> gezamenlijke lessen en battles; aanvankelijk de bestaande Klasbattle.</li>
+<li><strong>Oefenbladen:</strong> oefeningen samenstellen, bekijken en afdrukken.</li>
+<li><strong>Mijn voortgang:</strong> eigen activiteiten en resultaten, binnen het privéprofiel.</li>
+<li><strong>Mijn klassen:</strong> het leerkrachtoverzicht, alleen voor bevoegde leerkrachten.</li>
+</ul>
+<p>Het account en de avatar blijven rechtsboven. Publiek profiel wordt een bewuste
+actie vanuit dat account, geen tweede identiteit of standaard landingspagina.
+De naam <strong>Klasbattle</strong> blijft passend voor competitieve sessies. Zodra ook echte
+klassikale lessen bestaan, is <strong>Klasruimte</strong> de overkoepelende sectie, met
+<strong>Samen leren</strong>, <strong>Battle</strong> en <strong>Resultaten</strong> als onderdelen. Hernoemen vóór
+die lesfunctie werkt zou te veel beloven.</p>
+<p>Binnen een spel is het pad:</p>
+<pre><code class="language-text">leraarBob → Algebrawereld → Vergelijkingen → Twee stappen
+                         wereld            geselecteerd level
+
+Werelden → Levels → Spelen
+                    Oefenblad
+                    Samen: samen leren of battle, waar ondersteund
+</code></pre>
+<p>Een levelkaart selecteert het level. Alleen <strong>Spelen</strong> of <strong>Verder spelen</strong> opent
+de ronde. <strong>Oefenblad</strong> maakt een afzonderlijk document. Een keuze voor een
+spelvorm opent eerst de instellingen; ze begint niet meteen een sessie.
+Moeilijkheid is een instelling van de opgaven, geen extra hoofdsectie naast Levels.</p>
+<p>Dit maakt ook de overgang voorspelbaar: selecteren verandert instellingen,
+starten verandert de werkruimte. De W3C-richtlijn over invoer ondersteunt het
+vermijden van onverwachte contextwisselingen bij een instellingswijziging;
+onze keuze voor een afzonderlijke startknop is de concrete toepassing hier.
+<a href="https://www.w3.org/WAI/WCAG22/Understanding/on-input">W3C: On Input</a>.</p>
+<p>Voorstel voor de bovenbalk:</p>
+<pre><code class="language-text">leraarBob → wereld → onderwerp | account + echte voortgang | scherm | weergave | menu | inklappen
+</code></pre>
+<p>Timers, codes, rondes, antwoordknoppen en docentbediening staan onder deze rij.
+Op een telefoon worden locatie en acties verdeeld over compacte rijen. Bij
+inklappen blijft één herstelknop bereikbaar en komt de ruimte ten goede aan de
+oefening. Een ingebed werkbord krijgt geen tweede platformbalk.</p>
+<p>Dit past bij de W3C-richtlijn om herhaalde navigatie in dezelfde relatieve volgorde
+te houden. De concrete keuze voor deze bestemmingen is ons ontwerpvoorstel,
+niet een voorgeschreven W3C-menu. <a href="https://www.w3.org/WAI/WCAG22/Understanding/consistent-navigation.html">W3C over consistente navigatie</a>.</p>
+<h2 id="4-maak-links-en-terugwegen-voorspelbaar">4 Maak links en terugwegen voorspelbaar</h2>
+<p>Een centrale routetabel moet bepalen welke bestemmingen bestaan. Dezelfde tabel
+voedt de menubalk, spelvormkeuze, leerkrachtconsole, oefenbladpagina en uitnodigingen.
+Nu zijn spelpaden en ondersteunde modi nog over meerdere bestanden verdeeld.</p>
+<p>Elke overgang bewaart ten minste wereld, onderwerp, gekozen level, spelvorm en
+een veilige terugbestemming. Een concrete sessie gebruikt haar sessie-ID; een
+menuvoorkeur wordt apart bewaard. Het werkbord behoudt zijn eigen opgave-ID en
+invoer. Dat laatste hoort niet alleen in een URL of in de zichtbare menustatus.</p>
+<p>De volgende afspraken zijn controleerbaar:</p>
+<ol>
+<li><strong>Levels</strong> keert terug naar hetzelfde gekozen level, zonder de ronde te verwijderen.</li>
+<li><strong>Werelden</strong> opent het wereldmenu, met een zichtbare mogelijkheid om werk te hervatten.</li>
+<li><strong>Overzicht</strong> vanuit een battle bewaart de lopende sessie en haar antwoorden.</li>
+<li><strong>Terug naar je wereld</strong> verwijst naar de werkelijke solo-ingang, ook als een spelmap geen index heeft.</li>
+<li>Een oude deelnamelink met code blijft bruikbaar; een nieuwe code is een expliciete keuze voor een andere sessie.</li>
+<li>Alleen een bewust gekozen actie opent een andere spelvorm. Een avatar, menu of schermknop doet dit nooit.</li>
+<li>Een accountwissel verwijdert onmiddellijk het oude zichtbare werk en oude leerlinggegevens; uitstaande reacties krijgen geen kans dat terug te zetten.</li>
+<li>De browserknoppen terug/vooruit volgen dezelfde routeafspraken als de zichtbare knoppen.</li>
+</ol>
+<p>Gebruik de bestaande HTML-modules en adapters; een volledige herschrijving naar
+één groot JavaScript-raamwerk is hiervoor niet nodig. Eerst het contract en de
+router centraal maken, daarna scherm voor scherm aansluiten.</p>
+<h2 id="5-spelvormen-met-twee-afzonderlijke-keuzes">5 Spelvormen met twee afzonderlijke keuzes</h2>
+<p><strong>Solo, duo en groep</strong> beschrijven wie meedoet. <strong>Samen leren en battle</strong>
+beschrijven wat die deelnemers doen. Die begrippen horen niet door elkaar in
+één lange lijst, en niet elke combinatie heeft meteen een werkende uitvoering.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Vergelijkingstabel, horizontaal te verschuiven"><table>
+<thead>
+<tr>
+<th>Deelname</th>
+<th>Leren en oefenen</th>
+<th>Battle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alleen</td>
+<td>Een level spelen, met feedback en eigen voortgang</td>
+<td>Eventueel een tijd- of score-uitdaging; geen schijntegenstander</td>
+</tr>
+<tr>
+<td>Duo</td>
+<td>Samen bouwen en controleren, op één of twee toestellen</td>
+<td>Twee echte deelnemers, lokaal of online</td>
+</tr>
+<tr>
+<td>Groep</td>
+<td>Leerkracht begeleidt een gezamenlijke les, of leerlingen werken in kleine groepjes</td>
+<td>Leerkracht organiseert rondes en een uitslag</td>
+</tr>
+</tbody>
+</table></div>
+<p>Voor een leerling is <strong>Spelen</strong> de duidelijke standaard. <strong>Samen</strong> toont daarna
+alleen ondersteunde mogelijkheden, met uitleg over toestellen en deelnemers.
+Voor een leerkracht komen <strong>Les tonen</strong>, <strong>Samen leren</strong>, <strong>Groepsbattle</strong> en
+<strong>Simulatie</strong> beschikbaar zodra de bijbehorende adapter werkt.</p>
+<p>Een beschikbaarheidsregister voorkomt lege of misleidende knoppen. Per spel
+staan daarin de generator, validator, werkbord, printadapter, sessieprovider,
+progressieadapter en ondersteunde rollen. Eén vlag <code>multiplayer: true</code> is te
+grof: een lokaal duo, een online duel en een klassikale les hebben andere regels.</p>
+<h2 id="6-de-leerkracht-kan-begeleiden-en-meedoen">6 De leerkracht kan begeleiden én meedoen</h2>
+<p>Voorstel: ondersteun beide rollen, zonder het leerkrachtaccount om te zetten
+naar een leerlingaccount.</p>
+<p><strong>Les tonen</strong> gebruikt een projectorwerkbord met dezelfde opgavegenerator. De
+leerkracht kiest level en moeilijkheid, bouwt stappen op en toont op verzoek de
+uitleg. Dit kan als eerste uitbreiding al zonder online klasregistratie werken.</p>
+<p><strong>Samen leren met de klas</strong> voegt leerlingwerk toe. Iedereen ziet dezelfde opgave;
+de leerkracht ziet wie begonnen is, waar leerlingen vastlopen en welke inzendingen
+klaarstaan. Antwoorden verschijnen pas op het bord na een docentactie. Een
+voorstel kan anoniem geprojecteerd worden. Fouten zijn bespreekbaar zonder dat
+iedere poging een competitie of publiek oordeel wordt.</p>
+<p><strong>Zelf meedoen</strong> geeft de leerkracht een eigen werkbord naast de hostbediening.
+De leerkracht kan een oplossing voordoen of als herkenbare deelnemer meespelen.
+In een battle mag die demonstratiescore niet in de leerlingranglijst of de
+klasgemiddelden terechtkomen.</p>
+<p>Hiervoor is een echt sessiecontract nodig: een account heeft een platformrol,
+maar binnen een sessie daarnaast bijvoorbeeld <code>host</code>, <code>participant</code>, <code>observer</code>
+of <code>projector</code>. De huidige groepsbattle-backend weigert echte leerkrachtdeelname.
+De bestaande lokale <strong>Zelf proberen</strong> in Simulatie is daarom geen bewijs dat
+online host en deelnemer al tegelijk werken.</p>
+<p>Een gezamenlijk juist antwoord geeft evenmin automatisch iedere leerling
+zelfstandige beheersing of XP. Registreer hun eigen bijdrage en, waar het
+leerdoel dat vraagt, een afzonderlijke eindcheck.</p>
+<p>GeoGebra Lessons laat een bruikbaar verwant patroon zien: materiaal toewijzen,
+leerlingwerk volgen en antwoorden bespreken, met mogelijkheden voor groepen en
+anonieme bespreking. We nemen dat onderscheid tussen begeleiden en presenteren
+als inspiratie; het is geen voorstel om leraarBob naar GeoGebra te verplaatsen.
+<a href="https://help.geogebra.org/hc/en-us/articles/8828154551965-Assign-GeoGebra-Resources">GeoGebra: Assign Resources</a>.</p>
+<h2 id="7-een-centrale-oefenbladmotor">7 Een centrale oefenbladmotor</h2>
+<p>Het gewenste systeem centraliseert de documentopbouw, niet alle wiskunde in
+één gigantische generator. Elke inhoudsmotor blijft verantwoordelijk voor
+correcte opgaven, toegestane varianten, antwoorden en uitwerkingen.</p>
+<pre><code class="language-text">Wereld en level
+      ↓
+Zelfde opgavegenerator met vaste seed en versie
+      ├── schermwerkbord → leerlingpoging en feedback
+      ├── les of battle → deelnemers en beoordeling
+      └── printadapter → A4-pagina's en afzonderlijke verbetersleutel
+</code></pre>
+<p>De gedeelde motor verzorgt titel, aantal opgaven, moeilijkheid, paginering,
+antwoordruimte, kop/voet, preview, PDF en print. De printadapter van het vak
+verzorgt grafieken, bouwfiguren, wiskundetekst en de mogelijke uitwerking.
+De bestaande <a href="https://github.com/godwillsaveyoutoo-pixel/LeraarBob/blob/main/shared/worksheet-layout.js">A4-paginering</a> en
+<a href="https://github.com/godwillsaveyoutoo-pixel/LeraarBob/blob/main/shared/worksheet-render.js">renderlaag</a> zijn een bruikbaar begin, maar de
+renderlaag heeft nog een vaste Rechtenwereld-kop en is dus nog geen algemene
+vakoverschrijdende documentmotor.</p>
+<p>Een oefenblad krijgt een eigen document-ID, seed, generatorversie, configuratie
+en een onveranderlijke kopie van de <strong>concrete vragen en het antwoordmodel</strong>.
+Alleen een seed bewaren is onvoldoende zodra de generator verandert. De kopie
+houdt een eerder uitgedeeld blad en zijn sleutel gelijk; de versie verklaart
+hoe de reeks oorspronkelijk is gemaakt. <strong>Nieuwe opgaven</strong>
+verandert de documentseed. <strong>Dezelfde reeks afdrukken</strong> gebruikt een expliciete
+kopie van de huidige vragen. Beide acties laten de spelpoging en XP intact.</p>
+<p>Voorstel voor de flow:</p>
+<ol>
+<li>Vanuit een geselecteerd level: <strong>Oefenblad</strong>.</li>
+<li>Level staat al ingevuld; kies aantal, moeilijkheid en hulp/antwoordruimte.</li>
+<li>Bekijk vragen en eventueel de aparte sleutel.</li>
+<li><strong>Download PDF</strong> of <strong>Print</strong>.</li>
+<li><strong>Terug naar level</strong> brengt je bij dezelfde selectie en hetzelfde lopende werk.</li>
+</ol>
+<p>De centrale sectie gebruikt precies dezelfde configuratiecomponenten. Ze is
+geen tweede, afwijkende generator. Standaard staan naam en klas leeg op het
+papier; voeg leerlinggegevens alleen bewust toe. Een antwoordbestand hoort
+niet automatisch bij een publieke leerlinglink of een lopende battle.</p>
+<p>Begin met de gedeelde HTML-voorvertoning en A4-printstijl. Maak PDF een vaste
+download zodra consistente paginering over de gebruikte browsers nodig is.
+Test daarbij zwart-wit, breuken, lange uitwerkingen, figuren en paginaovergangen.
+Geavanceerde <code>@page</code>-mogelijkheden verschillen per browser; Chrome documenteert
+zijn ondersteuning, maar dat bewijst niet dat iedere schoolbrowser diezelfde
+afdruk maakt. <a href="https://developer.chrome.com/blog/print-margins">Chrome: Print Margins</a>.</p>
+<h2 id="8-maak-van-voortgang-en-activiteiten-twee-gegevenslagen">8 Maak van voortgang en activiteiten twee gegevenslagen</h2>
+<p>De bestaande spelstand is geschikt om een oefening te hervatten. Ze is minder
+geschikt om achteraf te bepalen wat een leerling op dinsdag tussen 10 en 11 uur
+heeft gedaan. Een overschreven JSON-stand bewaart niet vanzelf alle eerdere
+gebeurtenissen.</p>
+<p>Voorstel voor vier samenhangende lagen:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Vergelijkingstabel, horizontaal te verschuiven"><table>
+<thead>
+<tr>
+<th>Laag</th>
+<th>Doel</th>
+<th>Voorbeelden</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Account en lidmaatschap</td>
+<td>Wie is het, in welke klas en met welke toegangsrechten?</td>
+<td>Stabiele gebruiker-ID, alias, klaslidmaatschap, toegewezen leerkracht</td>
+</tr>
+<tr>
+<td>Hervatbare spelstand</td>
+<td>Waar ging het werk verder?</td>
+<td>Opgave, tussenstappen, invoer, levelselectie en opslagrevisie</td>
+</tr>
+<tr>
+<td>Activiteiten en resultaten</td>
+<td>Wat gebeurde er wanneer en in welke context?</td>
+<td>Opgave gestart, antwoord nagekeken, hint, level afgerond, battle geëindigd</td>
+</tr>
+<tr>
+<td>Samenvattingen</td>
+<td>Snel filteren en vergelijken</td>
+<td>Dagtotalen per leerling, leerdoel, wereld en spelvorm</td>
+</tr>
+</tbody>
+</table></div>
+<p>De stabiele gebruiker-ID is de sleutel, <strong>niet de aliastekst</strong>. Een alias kan
+wijzigen; twee leerlingen kunnen vergelijkbare namen hebben. De console laat
+de alias zien en filtert daarop, terwijl de onderliggende koppeling hetzelfde
+account blijft volgen. Lidmaatschap heeft een begin- en einddatum, zodat een
+klaswissel oudere rapporten niet onjuist hergroepeert.</p>
+<p>Nieuwe activiteiten worden append-only vastgelegd met een uniek event-ID.
+Herhaald versturen bij een netwerkstoring telt niet dubbel. De server bindt het
+event aan het aangemelde account; een leerling kan geen andere actor-ID
+aanleveren om onder een klasgenoot te schrijven.</p>
+<p>Minimale velden zijn: event-ID, sessie-ID, actor-ID, spel/wereld/level/leerdoel,
+opgave-ID en generatorversie, deelnamevorm, doel van de sessie, gebeurtenistype,
+clienttijd, serverontvangsttijd, resultaat, hulpaanduiding en betrouwbaarheid.
+Bewaar getypte tussenstappen alleen als ze voor feedback of de afgesproken
+docentfunctie nodig zijn; een volledige toetsaanslagregistratie is niet nodig.</p>
+<h2 id="9-definieer-de-metingen-voor-je-er-grafieken-van-maakt">9 Definieer de metingen vóór je er grafieken van maakt</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Vergelijkingstabel, horizontaal te verschuiven"><table>
+<thead>
+<tr>
+<th>Metriek</th>
+<th>Voorgestelde definitie</th>
+<th>Grenzen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Opgaven gemaakt</td>
+<td>Aantal unieke afgeronde opgavepogingen</td>
+<td>Een hint of tussenstap is geen nieuwe opgave</td>
+</tr>
+<tr>
+<td>Juist bij eerste beoordeling</td>
+<td>Correcte eerste nagekeken inzendingen gedeeld door eerste nagekeken inzendingen</td>
+<td>Apart tonen van een antwoord dat na hulp is verbeterd</td>
+</tr>
+<tr>
+<td>Uiteindelijk opgelost</td>
+<td>Opgaven die na de toegestane hulp of verbetering slagen</td>
+<td>Geen automatische aanduiding ‘zelfstandig’</td>
+</tr>
+<tr>
+<td>Levelvoltooiing</td>
+<td>Uniek afgeronde leerroute</td>
+<td>Nieuwe herhaalrondes geven geen extra uniek level</td>
+</tr>
+<tr>
+<td>XP</td>
+<td>Werkelijk toegekende beloningen van het spel</td>
+<td>Geen uniforme moeilijkheids- of beheersingsschaal</td>
+</tr>
+<tr>
+<td>Battlepunten</td>
+<td>Nagekeken competitiepunten, met beoordelingsbron en validator-/scorepolicyversie</td>
+<td>Alleen binnen een vergelijkbare regelset vergelijken</td>
+</tr>
+<tr>
+<td>Deelname</td>
+<td>Echte inschrijving en eventuele inzendingen in een sessie</td>
+<td>Aanwezig zonder antwoord is iets anders dan een fout antwoord</td>
+</tr>
+<tr>
+<td>Actieve interactietijd</td>
+<td>Geschatte tijd waarin het oefenwerkbord actief gebruikt wordt</td>
+<td>Geen bewijs van aandacht, rekentijd op papier of leerkwaliteit</td>
+</tr>
+</tbody>
+</table></div>
+<p>Toon bij percentages altijd de teller en noemer, bijvoorbeeld <strong>8 van 10</strong>.
+Ontbrekende data krijgen <strong>Niet geregistreerd</strong>, niet nul. Maak per bron zichtbaar
+of een resultaat lokaal door de trainer is beoordeeld of door de server is
+geverifieerd. Oude lokale XP worden niet achteraf ‘geverifieerde battlepunten’.</p>
+<p>Een klein aantal opgaven is een beperkt signaal. Een dashboard kan bijvoorbeeld
+‘nog weinig gegevens’ tonen, zonder er een diagnose van de leerling aan te verbinden.
+Vergelijkingen in de tijd moeten dezelfde leerdoelen en moeilijkheid zichtbaar houden.</p>
+<h2 id="10-oefentijd-zorgvuldig-meten">10 Oefentijd zorgvuldig meten</h2>
+<p>Voorstel: noem de eerste meting <strong>actieve interactietijd</strong>. Meet met een monotone
+browserklok terwijl de oefening open is, het document zichtbaar is, geen blokkerend
+accountvenster openstaat en er recent een betekenisvolle oefenactie is geweest.
+Pauzeer bij een verborgen tab, een pauzeknop en in menu's of uitslagoverzichten.</p>
+<p>Een startinstelling van 60 seconden zonder actie is een voorstel voor een pilot,
+geen vastgestelde onderwijsnorm. Bij lezen, hoofdrekenen en rekenen op papier
+kan iemand langer bezig zijn zonder te klikken. Daarom horen de gekozen
+meetsystematiek en die beperking bij de rapportage.</p>
+<p>Stuur tijd in kleine, begrensde segmenten met unieke ID's. Tel geen volledige
+interval op omdat een tab een uur openstond. Bij herladen sluit of begrens je
+het oude segment. Gelijktijdige tabs van dezelfde leerling mogen overlappende
+seconden niet dubbel optellen. Offline gebeurtenissen behouden zowel de
+waargenomen tijd als de latere serverontvangsttijd.</p>
+<p>Bewaar tijdstippen in UTC en toon/filter ze in de afgesproken schooltijdzone,
+hier Europe/Brussels. Een datumfilter gebruikt het begin van de eerste dag tot
+het begin van de dag ná de laatste dag. Dat voorkomt fouten rond middernacht
+en zomer-/wintertijd. ‘Laatst opgeslagen’ blijft apart zichtbaar van ‘laatst
+geoefend’ en ‘laatst gesynchroniseerd’.</p>
+<p>Browseractiviteit blijft een benadering. Gebruik deze tijd als context voor
+begeleiding, niet als zelfstandig cijfer of publieke tijdsranglijst.</p>
+<p>De HTML-standaard beschrijft de zichtbaarheidstoestand van een document. Die
+helpt pauzeren als een tab verborgen is; zij meet geen concentratie of rekenen
+buiten het scherm. <a href="https://html.spec.whatwg.org/multipage/interaction.html#page-visibility">WHATWG: Page Visibility</a>.</p>
+<h2 id="11-een-leerkrachtdashboard-dat-begint-bij-een-vraag">11 Een leerkrachtdashboard dat begint bij een vraag</h2>
+<p>Voorstel voor de standaardflow: <strong>Mijn klassen → klas → periode → leerlingen</strong>.
+Daarna kun je op alias, wereld, onderwerp, level, moeilijkheid en spelvorm filteren.
+Een globale leerkrachtrol alleen is voor een toekomstige site met meerdere
+leerkrachten of scholen geen voldoende klasafbakening. Werk met expliciete
+toewijzingen aan klassen; de server controleert die bij iedere gegevensaanvraag.</p>
+<p>Een overzichtsrij toont alias, gemaakte opgaven, eerste-pogingresultaat,
+zelfstandig/met hulp, interactietijd, laatste activiteit en relevante battledeelname.
+XP en voltooide levels staan apart. Vanuit de rij opent een profiel met vier tabbladen:</p>
+<ul>
+<li><strong>Overzicht:</strong> voortgang en recente onderwerpen.</li>
+<li><strong>Activiteiten:</strong> een tijdlijn binnen het gekozen datumbereik.</li>
+<li><strong>Leerstof:</strong> bewijs per leerdoel, met aantallen en hulpgebruik.</li>
+<li><strong>Sessies:</strong> lessen, duo's en battles, met de relevante resultaten.</li>
+</ul>
+<p>Voorbeelden van nuttige vragen zijn: wie begon deze week niet aan het level,
+welke rekenregel gaf problemen, wie slaagt zelfstandig na eerdere hulp, en welke
+leerlingen deden wel mee aan de battle maar dienden niet in?</p>
+<p>Laat filters deelbaar zijn binnen bevoegde accounts en behoud ze bij teruggaan
+uit een leerlingprofiel. Voer de filtering en paginering op de server uit. De
+huidige console haalt veel resultaten vooraf naar de browser; dat schaalt niet
+goed naar een langdurige activiteitenhistoriek.</p>
+<p>CSV-export volgt dezelfde selectie en toegang als het scherm. Toon in de export
+definities, periode, tijdzone en eventuele ontbrekende data. Namen hoeven niet
+automatisch mee als een alias voldoende is.</p>
+<p>Khan Academy biedt een bruikbaar onderzoeksvoorbeeld: aparte rapporten voor
+activiteit, vaardigheden en opdrachten, en een individueel leerlingrapport voor
+detail. Dat ondersteunt ons voorstel om tijdlijn, leerdoelen en sessieresultaten
+te verbinden zonder ze in één totaalgetal te persen. De precieze menu's en
+metingen hierboven zijn een ontwerp voor leraarBob.
+<a href="https://support.khanacademy.org/hc/en-us/articles/360031052391-How-do-I-use-Reports-to-view-Activity-Skills-and-Assignment-score-reports">Khan Academy: Reports</a>,
+<a href="https://support.khanacademy.org/hc/en-us/articles/7263187791373-How-do-I-use-the-Individual-Student-Report">Individual Student Report</a>.</p>
+<h2 id="12-priveprofiel-en-publiek-profiel-zijn-verschillende-weergaven">12 Privéprofiel en publiek profiel zijn verschillende weergaven</h2>
+<p>Voorstel voor de standaardtoegang:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Vergelijkingstabel, horizontaal te verschuiven"><table>
+<thead>
+<tr>
+<th>Informatie</th>
+<th>Leerling zelf</th>
+<th>Toegewezen leerkracht</th>
+<th>Klasgenoten</th>
+<th>Internet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alias en gekozen avatar</td>
+<td>Ja</td>
+<td>Ja</td>
+<td>Binnen deelname/context</td>
+<td>Alleen in een afzonderlijk ingesteld publiek profiel</td>
+</tr>
+<tr>
+<td>Eigen voortgang en XP</td>
+<td>Ja</td>
+<td>Voor begeleidingsdoel</td>
+<td>Alleen expliciet gedeelde elementen</td>
+<td>Standaard nee</td>
+</tr>
+<tr>
+<td>Fouten, hints en interactietijd</td>
+<td>Ja</td>
+<td>Voor begeleidingsdoel</td>
+<td>Nee</td>
+<td>Nee</td>
+</tr>
+<tr>
+<td>Battleuitslag</td>
+<td>Eigen resultaat en toegestane ranglijst</td>
+<td>Sessies en toegewezen klas</td>
+<td>Binnen toegestane klas/sessie</td>
+<td>Standaard nee</td>
+</tr>
+<tr>
+<td>Login, e-mail en accountbeheer</td>
+<td>Alleen eigen beheer</td>
+<td>Geen wachtwoord of sessietokens</td>
+<td>Nee</td>
+<td>Nee</td>
+</tr>
+<tr>
+<td>Leerkrachtprofiel</td>
+<td>Eigen beheer</td>
+<td>Volgens schoolrol</td>
+<td>Alleen afgesproken informatie</td>
+<td>Eventueel naam, vak en gedeelde lesmaterialen</td>
+</tr>
+</tbody>
+</table></div>
+<p>Een publieke leerlingkaart kan beperkt blijven tot alias, avatar en bewust
+gedeelde badges. Zet daar geen klascode, aanwezigheidsstatus, foutanalyse,
+volledige activiteitenkalender of privé-link in. Een alias is niet automatisch
+anoniem: de klascontext kan herkenning mogelijk maken.</p>
+<p>Maak een preview <strong>Zo ziet een ander jouw profiel</strong> en een eenvoudige mogelijkheid
+om delen weer uit te zetten. Publieke data worden via een aparte, beperkte
+serverweergave geleverd, niet door privégegevens in de browser te verbergen.
+Schoolafspraken, geschikte grondslag en bewaartermijnen moeten vóór bredere
+publicatie worden vastgesteld. Dit rapport kiest de product- en toegangsstructuur;
+het vervangt geen beoordeling van de specifieke schoolcontext.</p>
+<p>Herleidbare gepseudonimiseerde gegevens blijven persoonsgegevens volgens de
+Europese Commissie. De EDPB werkt beperkte toegang, noodzakelijke gegevens en
+bewaartermijnen uit bij bescherming door ontwerp en standaardinstellingen.
+Dat onderbouwt de beperkte standaardzichtbaarheid; de concrete grondslag en
+publicatievoorwaarden moeten bij de schoolcontext passen.
+<a href="https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/application-gdpr_en">Europese Commissie: toepassing van gegevensbescherming</a>,
+<a href="https://www.edpb.europa.eu/sites/default/files/files/file1/edpb_guidelines_201904_dataprotection_by_design_and_by_default_v2.0_en.pdf">EDPB: Data Protection by Design and Default, paragrafen 40–57</a>.</p>
+<h2 id="13-ranglijsten-die-leerdoelen-niet-door-elkaar-halen">13 Ranglijsten die leerdoelen niet door elkaar halen</h2>
+<p>Behoud ranglijsten per wereld. Wortelbouw en vergelijkingen hebben verschillende
+vragen en puntensystemen; een optelsom geeft geen betrouwbare algemene
+wiskunderangorde. Bied als eerste uitbreiding een periodefilter: deze sessie,
+deze week, deze maand of een gekozen datumbereik.</p>
+<p>Ook <strong>binnen één spel</strong> bestaan historische scoreformules: de bestaande routes
+kennen onder meer 500 basispunten plus maximaal 500 tijdpunten, en 1000 plus
+maximaal 250. De server beoordeelt Rechten, Vectoren, Algebra en Bewerkingen;
+Wortelbouw wordt momenteel met de echte validator in het leerkrachtvenster
+nagekeken. Bewaar daarom scorepolicy, validatorversie en beoordelingsbron.
+Splits onvergelijkbare regimes of toon ze als afzonderlijke perioden; alleen
+hetzelfde spel-ID is geen voldoende garantie van vergelijkbare punten.</p>
+<p>De huidige klasranglijst gebruikt de actuele klas uit het profiel. Een
+klaswissel kan daardoor historische resultaten anders groeperen. Nieuwe
+sessies moeten hun klas- en schooljaarcontext bij deelname vastleggen.
+Oudere resultaten zonder dat gegeven krijgen een expliciet kwaliteitslabel;
+een historische klas mag niet achteraf worden verzonnen.</p>
+<p>Toon ook het aantal battles en nagekeken antwoorden. Een cumulatieve score
+beloont immers eveneens vaker deelnemen. Voor een seizoenscompetitie kun je
+later een afzonderlijke regel afspreken, bijvoorbeeld een vooraf gekozen aantal
+meetellende battles. Verander die regels niet achteraf zonder ze te vermelden.</p>
+<p>De standaardranglijst is van de eigen klas. De leerkracht kan de toegestane klas
+kiezen. Een publieke competitie wordt een expliciet ingerichte activiteit met
+eigen deelnemers en zichtbaarheid; ze is geen kopie van alle leerlingenprofielen.
+Fouten, interactietijd, geholpen antwoorden en docentinformatie komen er niet op.</p>
+<p>Houd battlepunten, oefen-XP, badges en beheersing in aparte registers. Een
+leerkracht die meedoet krijgt een herkenbare demonstratierij en telt niet mee
+in de leerlingplaatsen. Simulaties blijven volledig gescheiden van echte resultaten.</p>
+<h2 id="14-technische-onderdelen-die-bij-elkaar-moeten-passen">14 Technische onderdelen die bij elkaar moeten passen</h2>
+<p>Voorstel voor een klein gedeeld aansluitcontract:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Vergelijkingstabel, horizontaal te verschuiven"><table>
+<thead>
+<tr>
+<th>Onderdeel</th>
+<th>Verantwoordelijkheid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spelregister</td>
+<td>Stabiele ID's, titels, routes, mogelijkheden en versiegegevens</td>
+</tr>
+<tr>
+<td>Opgaveprovider</td>
+<td>Genereren vanuit leerdoel/configuratie/seed en versie</td>
+</tr>
+<tr>
+<td>Validator</td>
+<td>Invoer en tussenstappen beoordelen volgens de inhoudsmotor</td>
+</tr>
+<tr>
+<td>Werkbordadapter</td>
+<td>Opdracht tonen, invoer bewaren, feedback en projectie</td>
+</tr>
+<tr>
+<td>Printadapter</td>
+<td>Op dezelfde opgavegegevens vragen en sleutel renderen</td>
+</tr>
+<tr>
+<td>Sessieprovider</td>
+<td>Deelnemers, hostrol, les/battlefase, deadlines en herstel</td>
+</tr>
+<tr>
+<td>Voortgangsadapter</td>
+<td>Bestaande spelstand en beloningen behouden</td>
+</tr>
+<tr>
+<td>Activiteitenservice</td>
+<td>Accountgebonden gebeurtenissen en tijdsegmenten ontvangen</td>
+</tr>
+<tr>
+<td>Rapportservice</td>
+<td>Bevoegd filteren, samenvatten, rangschikken en exporteren</td>
+</tr>
+</tbody>
+</table></div>
+<p>Een kleine manifeststructuur kan al aangeven welke verbindingen bestaan.
+Vermijd één record met handgeschreven links op de homepage, een andere lijst
+voor battles en een derde afwijkende lijst voor de leerkracht. Gebruik adapters
+waar historische ID's of opslagformaten anders zijn; herschrijf opgeslagen IDs
+niet omdat een zichtbare titel verandert.</p>
+<p>De bestaande Supabase-database en GitHub Pages zijn een bruikbare basis. De
+browser toont de schermen; serverfuncties beheren toegangsrechten en vertrouwde
+beoordeling. Nieuwe analytics horen niet als steeds grotere JSON-lijsten in de
+spelstand: de bestaande opslag heeft een groottebegrenzing en revisieconflicten.</p>
+<p>Een eenvoudige eigen eventspecificatie is als eerste stap voldoende. Gebruik
+de begrippen actor, activiteit, context en resultaat zodat later koppeling met
+onderwijsstandaarden mogelijk blijft. Een volledig Learning Record Store of
+nieuw extern analyseplatform is voor deze eerste uitbreiding niet noodzakelijk.</p>
+<p>Caliper biedt nuttige onderwijsbegrippen voor events. xAPI is eveneens een
+mogelijke latere exportgrens; de oude ADL-repository verwijst inmiddels naar
+xAPI 2.0. QTI kan later uitwisseling van toetsmateriaal helpen. Kies eerst een
+klein intern contract en maak pas een standaardadapter wanneer een school
+daadwerkelijk zo'n koppeling nodig heeft.
+<a href="https://www.1edtech.org/standards/caliper">1EdTech: Caliper</a>,
+<a href="https://github.com/adlnet/xAPI-Spec#specification-versions">ADL: xAPI-versies</a>,
+<a href="https://www.imsglobal.org/spec/qti/v3p0/oview/">1EdTech: QTI 3</a>.</p>
+<h2 id="15-bouw-dit-in-fasen-met-een-toetsbaar-resultaat">15 Bouw dit in fasen met een toetsbaar resultaat</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Vergelijkingstabel, horizontaal te verschuiven"><table>
+<thead>
+<tr>
+<th>Fase</th>
+<th>Werk</th>
+<th>Klaar wanneer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 Gemeenschappelijke ingangen</td>
+<td>Register, routecontract, menunamen, rollen en mogelijkheden vastleggen</td>
+<td>Iedere aangeboden link heeft een juiste heen- en terugweg; niet-ondersteunde modi worden niet beloofd</td>
+</tr>
+<tr>
+<td>2 Leerlingactiviteiten</td>
+<td>Events en interactietijd in twee trainers, servertoegang, periodefilters</td>
+<td>Geen dubbele events, geen accountlek, heldere definities en ontbrekende data blijven herkenbaar</td>
+</tr>
+<tr>
+<td>3 Centrale printstudio</td>
+<td>A4-kop, configuratie, seeds en adapters voor Rechten/Algebra/Bewerkingen</td>
+<td>Dezelfde reeks is reproduceerbaar; PDF en sleutel kloppen; lopend werk en XP blijven intact</td>
+</tr>
+<tr>
+<td>4 Leerkrachtwerkbord</td>
+<td>Les tonen, host plus deelnemer, samen leren met klas</td>
+<td>Echte leerlingen kunnen aansluiten; docentwerk blijft buiten leerlingcijfers en ranglijsten</td>
+</tr>
+<tr>
+<td>5 Verbreding en profielen</td>
+<td>Overige adapters, historische rapporten, gecontroleerde publieke kaart</td>
+<td>Zelfde contract werkt in alle trainers; publieke endpoint bevat uitsluitend gekozen velden</td>
+</tr>
+</tbody>
+</table></div>
+<p>Mijn aanbevolen eerste analytics-pilot is <strong>Algebrawereld en Getallenwereld</strong>:
+die maken het verschil tussen herhaalde XP, unieke voltooiing en opgave-activiteit
+goed zichtbaar. Rechtenwereld dient daarnaast als inhoudelijk rijk voorbeeld
+voor hulp, verschillende tussenstappen en Samen leren. Begin met één klas en
+enkele echte lessessies om de tijdmeting en docentflow te beoordelen.</p>
+<p>Maak eerst de metriekdefinities en klasbevoegdheden concreet; voeg dan registratie
+toe; bouw vervolgens de filters en grafieken. Anders ontstaat een dashboard
+dat preciezer lijkt dan de onderliggende gegevens werkelijk zijn.</p>
+<h2 id="16-vaste-acceptatievoorwaarden">16 Vaste acceptatievoorwaarden</h2>
+<ul>
+<li>Menu open/dicht, herstel en herladen werken op desktop, laag liggend scherm en staande telefoon.</li>
+<li>Elke zichtbare actie heeft een duidelijk label, keyboardfocus en minstens 44 × 44 pixels volgens onze interfaceafspraak.</li>
+<li>Account, volledig scherm en weergavekeuze blijven direct bereikbaar in de uitgeklapte bovenbalk.</li>
+<li>Geen opgave, invoerveld of belangrijke actie verdwijnt onder een herstelknop; een te laag werkbord scrollt in plaats van onbruikbaar te krimpen.</li>
+<li>Geen nieuwe oefening, XP-beloning of gegevensoverdracht ontstaat alleen door menu- of profielnavigatie.</li>
+<li>Nieuw antwoord, herhaald verzoek, herladen, offline herstel en meerdere tabs tellen niet dubbel.</li>
+<li>Een leerling kan geen andere klas aanvragen om privégegevens te lezen; een leerkracht krijgt alleen toegewezen contexten.</li>
+<li>Printvoorbeeld en werkbord gebruiken dezelfde generatorversie; de sleutel wordt inhoudelijk gecontroleerd, niet alleen visueel.</li>
+<li>Docentmeedoen, publieke preview en simulatie hebben expliciete rollen en afzonderlijke resultaatregels.</li>
+<li>Filters, exports en ranglijsten gebruiken dezelfde periode, tijdzone, tellers en noemers.</li>
+</ul>
+<p>De ARIA-disclosurevorm beschrijft hoe een aan/uit-knop haar toestand via
+<code>aria-expanded</code> bekendmaakt. Daarnaast vraagt zichtbare keyboardfocus aandacht
+wanneer vaste balken of herstelknoppen boven de inhoud staan. De 44-pixelgrens
+is onze expliciete projectafspraak; presenteer die niet als de algemene
+WCAG AA-minimumgrens. <a href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/">W3C disclosurepatroon</a>,
+<a href="https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum.html">W3C focus mag niet geheel afgedekt zijn</a>.</p>
+<h2 id="17-beslissingen-om-voor-de-volgende-implementatie-vast-te-leggen">17 Beslissingen om vóór de volgende implementatie vast te leggen</h2>
+<ol>
+<li>Klasruimte als overkoepelende naam zodra echte klassikale lessen beschikbaar zijn.</li>
+<li>Docentmeedoen naast docentprojectie, met uitsluiting van leerlingranglijsten.</li>
+<li>Privé als uitgangspunt; welke beperkte elementen eventueel publiek mogen zijn.</li>
+<li>Hoe klaslidmaatschap en leerkrachttoewijzing worden vastgesteld.</li>
+<li>De definitie en pilotgrens voor actieve interactietijd.</li>
+<li>Bewaartermijnen voor ruwe gebeurtenissen en samenvattingen, en mogelijkheden voor verwijderen/exporteren.</li>
+<li>Eén opgave- en documentcontract als voorwaarde voor het aansluiten van een nieuwe trainer.</li>
+</ol>
+<p>Deze keuzes kunnen afzonderlijk worden bijgesteld. Ze zijn geen reden om nu
+alle bestaande spellen massaal te vervangen. De aanpassing van Getallenwereld
+is een concrete eerste aansluiting; de rest van dit document is de routekaart
+voor de volgende ontwikkelfasen.</p>
+<details class="technical"><summary>Technische contracten en voorbeeldvelden</summary><h2 id="18-concrete-voorbeelden-van-de-voorgestelde-contracten">18 Concrete voorbeelden van de voorgestelde contracten</h2>
+<p>Deze voorbeelden verduidelijken het ontwerp. Ze zijn <strong>geen al ingevoerde API</strong>
+en leggen geen fictieve getallen, XP of leerlingresultaten vast.</p>
+<h3 id="een-spel-beschrijft-zijn-mogelijkheden">Een spel beschrijft zijn mogelijkheden</h3>
+<pre><code class="language-json">{
+  &quot;gameId&quot;: &quot;getallenwereld&quot;,
+  &quot;progressId&quot;: &quot;getallenwereld&quot;,
+  &quot;engineId&quot;: &quot;bewerkingen-core&quot;,
+  &quot;units&quot;: [&quot;machten-product&quot;, &quot;wortels-product&quot;],
+  &quot;routes&quot;: {&quot;solo&quot;: &quot;games/getallenwereld/&quot;},
+  &quot;capabilities&quot;: {
+    &quot;solo&quot;: true,
+    &quot;ownPaperProvider&quot;: false,
+    &quot;ownClassBattleProvider&quot;: false,
+    &quot;teacherParticipatesOnline&quot;: false
+  },
+  &quot;relatedProviders&quot;: {
+    &quot;paper&quot;: &quot;bewerkingen-trainer&quot;,
+    &quot;classBattle&quot;: &quot;bewerkingen&quot;
+  },
+  &quot;progressMetric&quot;: {&quot;kind&quot;: &quot;completedUnits&quot;, &quot;total&quot;: 15}
+}
+</code></pre>
+<p>De werkelijke versie-ID van de motor hoort erbij zodra deze contractlaag wordt
+ingevoerd. De lijst <code>units</code> hierboven bevat slechts twee voorbeelden. Een
+automatische controle verifieert dat routes bestaan, providers bij hun
+registratie horen, bevoegdheden aansluiten en elk actief level een leerdoel
+heeft. Verwijzingen en eigen ondersteuning blijven zo onderscheidbaar.</p>
+<h3 id="een-resultaat-verwijst-naar-een-echte-poging">Een resultaat verwijst naar een echte poging</h3>
+<pre><code class="language-text">eventId             uniek, idempotent ontvangstbewijs
+eventType           answer_graded
+actorId             door server aan aangemeld account gebonden
+sessionId           concrete ronde of les
+attemptId           eigen poging, niet alleen level-ID
+exerciseId          concrete vraag binnen de ronde
+skillId             inhoudelijk leerdoel
+generatorVersion    bron van die vraag
+validationSource    trainer | teacher | server
+validatorVersion    gebruikte nakijkregel
+scorePolicyVersion  alleen waar competitiepunten worden toegekend
+occurredAt          waargenomen uitvoeringstijd
+receivedAt          serverontvangsttijd
+result              correct, hulp en aantal inzendingen
+quality             live | offline | legacy_partial
+</code></pre>
+<p>Een leerling mag een client-side leerresultaat inzenden binnen een toegestane
+trainer, met die herkomst zichtbaar. Competitiepunten komen uit de bevoegde
+validator, niet uit een vrij aangeleverde <code>points</code>-waarde. Duplicaten met hetzelfde
+event-ID en gelijke inhoud krijgen dezelfde ontvangstbevestiging; hetzelfde
+ID met afwijkende inhoud wordt geweigerd. Een XP-beloning heeft een eigen
+unieke beloningssleutel, zodat retries geen dubbele beloning geven.</p>
+<h3 id="een-rapportquery-heeft-een-afgebakend-doel">Een rapportquery heeft een afgebakend doel</h3>
+<pre><code class="language-text">klas + bevoegde leerling(en)
+periode [begin, einde), omgezet vanuit Europe/Brussels
+wereld / level / leerdoel / moeilijkheid
+vorm solo / duo / groep, doel leren / battle
+beoordelingsbron / scorepolicy waar relevant
+cursor + begrensde paginagrootte
+</code></pre>
+<p>De server controleert eerst de klasbevoegdheid en leest daarna alleen passende
+gegevens. Indexen volgen deze concrete queries, bijvoorbeeld actor/tijd,
+klas/tijd en sessie/volgorde. Dagtotalen zijn herberekenbaar; ze bevatten hun
+meetversie en datadekking. Een CSV-export wordt begrensd en gebruikt dezelfde
+query, geen onbeperkte download van alle native spelstanden.
+<a href="https://supabase.com/docs/guides/database/postgres/row-level-security">Supabase: Row Level Security</a>,
+<a href="https://supabase.com/docs/guides/database/postgres/indexes">Supabase: indexen</a>.</p>
+<h3 id="bewaren-en-verwijderen-vormen-een-eigen-werkstroom">Bewaren en verwijderen vormen een eigen werkstroom</h3>
+<p>Leg vóór de analytics-pilot vast welke ruwe antwoorden nodig zijn, hoe lang,
+wie een export krijgt en hoe correctie of verwijdering doorwerkt naar dagtotalen,
+ranglijsten en caches. Een beperkte profielkaart is geen tweede ongecontroleerde
+kopie van de leerlinghistoriek. Bewaar een verifieerbare verwijderingsstatus
+zonder de verwijderde antwoordinhoud opnieuw in een auditlog te stoppen.
+De concrete termijnen horen bij het afgesproken schoolbeleid; dit voorstel
+kiest geen willekeurige universele termijn.</p>
+</details><h2 id="19-onderzoeksbasis-en-grenzen">19 Onderzoeksbasis en grenzen</h2>
+<p>De analyse combineert broninspectie van de gepubliceerde website op commit
+<code>1ce7702eefeaca12353462b3951d3a19ec9af4c8</code>, de nieuwe Getallenwereld-integratie,
+en de hierboven gelinkte officiële bronnen, geraadpleegd op 5 oktober 2026.
+Er zijn geen echte leerlinggegevens onderzocht om dit rapport te maken.</p>
+<p>De productvoorbeelden laten bruikbare patronen zien, geen bewijs dat hun
+volledige systeem voor leraarBob passend is. Er is evenmin een effectonderzoek
+uitgevoerd naar XP, competitie of een optimale inactiviteitsgrens. Test die
+keuzes met een kleine klas voordat ze als vaste leerindicatoren worden gebruikt.</p>
+<p>Aanvullende toegankelijkheidsbronnen ondersteunen de schermtests:
+<a href="https://www.w3.org/WAI/WCAG22/Understanding/reflow">W3C Reflow</a>,
+<a href="https://www.w3.org/WAI/WCAG22/Understanding/orientation">Orientation</a>,
+<a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced">Target Size Enhanced, 44 pixels op AAA-niveau</a>,
+<a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum">Target Size Minimum, het afzonderlijke AA-criterium</a>.</p>
+<p>De voorgestelde eerste opleverproef is één doorlopende route: de leerkracht
+selecteert een level, maakt er een blad van, toont dezelfde inhoud als les,
+doet herkenbaar mee en bekijkt daarna een alias binnen een datumbereik. De
+leerling hervat ondertussen een eigen solo-opgave na inklappen en herladen.
+Die proef maakt samenhang toetsbaar voordat alle trainers worden aangesloten.</p>
+</article></div><footer>Dit rapport bevat bestaande functies en voorstellen voor volgende fasen. Leerlinganalytics, nieuwe sessierollen en publieke profielen zijn hiermee niet automatisch ingevoerd.</footer>
+<script>
+const contents=document.querySelector('.contents details'),compact=matchMedia('(max-width:980px)');
+if(compact.matches)contents.open=false;
+document.querySelector('.contents').addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const id=decodeURIComponent(a.hash.slice(1)),target=document.getElementById(id);if(target?.closest('.technical'))target.closest('.technical').open=true;if(compact.matches)contents.open=false;});
+</script><script src="../../shared/collapsible-topbar.js"></script></body></html>
