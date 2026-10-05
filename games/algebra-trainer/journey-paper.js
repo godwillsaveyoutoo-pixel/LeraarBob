@@ -1,4 +1,4 @@
-(function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory(require('./core.js'),require('./learning-core.js'));else root.AlgebraJourneyPaper=factory(root.AlgebraCore,root.AlgebraLearning)})(globalThis,(C,L)=>{
+(function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory(require('./core.js'),require('./learning-core.js'),require('./fraction-core.js'));else root.AlgebraJourneyPaper=factory(root.AlgebraCore,root.AlgebraLearning,root.AlgebraFractions)})(globalThis,(C,L,F)=>{
 'use strict';
 function question(t){
  const eq=C.latexEq(t.ex.start,t.ex.policy),math=t.display||eq;
@@ -6,6 +6,7 @@ function question(t){
  return {math,prompt:t.prompt,extra,kind:t.kind};
 }
 function answer(t){
+ if(t.kind==='fractions'){const common=F.prepare({current:t.fractions},'common',F.common(t.fractions));return {lines:[F.equationTex(t.fractions),F.equationTex(common.target),...t.ex.states.slice(1).map(s=>C.latexEq(s,t.ex.policy))],note:'Gelijknamig maken verandert de waarde van de breuken niet. Vermenigvuldig daarna elke term in beide leden met de gemeenschappelijke noemer. Rechtstreeks alle noemers wegwerken kan ook.'};}
  if(t.kind==='solve')return {lines:t.ex.states.map(s=>C.latexEq(s,t.ex.policy)),note:'Eén standaardroute. Andere equivalente routes zijn ook geldig.'};
  if(['repair','predict','expand'].includes(t.kind))return {lines:[C.latexEq(t.expected,t.ex.policy)],note:t.kind==='repair'?'De buitenfactor moet elke term binnen de groep vermenigvuldigen.':''};
  if(t.kind==='build')return {lines:[C.ratLatex(t.expectedNumber,t.ex.policy)],note:'Getal in het vak.'};

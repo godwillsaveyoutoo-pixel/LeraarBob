@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict'),C=require('../games/algebra-trainer/core.js'),L=require('../games/algebra-trainer/learning-core.js');
 async function put(page,name,text){
  const blocks=C.topTerms(L.parseExpression(text));await page.locator('[data-edit-field="'+name+'"]').click();await page.locator('[data-edit-action=clear]').click();
- for(const block of blocks){const key=C.exprSig(block),tiles=page.locator('#production [data-term]'),keys=await tiles.evaluateAll(es=>es.map(e=>e.dataset.term));const index=keys.indexOf(key);assert.ok(index>=0,'Contextual term missing: '+key);await tiles.nth(index).click();}await page.clock.runFor(30);
+ for(const [i,block] of blocks.entries()){if(i)await page.locator('[data-term-sign="+"]').click();const key=C.exprSig(block),tiles=page.locator('#production [data-term]'),keys=await tiles.evaluateAll(es=>es.map(e=>e.dataset.term));const index=keys.indexOf(key);assert.ok(index>=0,'Contextual term missing: '+key);await tiles.nth(index).click();}await page.clock.runFor(30);
 }
 async function equation(page,text){const [left,right]=text.split('=');await put(page,'lhs',left);await put(page,'rhs',right);}
 async function wrongEquation(page){

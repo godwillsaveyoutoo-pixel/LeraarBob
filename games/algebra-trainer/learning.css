@@ -35,7 +35,7 @@ body[data-screen=history] .sectionNav,body[data-screen=summary] .sectionNav{disp
 .trainer .solvedNote{font:19px system-ui}.solvedNote>span{font-size:30px}.solvedNote p{margin:4px}
 .trainer .trainFooter{gap:6px;padding:0 0 4px}
 .trainer .feedback{font:15px/1.25 system-ui;text-align:left;padding:0 5px;min-height:44px}
-.trainFooter #reminderBtn,.trainFooter #historyBtn,.trainFooter .primarybtn,.trainer .nextBox button{font:600 14px system-ui;min-height:44px;padding:0 8px}
+.trainFooter #watchDemoBtn,.trainFooter #historyBtn,.trainFooter .primarybtn,.trainer .nextBox button{font:600 14px system-ui;min-height:44px;padding:0 8px}
 .topicGoal{font:14px/1.4 system-ui;color:var(--muted)}
 .trainer .katex,.historyScreen .katex{white-space:nowrap}
 .historyScreen{display:grid;grid-template-rows:48px auto minmax(0,1fr) 48px;gap:8px;padding:8px 24px}
@@ -61,7 +61,7 @@ html[data-mode=dark] .trainer{background:var(--paper);color:var(--ink)}html[data
  .trainer .valueBtn{height:44px;font-size:16px}.valuePages{margin-top:2px}
  .production{gap:4px}.production button{font-size:13px}.production input{font-size:16px}
  .algebraReminder h2{font-size:16px}.algebraReminder p{font-size:14px;line-height:1.3;margin:4px 0}
- .trainer .feedback{font-size:13px;padding:0 3px}.trainFooter #reminderBtn,.trainFooter #historyBtn,.trainFooter .primarybtn,.trainer .nextBox button{font-size:12px;padding:0 6px}
+ .trainer .feedback{font-size:13px;padding:0 3px}.trainFooter #watchDemoBtn,.trainFooter #historyBtn,.trainFooter .primarybtn,.trainer .nextBox button{font-size:12px;padding:0 6px}
  .summaryScreen{padding:6px 16px}.summaryScreen h1{font-size:22px}.summaryTitle p{font-size:13px;margin:3px 0}
  .summaryEvidence{gap:12px}.summaryEvidence h2{font-size:15px;margin:4px 0}.summaryEvidence p{font-size:12px;margin:4px 0}.summaryRecommendation{font-size:13px;margin:6px 0}
 }
@@ -71,7 +71,7 @@ html[data-mode=dark] .trainer{background:var(--paper);color:var(--ink)}html[data
  .trainer .opRail{border:0;border-top:1px solid var(--line);padding:4px 0;gap:4px}
  .trainer .contextOp{height:44px;font-size:19px}.production{gap:4px}
  .trainer .trainFooter{grid-template-columns:44px auto auto minmax(0,1fr);grid-template-rows:44px 44px}
- .trainFooter #reminderBtn{grid-column:2}.trainFooter #historyBtn{grid-column:3;grid-row:2}.trainFooter #checkBtn,.trainer .nextBox{grid-column:4;grid-row:2;justify-self:end}
+ .trainFooter #watchDemoBtn{grid-column:2}.trainFooter #historyBtn{grid-column:3;grid-row:2}.trainFooter #checkBtn,.trainer .nextBox{grid-column:4;grid-row:2;justify-self:end}
  .trainer .feedback{grid-column:1/-1;font-size:13px}.trainer .derivationMath{font-size:28px}
  .summaryEvidence{gap:10px}.summaryScreen{padding:12px}.summaryScreen h1{font-size:22px}.summaryEvidence p{font-size:12px}
 }

@@ -24,7 +24,7 @@ function contextOperations(ex,eq){
   }
   const scalars=[...left,...right].filter(containsVar).map(outerScalar).filter(q=>q&&!q.isZero()&&!q.eq(1));
   const scalar=scalars[0];
-  // Undo a factor in either notation: ÷ a and × (1/a).
+  // Undo a factor in either notation: ÷ a and · (1/a).
   // Reserve both places before filling the compact menu with extra choices.
   if(scalar){add('/',N(scalar));add('*',N(C.reciprocal(scalar)));}
   else{add('/',N(2));add('*',N(2));}

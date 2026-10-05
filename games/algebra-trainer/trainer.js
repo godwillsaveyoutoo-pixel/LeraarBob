@@ -11,16 +11,17 @@ let trainerIndex=0;
 let trainerStates=[];
 let trainerStepLog=[];
 let selectedOp=null;
-let manualOpen=false,reminderOpen=false,valuePage=0;
+let manualOpen=false,valuePage=0;let navigation=null;
 const VALUE_PAGE_SIZE=2;
 let currentSolved=false;
 let settingsDirty=true;
-let screen='world',restoring=false,perExercise={},solvedTypes=new Set();
+let screen='menu',restoring=false,perExercise={},solvedTypes=new Set();
 let journey=AlgebraWorld.normalize(null),mission=null,worldView=null,worldLegacy=[],mapLocation=null;
 const SAVE_KEY='leraarbob.algebra.v1';
 let lesson=null,motionFrame=null;
 let touchField="lhs";
-const touchKinds=["predict","repair","expand","build","verify"];
+const touchKinds=["predict","repair","expand","build","verify","fractions"];
+const fractionView=AlgebraFractionView.mount({task,result,render:()=>renderTrainer(),feedback:(message,bad)=>{feedback.className='feedback'+(bad?' bad':'');feedback.textContent=message;}});
 const motionPlayer=new AlgebraMotion.Player(onMotionFrame,onMotionFinished);
 
 const $=s=>document.querySelector(s);
@@ -118,6 +119,7 @@ function makeSet(){
 function showScreen(name){
   if(lesson||motionPlayer.active){stopPresentation();if(trainerStates.length)renderTrainer();}
   screen=name;document.body.dataset.screen=name;
+  $('#navigationScreen').classList.toggle('hidden',name!=='menu');if(name==='menu')navigation?.render();
   $('#worldScreen').classList.toggle('hidden',name!=='world');
   $('#toolsScreen').classList.toggle('hidden',name!=='tools');
   if(name==='world')worldView?.render();$('#resumeFreeBtn').hidden=!freeSession;document.querySelectorAll('[data-nav]').forEach(b=>b.setAttribute('aria-current',b.dataset.nav===name?'page':'false'));
@@ -151,11 +153,11 @@ document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>{
 function currentExercise(){return activeSet[trainerIndex]}
 function currentEquation(){return trainerStates[trainerStates.length-1]}
 function stepText(op,operand,policy){
-  return `${op==='*'?'×':op==='/'?'÷':op==='-'?'−':'+'} ${fallbackText(latexExpr(operand,policy))} op beide leden`;
+  return `${op==='*'?'·':op==='/'?'÷':op==='-'?'−':'+'} ${fallbackText(latexExpr(operand,policy))} op beide leden`;
 }
 function actionLatex(op,operand,policy){
   const expression=latexExpr(operand,policy);
-  const symbol=op==='*'?'\\times':op==='/'?'\\div':op==='-'?'-':'+';
+  const symbol=op==='*'?'\\cdot':op==='/'?'\\div':op==='-'?'-':'+';
   return `${symbol}\\;${operand.t==='add'?`\\left(${expression}\\right)`:expression}`;
 }
 function task(){return learningRun?.tasks[trainerIndex]||null}
@@ -167,7 +169,7 @@ function motionHTML(tex){
 function renderDerivation(animateNew=false){
  const ex=currentExercise();if(!ex)return;const t=task(),eq=currentEquation();
  $('#givenEquation').dataset.mathTex=t?.display||latexEq(ex.start,ex.policy);$('#givenEquation').innerHTML=texHTML($('#givenEquation').dataset.mathTex);
- if(t&&touchKinds.includes(t.kind)&&!reminderOpen){renderTouchAnswer();return;}
+ if(t&&touchKinds.includes(t.kind)){renderTouchAnswer();return;}
  $('#touchAnswer').hidden=true;
  const shown=t?.kind==='repair'?t.fault:t?.kind==='build'?null:eq;
  const previous=trainerStates.length>1?trainerStates.at(-2):null;
@@ -198,23 +200,26 @@ function onMotionFinished(){
 }
 function startLesson(){
  if(motionPlayer.active&&!lesson)return;
- let example=lesson?.ex;
+ const fractionDemo=task()?.kind==='fractions'?(lesson?.fractionDemo||AlgebraFractions.demo(task(),AlgebraFractions.init(task(),result()),crypto.getRandomValues(new Uint32Array(1))[0])):null;
+ if(fractionDemo&&!lesson&&result()){result().hints=Math.max(1,result().hints);result().supported=true;persist();}
+ let example=fractionDemo?.ex||lesson?.ex;
  if(!example){
   const own=currentExercise();if(!own)return;
   for(let i=0;i<8;i++){example=AlgebraCore.generateSeeded(own.type,own.policy,0,crypto.getRandomValues(new Uint32Array(1))[0]);if(eqSig(example.start)!==eqSig(own.start))break;}
   if(result()){result().hints=Math.max(1,result().hints);result().supported=true;persist();}
  }
- motionPlayer.cancel();lesson={ex:example,frame:null,finished:false};document.body.classList.add('demonstrating');document.body.classList.remove('step-playing');$('#liveLessonPanel').hidden=false;$('#watchDemoBtn').hidden=true;derivationStack.setAttribute('aria-live','off');
+ motionPlayer.cancel();lesson={ex:example,frame:null,finished:false,fractionDemo};document.body.classList.add('demonstrating');document.body.classList.remove('step-playing');$('#liveLessonPanel').hidden=false;$('#watchDemoBtn').hidden=true;derivationStack.setAttribute('aria-live','off');
  let timeline=[{tex:latexEq(example.start,example.policy),previous:null,caption:'We maken x vrij. De gelijkheid blijft behouden.',step:0,delay:1600}];
  example.steps.forEach((st,i)=>{const record=AlgebraMotion.frames(example.states[i],st.op,st.operand,example.policy);record.frames.forEach((f,j)=>timeline.push({...f,previous:latexEq(example.states[i],example.policy),step:i+1,shift:j===0}));});
+ if(fractionDemo){timeline=fractionDemo.timeline;lesson.total=fractionDemo.total;}
  if(task()?.kind==='verify'){timeline=AlgebraTouch.verifyDemo(example,example.solution.add(R(1)));lesson.total=timeline.at(-1).step;}
  motionPlayer.start(timeline);
 }
 function renderLesson(shift=false){
  if(!lesson)return;const frame=lesson.frame,ex=lesson.ex;
- document.body.classList.remove('touch-writing');$('#touchAnswer').hidden=true;
+ document.body.classList.remove('touch-writing','fraction-writing');$('#touchAnswer').hidden=true;
  document.body.classList.toggle('lesson-paused',motionPlayer.paused);
- $('#taskGoal').textContent='Kijk even mee';$('#trainProgress').textContent='Voorbeeld';$('#taskPrompt').textContent='Andere getallen · dezelfde aanpak';
+ $('#taskGoal').textContent='Hulp · live voorbeeld';$('#trainProgress').textContent='Voorbeeld';$('#taskPrompt').textContent='Andere getallen · dezelfde aanpak';
  $('#givenEquation').dataset.mathTex=latexEq(ex.start,ex.policy);$('#givenEquation').innerHTML=texHTML($('#givenEquation').dataset.mathTex);
  drawSteps(frame?.previous||null,frame?.tex||latexEq(ex.start,ex.policy),'Stap '+(frame?.step||0),shift);
  $('#lessonCaption').textContent=lesson.finished?'Nu jij. Pas deze aanpak toe op je eigen opgave.':frame?.caption||'We beginnen met de opgave.';
@@ -228,7 +233,7 @@ $('#lessonReturnBtn').onclick=()=>{stopPresentation();renderTrainer();$('#watchD
 $('#lessonPauseBtn').onclick=()=>{if(motionPlayer.paused)motionPlayer.resume();else motionPlayer.pause();renderLesson();};
 // Moving away never lets an unseen demo complete or a timer write to another task.
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&lesson&&motionPlayer.active){motionPlayer.pause();renderLesson();}});
-function fitMath(){requestAnimationFrame(()=>{for(const el of document.querySelectorAll('#givenEquation,.derivationMath,.previousEquation,#historyEquation,.touchFieldMath')){
+function fitMath(){requestAnimationFrame(()=>{for(const el of document.querySelectorAll('#givenEquation,.derivationMath,.previousEquation,#historyEquation,.touchFieldMath,.fractionMath')){
  if(!el.getClientRects().length)continue;
  el.style.fontSize='';const base=parseFloat(getComputedStyle(el).fontSize);if(el.dataset.mathTex)el.innerHTML=motionHTML(el.dataset.mathTex);el.style.fontSize=base+'px';
  const m=el.querySelector('.katex');if(!m)continue;const width=m.getBoundingClientRect().width,limit=el.clientWidth-8;
@@ -247,25 +252,32 @@ function touchBlocks(){
  const t=task(),r=result();if(!r.blocks)r.blocks=Object.fromEntries(touchNames(t).map(name=>[name,AlgebraTouch.blocksFromText(touchValue(name))]));return r.blocks;
 }
 function rememberBuild(){
- const r=result();r.buildHistory=r.buildHistory||[];r.buildHistory.push(JSON.parse(JSON.stringify({input:r.input,left:r.left,right:r.right,choice:r.choice,location:r.location,blocks:r.blocks,verifyPhase:r.verifyPhase})));if(r.buildHistory.length>24)r.buildHistory.shift();
+ const r=result();r.buildHistory=r.buildHistory||[];r.buildHistory.push(JSON.parse(JSON.stringify({input:r.input,left:r.left,right:r.right,choice:r.choice,location:r.location,blocks:r.blocks,pendingSigns:r.pendingSigns||{},verifyPhase:r.verifyPhase})));if(r.buildHistory.length>24)r.buildHistory.shift();$('#undoBtn').disabled=false;
 }
 function renderTouchAnswer(){
  const t=task(),r=result(),host=$('#touchAnswer');host.hidden=false;
+ if(t.kind==='fractions'){fractionView.renderAnswer(t,r);fitMath();return;}
  if(t.kind==='verify'){renderVerification();return;}
  const names=touchNames(t),blocks=touchBlocks();if(!names.includes(touchField))touchField=names[0];
  if(t.kind==='repair'&&r.location!=='group'&&!r.done){host.innerHTML='<div class="verifyCandidate"><small>Foute regel</small>'+texHTML(latexEq(t.fault,t.ex.policy))+'</div><p class="touchPrompt">Vergelijk met de haakjes bovenaan.</p>';return;}
  const labels={lhs:'Links',rhs:'Rechts',input:'Ontbrekend getal'};
  const context=t.kind==='repair'?'<div class="touchContext"><small>Foute regel</small>'+texHTML(latexEq(t.fault,t.ex.policy))+'</div>':'';
- host.innerHTML=context+'<div class="touchFields">'+names.map((name,i)=>(i?'<span class="touchEquals">=</span>':'')+'<button type="button" class="touchField" data-edit-field="'+name+'" aria-label="'+labels[name]+'" aria-pressed="'+(name===touchField)+'" '+(r.done?'disabled':'')+'><small>'+labels[name]+'</small><span class="touchFieldMath" data-answer-name="'+name+'"></span></button>').join('')+'</div><p class="touchPrompt">'+(r.done?'Jouw regel klopt.':'Kies links of rechts. Voeg hele termen toe.')+'</p>';
+ host.innerHTML=context+'<div class="touchFields">'+names.map((name,i)=>(i?'<span class="touchEquals">=</span>':'')+'<button type="button" class="touchField" data-edit-field="'+name+'" aria-label="'+labels[name]+'" aria-pressed="'+(name===touchField)+'" '+(r.done?'disabled':'')+'><small>'+labels[name]+'</small><span class="touchFieldMath" data-answer-name="'+name+'"></span></button>').join('')+'</div><p class="touchPrompt">'+(r.done?'Jouw regel klopt.':'Kies een term. Kies daarna + of − en de volgende term.')+'</p>';
  if(t.kind==='build')host.querySelector('.touchPrompt').textContent=r.done?'Het getal klopt.':'Kies het getal dat in het vak past.';
- host.querySelectorAll('[data-answer-name]').forEach(el=>{const name=el.dataset.answerName,items=blocks[name]||[],tex=items.length?AlgebraTouch.blockTex(items,t.ex.policy):touchValue(name)?AlgebraTouch.preview(touchValue(name)):'\\square';el.dataset.mathTex=tex;el.innerHTML=texHTML(tex);});
+ host.querySelectorAll('[data-answer-name]').forEach(el=>{const name=el.dataset.answerName,items=blocks[name]||[],base=items.length?AlgebraTouch.blockTex(items,t.ex.policy):touchValue(name)?AlgebraTouch.preview(touchValue(name)):'',sign=r.pendingSigns?.[name],tex=(base+(sign?' '+sign+' \\square':''))||'\\square';el.dataset.mathTex=tex;el.innerHTML=texHTML(tex);});
  host.querySelectorAll('[data-edit-field]').forEach(el=>el.onclick=()=>{touchField=el.dataset.editField;renderTouchAnswer();renderProduction();});fitMath();
 }
 function addTerm(item){
  const t=task(),r=result(),blocks=touchBlocks();if(t.kind!=='build'&&(blocks[touchField]||[]).length>=4){feedback.textContent='Gebruik ↶ of wis dit lid om een term te vervangen.';return;}
- rememberBuild();blocks[touchField]=t.kind==='build'?[cloneExpr(item.expr)]:[...(blocks[touchField]||[]),cloneExpr(item.expr)];touchSet(touchField,AlgebraTouch.blockText(blocks[touchField]));renderTouchAnswer();renderProduction();persist();
+ const sign=r.pendingSigns?.[touchField];
+ if(t.kind!=='build'&&blocks[touchField]?.length&&!sign){feedback.textContent='Kies eerst + of − tussen de termen.';return;}
+ rememberBuild();const term=sign==='-'?AlgebraCore.negExpr(cloneExpr(item.expr)):cloneExpr(item.expr);
+ blocks[touchField]=t.kind==='build'?[term]:[...(blocks[touchField]||[]),term];
+ if(r.pendingSigns)delete r.pendingSigns[touchField];
+ touchSet(touchField,AlgebraTouch.blockText(blocks[touchField]));feedback.textContent='';renderTouchAnswer();renderProduction();persist();
 }
-function clearTerms(){rememberBuild();touchBlocks()[touchField]=[];touchSet(touchField,'');renderTouchAnswer();renderProduction();persist();}
+function chooseTermSign(sign){rememberBuild();const r=result();r.pendingSigns=r.pendingSigns||{};r.pendingSigns[touchField]=sign;feedback.textContent='Kies de volgende term.';renderTouchAnswer();renderProduction();persist();}
+function clearTerms(){rememberBuild();touchBlocks()[touchField]=[];if(result().pendingSigns)delete result().pendingSigns[touchField];touchSet(touchField,'');renderTouchAnswer();renderProduction();persist();}
 function verifyPhase(){return result().done?4:result().verifyPhase||0;}
 function renderVerification(){
  const t=task(),r=result(),host=$('#touchAnswer'),phase=verifyPhase(),p=t.ex.policy,x=AlgebraCore.ratLatex(t.proposed,'auto',p);
@@ -301,6 +313,8 @@ function productionMessage(t,r,checked){
 }
 function renderProduction(){
  const t=task(),r=result(),form=$('#production');if(!t||t.kind==='solve'){form.classList.add('hidden');return;}form.classList.remove('hidden');
+ form.classList.toggle('fractionProduction',t.kind==='fractions');
+ if(t.kind==='fractions'){fractionView.renderControls(t,r);return;}
  const touch=touchKinds.includes(t.kind);form.classList.toggle('touchProduction',touch);let fields='';
  if(t.kind==='routes')fields=t.routes.map((st,i)=>`<button type="button" data-route="${i}" aria-pressed="${r.choice===String(i)}">${escapeHTML(L.operationText(st,t.ex.policy))} op beide leden</button>`).join('');
  else if(!r.done){
@@ -310,20 +324,23 @@ function renderProduction(){
    else if(phase===3)fields='<div class="verifyChoice"><button type="button" data-answer="yes">Gelijk '+texHTML('=')+'</button><button type="button" data-answer="no">Verschillend '+texHTML('\\ne')+'</button></div>';
    else{const options=AlgebraTouch.valueChoices(t,phase===1?'left':'right');fields='<p class="termLabel">Kies de uitkomst '+(phase===1?'links':'rechts')+'</p><div class="termPalette">'+options.map((item,i)=>'<button type="button" class="termTile" data-proof-value="'+i+'">'+texHTML(item.tex)+'</button>').join('')+'</div>';}
   }else if(t.kind==='repair'&&r.location!=='group'){fields='<p class="termLabel">Waar zit de fout?</p><div class="faultChoices"><button type="button" data-location="group">Term uit de haakjes</button><button type="button" data-location="both">Rechter lid</button></div>';}else{
-   const options=AlgebraTouch.palette(t),name=t.kind==='build'?'dit vak':touchField==='lhs'?'links':'rechts';
-   fields='<div class="termHead"><span>Bouwstenen</span><button type="button" data-edit-action="clear">Wis '+name+'</button></div><div class="termPalette">'+options.map((item,i)=>'<button type="button" class="termTile" data-term="'+item.key+'" data-term-index="'+i+'" aria-label="Bouwsteen '+escapeHTML(fallbackText(item.tex))+'">'+texHTML(item.tex)+'</button>').join('')+'</div>';
+   const options=AlgebraTouch.palette(t),name=t.kind==='build'?'dit vak':touchField==='lhs'?'links':'rechts',sign=r.pendingSigns?.[touchField],needsSign=t.kind!=='build'&&touchBlocks()[touchField]?.length&&!sign;
+   const signs=t.kind==='build'?'':'<div class="termSigns" role="group" aria-label="Teken voor de volgende term">'+['+','-'].map(op=>'<button type="button" data-term-sign="'+op+'" aria-label="'+(op==='+'?'Optellen':'Aftrekken')+'" aria-pressed="'+(sign===op)+'">'+(op==='+'?'+':'−')+'</button>').join('')+'</div>';
+   fields='<div class="termHead"><span>Bouwstenen</span>'+signs+'<button type="button" data-edit-action="clear">Wis '+name+'</button></div><div class="termPalette">'+options.map((item,i)=>'<button type="button" class="termTile" '+(needsSign?'disabled ':'')+'data-term="'+item.key+'" data-term-index="'+i+'" aria-label="Bouwsteen '+escapeHTML(fallbackText(item.tex))+'">'+texHTML(item.tex)+'</button>').join('')+'</div>';
   }
  }
  form.innerHTML=fields+(r.done?'<p class="productionSuccess">✓ Opdracht afgerond</p>':touch?'':'<button class="primarybtn" type="submit">Controleer →</button>');
  form.querySelectorAll('[data-location]').forEach(b=>b.onclick=()=>{r.location=b.dataset.location;if(r.location!=='group'){r.errors++;feedback.className='feedback bad';feedback.textContent='Vergelijk elke term met de oorspronkelijke haakjes.';}renderTrainer();});
  form.querySelectorAll('[data-route],[data-answer]').forEach(b=>{b.disabled=r.done;b.onclick=()=>{r.choice=b.dataset.route??b.dataset.answer;if(t.kind==='verify')form.requestSubmit();else renderTrainer();};});
  form.querySelectorAll('[data-term-index]').forEach(b=>b.onclick=()=>addTerm(AlgebraTouch.palette(t)[Number(b.dataset.termIndex)]));
+ form.querySelectorAll('[data-term-sign]').forEach(b=>b.onclick=()=>chooseTermSign(b.dataset.termSign));
  form.querySelector('[data-edit-action]')?.addEventListener('click',clearTerms);
  form.querySelector('#substituteBtn')?.addEventListener('click',startVerification);
  form.querySelectorAll('[data-proof-value]').forEach(b=>b.onclick=()=>chooseProofValue(AlgebraTouch.valueChoices(t,verifyPhase()===1?'left':'right')[Number(b.dataset.proofValue)]));
  form.onsubmit=e=>{e.preventDefault();if(r.done)return;try{
   if(t.kind==='verify'&&verifyPhase()!==3)return;
   if(['predict','repair','expand'].includes(t.kind)&&(!touchValue('lhs')||!touchValue('rhs'))){feedback.textContent='Vul links en rechts met bouwstenen.';return;}
+  if(Object.values(r.pendingSigns||{}).some(Boolean)){feedback.textContent='Kies nog een term, of tik op ↶.';return;}
   const checked=L.validate(t,r);feedback.className='feedback '+(checked.ok?'good':checked.valid?'warn':'bad');feedback.textContent=productionMessage(t,r,checked);
   if(checked.ok){r.done=true;currentSolved=true;}else if(!checked.valid)r.errors++;renderTrainer();if(checked.ok)$('#nextExerciseBtn').focus({preventScroll:true});
  }catch(err){r.errors++;feedback.className='feedback bad';feedback.textContent=err.message;persist();}};
@@ -333,22 +350,21 @@ function renderTrainer(animateNew=false){
   $('#watchDemoBtn').disabled=!!motionFrame;
   const ex=currentExercise();if(!ex)return;
   const eq=currentEquation(),t=task(),r=result(),production=!!t&&t.kind!=='solve';if(production)currentSolved=!!r.done;
-  document.body.classList.toggle('touch-writing',!!t&&touchKinds.includes(t.kind)&&!reminderOpen);
-  const title=J.stop(mission)?.title||AlgebraWorld.topic(mission)?.title;$('#taskGoal').innerHTML=(title?'<small>'+escapeHTML(title)+'</small>':'')+escapeHTML(t?.kind==='verify'?'Test een x-waarde':t?t.stage.replace(/Schrijf/g,'Bouw'):'Maak x vrij');$('#solvedNote p').textContent=t&&t.kind!=='solve'?'Opdracht afgerond. Ga verder.':'x staat vrij. Ga verder.';$('#taskPrompt').textContent=t?.kind==='verify'?AlgebraTouch.verifyPrompt(t,verifyPhase()):t?.kind==='repair'?(r.location==='group'?'Herstel de volledige regel met de bouwstenen.':'Welke term is fout uitgewerkt?'):t?t.prompt.replace(/Schrijf/g,'Bouw'):'Doel: maak x vrij met dezelfde bewerking op beide leden.';
+  document.body.classList.toggle('touch-writing',!!t&&touchKinds.includes(t.kind));
+  document.body.classList.toggle('fraction-writing',t?.kind==='fractions');
+  const title=J.stop(mission)?.title||AlgebraWorld.topic(mission)?.title;$('#taskGoal').innerHTML=(title?'<small>'+escapeHTML(title)+'</small>':'')+escapeHTML(t?.kind==='verify'?'Test een x-waarde':t?t.stage.replace(/Schrijf/g,'Bouw'):'Maak x vrij');$('#solvedNote p').textContent=t&&t.kind!=='solve'?'Opdracht afgerond. Ga verder.':'x staat vrij. Ga verder.';$('#taskPrompt').textContent=t?.kind==='fractions'?AlgebraFractions.prompt(AlgebraFractions.init(t,r)):t?.kind==='verify'?AlgebraTouch.verifyPrompt(t,verifyPhase()):t?.kind==='repair'?(r.location==='group'?'Herstel de volledige regel met de bouwstenen.':'Welke term is fout uitgewerkt?'):t?t.prompt.replace(/Schrijf/g,'Bouw').replace(/×/g,'·'):'Doel: maak x vrij met dezelfde bewerking op beide leden.';
   $('#trainProgress').textContent=`${trainerIndex+1} / ${activeSet.length}`;
   renderDerivation(animateNew);
   trainProgress.textContent=`${trainerIndex+1} / ${activeSet.length}`;
   trainProgress.title=TYPES.find(t=>t.id===ex.type)?.label||ex.type;
-  $('#operationTitle').textContent=reminderOpen?'Een aanwijzing':currentSolved?'Afgerond':production?({predict:'Produceer de volgende regel',repair:'Lokaliseer en herstel',expand:'Werk zelf uit',build:'Bouw de vergelijking',verify:'Controleer door invullen',routes:'Vergelijk routes'})[t.kind]:manualOpen?'Bewerking op beide leden':'Kies een bewerking';
+  $('#operationTitle').textContent=currentSolved?'Afgerond':production?({predict:'Produceer de volgende regel',repair:'Lokaliseer en herstel',expand:'Werk zelf uit',build:'Bouw de vergelijking',verify:'Controleer door invullen',routes:'Vergelijk routes',fractions:'Breuken'})[t.kind]:manualOpen?'Bewerking op beide leden':'Kies een bewerking';
   $('#moreOperationsBtn').textContent=manualOpen?'Terug':'Andere';
-  $('#moreOperationsBtn').hidden=reminderOpen||currentSolved||production;
+  $('#moreOperationsBtn').hidden=currentSolved||production;
   $('#moreOperationsBtn').setAttribute('aria-expanded',String(manualOpen));
-  $('#reminderBtn').setAttribute('aria-expanded',String(reminderOpen));
-  $('#algebraReminder').classList.toggle('hidden',!reminderOpen);
-  $('#solvedNote').classList.toggle('hidden',!currentSolved||reminderOpen);
-  $('#manualOperations').classList.toggle('hidden',!manualOpen||reminderOpen||currentSolved||production);
+  $('#solvedNote').classList.toggle('hidden',!currentSolved);
+  $('#manualOperations').classList.toggle('hidden',!manualOpen||currentSolved||production);
   const direct=$('#contextOperations');
-  direct.classList.toggle('hidden',manualOpen||reminderOpen||currentSolved||production);
+  direct.classList.toggle('hidden',manualOpen||currentSolved||production);
   const operations=contextOperations(ex,eq);if(t&&!t.guided&&!manualOpen&&!production&&!currentSolved){manualOpen=true;$('#manualOperations').classList.remove('hidden');direct.classList.add('hidden');$('#operationTitle').textContent='Taak: maak x vrij';}
   direct.innerHTML=operations.map((choice,i)=>`<button class="contextOp ${choice.op==='*'||choice.op==='/'?'is-scale':''}" data-choice="${i}" aria-label="${escapeHTML(stepText(choice.op,choice.operand,ex.policy))}">${texHTML(actionLatex(choice.op,choice.operand,ex.policy))}</button>`).join('');
   direct.querySelectorAll('.contextOp').forEach((button,i)=>button.onclick=()=>performOperation(operations[i].op,operations[i].operand));
@@ -367,18 +383,17 @@ function renderTrainer(animateNew=false){
   }else valueZone.classList.add('hidden');
 
   nextBox.classList.toggle('hidden',!currentSolved);
-  $('#checkBtn').hidden=currentSolved||t?.kind==='verify'||t?.kind==='repair'&&r.location!=='group'||(production&&!touchKinds.includes(t.kind))||(production&&reminderOpen);$('#production').classList.toggle('hidden',!production||reminderOpen);if(production&&!reminderOpen)renderProduction();
-  if(reminderOpen){$('#hintText').textContent=t?L.hint(t,eq,Math.max(1,r.hints)):'Doe dezelfde bewerking op beide leden. Vermenigvuldig of deel met een getal dat niet nul is.';}
-  $('#undoBtn').disabled=production?!r.done&&!r.input&&!r.choice&&!r.buildHistory?.length:trainerStates.length<=1;$('#prevExerciseBtn').disabled=trainerIndex===0;$('#forwardExerciseBtn').disabled=trainerIndex>=activeSet.length-1||!!learningRun&&!r.done;
+  $('#checkBtn').hidden=currentSolved||t?.kind==='fractions'&&r.fraction?.phase!=='build'||t?.kind==='verify'||t?.kind==='repair'&&r.location!=='group'||(production&&!touchKinds.includes(t.kind));$('#production').classList.toggle('hidden',!production);if(production)renderProduction();
+  $('#undoBtn').disabled=t?.kind==='fractions'?!r.fractionUndo?.length:production?!r.done&&!r.input&&!r.choice&&!r.buildHistory?.length:trainerStates.length<=1;$('#prevExerciseBtn').disabled=trainerIndex===0;$('#forwardExerciseBtn').disabled=trainerIndex>=activeSet.length-1||!!learningRun&&!r.done;
   document.querySelectorAll('.opBtn').forEach(b=>{b.disabled=currentSolved;b.setAttribute('aria-pressed',String(b.dataset.op===selectedOp));b.setAttribute('aria-label',({'+' :'Optellen','-':'Aftrekken','*':'Vermenigvuldigen','/':'Delen'})[b.dataset.op]+' aan beide kanten')});
-  $('#nextExerciseBtn').textContent=trainerIndex===activeSet.length-1?(learningRun?'Missie afronden →':'Bekijk je reeks →'):'Volgende oefening →';
+  $('#nextExerciseBtn').textContent=trainerIndex===activeSet.length-1?(learningRun?'Missie afronden →':'Bekijk je reeks →'):t?.kind==='fractions'?'Volgende →':'Volgende oefening →';
   persist();
 }
 function startExercise(index){
   stopPresentation();
   rememberExercise();trainerIndex=index;const ex=currentExercise(),previous=perExercise[index];
   trainerStates=previous?.states?.length?previous.states.map(cloneEq):[cloneEq(ex.start)];trainerStepLog=previous?.log||[];selectedOp=null;currentSolved=task()&&task().kind!=='solve'?!!result().done:solvedEquation(currentEquation());
-  manualOpen=false;reminderOpen=false;valuePage=0;
+  manualOpen=false;valuePage=0;
   touchField=task()?touchNames(task())[0]:'lhs';
   feedback.className='feedback'+(currentSolved?' good':'');feedback.textContent=currentSolved?'Opdracht afgerond.':task()?.guided?'Je begint met zichtbare ondersteuning.':task()?'Probeer zelfstandig. Hulp blijft bereikbaar.':'Werk tot x alleen staat.';
   derivationStack.innerHTML='';
@@ -386,7 +401,7 @@ function startExercise(index){
 }
 document.querySelectorAll('.opBtn').forEach(b=>b.onclick=()=>{
   if(currentSolved)return;
-  manualOpen=true;reminderOpen=false;valuePage=0;
+  manualOpen=true;valuePage=0;
   selectedOp=selectedOp===b.dataset.op?null:b.dataset.op;
   feedback.className='feedback';
   feedback.textContent=selectedOp?'Kies nu waarmee je die bewerking op beide leden uitvoert.':'Kies een bewerking.';
@@ -395,8 +410,6 @@ document.querySelectorAll('.opBtn').forEach(b=>b.onclick=()=>{
 $('#moreOperationsBtn').onclick=()=>{manualOpen=!manualOpen;selectedOp=null;valuePage=0;renderTrainer()};
 $('#prevValuesBtn').onclick=()=>{valuePage--;renderTrainer()};
 $('#nextValuesBtn').onclick=()=>{valuePage++;renderTrainer()};
-$('#reminderBtn').onclick=()=>{reminderOpen=!reminderOpen;if(reminderOpen&&result()){result().hints=Math.max(1,result().hints);result().supported=true;}renderTrainer()};
-$('#moreHintBtn').onclick=()=>{if(result()){result().hints++;result().supported=true;}renderTrainer()};
 $('#checkBtn').onclick=()=>{
   if(task()&&touchKinds.includes(task().kind)){$('#production').requestSubmit();return;}
   const checked=checkProgress(currentEquation());
@@ -407,7 +420,7 @@ function performOperation(op,operand){
   const before=currentEquation();
   try{
     const record=AlgebraMotion.frames(before,op,operand,currentExercise().policy),after=record.after;
-    trainerStates.push(after);trainerStepLog.push({op,operand:cloneExpr(operand)});selectedOp=null;manualOpen=false;reminderOpen=false;valuePage=0;
+    trainerStates.push(after);trainerStepLog.push({op,operand:cloneExpr(operand)});selectedOp=null;manualOpen=false;valuePage=0;
     currentSolved=solvedEquation(after);
 
     feedback.className='feedback'+(currentSolved?' good':'');feedback.textContent=L.causal(before,after,op,operand);
@@ -421,13 +434,14 @@ function performOperation(op,operand){
 }
 $('#undoBtn').onclick=()=>{
   stopPresentation();
+  if(task()?.kind==='fractions'){fractionView.undo();return;}
   if(task()&&task().kind!=='solve'){
-   const r=result(),old=r.buildHistory?.pop();if(old){Object.assign(r,old);if(r.blocks)for(const name of Object.keys(r.blocks))r.blocks[name]=r.blocks[name].map(cloneExpr);}
-   else{r.input='';r.left='';r.right='';r.choice='';r.location='';delete r.blocks;r.verifyPhase=0;}
+   const r=result(),old=r.buildHistory?.pop();if(old){r.pendingSigns={};Object.assign(r,old);if(r.blocks)for(const name of Object.keys(r.blocks))r.blocks[name]=r.blocks[name].map(cloneExpr);}
+   else{r.input='';r.left='';r.right='';r.choice='';r.location='';delete r.blocks;delete r.pendingSigns;r.verifyPhase=0;}
    r.done=false;currentSolved=false;feedback.textContent='Laatste keuze teruggenomen.';renderTrainer();return;
   }
   if(trainerStates.length<=1)return;
-  if(result())result().done=false;trainerStates.pop();trainerStepLog.pop();selectedOp=null;manualOpen=false;reminderOpen=false;valuePage=0;currentSolved=solvedEquation(currentEquation());
+  if(result())result().done=false;trainerStates.pop();trainerStepLog.pop();selectedOp=null;manualOpen=false;valuePage=0;currentSolved=solvedEquation(currentEquation());
   feedback.className='feedback';feedback.textContent='Laatste stap ongedaan gemaakt.';
   renderTrainer();
 };
@@ -441,7 +455,6 @@ $('#nextExerciseBtn').onclick=()=>{
 };
 $('#prevExerciseBtn').onclick=()=>{if(trainerIndex>0)startExercise(trainerIndex-1)};
 $('#forwardExerciseBtn').onclick=()=>{if((!learningRun||result()?.done)&&trainerIndex<activeSet.length-1)startExercise(trainerIndex+1)};
-$('#backSetupBtn').onclick=()=>{if(mission)worldView?.open(J.stop(mission)?'equations':AlgebraWorld.topic(mission)?.world);showScreen('world');};
 
 /* ============================================================
    11. OEFENBLAD + VERBETERSLEUTEL
@@ -549,8 +562,8 @@ function restore(){
    activeSet=saved.activeSet;perExercise=saved.perExercise||{};trainerIndex=Math.max(0,Math.min(activeSet.length-1,saved.trainerIndex||0));
    if(activeSet.length)startExercise(trainerIndex);
   }
-  settingsDirty=saved.settingsDirty!==false;screen=saved.screen==='setup'&&!saved.journey?'world':['world','tools','setup','trainer','preview','summary','history'].includes(saved.screen)&&(['world','tools','setup'].includes(saved.screen)||activeSet.length)?saved.screen:'world';
- }catch{activeSet=[];perExercise={};trainerStates=[];screen='world';showSetupMessage('Je reeks kon niet worden hervat. Kies een nieuwe reeks.',true)}finally{restoring=false}
+  settingsDirty=saved.settingsDirty!==false;screen=saved.screen==='setup'&&!saved.journey?'world':['world','tools','setup','trainer','preview','summary','history','menu'].includes(saved.screen)&&(['world','tools','setup','menu'].includes(saved.screen)||activeSet.length)?saved.screen:'menu';
+ }catch{activeSet=[];perExercise={};trainerStates=[];screen='menu';showSetupMessage('Je reeks kon niet worden hervat. Kies een nieuwe reeks.',true)}finally{restoring=false}
 }
 function startTopic(id){
  const t=J.stop(id)||AlgebraWorld.topic(id);if(!t||(!J.stop(id)&&t.engine!=='equations'))return;
@@ -576,7 +589,7 @@ function renderSummary(){
 $('#summaryReplayBtn').onclick=()=>startTopic(mission);
 $('#summaryWorldBtn').onclick=()=>{worldView.open('equations');showScreen('world')};
 $('#summaryNextBtn').onclick=()=>{const t=recommended();if(t)startTopic(t.id);else{worldView.open('systems');showScreen('world')}};
-function historyEntries(){const t=task(),ex=currentExercise();return t&&touchKinds.includes(t.kind)?AlgebraTouch.history(t,result()):trainerStates.map((eq,i)=>({tex:latexEq(eq,ex.policy),caption:i?stepText(trainerStepLog[i-1].op,trainerStepLog[i-1].operand,ex.policy):'Oorspronkelijke opgave'}));}
+function historyEntries(){const t=task(),ex=currentExercise();return t?.kind==='fractions'?fractionView.history(t,result()):t&&touchKinds.includes(t.kind)?AlgebraTouch.history(t,result()):trainerStates.map((eq,i)=>({tex:latexEq(eq,ex.policy),caption:i?stepText(trainerStepLog[i-1].op,trainerStepLog[i-1].operand,ex.policy):'Oorspronkelijke opgave'}));}
 function renderHistory(){const entries=historyEntries();historyIndex=Math.max(0,Math.min(entries.length-1,historyIndex));$('#historyPosition').textContent=`${historyIndex+1} / ${entries.length}`;$('#historyEquation').dataset.mathTex=entries[historyIndex].tex;$('#historyEquation').innerHTML=motionHTML(entries[historyIndex].tex);$('#historyAction').textContent=entries[historyIndex].caption;$('#historyPrevBtn').disabled=historyIndex===0;$('#historyNextBtn').disabled=historyIndex===entries.length-1;fitMath();}
 $('#historyBtn').onclick=()=>{historyIndex=historyEntries().length-1;renderHistory();showScreen('history')};$('#closeHistoryBtn').onclick=()=>showScreen('trainer');$('#historyPrevBtn').onclick=()=>{historyIndex--;renderHistory()};$('#historyNextBtn').onclick=()=>{historyIndex++;renderHistory()};
 $('#resumeFreeBtn').onclick=()=>{rememberExercise();if(learningRun)learningRun.work=perExercise;mission=null;learningRun=null;activeSet=freeSession.activeSet;perExercise=freeSession.perExercise;trainerStates=[];startExercise(freeSession.trainerIndex);showScreen('trainer')};
@@ -584,9 +597,18 @@ window.addEventListener('resize',fitMath);
 function init(){
   restore();
   worldView=AlgebraWorldView.mount({progress:()=>journey,chapter:()=>chapterJourney,runs:()=>runs,current:()=>mission,solved:()=>worldLegacy,location:()=>mapLocation,remember:id=>{mapLocation=id;persist();},run:id=>runs[id],canResume:()=>activeSet.length>0&&(!learningRun||!learningRun.completed),start:startTopic,resume:()=>{if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer')}});
+  navigation=AlgebraNavigation.mount({
+   screen:()=>screen,show:showScreen,canResume:()=>!!activeSet.length,canResumeFree:()=>!!freeSession&&!!mission,resumeFree:()=>$('#resumeFreeBtn').click(),
+   navigate:name=>{if(name==='world'){if(mission)worldView.open(J.worldFor(mission));showScreen('world');}else if(name==='trainer'){if(activeSet.length){if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer');}}else if(name==='preview'&&!activeSet.length){showScreen('setup');showSetupMessage('Kies eerst opgaven voor je oefenblad.',false);}else showScreen(name);},
+   title:()=>J.stop(mission)?.title||AlgebraWorld.topic(mission)?.title||'Vrij oefenen',position:()=>activeSet.length?(trainerIndex+1)+' / '+activeSet.length:'',
+   world:()=> 'Vergelijkingen',stops:()=>J.stops.map((st,i)=>{const info=J.info(chapterJourney,st.id,runs,journey,worldLegacy);return {id:st.id,number:i+1,title:st.title,status:info.status,current:st.id===mission||st.skills.some(k=>'eq-'+k===mission)};}),start:startTopic
+  });
+  // A fresh open lands on the designed menu; reloading keeps the current work screen.
+  const navigationType=performance.getEntriesByType('navigation')[0]?.type;
+  if(navigationType&&navigationType!=='reload')screen='menu';
   const params=new URLSearchParams(location.search),requestedWorld=params.get('world');if(J.world(requestedWorld)||AlgebraWorld.world(requestedWorld)){worldView.open(requestedWorld);if(performance.getEntriesByType('navigation')[0]?.type!=='reload')screen='world';}
   const requestedTopic=J.stop(params.get('topic'))||AlgebraWorld.topic(params.get('topic'));if((J.stop(requestedTopic?.id)||requestedTopic?.engine==='equations')&&performance.getEntriesByType('navigation')[0]?.type!=='reload'){startTopic(requestedTopic.id);screen='trainer';}
-  if(['setup','preview'].includes(params.get('screen'))&&performance.getEntriesByType('navigation')[0]?.type!=='reload')screen=params.get('screen');
+  if(['setup','preview','tools','menu'].includes(params.get('screen'))&&performance.getEntriesByType('navigation')[0]?.type!=='reload')screen=params.get('screen');
   renderTypeLevel();updateTotal();refreshNav();if(screen==='summary')renderSummary();if(screen==='history'&&activeSet.length)renderHistory();showScreen(screen);
   /* Wanneer KaTeX later klaar is dan de app, render nogmaals zonder de toestand te wijzigen. */
   setTimeout(()=>{

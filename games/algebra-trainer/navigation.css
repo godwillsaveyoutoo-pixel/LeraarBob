@@ -1,0 +1,111 @@
+/* The menu separates global actions, the current world, its stops and saved work. */
+.algebraChrome{display:flex!important;align-items:center;gap:12px;min-height:48px;height:48px;padding:2px 18px!important;border-bottom:1px solid var(--line);background:var(--paper,#f7f4ec);flex:none}
+.algebraChrome .algebraBrand{border:0!important;background:transparent;font:600 22px Georgia,serif;color:var(--ink,#193e53);padding:0 4px;min-height:44px;cursor:pointer}
+.algebraChrome .algebraContext{font:13px system-ui;color:var(--muted);flex:1}
+.algebraChrome>button:last-child{font:600 14px system-ui;min-height:44px;padding:0 12px}
+body[data-screen=trainer] .algebraChrome,body[data-screen=menu] .algebraChrome,body[data-screen=work] .algebraChrome{display:none!important}
+body[data-screen=menu] main{overflow:hidden}
+.journeyGame[data-screen=menu] .app{grid-template-rows:minmax(0,1fr)}
+.algebraMenu{--menu-ink:#101e35;--menu-muted:#52677a;--menu-paper:#f6f2e9;--menu-card:#fffdf8;--menu-line:#d6d5cf;--menu-active:#fff0d6;height:100%;width:100%;box-sizing:border-box;flex:1;padding:0;display:grid!important;grid-template-rows:64px 104px minmax(0,1fr) 76px 56px;gap:0;background:var(--menu-paper);color:var(--menu-ink);overflow:hidden;min-height:0;font-family:system-ui,sans-serif}
+.algebraMenu.hidden,.algebraMenu[hidden]{display:none!important}
+.algebraMenu button,.algebraMenu a{touch-action:manipulation;min-height:44px;border-radius:6px;font-family:inherit;cursor:pointer}
+.algebraMenu button:disabled{cursor:default;opacity:.5}
+.algebraMenu button:focus-visible,.algebraMenu a:focus-visible{outline:3px solid #c05f0d;outline-offset:-3px}
+.algebraMenuHead{display:flex;align-items:center;gap:16px;padding:0 24px;background:#163b51;color:#fff;min-width:0}
+.algebraMenuHead button,.algebraMenuHead a{color:inherit;background:transparent;border:0;font-size:16px;padding:0 12px;text-decoration:none}
+.algebraMenuHead button:hover:not(:disabled),.algebraMenuHead a:hover{background:#ffffff16}
+.algebraMenuHead .menuBrand{font-size:26px;letter-spacing:-.035em;font-weight:750;padding:0 4px;white-space:nowrap}
+.algebraMenuHead #navigationClose{border:1px solid #7091a5;white-space:nowrap;flex:none;padding:0 18px}
+.algebraMenuActions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));flex:1;min-width:0}
+.algebraMenuActions button,.algebraMenuActions a{display:flex;align-items:center;justify-content:center;gap:9px;border-left:1px solid #ffffff30;border-radius:0;font-weight:550;white-space:nowrap}
+.algebraMenuActions small{display:block;font-size:10px;line-height:1.2;font-weight:400}
+.algebraMenuActions svg{width:22px;height:22px;flex:none;pointer-events:none}
+.algebraRouteHeading{display:flex;align-items:center;gap:16px;padding:12px 28px;background:#dce9ef;border-bottom:1px solid #c5d7df;min-width:0}
+.algebraRouteHeading>div{flex:1;min-width:0}.algebraRouteHeading h1{font:750 40px/1.1 system-ui,sans-serif;letter-spacing:-.035em;margin:0;color:var(--menu-ink)}
+.algebraRouteHeading p{margin:6px 0 0;font:15px/1.2 system-ui;color:#415e72}
+.algebraRouteHeading>.menuWorldMeta{flex:none;font-size:19px;color:#415e72;border-left:1px solid #a0b6c4;padding-left:24px;white-space:nowrap}
+.menuWorldMeta small{display:block;font:11px/1.2 system-ui;margin-top:4px;color:inherit}
+.algebraMenuStops{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:14px;padding:18px 24px;min-height:0}
+.menuStop{grid-column:span 3;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:4px;text-align:left;min-width:0;min-height:0!important;background:var(--menu-card);border:1px solid var(--menu-line);border-radius:10px!important;color:var(--menu-ink);padding:12px 16px;box-shadow:0 2px 4px #3333330b;overflow:hidden}
+.algebraMenuStops[data-count="7"] .menuStop:nth-child(n+5),.algebraMenuStops[data-count="6"] .menuStop{grid-column:span 4}
+.algebraMenu .menuStop:hover{background:#f0f5f6;border-color:#9cafb8}
+.menuStopHeading{display:flex;align-items:center;gap:12px;min-width:0}.menuStopNumber{border-right:1px solid #c8ced0;padding-right:12px;font:700 23px/1 system-ui;color:#254b5d;flex:none}
+.menuStopShortTitle{display:none}
+.menuStop strong{font:700 19px/1.15 system-ui;letter-spacing:-.02em;min-width:0}
+.menuStopExample{display:flex;align-items:center;justify-content:center;width:100%;min-width:0;min-height:0;font-size:clamp(24px,3vw,48px);line-height:1.5}
+.menuStopExample .katex{font-size:1em;white-space:nowrap}.menuStopExample .katex,.menuStopExample .katex *{pointer-events:none}
+.menuStopStatus{display:flex;align-items:center;gap:8px;border-top:1px solid var(--menu-line);padding-top:8px;font:13px/1.15 system-ui;color:var(--menu-muted);min-width:0}
+.menuStatusDot{width:11px;height:11px;border-radius:50%;background:#c2c6c8;border:1px solid #8a9397;display:grid;place-items:center;flex:none;font-size:9px;line-height:1;color:white}
+.menuStop[data-status=finished] .menuStatusDot,.menuStop[data-status=independent] .menuStatusDot{background:#377763;border-color:#377763}
+.menuStop[data-status=started] .menuStatusDot{background:#e67518;border-color:#af530b}
+.algebraMenu .menuStop[aria-current=step]{border:2px solid #e97613;background:var(--menu-active);padding:11px 15px;box-shadow:0 2px 4px #be5e121c}
+.menuStop[aria-current=step] .menuStopNumber,.menuStop[aria-current=step] strong{color:#603013}
+.menuStop[aria-current=step] .menuStopStatus{border-color:#e9ca9c;color:#8c4314}
+.algebraMenuResume{margin:0 24px;display:flex;align-items:center;gap:12px;border-top:1px solid #cacbc7;min-width:0}
+.algebraMenuResume p{flex:1;margin:0;font-size:22px;line-height:1.2;min-width:0}.algebraMenuResume p strong{font-weight:750}
+.algebraMenuResume button{min-height:48px;padding:0 16px;border:1px solid #bac5c9;background:transparent;color:var(--menu-ink);font-size:14px;white-space:nowrap}
+.algebraMenu .menuContinue{min-width:230px;background:#ff8a24;border:1px solid #dc6704;border-radius:6px!important;color:#251307;font-size:23px;font-weight:750;box-shadow:0 2px 3px #9c4a1120}
+.algebraMenu .menuContinue:hover:not(:disabled){background:#ff9d45}
+.algebraMenuFoot{display:flex;align-items:center;gap:12px;padding:0 24px;background:#426174;color:#f7fbfd;min-width:0}
+.algebraMenuFoot>span{flex:1;font:14px/1.2 system-ui}.algebraMenuFoot button{border:0;border-left:1px solid #ffffff40;background:transparent;border-radius:0;color:inherit;padding:0 14px;font-size:14px;white-space:nowrap}
+.algebraMenuFoot button:hover{background:#ffffff15}
+.trainFooter #watchDemoBtn{background:#fff8e1;border-color:#c7bb8d;font:600 15px system-ui;padding:0 12px}
+#backSetupBtn{font:600 14px system-ui}
+@media(max-width:1100px) and (min-width:601px){
+ .algebraMenuHead{gap:8px;padding:0 12px}.algebraMenuHead .menuBrand{font-size:22px}.algebraMenuHead button,.algebraMenuHead a{font-size:14px;padding:0 8px}.algebraMenuActions{gap:0}.algebraMenuActions svg{width:18px;height:18px}.algebraMenuActions button,.algebraMenuActions a{gap:5px}.menuStop strong{font-size:15px}.menuStopHeading{gap:8px}.menuStopNumber{font-size:20px;padding-right:8px}.menuStop{padding:10px}.algebraMenu .menuStop[aria-current=step]{padding:9px}.algebraMenuResume p{font-size:19px}
+}
+@media(max-height:500px) and (min-width:601px){
+ .algebraMenu{grid-template-rows:44px 52px minmax(0,1fr) 50px 44px}.algebraMenuHead{padding:0 10px;gap:6px}.algebraMenuHead .menuBrand{font-size:18px}.algebraMenuHead button,.algebraMenuHead a{font-size:12px;padding:0 6px}.algebraMenuHead #navigationClose{padding:0 10px}.algebraMenuActions svg{width:17px;height:17px}.algebraMenuActions button,.algebraMenuActions a{gap:5px}
+ .algebraRouteHeading{padding:4px 14px}.algebraRouteHeading h1{font-size:25px}.algebraRouteHeading p{font-size:10px;margin-top:3px}.algebraRouteHeading>.menuWorldMeta{flex:none;font-size:13px;padding-left:14px}
+ .algebraMenuStops{gap:6px;padding:7px 12px}.menuStop{padding:5px 7px;gap:1px;border-radius:6px!important}.algebraMenu .menuStop[aria-current=step]{padding:4px 6px}.menuStopHeading{gap:6px}.menuStopNumber{font-size:14px;padding-right:6px}.menuStop strong{font-size:12px}.menuStopExample{font-size:clamp(17px,2.8vw,24px);line-height:1.3}.algebraMenuStops[data-count="6"] .menuStopExample{font-size:17px}.menuStopStatus{font-size:10px;gap:5px;padding-top:3px}.menuStatusDot{width:8px;height:8px;font-size:7px}
+ .algebraMenuResume{margin:0 12px;gap:8px}.algebraMenuResume p{font-size:16px}.algebraMenuResume button{min-height:44px;font-size:12px;padding:0 10px}.algebraMenu .menuContinue{font-size:17px;min-width:170px}.algebraMenuFoot{padding:0 12px;gap:6px}.algebraMenuFoot>span,.algebraMenuFoot button{font-size:11px}.algebraMenuFoot button{padding:0 9px}
+ .algebraMenu:has(.algebraMenuStops[data-count="6"]){grid-template-rows:44px 44px minmax(0,1fr) 44px 44px}.algebraMenuStops[data-count="6"]{padding-top:2px;padding-bottom:2px}.algebraMenuStops[data-count="6"] .menuStop{padding-top:4px;padding-bottom:4px}.algebraMenuStops[data-count="6"] .menuStop[aria-current=step]{padding-top:3px;padding-bottom:3px}.algebraMenuStops[data-count="6"] .menuStopExample{font-size:15px}
+}
+@media(max-width:700px) and (min-width:601px){.menuStopFullTitle{display:none}.menuStopShortTitle{display:inline}.algebraMenuActions svg{display:none}.menuStop strong{font-size:11px}.algebraMenuHead .menuBrand{font-size:17px}}
+@media(max-width:600px){
+ .algebraChrome{padding:2px 8px!important;gap:6px}.algebraChrome .algebraBrand{font-size:18px;margin-right:auto}.algebraChrome .algebraContext{display:none}
+ .algebraMenu{grid-template-rows:136px 62px minmax(0,1fr) 62px 44px}.algebraMenuHead{display:grid;grid-template-columns:1fr auto;grid-template-rows:44px 88px;gap:0;padding:2px 10px}.algebraMenuHead .menuBrand{font-size:23px;text-align:left}.algebraMenuHead #navigationClose{grid-column:2;grid-row:1;padding:0 12px;font-size:13px}.algebraMenuActions{grid-column:1/-1;grid-row:2;grid-template-columns:1fr 1fr}.algebraMenuActions button,.algebraMenuActions a{border-left:0;border-top:1px solid #ffffff25;justify-content:flex-start;padding:0 12px;font-size:13px}.algebraMenuActions svg{width:19px;height:19px}
+ .algebraRouteHeading{padding:6px 12px;gap:8px}.algebraRouteHeading h1{font-size:26px}.algebraRouteHeading p{font-size:10px;margin-top:4px}.algebraRouteHeading>.menuWorldMeta{flex:none;font-size:12px;padding-left:10px}
+ .algebraMenuStops{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(4,minmax(0,1fr));gap:6px;padding:8px 10px}.algebraMenuStops[data-count="6"]{grid-template-rows:repeat(3,minmax(0,1fr))}.algebraMenu .menuStop{grid-column:auto!important;padding:6px 8px;border-radius:6px!important;gap:1px}.algebraMenu .menuStop[aria-current=step]{padding:5px 7px}.algebraMenuStops[data-count="7"] .menuStop:last-child{grid-column:1/-1!important}
+ .menuStopHeading{gap:6px}.menuStopNumber{font-size:15px;padding-right:6px}.menuStop strong{font-size:12px}.menuStopExample{font-size:clamp(17px,5.2vw,23px);line-height:1.3}.algebraMenuStops[data-count="6"] .menuStopExample{font-size:20px}.menuStopStatus{font-size:10px;gap:5px;padding-top:3px}.menuStatusDot{width:8px;height:8px;font-size:7px}
+ .algebraMenuResume{margin:0 10px;gap:6px}.algebraMenuResume p{font-size:13px}.algebraMenuResume p span{display:block;font-size:11px;margin-top:3px}.algebraMenuResume button{min-height:44px;padding:0 8px;font-size:11px}.algebraMenu .menuContinue{min-width:132px;font-size:15px}.algebraMenuResume:has(#navigationResumeFree:not([hidden])){display:grid;grid-template-columns:1fr auto;grid-template-rows:1fr 1fr;height:106px}.algebraMenuResume:has(#navigationResumeFree:not([hidden])) p{grid-column:1}.algebraMenuResume:has(#navigationResumeFree:not([hidden])) .menuContinue{grid-column:2;grid-row:1/3}.algebraMenuResume:has(#navigationResumeFree:not([hidden])) #navigationResumeFree{grid-column:1;grid-row:2;padding:0 4px}.algebraMenu:has(#navigationResumeFree:not([hidden])){grid-template-rows:136px 62px minmax(0,1fr) 106px 44px}
+ .algebraMenuFoot{padding:0 10px;gap:3px}.algebraMenuFoot>span{font-size:10px;max-width:100px}.algebraMenuFoot button{font-size:11px;padding:0 7px}.algebraMenuFoot button:last-child{margin-left:auto}
+ .touch-writing .trainer .trainHead{grid-template-columns:88px minmax(0,1fr) 90px}
+}
+[data-mode=dark] .algebraMenu{--menu-ink:#f3f4ed;--menu-muted:#bfced4;--menu-paper:#1c2a30;--menu-card:#24363e;--menu-line:#43565f;--menu-active:#463521}
+[data-mode=dark] .algebraRouteHeading{background:#2b4655;border-color:#526977}[data-mode=dark] .algebraRouteHeading p,[data-mode=dark] .algebraRouteHeading>.menuWorldMeta,[data-mode=dark] .menuStopNumber{color:#c3d8e1}
+[data-mode=dark] .algebraMenu .menuStop:hover{background:#304752}[data-mode=dark] .menuStop[aria-current=step] .menuStopNumber,[data-mode=dark] .menuStop[aria-current=step] strong{color:#ffd4a5}[data-mode=dark] .menuStop[aria-current=step] .menuStopStatus{color:#ffcf9d;border-color:#896444}
+@media print{.algebraChrome,.algebraMenu{display:none!important}}
+
+/* Keep the platform row available while the game presents its own stop menu. */
+.algebraPlatform .algebraChrome.lb-header{display:flex!important}
+.algebraPlatform .lb-gamebar{display:none!important}
+.algebraPlatform.journeyGame[data-screen=menu] .app{grid-template-rows:auto minmax(0,1fr)}
+.algebraPlatform .algebraMenuFoot #trainerProfileBtn,.algebraPlatform .algebraMenuFoot #trainerFullscreenBtn{display:none}
+.algebraPlatform.topbar-collapsed .algebraMenuHead{padding-left:max(56px,calc(env(safe-area-inset-left) + 50px))}
+.algebraPlatform.topbar-collapsed .algebraMenuHead .menuBrand{display:none}
+@media(max-height:500px) and (min-width:601px){
+ .algebraPlatform .algebraMenu,.algebraPlatform .algebraMenu:has(.algebraMenuStops[data-count="6"]){grid-template-rows:44px 38px minmax(0,1fr) 44px 24px}
+ .algebraPlatform .algebraRouteHeading{padding-block:2px}
+ .algebraPlatform .algebraRouteHeading h1{font-size:22px}
+ .algebraPlatform .algebraRouteHeading p{margin-top:1px}
+ .algebraPlatform .menuWorldMeta small{display:inline;margin-left:7px;font-size:10px}
+ .algebraPlatform .algebraMenuStops{padding-block:4px}
+ .algebraPlatform .algebraMenu:has(.algebraMenuStops[data-count="6"]){grid-template-rows:44px 28px minmax(0,1fr) 44px 16px}
+ .algebraPlatform .algebraMenu:has(.algebraMenuStops[data-count="6"]) .algebraRouteHeading p{display:none}
+ .algebraPlatform .algebraMenuStops[data-count="6"] .menuStop{padding-block:2px}
+ .algebraPlatform .algebraMenuStops[data-count="6"] .menuStop[aria-current=step]{padding-block:1px}
+}
+@media(max-width:600px){
+ .algebraPlatform .algebraMenuHead .menuBrand{display:none}
+ .algebraPlatform .algebraMenuHead{grid-template-rows:44px 44px}
+ .algebraPlatform .algebraMenu,.algebraPlatform .algebraMenu:has(#navigationResumeFree:not([hidden])){grid-template-rows:92px 62px minmax(0,1fr) 62px 24px}
+ .algebraPlatform .algebraMenu:has(#navigationResumeFree:not([hidden])){grid-template-rows:92px 62px minmax(0,1fr) 106px 24px}
+ .algebraPlatform .algebraMenu:has(#navigationResumeFree:not([hidden])) .menuStop{padding-block:3px}
+ .algebraPlatform .algebraMenu:has(#navigationResumeFree:not([hidden])) .menuStop[aria-current=step]{padding-block:2px}
+ .algebraPlatform .algebraMenuHead #navigationClose{grid-column:2;grid-row:1;width:72px;justify-self:end}
+ .algebraPlatform .algebraMenuActions{grid-column:1/-1;grid-row:1/3;padding-right:74px;grid-template-columns:1fr 1fr}
+ .algebraPlatform .algebraMenuActions button,.algebraPlatform .algebraMenuActions a{font-size:11px;padding-inline:5px;gap:4px}
+ .algebraPlatform .algebraMenuActions svg{width:16px;height:16px}
+ .algebraPlatform .algebraMenuFoot>span{max-width:none}
+}

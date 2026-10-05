@@ -30,7 +30,7 @@ function substitution(e,x,policy){
  if(e.t==='var')return '\\htmlClass{motion-new}{'+(x.n<0?'\\left('+C.ratLatex(x,'auto',policy)+'\\right)':C.ratLatex(x,'auto',policy))+'}';
  if(e.t==='num')return C.latexExpr(e,policy);
  if(e.t==='add')return e.terms.map((t,i)=>{const s=C.splitSign(t);return (s.neg?(i?' - ':'-'):(i?' + ':''))+substitution(s.abs,x,policy);}).join('');
- if(e.t==='mul')return e.factors.map(f=>f.t==='add'?'\\left('+substitution(f,x,policy)+'\\right)':substitution(f,x,policy)).join('\\times ');
+ if(e.t==='mul')return e.factors.map(f=>f.t==='add'?'\\left('+substitution(f,x,policy)+'\\right)':substitution(f,x,policy)).join('\\cdot ');
  if(e.t==='div')return '\\frac{'+substitution(e.n,x,policy)+'}{'+substitution(e.d,x,policy)+'}';
  return '?';
 }
@@ -69,7 +69,7 @@ function numericSign(e){
 function numericTex(e,p){
  if(e.t==='num')return C.ratLatex(e.q,e.fmt||'auto',p);
  if(e.t==='add')return e.terms.map((t,i)=>{const s=numericSign(t),tex=numericTex(s.abs,p);return (s.neg?(i?' - ':'-'):(i?' + ':''))+(s.abs.t==='add'?'\\left('+tex+'\\right)':tex);}).join('');
- if(e.t==='mul')return e.factors.map(f=>{const tex=numericTex(f,p);return f.t==='add'||f.t==='num'&&f.q.n<0?'\\left('+tex+'\\right)':tex;}).join('\\times ');
+ if(e.t==='mul')return e.factors.map(f=>{const tex=numericTex(f,p);return f.t==='add'||f.t==='num'&&f.q.n<0?'\\left('+tex+'\\right)':tex;}).join('\\cdot ');
  return '\\frac{'+numericTex(e.n,p)+'}{'+numericTex(e.d,p)+'}';
 }
 function verifyDemo(ex,x){
@@ -98,7 +98,7 @@ function history(t,r){
  return entries;
 }
 function preview(text,cursor=null){
- text=String(text||'').replace(/\s/g,'').replace(/[−–]/g,'-').replace(/×/g,'*').replace(/÷/g,'/');
+ text=String(text||'').replace(/\s/g,'').replace(/[−–]/g,'-').replace(/[×·⋅]/g,'*').replace(/÷/g,'/');
  if(/[^0-9x,+*/().-]/.test(text))return '\\text{?}';
  const tokens=[...text.matchAll(/\d+(?:[.,]\d*)?|[x,+*/().-]/g)].map(m=>({value:m[0],start:m.index}));
  let i=0,placed=false;
@@ -115,9 +115,9 @@ function preview(text,cursor=null){
   }
   return '\\square';
  }
- function product(){let s=atom();while(i<tokens.length){const t=tokens[i];if(t.value==='*'||t.value==='/'){i++;const p=prefix(t),r=atom();s=t.value==='/'?'\\frac{'+s+p+'}{'+r+'}':s+p+'\\times '+r;}else if(t.value==='x'||t.value==='('||/^\d/.test(t.value))s+=atom();else break;}return s;}
+ function product(){let s=atom();while(i<tokens.length){const t=tokens[i];if(t.value==='*'||t.value==='/'){i++;const p=prefix(t),r=atom();s=t.value==='/'?'\\frac{'+s+p+'}{'+r+'}':s+p+'\\cdot '+r;}else if(t.value==='x'||t.value==='('||/^\d/.test(t.value))s+=atom();else break;}return s;}
  function sum(){let s=product();while(tokens[i]?.value==='+'||tokens[i]?.value==='-'){const t=tokens[i++];s+=prefix(t)+' '+t.value+' '+product();}return s;}
- let tex=sum();while(i<tokens.length){const t=tokens[i++];tex+=prefix(t)+(t.value==='*'?'\\times':t.value==='/'?'\\div':t.value.replace(',','{,}'));}
+ let tex=sum();while(i<tokens.length){const t=tokens[i++];tex+=prefix(t)+(t.value==='*'?'\\cdot':t.value==='/'?'\\div':t.value.replace(',','{,}'));}
  if(cursor===text.length&&!placed)tex+=caret;
  return tex;
 }

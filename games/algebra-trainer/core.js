@@ -233,7 +233,7 @@ function applyEquation(eq,op,operand){
   if((op==='*'||op==='/')&&!operandIsNumeric(operand))throw new Error('Vermenigvuldigen of delen gebeurt hier met een getal.');
   const oq=operandIsNumeric(operand)?simplify(operand).q:null;
   if((op==='*'||op==='/')&&oq.isZero()){
-    if(op==='*')throw new Error('× 0 bewaart de oplossingsverzameling niet.');
+    if(op==='*')throw new Error('· 0 bewaart de oplossingsverzameling niet.');
     throw new Error('÷ 0 kan niet.');
   }
 
@@ -337,13 +337,13 @@ function latexEq(eq,policy=currentPolicy()){
   return `${latexExpr(eq.l,policy,0)} = ${latexExpr(eq.r,policy,0)}`;
 }
 function operationLatex(op,operand,policy=currentPolicy()){
-  const sym=op==='*'?'\\times':op==='/'?'\\div':op==='-'?'-':'+';
+  const sym=op==='*'?'\\cdot':op==='/'?'\\div':op==='-'?'-':'+';
   return `${sym}\\;${latexExpr(operand,policy,0)}`;
 }
 function fallbackText(tex){
   return tex
     .replace(/\\left|\\right/g,'')
-    .replace(/\\times/g,'×').replace(/\\div/g,'÷')
+    .replace(/\\(?:times|cdot)/g,'·').replace(/\\div/g,'÷')
     .replace(/\\,/g,' ')
     .replace(/\{,\}/g,',')
     .replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g,'($1)/($2)')

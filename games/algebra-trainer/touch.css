@@ -66,3 +66,10 @@
  .production .termTile{height:48px;min-height:44px;font-size:24px}
  .verifyCandidate{font-size:30px}.proofLine .touchFieldMath{font-size:27px}
 }
+
+/* Explicit operation choice between whole terms. */
+.termSigns{display:flex;gap:4px;margin-left:auto}
+.termSigns button{min-width:44px;min-height:44px;font-size:24px!important;padding:0!important}
+.termSigns button[aria-pressed=true]{background:#d8eaf2;border-color:var(--blue);color:var(--ink)}
+.termTile:disabled{opacity:.5}
+@media(max-height:500px) and (min-width:601px){.termHead{gap:4px}.termHead>span{font-size:11px}.termHead>button{padding:0 5px!important}}

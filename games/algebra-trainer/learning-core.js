@@ -1,5 +1,5 @@
 /* Five-task missions and exact symbolic answer checks. No sampling is used as proof. */
-(function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory(require('./core.js'));else root.AlgebraLearning=factory(root.AlgebraCore)})(globalThis,C=>{
+(function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory(require('./core.js'),require('./fraction-core.js'));else root.AlgebraLearning=factory(root.AlgebraCore,root.AlgebraFractions)})(globalThis,(C,F)=>{
 'use strict';
 const {R,N,V,Add,Mul,Div,EQ,simplify,applyEquation}=C;
 const goals={A1:'Maak een factor ongedaan door beide leden te delen.',A2:'Maak een optelling ongedaan op beide leden.',A3:'Maak een aftrekking ongedaan op beide leden.',A4:'Maak een deling ongedaan door beide leden te vermenigvuldigen.',B1:'Plan twee stappen: losse term en factor.',B2:'Plan twee stappen bij een negatieve losse term.',B3:'Behoud het teken van de x-term; deel door de juiste factor.',C1:'Behandel de haakjes als één groep.',C2:'Werk een factor met een minteken correct uit.',D1:'Onderscheid de buitenfactor en de factor bij x.',D2:'De noemer deelt de volledige teller.',D3:'Onderscheid de losse term buiten en binnen de groep.',B4:'Onderscheid x gedeeld door a van de losse term.',B5:'Werk een aftrekking buiten de breuk weg.',E1:'Verzamel x-termen met een geldige bewerking op beide leden.',E2:'Kies aan welk lid je de x-termen verzamelt.',E3:'Vergelijk routes naar dezelfde oplossing.'};
@@ -15,7 +15,7 @@ const fromAffine=e=>simplify(Add(Mul(N(e.a),V()),N(e.b)));
 function expandEquation(eq){return EQ(fromAffine(affine(eq.l)),fromAffine(affine(eq.r)))}
 function parseExpression(text){
  text=String(text).replace(/[−–]/g,'-').replace(/×|·/g,'*').replace(/÷/g,'/').replace(/,/g,'.').replace(/\s/g,'');
- if(!text||text.length>140||/[^0-9x+*/().-]/.test(text))throw Error('Gebruik x, getallen en + − × / ( ).');
+ if(!text||text.length>140||/[^0-9x+*/().-]/.test(text))throw Error('Gebruik x, getallen en + − · / ( ).');
  const tokens=text.match(/\d+(?:\.\d+)?|[x+*/().-]/g)||[];let i=0;
  function atom(){const t=tokens[i++];if(t==='+'||t==='-')return t==='-'?Mul(N(-1),atom()):atom();if(t==='x')return V();if(t==='('){const e=sum();if(tokens[i++]!==')')throw Error('Sluit de haakjes.');return e;}if(/^\d+(?:\.\d+)?$/.test(t||'')){const [n,d='']=t.split('.');if(n.length+d.length>7)throw Error('Gebruik kleinere getallen.');return N(R(Number(n+d),10**d.length));}throw Error('Vul een volledige uitdrukking in.');}
  function product(){let e=atom();while(i<tokens.length){const t=tokens[i];if(t==='*'||t==='/'){i++;const r=atom();e=t==='*'?Mul(e,r):Div(e,r);}else if(t==='x'||t==='('||/^\d/.test(t)){e=Mul(e,atom());}else break;}return e;}
@@ -26,7 +26,7 @@ function parseEquation(text){const parts=String(text).split('=');if(parts.length
 const sameExpr=(a,b)=>{const p=affine(a),q=affine(b);return p.a.eq(q.a)&&p.b.eq(q.b)};
 const sameEquation=(a,b)=>sameExpr(a.l,b.l)&&sameExpr(a.r,b.r)||sameExpr(a.l,b.r)&&sameExpr(a.r,b.l);
 function evaluate(e,x){x=typeof x==='object'?R(x.n,x.d):R(x);const q=affine(e);return q.a.mul(x).add(q.b)}
-function operationText(step,policy){return (step.op==='*'?'×':step.op==='/'?'÷':step.op==='-'?'−':'+')+' '+C.fallbackText(C.latexExpr(step.operand,policy));}
+function operationText(step,policy){return (step.op==='*'?'·':step.op==='/'?'÷':step.op==='-'?'−':'+')+' '+C.fallbackText(C.latexExpr(step.operand,policy));}
 function mission(skill,seed=Date.now()){
  if(!goals[skill])throw Error('Onbekende halte.');
  const policy={allowFractions:['B4','B5','D2'].includes(skill),allowDecimals:false,allowNegative:['B3','C2','D3','E1','E2','E3'].includes(skill)};
@@ -58,6 +58,7 @@ function mission(skill,seed=Date.now()){
  return {version:2,skill,seed,index:0,tasks,results:tasks.map(t=>({kind:t.kind,goal:t.goal,done:false,supported:t.guided,errors:0,hints:0,input:'',left:'',right:'',choice:''})),completed:false};
 }
 function validate(task,values){
+ if(task.kind==='fractions')return F.validate(task,values);
  if(['predict','repair','expand'].includes(task.kind)){
   if(task.kind==='repair'&&values.location!==task.location)return {ok:false,message:'De fout zit bij het vermenigvuldigen van de volledige groep.'};
   const answer=parseEquation(values.input);if(!sameEquation(answer,task.expected))return {ok:false,message:'Controleer elke term en beide leden van deze stap.'};
@@ -84,7 +85,7 @@ function hint(task,eq,level){
  if(task.kind==='solve'){const q=affine(eq.l),r=affine(eq.r);if(!q.a.isZero()&&!r.a.isZero())return 'Trek een x-term af van beide leden.';const side=!q.a.isZero()?q:r;if(!side.b.isZero())return 'Werk de losse term weg met de inverse bewerking.';return 'Maak de factor bij x ongedaan.';}
  if(task.expected)return 'Een correcte regel is '+C.fallbackText(C.latexEq(task.expected,task.ex.policy))+'.';
  if(task.kind==='routes')return 'Kijk of de losse term of een x-term verdwijnt, en of er breuken bijkomen.';
- if(task.kind==='build')return task.factor.n+' × '+task.x.n+' = '+task.factor.mul(task.x).n+'. Het ontbrekende getal is '+task.expectedNumber.n+'.';
+ if(task.kind==='build')return task.factor.n+' · '+task.x.n+' = '+task.factor.mul(task.x).n+'. Het ontbrekende getal is '+task.expectedNumber.n+'.';
  return 'Vervang elke x door '+C.fallbackText(C.ratLatex(task.proposed,task.ex.policy))+'.';
 }
 function causal(before,after,op,operand){

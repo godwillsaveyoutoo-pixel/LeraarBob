@@ -20,7 +20,7 @@ function cancellation(side,delta,after,policy){
 function distributed(side,op,operand,policy){
  const parts=terms(side),o=C.latexExpr(operand,policy);
  return parts.map((e,i)=>{const s=C.splitSign(e),t=C.latexExpr(s.abs,policy),sign=s.neg?(i?' - ':'-'):(i?' + ':'');
- return sign+(op==='/'?'\\frac{'+t+'}{'+mark('new',o)+'}':group(t)+mark('new','\\times '+group(o)));
+ return sign+(op==='/'?'\\frac{'+t+'}{'+mark('new',o)+'}':group(t)+mark('new','\\cdot '+group(o)));
  }).join('');
 }
 function frames(before,op,operand,policy){
@@ -34,7 +34,7 @@ function frames(before,op,operand,policy){
   label=(op==='-'?'Trek ':'Tel ')+C.fallbackText(o)+(op==='-'?' af van':' op bij')+' beide leden.';
   combine=partial.includes('motion-zero')?'Tegengestelde termen worden nul.':'Voeg gelijksoortige termen samen.';
  }else{
-  raw=op==='/'?'\\frac{'+l+'}{'+mark('new',o)+'} = \\frac{'+r+'}{'+mark('new',o)+'}':group(l)+mark('new','\\times '+group(o))+' = '+group(r)+mark('new','\\times '+group(o));
+  raw=op==='/'?'\\frac{'+l+'}{'+mark('new',o)+'} = \\frac{'+r+'}{'+mark('new',o)+'}':group(l)+mark('new','\\cdot '+group(o))+' = '+group(r)+mark('new','\\cdot '+group(o));
   partial=distributed(before.l,op,operand,policy)+' = '+distributed(before.r,op,operand,policy);
   label=(op==='/'?'Deel':'Vermenigvuldig')+' beide volledige leden '+(op==='/'?'door ':'met ')+C.fallbackText(o)+'.';
   combine='Voer de bewerking uit bij elke term.';

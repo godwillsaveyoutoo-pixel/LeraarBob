@@ -1,13 +1,29 @@
-# Algebrawereld v0.4
+# Algebrawereld v0.4.5
 
-De platformversie uit `Axioma_Algebrawereld_v0.4 (3).zip` vervangt het eerdere
+De platformversie uit `Axioma-Algebrawereld-v0.4.5.zip` vervangt het eerdere
 algebraspel op dezelfde ingang: `games/algebra-trainer/`. De spel-id
 `algebra-trainer`, het centrale account en de bestaande opslagsleutels blijven
 behouden. De catalogus toont één hoofdkaart voor Algebrawereld.
 
+## Startmenu en hervatten
+
+Een nieuw bezoek opent rechtstreeks het kaartjesmenu uit v0.4.5: een donkere
+actierij, een afzonderlijke wereldkop, zeven haltes met voorbeeldvergelijkingen
+en status, en een oranje knop **Verder spelen**. De huidige halte is oranje
+omlijnd. **Werelden** opent de geïllustreerde kaart. Herladen tijdens oefenen
+behoudt het werkbord; opnieuw bezoeken opent het menu met hetzelfde werk
+beschikbaar via Verder spelen. Stelsels krijgt hetzelfde menu met zes haltes.
+
+De platformversie gebruikt de gedeelde leraarBob-balk voor het centrale
+account, echte XP, volledig scherm, licht/donker, menu en inklappen. De losse
+account- en volledig-schermknoppen uit de offline-menubodem blijven als
+DOM-nodes aanwezig, maar worden in de platformversie niet getoond. De vaste
+platformknoppen blijven rechtstreeks bereikbaar. Het kaartjesmenu verdeelt
+zijn ruimte over kop, opgaven en hervatten binnen de resterende viewport.
+
 ## Speelbare route
 
-De kaart toont vijf werelden. **Vergelijkingen** bevat zeven speelbare haltes;
+Via Werelden toont de kaart vijf werelden. **Vergelijkingen** bevat zeven speelbare haltes;
 **Stelsels** bevat de bestaande zes haltes. Letters begrijpen, Rekenen met
 letters en Formules zijn zichtbaar als **Binnenkort** en tellen niet mee in
 de voortgang. Alle speelbare haltes zijn direct toegankelijk.
@@ -30,11 +46,15 @@ tussenstap of uitwerking van haakjes.
 
 Leerlingen bouwen tussenstappen met contextuele bouwstenen. Bij controle
 vervangen ze x door een voorgestelde waarde, berekenen beide leden en
-vergelijken de uitkomsten. **Kijk even mee** toont een bewegend voorbeeld met
+vergelijken de uitkomsten. **Hulp** toont een bewegend voorbeeld met
 andere getallen; pauzeren, herhalen en terugkeren bewaren de eigen opgave.
-Een nieuwe ronde vermijdt de getoonde vragen van de vorige ronde.
+Een nieuwe ronde vermijdt de getoonde vragen van de vorige ronde. Bij het
+bouwen kiest de leerling expliciet + of − tussen termen. Vermenigvuldigen
+wordt met de maalpunt · aangeduid. De breukenhalte biedt Gelijknamig maken,
+Noemers wegwerken en eigen opbouw van de volledige volgende regel.
 
-**Werkvormen** in het gedeelde menu biedt vrije reeksen, oefenbladen met
+Het kaartjesmenu biedt Vrij oefenen, Oefenblad en Klasbattle.
+**Werkvormen** in het gedeelde menu biedt ook vrije reeksen, oefenbladen met
 verbetersleutel, stelsels, machten en wortels en de bestaande klasbattles.
 De stelselsmodule behoudt grafisch oplossen, substitutie en combinatie.
 De oudere wereldkaart blijft beschikbaar via `legacy.html`.
@@ -67,7 +87,7 @@ liggende viewport.
 ## Verificatie
 
 ```sh
-node --test tests/algebra-v04-journey.test.cjs tests/algebra-v04-motion.test.cjs tests/algebra-v04-choices.test.cjs tests/algebra-trainer.test.cjs tests/algebra-learning.test.cjs tests/algebra-world.test.cjs tests/algebra-class.test.cjs tests/bewerkingen-trainer.test.cjs tests/stelsels-workshop.test.cjs tests/catalog.test.cjs tests/catalog-progress.test.cjs
+node --test tests/algebra-v04-journey.test.cjs tests/algebra-v04-motion.test.cjs tests/algebra-v04-choices.test.cjs tests/algebra-v045-fractions.test.cjs tests/algebra-trainer.test.cjs tests/algebra-learning.test.cjs tests/algebra-world.test.cjs tests/algebra-class.test.cjs tests/bewerkingen-trainer.test.cjs tests/stelsels-workshop.test.cjs tests/catalog.test.cjs tests/catalog-progress.test.cjs
 node scripts/build-catalog.cjs --check
 ```
 
@@ -81,6 +101,10 @@ node tests/algebra-v04-browser.cjs
 node tests/algebra-v04-touch-browser.cjs
 node tests/algebra-v04-lesson-browser.cjs
 node tests/algebra-v04-platform-browser.cjs
+node tests/algebra-v045-entry-browser.cjs
+node tests/algebra-v045-navigation-browser.cjs
+node tests/algebra-v045-fractions-browser.cjs
+node tests/algebra-v045-signs-browser.cjs
 ```
 
 De proeven controleren alle zeven haltes via echte bediening, correcte en
