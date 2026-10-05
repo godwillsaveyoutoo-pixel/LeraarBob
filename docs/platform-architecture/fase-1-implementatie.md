@@ -428,3 +428,19 @@ De verdere uitvoering blijft hieronder afgebakend.
 Volgende inhoudelijke prioriteit: Algebrawereld/stelsels en de gezamenlijke
 Learn/Battle-aansluiting. De bestaande data en werkborden blijven daarbij
 het vertrekpunt; een nieuw menu alleen voltooit die werkpakketten niet.
+
+
+### Prioriteit: klasleren en klasbattle in Rechten, Getallen en Algebra
+
+De drie prioritaire werelden zijn Rechtenwereld, Getallenwereld en Algebrawereld. Voor elk zijn twee duidelijke klasroutes nodig:
+
+- **Klasleren:** oefenen, hulp en verbeteren; de leerkracht volgt, bespreekt en kan meedoen. Het klasscherm toont voortgang en bespreekpunten, zonder wedstrijdpodium.
+- **Klasbattle:** code delen, wachtkamer, getimede ronde, eigen antwoord indienen, gezamenlijke uitslag, volgende ronde en eindpodium. De leerkracht bepaalt de overgang; animaties blokkeren geen acties.
+
+Gemeenschappelijke kwaliteitscriteria: korte teksten, zichtbare primaire actie, dezelfde antwoordbediening als solo, echte leerlinginvoer in simulatie, herladen zonder verlies, compacte schermen en een blijvend bereikbare inklap-/herstelknop. Grafische kwaliteit hoort bij iedere stap: rustige kleurhiërarchie, verzorgde deelnemerskaarten, duidelijke tussenstanden, eigen positie, gedeelde plaatsen en een top 3. Beperkte beweging ondersteunt de overgang; reduced-motion wordt gerespecteerd.
+
+**In deze stap uitgevoerd:** één gedeelde podium-/ranglijstpresentatie voor de bestaande Rechten-, Algebra- en Getallenklasbattleproviders, en de nieuwere Getallen-sessies. Wachtkamer en uitslag passen binnen het scherm; deelnemers en ranglijst scrollen intern terwijl vervolgacties bereikbaar blijven. De Getallenbattle krijgt ook tussenstanden per ronde, met behoud van de uitwerking. Geen nieuwe puntentelling of databasewijziging. De bestaande klasleermodus blijft zonder podium.
+
+**Nog uit te voeren:** een echte Klaslearn-aansluiting voor Rechten en Algebra, hun gezamenlijke afspraken voor meedoen/begeleiden, en verdere afwerking van de klasleerbespreking. De bestaande Learn-groep in Rechten is nog geen volledige leerkrachtgestuurde klasmodus. De nieuwe presentatie betekent dus niet dat deze ontbrekende modi al bestaan.
+
+Validatie: `tests/battle-presentation-browser.cjs` controleert de drie providers en de nieuwe Getallenroute, 1280×800 / 640×360 / 390×844 / 320×700, inklappen/herstellen, bewaren bij herladen, gedeelde plaatsen, eigen plaats buiten de top 10, veilige aliasweergave, reduced-motion en rondeovergangen. Daarnaast blijven de bestaande simulatie- en Getallen Learn/Battle-regressies van toepassing.

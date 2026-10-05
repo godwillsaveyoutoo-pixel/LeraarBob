@@ -3,6 +3,8 @@
 const $=id=>document.getElementById(id),Game=window.BattleGame,baseFrame=$('board');
 let frame=baseFrame;
 const simulationBoards=new Map();
+const BattlePresentation=window.LeraarBobBattlePresentation;
+if(BattlePresentation){document.body.classList.add('battle-stage');const host=document.createElement('div');host.id='battleStandings';$('ranking').before(host);host.append($('ranking'));}
 const boardQuestions=new WeakMap();
 const moduleURL=new URL('.',document.currentScript.src),parameters=new URLSearchParams(location.search),embedded=parameters.get('hub')==='1'&&window.parent!==window;
 const simulationRequested=()=>new URLSearchParams(location.search).get('simulation')==='1';
@@ -30,7 +32,7 @@ const pendingKey=()=>`${Game.id==='vectoren'?'vector':Game.id}-class-answer:${ac
 function store(key,value){try{if(value===null)localStorage.removeItem(key);else localStorage.setItem(key,JSON.stringify(value));}catch{}}
 function read(key){try{return JSON.parse(localStorage.getItem(key)||'null');}catch{return null;}}
 function notice(text){$('notice').textContent=text||'';}
-function display(screen){document.body.dataset.playing='false';for(const id of ['login','setup','session'])$(id).hidden=id!==screen;portalStatus();}
+function display(screen){document.body.dataset.playing='false';if(screen!=='session')delete document.body.dataset.classStage;for(const id of ['login','setup','session'])$(id).hidden=id!==screen;portalStatus();}
 function errorText(e){if(e?.code==='PGRST202'||/could not find.*function/i.test(e?.message||''))return 'De online klasmodus is nog niet beschikbaar. Probeer later opnieuw.';return e?.message||'De verbinding is onderbroken. Probeer opnieuw.';}
 // Serialize requests so an older poll cannot replace a newer round or submission.
 function rpc(action,data={}){
@@ -68,6 +70,7 @@ function resetSimulationBoards(){
 function rank(rows,key){const sorted=[...rows].sort((a,b)=>b[key]-a[key]||a.alias.localeCompare(b.alias)||a.user_id.localeCompare(b.user_id));let previous=null,place=0;return new Map(sorted.map((p,i)=>{if(p[key]!==previous)place=i+1;previous=p[key];return[p.user_id,place]}));}
 function renderRanking(){
  const signature=JSON.stringify([state.phase,state.round,state.members]);if(signature===lastRanking)return;lastRanking=signature;
+ if(BattlePresentation){BattlePresentation.render($('battleStandings'),{rows:state.members.map(p=>({id:p.user_id,alias:p.alias,points:p.points,previousPoints:state.round>0?p.previous_points:undefined})),ownId:account.id,final:['finished','closed'].includes(state.phase),roundKey:state.id+':'+state.round,list:$('ranking')});return;}
  const ranks=rank(state.members,'points'),before=rank(state.members,'previous_points');$('ranking').replaceChildren();
  const sorted=[...state.members].sort((a,b)=>ranks.get(a.user_id)-ranks.get(b.user_id)||a.alias.localeCompare(b.alias));
  const shown=sorted.filter((p,index)=>index<10||p.user_id===account.id);
@@ -96,6 +99,7 @@ function accept(next){
 }
 function render(){
  const phase=state.phase,late=waiting(),activeMembers=state.members.filter(p=>(p.eligible_from_round||0)<=state.round),ended=['finished','closed'].includes(phase),results=phase==='results'||ended;
+ if(BattlePresentation){if(phase==='lobby'||results)document.body.dataset.classStage=phase;else delete document.body.dataset.classStage;$('battleStandings').hidden=reviewOpen;}
  const settingsOpen=!!$('classSimulationControls')?.open;document.body.dataset.playing=String(!late&&!settingsOpen&&['question','grading'].includes(phase));document.body.dataset.simulationSettings=String(settingsOpen);$('session').dataset.phase=phase;$('session').classList.toggle('host',state.owner);$('code').textContent=state.code;$('phaseLabel').textContent=({lobby:'WACHTKAMER',question:'RONDE BEZIG',grading:'ANTWOORDEN NAKIJKEN',results:'RANGLIJST',finished:'MISSIE VOLTOOID',closed:'SESSIE GESLOTEN'})[phase];
  $('sessionTitle').textContent=phase==='lobby'?'Wachten op de klas':ended?'Samen op koers':`Ronde ${state.round+1} van ${state.total}`;
  $('closeSession').hidden=!state.owner||ended;$('leaveSession').hidden=state.owner||phase!=='lobby';$('copyLink').hidden=!!simulator||!state.owner||ended;$('joinInstructions').hidden=!!simulator||!state.owner||phase!=='lobby';
