@@ -7,7 +7,7 @@ const root=path.resolve(__dirname,'..'),out=process.env.ALGEBRA_SCREENSHOTS||'/t
  const browser=await chromium.launch({headless:true,executablePath:process.env.ALGEBRA_CHROMIUM_PATH,args:['--no-sandbox','--disable-dev-shm-usage']});
  const page=await browser.newPage({viewport:{width:1280,height:800}}),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.fulfill({body:''}));
  const C=require(root+'/games/algebra-trainer/core.js'),J=require(root+'/games/algebra-trainer/journey-core.js'),L=require(root+'/games/algebra-trainer/learning-core.js'),T=require(root+'/games/algebra-trainer/touch-core.js'),Touch=require('./algebra-v04-touch-controls.cjs');
- const base='http://127.0.0.1:'+server.address().port+'/games/algebra-trainer/';await page.goto(base);await page.waitForSelector('[data-stop]',{state:'attached'});await page.clock.install();
+ const base='http://127.0.0.1:'+server.address().port+'/games/algebra-trainer/';await page.goto(base);await page.waitForSelector('[data-menu-stop]',{state:'attached'});await page.clock.install();
  async function load(run,index,screen='trainer'){
   const fixture={version:1,runs:{[run.skill]:run},chapterJourney:J.normalize(null),journey:null,mission:run.skill,activeSet:run.tasks.map(t=>t.ex),trainerIndex:index,perExercise:{},screen,settings:{allowFractions:false,allowDecimals:false,allowNegative:false},selection:{},includeKey:true,shuffle:true};
   await page.evaluate(f=>AxiomaGame.storage.setItem('leraarbob.algebra.v1',JSON.stringify(f)),fixture);await page.reload();await page.waitForSelector('#'+screen+'Screen:not(.hidden)');

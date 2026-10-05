@@ -1,4 +1,4 @@
-@import url('../rechten/rechtenwereld/styles/classroom.css');
+
 body.algebra-classroom{background:#f7f4ec;color:#263f38}
 .algebra-classroom .card{background:#fffdf6;border-color:#afbdaf}
 .algebra-classroom .setup{display:block;max-width:1000px;margin:auto}
@@ -21,3 +21,22 @@ body.algebra-classroom{background:#f7f4ec;color:#263f38}
 .algebra-classroom .ranking li{color:#263f38;animation:none}
 .algebra-classroom button:hover:not(:disabled){background:#e0ece4;color:#234b3c}
 .algebra-classroom leraarbob-topbar::part(crumb-current){color:#3d6356}
+
+/* Match the world and level menus, including the active session. */
+body.algebra-classroom{font-family:system-ui,sans-serif;background:var(--paper,#f6f2e9);color:var(--ink,#142c40);color-scheme:light}
+.algebra-classroom .algebraChrome.lb-header{display:flex!important}.algebra-classroom .lb-gamebar{display:none!important}
+.algebra-classroom main{width:100%;max-width:1100px;margin:0 auto;padding:0 20px 24px}
+.algebra-classroom .algebraRouteHeading{margin:0 -20px 20px;padding:18px 24px;min-height:100px}.algebra-classroom .algebraRouteHeading h1{font-size:32px;color:inherit}.algebra-classroom .algebraRouteHeading a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.algebra-classroom h1,.algebra-classroom h2{font-family:system-ui,sans-serif;font-weight:750;line-height:1.15}.algebra-classroom h1{font-size:28px}.algebra-classroom h2{font-size:21px}
+.algebra-classroom :is(.card,dialog,.members li,.ranking li){background:var(--menu-card,#fffdf8);color:var(--ink);border:1px solid var(--line);border-radius:8px;box-shadow:0 2px 4px #3333330b}
+.algebra-classroom .setup-intro{padding:0;margin:20px 0}.algebra-classroom .setup-intro p{font-size:16px;line-height:1.5}.algebra-classroom .eyebrow{color:var(--muted);font-weight:700}.algebra-classroom #notice:empty{display:none}
+.algebra-classroom button,.algebra-classroom .button{min-height:44px;border-radius:6px;font-family:system-ui,sans-serif}.algebra-classroom .primary{background:#ff8a24;color:#251307;border-color:#dc6704}.algebra-classroom .primary:hover{background:#ff9d45;color:#251307}
+.algebra-classroom :is(input,select){background:var(--menu-card,#fffdf8);color:var(--ink);border:1px solid var(--line);border-radius:6px;min-height:44px}
+.algebra-classroom #classTypes label:has(:checked){background:var(--soft);border-color:#52778d}.algebra-classroom #classTypes input,.algebra-classroom .number-options input{accent-color:#234e66;min-height:20px}
+.algebra-classroom .ranking li{color:var(--ink)}.algebra-classroom #roundBreakdown span{color:var(--ink);background:var(--soft);border-color:var(--line)}
+.algebra-classroom .advance{padding:12px 0;background:var(--paper)}.algebra-classroom .ranking li.mine{background:var(--soft);border-left:4px solid #e97613}
+.algebra-classroom leraarbob-topbar::part(crumb-current){color:inherit}
+.algebra-classroom[data-playing=true] main>.algebraRouteHeading{display:none}
+.algebra-classroom[data-playing=true].topbar-collapsed .session-bar{padding-left:0}
+html[data-mode=dark] .algebra-classroom{--menu-card:#24363e;color-scheme:dark}
+@media(max-width:600px){.algebra-classroom main{padding:0 12px 20px}.algebra-classroom .algebraRouteHeading{margin:0 -12px 16px;padding:12px}.algebra-classroom .algebraRouteHeading h1{font-size:26px}.algebra-classroom h1{font-size:24px}.algebra-classroom .card{padding:14px}}

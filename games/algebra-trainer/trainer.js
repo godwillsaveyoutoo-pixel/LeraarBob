@@ -587,7 +587,7 @@ function renderSummary(){
  $('#summaryNextBtn').textContent=next?'Volgende halte →':'Naar Stelsels →';
 }
 $('#summaryReplayBtn').onclick=()=>startTopic(mission);
-$('#summaryWorldBtn').onclick=()=>{worldView.open('equations');showScreen('world')};
+$('#summaryWorldBtn').onclick=()=>navigation.open();
 $('#summaryNextBtn').onclick=()=>{const t=recommended();if(t)startTopic(t.id);else{worldView.open('systems');showScreen('world')}};
 function historyEntries(){const t=task(),ex=currentExercise();return t?.kind==='fractions'?fractionView.history(t,result()):t&&touchKinds.includes(t.kind)?AlgebraTouch.history(t,result()):trainerStates.map((eq,i)=>({tex:latexEq(eq,ex.policy),caption:i?stepText(trainerStepLog[i-1].op,trainerStepLog[i-1].operand,ex.policy):'Oorspronkelijke opgave'}));}
 function renderHistory(){const entries=historyEntries();historyIndex=Math.max(0,Math.min(entries.length-1,historyIndex));$('#historyPosition').textContent=`${historyIndex+1} / ${entries.length}`;$('#historyEquation').dataset.mathTex=entries[historyIndex].tex;$('#historyEquation').innerHTML=motionHTML(entries[historyIndex].tex);$('#historyAction').textContent=entries[historyIndex].caption;$('#historyPrevBtn').disabled=historyIndex===0;$('#historyNextBtn').disabled=historyIndex===entries.length-1;fitMath();}
@@ -596,19 +596,19 @@ $('#resumeFreeBtn').onclick=()=>{rememberExercise();if(learningRun)learningRun.w
 window.addEventListener('resize',fitMath);
 function init(){
   restore();
-  worldView=AlgebraWorldView.mount({progress:()=>journey,chapter:()=>chapterJourney,runs:()=>runs,current:()=>mission,solved:()=>worldLegacy,location:()=>mapLocation,remember:id=>{mapLocation=id;persist();},run:id=>runs[id],canResume:()=>activeSet.length>0&&(!learningRun||!learningRun.completed),start:startTopic,resume:()=>{if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer')}});
+  worldView=AlgebraWorldView.mount({progress:()=>journey,chapter:()=>chapterJourney,runs:()=>runs,current:()=>mission,solved:()=>worldLegacy,location:()=>mapLocation,remember:id=>{mapLocation=id;persist();},run:id=>runs[id],canResume:()=>activeSet.length>0&&(!learningRun||!learningRun.completed),openWorld:id=>{if(id==='systems')location.href='stelsels.html?screen=menu';else navigation.open();},start:startTopic,resume:()=>{if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer')}});
   navigation=AlgebraNavigation.mount({
-   screen:()=>screen,show:showScreen,canResume:()=>!!activeSet.length,canResumeFree:()=>!!freeSession&&!!mission,resumeFree:()=>$('#resumeFreeBtn').click(),
+   screen:()=>screen,show:showScreen,canResume:()=>!!activeSet.length,canResumeFree:()=>mission?!!freeSession:!!activeSet.length,resumeFree:()=>mission?$('#resumeFreeBtn').click():showScreen('trainer'),
    navigate:name=>{if(name==='world'){if(mission)worldView.open(J.worldFor(mission));showScreen('world');}else if(name==='trainer'){if(activeSet.length){if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer');}}else if(name==='preview'&&!activeSet.length){showScreen('setup');showSetupMessage('Kies eerst opgaven voor je oefenblad.',false);}else showScreen(name);},
    title:()=>J.stop(mission)?.title||AlgebraWorld.topic(mission)?.title||'Vrij oefenen',position:()=>activeSet.length?(trainerIndex+1)+' / '+activeSet.length:'',
-   world:()=> 'Vergelijkingen',stops:()=>J.stops.map((st,i)=>{const info=J.info(chapterJourney,st.id,runs,journey,worldLegacy);return {id:st.id,number:i+1,title:st.title,status:info.status,current:st.id===mission||st.skills.some(k=>'eq-'+k===mission)};}),start:startTopic
+   world:()=> 'Vergelijkingen',stops:()=>J.stops.map((st,i)=>{const info=J.info(chapterJourney,st.id,runs,journey,worldLegacy);return {id:st.id,number:i+1,title:st.title,status:info.status,startId:info.activeId,total:info.total,current:st.id===mission||st.skills.some(k=>'eq-'+k===mission)};}),start:startTopic
   });
   // A fresh open lands on the designed menu; reloading keeps the current work screen.
   const navigationType=performance.getEntriesByType('navigation')[0]?.type;
   if(navigationType&&navigationType!=='reload')screen='menu';
   const params=new URLSearchParams(location.search),requestedWorld=params.get('world');if(J.world(requestedWorld)||AlgebraWorld.world(requestedWorld)){worldView.open(requestedWorld);if(performance.getEntriesByType('navigation')[0]?.type!=='reload')screen='world';}
   const requestedTopic=J.stop(params.get('topic'))||AlgebraWorld.topic(params.get('topic'));if((J.stop(requestedTopic?.id)||requestedTopic?.engine==='equations')&&performance.getEntriesByType('navigation')[0]?.type!=='reload'){startTopic(requestedTopic.id);screen='trainer';}
-  if(['setup','preview','tools','menu'].includes(params.get('screen'))&&performance.getEntriesByType('navigation')[0]?.type!=='reload')screen=params.get('screen');
+  if(['setup','preview','tools','menu','world'].includes(params.get('screen'))&&performance.getEntriesByType('navigation')[0]?.type!=='reload')screen=params.get('screen');
   renderTypeLevel();updateTotal();refreshNav();if(screen==='summary')renderSummary();if(screen==='history'&&activeSet.length)renderHistory();showScreen(screen);
   /* Wanneer KaTeX later klaar is dan de app, render nogmaals zonder de toestand te wijzigen. */
   setTimeout(()=>{

@@ -15,35 +15,42 @@ const icons={world:'<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="
 function icon(id){return '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+icons[id]+'</svg>';}
 function math(tex){return window.katex?katex.renderToString(tex,{throwOnError:false,output:'htmlAndMathml'}):esc(tex);}
 function mount(api){
- const $=s=>document.querySelector(s);let previous=api.canResume()?(api.resumeScreen||'trainer'):(api.homeScreen||'world'),origin=null;
+ const $=s=>document.querySelector(s);let previous=api.canResume()?(api.resumeScreen||'trainer'):(api.homeScreen||'world'),origin=null,selected=null;
+ const key='algebra.menu.selection.'+api.world();try{selected=sessionStorage.getItem(key);}catch{}
+ function choose(id){selected=id;try{sessionStorage.setItem(key,id);}catch{}render();}
  function render(){
-  const stops=api.stops(),resume=api.canResume();
+  const stops=api.stops();
+  if(!stops.some(s=>s.id===selected))selected=(stops.find(s=>s.current)||stops[0])?.id;
+  const chosen=stops.find(s=>s.id===selected),started=chosen?.status==='Bezig';
   $('#navigationTitle').textContent=api.world();$('#navigationBreadcrumb').textContent='Algebrawereld › '+api.world();$('#navigationRouteTitle').textContent=stops.length+' haltes';
-  $('#navigationContext').innerHTML=resume?'<strong>'+esc(api.title())+'</strong><span> · opdracht '+esc(api.position())+'</span>':'<span>Kies een halte om te beginnen.</span>';
+  $('#navigationContext').innerHTML=chosen?'<strong>'+esc(chosen.title)+'</strong><span> · '+(started&&chosen.current?'opdracht '+esc(api.position()):started?'bewaarde reeks':/geoefend|gelukt/i.test(chosen.status)?'opnieuw oefenen':String(chosen.total||6)+' opdrachten')+'</span>':'Kies een level.';
   $('#navigationActions').innerHTML=[['world','Werelden'],['setup','Vrij oefenen'],['preview','Oefenblad']].map(([id,title])=>'<button type="button" data-menu-nav="'+id+'">'+icon(id)+'<span>'+title+'</span></button>').join('')+(window.AXIOMA_STANDALONE?'<button type="button" data-menu-nav="battle" disabled title="Klasbattle is beschikbaar in de platformversie">'+icon('battle')+'<span>Klasbattle<small>Online</small></span></button>':'<a data-menu-nav="battle" href="'+esc(api.battleHref||'classroom.html')+'" title="Klasbattle met vergelijkingen">'+icon('battle')+'<span>Klasbattle</span></a>');
   $('#navigationStops').dataset.count=stops.length;
   $('#navigationStops').innerHTML=stops.map(s=>{
    const tex=s.exampleTex||examples[s.id];
    const status=s.status==='Zelfstandig gelukt'?'independent':/geoefend/i.test(s.status)?'finished':s.status==='Bezig'?'started':'new';
-   return '<button type="button" class="menuStop" data-menu-stop="'+esc(s.id)+'" data-status="'+status+'" aria-current="'+(s.current?'step':'false')+'"><span class="menuStopHeading"><span class="menuStopNumber">'+String(s.number).padStart(2,'0')+'</span><strong>'+(s.id==='sys-infinite'?'<span class="menuStopFullTitle">'+esc(s.title)+'</span><span class="menuStopShortTitle">Oneindig veel</span>':esc(s.title))+'</strong></span><span class="menuStopExample" data-math-tex="'+esc(tex||'')+'">'+(tex?math(tex):esc(s.example||''))+'</span><span class="menuStopStatus"><span class="menuStatusDot" aria-hidden="true">'+(status==='independent'?'✓':'')+'</span>'+esc(s.status)+'</span></button>';
+   return '<button type="button" class="menuStop" data-menu-stop="'+esc(s.id)+'" data-status="'+status+'" aria-pressed="'+(s.id===selected)+'" aria-current="'+(s.current?'step':'false')+'"><span class="menuStopHeading"><span class="menuStopNumber">'+String(s.number).padStart(2,'0')+'</span><strong>'+(s.id==='sys-infinite'?'<span class="menuStopFullTitle">'+esc(s.title)+'</span><span class="menuStopShortTitle">Oneindig veel</span>':esc(s.title))+'</strong></span><span class="menuStopExample" data-math-tex="'+esc(tex||'')+'">'+(tex?math(tex):esc(s.example||''))+'</span><span class="menuStopStatus"><span class="menuStatusDot" aria-hidden="true">'+(status==='independent'?'✓':'')+'</span>'+esc(s.status)+'</span></button>';
   }).join('');
-  $('.menuContinue').disabled=!resume;
+  $('.menuContinue').disabled=!chosen;
+  $('.menuContinue').textContent=started?'Verder spelen →':/geoefend|gelukt/i.test(chosen?.status||'')?'Opnieuw spelen →':'Spelen →';
   $('#navigationResumeFree').hidden=!api.canResumeFree?.();
   $('#navigationStatus').textContent='Je werk blijft bewaard.';
  }
- function open(button){if(api.screen()!=='menu'){previous=api.screen();origin=button;}api.show('menu');$('#navigationClose').focus({preventScroll:true});}
+ function open(button){if(api.screen()!=='menu'){previous=api.screen();origin=button;selected=api.stops().find(s=>s.current)?.id||selected;try{if(selected)sessionStorage.setItem(key,selected);}catch{}}api.show('menu');$('#navigationStops').querySelector('[aria-pressed=true]')?.focus({preventScroll:true});}
  function close(){api.show(previous==='menu'?(api.homeScreen||'world'):previous);origin?.focus({preventScroll:true});}
  document.querySelectorAll('[data-trainer-menu]').forEach(b=>b.onclick=()=>open(b));
  $('#navigationClose').onclick=close;
  $('.menuBrand').onclick=()=>api.navigate('world');
  $('#navigationScreen').addEventListener('click',e=>{const b=e.target.closest('[data-menu-nav]');if(b&&!b.disabled&&b.dataset.menuNav!=='battle')api.navigate(b.dataset.menuNav);});
  $('#navigationResumeFree').onclick=()=>api.resumeFree?.();
- $('#navigationStops').onclick=e=>{const b=e.target.closest('[data-menu-stop]');if(b)api.start(b.dataset.menuStop);};
+ $('#navigationStops').onclick=e=>{const b=e.target.closest('[data-menu-stop]');if(b){choose(b.dataset.menuStop);$('#navigationStops').querySelector('[data-menu-stop="'+selected+'"]')?.focus({preventScroll:true});}};
  $('#trainerFullscreenBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{$('#navigationStatus').textContent='Volledig scherm is hier niet beschikbaar.';}};
  document.addEventListener('fullscreenchange',()=>{$('#trainerFullscreenBtn').textContent=document.fullscreenElement?'Venster herstellen':'Volledig scherm';});
  $('#trainerProfileBtn').onclick=()=>document.getElementById('axioma-game-status')?.shadowRoot?.querySelector('.dock')?.click();
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&api.screen()==='menu'){e.preventDefault();close();}});
- return {render,open};
+ $('.menuContinue').onclick=()=>{const s=api.stops().find(s=>s.id===selected);if(!s)return;if(s.current&&s.status==='Bezig'&&api.canResume())api.navigate('trainer');else api.start(s.startId||s.id);};
+ window.AlgebraShell?.mount({world:api.world(),screen:api.screen,navigate:id=>id==='menu'?open():api.navigate(id)});
+ return {render,open,select:choose};
 }
 window.AlgebraNavigation=Object.freeze({mount});
 })();

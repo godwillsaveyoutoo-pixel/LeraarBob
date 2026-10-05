@@ -1,0 +1,69 @@
+/* Shared visual language for worlds, levels, workspaces and the class lobby. */
+.algebraPlatform,.algebra-classroom{--ink:#142c40;--muted:#52677a;--line:#cbd2d6;--paper:#f6f2e9;--bg:#f6f2e9;--accent:#234e66;--soft:#e5eef3;--blue:#234e66;--lb-surface:#163b51;--lb-ink:#f5f8fa;--lb-line:#7091a566;--lb-hover:#ffffff16;--lb-control-radius:6px;--lb-panel-radius:8px;font-family:system-ui,sans-serif;color:var(--ink);background:var(--paper)}
+.algebraPlatform .app{grid-template-rows:auto auto minmax(0,1fr)!important}
+.algebraSectionNav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));flex:none;min-height:44px;background:#163b51;color:white;border-top:1px solid #ffffff25;isolation:isolate}
+.algebraSectionNav a{min-height:44px;min-width:0;display:flex;align-items:center;justify-content:center;text-align:center;gap:6px;padding:4px 10px;color:inherit!important;text-decoration:none;font:600 14px/1.15 system-ui;border-right:1px solid #ffffff25;border-radius:0;box-sizing:border-box;touch-action:manipulation}
+.algebraSectionNav a:hover{background:#ffffff15}.algebraSectionNav a[aria-current=page]{background:#dce9ef;color:#163b51!important;box-shadow:inset 0 -3px #ff8a24}
+.algebraSectionNav a:focus-visible{outline:3px solid #ffb968;outline-offset:-3px}
+.topbar-collapsed .algebraSectionNav{padding-left:max(52px,calc(env(safe-area-inset-left) + 50px))}
+.algebraPlatform .algebraMenu{grid-template-rows:82px minmax(0,1fr) 64px 24px!important}
+.algebraPlatform .algebraMenuHead{display:none!important}
+.algebraPlatform .algebraMenuFoot{background:#426174}.algebraMenuFoot>span{font-size:12px}
+.algebraPlatform .algebraRouteHeading h1{font-size:32px}
+.algebraPlatform .menuStop{min-height:64px!important}
+.algebraPlatform .algebraMenuStops{overflow:auto}
+.algebraPlatform .workspace-nav{display:none!important}
+.algebraPlatform .builderHead,.algebraPlatform .worldHero,.algebraPlatform #setup>.intro{background:#dce9ef;border-color:#c5d7df;border-radius:0;padding:16px 24px;color:#142c40;margin:0;max-width:none}
+.algebraPlatform h1,.algebraPlatform h2,.algebra-classroom h1,.algebra-classroom h2{font-family:system-ui,sans-serif;letter-spacing:-.025em}
+.algebraPlatform :is(.panel,.toolCard){border-radius:8px;border-color:var(--line);box-shadow:0 2px 4px #3333330b}
+.algebraPlatform :is(.primarybtn,.primary){background:#ff8a24;border-color:#dc6704;color:#251307}
+.algebraPlatform :is(.primarybtn,.primary):hover{background:#ff9d45}
+.algebraPlatform .worldScreen{overflow:auto}.worldOverview{min-height:100%;background:var(--paper)}
+.worldOverview .algebraRouteHeading{min-height:100px}.worldAvailability{font-size:13px;color:#415e72}
+.worldCards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:24px}
+.worldCard{display:grid;grid-template-rows:auto 1fr auto auto;gap:12px;min-width:0;min-height:230px;padding:20px;text-align:left;border:1px solid var(--line);border-radius:8px;background:#fffdf8;color:var(--ink);box-shadow:0 2px 4px #3333330b;cursor:pointer}
+.worldCard:hover{border-color:#e97613;background:#fff0d6}.worldCard:focus-visible{outline:3px solid #e97613;outline-offset:2px}
+.worldCard .menuStopHeading strong{font-size:23px}.worldExample{display:flex;align-items:center;justify-content:center;font:italic 36px/1.25 Georgia,serif;text-align:center;padding:12px}.worldDescription{font:14px/1.4 system-ui;color:var(--muted)}
+.worldCardFoot{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding-top:12px;font:13px/1.3 system-ui}.worldCardFoot strong{color:#b25109}
+.futureWorlds{padding:0 24px 24px}.futureWorlds h2{font-size:17px;margin:0 0 12px}.futureWorlds>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.futureWorlds article{padding:16px;border:1px solid var(--line);border-radius:8px;background:#efeee8}.futureWorlds h3{font-size:15px;margin:0}.futureWorlds p{font-size:13px;line-height:1.4;color:var(--muted);margin:8px 0}.futureWorlds span{font-size:12px;font-weight:650;color:var(--muted)}
+.algebraPlatform .topbar-collapsed .work-head{padding-left:0}
+.algebraPlatform.topbar-collapsed :is(.work-head,#systemHistory header,#systemSummary h1){padding-left:0}
+@media(max-height:500px) and (min-width:601px){
+ .algebraPlatform .algebraMenu{grid-template-rows:38px minmax(0,1fr) 44px 20px!important}
+ .algebraPlatform .algebraMenu:has([data-count="6"]){grid-template-rows:28px minmax(0,1fr) 44px 16px!important}
+ .algebraPlatform .algebraRouteHeading h1{font-size:22px}
+ .worldOverview .algebraRouteHeading{min-height:60px}.worldCards{padding:12px;gap:12px}.worldCard{min-height:165px;padding:12px;gap:6px}.worldExample{font-size:26px;padding:4px}.futureWorlds{padding:0 12px 12px}
+}
+@media(max-width:600px){
+ .algebraSectionNav{grid-template-columns:repeat(3,minmax(0,1fr));min-height:88px}.algebraSectionNav a{font-size:12px;padding:4px 5px;border-bottom:1px solid #ffffff25}.algebraSectionNav a:first-child{grid-row:1/3}
+ .algebraPlatform .algebraMenu{grid-template-rows:62px minmax(0,1fr) 62px 24px!important}
+ .algebraPlatform .algebraMenu:has(#navigationResumeFree:not([hidden])){grid-template-rows:62px minmax(0,1fr) 106px 24px!important}
+ .algebraPlatform .algebraRouteHeading h1{font-size:26px}.worldOverview .algebraRouteHeading{min-height:95px}.worldAvailability{display:none}
+ .worldCards{grid-template-columns:1fr;padding:12px;gap:12px}.worldCard{min-height:190px;padding:14px;gap:8px}.worldCard .menuStopHeading strong{font-size:21px}.worldExample{font-size:28px;padding:4px}.worldCardFoot{font-size:12px}
+ .futureWorlds{padding:0 12px 20px}.futureWorlds>div{grid-template-columns:1fr}.futureWorlds article{padding:12px}
+}
+html[data-mode=dark] :is(.algebraPlatform,.algebra-classroom){--ink:#f3f4ed;--muted:#bfced4;--paper:#1c2a30;--bg:#1c2a30;--line:#43565f;--soft:#304752;--accent:#b4d2e2}
+[data-mode=dark] :is(.worldCard,.algebraPlatform .panel,.algebraPlatform .toolCard){background:#24363e;color:var(--ink)}
+[data-mode=dark] .worldCard:hover{background:#463521}[data-mode=dark] .worldCardFoot strong{color:#ffbb7c}[data-mode=dark] .futureWorlds article{background:#24363e}
+[data-mode=dark] :is(.algebraPlatform .builderHead,.algebraPlatform .worldHero,.algebraPlatform #setup>.intro){background:#2b4655;color:var(--ink)}
+[data-mode=dark] .worldAvailability{color:#bfced4}
+@media print{.algebraSectionNav{display:none!important}.algebraPlatform .app{display:block!important}}
+/* The class module supplies session layout; this shell owns its appearance. */
+body.algebra-classroom leraarbob-topbar::part(row){background:#163b51;color:#f5f8fa;border-color:#7091a566}
+body.algebra-classroom leraarbob-topbar::part(brand){color:inherit;border-color:transparent}
+body.algebra-classroom leraarbob-topbar::part(crumb-game),body.algebra-classroom leraarbob-topbar::part(crumb-link){background:transparent;color:inherit;border-color:transparent;box-shadow:none}
+body.algebra-classroom .primary{background:#ff8a24;color:#251307;border-color:#dc6704}
+body.algebra-classroom :is(p,.hint,.rules,.eyebrow,.device-note,.round-status,#identity,#roundStatus,.join-steps){color:var(--muted)}
+body.algebra-classroom :is(input,select,button,.button){border-radius:6px}
+body.algebra-classroom :is(input,select){background:var(--menu-card,#fffdf8);color:var(--ink);border-color:var(--line)}
+body.algebra-classroom :is(.members li,.ranking li,dialog,.host[data-phase=lobby] .join-code){background:var(--menu-card,#fffdf8);color:var(--ink);border-color:var(--line)}
+body.algebra-classroom[data-playing=true]{grid-template-rows:var(--lb-header-height,60px) auto minmax(0,1fr)}
+.algebraPlatform{--grain:none}
+/* The workboard keeps its complete tool palette on small landscape displays. */
+@media(max-height:500px) and (min-width:601px){
+ .algebraPlatform[data-screen=trainer] .algebraSectionNav,.algebraPlatform[data-screen=work] .algebraSectionNav,.algebraPlatform[data-screen=history] .algebraSectionNav,.algebraPlatform[data-screen=systemHistory] .algebraSectionNav{display:none}
+ .algebraPlatform[data-screen=trainer] .app,.algebraPlatform[data-screen=history] .app{grid-template-rows:auto minmax(0,1fr)!important}
+}
+.algebraPlatform .algebraMenu .menuStop[aria-pressed=true]{color:var(--menu-ink)}
+.algebraPlatform .worldCard{border-radius:8px!important}
+.algebraPlatform.topbar-collapsed .worldScreen{padding-top:0}

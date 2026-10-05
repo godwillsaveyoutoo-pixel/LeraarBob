@@ -1,4 +1,4 @@
-# Algebrawereld v0.4.5
+# Algebrawereld v0.4.6
 
 De platformversie uit `Axioma-Algebrawereld-v0.4.5.zip` vervangt het eerdere
 algebraspel op dezelfde ingang: `games/algebra-trainer/`. De spel-id
@@ -7,12 +7,25 @@ behouden. De catalogus toont één hoofdkaart voor Algebrawereld.
 
 ## Startmenu en hervatten
 
-Een nieuw bezoek opent rechtstreeks het kaartjesmenu uit v0.4.5: een donkere
-actierij, een afzonderlijke wereldkop, zeven haltes met voorbeeldvergelijkingen
-en status, en een oranje knop **Verder spelen**. De huidige halte is oranje
-omlijnd. **Werelden** opent de geïllustreerde kaart. Herladen tijdens oefenen
-behoudt het werkbord; opnieuw bezoeken opent het menu met hetzelfde werk
-beschikbaar via Verder spelen. Stelsels krijgt hetzelfde menu met zes haltes.
+Een nieuw bezoek opent het formele kaartjesmenu van Vergelijkingen. Dezelfde
+navigatie staat bij Werelden, Levels, Vrij oefenen, Oefenblad en Klasbattle.
+Algebrawereld in het gedeelde kruimelpad opent altijd het wereldenoverzicht;
+de wereldnaam brengt je naar zijn levels. Werelden gebruikt formele kaarten,
+zonder de vroegere eilanden. Stelsels heeft hetzelfde levelmenu met zes kaarten.
+
+Een kaart aanklikken selecteert uitsluitend: er worden geen opgaven of pogingen
+aangemaakt. De oranje selectie staat los van de status van een bewaarde reeks.
+**Spelen**, **Verder spelen** of **Opnieuw spelen** opent pas het gekozen level.
+De selectie is presentatie-informatie in sessionStorage. Oude leervoortgang,
+tussenstappen en XP blijven in de bestaande opslag. Vrije reeksen kunnen bij
+Vergelijkingen én Stelsels worden hervat nadat je een level hebt gespeeld.
+Herladen tijdens oefenen bewaart het werkbord; een nieuw bezoek opent het menu.
+
+Op korte liggende werkborden staan dezelfde bestemmingen in het gedeelde menu,
+zodat alle wiskundige bediening ruimte houdt. De bovenste platformbalk blijft
+inklappen, heropenen, echte voortgang, account, licht/donker en volledig scherm
+bieden. De klasbattle gebruikt dezelfde formele kleuren en typografie; sessie-
+en werkbordhandlers blijven behouden. Het iframe krijgt geen tweede bovenbalk.
 
 De platformversie gebruikt de gedeelde leraarBob-balk voor het centrale
 account, echte XP, volledig scherm, licht/donker, menu en inklappen. De losse
@@ -23,7 +36,7 @@ zijn ruimte over kop, opgaven en hervatten binnen de resterende viewport.
 
 ## Speelbare route
 
-Via Werelden toont de kaart vijf werelden. **Vergelijkingen** bevat zeven speelbare haltes;
+Via Werelden staan twee speelbare werelden en drie werelden in voorbereiding. **Vergelijkingen** bevat zeven speelbare haltes;
 **Stelsels** bevat de bestaande zes haltes. Letters begrijpen, Rekenen met
 letters en Formules zijn zichtbaar als **Binnenkort** en tellen niet mee in
 de voortgang. Alle speelbare haltes zijn direct toegankelijk.
@@ -105,6 +118,7 @@ node tests/algebra-v045-entry-browser.cjs
 node tests/algebra-v045-navigation-browser.cjs
 node tests/algebra-v045-fractions-browser.cjs
 node tests/algebra-v045-signs-browser.cjs
+node tests/algebra-v046-consistency-browser.cjs
 ```
 
 De proeven controleren alle zeven haltes via echte bediening, correcte en

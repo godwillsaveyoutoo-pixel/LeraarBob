@@ -21,7 +21,7 @@ const server=http.createServer((req,res)=>{
    const problems=await page.evaluate(()=>{
     const bad=[],restore=document.querySelector('.lb-restore:not([hidden])')?.getBoundingClientRect();
     if(document.documentElement.scrollWidth>innerWidth+1)bad.push('horizontal page overflow');
-    for(const e of document.querySelectorAll('.worldScreen button,.trainHead button,.opRail button,.routeDock a,.algebraMenu button,.algebraMenu a')){
+    for(const e of document.querySelectorAll('.trainHead button,.opRail button,.routeDock a,.algebraMenu button,.algebraMenu a')){
      if(!e.getClientRects().length)continue;const r=e.getBoundingClientRect();
      if(r.width<43.5||r.height<43.5)bad.push('small '+(e.id||e.textContent.trim()));
      if(r.left<-.5||r.right>innerWidth+.5||r.top<-.5||r.bottom>innerHeight+.5)bad.push('clipped '+(e.id||e.textContent.trim()));
@@ -37,19 +37,19 @@ const server=http.createServer((req,res)=>{
   assert.equal(await page.locator('#featuredGrid [data-game-id="algebra-trainer"]').count(),1);
   assert.equal(await page.locator('#grid [data-game-id="rechten-arcade"]').count(),1,'the previously published arcade remains available');
   await click('#featuredGrid [data-game-id="algebra-trainer"]');await page.waitForURL('**/games/algebra-trainer/');await ready();await page.waitForSelector('#navigationScreen:not(.hidden)');
-  assert.equal(await page.locator('[data-world]').count(),5);assert.equal(await page.locator('[data-stop]').count(),7);
+  assert.equal(await page.locator('[data-world]').count(),2);assert.equal(await page.locator('[data-menu-stop]').count(),7);
   assert(await page.locator('leraarbob-topbar .fullscreen').isVisible());assert(await page.locator('leraarbob-topbar .theme-toggle').isVisible());
-  assert.equal(await page.locator('[data-menu-stop]').count(),7);assert.equal(await page.locator('#navigationVersion').textContent(),'v0.4.5');await layout('menu-expanded');const initial=await page.evaluate(()=>AlgebraTrainer.snapshot());
+  assert.equal(await page.locator('[data-menu-stop]').count(),7);assert.equal(await page.locator('#navigationVersion').textContent(),'v0.4.6');await layout('menu-expanded');const initial=await page.evaluate(()=>AlgebraTrainer.snapshot());
   await click('leraarbob-topbar .collapse');assert.equal(await page.locator('.lb-restore').getAttribute('aria-expanded'),'false');await layout('menu-collapsed');
   await page.reload();await ready();await page.waitForSelector('#navigationScreen:not(.hidden)');assert(await page.locator('.lb-restore').isVisible());assert.deepEqual(await page.evaluate(()=>AlgebraTrainer.snapshot()),initial);
   await click('.lb-restore');assert.equal(await page.locator('leraarbob-topbar .collapse').getAttribute('aria-expanded'),'true');
-  await click('[data-menu-stop=route-inverse]');await page.waitForSelector('#trainerScreen:not(.hidden)');await layout('exercise-expanded');
+  await click('[data-menu-stop=route-inverse]');await click('.menuContinue');await page.waitForSelector('#trainerScreen:not(.hidden)');await layout('exercise-expanded');
   const work=await page.evaluate(()=>AlgebraTrainer.snapshot()),expandedHeight=await page.locator('.trainStage').evaluate(e=>e.getBoundingClientRect().height);
   await click('leraarbob-topbar .collapse');await layout('exercise-collapsed');
   assert(await page.locator('.trainStage').evaluate(e=>e.getBoundingClientRect().height)>expandedHeight,'folding frees space for the exercise');
   await page.reload();await ready();await page.waitForSelector('#trainerScreen:not(.hidden)');assert(await page.locator('.lb-restore').isVisible());assert.deepEqual(await page.evaluate(()=>AlgebraTrainer.snapshot()),work);
   await click('.lb-restore');await click('leraarbob-topbar .theme-toggle');assert.deepEqual(await page.evaluate(()=>AlgebraTrainer.snapshot()),work);await click('leraarbob-topbar .theme-toggle');
-  await click('#backSetupBtn');await layout('menu-with-work');await click('[data-menu-nav=world]');await layout('world-expanded');await click('leraarbob-topbar .collapse');await layout('world-collapsed');await click('.lb-restore');await click('[data-world="systems"]');assert.equal(await page.locator('[data-stop]').count(),6);await click('[data-start]');await page.waitForURL('**/stelsels.html?topic=*');await ready();
+  await click('#backSetupBtn');await layout('menu-with-work');await click('.algebraSectionNav [data-section=world]');await layout('world-expanded');await click('leraarbob-topbar .collapse');await layout('world-collapsed');await click('.lb-restore');await click('[data-world="systems"]');await page.waitForURL('**/stelsels.html?screen=menu');await page.waitForSelector('[data-menu-stop]');assert.equal(await page.locator('[data-menu-stop]').count(),6);await click('.menuContinue');await ready();
   assert.equal(await page.locator('leraarbob-topbar').count(),1);assert(await page.locator('leraarbob-topbar .progress-value').isVisible());
   assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);console.log('PASS Algebrawereld entry, topbar and Stelsels '+width+'×'+height);await context.close();
  }}finally{await browser.close();await new Promise(r=>server.close(r));}
