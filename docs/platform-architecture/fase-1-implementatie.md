@@ -51,7 +51,12 @@ laat aansluiten, begrensde invoer en idempotente herinzending blijven afgedwonge
 JWT-controle blijft aan. Battlepunten blijven afzonderlijk van leer-XP.
 
 De lokale leerkrachtsimulatie gebruikt dezelfde generatie, invoer en controle,
-met virtuele leerlingen. Ze schrijft geen sessies, punten, XP of ranglijsten
+met virtuele leerlingen. Ze opent bij een ronde standaard het **leerlingbeeld**,
+met dezelfde actieve invoervelden en antwoordknoppen. Via **Virtuele klas** kun
+je naar **Leerkrachtbeeld** en terug naar **Leerlingbeeld** wisselen. Beide
+werkborden blijven in hun eigen DOM staan, zodat een half ingevuld antwoord
+behouden blijft. De beeldkeuze wordt lokaal bewaard; na indienen blijft het
+leerlingantwoord vergrendeld. De volgende ronde toont weer haar eigen opgave. Ze schrijft geen sessies, punten, XP of ranglijsten
 naar de server. Simulatie-instellingen vervangen tijdelijk het werkbord als
 eigen inline scherm; ze staan niet als popup boven een opgave. De echte timer
 blijft lopen. Via het gedeelde menu kan de leerkracht naar het overzicht en
@@ -80,7 +85,7 @@ mogen als afzonderlijke schermen scrollen.
 | Leerlingwerkbord, optionele stappen, drafts en lage iframes | `tests/algebra-battle-player-browser.cjs`: 57 toestanden, ook 176 px hoog |
 | Live Stelselsklasbattle met twee fictieve leerlingen | `tests/algebra-systems-class-browser.cjs`; bestaande vergelijkingen-klasbattlebrowser |
 | Centrale Stelselsflow, drie minuten, drie rondes, terugweg en sessiebehoud | `tests/platform-battle-flow-browser.cjs`: vijf schermformaten |
-| Bestaande vijf spelproviders en lokale simulatie | `tests/class-battle-hub-browser.cjs`, `tests/classroom-simulation-browser.cjs` |
+| Bestaande vijf spelproviders en lokale simulatie | `tests/class-battle-hub-browser.cjs`, `tests/classroom-simulation-browser.cjs`: directe leerlinginvoer; Algebra en Vector behouden native invoernodes bij beeldwissels |
 
 Browsers en databasefixtures gebruiken fictieve accounts; tests voegen geen echte
 leerlingresultaten toe. Bouwcontrole: `node scripts/build-catalog.cjs --check` en
@@ -144,6 +149,25 @@ De oude, al bestaande verschillen in migratietijdstempels zijn niet herschreven.
 
 De naam **Klasbattle** blijft behouden. Een overkoepelende Klasruimte komt pas
 wanneer ook echte gezamenlijke lessen zijn aangesloten.
+
+## Vervolgaanpassing: direct leerlingbeeld in simulatie
+
+De simulatie opent standaard met actieve leerlinginvoer. De laatste controle
+bevestigt dit voor Algebra, Vectoren, Bewerkingentrainer, Rechtenwereld en
+Wortelbouw. Wisselen via **Virtuele klas** bewaart tussentijdse invoer; ingediende
+antwoorden worden daardoor niet opnieuw actief. Beeldkeuze, reload, volgende
+ronde, menu en inklappen zijn op vijf schermformaten gecontroleerd. Een echte
+Stelselsklasbattle met twee fictieve leerlingen behoudt het leerkrachtbord en
+servercontrole. Er zijn geen echte leerlingresultaten aangemaakt in de tests.
+
+Gewijzigde bestanden voor deze vervolgaanpassing:
+
+- `shared/multiplayer/simulation.js` en `shared/multiplayer/classroom.js`
+- De `classroom.html` van de vijf bovenstaande providers (nieuwe cacheverwijzing)
+- `tests/classroom-simulation.test.cjs`
+- `tests/classroom-simulation-browser.cjs`
+- `tests/platform-battle-flow-browser.cjs`
+- Deze implementatienotitie
 
 ## Gewijzigde bestanden vóór publicatie
 

@@ -1,6 +1,9 @@
 (function(){
 'use strict';
-const $=id=>document.getElementById(id),Game=window.BattleGame,frame=$('board');
+const $=id=>document.getElementById(id),Game=window.BattleGame,baseFrame=$('board');
+let frame=baseFrame;
+const simulationBoards=new Map();
+const boardQuestions=new WeakMap();
 const moduleURL=new URL('.',document.currentScript.src),parameters=new URLSearchParams(location.search),embedded=parameters.get('hub')==='1'&&window.parent!==window;
 const simulationRequested=()=>new URLSearchParams(location.search).get('simulation')==='1';
 let simulator=null,simulationLoading=null;
@@ -45,6 +48,23 @@ function rpc(action,data={}){
  });chain=work;return work;
 }
 function send(data){if(frameReady)frame.contentWindow.postMessage(data,target);}
+function connectBoard(board){board.addEventListener('load',()=>{boardQuestions.delete(board);if(board===frame){frameReady=false;frameKey='';board.contentWindow.postMessage({type:'vector-battle-ping'},target);}});}
+function selectSimulationBoard(){
+ if(!simulator)return;
+ const view=state.studentView?'student':'teacher';
+ if(!simulationBoards.size){simulationBoards.set(view,frame);return;}
+ let next=simulationBoards.get(view);
+ if(!next){next=document.createElement('iframe');next.title=baseFrame.title;next.src=Game.playerURL+'?mode=class';next.hidden=true;connectBoard(next);simulationBoards.set(view,next);$('playArea').append(next);}
+ if(next===frame)return;
+ // Keep both DOMs in place: changing a view must not discard a half-filled answer.
+ frame.id='simulation'+(state.studentView?'Teacher':'Student')+'Board';frame.hidden=true;
+ frame=next;frame.id='board';frame.hidden=false;frameReady=false;frameKey='';reviewKey='';
+ frame.contentWindow.postMessage({type:'vector-battle-ping'},target);
+}
+function resetSimulationBoards(){
+ for(const board of simulationBoards.values())if(board!==baseFrame)board.remove();
+ simulationBoards.clear();frame=baseFrame;frame.id='board';frame.hidden=false;
+}
 function rank(rows,key){const sorted=[...rows].sort((a,b)=>b[key]-a[key]||a.alias.localeCompare(b.alias)||a.user_id.localeCompare(b.user_id));let previous=null,place=0;return new Map(sorted.map((p,i)=>{if(p[key]!==previous)place=i+1;previous=p[key];return[p.user_id,place]}));}
 function renderRanking(){
  const signature=JSON.stringify([state.phase,state.round,state.members]);if(signature===lastRanking)return;lastRanking=signature;
@@ -57,11 +77,13 @@ function renderRanking(){
  $('ranking').classList.remove('changed');requestAnimationFrame(()=>$('ranking').classList.add('changed'));
 }
 function renderBoard(){
+ if(state)selectSimulationBoard();
  if(!state||!frameReady||!state.spec||(!reviewOpen&&(waiting()||!['question','grading'].includes(state.phase))))return;
  const key=state.id+':'+state.round;
- if(frameKey!==key){frameKey=key;send({type:'vector-battle-question',match:state.id,index:state.round,...state.spec,singleAttempt:true,projector:!!state.owner&&!state.trying,learner:state.trying?state.members[0].user_id:account.id});}
+ const student=!!simulator&&state.studentView,submitted=student&&state.members[0].answered;
+ if(frameKey!==key){frameKey=key;if(boardQuestions.get(frame)!==key){boardQuestions.set(frame,key);send({type:'vector-battle-question',match:state.id,index:state.round,...state.spec,singleAttempt:true,projector:!!state.owner&&!student,learner:student?state.members[0].user_id:account.id});}}
  if(reviewOpen){if(reviewKey!==key){reviewKey=key;send({type:'vector-class-review',match:state.id,index:state.round});}return;}
- if((state.owner&&!state.trying)||state.mine?.submitted||state.phase==='grading'||pending)send({type:'vector-battle-resolved',match:state.id,index:state.round,message:simulator?'Virtuele klas · kies Zelf proberen.':state.owner?'De klas werkt.':state.mine?.submitted?'Antwoord ontvangen. Wacht op de uitslag.':pending?'Je inzending wordt verstuurd.':'De tijd is om. Wacht op de uitslag.'});
+ if((state.owner&&!student)||submitted||state.mine?.submitted||state.phase==='grading'||pending)send({type:'vector-battle-resolved',match:state.id,index:state.round,message:simulator?submitted?'Antwoord ontvangen. Wacht op de uitslag.':'Leerkrachtbeeld · kies Leerlingbeeld om mee te doen.':state.owner?'De klas werkt.':state.mine?.submitted?'Antwoord ontvangen. Wacht op de uitslag.':pending?'Je inzending wordt verstuurd.':'De tijd is om. Wacht op de uitslag.'});
 }
 function accept(next){
  if(!state||next.round!==state.round||next.phase!==state.phase){reviewOpen=false;reviewKey='';}
@@ -116,7 +138,7 @@ async function identity(next){
  if(account?.id===next?.id&&account?.role===next?.role)return;
  epoch++;clearTimeout(pollTimer);state=null;simulator=null;pending=null;frameKey='';lastRanking='';account=next;notice('');if($('resumeClassSession'))$('resumeClassSession').hidden=true;document.body.classList.remove('class-simulation');if($('classSimulationControls'))$('classSimulationControls').hidden=true;if($('classSimulationSetup'))$('classSimulationSetup').hidden=true;if($('simulationEndRound'))$('simulationEndRound').hidden=true;
  // Drop the old account's board and answer on an account switch.
- frameReady=false;frame.src=Game.playerURL+'?mode=class';
+ resetSimulationBoards();frameReady=false;frame.src=Game.playerURL+'?mode=class';
  $('identity').textContent=account?(account.role==='teacher'?'Leerkracht':account.alias||'Account'):'';$('logout').hidden=!account;
  if(!account){display('login');return;}
  if(!['teacher','student'].includes(account.role)){display('login');notice('Dit account heeft geen leerling- of leerkrachtprofiel.');return;}
@@ -178,7 +200,7 @@ function restoreClassConfig(){
 }
 function loadSimulation(){
  if(window.LeraarBobClassSimulation)return Promise.resolve(window.LeraarBobClassSimulation);
- if(!simulationLoading)simulationLoading=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=new URL('simulation.js',moduleURL);script.onload=()=>resolve(window.LeraarBobClassSimulation);script.onerror=()=>{simulationLoading=null;reject(Error('De simulatie kon niet laden. Herlaad de pagina en probeer opnieuw.'));};document.head.append(script);});return simulationLoading;
+ if(!simulationLoading)simulationLoading=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=new URL('simulation.js?v=20261005-student-view',moduleURL);script.onload=()=>resolve(window.LeraarBobClassSimulation);script.onerror=()=>{simulationLoading=null;reject(Error('De simulatie kon niet laden. Herlaad de pagina en probeer opnieuw.'));};document.head.append(script);});return simulationLoading;
 }
 function buildDeck(){
  const selected=Game.multiSelect?[...document.querySelectorAll('[name=classType]:checked')].map(e=>e.value).filter(id=>!algebraSettings||pool().includes(id)):$('skill').value==='mix'?pool():[$('skill').value],count=Number($('rounds').value);
@@ -204,13 +226,13 @@ function renderSimulation(){
  if(!simulator)return;
  if(!$('endRound')&&!$('simulationEndRound')){const end=document.createElement('button');end.id='simulationEndRound';end.type='button';end.textContent='Ronde afronden';end.onclick=()=>action('end_round');document.querySelector('.round-status').append(end);}if($('simulationEndRound'))$('simulationEndRound').hidden=state.phase!=='question';
  let controls=$('classSimulationControls');if(!controls){controls=document.createElement('details');controls.id='classSimulationControls';controls.className='class-simulation-controls';controls.innerHTML='<summary>Virtuele klas</summary><span class="class-simulation-badge">SIMULATIE · GEEN LEERLINGRESULTATEN</span><p>Kies antwoord en snelheid.</p><div class="class-simulation-actions"><button id="simulationTry" type="button">Zelf proberen</button><a id="simulationReal">Naar echte klasbattle</a></div><p id="simulationTryStatus" role="status"></p><ul id="simulationLearners" class="class-simulation-learners"></ul>';document.querySelector('.session-bar').after(controls);controls.addEventListener('toggle',()=>{if(state){render();portalStatus();}});
-  $('simulationTry').onclick=()=>{try{const next=simulator.tryBoard();frameReady=false;frameKey='';frame.src=Game.playerURL+'?mode=class';accept(next);$('classSimulationControls').open=false;}catch(e){notice(errorText(e));}};
+  $('simulationTry').onclick=()=>{try{accept(simulator.tryBoard());$('classSimulationControls').open=false;}catch(e){notice(errorText(e));}};
   const real=new URL(location.href);real.searchParams.delete('simulation');$('simulationReal').href=real.href;if(embedded)$('simulationReal').onclick=e=>{e.preventDefault();window.parent.postMessage({type:'leraarbob-class-launch',game:Game.id,mode:'live'},location.origin);};
  }
  controls.hidden=false;controls.dataset.phase=state.phase;
  const list=$('simulationLearners');if(list.dataset.match!==state.id){list.dataset.match=state.id;list.replaceChildren();for(const p of state.members){const li=document.createElement('li'),name=document.createElement('strong');name.textContent=p.alias;li.append(name);for(const [kind,choices]of [['plan',[['correct','Juist'],['wrong','Onjuist'],['none','Geen antwoord']]],['pace',[['fast','Snel'],['normal','Gemiddeld'],['slow','Langzaam']]]]){const label=document.createElement('label'),select=document.createElement('select');select.dataset.learner=p.user_id;select.dataset.setting=kind;select.setAttribute('aria-label',(kind==='plan'?'Antwoord van ':'Snelheid van ')+p.alias);for(const [value,text]of choices)select.append(new Option(text,value));select.value=p[kind];select.onchange=()=>accept(simulator.configure(p.user_id,kind==='plan'?select.value:null,kind==='pace'?select.value:null));label.append(select);li.append(label);}const status=document.createElement('span');status.className='simulation-answer';status.dataset.simulationLearner=p.user_id;li.append(status);list.append(li);}}
  for(const p of state.members){const status=list.querySelector('[data-simulation-learner="'+p.user_id+'"]');status.textContent=p.answered?(p.correct?'Juist · +'+p.round_points+' punten':'Onjuist · 0 punten'):state.phase==='lobby'?'Klaar voor de start':state.phase==='question'?'Nog geen antwoord':'Geen antwoord';}
- $('simulationTry').disabled=state.phase!=='question'||state.members[0].answered;$('simulationTry').textContent=state.trying?'Terug naar leerkrachtbord':'Zelf proberen';$('simulationTryStatus').textContent=state.tryResult||(state.trying?'Je speelt nu als '+state.members[0].alias+'.':'');
+ $('simulationTry').disabled=state.phase!=='question';$('simulationTry').textContent=state.studentView?'Leerkrachtbeeld':'Leerlingbeeld';$('simulationTryStatus').textContent=state.tryResult||(state.studentView?'Leerlingbeeld · je speelt als '+state.members[0].alias+'.':'Leerkrachtbeeld');
 }
 const requestedWorld=new URLSearchParams(location.search).get('world');
 if(Game.worlds.some(w=>w.id===requestedWorld))$('world').value=requestedWorld;
@@ -243,7 +265,7 @@ addEventListener('message',event=>{
  if(data.type!=='vector-battle-answer'||!state||state.owner||waiting()||state.phase!=='question'||state.mine?.submitted||pending||data.match!==state.id||data.index!==state.round)return;
  pending={id:state.id,round:state.round,answer:data.answer,skipped:!!data.skipped};store(pendingKey(),pending);renderBoard();submit();
 });
-frame.addEventListener('load',()=>frame.contentWindow.postMessage({type:'vector-battle-ping'},target));
+connectBoard(baseFrame);
 setInterval(tick,250);
 addEventListener('online',()=>{if(state){schedule();if(pending)submit();}});
 addEventListener('axioma:login-complete',async event=>{await identity(event.detail.account);if(!$('setup').hidden)(account?.role==='teacher'?(algebraSettings?document.querySelector('[data-class-world][aria-pressed=true]'):$('world')):$('joinCode')).focus();});
