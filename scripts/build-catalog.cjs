@@ -32,6 +32,7 @@ function validateRegistry(catalog) {
  const ids=new Set(catalog.map(g=>g.id)),aliases=new Set(ids);
  const href=(value,label)=>{if(typeof value!=='string'||!value||value!==value.trim()||value.startsWith('/')||value.includes(String.fromCharCode(92))||/^[a-z]+:/i.test(value)||value.split(/[?#]/)[0].split('/').includes('..'))throw Error(label+': een relatieve platformroute is vereist.');};
  for(const g of catalog){
+  if(g.parentId){const parent=catalog.find(p=>p.id===g.parentId);if(!parent||parent.active===false||parent.id===g.id)throw Error(g.id+': onbekende of ongeldige hoofdwereld');if(g.featured)throw Error(g.id+': een component mag geen aparte startpaginakaart hebben');if(typeof g.componentTitle!=='string'||!g.componentTitle.trim())throw Error(g.id+': componentTitle ontbreekt');}
   if(typeof g.active!=='boolean'||typeof g.progressId!=='string'||!g.progressId)throw Error(g.id+': active/progressId ontbreekt.');
   href(g.href,g.id);href(g.route?.entry,g.id+' route');
   if(g.route.prefix)href(g.route.prefix,g.id+' prefix');
@@ -52,7 +53,7 @@ function validateRegistry(catalog) {
   }
  }
  const registry=require('../shared/game-registry.js')(catalog);
- for(const g of catalog){registry.modes(g.id);registry.worksheets(g.id);}
+ for(const g of catalog){registry.presentation(g.id);registry.modes(g.id);registry.worksheets(g.id);}
 }
 
 if (require.main === module) {

@@ -119,7 +119,9 @@
       if (seen.has(source)) continue;
       seen.add(source);
       const saved = savedFor(game, overview), progress = summarize(game, saved);
-      entries.push({ id: game.id, title: game.title, href: game.href, xp: earnedXP(game, saved), completed: progress.completed || 0, label: progress.label });
+      const parent=game.parentId&&catalog.find(g=>g.id===game.parentId);
+      // Component histories remain separate units; their real XP remains part of the platform total.
+      entries.push({ id: game.id, title: parent?parent.title+' · '+game.componentTitle:game.title, href: game.href, xp: earnedXP(game, saved), completed: progress.completed || 0, label: progress.label });
     }
     return { xp: entries.reduce((sum, e) => sum + (e.xp || 0), 0), completed: entries.reduce((sum, e) => sum + e.completed, 0), entries };
   }

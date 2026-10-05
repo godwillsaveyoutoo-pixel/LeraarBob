@@ -2,3 +2,7 @@
 #classTypes fieldset{min-width:0;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 #classTypes label{min-width:0;overflow-wrap:break-word}
 @media(max-width:440px){#classTypes fieldset{grid-template-columns:minmax(0,1fr)}}
+
+body.algebra-classroom{--ink:#142c40;--paper:#f6f3ec;--blue:#dce9ef;--accent:#163b51;--lb-surface:#163b51;--lb-ink:#fff;--lb-line:#799aae88;--lb-hover:#ffffff12;--lb-control-radius:4px;--lb-panel-radius:8px}
+.algebra-classroom .primary{background:#ff8a1b;color:#142b3d;border-color:#d5792c}.algebra-classroom .primary:hover:not(:disabled){background:#ff9b36;color:#142b3d}
+.algebra-classroom leraarbob-topbar::part(crumb-current){color:#fff}#classTypes label:has(:checked){background:#dce9ef;border-color:#537082}#classTypes input{accent-color:#163b51}

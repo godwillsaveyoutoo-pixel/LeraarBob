@@ -4,7 +4,8 @@ Analyse van de bestaande website en voorstel voor verdere ontwikkeling, 5 oktobe
 
 **Update:** [Fase 1 is geïmplementeerd](fase-1-implementatie.md): één spelregister,
 hervatbare Algebra-/Getallenroutes en compacte klasbattles, inclusief eenvoudige
-stelsels met servercontrole. Het document hieronder blijft de analyse voor de
+stelsels met servercontrole. Getallenwereld omvat nu ook de bestaande reeksen,
+battles en oefenbladen van Bewerkingentrainer. Het document hieronder blijft de analyse voor de
 verdere fases; de implementatienotitie beschrijft wat nu echt werkt en wat nog volgt.
 
 De aanbevolen richting is één platform met gedeelde accounts, navigatie, sessies,
@@ -58,15 +59,15 @@ ontbreekt; het zegt niet dat de wiskundige inhoud ongeschikt is voor die vorm.
 | Rechtenwereld | Eigen leerroute | Lokaal en online, met eigen toelatingsregels | Ja | Bestaande route voor 2–3 leerlingen met ideeën, bouwen en eigen eindcheck | Vier werkbladwerelden | Oefenen en lokale battle-simulatie |
 | Algebrawereld | Levels, expliciet starten, herhaal-XP | Niet aangesloten | Vergelijkingen en eenvoudige unieke stelsels (`S1`) | Niet aangesloten | Vergelijkingen en stelsels | Oefenen en lokale simulatie |
 | Vectormissie | Adaptieve leerroute | Lokaal | Ja | Niet aangesloten | Niet aangesloten | Oefenen en lokale simulatie |
-| Bewerkingentrainer | Eigen route | Lokaal | Ja | Niet aangesloten | Eigen oefenbladen | Bespreekmodus met stappen en lokale simulatie |
 | Wortelbouw | Eigen bouwpuzzels | Eigen lokale arena | Ja | Niet aangesloten | Niet aangesloten | Oefenen en lokale simulatie |
 | Reële-getallentrainer | Eigen leerroute | Niet centraal aangesloten | Niet aangesloten | Niet aangesloten | Niet centraal aangesloten | Lokaal oefenen |
-| Getallenwereld, nu toegevoegd | 15 onderdelen, elk zes opgaven | Verwijzing naar Bewerkingentrainer | Verwijzing naar Bewerkingentrainer | Niet aangesloten | Verwijzing naar Bewerkingentrainer | Gewone route lokaal oefenen |
+| Getallenwereld | 15 rekenonderdelen en samenstelbare reeksen, inclusief wetenschappelijke schrijfwijze | Lokaal | Machten, wortels en schrijfwijze | Bordbespreking op één scherm, zonder aparte leerlinginzendingen | Reeksen met verbetersleutel | Bespreekmodus met stappen en lokale battle-simulatie |
 
 Getallenwereld heeft een eigen tegel, accountgebonden spelstand en teller van
-**15 onderdelen**, zonder verzonnen XP. De verwijzingen naar printen en battles
-noemen Bewerkingentrainer expliciet. Het zijn bestaande mogelijkheden van die
-trainer, geen nieuwe Getallenwereld-provider. De standaardselectie **Actuele
+**15 rekenonderdelen**, zonder verzonnen XP. De bestaande bewerkingentrainer
+is nu een interne reekscomponent van dezelfde wereld. Zijn zestien vraagvormen
+en eventuele eerder verdiende XP blijven afzonderlijk bewaard en herkenbaar
+in het leerkrachtoverzicht. De standaardselectie **Actuele
 spellen** in het leerkrachtoverzicht volgt voortaan dezelfde catalogus als de
 homepage, zodat nieuwe werelden daar niet door een tweede vaste lijst ontbreken.
 
@@ -99,8 +100,9 @@ een route is afgewerkt. Beheersing vraagt aanvullend bewijs, zoals zelfstandig
 oplossen, variatie en later opnieuw slagen. Een battleplaats vervangt dat bewijs
 evenmin.
 
-Getallenwereld en Bewerkingentrainer gebruiken dezelfde rekenkern voor machten
-en wortels. Het blijven afzonderlijke spelstanden. Later kunnen hun opgaven
+De rekenonderdelen en reeksen binnen Getallenwereld gebruiken dezelfde rekenkern
+voor machten en wortels. Hun historische spelstanden blijven afzonderlijk
+bewaard; de interface toont één wereld. Later kunnen hun opgaven
 wel naar dezelfde leerdoel-ID verwijzen. Daarmee kun je leerstof over spellen
 heen bekijken zonder twee voltooiingen als twee verschillende beheersingen
 van dezelfde rekenregel te presenteren.

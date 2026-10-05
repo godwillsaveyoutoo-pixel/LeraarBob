@@ -7,7 +7,7 @@ const games=Object.freeze(Registry.list().flatMap(g=>{
  const mode=Registry.modes(g.id,{includeReferences:false}).find(m=>m.id==='classroom');
  return mode?[{id:mode.providerId,catalogId:g.id,title:g.title,subject:g.subject||g.subtitle,solo:g.route?.entry||g.href,classroom:mode.href,topics:mode.topics||[]}]:[];
 }));
-const root=new URL('../',location.href),params=new URLSearchParams(location.search),game=id=>games.find(g=>g.id===id||Registry.game(id)?.id===g.catalogId),origin=game(params.get('game'));
+const root=new URL('../',location.href),params=new URLSearchParams(location.search),game=id=>games.find(g=>g.id===id||Registry.presentation(id)?.id===g.catalogId),origin=game(params.get('game'));
 const launchContext={world:params.get('world')||params.get('topic')||'',level:params.get('level')||'',returnTo:params.get('returnTo')||''};
 let account=null,data=null,epoch=0,request=0,view='overview',pendingLaunch=null,currentModule=null;
 const modules=new Map(),phases={setup:'Instellen',login:'Aanmelden',lobby:'Wachtkamer',question:'Ronde bezig',grading:'Nakijken',results:'Uitslag',finished:'Afgerond',closed:'Gestopt'};

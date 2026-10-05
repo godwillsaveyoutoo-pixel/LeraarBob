@@ -11,7 +11,7 @@ register. De leerkrachtconsole haalt speldefinities niet meer uit een tweede
 catalogus in de database; leerlingvoortgang blijft via de bestaande adapters komen.
 
 `shared/game-registry.js` biedt `ready`, `list`, `game`, `modes`, `worksheets`,
-`destination` en `current`. Een mogelijkheid beschrijft afzonderlijk **deelname**
+`destination`, `current`, `presentation` en `components`. Een mogelijkheid beschrijft afzonderlijk **deelname**
 (solo, duo of groep), **doel** (leren of battle), rollen, route en werkelijke
 provider. Een verwijzing naar een andere trainer blijft een verwijzing.
 `shared/play-modes.js` is de compatibiliteitslaag voor bestaande consumenten.
@@ -139,8 +139,10 @@ De oude, al bestaande verschillen in migratietijdstempels zijn niet herschreven.
    opmaak, antwoordbladen en uitvoer. De huidige registry-aansluiting maakt nog
    geen nieuwe printstudio.
 3. Echte adapters voor samen leren, duo en deelnemende leerkracht in meer trainers.
-   Getallenwereld heeft nu eigen solo; duo, battle en papier verwijzen expliciet
-   naar Bewerkingentrainer. Niet aangesloten combinaties worden niet beloofd.
+   Getallenwereld heeft nu eigen rekenonderdelen, samenstelbare reeksen, bordduo,
+   klasbattle, bordbespreking en papier binnen één wereld. Bordbespreking is één
+   leerkrachtuitwerking; er zijn nog geen aparte inzendingen van meelerende
+   leerlingen. Niet aangesloten combinaties worden niet beloofd.
 4. Een apart ontworpen publiek profiel en publieke ranglijsten met duidelijke
    privacykeuzes. Bestaande privéaccounts en klasranglijsten blijven de basis.
 5. Verdere Stelselsbattle-types en moeilijkheidsniveaus, zodra hun antwoordvormen
@@ -168,6 +170,85 @@ Gewijzigde bestanden voor deze vervolgaanpassing:
 - `tests/classroom-simulation-browser.cjs`
 - `tests/platform-battle-flow-browser.cjs`
 - Deze implementatienotitie
+
+## Vervolgaanpassing: één Getallenwereld
+
+Getallenwereld is de enige publieke ingang voor machten, vierkantswortels en
+wetenschappelijke schrijfwijze. De vroegere Bewerkingentrainer is een interne
+reekscomponent. Zijn historische game-ID `bewerkingen-trainer`, opslagkey
+`leraarbob.bewerkingen.v1`, oude routes en battleprovider `bewerkingen` blijven
+behouden. Er is geen database- of antwoordmotorwijziging voor deze aansluiting.
+
+Het register maakt dat onderscheid centraal: `list()` toont hoofdwerelden;
+`list({includeComponents:true})` omvat ook de historische componenten.
+`game()` behoudt de opgeslagen identiteit; `presentation()` en standaard
+`current()` geven de publieke wereld. `components()` maakt beide bronhistories
+beschikbaar voor het leerkrachtoverzicht en echte platform-XP. Er verschijnt
+één wereldfilter met afzonderlijke resultaten voor **Rekenregels** (15 onderdelen)
+en **Reeksen** (16 vraagvormen), zonder een verzonnen teller van 31 levels.
+
+De wereld biedt drie hoofdstukken en dezelfde acties voor reeksen, duo,
+klasbattle, klasbord en oefenblad. Wetenschappelijke schrijfwijze gebruikt de
+bestaande reeksinstellingen en drie bestaande moeilijkheidsgraden. Een link of
+modekeuze opent instellingen; alleen **Start** genereert een spelreeks.
+**Oefenblad maken** genereert eigen printopgaven zonder een actieve solo-, duo-
+of klasbordreeks te vervangen. De teruglink volgt de werkelijk geselecteerde
+pagina en het onderdeel, ook wanneer een andere opgave nog actief is.
+
+Startpagina, samen-spelenkeuze, centraal battleoverzicht, ranglijstfilter,
+oefenbladpagina en leerkrachtconsole gebruiken dezelfde hoofdwereld. Oude
+battlealiases en uitnodigingscodes blijven werken. De bovenbalk, breadcrumbs en
+printkop heten Getallenwereld; de standaard wereldknop opent het hoofdstukoverzicht.
+
+Verificatie: catalogus/111 routes; echte rekenregels en 4.800 gegenereerde
+reeksopgaven; afzonderlijke historie en echte XP; selectie zonder nieuwe poging;
+bewaarde invoer, menu, terug, browsergeschiedenis, accountwissel en herladen;
+print met verbetersleutel; leerkrachtbord en onafhankelijke duo-invoer. De
+native simulatie van alle vijf battleproviders blijft direct leerlinginvoer
+geven zonder serverwrites. Schermproeven omvatten 1280 × 800, 390 × 844,
+320 × 700, 780 × 360 en 640 × 360, met uitgeklapte en ingeklapte bovenbalk.
+
+Gewijzigde bestanden voor deze Getallenwereld-aanpassing:
+
+- `docs/platform-architecture/README.md`
+- `docs/platform-architecture/fase-1-implementatie.md`
+- `games.json`
+- `games/bewerkingen-trainer/README.md`
+- `games/bewerkingen-trainer/app.js`
+- `games/bewerkingen-trainer/battle-config.js`
+- `games/bewerkingen-trainer/battle-player.html`
+- `games/bewerkingen-trainer/battle.html`
+- `games/bewerkingen-trainer/classroom.css`
+- `games/bewerkingen-trainer/classroom.html`
+- `games/bewerkingen-trainer/index.html`
+- `games/bewerkingen-trainer/style.css`
+- `games/getallenwereld/app.js`
+- `games/getallenwereld/index.html`
+- `games/getallenwereld/style.css`
+- `index.html`
+- `js/catalog-progress.js`
+- `js/catalog.js`
+- `js/frontpage.js`
+- `klasbattle/hub.js`
+- `klasbattle/index.html`
+- `oefenbladen.html`
+- `scripts/build-catalog.cjs`
+- `shared/axioma-game.js`
+- `shared/axioma-social.js`
+- `shared/game-registry.js`
+- `shared/leraarbob-topbar.js`
+- `shared/play-modes.js`
+- `shared/worksheet-hub.js`
+- `teacher/index.html`
+- `teacher/teacher.js`
+- `tests/catalog-progress.test.cjs`
+- `tests/game-registry-browser.cjs`
+- `tests/game-registry.cjs`
+- `tests/getallen-unified-browser.cjs`
+- `tests/getallenwereld-browser.cjs`
+- `tests/getallenwereld.test.cjs`
+- `tests/platform-pilots-browser.cjs`
+- `tests/teacher-details-browser.cjs`
 
 ## Gewijzigde bestanden vóór publicatie
 

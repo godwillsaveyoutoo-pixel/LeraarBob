@@ -2,7 +2,9 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const create=require('../shared/game-registry.js'),catalog=require('../games.json'),{render}=require('../scripts/build-catalog.cjs');
 const R=create(catalog,{baseURL:'https://school.example/LeraarBob/'});
-assert.equal(R.list().length,22);assert.equal(R.list({featured:true}).length,6);
+assert.equal(R.list().length,21);assert.equal(R.list({includeComponents:true}).length,22);assert.equal(R.list({featured:true}).length,6);
+assert.equal(R.list().some(g=>g.id==='bewerkingen-trainer'),false);assert.equal(R.game('bewerkingen-trainer').parentId,'getallenwereld');
+assert.equal(R.presentation('bewerkingen').id,'getallenwereld');assert.deepEqual(R.components('getallenwereld').map(g=>[g.id,g.progressTotal]),[['getallenwereld',15],['bewerkingen-trainer',16]]);
 for(const [alias,id] of [['rechten','rechtenwereld'],['vectoren','vectoren-trainer'],['algebra','algebra-trainer'],['bewerkingen','bewerkingen-trainer']])assert.equal(R.game(alias).id,id);
 assert.equal(R.game('rechtenwereld').progressId,'rechten-trainer');assert.equal(R.game('getallenwereld').progressId,'getallenwereld');
 assert.equal(R.list().flatMap(g=>R.modes(g.id,{includeReferences:false})).filter(m=>m.id==='classroom').length,5);
@@ -14,23 +16,29 @@ for(const [id,file] of [['bewerkingen-trainer','games/bewerkingen-trainer/battle
 assert.deepEqual(R.game('vectoren').topics.map(t=>t.id),require('../games/vectoren/vector-mission.js').STATIONS.map(w=>w.id));
 assert.equal(new URL(R.destination('getallenwereld','classroom',{hub:true,topicId:'wortels'})).searchParams.get('world'),'wortels');
 assert.equal(new URL(R.destination('wortelbouw','solo',{topicId:'basis'})).pathname,'/LeraarBob/games/wortelbouw_pro_v0.5.0/wortelbouw/index.html');
-const ref=R.modes('getallenwereld').find(m=>m.id==='classroom');assert.equal(ref.isReference,true);assert.equal(ref.providerGameId,'bewerkingen-trainer');assert.equal(ref.providerId,'bewerkingen');assert.equal(ref.providerTitle,'Bewerkingentrainer');
-assert.deepEqual(R.modes('getallenwereld',{includeReferences:false}).map(m=>m.id),['solo']);assert.equal(R.worksheets('getallenwereld',{includeReferences:false}).length,0);
+const native=R.modes('getallenwereld').find(m=>m.id==='classroom');assert.equal(native.isReference,false);assert.equal(native.providerGameId,'getallenwereld');assert.equal(native.providerId,'bewerkingen');assert.equal(native.providerTitle,'Getallenwereld');
+assert.deepEqual(R.modes('getallenwereld',{includeReferences:false}).map(m=>m.id),['solo','series','local','classroom','teacher']);assert.equal(R.worksheets('getallenwereld',{includeReferences:false}).length,1);
 let u=new URL(R.destination('algebra','classroom',{topicId:'systems'}));assert.equal(u.pathname,'/LeraarBob/games/algebra-trainer/classroom.html');assert.equal(u.searchParams.get('world'),'systems');
-u=new URL(R.destination('getallenwereld','classroom',{hub:true,returnTo:'/LeraarBob/games/getallenwereld/?world=machten&level=machten-product&screen=menu'}));assert.equal(u.searchParams.get('game'),'bewerkingen-trainer');assert.equal(u.searchParams.get('view'),'create');assert.match(u.searchParams.get('returnTo'),/machten-product/);
+u=new URL(R.destination('getallenwereld','classroom',{hub:true,returnTo:'/LeraarBob/games/getallenwereld/?world=machten&level=machten-product&screen=menu'}));assert.equal(u.searchParams.get('game'),'getallenwereld');assert.equal(u.searchParams.get('view'),'create');assert.match(u.searchParams.get('returnTo'),/machten-product/);
+u=new URL(R.destination('getallenwereld','series',{topicId:'wetenschappelijk'}));assert.equal(u.pathname,'/LeraarBob/games/bewerkingen-trainer/');assert.equal(u.searchParams.get('world'),'wetenschappelijk');assert.equal(u.searchParams.get('screen'),'setup');
+assert.equal(new URL(R.destination('getallenwereld','solo',{topicId:'wetenschappelijk'})).searchParams.get('world'),'wetenschappelijk');
+assert.equal(R.current('/LeraarBob/games/bewerkingen-trainer/classroom.html').id,'getallenwereld');assert.equal(R.current('/LeraarBob/games/bewerkingen-trainer/?mode=teacher',{includeComponents:true}).id,'bewerkingen-trainer');
 assert.equal(new URL(R.destination('algebra','solo',{topicId:'systems'})).pathname,'/LeraarBob/games/algebra-trainer/stelsels.html');assert.equal(R.destination('gravity-maze','classroom'),null);
 assert.equal(R.current('/LeraarBob/games/algebra-trainer/stelsels.html').id,'algebra-trainer');assert.equal(R.current('/LeraarBob/games/rechten/zeeslag/').id,'rechten-zeeslag');assert.equal(R.current('https://evil.example/LeraarBob/games/getallenwereld/'),null);
 for(const bad of ['https://evil.example/','//evil.example/','/outside/','javascript:alert(1)'])assert.equal(new URL(R.destination('getallenwereld','local',{returnTo:bad})).searchParams.has('returnTo'),false);
 const root=path.resolve(__dirname,'..');let routes=0;
-for(const g of R.list()){
+for(const g of R.list({includeComponents:true})){
  for(const href of [g.href,g.route.entry,...(g.topics||[]).map(t=>t.href),...R.modes(g.id).map(m=>m.href),...R.worksheets(g.id).map(m=>m.href)]){const rel=href.split(/[?#]/)[0],file=path.resolve(root,rel);assert(file.startsWith(root+path.sep));assert(fs.existsSync(file),'Missing registered route '+href);if(fs.statSync(file).isDirectory())assert(fs.existsSync(path.join(file,'index.html')));routes++;}
  for(const module of g.engine?.modules||[])assert(fs.existsSync(path.join(root,module)),'Missing engine '+module);
 }
 const J=require('../games/algebra-trainer/journey-core.js'),G=require('../games/getallenwereld/lessons.js');
 for(const topic of R.game('algebra').topics)assert.deepEqual(topic.levelIds,J.world(topic.id).stops.map(s=>s.id));
-for(const topic of R.game('getallenwereld').topics)assert.deepEqual(topic.levelIds,G.STOPS.filter(s=>s.theme===topic.id).map(s=>s.id));
+for(const topic of R.game('getallenwereld').topics.filter(t=>t.levelIds))assert.deepEqual(topic.levelIds,G.STOPS.filter(s=>s.theme===topic.id).map(s=>s.id));
+assert.deepEqual(R.game('getallenwereld').topics.map(t=>t.id),require('../games/bewerkingen-trainer/battle-config.js').worlds.map(t=>t.id));
 const copy=()=>structuredClone(catalog);let invalid=copy();invalid[1].modeAliases=['algebra'];assert.throws(()=>render(invalid),/alias/);
 invalid=copy();invalid[0].capabilities.modes[0].href='javascript:alert(1)';assert.throws(()=>render(invalid),/platformroute/);
-invalid=copy();invalid.find(g=>g.id==='getallenwereld').capabilities.worksheets[0].reference.worksheetId='missing';assert.throws(()=>render(invalid),/verwijzing/);
+invalid=copy();invalid.find(g=>g.id==='getallenwereld').capabilities.worksheets[0]={id:'missing',reference:{gameId:'bewerkingen-trainer',worksheetId:'missing'}};assert.throws(()=>render(invalid),/verwijzing/);
+invalid=copy();invalid.find(g=>g.id==='bewerkingen-trainer').parentId='missing';assert.throws(()=>render(invalid),/hoofdwereld/);
+invalid=copy();invalid.find(g=>g.id==='getallenwereld').parentId='bewerkingen-trainer';invalid.find(g=>g.id==='getallenwereld').featured=false;invalid.find(g=>g.id==='getallenwereld').componentTitle='Ongeldig';assert.throws(()=>render(invalid),/Circulaire wereldstructuur/);
 assert.equal(fs.readFileSync(path.join(root,'js/catalog.js'),'utf8'),render(catalog));
 console.log('Register: aliases, progress identities, actual providers, references, roles, topic/level contracts and '+routes+' active routes verified.');

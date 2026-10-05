@@ -10,15 +10,18 @@
   const script=existing||document.createElement('script');
   const complete=()=>{try{registry=factory(root.AXIOMA_CATALOG,{baseURL:base.href});resolve();}catch(e){reject(e);}};
   script.addEventListener('load',complete,{once:true});script.addEventListener('error',()=>reject(Error('Het spelregister kon niet laden.')),{once:true});
-  if(!existing){script.dataset.gameCatalog='true';script.src=new URL('js/catalog.js',base).href;document.head.append(script);}
+  if(!existing){script.dataset.gameCatalog='true';script.src=new URL('js/catalog.js?v=0.6.1',base).href;document.head.append(script);}
  });
- root.LeraarBobGameRegistry=Object.freeze({ready:()=>ready.then(()=>root.LeraarBobGameRegistry),list:options=>registry?.list(options)||[],game:id=>registry?.game(id)||null,modes:(id,options)=>registry?.modes(id,options)||[],worksheets:(id,options)=>registry?.worksheets(id,options)||[],destination:(...args)=>registry?.destination(...args)||null,current:path=>registry?.current(path||location.href)||null,baseURL:base.href});
+ root.LeraarBobGameRegistry=Object.freeze({ready:()=>ready.then(()=>root.LeraarBobGameRegistry),list:options=>registry?.list(options)||[],game:id=>registry?.game(id)||null,presentation:id=>registry?.presentation(id)||null,components:id=>registry?.components(id)||[],modes:(id,options)=>registry?.modes(id,options)||[],worksheets:(id,options)=>registry?.worksheets(id,options)||[],destination:(...args)=>registry?.destination(...args)||null,current:(path,options)=>registry?.current(path||location.href,options)||null,baseURL:base.href});
 })(typeof globalThis==='object'?globalThis:this,function createRegistry(catalog,{baseURL='http://localhost/'}={}){
  if(!Array.isArray(catalog))throw Error('Ongeldig spelregister.');
  const base=new URL(baseURL),games=JSON.parse(JSON.stringify(catalog));
  const freeze=v=>{if(v&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};games.forEach(freeze);
  const game=id=>games.find(g=>g.active!==false&&(g.id===id||(g.modeAliases||[]).includes(id)))||null;
- const list=({featured,teacherVisible}={})=>games.filter(g=>g.active!==false&&(featured===undefined||g.featured===featured)&&(teacherVisible===undefined||g.teacherVisible===teacherVisible)).sort((a,b)=>(a.featureOrder||1000)-(b.featureOrder||1000));
+ // Presentation membership does not change the historical progress/provider identity.
+ function presentation(id){let g=game(id);const seen=new Set();while(g?.parentId){if(seen.has(g.id))throw Error('Circulaire wereldstructuur: '+g.id);seen.add(g.id);g=game(g.parentId);}return g;}
+ const list=({featured,teacherVisible,includeComponents=false}={})=>games.filter(g=>g.active!==false&&(includeComponents||!g.parentId)&&(featured===undefined||g.featured===featured)&&(teacherVisible===undefined||g.teacherVisible===teacherVisible)).sort((a,b)=>(a.featureOrder||1000)-(b.featureOrder||1000));
+ const components=id=>{const parent=presentation(id);return parent?[parent,...list({includeComponents:true}).filter(g=>g.id!==parent.id&&presentation(g.id)?.id===parent.id)]:[];};
  function capabilities(id,kind,{topicId,role,includeReferences=true}={},seen=new Set()){
   const g=game(id);if(!g)return [];
   const key=g.id+':'+kind;if(seen.has(key))throw Error('Circulaire providerverwijzing: '+key);
@@ -46,11 +49,12 @@
   return url.href;
  }
  function safeReturn(value){try{if(typeof value!=='string'||/[\\]|%2f|%5c/i.test(value.split(/[?#]/)[0]))return null;const url=new URL(value,base);if(url.origin!==base.origin||!url.pathname.startsWith(base.pathname)||url.username||url.password||!['http:','https:','file:'].includes(url.protocol))return null;return url.pathname+url.search+url.hash;}catch{return null;}}
- function current(path){
+ function current(path,{includeComponents=false}={}){
   try{const url=new URL(path,base);if(url.origin!==base.origin)return null;
-   const candidates=list().filter(g=>{const entry=new URL(g.route?.entry||g.href,base);return url.pathname===entry.pathname||(g.route?.prefix&&url.pathname.startsWith(new URL(g.route.prefix,base).pathname));});
-   return candidates.sort((a,b)=>(new URL(b.route?.prefix||b.href,base).pathname.length)-(new URL(a.route?.prefix||a.href,base).pathname.length))[0]||null;
+   const candidates=list({includeComponents:true}).filter(g=>{const entry=new URL(g.route?.entry||g.href,base);return url.pathname===entry.pathname||(g.route?.prefix&&url.pathname.startsWith(new URL(g.route.prefix,base).pathname));});
+   const found=candidates.sort((a,b)=>(new URL(b.route?.prefix||b.href,base).pathname.length)-(new URL(a.route?.prefix||a.href,base).pathname.length))[0]||null;
+   return includeComponents?found:presentation(found?.id);
   }catch{return null;}
  }
- return Object.freeze({ready:()=>Promise.resolve(),list,game,modes,worksheets,destination,current,baseURL:base.href,safeReturn});
+ return Object.freeze({ready:()=>Promise.resolve(),list,game,presentation,components,modes,worksheets,destination,current,baseURL:base.href,safeReturn});
 });

@@ -169,3 +169,18 @@ test('central XP uses saved totals once and keeps completed puzzles separate', (
   assert.equal(api.earnedXP({id:'vectoren-trainer'},{state:{storage:{'axioma-vectorentrainer-v020':'invalid'}}}),null);
   assert.equal(api.earnedXP({id:'reele-getallen-trainer',progressType:'levels'},{state:{storage:{'axioma-real-numbers-v1':JSON.stringify({progress:{xp:75}})}}}),75);
 });
+
+test('Getallenwereld keeps its guided route and historical series separate while preserving earned XP', () => {
+  const api=context.window.LeraarBobCatalogProgress,catalog=JSON.parse(script('games.json'));
+  const family=catalog.filter(g=>g.id==='getallenwereld'||g.parentId==='getallenwereld');
+  const overview={errors:{},games:[
+    {game_id:'getallenwereld',state:{completed:['machten-product','wortels-factor'],total:15}},
+    {game_id:'bewerkingen-trainer',state:{completed:['power-power','power-product','scientific'],total:16,storage:{'leraarbob.bewerkingen.v1':JSON.stringify({journey:{topics:{'op-power-power':{answers:['a','b','c'],rewarded:true,xp:30}}}})}}}
+  ]};
+  const totals=api.aggregate([...family,family[1]],overview);
+  assert.equal(totals.xp,30);assert.equal(totals.entries.length,2);
+  assert.equal(totals.entries[0].label,'2 van 15 onderdelen');assert.equal(totals.entries[1].label,'3 van 16 vraagvormen');
+  assert.equal(totals.entries[1].title,'Getallenwereld · Reeksen');assert(!totals.entries.some(e=>e.label.includes('31')));
+  assert.equal(api.savedFor(family[0],overview).game_id,'getallenwereld');assert.equal(api.savedFor(family[1],overview).game_id,'bewerkingen-trainer');
+  overview.games[0].state.completed.push('machten-macht');assert.equal(api.summarize(family[1],api.savedFor(family[1],overview)).completed,3,'Guided work never rewrites the historical series total');
+});

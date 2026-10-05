@@ -52,7 +52,7 @@ await window.LeraarBobGameRegistry.ready();
     const student = account?.role === 'student';
     $('playerTotals').hidden = !student;
     $('progressLogin').hidden = !!account;
-    const totals = student && progressState === 'ready' ? window.LeraarBobCatalogProgress.aggregate(allGames, overview) : null;
+    const totals = student && progressState === 'ready' ? window.LeraarBobCatalogProgress.aggregate(window.LeraarBobGameRegistry.list({includeComponents:true}), overview) : null;
     $('totalXP').textContent = totals ? totals.xp.toLocaleString('nl-BE') : '—';
     $('totalCompleted').textContent = totals ? totals.completed.toLocaleString('nl-BE') : '—';
     $('playerProgressStatus').textContent = !account ? 'Met je centrale leraarBob-account.' : !student ? 'Je bent aangemeld als leerkracht.' : progressState === 'loading' ? 'Je voortgang wordt geladen…' : !totals ? 'Je totaalscore is tijdelijk niet beschikbaar.' : 'Bewaard bij je leraarBob-account.';
@@ -61,15 +61,15 @@ await window.LeraarBobGameRegistry.ready();
     $('progressGames').replaceChildren();
     $('progressReserveGames').replaceChildren();
     for (const entry of totals?.entries || []) {
-      const game = allGames.find(g => g.id === entry.id);
+      const game = window.LeraarBobGameRegistry.presentation(entry.id);
       const row = element('li', 'progress-game');
-      if (game?.featured) {
+      if (game?.featured && entry.id === game.id) {
         const cover = element('img', 'progress-cover'); cover.src = localUrl(game.coverSmall || game.cover); cover.alt = ''; cover.loading = 'lazy'; row.append(cover);
         row.append(element('span', 'progress-subject', game.subject));
       }
       const link = element('a', 'progress-game-link', entry.title); link.href = localUrl(entry.href);
       row.append(link, element('span', 'progress-game-label', entry.label), element('span', 'progress-game-xp', entry.xp === null ? '' : entry.xp.toLocaleString('nl-BE') + ' XP'));
-      if (game?.featured) {
+      if (game?.featured && entry.id === game.id) {
         const progress = window.LeraarBobCatalogProgress.summarize(game, window.LeraarBobCatalogProgress.savedFor(game, overview));
         if (progress.max) { const meter = element('progress', ''); meter.max = progress.max; meter.value = progress.value; meter.setAttribute('aria-label', entry.title + ': ' + entry.label); row.append(meter); }
       }
@@ -132,6 +132,11 @@ await window.LeraarBobGameRegistry.ready();
         meter.setAttribute('aria-label', `${game.title}: ${summary.label} afgerond`);
         root.append(heading, meter);
       } else root.append(heading);
+      for(const component of window.LeraarBobGameRegistry.components(game.id).filter(g=>g.id!==game.id)){
+        const componentSaved=window.LeraarBobCatalogProgress.savedFor(component,overview);if(!componentSaved)continue;
+        const componentSummary=window.LeraarBobCatalogProgress.summarize(component,componentSaved),xp=window.LeraarBobCatalogProgress.earnedXP(component,componentSaved);
+        const componentLabel=element('span','progress-label',component.componentTitle+': '+componentSummary.label+(xp===null?'':' · '+xp+' XP'));componentLabel.dataset.progressComponent=component.id;root.append(componentLabel);
+      }
       detail.textContent = summary.detail;
       if (summary.status === 'started' || summary.status === 'saved') action.textContent = 'Ga verder';
       if (summary.status === 'complete') {

@@ -1282,15 +1282,15 @@
   },
   {
     "title": "Getallenwereld",
-    "subtitle": "Herken rekenregels en bouw uitwerkingen van machten en vierkantswortels.",
+    "subtitle": "Machten, vierkantswortels en wetenschappelijke schrijfwijze. Kies rekenregels, een reeks of een battle.",
     "href": "games/getallenwereld/",
-    "category": "Machten & wortels",
+    "category": "Machten, wortels & schrijfwijze",
     "kind": "learn",
     "accent": "blue",
     "theme": "Getallen",
     "art": "getallenwereld",
     "cover": "games/getallenwereld/cover.svg",
-    "detail": "15 onderdelen · 6 opgaven per onderdeel",
+    "detail": "15 onderdelen · solo, duo, klasbattle en oefenbladen",
     "id": "getallenwereld",
     "progressType": "levels",
     "teacherVisible": true,
@@ -1301,7 +1301,7 @@
     "progressUnitPlural": "onderdelen",
     "featured": true,
     "featureOrder": 6,
-    "subject": "Machten & wortels",
+    "subject": "Machten, wortels & schrijfwijze",
     "presentation": "formal",
     "coverSmall": "games/getallenwereld/cover.svg",
     "active": true,
@@ -1325,35 +1325,99 @@
           "providerId": "getallenwereld"
         },
         {
+          "id": "series",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "title": "Reeks samenstellen",
+          "description": "Kies vraagvormen, moeilijkheid en aantal opgaven.",
+          "href": "games/bewerkingen-trainer/?mode=solo&screen=setup",
+          "providerId": "bewerkingen-trainer",
+          "topics": [
+            "machten",
+            "wetenschappelijk",
+            "wortels"
+          ],
+          "topicParam": "world"
+        },
+        {
           "id": "local",
           "participation": "duo",
           "purpose": "battle",
-          "title": "Duo-battle in Bewerkingentrainer",
-          "reference": {
-            "gameId": "bewerkingen-trainer",
-            "modeId": "local"
-          }
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/bewerkingen-trainer/battle.html",
+          "providerId": "bewerkingen-trainer",
+          "topics": [
+            "machten",
+            "wetenschappelijk",
+            "wortels"
+          ],
+          "topicParam": "world",
+          "title": "Duo-battle",
+          "devices": "Met twee op één toestel"
         },
         {
           "id": "classroom",
           "participation": "group",
           "purpose": "battle",
-          "title": "Klasbattle in Bewerkingentrainer",
-          "reference": {
-            "gameId": "bewerkingen-trainer",
-            "modeId": "classroom"
-          }
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "href": "games/bewerkingen-trainer/classroom.html",
+          "providerId": "bewerkingen",
+          "classFunction": "bewerkingen-class",
+          "rpc": "axioma_game_class",
+          "topics": [
+            "machten",
+            "wetenschappelijk",
+            "wortels"
+          ],
+          "topicParam": "world",
+          "title": "Klasbattle",
+          "devices": "Met een code op eigen toestellen"
+        },
+        {
+          "id": "teacher",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "teacher"
+          ],
+          "href": "games/bewerkingen-trainer/?mode=teacher&screen=setup",
+          "providerId": "bewerkingen-trainer",
+          "title": "Samen leren op het klasbord",
+          "description": "Begeleid een uitwerking samen met je klas.",
+          "devices": "Leerkracht en klas · één scherm",
+          "topics": [
+            "machten",
+            "wetenschappelijk",
+            "wortels"
+          ],
+          "topicParam": "world"
         }
       ],
       "worksheets": [
         {
           "id": "operations",
-          "title": "Oefenblad in Bewerkingentrainer",
-          "description": "Getallenwereld heeft geen eigen printprovider. Stel een oefenblad met machten en wortels samen in Bewerkingentrainer.",
-          "reference": {
-            "gameId": "bewerkingen-trainer",
-            "worksheetId": "operations"
-          }
+          "title": "Machten, schrijfwijze en wortels",
+          "href": "games/bewerkingen-trainer/?intent=worksheet&screen=setup",
+          "providerId": "bewerkingen-trainer",
+          "description": "Kies opgaven en print met een verbetersleutel.",
+          "topics": [
+            "machten",
+            "wetenschappelijk",
+            "wortels"
+          ],
+          "topicParam": "world"
         }
       ]
     },
@@ -1382,6 +1446,21 @@
         ]
       },
       {
+        "id": "wetenschappelijk",
+        "title": "Wetenschappelijke schrijfwijze",
+        "href": "games/bewerkingen-trainer/?world=wetenschappelijk&mode=solo&screen=setup",
+        "routeModes": [
+          "solo",
+          "series",
+          "local",
+          "classroom",
+          "teacher"
+        ],
+        "skillIds": [
+          "scientific"
+        ]
+      },
+      {
         "id": "wortels",
         "title": "Vierkantswortels",
         "href": "games/getallenwereld/?world=getallen&topic=wortels&screen=chapter",
@@ -1395,7 +1474,8 @@
           "wortels-regels"
         ]
       }
-    ]
+    ],
+    "progressLabel": "Rekenregels"
   },
   {
     "id": "bewerkingen-trainer",
@@ -1486,9 +1566,9 @@
         {
           "id": "operations",
           "title": "Machten, schrijfwijze en wortels",
-          "href": "games/bewerkingen-trainer/?mode=teacher",
+          "href": "games/bewerkingen-trainer/?intent=worksheet&screen=setup",
           "providerId": "bewerkingen-trainer",
-          "description": "Stel een reeks samen en kies Oefenblad. Met verbetersleutel."
+          "description": "Kies opgaven en print met een verbetersleutel."
         }
       ]
     },
@@ -1550,6 +1630,8 @@
           "root-sum-mixed"
         ]
       }
-    ]
+    ],
+    "parentId": "getallenwereld",
+    "componentTitle": "Reeksen"
   }
 ]

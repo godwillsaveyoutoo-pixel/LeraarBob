@@ -18,6 +18,7 @@ const rp=R.Progress.fresh();R.Progress.record(rp,R.generate('rootcalc'),{clean:f
 const rows=[{user_id:'alice',game_id:'vectoren-trainer',updated_at:'2026-09-21T10:00:00Z',state:{storage:{'axioma-vectorentrainer-v020':JSON.stringify({progress:vp,draft:{skill:'equal',done:true}})}}},{user_id:'alice',game_id:'reele-getallen-trainer',updated_at:'2026-09-21T10:00:00Z',state:{storage:{'axioma-real-numbers-v1':JSON.stringify({progress:rp,draft:{skill:'rootcalc',phase:'feedback',dirty:true,errorCode:'root-value'}})}}}];
 rows.push({user_id:'alice',game_id:'rechten-trainer',state:{rechtenV2:{missions:{slope:{completed:true,world:'hellingrug'}},events:[]}}},{user_id:'bob',game_id:'wortelbouw',state:{completed:['length-2'],total:14}});
 rows.push({user_id:'alice',game_id:'getallenwereld',updated_at:'2026-10-05T14:10:00Z',state:{completed:['machten-product','wortels-vereenvoudigen'],total:15,storage:{'leraarbob.getallenwereld.v1':JSON.stringify({version:1,entries:{'machten-product':{done:['1:0','1:1','1:2','1:3','1:4','1:5'],independent:['1:0','1:1','1:2','1:3','1:4','1:5']},'wortels-vereenvoudigen':{done:['2:0','2:1','2:2','2:3','2:4','2:5'],independent:['2:0','2:1','2:2','2:3','2:4']}}})}}});
+rows.push({user_id:'alice',game_id:'bewerkingen-trainer',updated_at:'2026-10-05T14:20:00Z',state:{completed:['power-product','root-product','scientific'],total:16,storage:{'leraarbob.bewerkingen.v1':JSON.stringify({version:1,solved:['power-product','root-product','scientific'],history:[],sessions:{}})}}});
 const profiles=[{user_id:'alice',alias:'alice <img src=x onerror=alert(1)>',class_code:'3TBO',axioma_progress:{state:{total:5,correct:4,xp:40}}},{user_id:'bob',alias:'bob',class_code:'4TMW'}];
 const mock=`(()=>{let account={id:'teacher',role:'teacher',email:'test@example.invalid'};const listeners=new Set();window.testQueries=[];window.testDelay=0;
 const data=${JSON.stringify({axioma_games:games,axioma_profiles:profiles,axioma_game_progress:rows})};
@@ -36,14 +37,18 @@ window.AxiomaAuth={getAccount:async()=>account,ready:async()=>({account}),client
   await c.until('!!document.querySelector("leraarbob-topbar")?.shadowRoot.querySelector(".collapse")');
   assert.equal(await c.eval('document.querySelectorAll("#groupBattles a").length'),5);
   assert.equal(await c.eval('document.querySelectorAll("main a[href*=klasbattle]").length'),6);
-  assert.deepEqual(await c.eval('[...document.querySelectorAll("#groupBattles a")].map(a=>new URL(a.href).searchParams.get("game"))'),['rechten','wortelbouw','vectoren','algebra','bewerkingen']);
+  assert.deepEqual(await c.eval('[...document.querySelectorAll("#groupBattles a")].map(a=>new URL(a.href).searchParams.get("game"))'),['rechtenwereld','wortelbouw','vectoren-trainer','algebra-trainer','getallenwereld']);
   assert.deepEqual(await c.eval('[...document.querySelectorAll(".gameChip")].map(b=>b.dataset.game)'),featuredIds);
   assert.equal(await c.eval('document.querySelectorAll(".gameChip").length'),6);
-  assert.match(await c.eval('document.querySelector("[data-label=Getallenwereld]").textContent'),/2\/15/);
+  assert.match(await c.eval('document.querySelector("[data-label=Getallenwereld]").textContent'),/2\/15.*3\/16/);
+  assert.equal(await c.eval('document.querySelectorAll("[data-game=bewerkingen-trainer]").length'),0,'The old component has no second public filter');
   await c.eval('document.querySelector("[data-game=getallenwereld]").click();document.querySelector("[data-id=alice]").click()');
   assert.equal(await c.eval('document.querySelectorAll("tbody tr:first-child td[data-label]").length'),1);
   assert.match(await c.eval('document.querySelector("#detail").innerText'),/Getallenwereld/);
   assert.match(await c.eval('document.querySelector("#detail").innerText'),/2\/15/);
+  assert.match(await c.eval('document.querySelector("#detail").innerText'),/3\/16/);
+  assert.equal(await c.eval('document.querySelectorAll("#detail [data-progress-component=getallenwereld]").length'),1);
+  assert.equal(await c.eval('document.querySelectorAll("#detail [data-progress-component=bewerkingen-trainer]").length'),1);
   assert.match(await c.eval('document.querySelector("#detail").innerText'),/2 onderdelen voltooid/);
   assert.equal(await c.eval('document.querySelector("#detail progress").value'),2/15);
   await c.eval('document.querySelector("[data-game=getallenwereld]").click();document.querySelector("#closeDetail").click()');

@@ -78,11 +78,11 @@ function genericSummary(p,game){
       value:0
     };
   }
-  if(game.progress_type==='levels'){
+  if((game.progress_type||game.progressType)==='levels'){
     const done=Array.isArray(s.completed)?s.completed.length:num(s.completed);
-    const total=num(s.totalLevels||s.total||s.levelCount);
-    const singular=game.metadata?.unit_singular||'onderdeel';
-    const plural=game.metadata?.unit_plural||'onderdelen';
+    const total=num(s.totalLevels||s.total||s.levelCount||game.progressTotal);
+    const singular=game.metadata?.unit_singular||game.progressUnitSingular||'onderdeel';
+    const plural=game.metadata?.unit_plural||game.progressUnitPlural||'onderdelen';
     const unit=done===1?singular:plural;
     return {
       label: total ? `${done}/${total}` : done ? `${done} klaar` : 'Actief',
@@ -102,6 +102,12 @@ function worldSummary(row){
  return {label:`${done}/${total}`,detail:'onderdelen afgerond',value:total?done/total:0,areas};
 }
 function summaryFor(row,game){
+  const components=registry.components(game.id).filter(g=>g.id!==game.id),base=summaryComponent(row,game);
+  const savedComponents=components.filter(g=>genericFor(row.user_id,g.id));
+  if(savedComponents.length)return {...base,label:[base.label,...savedComponents.map(g=>summaryComponent(row,g).label)].join(' · '),detail:[game.progressLabel||game.title,...savedComponents.map(g=>g.componentTitle)].join(' · ')};
+  return base;
+}
+function summaryComponent(row,game){
   if(game.id==='rechtenwereld')return worldSummary(row);
   if(game.id==='rechten-trainer') return trainerSummary(row);
   const details=trainerDetails(game.id,genericFor(row.user_id,game.id));
@@ -155,7 +161,7 @@ function drawRegistry(){
     const count=filteredStudents().filter(s=>{
       if(g.id==='rechtenwereld')return !!genericFor(s.user_id,'rechten-trainer')?.state?.rechtenV2;
       if(g.id==='rechten-trainer') return num(trainerOf(s)?.state?.total)>0;
-      return !!genericFor(s.user_id,g.id);
+      return registry.components(g.id).some(c=>!!genericFor(s.user_id,c.id));
     }).length;
     const cover=catalog.find(c=>c.id===g.id)?.coverSmall;
     return `<button type="button" class="gameChip" data-game="${esc(g.id)}" aria-pressed="${gameFilter===g.id}">
@@ -197,7 +203,9 @@ function drawDetail(){
   $('closeDetail').onclick=()=>{selectedStudent=null;drawDetail()};
 }
 
-function gameDetail(row,g){
+function gameDetail(row,g,component=false){
+  const parts=registry.components(g.id);
+  if(!component&&parts.length>1)return parts.map(part=>gameDetail(row,{...part,title:g.title+' · '+(part.componentTitle||part.progressLabel||'Onderdelen'),theme:g.theme,progress_type:part.progressType,metadata:{total:part.progressTotal,unit_singular:part.progressUnitSingular,unit_plural:part.progressUnitPlural}},true).replace('<article ',`<article data-progress-component="${esc(part.id)}" `)).join('');
   if(g.id==='rechtenwereld'){const summary=worldSummary(row);return `<article class="gameDetailCard"><div class="gameDetailHead"><h3>Rechtenwereld</h3><strong>${esc(summary.label)}</strong></div><p>${esc(summary.detail)}</p><ul class="world-results">${summary.areas.map(a=>`<li><span>${esc(a.name)}</span><strong>${a.playableCompleted}/${a.playableTotal}</strong></li>`).join('')}</ul></article>`;}
   if(g.id==='rechten-trainer'){
     const saved=trainerOf(row),s=saved?.state||{},skills=s.skills||{};
@@ -210,10 +218,12 @@ function gameDetail(row,g){
   const p=genericFor(row.user_id,g.id),details=trainerDetails(g.id,p);
   if(details)return readableDetail(g,p,details);
   if(!p) return `<article class="gameDetailCard"><div class="gameDetailHead"><div><p class="eyebrow">${esc(g.theme)}</p><h3>${esc(g.title)}</h3></div><strong>—</strong></div><p class="summary">Nog geen cloudvoortgang voor dit onderdeel.</p></article>`;
+  const summary=summaryComponent(row,g),xp=window.LeraarBobCatalogProgress?.earnedXP(g,p);
   return `<article class="gameDetailCard">
-    <div class="gameDetailHead"><div><p class="eyebrow">${esc(g.theme)}</p><h3>${esc(g.title)}</h3></div><strong>${esc(summaryFor(row,g).label)}</strong></div>
+    <div class="gameDetailHead"><div><p class="eyebrow">${esc(g.theme)}</p><h3>${esc(g.title)}</h3></div><strong>${esc(summary.label)}</strong></div>
     <p class="summary">Laatst opgeslagen: ${esc(new Date(p.updated_at).toLocaleString('nl-BE'))}</p>
-    <p class="game-result"><strong>${esc(summaryFor(row,g).detail)}</strong></p>${summaryFor(row,g).value?`<progress max="1" value="${Math.min(1,Math.max(0,summaryFor(row,g).value))}" aria-label="Afgeronde onderdelen"></progress>`:''}
+    <p class="game-result"><strong>${esc(summary.detail)}</strong></p>${summary.value?`<progress max="1" value="${Math.min(1,Math.max(0,summary.value))}" aria-label="Afgeronde onderdelen"></progress>`:''}
+    ${xp!==null&&xp!==undefined?`<p class="summary">${xp} XP</p>`:''}
   </article>`;
 }
 
@@ -273,6 +283,8 @@ async function init(){
 }
 
 $('logout').onclick=async()=>{try{await window.AxiomaAuth.signOut();location.href='../'}catch{}};
+const battleLinks=$('groupBattles').querySelector('.battle-links');battleLinks.replaceChildren();
+for(const g of registry.list()){if(!registry.modes(g.id,{includeReferences:false}).some(m=>m.id==='classroom'))continue;const a=document.createElement('a');a.href=registry.destination(g.id,'classroom',{hub:true});a.append(g.title,Object.assign(document.createElement('span'),{textContent:'↗'}));battleLinks.append(a);}
 window.AxiomaAuth.onChange(({account:next,pending})=>{
   if(!pending&&next?.id===account?.id&&next?.role===account?.role)return;
   loadVersion++;account=null;$('groupBattles').hidden=true;students=[];games=[];genericProgress=[];selectedStudent=null;

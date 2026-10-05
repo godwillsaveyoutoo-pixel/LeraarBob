@@ -1,7 +1,13 @@
-# Bewerkingentrainer
+# Getallenwereld · eigen reeksen
 
-Open `index.html` of de tegel Bewerkingentrainer op de startpagina. Deze eerste
-versie heeft zestien vraagvormen op drie niveaus: machten van machten,
+De openbare ingang is `../getallenwereld/`. Deze map bevat de bestaande
+Bewerkingentrainer als onderdeel van Getallenwereld: eigen reeksen, bordduo,
+samen leren, oefenbladen en de klasbattle. Oude links blijven bruikbaar.
+De opslag-ID `bewerkingen-trainer`, sleutel `leraarbob.bewerkingen.v1` en
+klasprovider `bewerkingen` blijven intact. De 16 vraagvormen zijn een aparte
+voortgangsreeks naast de 15 begeleide onderdelen; de aantallen worden niet opgeteld.
+
+De rekenkern heeft zestien vraagvormen op drie niveaus: machten van machten,
 producten/quotiënten van machten, eentermen, negatieve machten, gemengde
 bewerkingen, wetenschappelijke schrijfwijze, wortelproducten en -quotiënten,
 wortels van breuken, wortels en machten, wortels vereenvoudigen, wortels met
@@ -34,6 +40,12 @@ accountscheiding, offline cache en revisiecontrole van het platform. De
 gedeelde topbar toont het echte aantal zelfstandig geoefende vraagvormen.
 Inklappen, licht/donker en volledig scherm veranderen geen opgave of invoer.
 Bordbattle en leraarmodus vervangen de bewaarde zelfstandige reeks niet.
+`?world=machten|wortels|wetenschappelijk&mode=solo|duo|teacher&screen=setup`
+kiest alleen instellingen. Een nieuwe reeks begint pas via Start; Hervatten
+opent de bestaande reeks. `?intent=worksheet&screen=setup` biedt Oefenblad
+maken: de gegenereerde `sheetTasks` staan apart van alle speelreeksen en
+geschiedenis. Oefenblad bij een bestaande reeks gebruikt juist diezelfde vragen.
+Historische Algebra-missies via `?topic=op-*` blijven ondersteund.
 Klasconcepten staan apart per leerling/sessie/ronde in `sessionStorage`.
 
 ## Online uitrol

@@ -55,7 +55,7 @@ restore.onclick=()=>setCollapsed(false,true);
 addEventListener('storage',e=>{if(e.key===KEY)setCollapsed(e.newValue==='true');});
 function load(src){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=new URL(src,root);s.onload=resolve;s.onerror=reject;document.head.append(s);});}
 if(!window.LeraarBobAvatar){window.LeraarBobAvatarReady ||= load('shared/learner-avatar.js');window.LeraarBobAvatarReady.then(()=>syncAccount()).catch(()=>{window.LeraarBobAvatarReady=null;});}
-const modesReady=(window.LeraarBobPlayModes?Promise.resolve():load('shared/play-modes.js')).then(()=>window.LeraarBobPlayModes.ready()).catch(()=>{});
+const modesReady=(window.LeraarBobPlayModes?Promise.resolve():load('shared/play-modes.js?v=0.6.1')).then(()=>window.LeraarBobPlayModes.ready()).catch(()=>{});
 const routesReady=window.LeraarBobRoutes?Promise.resolve():load('shared/platform-routes.js').catch(()=>{});
 let loginLoading;
 async function openAccount(){
@@ -256,7 +256,7 @@ function watchSocial(){
   socialLoading=true;
   const existing=document.querySelector('script[src*="/axioma-social.js"]');
   if(existing)existing.addEventListener('load',watchSocial,{once:true});
-  else load('shared/axioma-social.js').then(watchSocial).catch(()=>{});
+  else load('shared/axioma-social.js?v=0.6.1').then(watchSocial).catch(()=>{});
  }
 }
 function navigateGame(){const node=current.header.querySelector('#crumbWorld,[data-screen="world"],#gameHomeBtn,#brandBtn,#homeBtn:not([data-platform-home]),#home');if(node)node.click();else if(script.dataset.gameHref)location.assign(new URL(script.dataset.gameHref,root));else if(!isHome)location.assign(location.pathname);}

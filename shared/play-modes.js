@@ -4,6 +4,7 @@
  const root=new URL('../',document.currentScript.src),escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const definitions={
   solo:{group:'learning',title:'Alleen leren',devices:'1 leerling',description:'Kies een level en volg je eigen leerroute.',access:'Ook zonder aanmelding',glyph:'route'},
+  series:{group:'learning',title:'Reeks samenstellen',devices:'1 leerling',description:'Kies vraagvormen, moeilijkheid en aantal opgaven.',access:'Ook zonder aanmelding',glyph:'route'},
   learn:{group:'learning',title:'Samen leren',devices:'2–3 leerlingen · elk een toestel',description:'Eerst je eigen idee, daarna samen bouwen en controleren.',access:'Leerlingaccounts · uitnodiging op alias',glyph:'classroom'},
   teacher:{group:'learning',title:'Samen leren op het klasbord',devices:'Leerkracht en klas · één scherm',access:'Leerkrachtaccount',glyph:'classroom'},
   local:{group:'battle',title:'Duo-battle op één toestel',devices:'2 spelers · één scherm',description:'Speel tegen elkaar op twee werkborden naast elkaar.',access:'Ook zonder aanmelding',glyph:'battle'},
@@ -11,11 +12,11 @@
   classroom:{group:'battle',title:'Klasbattle',devices:'De hele klas · elk een toestel',description:'Kies de instellingen en deel de sessiecode.',teacherDescription:'Start een sessie, deel de code en kies wanneer de ronde begint.',studentDescription:'Voer de code van je leerkracht in en speel mee met de klas.',access:'leraarBob-account · sessiecode',glyph:'classroom'},
   group:{group:'battle',title:'Groepssessie',devices:'Meerdere spelers · elk een toestel',access:'Leerlingaccounts',glyph:'classroom'}
  };
- const boot=window.LeraarBobGameRegistry?Promise.resolve():new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=new URL('shared/game-registry.js',root).href;s.onload=resolve;s.onerror=reject;document.head.append(s);});
+ const boot=window.LeraarBobGameRegistry?Promise.resolve():new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=new URL('shared/game-registry.js?v=0.6.1',root).href;s.onload=resolve;s.onerror=reject;document.head.append(s);});
  const ready=()=>boot.then(()=>window.LeraarBobGameRegistry.ready());
  const register=()=>window.LeraarBobGameRegistry;
  const adapt=g=>g&&({...g,name:g.title,subject:g.subject||g.category,path:g.route?.prefix||g.href.split(/[?#]/)[0],modes:register().modes(g.id).filter(m=>m.id!=='solo').map(m=>m.id)});
- const game=id=>adapt(register()?.game(id)),current=()=>adapt(register()?.current(location.href));
+ const game=id=>adapt(register()?.presentation(id)),current=()=>adapt(register()?.current(location.href));
  function modes(id,{solo=false,role='',topicId,world}={}){return (register()?.modes(id,{role:role||undefined,topicId:topicId||world})||[]).filter(m=>(solo||m.id!=='solo')&&(m.id!=='teacher'||role==='teacher')).map(m=>{
   const d=definitions[m.id]||{},description=role==='teacher'?d.teacherDescription||d.description:role==='student'?d.studentDescription||d.description:d.description;
   return {...d,...m,group:m.purpose==='battle'?'battle':'learning',description:m.description||description,...(m.isReference?{access:'Verwijzing naar '+m.providerTitle,description:m.description||'Je opent '+m.providerTitle+' voor deze spelvorm.'}:{}),file:m.href.split('/').pop().split('?')[0]};
