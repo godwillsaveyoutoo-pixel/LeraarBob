@@ -360,3 +360,24 @@ horen bij de bewuste toegang uitsluitend via de serverfunctie. De
 [drie nog ongebruikte indices](https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index)
 zijn nieuw en bedoeld voor eigen sessies, deelnemers en datumfilters. Bestaande
 platformadviezen blijven ongewijzigd.
+
+
+## Vervolg: begeleide Getallenwereld sluit aan op de aanklikbare bediening
+
+Ook de oorspronkelijke 15 onderdelen gebruiken nu antwoorddelen in de
+formule met passende keuzes. Alle bestaande opgaven, uitwerkingsstappen en
+oplossingsbewijzen blijven behouden. De hoofdacties zijn teruggebracht tot
+oefenen/samen, papier en resultaten; het gekozen leerdoel selecteert de
+bijbehorende vraagvormen waar daarvoor een provider bestaat. De start- en
+onderdelenpagina hebben een vast schermkader met intern scrollende inhoud.
+
+Sessiekeuzes blijven na herladen staan, inclusief een lege selectie.
+Een volgend onderdeel selecteren start niet meteen een nieuwe opgave.
+Dit vervolgt de Getallenwereld-pilot; het voegt geen XP toe aan historische
+begeleide voltooiingen en introduceert geen nieuwe databaselaag. Algebrawereld
+en de centrale rapport-/printuitbreidingen uit het structuurvoorstel zijn
+hiermee nog niet volledig omgebouwd.
+
+Controle: 11.941 antwoorddelen uit beide opgave-edities, 92 werkborden op
+klein liggend en staand scherm, de volledige bestaande Getallenwereld-routes
+en de online sessietests met fictieve accounts.

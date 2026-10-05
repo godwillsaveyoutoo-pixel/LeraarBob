@@ -18,6 +18,14 @@ const host=http.createServer((req,res)=>{let file=path.resolve(root,'.'+decodeUR
  const m=Smart.model(task);for(const [i,slot]of m.slots.entries()){await page.locator(root+' [data-smart-slot="'+slot.id+'"]').click();const value=wrong&&i===0?slot.options.find(v=>v!==slot.value):slot.value;await page.locator(root+' [data-smart-value='+JSON.stringify(value)+']').click();}
  }
  const t=await open('teacher'),a=await open('alex'),b=await open('sam');
+ // Reloading a setup preserves the chosen topic, individual forms and controls, without creating a session.
+ await t.page.locator('[data-go=duo-battle]').click();await t.page.locator('[data-group=wortels]').click();
+ for(const id of await t.page.locator('[name=skills]:checked').evaluateAll(es=>es.map(e=>e.value)))if(id!=='root-sum')await t.page.locator('[name=skills][value='+id+']').uncheck();
+ await t.page.locator('#sessionLevel').selectOption('2');await t.page.locator('#sessionCount').selectOption('10');await t.page.locator('#sessionSeconds').selectOption('120');await t.page.locator('#participate').uncheck();
+ await t.page.reload();await t.page.waitForFunction(()=>document.querySelector('#createSpace'));
+ assert.deepEqual(await t.page.evaluate(()=>NumbersSpace.snapshot().selected),['root-sum']);assert.equal(await t.page.locator('#sessionLevel').inputValue(),'2');assert.equal(await t.page.locator('#sessionCount').inputValue(),'10');assert.equal(await t.page.locator('#sessionSeconds').inputValue(),'120');assert.equal(await t.page.locator('#sessionAudience').inputValue(),'duo');assert.equal(await t.page.locator('#participate').isChecked(),false);assert.equal(await t.page.evaluate(()=>NumbersSpace.snapshot().state),null);
+ await t.page.locator('[name=skills][value=root-sum]').uncheck();await t.page.reload();await t.page.waitForFunction(()=>document.querySelector('#createSpace'));assert.equal(await t.page.locator('#createSpace button.primary').isDisabled(),true,'Reload cannot turn an empty selection into all topics');
+ await t.page.locator('[data-group=machten]').click();await t.page.locator('#sessionLevel').selectOption('1');await t.page.locator('#sessionCount').selectOption('5');await t.page.locator('#participate').check();await t.page.locator('#spaceBack').click();
  await t.page.locator('[data-go=class-learn]').click();await t.page.locator('#createSpace button.primary').click();await t.page.waitForFunction(()=>NumbersSpace.snapshot().state?.phase==='lobby');const code=await t.page.evaluate(()=>NumbersSpace.snapshot().state.code);
  for(const p of[a.page,b.page]){await p.locator('#sessionCode').fill(code);await p.locator('#joinSpace button').click();await p.waitForFunction(()=>NumbersSpace.snapshot().state?.phase==='lobby');}
  await t.page.locator('#hostStart').click();await a.page.waitForFunction(()=>NumbersSpace.snapshot().state?.phase==='question');await b.page.waitForFunction(()=>NumbersSpace.snapshot().state?.phase==='question');

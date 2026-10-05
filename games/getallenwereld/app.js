@@ -12,22 +12,25 @@ function sync(){router?.update(context());}
 function returnPath(){return R.href(location.href,{...context(),returnTo:''});}
 function providerPath(path,{topic=state.theme,mode='solo',worksheet=false}={}){
  const url=new URL(path,R.root);url.searchParams.set('mode',mode);if(worksheet)url.searchParams.set('intent','worksheet');
+ const focused=state.screen!=='home'&&L.stop(state.selected)?.theme===topic,skills=focused?L.practiceSkills(state.selected):[];
+ if(skills.length)url.searchParams.set('skills',skills.join(','));
+ if(focused){url.searchParams.set('lesson',state.selected);if(!skills.length)url.searchParams.set('scope','chapter');}
  return R.href(url.href,{gameId:'getallenwereld',world:topic,topic,screen:'setup',returnTo:returnPath()});
 }
 function scientificLink(){return providerPath('games/bewerkingen-trainer/',{topic:'wetenschappelijk'});}
 function worldLinks(){
  const registry=window.LeraarBobGameRegistry;if(!registry)return '';
- const role=AxiomaGame.account?.role||'guest';
- const entries=[...registry.modes('getallenwereld',{topicId:state.theme}).filter(e=>!['solo','learn','online','classlearn'].includes(e.id)&&(e.id!=='teacher'||role==='teacher')),...registry.worksheets('getallenwereld').map(e=>({...e,worksheet:true}))];
- return entries.map(e=>{
-  const key=e.worksheet?'worksheet':e.id;
-  let destination=e.worksheet?providerPath(e.href,{worksheet:true}):registry.destination('getallenwereld',e.id,{topicId:state.theme,hub:e.id==='classroom',returnTo:returnPath()});
-  if(!destination)return '';
-  if(!e.worksheet&&e.id!=='classroom')destination=providerPath(destination,{mode:e.id==='local'?'duo':e.id==='teacher'?'teacher':'solo'});
-  const label=e.worksheet?'Oefenblad maken':e.title||e.label||({local:'Duo-battle',classroom:'Klasbattle'})[e.id];
-  const detail=e.worksheet?'Met verbetersleutel':e.devices||({local:'Met twee op één toestel',classroom:'Met een code op eigen toestellen'})[e.id]||e.description||'';
-  return '<a data-world-link data-world-mode="'+esc(key)+'" data-platform-route href="'+esc(destination)+'">'+esc(label)+'<small>'+esc(detail)+'</small></a>';
- }).join('');
+ const series=registry.modes('getallenwereld',{topicId:state.theme}).find(m=>m.id==='series')?.href;
+ const paper=registry.worksheets('getallenwereld')[0]?.href;if(!series||!paper)return '';
+ const reportPath=view=>{const u=new URL(series,R.root);u.searchParams.set('view',view);return u.href;};
+ const teacher=AxiomaGame.account?.role==='teacher';
+ const actions=[
+  ['series','Oefenen & samen','Solo · duo · klas',series],
+  ['worksheet','Oefenblad','Met verbetersleutel',paper],
+  ['rankings','Ranglijsten','XP en battlepunten',reportPath('rankings')],
+  ...(teacher?[['students','Leerlingen','Resultaten per alias',reportPath('students')]]:[])
+ ];
+ return actions.map(([id,label,detail,path])=>'<a data-world-link data-world-mode="'+id+'" data-platform-route href="'+esc(providerPath(path,{worksheet:id==='worksheet'}))+'">'+label+'<small>'+detail+'</small></a>').join('');
 }
 function worldActions(){return '<nav class="world-actions" aria-label="Manieren van oefenen">'+worldLinks()+'</nav>';}
 function updateReferences(){const menu=$('trainerMenu');menu.querySelectorAll('a[data-world-link],a[data-scientific-link]').forEach(a=>a.remove());menu.insertAdjacentHTML('beforeend','<a data-scientific-link data-platform-route href="'+esc(scientificLink())+'">Wetenschappelijke schrijfwijze</a>'+worldLinks());}
@@ -83,12 +86,12 @@ function renderedStage(s,values,active=-1){return math(L.fill(s.template,values.
 function question(t){return `<span class="eyebrow">${state.screen==='help'?'Ander voorbeeld':'De opgave'}</span><div class="question">${math(t.tex)}</div><p class="condition">${esc(t.condition)}</p>${t.note?`<p class="note">${esc(t.note)}</p>`:''}`;}
 function play(){
  const t=task(),m=state.mission,s=t.stages[m.stage];
- const left=question(t)+(s?`<div class="working"><span class="phase">${m.done?'Jouw uitwerking':'Stap '+(m.stage+1)+'/'+t.stages.length}</span><div class="formula">${m.done&&s.expression&&s.accept!=='square-factor'?math(t.answerTex):renderedStage(s,m.values,activeSlot)}</div>${m.done?'<p class="answer-seal">✓ Juist uitgewerkt</p>':m.stage>0?`<div class="trail">${math(L.fill(t.stages[m.stage-1].template,t.stages[m.stage-1].slots.map(s=>s.answer)))}</div>`:''}</div>`:'');
- let right;
- if(m.done)right=`<p class="eyebrow">Opgelost</p><p class="help-explanation">${esc(s.explanation)}</p><p class="note">${m.assisted?'Je gebruikte hulp. Een volgende opgave kun je zelfstandig proberen.':'Je hebt deze opgave zelfstandig uitgewerkt.'}</p>`;
- else if(m.stage<0)right=`<p class="prompt">${esc(t.rulePrompt||'Welke rekenregel gebruik je eerst?')}</p><div class="rule-options">${t.choices.map(c=>`<button class="rule-choice ${wrongRule===c.id?'wrong':''}" data-rule="${c.id}"><span>${esc(c.label)}</span><span class="rule-math">${math(c.tex)}</span></button>`).join('')}</div>`;
- else right=`<p class="prompt">${esc(s.prompt)}</p><div class="slots">${s.slots.map((x,i)=>`<button class="slot" data-slot="${i}" aria-pressed="${activeSlot===i}" aria-label="${esc(x.label)}: ${esc(m.values[i]||'leeg')}"><span>${esc(x.label)}</span><b>${esc(m.values[i]||'?')}</b></button>`).join('')}</div>${s.squareChoices&&activeSlot===0?`<div class="square-picks" aria-label="Kies een kwadraatfactor">${s.squareChoices.map(k=>`<button data-square="${k}" aria-label="${k}, het kwadraat van ${Math.sqrt(k)}">${math(k+'='+Math.sqrt(k)+'^2')}</button>`).join('')}</div>`:`<div class="keypad" aria-label="Getal invoeren">${['1','2','3','4','5','6','7','8','9','−','0','⌫'].map(k=>`<button data-key="${k}" ${k==='⌫'?'aria-label="Laatste teken wissen" class="erase"':k==='−'?'aria-label="Minteken"':''}>${k}</button>`).join('')}</div>`}`;
- return `<section class="screen play">${playHead(t)}<div class="workbench"><div class="work-left">${left}</div><div class="work-right">${right}</div></div><footer class="workfoot"><p class="feedback" role="status" data-error="${error}" data-ok="${ok}">${esc(message||(m.stage<0?'Kies de regel die past bij de bewerking.':m.done?'Klaar voor de volgende opgave.':'Tik een vak aan en vul het getal in. Je kunt ook je toetsenbord gebruiken.'))}</p><button data-action="undo" ${m.stage<0?'disabled':''}>↶ Vorige stap</button><button data-action="help">Hulp</button>${m.done?'<button class="primary" data-action="next">'+(m.index===5?'Bekijk resultaat':'Volgende opgave')+' →</button>':m.stage>=0?'<button class="primary" data-action="check">Controleer →</button>':''}</footer></section>`;
+ if(s)activeSlot=Math.min(activeSlot,s.slots.length-1);
+ let work;
+ if(m.done)work=`<div class="guided-result"><div class="formula">${math(s.expression&&s.accept!=='square-factor'?t.answerTex:L.fill(s.template,m.values))}</div><p class="answer-seal">✓ Juist uitgewerkt</p><p>${esc(s.explanation)}</p></div>`;
+ else if(m.stage<0)work=`<p class="prompt">${esc(t.rulePrompt||'Welke rekenregel gebruik je eerst?')}</p><div class="rule-options">${t.choices.map(c=>`<button class="rule-choice ${wrongRule===c.id?'wrong':''}" data-rule="${c.id}"><span>${esc(c.label)}</span><span class="rule-math">${math(c.tex)}</span></button>`).join('')}</div>`;
+ else work=`<p class="prompt">${esc(s.prompt)}</p>${GuidedAnswer.render(t,m.stage,m.values,activeSlot)}`;
+ return `<section class="screen play guided-play" data-stage="${m.stage<0?'rule':m.done?'done':'answer'}">${playHead(t)}<div class="guided-workspace"><div class="guided-question">${question(t)}</div><div class="guided-work">${work}</div></div><footer class="workfoot"><p class="feedback" role="status" data-error="${error}" data-ok="${ok}">${esc(m.done?(m.assisted?'Met hulp uitgewerkt.':'Zelfstandig uitgewerkt.'):(message||(m.stage<0?'Kies de passende regel.':'Tik een antwoorddeel aan en kies.')))}</p><button data-action="undo" ${m.stage<0?'disabled':''}>↶ Vorige stap</button><button data-action="help">Hulp</button>${m.done?'<button class="primary" data-action="next">'+(m.index===5?'Bekijk resultaat':'Volgende opgave')+' →</button>':m.stage>=0?'<button class="primary" data-action="check">Controleer →</button>':''}</footer></section>`;
 }
 function start(){
  const parked=state.runs[state.selected];if(parked&&!parked.done){state.mission=parked;activeSlot=0;go('play');return;}
@@ -99,13 +102,14 @@ function start(){
 function chooseRule(id){
  const m=state.mission,t=task();if(!m||m.stage!==-1)return;
  if(id!==t.correct){m.attempts++;wrongRule=id;error=true;message='Deze regel past niet bij de eerste bewerking. Kijk naar het grondtal, de haakjes en het bewerkingsteken.';}
- else{resetMessage();m.stage=0;m.values=t.stages[0].slots.map(()=>'');activeSlot=0;message='Juist gekozen. Bouw nu de uitwerking.';ok=true;}
+ else{resetMessage();m.stage=0;m.values=t.stages[0].slots.map(()=>'');activeSlot=0;message='Juist gekozen.';ok=true;}
  render();persist();
 }
-function key(k){
+function chooseValue(value){
  const m=state.mission;if(!m||m.done||m.stage<0||state.screen!=='play')return;
- let v=m.values[activeSlot]||'';if(k==='⌫')v=v.slice(0,-1);else if(k==='−')v=v.startsWith('-')?v.slice(1):'-'+v;else if(/^\d$/.test(k)&&v.replace('-','').length<7)v=(v==='0'?k:v==='-0'?'-'+k:v+k);
- m.values[activeSlot]=v;resetMessage();render();persist();
+ if(!GuidedAnswer.choices(task(),m.stage,activeSlot,m.values).includes(value))return;
+ m.values[activeSlot]=value;const next=m.values.findIndex(v=>!v);if(next>=0)activeSlot=next;
+ resetMessage();render();persist();$('app').querySelector('[data-slot="'+activeSlot+'"]')?.focus({preventScroll:true});
 }
 function check(){
  const m=state.mission;if(!m||m.done||m.stage<0)return;const t=task(),result=L.checkStage(t,m.stage,m.values);message=result.message;error=!result.ok;ok=result.ok;
@@ -173,7 +177,7 @@ function actions(action){
   case 'help-return':go('play');break;
   case 'menu-close':go(previous==='help'?'play':previous);break;
   case 'again':state.mission=null;start();break;
-  case 'next-stop':{const old=L.stop(state.mission.id),list=L.STOPS.filter(s=>s.theme===old.theme),next=list[old.number];if(next){state.theme=next.theme;state.selected=next.id;state.mission=null;start();}else go('home');break;}
+  case 'next-stop':{const old=L.stop(state.mission.id),list=L.STOPS.filter(s=>s.theme===old.theme),next=list[old.number];if(next){state.theme=next.theme;state.selected=next.id;go('chapter');}else go('home');break;}
   case 'profile':$('profileBtn').click();break;
   case 'theme':{const mode=document.documentElement.dataset.mode==='dark'?'light':'dark';document.documentElement.dataset.mode=mode;try{localStorage.setItem('axioma-mode',mode);}catch{}render();break;}
   case 'fullscreen':fullscreen();break;
@@ -184,9 +188,8 @@ $('app').addEventListener('click',e=>{
  if(b.dataset.theme){state.theme=b.dataset.theme;state.selected=L.STOPS.find(s=>s.theme===state.theme).id;go('chapter');}
  else if(b.dataset.stop){state.selected=b.dataset.stop;resetMessage();render();persist();sync();}
  else if(b.dataset.rule)chooseRule(b.dataset.rule);
- else if(b.dataset.slot!==undefined){activeSlot=Number(b.dataset.slot);render();}
- else if(b.dataset.square){const m=state.mission,s=m&&task().stages[m.stage];if(state.screen==='play'&&!m.done&&s?.squareChoices?.includes(Number(b.dataset.square))){m.values[0]=b.dataset.square;activeSlot=1;resetMessage();render();persist();}}
- else if(b.dataset.key)key(b.dataset.key);
+ else if(b.dataset.slot!==undefined){activeSlot=Number(b.dataset.slot);render();$('guidedChoices')?.querySelector('button')?.focus({preventScroll:true});}
+ else if(b.dataset.choice!==undefined)chooseValue(b.dataset.choice);
  else if(b.dataset.action)actions(b.dataset.action);
 });
 $('gameHomeBtn').onclick=()=>{if(AxiomaGame.active)go('home');};
@@ -197,10 +200,7 @@ $('menuBtn').onclick=()=>{if(!AxiomaGame.active)return;if(state.screen==='menu')
 document.addEventListener('keydown',e=>{
  if(!AxiomaGame.active||e.composedPath().some(n=>n.id==='axioma-game-status'||n.matches?.('input,textarea,select,[contenteditable=true]')||n.tagName==='DIALOG'&&n.open))return;
  if(e.key==='Escape'){if(state.screen==='menu')actions('menu-close');else if(state.screen==='help')go('play');return;}
- if(state.screen!=='play'||!state.mission||state.mission.done||state.mission.stage<0)return;
- if(/^\d$/.test(e.key)){e.preventDefault();key(e.key);}else if(e.key==='-'||e.key==='Backspace'){e.preventDefault();key(e.key==='-'?'−':'⌫');}
- else if(e.key==='Enter'&&e.target.tagName!=='BUTTON'){e.preventDefault();check();}
- else if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const len=task().stages[state.mission.stage].slots.length;activeSlot=(activeSlot+(e.key==='ArrowRight'?1:len-1))%len;render();}
+
 });
 window.GetallenWorld=Object.freeze({snapshot:()=>JSON.parse(JSON.stringify(state)),task:()=>task()&&JSON.parse(JSON.stringify(task()))});
 restore();try{document.documentElement.dataset.mode=localStorage.getItem('axioma-mode')==='dark'?'dark':'light';}catch{}

@@ -99,7 +99,7 @@ body:is([data-screen=home],[data-screen=chapter],[data-screen=menu]) #app{overfl
 .home,.chapter{height:auto;min-height:100%;grid-template-rows:auto minmax(230px,1fr) auto auto auto}
 .home .heading,.chapter .heading{min-height:80px}
 .home .themes{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto}
-a.theme{text-decoration:none;min-width:44px;min-height:44px}
+a.theme{text-decoration:none;min-width:44px;min-height:44px;background:var(--card);border:1px solid #becdd1}
 .theme[data-topic=wetenschappelijk]{border-top:5px solid #377763}
 .theme .theme-title{font-size:clamp(21px,2.25vw,32px);line-height:1.15;gap:8px}
 .theme .theme-title>span{flex:none}
@@ -115,10 +115,87 @@ a.theme{text-decoration:none;min-width:44px;min-height:44px}
  .home .themes{padding:8px 12px;gap:8px}.theme .theme-title{font-size:19px}.theme .example{font-size:25px;min-height:56px}
  .theme .theme-bottom{font-size:11px}.world-actions{padding:6px 12px;gap:6px}.world-actions a{font-size:12px;flex-basis:120px;padding:6px 8px}.world-actions small{display:none}
 }
+
+/* The guided route uses the same inline answer choices as the generated series. */
+body[data-screen=play] #app{overflow:hidden}
+.guided-play{height:100%;min-height:0;grid-template-rows:70px minmax(0,1fr) auto}
+.guided-workspace{min-height:0;overflow:auto;overscroll-behavior:contain;display:flex;flex-direction:column;justify-content:safe center;gap:18px;padding:16px 24px}
+.guided-question{text-align:center;flex:none}.guided-question>.eyebrow{display:none}
+.guided-question .question{min-height:0;font-size:clamp(25px,3.5vw,42px);padding:5px;overflow-x:auto;justify-content:center}
+.guided-question .condition:empty,.guided-question .note:empty{display:none}
+.guided-work{width:100%;max-width:820px;margin-inline:auto;display:flex;flex-direction:column;gap:12px;flex:none}
+.guided-work>.prompt{text-align:center;font-size:16px;font-weight:650}
+.guided-work .rule-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.guided-work .rule-choice{align-items:center;text-align:center;min-height:86px}
+.guided-work .rule-math{overflow-x:auto;max-width:100%;font-size:20px}
+.guided-answer .smart-formula{flex-wrap:nowrap;min-height:112px;overflow-x:auto;justify-content:safe center;font-size:28px}
+.guided-answer .smart-formula .smart-power>span{display:inline-flex;align-items:center}
+.guided-answer .smart-choices button{max-width:100px}
+.guided-underbrace{display:flex;flex-direction:column;align-items:center;gap:6px}
+.guided-underbrace>span{display:flex;align-items:center;border-bottom:1px solid var(--muted);padding-bottom:4px}
+.guided-underbrace>small{display:flex;align-items:center;gap:6px;font:14px system-ui}
+.guided-aligned{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.guided-aligned>span{display:flex;align-items:center;gap:4px}
+.guided-result{text-align:center;display:grid;gap:12px}.guided-result .formula{font-size:32px}.guided-result>p:last-child{font-size:15px;color:var(--muted)}
+.guided-play .workfoot{min-height:64px;position:static}
+@media(max-width:599px){
+ .guided-play{grid-template-rows:64px minmax(0,1fr) auto}.guided-play .playhead{min-height:64px}
+ .guided-workspace{padding:10px 12px;gap:14px}.guided-work{gap:10px}
+ .guided-work .rule-options{grid-template-columns:1fr}.guided-work .rule-choice{min-height:62px;padding:6px 10px;gap:3px}
+ .guided-work>.prompt{font-size:14px}.guided-answer .smart-formula{font-size:24px}
+ .guided-play .workfoot{min-height:90px}.guided-play .workfoot .feedback{font-size:12px}
+}
+@media(min-width:600px) and (max-height:500px){
+ .guided-play{grid-template-rows:46px minmax(0,1fr) 52px}.guided-play .playhead{min-height:46px}
+ .guided-workspace{padding:3px 10px;gap:4px;flex-direction:row;align-items:center;justify-content:space-evenly}
+ .guided-question{width:37%;min-width:0}.guided-question .question{font-size:24px}
+ .guided-question .condition,.guided-question .note{font-size:11px}
+ .guided-work{width:61%;margin:0;gap:3px}.guided-work>.prompt{font-size:12px}
+ .guided-work .rule-options{grid-template-columns:1fr;gap:3px}.guided-work .rule-choice{min-height:46px;padding:3px 6px;gap:1px;font-size:11px;flex-direction:row;justify-content:space-between}
+ .guided-work .rule-choice>span:first-child{max-width:52%}.guided-work .rule-math{font-size:16px}
+ .guided-answer .smart-formula{min-height:106px;font-size:23px;padding:1px;gap:2px}
+ .guided-answer .smart-choice-label{font-size:11px}.guided-answer .smart-choices{gap:3px}
+ .guided-play .workfoot{min-height:52px}.guided-result{gap:4px}.guided-result .formula{font-size:25px}.guided-result>p:last-child{font-size:12px}
+}
 @media(max-width:899px) and (min-height:501px){.home .themes{grid-template-columns:1fr;grid-auto-rows:minmax(190px,auto)}}
 @media(max-width:599px){
  .home,.chapter{grid-template-rows:auto auto auto auto auto}
  .home .themes{grid-template-columns:1fr;grid-template-rows:none;grid-auto-rows:minmax(195px,auto)}
  .theme .theme-title{font-size:25px}.theme .example{font-size:28px;min-height:65px}
  .world-actions{padding:8px 12px;gap:6px}.world-actions a{flex-basis:130px;font-size:13px}
+}
+/* Fixed app frame: only the chapter list scrolls, with actions always in reach. */
+body:is([data-screen=home],[data-screen=chapter]) #app{overflow:hidden}
+.home,.chapter{height:100%;min-height:0;grid-template-rows:auto minmax(0,1fr) auto auto 28px;overflow:hidden}
+.home .heading,.chapter .heading{min-height:64px;padding:10px 24px}
+.home .heading h1,.chapter .heading h1{font-size:28px}
+.home .themes,.chapter .stops{min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.world-actions{flex-wrap:nowrap}.world-actions a{flex:1 1 0;min-width:44px}
+.home .dock,.chapter .dock{min-height:60px;padding-block:6px}
+@media(max-width:599px){
+ .home .heading,.chapter .heading{padding:8px 12px;min-height:64px}
+ .home .heading h1,.chapter .heading h1{font-size:23px}.home .heading p{display:none}
+ .home .themes{padding:8px 12px;gap:7px;grid-template-rows:repeat(3,minmax(86px,1fr));grid-auto-rows:initial}
+ .home .theme{padding:8px 12px;grid-template-columns:1fr auto;grid-template-rows:auto 1fr;align-items:center;gap:4px 8px}
+ .home .theme .eyebrow,.home .theme p,.home .theme-bottom strong{display:none}
+ .home .theme .theme-title{font-size:19px;grid-column:1/-1}.home .theme .theme-title>span{font-size:15px}
+ .home .theme .example{font-size:20px;min-height:0;justify-content:flex-start}
+ .home .theme .theme-bottom{font-size:10px;padding:0;border:0;max-width:100px}
+ .home .world-actions,.chapter .world-actions{padding:6px 12px;gap:5px}
+ .world-actions a{font-size:12px;padding:5px 7px}.world-actions small{display:none}
+ .home .dock,.chapter .dock{min-height:60px;flex-wrap:nowrap}.dock small{font-size:11px}
+ .home .foot,.chapter .foot{min-height:28px;padding:3px 10px;font-size:9px;flex-wrap:nowrap}
+ .home .foot span:first-child,.chapter .foot span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .home .foot span:last-child,.chapter .foot span:last-child{font-size:9px}
+ .chapter .stops{grid-template-rows:none;grid-auto-rows:110px;align-content:start}
+}
+@media(min-width:600px) and (max-height:500px){
+ .home,.chapter{grid-template-rows:50px minmax(0,1fr) 52px 50px 24px}
+ .home .heading,.chapter .heading{min-height:50px;padding:4px 12px}.home .heading h1,.chapter .heading h1{font-size:22px}
+ .home .heading p,.chapter .heading p{display:none}.home .theme p,.home .theme .eyebrow,.home .theme-bottom strong{display:none}
+ .home .theme{padding:6px 10px;gap:2px;grid-template-rows:auto minmax(0,1fr) auto}
+ .home .theme .theme-title{font-size:17px}.home .theme .example{min-height:0;font-size:22px}
+ .home .theme .theme-bottom{font-size:10px;padding-top:3px}
+ .home .dock,.chapter .dock{min-height:50px;padding-block:3px}.world-actions{padding-block:4px}
+ .home .foot,.chapter .foot{min-height:24px;font-size:10px}
 }

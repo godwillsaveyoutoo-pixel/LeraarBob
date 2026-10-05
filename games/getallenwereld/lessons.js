@@ -26,6 +26,17 @@ const THEMES=[
 ];
 const stops=THEMES.flatMap(t=>t.stops.map((s,i)=>({id:t.id+'-'+s[0],theme:t.id,kind:s[0],title:s[1],short:s[2],example:s[3],intro:s[4],number:i+1})));
 const stop=id=>stops.find(s=>s.id===id),theme=id=>THEMES.find(t=>t.id===id);
+// Shared learning goals, without merging the two historical progress records.
+const PRACTICE={
+ 'machten-product':['power-product'],'machten-quotient':['power-quotient'],
+ 'machten-macht':['power-power'],'machten-factoren':['power-monomial'],
+ 'machten-haakjes':['power-monomial','power-negative'],'machten-negatief':['power-negative'],
+ 'machten-mix':['power-mixed'],'wortels-factor':['square-factor'],
+ 'wortels-product':['root-product'],'wortels-quotient':['root-quotient','root-fraction'],
+ 'wortels-macht':['root-power','root-letters'],'wortels-vereenvoudigen':['root-simplify'],
+ 'wortels-som':['root-sum','root-sum-mixed']
+};
+const practiceSkills=id=>PRACTICE[id]?[...PRACTICE[id]]:[];
 const rule=(id,label,tex)=>({id,label,tex});
 const R={
  meaning:rule('meaning','Schrijf de herhaalde vermenigvuldiging','a^n=\\underbrace{a\\cdot\\ldots\\cdot a}_{n\\text{ factoren}}'),
@@ -154,5 +165,5 @@ function checkStage(t,index,values){
  if(s.expression){try{const actual=C.parse(fill(s.expression,values)),expected=C.parse(t.expression);if(C.signature(actual.value)!==C.signature(expected.value))return{ok:false,message:'Deze stap is niet gelijkwaardig.'};}catch{return{ok:false,message:'Deze waarden passen niet in de uitwerking.'};}}
  return{ok:true,message:s.explanation};
 }
-return Object.freeze({THEMES,STOPS:stops,stop,theme,make,fill,checkStage,GOAL:6});
+return Object.freeze({THEMES,STOPS:stops,stop,theme,make,fill,checkStage,practiceSkills,GOAL:6});
 });

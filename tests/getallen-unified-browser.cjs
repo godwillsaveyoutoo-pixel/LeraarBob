@@ -135,8 +135,15 @@ async function main(){
   // Guided work survives mode navigation and contextual returns exactly.
   await open('/games/getallenwereld/');await guidedReady();
   assert.equal(await page.locator('.theme').count(),3);
-  await topbarFit('world-home-1280');
-  await page.setViewportSize({width:390,height:844});await topbarFit('world-home-390');
+  for(const [width,height]of [[1280,800],[780,360],[640,360],[390,844],[360,640]]){
+   await page.setViewportSize({width,height});
+   for(const collapsed of[false,true]){
+    if(collapsed)await page.locator('leraarbob-topbar .collapse').click();
+    await topbarFit('world-home-'+width+'-'+collapsed);
+    const issues=await page.evaluate(()=>{const bad=[];if(document.documentElement.scrollHeight>innerHeight+1)bad.push('page scroll');for(const e of document.querySelectorAll('.themes>.theme,.world-actions a,.dock button')){const r=e.getBoundingClientRect();if(r.width<44||r.height<44)bad.push('small '+e.textContent);if(r.top<0||r.bottom>innerHeight+1||r.left<0||r.right>innerWidth+1)bad.push('clipped '+e.textContent);}return bad;});assert.deepEqual(issues,[],width+' home '+collapsed);
+    if(collapsed){await page.reload();await guidedReady();assert.equal(await page.locator('.lb-restore').isVisible(),true);await page.locator('.lb-restore').click();}
+   }
+  }
   await page.setViewportSize({width:1280,height:800});
   await page.locator('.theme[data-theme=machten]').click();
   await page.locator('[data-stop=machten-betekenis]').click();
@@ -144,16 +151,16 @@ async function main(){
   await page.locator('[data-action=start]').click();
   const task=await page.evaluate(()=>GetallenWorld.task());
   await page.locator('[data-rule="'+task.correct+'"]').click();
-  await page.locator('[data-slot="0"]').click();await page.keyboard.type('17');
+  await page.locator('[data-slot="0"]').click();await page.locator('[data-choice]').first().click();
   const guidedWork=await getLive();
   await page.locator('.playhead [data-action=chapter]').click();
   const returnPath=new URL(page.url()).pathname+new URL(page.url()).search+new URL(page.url()).hash;
+  await page.locator('[data-stop=machten-product]').click();
+  for(const mode of ['series','worksheet']){const u=new URL(await page.locator('.world-actions [data-world-mode='+mode+']').getAttribute('href'),base);assert.equal(u.searchParams.get('skills'),'power-product','Selected learning goal follows '+mode);}
+  await page.locator('[data-stop=machten-betekenis]').click();
   const actionLinks=await page.locator('.world-actions [data-world-mode]').evaluateAll(es=>es.map(e=>({mode:e.dataset.worldMode,href:e.href})));
-  for(const id of ['series','local','classroom','teacher','worksheet'])assert(actionLinks.some(link=>link.mode===id),'World action '+id);
+  for(const id of ['series','worksheet','rankings','students'])assert(actionLinks.some(link=>link.mode===id),'World action '+id);
   for(const link of actionLinks){assert.equal(new URL(link.href).searchParams.get('returnTo'),returnPath,'Exact selected-level return for '+link.mode);}
-  const classroomURL=new URL(actionLinks.find(link=>link.mode==='classroom').href);
-  assert.equal(classroomURL.searchParams.get('game'),'getallenwereld');
-  assert.equal(classroomURL.searchParams.get('world'),'machten');
   await page.locator('.world-actions [data-world-mode=series]').click();await page.locator('[data-go=solo]').click();await seriesReady();
   assert.equal(await page.locator('#axioma-game-status').evaluate(e=>e.shadowRoot.querySelector('.dock').hidden),true,'The shared topbar owns the account and progress controls');
   assert.match(await page.locator('leraarbob-topbar [part=crumb-game]').textContent(),/Getallenwereld/);
@@ -178,7 +185,7 @@ async function main(){
   assert.equal(new URL(page.url()).searchParams.get('level'),'machten-betekenis');
   assert.deepEqual(await getLive(),guidedWork);
   await page.locator('[data-action=start]').click();
-  assert.equal((await getLive()).mission.values[0],'17');
+  assert.equal((await getLive()).mission.values[0],guidedWork.mission.values[0]);
   // Scientific notation opens the old provider as an internal, explicit-start route.
   await page.locator('leraarbob-topbar [part=crumb-game]').click();
   await page.locator('.theme[data-topic=wetenschappelijk]').click();await seriesReady();
