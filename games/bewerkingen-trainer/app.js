@@ -16,6 +16,16 @@ try{const saved=JSON.parse(AxiomaGame.storage.getItem(KEY)||'null');if(saved?.ve
 state.journey=AlgebraWorld.normalize(state.journey);try{const old=JSON.parse(AxiomaGame.storage.getItem(KEY)||'null');state.worldLegacy=(Array.isArray(old?.worldLegacy)?old.worldLegacy:old?.solved||[]).filter(id=>C.SKILLS.some(s=>s.id===id));}catch{state.worldLegacy=[];}
 if(state.mission&&state.sessions.solo)state.sessions.solo.mission=state.mission;
 function selectedGroup(){const groups=[...new Set(state.selected.map(id=>C.SKILLS.find(s=>s.id===id)?.group))];return groups.length===1?groups[0]:'';}
+function routingTopic(){return state.screen!=='setup'&&AlgebraWorld.topic(state.mission)?.engine==='operations'?state.mission:selectedGroup();}
+function navigationGroup(){
+ if(state.screen==='play')return C.SKILLS.find(s=>s.id===task()?.skill)?.group||'';
+ if(state.screen==='sheet'){
+  const tasks=state.sheetSource==='generated'&&state.sheetTasks.length?state.sheetTasks:session()?.tasks||[];
+  const groups=[...new Set(tasks.map(t=>C.SKILLS.find(s=>s.id===t.skill)?.group))];
+  return groups.length===1?groups[0]:'';
+ }
+ return selectedGroup();
+}
 function applySelection(query){const group=query.get('world')||query.get('topic'),mode=query.get('mode'),requestedScreen=query.get('screen');
  if(C.GROUPS.some(g=>g.id===group)){const selected=state.selected.filter(id=>C.SKILLS.find(s=>s.id===id)?.group===group);state.selected=selected.length?selected:C.SKILLS.filter(s=>s.group===group).map(s=>s.id);}
  if(!worksheetIntent&&['solo','duo','teacher'].includes(mode))state.mode=mode;
@@ -37,11 +47,11 @@ function picker(){
  $('level').value=state.level;$('count').value=state.count;state.names.forEach((n,i)=>$('name'+i).value=n);modeUI();
 }
 function modeUI(){document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===state.mode&&!worksheetIntent)));$('duoNames').hidden=state.mode!=='duo'||worksheetIntent;document.querySelector('.mode-grid').hidden=worksheetIntent;$('setupTitle').textContent=worksheetIntent?'Maak een oefenblad':'Kies je eigen reeks';$('setupIntro').textContent=worksheetIntent?'Kies vraagvormen, niveau en aantal.':'Machten, wetenschappelijke schrijfwijze en vierkantswortels.';$('progressHint').hidden=worksheetIntent;$('startBtn').textContent=worksheetIntent?'Oefenblad maken →':({solo:'Start met oefenen →',duo:'Start de bordbattle →',teacher:'Start samen leren →'})[state.mode];$('startBtn').disabled=!state.selected.length;$('selectionSummary').textContent=state.selected.length?`${state.selected.length} vraagvormen · ${Math.max(state.count,state.selected.length)} vragen`:'Kies minstens één vraagvorm.';updateNavigation();}
-function updateNavigation(){const group=selectedGroup(),label=C.GROUPS.find(g=>g.id===group)?.label||'Eigen reeks';$('crumbGroup').textContent=label;$('crumbMode').textContent=state.screen==='sheet'||worksheetIntent?'Oefenblad':({solo:'Eigen reeks',duo:'Bordduo',teacher:'Samen leren'})[state.mode];$('crumbMode').hidden=$('crumbMode').textContent===label;
+function updateNavigation(){const group=navigationGroup(),label=C.GROUPS.find(g=>g.id===group)?.label||'Eigen reeks';$('crumbGroup').textContent=label;$('crumbMode').textContent=state.screen==='sheet'||worksheetIntent?'Oefenblad':({solo:'Eigen reeks',duo:'Bordduo',teacher:'Samen leren'})[state.mode];$('crumbMode').hidden=$('crumbMode').textContent===label;
  $('worldReturn').href=returnTo;
- const classURL=new URL('../../klasbattle/',location.href);classURL.searchParams.set('game','getallenwereld');classURL.searchParams.set('view','create');if(group)classURL.searchParams.set('world',group);if(R)classURL.searchParams.set('returnTo',R.href(location.href,{gameId:'getallenwereld',world:group,screen:'setup',returnTo:''}));document.querySelectorAll('a[href="classroom.html"],a[data-getallen-class]').forEach(a=>{a.href=classURL.pathname+classURL.search;a.dataset.getallenClass='';a.dataset.platformRoute='';});
+ const classURL=new URL('../../klasbattle/',location.href);classURL.searchParams.set('game','getallenwereld');classURL.searchParams.set('view','create');if(group)classURL.searchParams.set('world',group);if(R)classURL.searchParams.set('returnTo',R.href(location.href,{gameId:'getallenwereld',world:selectedGroup(),topic:selectedGroup(),screen:'setup',returnTo:''}));document.querySelectorAll('a[href="classroom.html"],a[data-getallen-class]').forEach(a=>{a.href=classURL.pathname+classURL.search;a.dataset.getallenClass='';a.dataset.platformRoute='';});
 }
-function syncRoute(){if(!router)return;router.update({world:selectedGroup(),screen:state.screen,returnTo});const url=new URL(location.href);if(worksheetIntent)url.searchParams.set('intent','worksheet');else url.searchParams.delete('intent');url.searchParams.set('mode',state.mode);history.replaceState(history.state,'',url.pathname+url.search+url.hash);}
+function syncRoute(){if(!router)return;router.update({world:selectedGroup(),topic:routingTopic(),screen:state.screen,returnTo});const url=new URL(location.href);if(worksheetIntent)url.searchParams.set('intent','worksheet');else url.searchParams.delete('intent');url.searchParams.set('mode',state.mode);history.replaceState(history.state,'',url.pathname+url.search+url.hash);}
 function screen(name){if(!AxiomaGame.active)return;if(name==='play'&&!session()){state.screen='setup';$('setupNotice').textContent='Kies je vragen en klik op Start.';}else if(name==='sheet'&&!session()&&!state.sheetTasks.length){worksheetIntent=true;state.screen='setup';}else state.screen=name;
  if(state.screen==='sheet'&&!session())state.sheetSource='generated';
  if(state.screen==='play'){worksheetIntent=false;state.mission=session()?.mission||null;}
@@ -99,6 +109,6 @@ if(requested?.engine==='operations'){
  }else{state.mode='solo';state.screen='play';}
 }
 renderMission();screen(state.screen);
-if(R)router=R.mount({gameId:'getallenwereld',enabled:()=>AxiomaGame.active,read:()=>({world:selectedGroup(),screen:state.screen,returnTo}),apply:context=>{worksheetIntent=new URLSearchParams(location.search).get('intent')==='worksheet';returnTo=R.safeReturn(context.returnTo,'games/getallenwereld/');applySelection(new URLSearchParams(location.search));screen(state.screen);}});
+if(R)router=R.mount({gameId:'getallenwereld',enabled:()=>AxiomaGame.active,read:()=>({world:selectedGroup(),topic:routingTopic(),screen:state.screen,returnTo}),apply:context=>{worksheetIntent=new URLSearchParams(location.search).get('intent')==='worksheet';returnTo=R.safeReturn(context.returnTo,'games/getallenwereld/');applySelection(new URLSearchParams(location.search));screen(state.screen);}});
 window.BewerkingenTrainer=Object.freeze({snapshot:()=>JSON.parse(JSON.stringify(state))});
 })();

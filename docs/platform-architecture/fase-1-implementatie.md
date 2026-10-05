@@ -193,7 +193,9 @@ bestaande reeksinstellingen en drie bestaande moeilijkheidsgraden. Een link of
 modekeuze opent instellingen; alleen **Start** genereert een spelreeks.
 **Oefenblad maken** genereert eigen printopgaven zonder een actieve solo-, duo-
 of klasbordreeks te vervangen. De teruglink volgt de werkelijk geselecteerde
-pagina en het onderdeel, ook wanneer een andere opgave nog actief is.
+pagina en het onderdeel, ook wanneer een andere opgave nog actief is. De kop
+van een hervatte reeks toont het onderwerp van de actieve opgave; een andere
+selectie voor een volgende reeks blijft apart bewaard.
 
 Startpagina, samen-spelenkeuze, centraal battleoverzicht, ranglijstfilter,
 oefenbladpagina en leerkrachtconsole gebruiken dezelfde hoofdwereld. Oude

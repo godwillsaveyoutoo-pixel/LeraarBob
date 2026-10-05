@@ -187,8 +187,21 @@ async function main(){
   assert.equal(scientific.screen,'setup');
   assert.deepEqual(scientific.selected,['scientific']);
   assert.deepEqual(seriesProgress(scientific),seriesWork,'Scientific selection preserves existing sessions and rewards');
+  const scientificURL=new URL(page.url()).pathname+new URL(page.url()).search;
+  await page.locator('#selectAll').click();
+  assert.equal((await getSeries()).selected.length,16);
+  assert.equal(new URL(page.url()).searchParams.has('topic'),false,'A mixed selection clears the previous topic');
+  await page.evaluate(()=>AxiomaGame.flush());await page.reload();await seriesReady();
+  assert.equal((await getSeries()).selected.length,16,'Mixed question choices survive reload');
+  assert.deepEqual(seriesProgress(await getSeries()),seriesWork);
+  await page.goto(new URL(scientificURL,base).href);await seriesReady();
   await page.locator('#resumeBtn').click();
   assert.equal(await page.locator('#answer0').inputValue(),'unfinished^(');
+  assert.deepEqual((await getSeries()).selected,['scientific'],'The next series selection remains separate');
+  assert.equal(await page.locator('#crumbGroup').textContent(),'Machten & letters','The resumed exercise shows its actual topic rather than the next selection');
+  const activeBattleURL=new URL(await page.locator('[data-getallen-class]').first().getAttribute('href'),base);
+  assert.equal(activeBattleURL.searchParams.get('world'),'machten');
+  assert.equal(new URL(activeBattleURL.searchParams.get('returnTo'),base).searchParams.get('world'),'wetenschappelijk','The battle return preserves the next series selection');
   // Collapse/reopen/reload keeps the actual work and has an accessible restore button.
   for(const [width,height]of [[1280,800],[780,360],[640,360],[390,844],[320,700]]){
    await page.setViewportSize({width,height});
