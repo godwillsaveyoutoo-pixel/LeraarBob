@@ -1,0 +1,43 @@
+.class-simulation-setup,.class-simulation-controls{border:1px solid #93afbb;background:#edf4f6;color:#183b50;border-radius:8px;padding:16px;margin:16px 0}
+.class-simulation-setup h2,.class-simulation-controls h2{margin:0 0 8px;font:700 20px system-ui}
+.class-simulation-setup p,.class-simulation-controls p{margin:8px 0;line-height:1.5}
+.class-simulation-setup label{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:12px 0}
+.class-simulation-setup button,.class-simulation-controls button,.class-simulation-setup select,.class-simulation-controls select{min-height:44px;font:inherit;border:1px solid #819aa6;border-radius:5px;padding:8px 12px;background:#fff;color:inherit;cursor:pointer}
+.class-simulation-setup button{font-weight:700;background:#ff891c;color:#172f3e;border-color:#dc6500}
+.class-simulation-badge{display:inline-block;background:#173c51;color:white;padding:5px 10px;font:700 12px system-ui;letter-spacing:.04em;border-radius:4px}
+.class-simulation-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:10px 0}
+.class-simulation-actions a{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px}
+.class-simulation-learners{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0;list-style:none}
+.class-simulation-learners li{display:grid;grid-template-columns:minmax(80px,1fr) minmax(95px,1fr) minmax(90px,1fr);gap:6px;align-items:center;font-size:14px}
+.class-simulation-learners label{min-width:0}.class-simulation-learners select{width:100%;min-width:0;padding:6px}
+.class-simulation-learners .simulation-answer{font-size:12px;grid-column:1/-1;color:#426578}
+.class-simulation-controls[data-phase=question]{margin-top:10px}
+.class-simulation-controls>summary{min-height:44px;display:list-item;align-content:center;font-weight:700;cursor:pointer}
+body[data-playing=true].class-simulation #session{grid-template-rows:44px auto minmax(0,1fr)}
+body[data-playing=true] .class-simulation-controls{padding:0 10px;margin:0;min-height:44px;max-height:38dvh;overflow:auto}
+.classroom-embedded{--lb-header-height:0px!important;--topbar-height:0px!important}
+body.classroom-embedded[data-playing=true]{grid-template-columns:minmax(0,1fr)}
+body.classroom-embedded[data-playing=true]>main,body.classroom-embedded #session,body.classroom-embedded .session-bar,body.classroom-embedded .class-simulation-controls,body.classroom-embedded #playArea{min-width:0;max-width:100%}
+body.classroom-embedded #playArea{grid-template-columns:minmax(0,1fr)}
+body.classroom-embedded #board{width:100%;max-width:100%;min-width:0}
+body.class-simulation #submissionStatus{display:none}
+.classroom-embedded .session-bar>div:first-child{min-width:0}
+.classroom-embedded>header,.classroom-embedded leraarbob-topbar,.classroom-embedded .lb-restore,.classroom-embedded .topbar-restore,.classroom-embedded>.algebraSectionNav,.classroom-embedded main>.solo-link,.classroom-embedded main>.class-solo-link,.classroom-embedded .setup-intro>a,.classroom-embedded main>.algebraRouteHeading{display:none!important}
+body.classroom-embedded[data-playing=true]{grid-template-rows:minmax(0,1fr)!important}
+body.classroom-embedded main{margin-top:0;padding-top:8px}
+body.classroom-embedded[data-playing=true].topbar-collapsed .session-bar{padding-right:4px}
+html[data-mode=dark] .class-simulation-setup,html[data-mode=dark] .class-simulation-controls{background:#122735;color:#e5edf2;border-color:#496b7d}
+html[data-mode=dark] .class-simulation-setup select,html[data-mode=dark] .class-simulation-controls select,html[data-mode=dark] .class-simulation-controls button{background:#1c384a;color:#eef4f8}
+html[data-mode=dark] .class-simulation-learners .simulation-answer{color:#b5ccd8}
+@media(max-width:700px){.class-simulation-learners{grid-template-columns:1fr}.class-simulation-learners li{grid-template-columns:minmax(72px,1fr) minmax(88px,1fr) minmax(80px,1fr)}.class-simulation-setup,.class-simulation-controls{padding:12px}.class-simulation-actions button{flex:1 1 140px}}
+/* A short portal frame scrolls as one module instead of crushing its workboard. */
+@media(max-height:520px){
+ body.classroom-embedded[data-playing=true]{display:block;height:auto;min-height:100dvh;overflow:auto}
+ body.classroom-embedded[data-playing=true]>main{display:block;height:auto;min-height:0;padding:4px 8px}
+ body.classroom-embedded[data-playing=true] #session{display:flex;flex-direction:column;gap:4px}
+ body.classroom-embedded[data-playing=true] .session-bar{min-height:44px}
+ body.classroom-embedded[data-playing=true] #playArea{display:grid;grid-template-rows:auto minmax(280px,1fr)}
+ body.classroom-embedded[data-playing=true] #board{height:max(280px,calc(100dvh - 120px));min-height:280px}
+ body.classroom-embedded[data-playing=true] .class-simulation-controls{flex:none}
+ body.classroom-embedded[data-playing=true] .class-simulation-controls[open]{max-height:none}
+}

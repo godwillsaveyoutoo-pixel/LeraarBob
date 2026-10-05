@@ -55,7 +55,7 @@ function freshMission(id,previous,seed=Date.now()){
  throw Error('Er kon geen nieuwe reeks worden gemaakt. Probeer opnieuw.');
 }
 const cleanEvidence=e=>({kind:String(e.kind||'solve'),goal:String(e.goal||'').slice(0,180),done:e.done===true,supported:!!e.supported,errors:Math.max(0,Number(e.errors)||0),hints:Math.max(0,Number(e.hints)||0)});
-function normalize(raw){const out={version:1,stops:{}};for(const s of stops){const r=raw?.stops?.[s.id];if(!r)continue;const evidence=Array.isArray(r.evidence)?r.evidence.slice(0,6).map(cleanEvidence):[];const finished=evidence.length===6&&evidence.every(e=>e.done);out.stops[s.id]={evidence,finished,independent:finished&&(r.independent===true||independently(evidence)),rewarded:finished&&r.rewarded===true,xp:finished&&r.rewarded===true&&r.xp===30?30:0};}return out;}
+function normalize(raw){const out={version:1,stops:{},roundRewards:{}};for(const [key,r] of Object.entries(raw?.roundRewards||{})){if(key.length>500||!r||!(stop(r.level)||W.topic(r.level))||![0,30].includes(r.xp))continue;out.roundRewards[key]={level:r.level,xp:r.xp};}for(const s of stops){const r=raw?.stops?.[s.id];if(!r)continue;const evidence=Array.isArray(r.evidence)?r.evidence.slice(0,6).map(cleanEvidence):[];const finished=evidence.length===6&&evidence.every(e=>e.done);out.stops[s.id]={evidence,finished,independent:finished&&(r.independent===true||independently(evidence)),rewarded:finished&&r.rewarded===true,xp:finished&&r.rewarded===true&&r.xp===30?30:0};}return out;}
 function independently(evidence){return evidence.filter(r=>r.done&&!r.supported&&!r.errors&&!r.hints).length>=3&&evidence.some(r=>r.kind==='solve'&&r.done&&!r.supported&&!r.errors&&!r.hints);}
 function info(progress,id,runs={},oldJourney=null,oldSolved=[]){
  const s=stop(id),p=normalize(progress).stops[id];if(!s)return null;
@@ -74,12 +74,22 @@ function record(progress,id,evidence,oldJourney){
  next.stops[id]={evidence:evidence.map(cleanEvidence),finished:true,independent,rewarded:true,xp:prev?.rewarded?prev.xp:already?0:30};
  return {progress:next,xp:already?0:30};
 }
-function xp(progress){return Object.values(normalize(progress).stops).reduce((n,s)=>n+s.xp,0);}
+// Completion rewards belong to a generated round, while level completion remains unique.
+// The original level award is kept intact; this ledger stores only the additional XP.
+function rewardRound(progress,id,run,evidence,baseXP=0){
+ const next=normalize(progress),level=stop(id)||W.topic(id);if(!level)return {progress:next,xp:0};const expected=stop(id)?6:5;
+ if(!run?.completed||!Array.isArray(evidence)||evidence.length!==expected||evidence.some(r=>!r.done))return {progress:next,xp:0};
+ const key=run.rewardId||id+':'+(run.seed??(run.exercises||[]).map(e=>e.id).join(':'));
+ if(!key||Object.hasOwn(next.roundRewards,key))return {progress:next,xp:0};
+ const extra=30-Math.min(30,Math.max(0,Number(baseXP)||0));
+ next.roundRewards[key]={level:id,xp:extra};return {progress:next,xp:30};
+}
+function xp(progress){const p=normalize(progress);return Object.values(p.stops).reduce((n,s)=>n+s.xp,0)+Object.values(p.roundRewards).reduce((n,s)=>n+s.xp,0);}
 function platform(progress,oldJourney,systemsJourney){
  const completed=stops.filter(s=>info(progress,s.id,{},oldJourney).finished).map(s=>s.id);
  const sys=W.normalize(systemsJourney);for(const s of systems)if(sys.topics[s.id]?.finished)completed.push(s.id);
  return {completed,total:stops.length+systems.length};
 }
 function next(progress,runs,oldJourney,oldSolved=[]){return stops.find(s=>!info(progress,s.id,runs,oldJourney,oldSolved).finished)||stops.find(s=>!info(progress,s.id,runs,oldJourney,oldSolved).independent)||null;}
-return Object.freeze({stops,worlds,stop,world,worldFor,mission,freshMission,questionSignature,normalize,info,record,xp,platform,next,independently});
+return Object.freeze({stops,worlds,stop,world,worldFor,mission,freshMission,questionSignature,normalize,info,record,rewardRound,xp,platform,next,independently});
 });

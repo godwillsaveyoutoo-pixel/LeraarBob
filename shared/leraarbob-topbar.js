@@ -1,6 +1,9 @@
 /* Shared platform chrome. Existing engine controls retain their nodes and handlers. */
 (() => {
 'use strict';
+// The central Klasbattle page owns account, social and presentation controls.
+// Exit before creating observers, loading helpers or mounting hidden chrome.
+if(location.pathname.endsWith('/classroom.html')&&new URLSearchParams(location.search).get('hub')==='1'&&window.parent!==window)return;
 if(window.LeraarBobTopbar||window.VectorBattlePlayer||window!==window.top)return;
 const script=document.currentScript,root=new URL('../',script.src),home=new URL('index.html',root).href;
 const title=script.dataset.title||document.title.split('·')[0].trim();
@@ -170,12 +173,15 @@ function showMenu(){
   if(source){b.dataset.source=source.id;b.disabled=source.disabled===true;}
   b.onclick=()=>{dialog.close();action();};group.append(b);return b;
  };
+  let classroomEntry=null;
   if(!isHome){
    const game=section('Huidig spel','menu-options menu-game');
    const menu=nativeMenu(header);
    const nodes=[...(menu||header).querySelectorAll(menu?'button,a':'.lb-gamebar button,.lb-gamebar a')].filter(node=>!node.hidden&&!node.matches('[data-nav-hidden],[data-collapse-topbar],#themeBtn,#modeBtn[aria-pressed],#theme,#fullBtn,[data-fullscreen],[data-platform-home],.axiomaHome,.lb-legacy-brand,#logout')&&(menu||!node.closest('[hidden]')));
    const modes=window.LeraarBobPlayModes,gameId=modes?.current()?.id;
-   const entries=nodes.map(node=>{const details=menuDetails(node),mode=modes?.navigation(node,gameId);if(mode)Object.assign(details,{label:mode.title,description:mode.devices,glyph:mode.glyph,group:mode.group==='battle'?'multiplayer':'learning'});return {node,details};}).filter(e=>e.details.label);
+   const entries=nodes.map(node=>{const details=menuDetails(node),mode=modes?.navigation(node,gameId);if(mode)Object.assign(details,{label:mode.title,description:mode.devices,glyph:mode.glyph,group:mode.group==='battle'?'multiplayer':'learning'});return {node,details,mode};}).filter(e=>e.details.label);
+   classroomEntry=entries.find(e=>e.mode?.id==='classroom'||e.node.id==='classBtn'||e.node.matches('a[href]')&&new URL(e.node.href).pathname.endsWith('/classroom.html')||/^Klasbattle$/.test(e.details.label));
+   if(classroomEntry?.node.matches('a')&&gameId)classroomEntry.node.href=modes.destination(gameId,'classroom',new URLSearchParams(location.search).get('world'));
    const isBattle=e=>e.details.group==='multiplayer'||['battleBtn','classBtn'].includes(e.node.id)||/^(Duo|Groepsbattle|Online duo|Klasmodus|Battle met twee)/i.test(e.details.label);
    const isLearning=e=>e.details.group==='learning';
    const isProgress=e=>e.node.id==='progressBtn'||e.node.dataset.screen==='book'||/^(Mijn voortgang|Spelvoortgang)$/.test(e.details.label);
@@ -184,12 +190,12 @@ function showMenu(){
    else if(script.dataset.menuOverview!=='false')add(game,'Spelmenu',navigateGame,{glyph:'compass'});
    const progress=entries.find(isProgress);
    if(progress)add(game,'Spelvoortgang',()=>progress.node.click(),{...progress.details,source:progress.node});
-   for(const e of entries){if(e===overview||isProgress(e)||isBattle(e)||isLearning(e))continue;
+   for(const e of entries){if(e===classroomEntry||e===overview||isProgress(e)||isBattle(e)||isLearning(e))continue;
     add(game,e.node.id==='canvasBtn'?'Vrij tekenen':e.details.label,()=>e.node.click(),{...e.details,source:e.node});
    }
    const learning=entries.filter(isLearning);
    if(learning.length){const group=section('Leren','menu-options menu-learning');for(const e of learning)add(group,e.details.label,()=>e.node.click(),{...e.details,source:e.node});}
-   const battles=entries.filter(isBattle);
+   const battles=entries.filter(e=>e!==classroomEntry&&isBattle(e));
    if(battles.length){const group=section('Battles','menu-options menu-battles');for(const e of battles){
     const label=/online/i.test(e.details.label)?'Online duel':/groep|klas/i.test(e.details.label)?'Klasbattle':'Duo-battle op één toestel';
     add(group,label,()=>e.node.click(),{...e.details,source:e.node});
@@ -198,6 +204,11 @@ function showMenu(){
   }
   const platform=section('leraarBob','menu-nav menu-platform');
   add(platform,'Spellen',()=>goPlatformSection('homeGames','#ontdek'),{glyph:'home'});
+  add(platform,'Klasbattle',()=>{
+   if(classroomEntry){classroomEntry.node.click();return;}
+   const gameId=window.LeraarBobPlayModes?.current()?.id;
+   location.assign(gameId?window.LeraarBobPlayModes.destination(gameId,'classroom'):new URL('klasbattle/',root));
+  },{glyph:'classroom',description:'Battles en ranglijsten voor alle spellen',source:classroomEntry?.node});
   add(platform,'Alle oefenbladen',()=>location.assign(new URL('oefenbladen.html',root)),{glyph:'pencil'});
   add(platform,'Mijn leerpad',()=>goPlatformSection('homeProgress','#playerProgress'),{glyph:'chart'});
   if(account?.role==='teacher'&&script.dataset.page!=='teacher')add(platform,'Mijn klassen',()=>location.assign(new URL('teacher/',root)),{glyph:'classroom'});
@@ -275,7 +286,7 @@ function mount(header){
  // Keep live nodes: game event handlers and progress updates continue to work.
  while(header.firstChild)context.append(header.firstChild);
  header.classList.add('lb-header');for(const [property,value] of [['visibility','visible'],['pointer-events','auto'],['transform','none'],['opacity','1']])header.style.setProperty(property,value,'important');header.removeAttribute('data-collapsible-topbar');header.hidden=false;header.inert=false;if(!header.id)header.id='leraarbob-header';
- const host=document.createElement('leraarbob-topbar');if(navPilot)host.dataset.navPilot='true';const shadow=host.attachShadow({mode:'open'});
+ const host=document.createElement('leraarbob-topbar');if(navPilot)host.dataset.navPilot='true';if(title==='Algebrawereld'||script.dataset.breadcrumbEmphasis==='true')host.dataset.breadcrumbEmphasis='true';const shadow=host.attachShadow({mode:'open'});
  shadow.innerHTML=`<style>
  :host{display:block;flex:none;color:var(--lb-ink,#e7f1fa);background:var(--lb-surface,#102333);font:600 14px/1.25 system-ui,sans-serif}*{box-sizing:border-box}button,a{font:inherit;color:inherit}button,a.brand{min-height:44px;border:1px solid transparent;border-radius:var(--lb-control-radius,8px);background:none;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:8px}button:hover,a:hover{background:var(--lb-hover,#ffffff12)}button:focus-visible,a:focus-visible{outline:3px solid #e5b957;outline-offset:2px}svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}.row{display:flex;align-items:center;gap:16px;min-height:60px;padding:6px 20px;border-bottom:1px solid var(--lb-line,#799aae50)}.mobile-menu,.mobile-context{display:none}.brand{font-weight:850;font-size:24px;letter-spacing:-1px;font-style:italic;white-space:nowrap}.crumbs{display:flex;align-items:center;gap:5px;flex:1;min-width:0;overflow:auto;scrollbar-width:thin}.crumbs button,.crumbs>span{white-space:nowrap;font-size:13px}.crumbs button:disabled{opacity:1;cursor:default}.actions{display:flex;align-items:center;gap:5px;flex-shrink:0}.actions button{min-width:44px}.account{gap:8px}.account-mark{display:inline-flex;align-items:center;justify-content:center;flex:none;--avatar-size:30px}.account-mark .learner-avatar{display:inline-grid!important}.account .account-label{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
  .teacher-link{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid var(--lb-line,#799aae50);text-decoration:none;font-size:13px;font-weight:750;color:inherit;white-space:nowrap}.teacher-link[hidden]{display:none}.teacher-link:hover{background:var(--lb-hover,#ffffff12)}
@@ -377,6 +388,18 @@ function mount(header){
   :host([data-nav-pilot=true]) .row:has(.theme-toggle:not([hidden])) .mobile-context{grid-column:2;grid-row:1}
   :host([data-nav-pilot=true]) .row:has(.theme-toggle:not([hidden])) .actions{grid-column:2;grid-row:2;width:100%;justify-content:flex-end}
   :host([data-nav-pilot=true]) .row:has(.theme-toggle:not([hidden])) .progress{margin-right:auto}
+ }
+ /* Algebra's hierarchy remains readable beside the shared account controls. */
+ :host([data-breadcrumb-emphasis=true]) .crumbs{gap:8px}
+ :host([data-breadcrumb-emphasis=true]) [part=crumb-game]{font-size:17px;font-weight:850;padding-inline:12px;background:var(--lb-hover,#ffffff12);border-color:var(--lb-line,#799aae50)}
+ :host([data-breadcrumb-emphasis=true]) [part=crumb-current],:host([data-breadcrumb-emphasis=true]) [part=crumb-link]{font-size:14px;font-weight:750}
+ :host([data-breadcrumb-emphasis=true]) [part=crumb-separator]{font-size:21px;opacity:.65}
+ @media(max-width:650px),(max-height:500px) and (max-width:900px){
+  :host([data-breadcrumb-emphasis=true]) .mobile-context{gap:5px}
+  :host([data-breadcrumb-emphasis=true]) .mobile-title{font-size:13px}
+  :host([data-breadcrumb-emphasis=true]) .mobile-detail{display:block;font-size:11px;opacity:.8}
+  :host([data-breadcrumb-emphasis=true]) .mobile-detail[hidden]{display:none}
+  :host([data-breadcrumb-emphasis=true]) .mobile-detail::before{content:'› ';font-weight:800}
  }
  </style><div class="row" part="row"><button part="mobile-menu" class="mobile-menu" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Menu openen" title="Menu">${svg('menu')}</button><a part="brand" class="brand" data-platform-home href="${home}" aria-label="leraarBob, startpagina">leraarBob</a><nav part="crumbs" class="crumbs" aria-label="Je locatie"></nav><div class="mobile-context" part="mobile-context" aria-live="polite"><strong class="mobile-title">${isHome?'leraarBob':title}</strong><span class="mobile-detail" hidden></span></div><div class="actions" part="actions"><output class="progress" part="progress" hidden role="status" aria-live="polite" aria-atomic="true"><span class="progress-icon" aria-hidden="true"></span><span class="progress-value" aria-hidden="true"></span></output><a class="teacher-link" part="teacher-link" href="${new URL('teacher/',root)}" hidden>Mijn klassen</a><button part="toolbar-button account" class="account" type="button"><i class="account-mark" aria-hidden="true">${svg('account')}</i><span class="account-label" part="account-label">Inloggen</span></button><button part="toolbar-button fullscreen" class="fullscreen" type="button" aria-label="Volledig scherm" title="Volledig scherm" aria-pressed="false">${svg('full')}</button><button part="toolbar-button theme-toggle" class="theme-toggle" type="button" aria-label="Donkere weergave" title="Donkere weergave" aria-pressed="false" hidden>${svg('moon')}</button><button part="toolbar-button menu" class="menu" type="button" aria-haspopup="dialog" aria-label="Menu" title="Menu">${svg('menu')}</button><button part="toolbar-button collapse" class="collapse" type="button" aria-label="Bovenbalk inklappen" title="Bovenbalk inklappen" aria-controls="${header.id}">${svg('up')}</button></div></div><div class="display-notice" role="status" hidden><span></span><button type="button" class="dismiss-notice" aria-label="Melding sluiten">${svg('close')}</button></div><dialog aria-labelledby="lb-menu-title"><div class="dialog-head"><div><span class="menu-eyebrow"></span><h2 id="lb-menu-title" class="menu-title">Menu</h2></div><button class="close" type="button" aria-label="Menu sluiten" autofocus>${svg('close')}</button></div><div class="menu-list"></div></dialog>`;
  header.append(host,context);

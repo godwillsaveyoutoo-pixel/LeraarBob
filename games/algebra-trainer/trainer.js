@@ -2,7 +2,7 @@
 'use strict';
 const {gcd,lcm,Rat,R,ratKey,reciprocal,terminatingPlaces,N,V,Add,Mul,Div,EQ,cloneExpr,cloneEq,isNum,isVar,num,linearCoeff,makeLinearTerm,simplify,negExpr,simplifyEq,exprSig,eqSig,exprNodeCount,equationComplexity,containsVar,countType,solvedEquation,operandIsNumeric,applyEquation,decimalText,hashRat,autoNumberFormat,ratLatex,splitSign,latexExpr,latexEq,operationLatex,fallbackText,texHTML,renderMathNodes,TYPES,LEVEL_META,INT_COEFF,INT_SHIFT,FRAC_COEFF,FRAC_SHIFT,DEC_COEFF,DEC_SHIFT,pick,chance,currentPolicy,pickFmt,pickParam,pickSolution,numNodeFromParam,nice,rhsFmt,positiveDifferentCoeffs,step,generateExercise,topTerms,absExpr,exprIsZero,collectNumericDenominators,outerScalar,operandRepresentable,canonicalStepAt,candidateOperands}=window.AlgebraCore;
 const {contextOperations,checkProgress}=window.AlgebraWorkbench;
-const L=AlgebraLearning,J=AlgebraJourney;let chapterJourney=J.normalize(null);let runs={},learningRun=null,freeSession=null,historyIndex=0;
+const L=AlgebraLearning,J=AlgebraJourney;let chapterJourney=J.normalize(null);let paperSelection=null;let runs={},learningRun=null,freeSession=null,historyIndex=0;
 const selection={};
 TYPES.forEach(t=>selection[t.id]={checked:t.level==='beginner',count:t.level==='beginner'?2:1});
 let activeLevel='beginner';
@@ -107,7 +107,7 @@ function makeSet(){
   if($('#shuffleQuestions').checked){
     for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]]}
   }
-  if(learningRun)learningRun.work=perExercise;mission=null;learningRun=null;activeSet=out;perExercise={};trainerStates=[];trainerIndex=0;settingsDirty=false;
+  if(learningRun)learningRun.work=perExercise;mission=null;learningRun=null;paperSelection=null;activeSet=out;perExercise={};trainerStates=[];trainerIndex=0;settingsDirty=false;
   renderPreview();
   refreshNav();
   return out;
@@ -496,6 +496,7 @@ function keyPage(items,page,total,startNo){
 }
 function renderPreview(){
   const host=$('#previewStack');
+  if(paperSelection?.run){renderMissionPaper(host,paperSelection.run,paperSelection.id);return;}
   if(!activeSet.length){host.innerHTML='';return}
   if(learningRun){renderMissionPaper(host);return;}
   const qs=chunks(activeSet,12);
@@ -506,15 +507,24 @@ function renderPreview(){
   }
   host.innerHTML=html;renderMathNodes(host);
 }
-function renderMissionPaper(host){
- const tasks=learningRun.tasks,title=J.stop(mission)?.title||AlgebraWorld.topic(mission)?.title||'Vergelijkingen';
+function renderMissionPaper(host,run=learningRun,id=mission){
+ const tasks=run.tasks,title=J.stop(id)?.title||AlgebraWorld.topic(id)?.title||'Vergelijkingen';
  const header=(key)=>`<div class="sheetHeader"><div><h2>${key?'Verbetersleutel':'Vergelijkingen'} · ${escapeHTML(title)}</h2><p>${key?'De antwoorden horen bij deze opdrachten. Andere geldige oplosroutes zijn mogelijk.':'Lees elke opdracht. Schrijf je uitwerking en controle op.'}</p></div><div class="sheetMeta">Naam: __________________<br>Klas: ______ Datum: ______</div></div>`;
  let html=chunks(tasks,3).map((items,p)=>`<section class="paperPage missionPaper">${header(false)}<div class="missionQuestions">${items.map((t,i)=>{const q=AlgebraJourneyPaper.question(t);return `<article><h3>${p*3+i+1}. ${escapeHTML(q.prompt)}</h3><div data-tex="${escapeHTML(q.math)}"></div>${q.extra?'<p>'+escapeHTML(q.extra)+'</p>':''}<div class="writeLines"><span></span><span></span><span></span></div></article>`}).join('')}</div><div class="pageFoot">leraarBob · Opgaven ${p+1}/${Math.ceil(tasks.length/3)}</div></section>`).join('');
  if($('#includeKey').checked)html+=chunks(tasks,3).map((items,p)=>`<section class="paperPage missionPaper">${header(true)}<div class="missionAnswers">${items.map((t,i)=>{const a=AlgebraJourneyPaper.answer(t);return `<article><h3>${p*3+i+1}. ${escapeHTML(t.stage)}</h3>${a.lines.map(l=>'<div data-tex="'+escapeHTML(l)+'"></div>').join('')}<p>${escapeHTML(a.note)}</p></article>`}).join('')}</div><div class="pageFoot">leraarBob · Sleutel ${p+1}/${Math.ceil(tasks.length/3)}</div></section>`).join('');
  host.innerHTML=html;renderMathNodes(host);
 }
 $('#printBtn').onclick=()=>{renderMathNodes(previewScreen);setTimeout(()=>window.print(),50)};
+$('#backPaperLevels').onclick=()=>navigation.open();
+function levelWorksheet(id,fresh=false){
+ const st=J.stop(id);if(!st)return;
+ // Paper keeps its own generated series and never changes a live round or its input.
+ const active=runs[id]&&!runs[id].completed?runs[id]:null;
+ if(fresh||paperSelection?.id!==id||!paperSelection?.run)paperSelection={id,run:!fresh&&active?active:J.freshMission(id,fresh?paperSelection?.run:null,crypto.getRandomValues(new Uint32Array(1))[0])};
+ showScreen('preview');
+}
 $('#regenBtn').onclick=()=>{
+  if(paperSelection){levelWorksheet(paperSelection.id,true);return;}
   const set=makeSet();if(!set)return;
   trainerStates=[];trainerIndex=0;
   showScreen('preview');
@@ -539,9 +549,9 @@ function rememberExercise(){if(learningRun){learningRun.index=trainerIndex;learn
 function persist(){
  if(restoring||!window.AxiomaGame?.active)return;
  rememberExercise();
- const save={version:1,chapterJourney,runs,freeSession,journey,worldLegacy,mission,mapLocation,activeLevel,selection,settings:currentSettings(),includeKey:$('#includeKey').checked,shuffle:$('#shuffleQuestions').checked,activeSet,trainerIndex,perExercise,solvedTypes:[...solvedTypes],screen,settingsDirty};
+ const save={version:1,chapterJourney,paperSelection,runs,freeSession,journey,worldLegacy,mission,mapLocation,activeLevel,selection,settings:currentSettings(),includeKey:$('#includeKey').checked,shuffle:$('#shuffleQuestions').checked,activeSet,trainerIndex,perExercise,solvedTypes:[...solvedTypes],screen,settingsDirty};
  AxiomaGame.storage.setItem(SAVE_KEY,JSON.stringify(save));let systems=null;try{systems=JSON.parse(AxiomaGame.storage.getItem('leraarbob.stelsels.workshop.v1')||'null')}catch{}const routeProgress=J.platform(chapterJourney,journey,systems?.journey);AxiomaGame.report(routeProgress.completed,routeProgress.total);
- const badge=$('#algebraProgress');badge.dataset.platformProgress='xp';badge.dataset.value=String(AlgebraWorld.xp(worldView?.progress()||journey)+J.xp(chapterJourney));badge.textContent=badge.dataset.value+' XP';
+ const badge=$('#algebraProgress');badge.dataset.platformProgress='xp';badge.dataset.value=String(AlgebraWorld.xp(worldView?.progress()||journey)+J.xp(chapterJourney)+J.xp(systems?.roundJourney));badge.textContent=badge.dataset.value+' XP';
  AxiomaGame.emit(routeProgress.completed,routeProgress.total);
 }
 function restore(){
@@ -551,7 +561,7 @@ function restore(){
   const saved=JSON.parse(raw,(k,v)=>v&&typeof v==='object'&&Object.keys(v).length===2&&Number.isSafeInteger(v.n)&&Number.isSafeInteger(v.d)?new Rat(v.n,v.d):v);
   if(saved.version!==1)return;
   runs=saved.runs&&typeof saved.runs==='object'?saved.runs:{};freeSession=saved.freeSession||null;
-  chapterJourney=J.normalize(saved.chapterJourney);mapLocation=J.worldFor(saved.mapLocation);journey=AlgebraWorld.normalize(saved.journey);worldLegacy=(Array.isArray(saved.worldLegacy)?saved.worldLegacy:saved.solvedTypes||[]).filter(id=>TYPES.some(t=>t.id===id));mission=J.stop(saved.mission)||AlgebraWorld.topic(saved.mission)?.engine==='equations'?saved.mission:null;
+  chapterJourney=J.normalize(saved.chapterJourney);paperSelection=J.stop(saved.paperSelection?.id)&&saved.paperSelection?.run?.tasks?.length===6?saved.paperSelection:null;mapLocation=J.worldFor(saved.mapLocation);journey=AlgebraWorld.normalize(saved.journey);worldLegacy=(Array.isArray(saved.worldLegacy)?saved.worldLegacy:saved.solvedTypes||[]).filter(id=>TYPES.some(t=>t.id===id));mission=J.stop(saved.mission)||AlgebraWorld.topic(saved.mission)?.engine==='equations'?saved.mission:null;
   learningRun=mission&&runs[mission]?.version===2?runs[mission]:null;
   for(const t of TYPES){const s=saved.selection?.[t.id];if(s)selection[t.id]={checked:!!s.checked,count:Math.max(1,Math.min(20,Number(s.count)||1))}}
   activeLevel=Object.hasOwn(LEVEL_META,saved.activeLevel)?saved.activeLevel:'beginner';
@@ -562,20 +572,20 @@ function restore(){
    activeSet=saved.activeSet;perExercise=saved.perExercise||{};trainerIndex=Math.max(0,Math.min(activeSet.length-1,saved.trainerIndex||0));
    if(activeSet.length)startExercise(trainerIndex);
   }
-  settingsDirty=saved.settingsDirty!==false;screen=saved.screen==='setup'&&!saved.journey?'world':['world','tools','setup','trainer','preview','summary','history','menu'].includes(saved.screen)&&(['world','tools','setup','menu'].includes(saved.screen)||activeSet.length)?saved.screen:'menu';
+  settingsDirty=saved.settingsDirty!==false;screen=saved.screen==='setup'&&!saved.journey?'world':['world','tools','setup','trainer','preview','summary','history','menu'].includes(saved.screen)&&(['world','tools','setup','menu'].includes(saved.screen)||saved.screen==='preview'&&paperSelection||activeSet.length)?saved.screen:'menu';
  }catch{activeSet=[];perExercise={};trainerStates=[];screen='menu';showSetupMessage('Je reeks kon niet worden hervat. Kies een nieuwe reeks.',true)}finally{restoring=false}
 }
 function startTopic(id){
  const t=J.stop(id)||AlgebraWorld.topic(id);if(!t||(!J.stop(id)&&t.engine!=='equations'))return;
  rememberExercise();if(learningRun)learningRun.work=perExercise;else if(!mission&&activeSet.length)freeSession={activeSet,perExercise,trainerIndex};
  mission=id;learningRun=runs[id];
- if(!learningRun||learningRun.completed){const seed=crypto.getRandomValues(new Uint32Array(1))[0];learningRun=J.freshMission(id,learningRun,seed);learningRun.work={};runs[id]=learningRun;}
+ if(!learningRun||learningRun.completed){const seed=crypto.getRandomValues(new Uint32Array(1))[0];learningRun=J.freshMission(id,learningRun,seed);learningRun.rewardId=id+':'+crypto.randomUUID();learningRun.work={};runs[id]=learningRun;}
  activeSet=learningRun.tasks.map(t=>t.ex);perExercise=learningRun.work||{};trainerStates=[];
  const i=learningRun.results.findIndex(r=>!r.done);startExercise(i<0?activeSet.length-1:i);showScreen('trainer');
 }
 function finishMission(){
- if(!learningRun||learningRun.results.some(r=>!r.done))return;learningRun.completed=true;
- const reward=J.stop(mission)?J.record(chapterJourney,mission,learningRun.results,journey):AlgebraWorld.recordMission(journey,mission,learningRun.results,worldView.legacy());if(J.stop(mission))chapterJourney=reward.progress;else journey=reward.progress;learningRun.lastReward=reward.xp;renderSummary();showScreen('summary');
+ if(!learningRun||learningRun.results.some(r=>!r.done))return;if(learningRun.completed){renderSummary();showScreen('summary');return;}learningRun.completed=true;
+ const reward=J.stop(mission)?J.record(chapterJourney,mission,learningRun.results,journey):AlgebraWorld.recordMission(journey,mission,learningRun.results,worldView.legacy());if(J.stop(mission))chapterJourney=reward.progress;else journey=reward.progress;const round=J.rewardRound(chapterJourney,mission,learningRun,learningRun.results,reward.xp);chapterJourney=round.progress;learningRun.lastReward=round.xp;renderSummary();showScreen('summary');
 }
 function recommended(){return J.next(chapterJourney,runs,journey,worldLegacy);}
 function renderSummary(){
@@ -599,9 +609,9 @@ function init(){
   worldView=AlgebraWorldView.mount({progress:()=>journey,chapter:()=>chapterJourney,runs:()=>runs,current:()=>mission,solved:()=>worldLegacy,location:()=>mapLocation,remember:id=>{mapLocation=id;persist();},run:id=>runs[id],canResume:()=>activeSet.length>0&&(!learningRun||!learningRun.completed),openWorld:id=>{if(id==='systems')location.href='stelsels.html?screen=menu';else navigation.open();},start:startTopic,resume:()=>{if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer')}});
   navigation=AlgebraNavigation.mount({
    screen:()=>screen,show:showScreen,canResume:()=>!!activeSet.length,canResumeFree:()=>mission?!!freeSession:!!activeSet.length,resumeFree:()=>mission?$('#resumeFreeBtn').click():showScreen('trainer'),
-   navigate:name=>{if(name==='world'){if(mission)worldView.open(J.worldFor(mission));showScreen('world');}else if(name==='trainer'){if(activeSet.length){if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer');}}else if(name==='preview'&&!activeSet.length){showScreen('setup');showSetupMessage('Kies eerst opgaven voor je oefenblad.',false);}else showScreen(name);},
-   title:()=>J.stop(mission)?.title||AlgebraWorld.topic(mission)?.title||'Vrij oefenen',position:()=>activeSet.length?(trainerIndex+1)+' / '+activeSet.length:'',
-   world:()=> 'Vergelijkingen',stops:()=>J.stops.map((st,i)=>{const info=J.info(chapterJourney,st.id,runs,journey,worldLegacy);return {id:st.id,number:i+1,title:st.title,status:info.status,startId:info.activeId,total:info.total,current:st.id===mission||st.skills.some(k=>'eq-'+k===mission)};}),start:startTopic
+   navigate:name=>{if(name==='world'){if(mission)worldView.open(J.worldFor(mission));showScreen('world');}else if(name==='trainer'){if(activeSet.length){if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer');}}else if(name==='preview')levelWorksheet(navigation.selected());else showScreen(name);},
+   title:()=>J.stop(mission)?.title||AlgebraWorld.topic(mission)?.title||'Bewaard werk',position:()=>activeSet.length?(trainerIndex+1)+' / '+activeSet.length:'',
+   worksheet:levelWorksheet,world:()=> 'Vergelijkingen',stops:()=>J.stops.map((st,i)=>{const info=J.info(chapterJourney,st.id,runs,journey,worldLegacy);return {id:st.id,number:i+1,title:st.title,status:info.status,startId:info.activeId,total:info.total,current:st.id===mission||st.skills.some(k=>'eq-'+k===mission)};}),start:startTopic
   });
   // A fresh open lands on the designed menu; reloading keeps the current work screen.
   const navigationType=performance.getEntriesByType('navigation')[0]?.type;

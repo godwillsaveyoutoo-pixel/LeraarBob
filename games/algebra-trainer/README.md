@@ -1,4 +1,4 @@
-# Algebrawereld v0.4.6
+# Algebrawereld v0.5.0
 
 De platformversie uit `Axioma-Algebrawereld-v0.4.5.zip` vervangt het eerdere
 algebraspel op dezelfde ingang: `games/algebra-trainer/`. De spel-id
@@ -8,7 +8,8 @@ behouden. De catalogus toont één hoofdkaart voor Algebrawereld.
 ## Startmenu en hervatten
 
 Een nieuw bezoek opent het formele kaartjesmenu van Vergelijkingen. Dezelfde
-navigatie staat bij Werelden, Levels, Vrij oefenen, Oefenblad en Klasbattle.
+navigatie heeft drie bestemmingen: Werelden, Levels en Klasbattle. Er is geen
+aparte sectie Vrij oefenen. Oefenblad is een actie bij het geselecteerde level.
 Algebrawereld in het gedeelde kruimelpad opent altijd het wereldenoverzicht;
 de wereldnaam brengt je naar zijn levels. Werelden gebruikt formele kaarten,
 zonder de vroegere eilanden. Stelsels heeft hetzelfde levelmenu met zes kaarten.
@@ -24,7 +25,7 @@ Herladen tijdens oefenen bewaart het werkbord; een nieuw bezoek opent het menu.
 Op korte liggende werkborden staan dezelfde bestemmingen in het gedeelde menu,
 zodat alle wiskundige bediening ruimte houdt. De bovenste platformbalk blijft
 inklappen, heropenen, echte voortgang, account, licht/donker en volledig scherm
-bieden. De klasbattle gebruikt dezelfde formele kleuren en typografie; sessie-
+bieden. Klasbattle opent het centrale leraarBob-overzicht voor alle spellen; sessie-
 en werkbordhandlers blijven behouden. Het iframe krijgt geen tweede bovenbalk.
 
 De platformversie gebruikt de gedeelde leraarBob-balk voor het centrale
@@ -33,6 +34,15 @@ account- en volledig-schermknoppen uit de offline-menubodem blijven als
 DOM-nodes aanwezig, maar worden in de platformversie niet getoond. De vaste
 platformknoppen blijven rechtstreeks bereikbaar. Het kaartjesmenu verdeelt
 zijn ruimte over kop, opgaven en hervatten binnen de resterende viewport.
+
+## Oefenbladen
+
+De knop Oefenblad hoort bij het geselecteerde level. Een onafgeronde reeks kan
+met precies dezelfde opgaven worden afgedrukt; anders wordt een losse
+papierreeks gemaakt. Die wordt apart opgeslagen en verandert geen lopende
+speelronde, invoer of XP. Nieuwe opgaven regenereert alleen het blad. Op een
+verticaal telefoonscherm staan Oefenblad en Spelen naast elkaar onder de
+selectie; de drie bestemmingen blijven op één rij.
 
 ## Speelbare route
 
@@ -84,9 +94,11 @@ leesbaar. Begonnen oude missies worden hervat met hun eigen opdrachten.
 Vrije reeksen worden geparkeerd wanneer een leerling een missie begint en
 kunnen met hun uitwerking worden hervat.
 
-Een nieuwe halte levert eenmaal 30 XP op. Herhalen verdubbelt geen beloning.
-Een nieuwe halte waarvoor al een oude deelhalte is beloond geeft geen tweede
-beloning; de oude XP blijven behouden. Geoefend en zelfstandig gelukt blijven
+Elke volledig afgeronde, nieuw gegenereerde speelronde levert 30 XP op, ook
+bij herhalen. `chapterJourney.roundRewards` en `roundJourney.roundRewards` bij
+Stelsels bewaren de beloning per stabiele ronde-id. Herladen of een afgeronde
+ronde opnieuw bekijken levert geen extra XP. Oude levelbeloningen blijven
+behouden; de rondetelling voegt alleen nieuwe werkelijk gespeelde beloningen toe. Geoefend en zelfstandig gelukt blijven
 verschillende statussen. De catalogus telt 13 speelbare haltes zodra het
 nieuwe voortgangsrecord bestaat; oude records behouden hun eerdere telling
 tot de leerling de nieuwe versie opent.
@@ -100,7 +112,7 @@ liggende viewport.
 ## Verificatie
 
 ```sh
-node --test tests/algebra-v04-journey.test.cjs tests/algebra-v04-motion.test.cjs tests/algebra-v04-choices.test.cjs tests/algebra-v045-fractions.test.cjs tests/algebra-trainer.test.cjs tests/algebra-learning.test.cjs tests/algebra-world.test.cjs tests/algebra-class.test.cjs tests/bewerkingen-trainer.test.cjs tests/stelsels-workshop.test.cjs tests/catalog.test.cjs tests/catalog-progress.test.cjs
+node --test tests/algebra-v050-flow.test.cjs tests/algebra-v04-journey.test.cjs tests/algebra-v04-motion.test.cjs tests/algebra-v04-choices.test.cjs tests/algebra-v045-fractions.test.cjs tests/algebra-trainer.test.cjs tests/algebra-learning.test.cjs tests/algebra-world.test.cjs tests/algebra-class.test.cjs tests/bewerkingen-trainer.test.cjs tests/stelsels-workshop.test.cjs tests/catalog.test.cjs tests/catalog-progress.test.cjs
 node scripts/build-catalog.cjs --check
 ```
 
@@ -118,16 +130,16 @@ node tests/algebra-v045-entry-browser.cjs
 node tests/algebra-v045-navigation-browser.cjs
 node tests/algebra-v045-fractions-browser.cjs
 node tests/algebra-v045-signs-browser.cjs
-node tests/algebra-v046-consistency-browser.cjs
+node tests/algebra-v050-flow-browser.cjs
 ```
 
 De proeven controleren alle zeven haltes via echte bediening, correcte en
-foute antwoorden, herladen, oude voortgang, eenmalige XP, nieuwe vragen,
+foute antwoorden, herladen, oude voortgang, XP per afgeronde ronde, unieke leveltotalen, nieuwe vragen,
 oefenbladen en live voorbeelden. De platformproef controleert ook de
 startpagina, de toegang tot Stelsels en beide standen van de bovenbalk op
 1280×800, 780×360, 640×360, 390×844 en 320×700.
 
 Alleen de productiebron en vereiste spelassets zijn geïmporteerd. De losse
 offline-HTML, screenshots en vervangingspagina's voor andere spellen uit de
-zip horen niet bij deze publicatie. Er zijn geen nieuwe backendfuncties of
+zip horen niet bij deze publicatie. Deze algebraflow heeft geen nieuwe backendfuncties of
 databasemigraties nodig.

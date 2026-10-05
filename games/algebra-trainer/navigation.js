@@ -22,9 +22,9 @@ function mount(api){
   const stops=api.stops();
   if(!stops.some(s=>s.id===selected))selected=(stops.find(s=>s.current)||stops[0])?.id;
   const chosen=stops.find(s=>s.id===selected),started=chosen?.status==='Bezig';
-  $('#navigationTitle').textContent=api.world();$('#navigationBreadcrumb').textContent='Algebrawereld › '+api.world();$('#navigationRouteTitle').textContent=stops.length+' haltes';
+  $('#navigationTitle').textContent=api.world();$('#navigationBreadcrumb').textContent='Algebrawereld › '+api.world();$('#navigationRouteTitle').textContent=stops.length+' levels';
   $('#navigationContext').innerHTML=chosen?'<strong>'+esc(chosen.title)+'</strong><span> · '+(started&&chosen.current?'opdracht '+esc(api.position()):started?'bewaarde reeks':/geoefend|gelukt/i.test(chosen.status)?'opnieuw oefenen':String(chosen.total||6)+' opdrachten')+'</span>':'Kies een level.';
-  $('#navigationActions').innerHTML=[['world','Werelden'],['setup','Vrij oefenen'],['preview','Oefenblad']].map(([id,title])=>'<button type="button" data-menu-nav="'+id+'">'+icon(id)+'<span>'+title+'</span></button>').join('')+(window.AXIOMA_STANDALONE?'<button type="button" data-menu-nav="battle" disabled title="Klasbattle is beschikbaar in de platformversie">'+icon('battle')+'<span>Klasbattle<small>Online</small></span></button>':'<a data-menu-nav="battle" href="'+esc(api.battleHref||'classroom.html')+'" title="Klasbattle met vergelijkingen">'+icon('battle')+'<span>Klasbattle</span></a>');
+  $('#navigationActions').innerHTML=[['world','Werelden'],['menu','Levels']].map(([id,title])=>'<button type="button" data-menu-nav="'+id+'">'+icon(id)+'<span>'+title+'</span></button>').join('')+(window.AXIOMA_STANDALONE?'<button type="button" data-menu-nav="battle" disabled title="Klasbattle is beschikbaar in de platformversie">'+icon('battle')+'<span>Klasbattle<small>Online</small></span></button>':'<a data-menu-nav="battle" href="'+esc(api.battleHref||'../../klasbattle/?game=algebra')+'" title="Naar het klasbattleoverzicht van leraarBob">'+icon('battle')+'<span>Klasbattle</span></a>');
   $('#navigationStops').dataset.count=stops.length;
   $('#navigationStops').innerHTML=stops.map(s=>{
    const tex=s.exampleTex||examples[s.id];
@@ -33,16 +33,17 @@ function mount(api){
   }).join('');
   $('.menuContinue').disabled=!chosen;
   $('.menuContinue').textContent=started?'Verder spelen →':/geoefend|gelukt/i.test(chosen?.status||'')?'Opnieuw spelen →':'Spelen →';
-  $('#navigationResumeFree').hidden=!api.canResumeFree?.();
-  $('#navigationStatus').textContent='Je werk blijft bewaard.';
+  $('#navigationResumeFree').hidden=!api.canResumeFree?.();$('#navigationWorksheet').disabled=!chosen;
+  $('#navigationStatus').textContent='Elke afgeronde speelronde: +30 XP · Oefenbladen leveren geen XP op.';
  }
  function open(button){if(api.screen()!=='menu'){previous=api.screen();origin=button;selected=api.stops().find(s=>s.current)?.id||selected;try{if(selected)sessionStorage.setItem(key,selected);}catch{}}api.show('menu');$('#navigationStops').querySelector('[aria-pressed=true]')?.focus({preventScroll:true});}
  function close(){api.show(previous==='menu'?(api.homeScreen||'world'):previous);origin?.focus({preventScroll:true});}
  document.querySelectorAll('[data-trainer-menu]').forEach(b=>b.onclick=()=>open(b));
  $('#navigationClose').onclick=close;
  $('.menuBrand').onclick=()=>api.navigate('world');
- $('#navigationScreen').addEventListener('click',e=>{const b=e.target.closest('[data-menu-nav]');if(b&&!b.disabled&&b.dataset.menuNav!=='battle')api.navigate(b.dataset.menuNav);});
+ $('#navigationScreen').addEventListener('click',e=>{const b=e.target.closest('[data-menu-nav]');if(b&&!b.disabled&&b.dataset.menuNav!=='battle')b.dataset.menuNav==='menu'?open(b):api.navigate(b.dataset.menuNav);});
  $('#navigationResumeFree').onclick=()=>api.resumeFree?.();
+ $('#navigationWorksheet').onclick=()=>{if(selected)api.worksheet?.(selected);};
  $('#navigationStops').onclick=e=>{const b=e.target.closest('[data-menu-stop]');if(b){choose(b.dataset.menuStop);$('#navigationStops').querySelector('[data-menu-stop="'+selected+'"]')?.focus({preventScroll:true});}};
  $('#trainerFullscreenBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{$('#navigationStatus').textContent='Volledig scherm is hier niet beschikbaar.';}};
  document.addEventListener('fullscreenchange',()=>{$('#trainerFullscreenBtn').textContent=document.fullscreenElement?'Venster herstellen':'Volledig scherm';});
@@ -50,7 +51,7 @@ function mount(api){
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&api.screen()==='menu'){e.preventDefault();close();}});
  $('.menuContinue').onclick=()=>{const s=api.stops().find(s=>s.id===selected);if(!s)return;if(s.current&&s.status==='Bezig'&&api.canResume())api.navigate('trainer');else api.start(s.startId||s.id);};
  window.AlgebraShell?.mount({world:api.world(),screen:api.screen,navigate:id=>id==='menu'?open():api.navigate(id)});
- return {render,open,select:choose};
+ return {render,open,select:choose,selected:()=>selected};
 }
 window.AlgebraNavigation=Object.freeze({mount});
 })();

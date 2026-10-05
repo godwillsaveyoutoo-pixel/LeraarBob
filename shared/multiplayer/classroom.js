@@ -1,6 +1,15 @@
 (function(){
 'use strict';
 const $=id=>document.getElementById(id),Game=window.BattleGame,frame=$('board');
+const moduleURL=new URL('.',document.currentScript.src),parameters=new URLSearchParams(location.search),embedded=parameters.get('hub')==='1'&&window.parent!==window;
+const simulationRequested=()=>new URLSearchParams(location.search).get('simulation')==='1';
+let simulator=null,simulationLoading=null;
+const simulationKey=()=>`leraarbob-class-simulation:${Game.id}:${account.id}`;
+const simulationStore=value=>{try{if(value===null)sessionStorage.removeItem(simulationKey());else sessionStorage.setItem(simulationKey(),JSON.stringify(value));}catch{}};
+const simulationRead=()=>{try{return JSON.parse(sessionStorage.getItem(simulationKey())||'null');}catch{return null;}};
+function portalStatus(){if(embedded)window.parent.postMessage({type:'leraarbob-class-status',game:Game.id,phase:state?.phase||(!$('login').hidden?'login':'setup'),simulation:!!simulator},location.origin);}
+const presentation=document.createElement('link');presentation.rel='stylesheet';presentation.href=new URL('simulation.css',moduleURL);document.head.append(presentation);
+if(embedded)document.body.classList.add('classroom-embedded');
 const opaque=location.protocol==='file:'||location.origin==='null',target=opaque?'*':location.origin,peerOrigin=opaque?'null':location.origin;
 let account=null,state=null,epoch=0,chain=Promise.resolve(),pollTimer,frameReady=false,frameKey='',offset=0,pending=null,grading=false,actionBusy=false,lastRanking='';
 let inviteCode='',reviewOpen=false,reviewKey='';
@@ -18,7 +27,7 @@ const pendingKey=()=>`${Game.id==='vectoren'?'vector':Game.id}-class-answer:${ac
 function store(key,value){try{if(value===null)localStorage.removeItem(key);else localStorage.setItem(key,JSON.stringify(value));}catch{}}
 function read(key){try{return JSON.parse(localStorage.getItem(key)||'null');}catch{return null;}}
 function notice(text){$('notice').textContent=text||'';}
-function display(screen){document.body.dataset.playing='false';for(const id of ['login','setup','session'])$(id).hidden=id!==screen;}
+function display(screen){document.body.dataset.playing='false';for(const id of ['login','setup','session'])$(id).hidden=id!==screen;portalStatus();}
 function errorText(e){if(e?.code==='PGRST202'||/could not find.*function/i.test(e?.message||''))return 'De online klasmodus is nog niet beschikbaar. Probeer later opnieuw.';return e?.message||'De verbinding is onderbroken. Probeer opnieuw.';}
 // Serialize requests so an older poll cannot replace a newer round or submission.
 function rpc(action,data={}){
@@ -50,26 +59,26 @@ function renderRanking(){
 function renderBoard(){
  if(!state||!frameReady||!state.spec||(!reviewOpen&&(waiting()||!['question','grading'].includes(state.phase))))return;
  const key=state.id+':'+state.round;
- if(frameKey!==key){frameKey=key;send({type:'vector-battle-question',match:state.id,index:state.round,...state.spec,singleAttempt:true,projector:!!state.owner,learner:account.id});}
+ if(frameKey!==key){frameKey=key;send({type:'vector-battle-question',match:state.id,index:state.round,...state.spec,singleAttempt:true,projector:!!state.owner&&!state.trying,learner:state.trying?state.members[0].user_id:account.id});}
  if(reviewOpen){if(reviewKey!==key){reviewKey=key;send({type:'vector-class-review',match:state.id,index:state.round});}return;}
- if(state.owner||state.mine?.submitted||state.phase==='grading'||pending)send({type:'vector-battle-resolved',match:state.id,index:state.round,message:state.owner?'De leerlingen werken op hun eigen toestel.':state.mine?.submitted?'Antwoord ontvangen. Wacht op de uitslag.':pending?'Je inzending wordt verstuurd.':'De tijd is om. Wacht op de uitslag.'});
+ if((state.owner&&!state.trying)||state.mine?.submitted||state.phase==='grading'||pending)send({type:'vector-battle-resolved',match:state.id,index:state.round,message:simulator?'Virtuele leerlingen beantwoorden deze oefening. Kies Zelf proberen om het werkbord te testen.':state.owner?'De leerlingen werken op hun eigen toestel.':state.mine?.submitted?'Antwoord ontvangen. Wacht op de uitslag.':pending?'Je inzending wordt verstuurd.':'De tijd is om. Wacht op de uitslag.'});
 }
 function accept(next){
  if(!state||next.round!==state.round||next.phase!==state.phase){reviewOpen=false;reviewKey='';}
- if(next.game&&next.game!==Game.id)throw Error('Deze sessie hoort bij een ander spel. Open de deelnamelink van je leerkracht.');state=next;if(!state.owner){const url=new URL(location.href);url.searchParams.set('code',state.code);if(url.href!==location.href){history.replaceState(null,'',url.href);updateInviteCode();}}offset=Date.parse(next.server_time)-Date.now();store(storageKey(),state.id);
- if(state.mine?.submitted||!pending||pending.id!==state.id||pending.round!==state.round||state.phase!=='question'){pending=null;store(pendingKey(),null);}
+ if(next.game&&next.game!==Game.id)throw Error('Deze sessie hoort bij een ander spel. Open de deelnamelink van je leerkracht.');state=next;if(!state.owner){const url=new URL(location.href);url.searchParams.set('code',state.code);if(url.href!==location.href){history.replaceState(null,'',url.href);updateInviteCode();}}offset=Date.parse(next.server_time)-Date.now();if(simulator)simulationStore(simulator.serialize());else store(storageKey(),state.id);
+ if(!simulator&&(state.mine?.submitted||!pending||pending.id!==state.id||pending.round!==state.round||state.phase!=='question')){pending=null;store(pendingKey(),null);}
  display('session');render();schedule();
- if(!serverFunction&&state.owner&&state.phase==='grading')grade();
+ if(!simulator&&!serverFunction&&state.owner&&state.phase==='grading')grade();portalStatus();
 }
 function render(){
  const phase=state.phase,late=waiting(),activeMembers=state.members.filter(p=>(p.eligible_from_round||0)<=state.round),ended=['finished','closed'].includes(phase),results=phase==='results'||ended;
  document.body.dataset.playing=String(!late&&['question','grading'].includes(phase));$('session').dataset.phase=phase;$('session').classList.toggle('host',state.owner);$('code').textContent=state.code;$('phaseLabel').textContent=({lobby:'WACHTKAMER',question:'RONDE BEZIG',grading:'ANTWOORDEN NAKIJKEN',results:'RANGLIJST',finished:'MISSIE VOLTOOID',closed:'SESSIE GESLOTEN'})[phase];
  $('sessionTitle').textContent=phase==='lobby'?'Wachten op de klas':ended?'Samen op koers':`Ronde ${state.round+1} van ${state.total}`;
- $('closeSession').hidden=!state.owner||ended;$('leaveSession').hidden=state.owner||phase!=='lobby';$('copyLink').hidden=!state.owner||ended;$('joinInstructions').hidden=!state.owner||phase!=='lobby';
+ $('closeSession').hidden=!state.owner||ended;$('leaveSession').hidden=state.owner||phase!=='lobby';$('copyLink').hidden=!!simulator||!state.owner||ended;$('joinInstructions').hidden=!!simulator||!state.owner||phase!=='lobby';
  $('lobby').hidden=phase!=='lobby';$('playArea').hidden=late||!['question','grading'].includes(phase);$('lateWait').hidden=!late||phase==='lobby'||ended;$('lateTitle').textContent=state.round+1<state.total?'Even wachten op de volgende ronde':'De laatste ronde is bezig';$('lateHelp').textContent=state.round+1<state.total?'Je alias staat in de sessie. Je speelt mee vanaf ronde '+(state.round+2)+', zodra je leerkracht die start.':'De laatste ronde is al gestart. Je kunt de eindranglijst bekijken en bij een nieuwe battle meedoen.';$('results').hidden=!results;
  $('members').replaceChildren();for(const p of state.members){const li=document.createElement('li');if(window.LeraarBobAvatar)li.append(LeraarBobAvatar.create(p));li.append(document.createTextNode(p.alias));$('members').append(li);}
  $('count').textContent=`${state.members.length} ${state.members.length===1?'leerling':'leerlingen'} in de sessie`;
- $('lobbyHelp').textContent=state.owner?'Deel de code of deelnamelink. Jij kiest wanneer je start; leerlingen kunnen ook later aansluiten. '+(serverFunction?'Je kunt deze sessie na herladen hervatten.':'Houd dit leerkrachtvenster open tijdens de sessie.'):'Je doet mee! Wacht tot je leerkracht de eerste ronde start.';
+ $('lobbyHelp').textContent=simulator?'Dit zijn virtuele leerlingen. Kies hun antwoorden en snelheid bij Simulatie instellen. Jij start en beëindigt elke ronde. De simulatie blijft bij herladen in dit tabblad bewaard.':state.owner?'Deel de code of deelnamelink. Jij kiest wanneer je start; leerlingen kunnen ook later aansluiten. '+(serverFunction?'Je kunt deze sessie na herladen hervatten.':'Houd dit leerkrachtvenster open tijdens de sessie.'):'Je doet mee! Wacht tot je leerkracht de eerste ronde start.';
  $('start').hidden=!state.owner;$('start').disabled=!state.members.length||actionBusy;
  $('answered').textContent=`${activeMembers.filter(p=>p.answered).length} / ${activeMembers.length} ingediend`;
  const lateMembers=state.members.filter(p=>p.eligible_from_round>state.round);$('lateCount').hidden=!state.owner||!lateMembers.length;$('lateCount').textContent=lateMembers.length+' later aangesloten: '+lateMembers.map(p=>p.alias).join(', ');
@@ -90,11 +99,11 @@ function render(){
   $('roundBreakdown').replaceChildren();
   if(results&&state.round>=0){for(const [label,count] of [['Juist',activeMembers.filter(p=>p.correct===true).length],['Onjuist',activeMembers.filter(p=>p.answered&&p.correct!==true).length],['Geen antwoord',activeMembers.filter(p=>!p.answered).length]]){const item=document.createElement('span');item.textContent=count+' '+label;item.dataset.kind=label;$('roundBreakdown').append(item);}}
  }
- if($('classAccuracy')){const pct=activeMembers.length?Math.round(100*activeMembers.filter(p=>p.correct===true).length/activeMembers.length):0;$('classAccuracy').value=pct;$('classAccuracy').textContent=pct+'%';$('classAccuracyText').textContent=pct+'% juist';$('classAccuracy').dataset.band=pct>=75?'high':pct>=40?'middle':'low';}if(results)renderRanking();renderBoard();tick();
+ if($('classAccuracy')){const pct=activeMembers.length?Math.round(100*activeMembers.filter(p=>p.correct===true).length/activeMembers.length):0;$('classAccuracy').value=pct;$('classAccuracy').textContent=pct+'%';$('classAccuracyText').textContent=pct+'% juist';$('classAccuracy').dataset.band=pct>=75?'high':pct>=40?'middle':'low';}if(results)renderRanking();renderSimulation();renderBoard();tick();
 }
-function tick(){if(!state)return;const left=Math.max(0,Math.ceil((Date.parse(state.deadline)-Date.now()-offset)/1000));$('timer').textContent=state.phase==='question'?`${left} s`:'Tijd afgelopen';if(state.phase==='question'&&left===0)send({type:'vector-battle-resolved',match:state.id,index:state.round,message:'De tijd is om. Wacht op de uitslag.'});}
-function schedule(){clearTimeout(pollTimer);if(!state||['closed','finished'].includes(state.phase))return;const captured=epoch;pollTimer=setTimeout(async()=>{try{const next=await rpc('state',{id:state.id});if(captured===epoch){notice('');accept(next);if(pending&&state.phase==='question')submit();}}catch(e){if(captured===epoch){notice('Verbinding onderbroken. We proberen opnieuw. '+errorText(e));schedule();}}},1500);}
-async function action(name,data={}){if(actionBusy)return;actionBusy=true;document.querySelectorAll('form button,#start,#next,#confirmStop').forEach(b=>b.disabled=true);try{notice('');accept(await rpc(name,{id:state?.id,...data}));}catch(e){notice(errorText(e));}finally{actionBusy=false;document.querySelectorAll('form button,#start,#next,#confirmStop').forEach(b=>b.disabled=false);if(state)render();}}
+function tick(){if(!state)return;if(simulator&&simulator.advance()){accept(simulator.snapshot());return;}const left=Math.max(0,Math.ceil((Date.parse(state.deadline)-Date.now()-offset)/1000));$('timer').textContent=state.phase==='question'?`${left} s`:'Tijd afgelopen';if(state.phase==='question'&&left===0)send({type:'vector-battle-resolved',match:state.id,index:state.round,message:'De tijd is om. Wacht op de uitslag.'});}
+function schedule(){clearTimeout(pollTimer);if(simulator||!state||['closed','finished'].includes(state.phase))return;const captured=epoch;pollTimer=setTimeout(async()=>{try{const next=await rpc('state',{id:state.id});if(captured===epoch){notice('');accept(next);if(pending&&state.phase==='question')submit();}}catch(e){if(captured===epoch){notice('Verbinding onderbroken. We proberen opnieuw. '+errorText(e));schedule();}}},1500);}
+async function action(name,data={}){if(actionBusy)return;actionBusy=true;document.querySelectorAll('form button,#start,#next,#confirmStop').forEach(b=>b.disabled=true);try{notice('');accept(simulator?simulator.action(name):await rpc(name,{id:state?.id,...data}));}catch(e){notice(errorText(e));}finally{actionBusy=false;document.querySelectorAll('form button,#start,#next,#confirmStop').forEach(b=>b.disabled=false);if(state)render();}}
 async function grade(){
  if(grading)return;grading=true;const current=state;
  try{const task=Game.generate(current.spec);const grades=current.submissions.map(s=>{let correct=false;try{correct=!s.skipped&&Game.validate(task,s.answer).ok;}catch{}return{user_id:s.user_id,correct};});accept(await rpc('grade',{id:current.id,round:current.round,grades}));}
@@ -103,19 +112,57 @@ async function grade(){
 async function submit(){if(!pending)return;try{notice('');const current=pending;accept(await rpc('submit',current));}catch(e){notice('Je inzending is nog niet bevestigd. '+errorText(e));if(state)render();}}
 async function identity(next){
  if(account?.id===next?.id&&account?.role===next?.role)return;
- epoch++;clearTimeout(pollTimer);state=null;pending=null;frameKey='';lastRanking='';account=next;notice('');
+ epoch++;clearTimeout(pollTimer);state=null;simulator=null;pending=null;frameKey='';lastRanking='';account=next;notice('');document.body.classList.remove('class-simulation');if($('classSimulationControls'))$('classSimulationControls').hidden=true;if($('classSimulationSetup'))$('classSimulationSetup').hidden=true;if($('simulationEndRound'))$('simulationEndRound').hidden=true;
  // Drop the old account's board and answer on an account switch.
  frameReady=false;frame.src=Game.playerURL+'?mode=class';
  $('identity').textContent=account?(account.role==='teacher'?'Leerkracht':account.alias||'Account'):'';$('logout').hidden=!account;
  if(!account){display('login');return;}
  if(!['teacher','student'].includes(account.role)){display('login');notice('Dit account heeft geen leerling- of leerkrachtprofiel.');return;}
  display('setup');$('setupTitle').textContent=account.role==='teacher'?'Speel samen met je klas.':'Welkom, '+account.alias+'.';$('joinIdentity').textContent='Je doet mee als '+(account.alias||'leerling')+' met je leraarBob-account.';$('hostForm').hidden=account.role!=='teacher';$('joinForm').hidden=account.role!=='student';$('setupText').textContent=account.role==='teacher'?'Kies de oefeningen en de rondetijd. Je ontvangt een code die je met de klas deelt.':'Voer de code van je leerkracht in. Je naam verschijnt vanzelf in de wachtkamer.';
+ if(account.role==='teacher')mountSimulationSetup();
+ if(simulationRequested()){if(account.role!=='teacher'){notice('Alleen een leerkrachtaccount kan een simulatie starten.');return;}simulationLabels();const saved=simulationRead();if(saved)await beginSimulation(saved);else notice('Simulatie: kies hieronder de oefeningen en start met virtuele leerlingen.');return;}
+ if(embedded&&parameters.get('join')==='1'&&inviteCode&&account.role==='student'){
+  const captured=epoch,id=read(storageKey());if(id){try{const previous=await rpc('state',{id});if(captured!==epoch)return;if(previous.code===inviteCode){pending=read(pendingKey());accept(previous);return;}}catch(e){if(captured!==epoch)return;}}
+  await action('join',{code:inviteCode});return;
+ }
  const id=read(storageKey());if(id){try{const previous=await rpc('state',{id});if(account.role==='student'&&inviteCode&&previous.code!==inviteCode)return;pending=read(pendingKey());accept(previous);}catch(e){notice('Je vorige sessie kon nog niet worden hervat. Je bewaarde inzending blijft behouden. '+errorText(e));}}
 }
 for(const world of Game.worlds)$('world').append(new Option(world.name,world.id));
 $('world').append(new Option('Mixed · meerdere werelden','mixed'));
 function pool(){return $('world').value==='mixed'?Game.mixedSkills:Game.worlds.find(w=>w.id===$('world').value).skills;}
 function updateSkills(){ $('skill').replaceChildren(new Option('Mix van dit onderdeel','mix'));for(const id of pool())$('skill').append(new Option(Game.skills.find(s=>s.id===id).label,id)); }
+function loadSimulation(){
+ if(window.LeraarBobClassSimulation)return Promise.resolve(window.LeraarBobClassSimulation);
+ if(!simulationLoading)simulationLoading=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=new URL('simulation.js',moduleURL);script.onload=()=>resolve(window.LeraarBobClassSimulation);script.onerror=()=>{simulationLoading=null;reject(Error('De simulatie kon niet laden. Herlaad de pagina en probeer opnieuw.'));};document.head.append(script);});return simulationLoading;
+}
+function buildDeck(){
+ const selected=Game.multiSelect?[...document.querySelectorAll('[name=classType]:checked')].map(e=>e.value):$('skill').value==='mix'?pool():[$('skill').value],count=Number($('rounds').value);
+ if(!selected.length)throw Error('Kies minstens één vraagvorm.');if(Game.multiSelect&&selected.length>count)throw Error('Kies meer rondes of minder types, zodat elk gekozen type aan bod komt.');
+ const seeds=crypto.getRandomValues(new Uint32Array(count));return Array.from({length:count},(_,i)=>({skill:selected[i%selected.length],seed:seeds[i],variant:i%4,level:Game.levelSelect&&$('classLevel')?Number($('classLevel').value):1,...(Game.multiSelect?{fractions:$('classFractions').checked,decimals:$('classDecimals').checked,negative:$('classNegative').checked}:{})}));
+}
+function mountSimulationSetup(){
+ if($('classSimulationSetup')){$('classSimulationSetup').hidden=false;return;}
+ const panel=document.createElement('section');panel.id='classSimulationSetup';panel.className='class-simulation-setup';panel.innerHTML='<span class="class-simulation-badge">LEERKRACHT · SIMULATIE</span><h2>Test een groepsbattle</h2><p>Gebruik de oefeningen en rondetijd hierboven. Virtuele leerlingen maken antwoorden en een ranglijst zichtbaar. Deze lokale test telt niet mee voor leerlingranglijsten of XP.</p><label>Aantal virtuele leerlingen <select id="simulationCount"><option value="4">4 leerlingen</option><option value="6" selected>6 leerlingen</option><option value="8">8 leerlingen</option><option value="12">12 leerlingen</option></select></label><button id="startSimulation" type="button">Start simulatie →</button>';
+ $('hostForm').after(panel);$('startSimulation').onclick=()=>beginSimulation().catch(e=>notice(errorText(e)));
+}
+function simulationLabels(){$('hostForm').querySelector('h2').textContent='Kies de oefeningen voor je simulatie';$('hostForm').querySelector('button.primary').hidden=true;$('setupTitle').textContent='Test een groepsbattle met een virtuele klas.';$('setupText').textContent='Je gebruikt het echte spelwerkbord. De virtuele klas blijft lokaal in dit tabblad.';}
+async function beginSimulation(saved=null){
+ if(account?.role!=='teacher')throw Error('Alleen een leerkrachtaccount kan een simulatie starten.');const owner=account.id,currentEpoch=epoch,options=saved?{saved}:{deck:buildDeck(),seconds:Number($('seconds').value),count:Number($('simulationCount').value)};
+ const engine=await loadSimulation();if(currentEpoch!==epoch||account?.id!==owner||account?.role!=='teacher')return;
+ clearTimeout(pollTimer);simulator=engine.create({game:Game,...options});pending=null;frameKey='';reviewKey='';lastRanking='';document.body.classList.add('class-simulation');const url=new URL(location.href);url.searchParams.set('simulation','1');url.searchParams.delete('code');history.replaceState(null,'',url);simulationLabels();notice('');accept(simulator.snapshot());
+}
+function renderSimulation(){
+ if(!simulator)return;
+ if(!$('endRound')&&!$('simulationEndRound')){const end=document.createElement('button');end.id='simulationEndRound';end.type='button';end.textContent='Ronde afronden';end.onclick=()=>action('end_round');document.querySelector('.round-status').append(end);}if($('simulationEndRound'))$('simulationEndRound').hidden=state.phase!=='question';
+ let controls=$('classSimulationControls');if(!controls){controls=document.createElement('details');controls.id='classSimulationControls';controls.className='class-simulation-controls';controls.innerHTML='<summary>Simulatie instellen · virtuele klas</summary><span class="class-simulation-badge">SIMULATIE · GEEN LEERLINGRESULTATEN</span><p>Kies per virtuele leerling het antwoord en de snelheid. Dit gedrag wordt elke ronde opnieuw gebruikt. Met Zelf proberen test je het echte werkbord als de eerste leerling.</p><div class="class-simulation-actions"><button id="simulationTry" type="button">Zelf proberen</button><a id="simulationReal">Naar echte klasbattle</a></div><p id="simulationTryStatus" role="status"></p><ul id="simulationLearners" class="class-simulation-learners"></ul>';document.querySelector('.session-bar').after(controls);
+  $('simulationTry').onclick=()=>{try{const next=simulator.tryBoard();frameReady=false;frameKey='';frame.src=Game.playerURL+'?mode=class';accept(next);$('classSimulationControls').open=false;}catch(e){notice(errorText(e));}};
+  const real=new URL(location.href);real.searchParams.delete('simulation');$('simulationReal').href=real.href;if(embedded)$('simulationReal').onclick=e=>{e.preventDefault();window.parent.postMessage({type:'leraarbob-class-launch',game:Game.id,mode:'live'},location.origin);};
+ }
+ controls.hidden=false;controls.dataset.phase=state.phase;
+ const list=$('simulationLearners');if(list.dataset.match!==state.id){list.dataset.match=state.id;list.replaceChildren();for(const p of state.members){const li=document.createElement('li'),name=document.createElement('strong');name.textContent=p.alias;li.append(name);for(const [kind,choices]of [['plan',[['correct','Juist'],['wrong','Onjuist'],['none','Geen antwoord']]],['pace',[['fast','Snel'],['normal','Gemiddeld'],['slow','Langzaam']]]]){const label=document.createElement('label'),select=document.createElement('select');select.dataset.learner=p.user_id;select.dataset.setting=kind;select.setAttribute('aria-label',(kind==='plan'?'Antwoord van ':'Snelheid van ')+p.alias);for(const [value,text]of choices)select.append(new Option(text,value));select.value=p[kind];select.onchange=()=>accept(simulator.configure(p.user_id,kind==='plan'?select.value:null,kind==='pace'?select.value:null));label.append(select);li.append(label);}const status=document.createElement('span');status.className='simulation-answer';status.dataset.simulationLearner=p.user_id;li.append(status);list.append(li);}}
+ for(const p of state.members){const status=list.querySelector('[data-simulation-learner="'+p.user_id+'"]');status.textContent=p.answered?(p.correct?'Juist · +'+p.round_points+' punten':'Onjuist · 0 punten'):state.phase==='lobby'?'Klaar voor de start':state.phase==='question'?'Nog geen antwoord':'Geen antwoord';}
+ $('simulationTry').disabled=state.phase!=='question'||state.members[0].answered;$('simulationTry').textContent=state.trying?'Terug naar leerkrachtbord':'Zelf proberen';$('simulationTryStatus').textContent=state.tryResult||(state.trying?'Je speelt nu als '+state.members[0].alias+'.':'');
+}
 const requestedWorld=new URLSearchParams(location.search).get('world');
 if(Game.worlds.some(w=>w.id===requestedWorld))$('world').value=requestedWorld;
 $('world').onchange=updateSkills;updateSkills();
@@ -123,18 +170,19 @@ $('logout').onclick=async()=>{try{await AxiomaAuth.signOut();await identity(null
 if(Game.multiSelect&&$('classTypes')){
  for(const world of Game.worlds){const group=document.createElement('fieldset'),title=document.createElement('legend');title.textContent=world.name;group.append(title);for(const id of world.skills){const item=Game.skills.find(s=>s.id===id),label=document.createElement('label'),input=document.createElement('input'),text=document.createElement('span');input.type='checkbox';input.value=id;input.name='classType';input.checked=world.id===Game.worlds[0].id;text.textContent=item.label;label.title=item.description;label.append(input,text);group.append(label);}$('classTypes').append(group);}
 }
-$('hostForm').onsubmit=e=>{e.preventDefault();const selected=Game.multiSelect?[...document.querySelectorAll('[name=classType]:checked')].map(e=>e.value):$('skill').value==='mix'?pool():[$('skill').value],count=Number($('rounds').value);if(!selected.length){notice('Kies minstens één vraagvorm.');return;}if(Game.multiSelect&&selected.length>count){notice('Kies meer rondes of minder types, zodat elk gekozen type aan bod komt.');return;}const seeds=crypto.getRandomValues(new Uint32Array(count));const deck=Array.from({length:count},(_,i)=>({skill:selected[i%selected.length],seed:seeds[i],variant:i%4,level:Game.levelSelect&&$('classLevel')?Number($('classLevel').value):1,...(Game.multiSelect?{fractions:$('classFractions').checked,decimals:$('classDecimals').checked,negative:$('classNegative').checked}:{})}));action('create',{deck,seconds:Number($('seconds').value)});};
+$('hostForm').onsubmit=e=>{e.preventDefault();try{if(new URLSearchParams(location.search).get('simulation')==='1'){beginSimulation().catch(error=>notice(errorText(error)));return;}action('create',{deck:buildDeck(),seconds:Number($('seconds').value)});}catch(error){notice(errorText(error));}};
 $('joinForm').onsubmit=e=>{e.preventDefault();action('join',{code:$('joinCode').value.trim().toUpperCase()});};
 if($('endRound'))$('endRound').onclick=()=>action('end_round');
 if($('reviewToggle'))$('reviewToggle').onclick=()=>{reviewOpen=!reviewOpen;reviewKey='';render();};
 $('start').onclick=()=>action('start');$('next').onclick=()=>action('next');$('retrySubmit').onclick=submit;
-$('newSession').onclick=()=>{clearTimeout(pollTimer);store(storageKey(),null);store(pendingKey(),null);state=null;pending=null;frameKey='';display('setup');};
+$('newSession').onclick=()=>{clearTimeout(pollTimer);if(simulator){simulationStore(null);simulator=null;document.body.classList.remove('class-simulation');$('classSimulationControls').hidden=true;if($('simulationEndRound'))$('simulationEndRound').hidden=true;}else{store(storageKey(),null);store(pendingKey(),null);}state=null;pending=null;frameKey='';display('setup');};
 $('leaveSession').onclick=async()=>{try{await rpc('leave',{id:state.id});$('newSession').click();}catch(e){notice(errorText(e));}};
 $('closeSession').onclick=()=>$('stopDialog').showModal();$('cancelStop').onclick=()=>$('stopDialog').close();$('confirmStop').onclick=async()=>{await action('close');$('stopDialog').close();};
 $('copyLink').onclick=async()=>{const url=new URL(location.href);url.search='';url.searchParams.set('code',state.code);try{await navigator.clipboard.writeText(url.href);notice('Deelnamelink gekopieerd.');}catch{notice(`Deel deze code met je klas: ${state.code}`);}};
 addEventListener('message',event=>{
  if(event.source!==frame.contentWindow||event.origin!==peerOrigin)return;const data=event.data;if(!data||typeof data!=='object')return;
  if(data.type==='vector-battle-ready'){frameReady=true;frameKey='';reviewKey='';renderBoard();return;}
+ if(data.type==='vector-battle-answer'&&simulator&&state?.trying&&state.phase==='question'&&data.match===state.id&&data.index===state.round){accept(simulator.submit(data.answer,!!data.skipped));return;}
  if(data.type!=='vector-battle-answer'||!state||state.owner||waiting()||state.phase!=='question'||state.mine?.submitted||pending||data.match!==state.id||data.index!==state.round)return;
  pending={id:state.id,round:state.round,answer:data.answer,skipped:!!data.skipped};store(pendingKey(),pending);renderBoard();submit();
 });
@@ -144,4 +192,5 @@ addEventListener('online',()=>{if(state){schedule();if(pending)submit();}});
 addEventListener('axioma:login-complete',async event=>{await identity(event.detail.account);if(!$('setup').hidden)(account?.role==='teacher'?$('world'):$('joinCode')).focus();});
 AxiomaAuth.onChange(({account:a,pending:p})=>{if(!p)identity(a);});
 AxiomaAuth.ready().then(({account:a})=>{if(!a){display('login');return;}return identity(a);}).catch(e=>{display('login');notice(errorText(e));});
+window.LeraarBobClassroom=Object.freeze({snapshot:()=>state?JSON.parse(JSON.stringify(state)):null,simulation:()=>!!simulator});
 })();

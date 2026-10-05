@@ -1,0 +1,91 @@
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+const games=Object.freeze([
+ {id:'rechten',title:'Rechtenwereld',subject:'Rechten, grafieken en voorschriften',path:'games/rechten/rechtenwereld/'},
+ {id:'vectoren',title:'Vectorwereld',subject:'Vectoren en coördinaten',path:'games/vectoren/',solo:'games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html'},
+ {id:'algebra',title:'Algebrawereld',subject:'Vergelijkingen',path:'games/algebra-trainer/'},
+ {id:'bewerkingen',title:'Bewerkingentrainer',subject:'Machten en wortels',path:'games/bewerkingen-trainer/'},
+ {id:'wortelbouw',title:'Wortelbouw',subject:'Pythagoras en wortels',path:'games/wortelbouw_pro_v0.5.0/wortelbouw/'}
+]);
+const root=new URL('../',location.href),params=new URLSearchParams(location.search),game=id=>games.find(g=>g.id===id),origin=game(params.get('game'));
+let account=null,data=null,epoch=0,request=0,view='overview',pendingLaunch=null,currentModule=null;
+const modules=new Map(),phases={setup:'Instellen',login:'Aanmelden',lobby:'Wachtkamer',question:'Ronde bezig',grading:'Nakijken',results:'Uitslag',finished:'Afgerond',closed:'Gestopt'};
+function notice(text){$('notice').textContent=text||'';}
+function date(value){const d=new Date(value);return Number.isFinite(d.getTime())?d.toLocaleDateString('nl-BE',{day:'numeric',month:'short',year:'numeric'}):'';}
+function login(){window.LeraarBobAccount?.open($('loginBtn'));}
+function updateURL(){const url=new URL(location.href);if(currentModule)url.searchParams.set('game',currentModule.game.id);url.searchParams.set('view',view);if(currentModule?.simulation)url.searchParams.set('simulation','1');else url.searchParams.delete('simulation');url.searchParams.delete('code');history.replaceState(null,'',url);}
+function show(next){
+ if(!['overview','rankings','session'].includes(next))return;
+ if(next==='session'&&!currentModule){notice('Kies eerst een wereld voor je battle.');next='overview';}
+ view=next;document.body.dataset.view=next;
+ for(const id of ['overview','rankings','session'])$(id+'View').hidden=id!==next;
+ document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-current',b.dataset.view===next?'page':'false'));
+ $('hubCrumb').textContent=next==='session'?currentModule.game.title:next==='rankings'?'Ranglijsten':'Overzicht';
+ $('savedBattleNav').hidden=$('savedBattleMenu').hidden=!currentModule;updateURL();
+ if(next==='rankings')renderRankings();
+}
+async function rpc(action,payload={}){
+ let timeout;const query=AxiomaAuth.client().rpc('axioma_class_battle_hub',{p_action:action,p_data:payload});
+ let response;try{response=await Promise.race([query,new Promise((_,reject)=>{timeout=setTimeout(()=>reject(Error('Geen verbinding. Gebruik Vernieuwen om opnieuw te proberen.')),15000);})]);}finally{clearTimeout(timeout);}
+ if(response.error)throw Error(response.error.message||'Het battleoverzicht is tijdelijk niet bereikbaar.');
+ return response.data;
+}
+async function load(){
+ if(!account)return;const captured=epoch,serial=++request;
+ try{const result=await rpc('overview',{class:account.role==='teacher'?$('rankingClass').value||null:null});if(epoch!==captured||serial!==request)return;data=result;render();notice('');}
+ catch(e){if(epoch===captured&&serial===request){notice('Je battleoverzicht kon niet worden geladen. '+e.message);$('rankingContent').textContent='De ranglijst is tijdelijk niet bereikbaar. Gebruik Vernieuwen om opnieuw te proberen.';}}
+}
+function render(){
+ const teacher=account?.role==='teacher';$('loginBtn').hidden=!!account;$('joinHint').textContent=account?teacher?'Gebruik een leerlingaccount om mee te spelen. Je kunt hieronder een groepsbattle maken.':'De code brengt je naar de juiste wereld.': 'Meld je aan en gebruik de code op het klasbord.';
+ $('codeForm').querySelector('button[type=submit]').disabled=teacher;
+ $('gamesHint').textContent=teacher?'Maak een echte groepsbattle of test met virtuele leerlingen.':'Open de battle van je wereld of doe mee met een code.';
+ $('gameCards').innerHTML=games.map(g=>{const s=data?.stats?.find(x=>x.game===g.id),mine=data?.leaderboards?.find(x=>x.game===g.id&&x.mine);
+ return '<article class="panel gameCard" data-origin="'+(g.id===origin?.id)+'"><h3>'+g.title+'</h3><p>'+g.subject+'</p>'+(s?'<div class="gameStats"><div><strong>'+Number(s.points)+'<span> punten</span></strong><span>'+s.sessions+' battles</span></div><div><strong>'+(s.graded?Math.round(100*s.correct/s.graded)+'%':'—')+'</strong><span>juiste inzendingen'+(mine?' · plaats '+mine.place:'')+'</span></div></div>':'<p class="muted">'+(teacher?'Jij kiest de oefeningen en rondetijd.':account?'Nog geen afgeronde battle in deze wereld.':'Je resultaten verschijnen na aanmelden.')+'</p>')+'<div class="cardActions"><button class="primary" data-launch="'+g.id+'">'+(teacher?'Groepsbattle maken':'Battle openen')+'</button>'+(teacher?'<button data-simulate="'+g.id+'">Simulatie</button>':'')+'</div></article>';
+ }).join('');
+ $('classFilter').hidden=!teacher;$('accountScope').textContent=account?(teacher?'Leerkrachtaccount · ranglijsten per klas':(account.alias||'Leerling')+' · '+(account.class_code||'je klas')):'';
+ const stats=(data?.stats||[]).filter(s=>s.graded>=5).sort((a,b)=>b.correct/b.graded-a.correct/a.graded);
+ $('insightTitle').textContent=teacher?'Test en begeleid je klas':'Je eigen battleoverzicht';
+ $('insight').textContent=teacher?'Met Simulatie kun je wachtkamer, vragen en uitslagen tonen. Virtuele leerlingen blijven buiten de echte ranglijsten.':stats.length?'Je hoogste percentage juiste inzendingen staat bij '+(game(stats[0].game)?.title||stats[0].game)+': '+Math.round(100*stats[0].correct/stats[0].graded)+'% over '+stats[0].graded+' inzendingen.':account?'Je resultaten groeien met je deelname. Na een afgeronde battle zie je je punten en plaats per wereld.':'Na het aanmelden vind je hier je deelname en resultaten per wereld.';
+ const selected=$('rankingClass').value;$('rankingClass').replaceChildren(new Option('Kies een klas',''));for(const c of data?.classes||[])if(c)$('rankingClass').append(new Option(c,c));if([...$('rankingClass').options].some(o=>o.value===selected))$('rankingClass').value=selected;
+ $('recentSection').hidden=!account;
+ $('recentRooms').innerHTML=(data?.rooms||[]).filter(r=>game(r.game)).map(r=>'<article class="panel roomItem"><div><h3>'+game(r.game).title+' · '+(phases[r.phase]||r.phase)+'</h3><p>'+date(r.created_at)+' · '+r.participants+' leerlingen'+(r.active?' · code '+esc(r.code):' · '+r.points+' punten'+(r.graded?' · '+Math.round(100*r.correct/r.graded)+'% juiste inzendingen':''))+'</p></div>'+(r.active?'<button data-launch="'+r.game+'" data-code="'+esc(r.code)+'">Hervatten →</button>':'<button data-ranking="'+r.game+'">Ranglijst →</button>')+'</article>').join('')||'<p class="empty">'+(account?'Je hebt nog geen groepsbattle gemaakt of meegespeeld.':'Meld je aan om je battles te zien.')+'</p>';
+ renderRankings();
+}
+function renderRankings(){
+ const g=game($('rankingGame').value)||games[0],rows=(data?.leaderboards||[]).filter(r=>r.game===g.id);
+ $('rankingScope').textContent=data?.class?'Klas '+data.class+' · '+g.title+' · top 20 en je eigen plaats':account?.role==='teacher'?'Kies een klas om haar ranglijsten te bekijken.':'Ranglijst van je eigen klas · '+g.title;
+ if(!account){$('rankingContent').innerHTML='<p class="empty">Meld je aan bij leraarBob om de ranglijsten van je klas te zien.</p><button type="button" data-login>Aanmelden</button>';return;}
+ if(!rows.length){$('rankingContent').innerHTML='<p class="empty">'+(account.role==='teacher'&&!data?.class?'Kies hierboven een klas.':'Er zijn nog geen afgeronde battles in deze wereld voor deze klas.')+'</p>';return;}
+ $('rankingContent').innerHTML='<div class="tableWrap"><table class="rankingTable"><thead><tr><th scope="col">Plaats</th><th scope="col">Leerling</th><th scope="col">Punten</th><th scope="col">Juist</th><th scope="col">Battles</th></tr></thead><tbody>'+rows.map(r=>'<tr'+(r.mine?' class="mine"':'')+'><td>'+r.place+'</td><th scope="row">'+esc(r.alias)+(r.mine?' (jij)':'')+'</th><td>'+r.points+'</td><td>'+(r.graded?Math.round(100*r.correct/r.graded)+'%':'—')+'</td><td>'+r.sessions+'</td></tr>').join('')+'</tbody></table></div>';
+}
+function launch(id,simulation=false,code=''){
+ const g=game(id);if(!g)return;
+ if(!account){pendingLaunch={id,simulation,code};login();return;}
+ if(!['student','teacher'].includes(account.role)){notice('Gebruik een leerling- of leerkrachtaccount voor Klasbattle.');return;}
+ if(simulation&&account.role!=='teacher'){notice('Een leerkracht kan een simulatie starten.');return;}
+ const key=g.id+':'+(simulation?'simulation':'live');let module=modules.get(key);
+ if(module&&code){let savedCode=module.code;try{savedCode=module.frame.contentWindow.LeraarBobClassroom?.snapshot()?.code||savedCode;}catch{}if(savedCode!==code){module.frame.remove();modules.delete(key);module=null;}}
+ if(!module){const frame=document.createElement('iframe'),src=new URL(g.path+'classroom.html',root);src.searchParams.set('hub','1');if(simulation)src.searchParams.set('simulation','1');if(/^[A-Fa-f0-9]{6}$/.test(code)){src.searchParams.set('code',code);if(account.role==='student')src.searchParams.set('join','1');}frame.src=src;frame.className='battleModule';frame.title=(simulation?'Simulatie · ':'Groepsbattle · ')+g.title;module={game:g,simulation,code,frame,phase:'setup'};modules.set(key,module);$('moduleHost').append(frame);frame.addEventListener('load',()=>syncFrameTheme(frame));}
+ for(const m of modules.values())m.frame.hidden=m!==module;currentModule=module;
+ $('sessionWorld').textContent=g.title;$('sessionKind').textContent=simulation?'Leerkrachtsimulatie':'Groepsbattle';$('simulationNote').hidden=!simulation;$('sessionPhase').textContent=phases[module.phase]||'Instellen';show('session');
+}
+function syncFrameTheme(frame){try{frame.contentDocument.documentElement.dataset.mode=document.documentElement.dataset.mode||'light';}catch{}}
+new MutationObserver(()=>{for(const m of modules.values())syncFrameTheme(m.frame);}).observe(document.documentElement,{attributes:true,attributeFilter:['data-mode']});
+addEventListener('message',e=>{if(e.origin!==location.origin)return;const m=[...modules.values()].find(x=>x.frame.contentWindow===e.source);if(!m||e.data?.game!==m.game.id)return;if(e.data.type==='leraarbob-class-launch'){if(e.data.mode==='live'&&m===currentModule&&m.simulation&&account?.role==='teacher')launch(m.game.id,false);return;}if(e.data.type!=='leraarbob-class-status'||!Object.hasOwn(phases,e.data.phase))return;m.phase=e.data.phase;if(m===currentModule)$('sessionPhase').textContent=phases[m.phase];if(['finished','closed'].includes(m.phase)&&!m.simulation)load();});
+async function identity(next){
+ if(account?.id===next?.id&&account?.role===next?.role){const changed=account?.alias!==next?.alias||account?.class_code!==next?.class_code;account=next;if(changed){render();load();}return;}epoch++;request++;account=next;data=null;
+ for(const m of modules.values())m.frame.remove();modules.clear();currentModule=null;render();show('overview');
+ if(!account)return;if(!['student','teacher'].includes(account.role)){notice('Gebruik een leerling- of leerkrachtaccount voor Klasbattle.');return;}
+ await load();
+ if(pendingLaunch){const item=pendingLaunch;pendingLaunch=null;launch(item.id,item.simulation,item.code);}
+ else if(params.get('view')==='session'&&origin)launch(origin.id,params.get('simulation')==='1',params.get('code')||'');else if(params.get('view')==='rankings')show('rankings');
+}
+$('codeForm').onsubmit=async e=>{e.preventDefault();if(!account){login();return;}if(account.role!=='student'){notice('Gebruik een leerlingaccount om mee te spelen.');return;}const button=e.submitter;button.disabled=true;const captured=epoch;try{const resolved=await rpc('code',{code:$('battleCode').value.trim().toUpperCase()});if(epoch===captured)launch(resolved.game,false,resolved.code);}catch(err){if(epoch===captured)notice(err.message);}finally{button.disabled=account?.role==='teacher';}};
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.view)show(b.dataset.view);if(b.dataset.launch)launch(b.dataset.launch,false,b.dataset.code||'');if(b.dataset.simulate)launch(b.dataset.simulate,true);if(b.dataset.ranking){$('rankingGame').value=b.dataset.ranking;show('rankings');}if(b.hasAttribute('data-login'))login();});
+$('gameHomeBtn').onclick=()=>show('overview');$('refreshBtn').onclick=$('refreshRankings').onclick=load;$('rankingGame').onchange=renderRankings;$('rankingClass').onchange=load;$('loginBtn').onclick=login;
+for(const g of games)$('rankingGame').append(new Option(g.title,g.id));if(origin){$('rankingGame').value=origin.id;$('originGame').hidden=false;$('originGame').href=new URL(origin.solo||origin.path,root);$('originGame').textContent='Terug naar '+origin.title+' →';}
+render();show(params.get('view')==='rankings'?'rankings':'overview');
+AxiomaAuth.onChange(({account:a,pending})=>identity(pending?null:a));AxiomaAuth.ready().then(({account:a})=>identity(a)).catch(e=>notice(e.message));
+window.LeraarBobClassHub=Object.freeze({games,show,launch,snapshot:()=>({view,account:account?.role||null,game:currentModule?.game.id||null,simulation:currentModule?.simulation||false,modules:modules.size})});
+})();

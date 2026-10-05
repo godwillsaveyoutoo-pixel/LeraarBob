@@ -16,11 +16,11 @@
     {id:'wortelbouw',name:'Wortelbouw',subject:'Pythagoras & wortels',path:'games/wortelbouw_pro_v0.5.0/wortelbouw/',cover:'wortelbouw',modes:['local','classroom']},
     {id:'vectoren',name:'Vectormissie',subject:'Vectoren',path:'games/vectoren/',cover:'vectormissie',modes:['local','classroom']},
     {id:'bewerkingen',name:'Bewerkingentrainer',subject:'Machten & wortels',path:'games/bewerkingen-trainer/',cover:'bewerkingen',modes:['local','classroom']},
-    {id:'algebra',name:'Algebra Trainer',subject:'Vergelijkingen',path:'games/algebra-trainer/',cover:'algebra-trainer',modes:['classroom']}
+    {id:'algebra',name:'Algebrawereld',subject:'Vergelijkingen',path:'games/algebra-trainer/',cover:'algebra-trainer',modes:['classroom']}
   ];
   const escape = text => String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const game = id => games.find(item=>item.id===id);
-  const current = () => games.find(item=>location.pathname.startsWith(new URL(item.path,root).pathname));
+  const current = () => games.find(item=>location.pathname.startsWith(new URL(item.path,root).pathname)) || (location.pathname.startsWith(new URL('games/rechten/',root).pathname) ? game('rechten') : null);
   function modes(id, {solo=false,role=''}={}) {
     const item=game(id);
     return item ? [...(solo&&id==='rechten'?['solo']:[]),...item.modes].map(key=>{
@@ -29,7 +29,8 @@
     }) : [];
   }
   function destination(id, mode, world) {
-    const url=new URL(game(id).path+definitions[mode].file,root);
+    const url=mode==='classroom' ? new URL('klasbattle/',root) : new URL(game(id).path+definitions[mode].file,root);
+    if(mode==='classroom')url.searchParams.set('game',id);
     if(id==='rechten'&&worlds.includes(world)) {
       if(mode==='solo')url.hash=world;
       else url.searchParams.set('world',world);
@@ -47,7 +48,7 @@
   function navigation(node, id) {
     const item=game(id);if(!item)return null;
     const key=node.id==='battleBtn'?'local':node.id==='classBtn'?'classroom':null;
-    return modes(id).find(mode=>mode.id===key||node.href&&new URL(node.href).pathname===new URL(item.path+mode.file,root).pathname)||null;
+    return modes(id).find(mode=>mode.id===key||node.href&&[new URL(item.path+mode.file,root).pathname,new URL(destination(id,mode.id),root).pathname].includes(new URL(node.href).pathname))||null;
   }
   const css=`
     .play-mode-section{margin:14px 0 0}.play-mode-section>h3{margin:0 0 7px;font:700 12px/1.4 system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:inherit}
@@ -59,8 +60,17 @@
   window.LeraarBobPlayModes=Object.freeze({games,game,current,modes,cards,destination,navigation,css});
   function retainWorld() {
     const world=new URLSearchParams(location.search).get('world');
-    if(current()?.id!=='rechten'||!worlds.includes(world))return;
-    for(const link of document.querySelectorAll('a[href="play.html"]'))link.href='play.html?world='+encodeURIComponent(world);
+    const item=current();
+    if(item?.id==='rechten'&&worlds.includes(world))for(const link of document.querySelectorAll('a[href="play.html"]'))link.href='play.html?world='+encodeURIComponent(world);
+    // Entry links first visit the shared overview; session launch URLs stay local.
+    if(!item||location.pathname.endsWith('/classroom.html'))return;
+    const local=new URL(item.path+'classroom.html',root).pathname;
+    for(const link of document.querySelectorAll('a[href]')){
+      const target=new URL(link.href);
+      if(target.pathname!==local||['hub','join','room','code','session'].some(key=>target.searchParams.has(key)))continue;
+      link.href=destination(item.id,'classroom',target.searchParams.get('world')||world);
+    }
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',retainWorld,{once:true});else retainWorld();
+  new MutationObserver(retainWorld).observe(document.body,{childList:true,subtree:true});
 })();

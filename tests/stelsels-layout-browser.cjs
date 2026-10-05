@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http');
 const {chromium}=require('playwright'),C=require('../games/algebra-trainer/core.js');
-const root=path.resolve(__dirname,'..'),out=path.join(root,'docs/algebra-leerroute/screenshots');
+const root=path.resolve(__dirname,'..'),out=process.env.STELSELS_SCREENSHOTS||'/tmp/stelsels-v050-layout';
 fs.mkdirSync(out,{recursive:true});
 const server=http.createServer((req,res)=>{
  const file=path.resolve(root,'.'+decodeURIComponent(new URL(req.url,'http://local').pathname));
@@ -101,12 +101,19 @@ const server=http.createServer((req,res)=>{
   await page.evaluate(async()=>{AxiomaGame.storage.setItem('leraarbob.algebra.v1',JSON.stringify({version:1,worldLegacy:['E1']}));await AxiomaGame.flush();});await page.goto(base+'/games/algebra-trainer/stelsels.html?topic=sys-graphic');await ready();
   assert((await snap()).systemRun);for(let i=0;i<5;i++){await solve('graphic');await page.locator('#systemContinue').click();}await layout('system mission summary');assert((await snap()).journey.topics['sys-graphic'].finished);await page.screenshot({path:path.join(out,'system-summary-640.png')});
   await page.evaluate(()=>AxiomaGame.flush());await page.reload();await ready();await layout('system summary reload');
+  const firstGraphic=await page.evaluate(()=>StelselsTrainer.snapshot().exercises.map(e=>StelselsCore.systemTex(e.start)));
+  assert.equal(await page.evaluate(()=>AlgebraWorld.xp(StelselsTrainer.snapshot().journey)+AlgebraJourney.xp(StelselsTrainer.snapshot().roundJourney)),30);
+  await page.locator('[data-trainer-menu]:visible').first().click();await page.locator('[data-menu-stop=sys-graphic]').click();await page.locator('.menuContinue').click();
+  const secondGraphic=await page.evaluate(()=>StelselsTrainer.snapshot().exercises.map(e=>StelselsCore.systemTex(e.start)));assert(secondGraphic.every(eq=>!firstGraphic.includes(eq)),'Replay has five distinct new systems');
+  for(let i=0;i<5;i++){await solve('graphic');await page.locator('#systemContinue').click();}
+  assert.equal(await page.evaluate(()=>AlgebraWorld.xp(StelselsTrainer.snapshot().journey)+AlgebraJourney.xp(StelselsTrainer.snapshot().roundJourney)),60);await page.reload();await ready();
+  assert.equal(await page.evaluate(()=>AlgebraWorld.xp(StelselsTrainer.snapshot().journey)+AlgebraJourney.xp(StelselsTrainer.snapshot().roundJourney)),60,'Reload cannot reward the same completed round again');
   for(const method of ['substitution','combination']){await page.goto(base+'/games/algebra-trainer/stelsels.html?topic=sys-'+method);await ready();assert((await snap()).systemRun);for(let i=0;i<5;i++){await solve(method);await page.locator('#systemContinue').click();}await layout(method+' mission summary');assert((await snap()).journey.topics['sys-'+method].finished);}
-  // Worksheet building still uses the exact exercises on the workboard.
+  // Selected-level worksheet building leaves the active workboard unchanged.
   const original=await page.evaluate(()=>JSON.stringify(StelselsTrainer.snapshot().exercises));
-  if(await page.locator('.lb-restore').isVisible())await page.locator('.lb-restore').click();await page.locator('leraarbob-topbar .menu:visible,leraarbob-topbar .mobile-menu:visible').click();await page.getByRole('button',{name:'Oefenblad huidige reeks',exact:true}).click();
+  if(await page.locator('.lb-restore').isVisible())await page.locator('.lb-restore').click();await page.locator('leraarbob-topbar .menu:visible,leraarbob-topbar .mobile-menu:visible').click();await page.locator('leraarbob-topbar dialog').getByRole('button',{name:'Levels',exact:true}).click();await page.locator('#navigationWorksheet').click();
   for(const method of ['substitution','combination','graphic']){await page.locator('#paperMethod').selectOption(method);await page.waitForFunction(()=>StelselsTrainer.snapshot().pages>0&&!document.getElementById('download').disabled);assert.equal(await page.evaluate(()=>JSON.stringify(StelselsTrainer.snapshot().exercises)),original);assert(await page.locator('.paper-page').count()>0);}
   await page.locator('#paperMethod').selectOption('graphic');await page.waitForFunction(()=>!document.getElementById('download').disabled);const download=page.waitForEvent('download');await page.locator('#download').click();const file=await download;const filePath=await file.path();await file.saveAs(path.join(out,'stelsels-voorbeeld.pdf'));assert.equal(fs.readFileSync(filePath).subarray(0,8).toString(),'%PDF-1.4');
-  assert.deepEqual(errors,[]);fs.writeFileSync(path.join(out,'../stelsels-browser-report.json'),JSON.stringify({checks:report.length,report},null,2));console.log('PASS '+report.length+' system checks; all three methods, exceptional cases, history, reload and full mission');
+  assert.deepEqual(errors,[]);fs.writeFileSync(path.join(out,'stelsels-browser-report.json'),JSON.stringify({checks:report.length,report},null,2));console.log('PASS '+report.length+' system checks; all three methods, exceptional cases, history, reload and full mission');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>server.close());

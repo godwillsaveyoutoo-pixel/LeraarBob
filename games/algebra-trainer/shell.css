@@ -1,11 +1,11 @@
 /* Shared visual language for worlds, levels, workspaces and the class lobby. */
 .algebraPlatform,.algebra-classroom{--ink:#142c40;--muted:#52677a;--line:#cbd2d6;--paper:#f6f2e9;--bg:#f6f2e9;--accent:#234e66;--soft:#e5eef3;--blue:#234e66;--lb-surface:#163b51;--lb-ink:#f5f8fa;--lb-line:#7091a566;--lb-hover:#ffffff16;--lb-control-radius:6px;--lb-panel-radius:8px;font-family:system-ui,sans-serif;color:var(--ink);background:var(--paper)}
 .algebraPlatform .app{grid-template-rows:auto auto minmax(0,1fr)!important}
-.algebraSectionNav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));flex:none;min-height:44px;background:#163b51;color:white;border-top:1px solid #ffffff25;isolation:isolate}
+.algebraSectionNav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));flex:none;min-height:44px;background:#163b51;color:white;border-top:1px solid #ffffff25;isolation:isolate}
 .algebraSectionNav a{min-height:44px;min-width:0;display:flex;align-items:center;justify-content:center;text-align:center;gap:6px;padding:4px 10px;color:inherit!important;text-decoration:none;font:600 14px/1.15 system-ui;border-right:1px solid #ffffff25;border-radius:0;box-sizing:border-box;touch-action:manipulation}
 .algebraSectionNav a:hover{background:#ffffff15}.algebraSectionNav a[aria-current=page]{background:#dce9ef;color:#163b51!important;box-shadow:inset 0 -3px #ff8a24}
 .algebraSectionNav a:focus-visible{outline:3px solid #ffb968;outline-offset:-3px}
-.topbar-collapsed .algebraSectionNav{padding-left:max(52px,calc(env(safe-area-inset-left) + 50px))}
+.topbar-collapsed .algebraSectionNav{min-height:52px;padding-left:max(52px,calc(env(safe-area-inset-left) + 50px))}
 .algebraPlatform .algebraMenu{grid-template-rows:82px minmax(0,1fr) 64px 24px!important}
 .algebraPlatform .algebraMenuHead{display:none!important}
 .algebraPlatform .algebraMenuFoot{background:#426174}.algebraMenuFoot>span{font-size:12px}
@@ -35,7 +35,7 @@
  .worldOverview .algebraRouteHeading{min-height:60px}.worldCards{padding:12px;gap:12px}.worldCard{min-height:165px;padding:12px;gap:6px}.worldExample{font-size:26px;padding:4px}.futureWorlds{padding:0 12px 12px}
 }
 @media(max-width:600px){
- .algebraSectionNav{grid-template-columns:repeat(3,minmax(0,1fr));min-height:88px}.algebraSectionNav a{font-size:12px;padding:4px 5px;border-bottom:1px solid #ffffff25}.algebraSectionNav a:first-child{grid-row:1/3}
+ .algebraSectionNav{grid-template-columns:repeat(3,minmax(0,1fr));min-height:44px}.algebraSectionNav a{font-size:13px;padding:4px 5px;border-bottom:1px solid #ffffff25}
  .algebraPlatform .algebraMenu{grid-template-rows:62px minmax(0,1fr) 62px 24px!important}
  .algebraPlatform .algebraMenu:has(#navigationResumeFree:not([hidden])){grid-template-rows:62px minmax(0,1fr) 106px 24px!important}
  .algebraPlatform .algebraRouteHeading h1{font-size:26px}.worldOverview .algebraRouteHeading{min-height:95px}.worldAvailability{display:none}
@@ -67,3 +67,40 @@ body.algebra-classroom[data-playing=true]{grid-template-rows:var(--lb-header-hei
 .algebraPlatform .algebraMenu .menuStop[aria-pressed=true]{color:var(--menu-ink)}
 .algebraPlatform .worldCard{border-radius:8px!important}
 .algebraPlatform.topbar-collapsed .worldScreen{padding-top:0}
+
+/* Hierarchy and level actions remain legible on a portrait phone. */
+.algebraPlatform leraarbob-topbar::part(crumb-game),.algebraPlatform leraarbob-topbar::part(crumb-link){font-size:19px;font-weight:750;padding-inline:10px}
+.algebraPlatform leraarbob-topbar::part(crumb-separator){font-size:23px;color:#a8c8d7}
+.algebraPlatform .algebraMenuResume{flex-wrap:wrap;align-content:center;row-gap:6px}
+.algebraPlatform .algebraMenuResume p{font-size:20px}
+.algebraPlatform .algebraMenuFoot>span{font-size:11px}
+@media(max-width:600px){
+ .algebraPlatform .algebraMenu,.algebraPlatform .algebraMenu:has(#navigationResumeFree:not([hidden])){grid-template-rows:62px minmax(0,1fr) 108px 30px!important}
+ .algebraPlatform .algebraMenuResume{display:grid;height:auto!important;grid-template-columns:1fr 1fr;grid-template-rows:auto 44px;margin-inline:10px;gap:6px;padding-block:6px}
+ .algebraPlatform .algebraMenuResume p{grid-column:1/-1;font-size:16px}
+ .algebraPlatform .algebraMenuResume #navigationWorksheet{grid-column:1;grid-row:2;font-size:14px;min-width:0}
+ .algebraPlatform .algebraMenuResume .menuContinue{grid-column:2;grid-row:2;min-width:0;font-size:16px}
+ .algebraPlatform .algebraMenuResume #navigationResumeFree:not([hidden]){grid-column:1/-1;grid-row:3;font-size:13px}
+ .algebraPlatform .algebraMenu:has(#navigationResumeFree:not([hidden])){grid-template-rows:62px minmax(0,1fr) 158px 30px!important}
+ .algebraPlatform .algebraMenuFoot>span{font-size:10px}
+ .algebraPlatform .previewHead{flex-wrap:wrap;gap:6px;padding:10px}
+ .algebraPlatform .previewHead>div{flex-basis:100%}
+ .algebraPlatform .previewHead button{min-height:44px;flex:1;padding-inline:6px}
+ .algebraPlatform .algebraMenuStops{grid-template-rows:repeat(4,minmax(72px,1fr))}
+ .algebraPlatform .algebraMenuStops[data-count="6"]{grid-template-rows:repeat(3,minmax(100px,1fr))}
+}
+@media(max-height:500px) and (min-width:601px){
+ .algebraPlatform .algebraMenuResume p{font-size:14px}
+ .algebraPlatform .algebraMenuResume button{font-size:12px;padding-inline:8px}
+ .algebraPlatform .algebraMenu .menuContinue{min-width:136px;font-size:16px}
+ .algebraPlatform .algebraMenuFoot>span{font-size:10px}
+}
+@media(max-width:600px){
+ .algebraPlatform .algebraMenuResume:has(#navigationResumeFree:not([hidden])){grid-template-columns:1fr 1fr;grid-template-rows:auto 44px 44px;gap:6px}
+ .algebraPlatform .algebraMenuResume:has(#navigationResumeFree:not([hidden])) p{grid-column:1/-1;grid-row:1}
+ .algebraPlatform .algebraMenuResume:has(#navigationResumeFree:not([hidden])) .menuContinue{grid-column:2;grid-row:2}
+ .algebraPlatform .algebraMenuResume:has(#navigationResumeFree:not([hidden])) #navigationResumeFree{grid-column:1/-1;grid-row:3}
+}
+@media(max-height:500px) and (min-width:601px){
+ .algebraPlatform.topbar-collapsed[data-screen=work] #work .work-head,.algebraPlatform.topbar-collapsed[data-screen=systemHistory] #systemHistory header{padding-left:48px}
+}

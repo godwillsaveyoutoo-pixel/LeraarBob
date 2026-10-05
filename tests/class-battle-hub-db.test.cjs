@@ -1,0 +1,19 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs');
+const {createDB,ids}=require('./helpers/vector-class-db.cjs');
+test('central overview restricts peers to own class, ranks ties, resolves codes and reads only graded finished results',async()=>{
+ const {db}=await createDB();try{
+ await db.exec("alter table public.axioma_profiles add column class_code text; update public.axioma_profiles set class_code='3TBO'; update public.axioma_profiles set class_code='4TMW' where alias='outsider';");
+ await db.exec(fs.readFileSync('supabase/migrations/20261005132202_central_class_battle_hub.sql','utf8'));
+ const call=(user,action='overview',data={})=>db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[ids[user]||'']);await tx.exec('set local role authenticated');return(await tx.query('select public.axioma_class_battle_hub($1,$2) result',[action,JSON.stringify(data)])).rows[0].result;});
+ const create=async(code,game,phase)=>{const r=await db.query("insert into axioma_private.vector_class_rooms(code,owner_id,game,deck,seconds,phase,round) values($1,$2,$3,'[{},{}]',60,$4,1) returning id",[code,ids.teacher,game,phase]);return r.rows[0].id;};
+ const done=await create('AABBCC','vectoren','finished'),live=await create('DDEEFF','rechten','question');
+ for(const user of ['alex','sam','outsider']){await db.query('insert into axioma_private.vector_class_members(room_id,user_id,alias) values($1,$2,$3)',[done,ids[user],user]);await db.query("insert into axioma_private.vector_class_answers(room_id,user_id,round,answer,elapsed_ms,correct,points) values($1,$2,0,'{}',1000,true,1100),($1,$2,1,'{}',1000,false,0)",[done,ids[user]]);}
+ await db.query('insert into axioma_private.vector_class_members(room_id,user_id,alias) values($1,$2,$3)',[live,ids.alex,'alex']);await db.query("insert into axioma_private.vector_class_answers(room_id,user_id,round,answer,elapsed_ms,correct,points) values($1,$2,0,'{}',1000,null,9999)",[live,ids.alex]);
+ const a=await call('alex','overview',{class:'4TMW'});assert.equal(a.class,'3TBO');assert.deepEqual(a.leaderboards.map(r=>r.alias),['alex','sam']);assert(a.leaderboards.every(r=>r.place===1));assert.equal(a.stats[0].points,1100);assert.equal(a.stats[0].graded,2);assert.equal(a.stats[0].correct,1);assert.equal(a.rooms.length,2);assert(a.rooms.find(r=>r.id===live).active);assert.equal(a.rooms.find(r=>r.id===live).points,0);assert(!JSON.stringify(a.leaderboards).includes('user_id'));assert.equal(a.leaderboards.find(r=>r.mine).alias,'alex');
+ const outsider=await call('outsider');assert.deepEqual(outsider.leaderboards.map(r=>r.alias),['outsider']);assert.equal(outsider.rooms.length,1);
+ const teacher=await call('teacher','overview',{class:'4TMW'});assert(teacher.teacher);assert.deepEqual(teacher.leaderboards.map(r=>r.alias),['outsider']);assert.equal(teacher.rooms.length,2);assert.equal((await call('teacher')).leaderboards.length,0);await assert.rejects(call('teacher','overview',{class:'bad'}),/Onbekende klas/);
+ assert.deepEqual(await call('alex','code',{code:'ddeeff'}),{game:'rechten',code:'DDEEFF'});await assert.rejects(call('alex','code',{code:'AABBCC'}),/afgelopen/);await assert.rejects(call('alex','code',{code:'1'}),/zes tekens/);await assert.rejects(call('none'),/Meld je eerst/);await assert.rejects(call('alex','create'),/Onbekende/);
+ const grants=(await db.query("select has_function_privilege('anon','public.axioma_class_battle_hub(text,jsonb)','execute') anon,has_function_privilege('authenticated','public.axioma_class_battle_hub(text,jsonb)','execute') logged")).rows[0];assert.equal(grants.anon,false);assert.equal(grants.logged,true);
+ assert.equal((await db.query('select count(*) n from axioma_private.vector_class_answers')).rows[0].n,7);
+ }finally{await db.close();}
+});

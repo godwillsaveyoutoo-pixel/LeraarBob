@@ -448,6 +448,19 @@ Zie [v10-verslag](../docs/v10-online-duo.md) voor uitrol en resterende grenzen.
 
 ## Algebra Trainer
 
+De huidige Algebrawereld 0.5.0 en centrale Klasbattle worden beschreven in
+[`docs/klasbattle/README.md`](../docs/klasbattle/README.md). Nieuwe lokale proeven:
+
+```bash
+node --test tests/algebra-v050-flow.test.cjs tests/classroom-simulation.test.cjs
+VECTOR_PGLITE_MODULE=/pad/naar/@electric-sql/pglite node --test tests/class-battle-hub-db.test.cjs
+NODE_PATH=/pad/naar/node_modules ALGEBRA_CHROMIUM_PATH=/pad/naar/chromium node tests/class-battle-hub-browser.cjs
+NODE_PATH=/pad/naar/node_modules ALGEBRA_CHROMIUM_PATH=/pad/naar/chromium node tests/central-classroom-navigation-browser.cjs
+NODE_PATH=/pad/naar/node_modules ALGEBRA_CHROMIUM_PATH=/pad/naar/chromium node tests/classroom-simulation-browser.cjs
+NODE_PATH=/pad/naar/node_modules ALGEBRA_CHROMIUM_PATH=/pad/naar/chromium node tests/classroom-portal-join-browser.cjs
+NODE_PATH=/pad/naar/node_modules ALGEBRA_CHROMIUM_PATH=/pad/naar/chromium node tests/algebra-v050-flow-browser.cjs
+```
+
 `node --test tests/algebra-trainer.test.cjs` controleert alle 17 vormen met exacte breuken. `node tests/algebra-trainer-browser.cjs` gebruikt dezelfde geïsoleerde browser en webserver als de Rechtenwereld-releaseproeven en controleert formaat, navigatie, hervatten, afdrukken, accountwissel en offline opslag.
 
 ## Rechtenwereld: XP naar het centrale profiel

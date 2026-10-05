@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="nl-BE"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#163b51"><title>Klasbattle · leraarBob</title><link rel="icon" href="../assets/favicon.svg">
+<script>try{document.documentElement.dataset.mode=localStorage.getItem('axioma-mode')==='dark'?'dark':'light'}catch{}</script>
+<link rel="stylesheet" href="hub.css?v=1"><script src="../shared/vendor/supabase.js" defer></script><script src="../shared/supabase-config.js" defer></script><script src="../shared/axioma-auth.js" defer></script><script src="../shared/axioma-progress.js" defer></script><script src="../shared/learner-avatar.js" defer></script><script src="../shared/leraarbob-topbar.js" data-title="Klasbattle" data-game-href="klasbattle/" data-context="none" data-nav-pilot="true" data-theme-mode="site" data-menu-overview="false" defer></script><script src="../js/account-ui.js" defer></script><script src="hub.js?v=1" defer></script>
+</head><body>
+<header class="hubTopbar" data-collapsible-topbar><button id="gameHomeBtn" type="button">Klasbattle</button><nav class="breadcrumbs" hidden><span id="hubCrumb">Overzicht</span></nav><nav class="appNav" hidden><button type="button" data-view="overview">Battleoverzicht</button><button type="button" data-view="rankings">Ranglijsten</button><button type="button" data-view="session" id="savedBattleMenu" hidden>Lopende battle</button></nav></header>
+<nav class="hubNav" aria-label="Klasbattle"><button type="button" data-view="overview" aria-current="page">Overzicht</button><button type="button" data-view="rankings">Ranglijsten</button><button type="button" data-view="session" id="savedBattleNav" hidden>Lopende battle</button><a id="originGame" hidden>Terug naar je wereld →</a></nav>
+<main>
+<section id="overviewView">
+<div class="pageHeading"><p class="eyebrow">Samen spelen bij leraarBob</p><h1>Klasbattle</h1><p>Alle groepsbattles op één plek. Speel mee met een code, bekijk je resultaten of maak een battle voor je klas.</p></div>
+<p id="notice" class="notice" role="status" aria-live="polite"></p>
+<div class="welcomeRow"><form id="codeForm" class="panel joinPanel"><h2>Doe mee met je klas</h2><label for="battleCode">Sessiecode van je leerkracht</label><div class="codeRow"><input id="battleCode" name="code" maxlength="6" pattern="[A-Fa-f0-9]{6}" placeholder="A1B2C3" autocomplete="off" autocapitalize="characters" spellcheck="false" required><button type="submit" class="primary">Doe mee →</button></div><p id="joinHint">Meld je aan en gebruik de code op het klasbord.</p><button id="loginBtn" type="button" data-axioma-login>Aanmelden bij leraarBob</button></form>
+<aside class="panel"><h2 id="insightTitle">Je eigen battleoverzicht</h2><p id="insight">Na het aanmelden vind je hier je deelname en resultaten per wereld.</p><p id="accountScope" class="muted"></p><button type="button" data-view="rankings">Bekijk ranglijsten →</button></aside></div>
+<section aria-labelledby="gamesTitle"><div class="sectionHead"><h2 id="gamesTitle">Kies je wereld</h2><p id="gamesHint">Open de battle van je wereld.</p></div><div id="gameCards" class="gameCards"></div></section>
+<section id="recentSection" hidden aria-labelledby="recentTitle"><div class="sectionHead"><h2 id="recentTitle">Mijn battles</h2><button type="button" id="refreshBtn">Vernieuwen</button></div><div id="recentRooms" class="roomList"></div></section>
+</section>
+<section id="rankingsView" hidden>
+<div class="pageHeading"><p class="eyebrow">Resultaten per wereld</p><h1>Ranglijsten</h1><p>Je kunt in iedere wereld een andere plaats hebben. Afgeronde battles tellen mee voor de ranglijst van je klas.</p></div>
+<div class="rankingFilters"><label>Wereld<select id="rankingGame"></select></label><label id="classFilter" hidden>Klas<select id="rankingClass"></select></label><button type="button" id="refreshRankings">Vernieuwen</button></div>
+<p id="rankingScope" class="muted"></p><div id="rankingContent" class="panel"></div><p class="muted">Battlepunten worden binnen dezelfde wereld vergeleken. ‘Juist’ gaat over nagekeken inzendingen. Een simulatie telt niet mee.</p>
+</section>
+<section id="sessionView" hidden aria-label="Groepsbattle">
+<div class="sessionHeading"><div><p id="sessionKind" class="eyebrow">Groepsbattle</p><h1 id="sessionWorld">Klasbattle</h1></div><span id="sessionPhase" role="status" aria-live="polite">Instellen</span><button type="button" data-view="overview">Overzicht</button></div>
+<p id="simulationNote" hidden class="simulationNote">Leerkrachtsimulatie · virtuele leerlingen · resultaten tellen niet mee.</p><div id="moduleHost" class="moduleHost"></div>
+</section>
+</main>
+<dialog id="authOverlay" class="lb-account-dialog" data-auth-context="embedded" aria-labelledby="authTitle" hidden><div class="lb-dialog-heading"><h2 id="authTitle">Aanmelden bij leraarBob</h2><button id="authClose" type="button" aria-label="Aanmelding sluiten">×</button></div><div id="authContent"></div></dialog></body></html>

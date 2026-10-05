@@ -39,7 +39,7 @@ const server=http.createServer((req,res)=>{
   await click('#featuredGrid [data-game-id="algebra-trainer"]');await page.waitForURL('**/games/algebra-trainer/');await ready();await page.waitForSelector('#navigationScreen:not(.hidden)');
   assert.equal(await page.locator('[data-world]').count(),2);assert.equal(await page.locator('[data-menu-stop]').count(),7);
   assert(await page.locator('leraarbob-topbar .fullscreen').isVisible());assert(await page.locator('leraarbob-topbar .theme-toggle').isVisible());
-  assert.equal(await page.locator('[data-menu-stop]').count(),7);assert.equal(await page.locator('#navigationVersion').textContent(),'v0.4.6');await layout('menu-expanded');const initial=await page.evaluate(()=>AlgebraTrainer.snapshot());
+  assert.equal(await page.locator('[data-menu-stop]').count(),7);assert.equal(await page.locator('#navigationVersion').textContent(),'v0.5.0');await layout('menu-expanded');const initial=await page.evaluate(()=>AlgebraTrainer.snapshot());
   await click('leraarbob-topbar .collapse');assert.equal(await page.locator('.lb-restore').getAttribute('aria-expanded'),'false');await layout('menu-collapsed');
   await page.reload();await ready();await page.waitForSelector('#navigationScreen:not(.hidden)');assert(await page.locator('.lb-restore').isVisible());assert.deepEqual(await page.evaluate(()=>AlgebraTrainer.snapshot()),initial);
   await click('.lb-restore');assert.equal(await page.locator('leraarbob-topbar .collapse').getAttribute('aria-expanded'),'true');
