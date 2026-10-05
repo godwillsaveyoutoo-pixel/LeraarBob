@@ -175,3 +175,31 @@ html[data-mode=dark] .algebraPlatform .trainer button[data-op-kind=add]{backgrou
 html[data-mode=dark] .algebraPlatform .trainer button[data-op-kind=subtract]{background:#263e62;border-color:#607fa7;color:#d6e4ff}
 html[data-mode=dark] .algebraPlatform .trainer button[data-op-kind=multiply]{background:#472d56;border-color:#916aa7;color:#edcffc}
 html[data-mode=dark] .algebraPlatform .trainer button[data-op-kind=divide]{background:#503a17;border-color:#a17c42;color:#ffdfaa}
+
+/* Short landscape: choose a small page of actions while the workboard stays still. */
+.choicePagination{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:44px;flex:none}
+.choicePagination button{width:44px;min-height:44px;padding:0;font:20px system-ui}
+.choicePagination output{font:13px/1.2 system-ui;text-align:center;color:var(--muted);flex:1}
+@media(max-height:500px) and (min-width:601px){
+ .algebraPlatform .trainer .opRail{overflow:hidden;scrollbar-gutter:auto;overscroll-behavior:auto;gap:4px;padding:2px 4px}
+ .algebraPlatform .trainer .operationHead{position:static;min-height:44px;max-height:44px;padding:0}
+ .algebraPlatform .trainer .operationHead h2{font-size:14px;line-height:1.15}
+ .algebraPlatform .trainer .operationHead button{font-size:13px;min-height:44px}
+ .algebraPlatform .trainer .contextOperations{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+ .algebraPlatform .trainer .contextOp{min-height:76px;height:76px;padding:4px 2px;gap:4px}
+ .algebraPlatform .trainer .choiceLabel{font-size:13px;line-height:1.15;overflow-wrap:normal;hyphens:auto}
+ .algebraPlatform .trainer .choiceMath{font-size:23px;line-height:1.5}
+ .algebraPlatform .trainer .manualOperations{gap:4px}
+ .algebraPlatform .trainer .opBtn{height:62px;min-height:62px;gap:2px;padding:3px}
+ .algebraPlatform .trainer .ops{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+ .algebraPlatform .trainer .opRail:has(.manualOperations[data-stage=operand]:not(.hidden)) .operationHead{display:none}
+ .algebraPlatform .trainer .operandLabel{min-height:44px;margin:0;font-size:13px;line-height:1.2}
+ .algebraPlatform .trainer #changeOperationBtn{font-size:13px;max-width:108px}
+ .algebraPlatform .trainer #valueGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+ .algebraPlatform .trainer .valueBtn{height:64px;min-height:64px}
+ .algebraPlatform .trainer .valuePages{height:44px;margin-top:4px}
+ .algebraPlatform .trainer .mathArea{container-type:size;container-name:algebra-landscape-math}
+ .algebraPlatform .trainer .derivationStack{overflow:hidden}
+ .algebraPlatform .trainer .feedback{font-size:13px;line-height:1.25}
+}
+@container algebra-landscape-math (max-height:150px){.previousEquation{display:none}}

@@ -22,9 +22,37 @@ function render(catalog) {
       if (typeof game[key] !== 'string' || !game[key]) throw Error(`${game.id}: ${key} ontbreekt.`);
     }
   }
+  validateRegistry(catalog);
   return '// Automatisch gegenereerd uit games.json. Wijzig de bron, niet dit bestand.\n' +
     '// Opnieuw bouwen: node scripts/build-catalog.cjs\n' +
     'window.AXIOMA_CATALOG = ' + JSON.stringify(catalog, null, 2) + ';\n';
+}
+
+function validateRegistry(catalog) {
+ const ids=new Set(catalog.map(g=>g.id)),aliases=new Set(ids);
+ const href=(value,label)=>{if(typeof value!=='string'||!value||value!==value.trim()||value.startsWith('/')||value.includes(String.fromCharCode(92))||/^[a-z]+:/i.test(value)||value.split(/[?#]/)[0].split('/').includes('..'))throw Error(label+': een relatieve platformroute is vereist.');};
+ for(const g of catalog){
+  if(typeof g.active!=='boolean'||typeof g.progressId!=='string'||!g.progressId)throw Error(g.id+': active/progressId ontbreekt.');
+  href(g.href,g.id);href(g.route?.entry,g.id+' route');
+  if(g.route.prefix)href(g.route.prefix,g.id+' prefix');
+  for(const alias of g.modeAliases||[]){if(!alias||aliases.has(alias))throw Error('Dubbele spelalias: '+alias);aliases.add(alias);}
+  const topics=new Set();
+  for(const t of g.topics||[]){if(!t.id||topics.has(t.id))throw Error(g.id+': dubbel onderwerp');topics.add(t.id);href(t.href,g.id+'/'+t.id);if(t.levelIds&&new Set(t.levelIds).size!==t.levelIds.length)throw Error(g.id+': dubbele level-id');}
+  for(const kind of ['modes','worksheets']){
+   if(!Array.isArray(g.capabilities?.[kind]))throw Error(g.id+': mogelijkheden ontbreken.');
+   const seen=new Set();
+   for(const c of g.capabilities[kind]){
+    if(!c.id||seen.has(c.id))throw Error(g.id+': dubbele mogelijkheid '+c.id);seen.add(c.id);
+    if(c.reference){if(c.href||c.providerId)throw Error(g.id+': verwijzing heeft een eigen provider');const target=catalog.find(x=>x.id===c.reference.gameId);if(!target?.capabilities?.[kind]?.some(x=>x.id===c.reference[kind==='modes'?'modeId':'worksheetId']))throw Error(g.id+': onbekende verwijzing');}
+    else {href(c.href,g.id+'/'+c.id);if(!c.providerId)throw Error(g.id+': providerId ontbreekt');}
+    if(kind==='modes'&&(!['solo','duo','group'].includes(c.participation)||!['learn','battle'].includes(c.purpose)))throw Error(g.id+': deelname/doel ontbreekt');
+    if(!c.reference&&kind==='modes'&&(!Array.isArray(c.roles)||!c.roles.length||c.roles.some(r=>!['guest','student','teacher'].includes(r))))throw Error(g.id+': ongeldige rollen');
+    if(c.topicId&&!topics.has(c.topicId)||c.topics?.some(id=>!topics.has(id)))throw Error(g.id+': onbekend onderwerp bij mogelijkheid');
+   }
+  }
+ }
+ const registry=require('../shared/game-registry.js')(catalog);
+ for(const g of catalog){registry.modes(g.id);registry.worksheets(g.id);}
 }
 
 if (require.main === module) {
@@ -47,4 +75,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { render };
+module.exports = { render, validateRegistry };

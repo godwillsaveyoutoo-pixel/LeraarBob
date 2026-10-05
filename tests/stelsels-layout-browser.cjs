@@ -36,13 +36,13 @@ const server=http.createServer((req,res)=>{
     if(!root)return {missing:true};
     const visible=e=>!!e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden';
     const interactive=[...root.querySelectorAll('button,input,select,a')].filter(visible),bad=[],scroll=[],clipped=[],covered=[];
-    const allowedScroll='.tools,.board,.work-grid,#systemHistory,#systemSummary';
+    const compact=innerWidth>=640&&innerHeight<=500&&root.matches('#work,#systemHistory'),allowedScroll=compact?'.no-allowed-work-scroll':'.tools,.board,.work-grid,#systemHistory,#systemSummary';
     const scroller=e=>{for(let p=e.parentElement;p&&p!==document.body;p=p.parentElement){const css=getComputedStyle(p);if(p.matches(allowedScroll)&&(['auto','scroll'].includes(css.overflowY)||['auto','scroll'].includes(css.overflowX)))return p;}return null;};
     const positions=[root,...root.querySelectorAll(allowedScroll)].filter(e=>e.matches(allowedScroll)).map(e=>[e,e.scrollTop,e.scrollLeft]);
     const onScreen=e=>{const r=e.getBoundingClientRect(),x=r.x+r.width/2,y=r.y+r.height/2;if(x<0||y<0||x>innerWidth||y>innerHeight)return false;for(let p=e.parentElement;p&&p!==root;p=p.parentElement){const css=getComputedStyle(p),q=p.getBoundingClientRect();if(['hidden','clip','auto','scroll'].includes(css.overflowY)&&(y<q.top||y>q.bottom)||['hidden','clip','auto','scroll'].includes(css.overflowX)&&(x<q.left||x>q.right))return false;}return true;};
     for(const e of [root,...root.querySelectorAll('*')]){
      if(!visible(e)||e.closest('.katex'))continue;
-     const css=getComputedStyle(e);if(['auto','scroll'].includes(css.overflowX)&&e.scrollWidth>e.clientWidth+1||['auto','scroll'].includes(css.overflowY)&&e.scrollHeight>e.clientHeight+1){if(!e.matches(allowedScroll)&&!scroller(e))scroll.push(e.id||e.className);}
+     const css=getComputedStyle(e);if((compact&&e.matches('#work,.tools,.board,.work-grid,#systemHistory')&&e.scrollHeight>e.clientHeight+1)||['auto','scroll'].includes(css.overflowX)&&e.scrollWidth>e.clientWidth+1||['auto','scroll'].includes(css.overflowY)&&e.scrollHeight>e.clientHeight+1){if(!e.matches(allowedScroll)&&!scroller(e))scroll.push(e.id||e.className);}
     }
     for(const e of interactive){if(scroller(e))e.scrollIntoView({block:'nearest',inline:'nearest'});const r=e.getBoundingClientRect();if(r.width<43.9||r.height<43.9||r.x<-.5||r.y<-.5||r.right>innerWidth+.5||r.bottom>innerHeight+.5)bad.push({id:e.id||e.textContent,rect:r.toJSON()});if(!e.disabled&&!e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)))covered.push(e.id||e.textContent);}
     for(const [e,top,left]of positions){e.scrollTop=top;e.scrollLeft=left;}
@@ -61,11 +61,11 @@ const server=http.createServer((req,res)=>{
   const snap=()=>page.evaluate(()=>StelselsTrainer.snapshot());
   async function seed(width,height,fold=false,kind='unique',level='advanced'){
    const S=require('../games/algebra-trainer/stelsels/core.js'),ex=S.generate(321821,level,kind);
-   await page.setViewportSize({width,height});await page.evaluate(async({ex,fold})=>{AxiomaGame.storage.setItem('leraarbob.stelsels.workshop.v1',JSON.stringify({version:1,settings:{level:ex.level,method:'substitution'},exercises:[ex],index:0,work:{},screen:'work'}));LeraarBobTopbar.setCollapsed(fold);await AxiomaGame.flush();},{ex,fold});await page.reload();await ready();await layout('system start '+width+' '+fold);
+   await page.setViewportSize({width,height});await page.evaluate(async({ex,fold})=>{AxiomaGame.storage.setItem('leraarbob.stelsels.workshop.v1',JSON.stringify({version:1,settings:{level:ex.level,method:'substitution'},exercises:[ex],index:0,work:{},screen:'work'}));LeraarBobTopbar.setCollapsed(fold);await AxiomaGame.flush();},{ex,fold});await page.goto(base+'/games/algebra-trainer/stelsels.html?screen=work');await ready();await layout('system start '+width+' '+fold);
   }
   async function phase(name){const current=await page.evaluate(()=>{const s=StelselsTrainer.snapshot();return s.work[s.exercises[s.index].id].phase;});if(current!==name)await page.locator('[data-phase="'+name+'"]').click();await layout('phase '+name);}
   async function op(row,operator,q,term='c'){
-   await phase('operate');await page.locator('[data-row="'+row+'"]').click();await page.locator('[data-op="'+operator+'"]').click();const command=await page.evaluate(({operator,q,term})=>StelselsCore.operationText(operator,StelselsCore.parse(q),term),{operator,q:String(q),term});await page.locator('#operand').fill(command);
+   await phase('operate');await page.locator('[data-row="'+row+'"]').click();if(await page.locator('#palettePanel').isVisible())await page.locator('#palettePanel').click();await page.locator('[data-op="'+operator+'"]').click();const command=await page.evaluate(({operator,q,term})=>StelselsCore.operationText(operator,StelselsCore.parse(q),term),{operator,q:String(q),term});await page.locator('#operand').fill(command);
    await page.locator('#previewOperation').click();await layout('operation preview');await page.locator('#apply').click();await layout('operation committed');
   }
   const coeff=(r,side,k)=>page.evaluate(({r,side,k})=>{const s=StelselsTrainer.snapshot(),e=s.exercises[s.index],st=s.work[e.id].steps.at(-1);return StelselsCore.text(st.system[r][side][k]);},{r,side,k});
@@ -75,7 +75,7 @@ const server=http.createServer((req,res)=>{
    await page.locator('#previewSubstitution').click();await layout('substitution preview');await page.locator('#apply').click();await layout('raw grouped substitution');await page.locator('#simplify').click();await layout('simplified substitution');
   }
   async function solve(method){
-   await page.locator('[data-method="'+method+'"]').click();await layout('method '+method);
+   if(await page.locator('#compactMethodToggle').isVisible())await page.locator('#compactMethodToggle').click();await page.locator('[data-method="'+method+'"]').click();await layout('method '+method);
    if(method==='graphic'){
     const points=await page.evaluate(()=>StelselsTrainer.snapshot().exercises[StelselsTrainer.snapshot().index].start.map(e=>StelselsCore.graphPoints(e).map(p=>({x:StelselsCore.text(p.x),y:StelselsCore.text(p.y)}))));
     for(let r=0;r<2;r++)for(let p=0;p<2;p++){await page.locator('[data-point="'+r+','+p+'"]').click();await page.locator('#pointX').fill(points[r][p].x);await page.locator('#pointY').fill(points[r][p].y);await page.locator('#setGraphPoint').click();await layout('graph point');}
@@ -83,7 +83,7 @@ const server=http.createServer((req,res)=>{
     const ratio=await page.locator('#graph svg').evaluate(svg=>{const m=svg.getScreenCTM();return m.a/m.d;});assert(Math.abs(ratio-1)<1e-8,'axes use identical unit scale');
    }else{
     await normalize(0);if(method==='combination'){
-     await normalize(1);const a=await coeff(0,'l','x'),b=await coeff(1,'l','x');await phase('combine');await page.locator('#factor1').fill(b);await page.locator('#factor2').fill(a);await page.locator('#previewCombination').click();await layout('combination with intermediate calculation');await page.screenshot({path:path.join(out,'combination-'+(await page.viewportSize()).width+'.png')});await page.locator('#apply').click();await layout('combined');
+     await normalize(1);const a=await coeff(0,'l','x'),b=await coeff(1,'l','x');await phase('combine');if(await page.locator('#combineFactors').isVisible())await page.locator('#combineFactors').click();await page.locator('#factor1').fill(b);await page.locator('#factor2').fill(a);if(await page.locator('#combineChoices').isVisible())await page.locator('#combineChoices').click();await page.locator('#previewCombination').click();await layout('combination with intermediate calculation');await page.screenshot({path:path.join(out,'combination-'+(await page.viewportSize()).width+'.png')});await page.locator('#apply').click();await layout('combined');
     }else{
      const b=await coeff(0,'l','y');if(b!=='0')await op(0,'-',b,'y');const a=await coeff(0,'l','x');if(a!=='1')await op(0,'/',a);await substitute(0);
     }
@@ -92,7 +92,7 @@ const server=http.createServer((req,res)=>{
    await phase('answer');const sol=await page.evaluate(()=>{const s=StelselsTrainer.snapshot(),sol=s.exercises[s.index].solution;return {kind:sol.kind,x:sol.x&&StelselsCore.text(sol.x),y:sol.y&&StelselsCore.text(sol.y)};});await page.locator('[data-conclusion="'+sol.kind+'"]').click();if(sol.kind==='unique'){await page.locator('#answerX').fill(sol.x);await page.locator('#answerY').fill(sol.y);}
    await page.locator('#checkAnswer').click();await layout('solution feedback');const s=await snap();assert(s.work[s.exercises[s.index].id].done,method+' solved');
   }
-  await seed(640,360,false,'unique','beginner');await page.locator('[data-method=graphic]').tap();
+  await seed(640,360,false,'unique','beginner');await page.locator('#compactMethodToggle').tap();await page.locator('[data-method=graphic]').tap();
   const touchPoint=await page.evaluate(()=>{const s=StelselsTrainer.snapshot(),point=StelselsCore.graphPoints(s.exercises[0].start[0])[0],svg=document.querySelector('#graph svg'),board=document.querySelector('.board'),first=svg.getScreenCTM(),bounds=board.getBoundingClientRect();board.scrollTop+=first.d*(8-point.y.value())*37.5+first.f-(bounds.top+bounds.height/2);const matrix=svg.getScreenCTM();return {x:matrix.a*(point.x.value()+8)*37.5+matrix.e,y:matrix.d*(8-point.y.value())*37.5+matrix.f,expectedX:StelselsCore.text(point.x),expectedY:StelselsCore.text(point.y)};});
   await page.touchscreen.tap(touchPoint.x,touchPoint.y);const placed=await page.evaluate(()=>{const s=StelselsTrainer.snapshot(),p=s.work[s.exercises[0].id].points[0][0];return {x:StelselsCore.text(p.x),y:StelselsCore.text(p.y)}});assert.deepEqual(placed,{x:touchPoint.expectedX,y:touchPoint.expectedY});await layout('real touch graph point');await page.locator('#undo').tap();assert(await page.evaluate(()=>{const s=StelselsTrainer.snapshot();return !s.work[s.exercises[0].id].points[0][0]}));await layout('touch graph undo');await page.touchscreen.tap(touchPoint.x,touchPoint.y);
   await page.locator('leraarbob-topbar .theme-toggle').tap();await layout('dark graph');await page.screenshot({path:path.join(out,'dark-graph-640.png')});await page.evaluate(()=>AxiomaGame.flush());await page.reload();await ready();assert.equal(await page.evaluate(()=>document.documentElement.dataset.mode),'dark');await page.locator('leraarbob-topbar .theme-toggle').tap();if(process.env.STELSELS_TOUCH_ONLY){assert.deepEqual(errors,[]);console.log('PASS touch, point undo, dark graph and theme reload');return;}

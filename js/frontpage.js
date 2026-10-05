@@ -1,5 +1,6 @@
-(() => {
+(async() => {
   'use strict';
+await window.LeraarBobGameRegistry.ready();
   const $ = id => document.getElementById(id);
   const grid = $('grid');
   const featuredGrid = $('featuredGrid');
@@ -295,7 +296,7 @@
     return true;
   }
   // Render immediately, also when opening index.html directly from disk.
-  useCatalog(window.AXIOMA_CATALOG || []);
+  useCatalog(window.LeraarBobGameRegistry.list());
   if (window.AxiomaAuth) {
     window.AxiomaAuth.onChange(accountChanged);
     window.AxiomaAuth.ready().then(result => {
@@ -307,10 +308,5 @@
   window.addEventListener('pageshow', event => { if (event.persisted) refreshProgress(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshProgress(); });
   window.addEventListener('online', refreshProgress);
-  if (location.protocol !== 'file:') {
-    fetch('./games.json').then(response => {
-      if (!response.ok) throw new Error('Catalog unavailable');
-      return response.json();
-    }).then(catalog => { useCatalog(catalog); }).catch(() => { /* Keep the bundled catalog. */ });
-  }
+
 })();

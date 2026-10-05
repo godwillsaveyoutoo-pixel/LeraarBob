@@ -1,0 +1,59 @@
+'use strict';
+// No production credentials or student writes: the real UI/math runs with a local teacher rehearsal.
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),http=require('node:http'),{chromium}=require('playwright');
+const root=path.resolve(__dirname,'..'),out='/tmp/leraarbob-platform-battle-flow';fs.mkdirSync(out,{recursive:true});
+const server=http.createServer((req,res)=>{let p=path.join(root,new URL(req.url,'http://local').pathname);try{if(fs.statSync(p).isDirectory())p=path.join(p,'index.html');res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.css':'text/css','.woff2':'font/woff2','.svg':'image/svg+xml'})[path.extname(p)]||'application/octet-stream');res.end(fs.readFileSync(p));}catch{res.writeHead(404).end();}});
+(async()=>{
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=(process.env.LB_SITE_URL||'http://127.0.0.1:'+server.address().port).replace(/\/$/,'');const origin=new URL(base).origin,prefix=new URL(base).pathname.replace(/\/$/,'');
+ const browser=await chromium.launch({headless:true,executablePath:process.env.ALGEBRA_CHROMIUM_PATH,args:['--no-sandbox','--disable-dev-shm-usage']});
+ try{for(const [width,height]of [[1280,800],[780,360],[640,360],[390,844],[320,700]]){
+  const context=await browser.newContext({viewport:{width,height}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.route('**/*',r=>{const u=new URL(r.request().url());if(u.origin!==origin)return r.fulfill({body:''});if(u.pathname.endsWith('/shared/axioma-auth.js'))return r.fulfill({contentType:'text/javascript',body:`
+window.__listeners=[];window.__writes=0;window.__account={id:'phase1-test-teacher',role:'teacher',alias:'Testleerkracht'};
+window.AxiomaAuth={ready:async()=>({account:__account,pending:false}),onChange:fn=>__listeners.push(fn),getAccount:async()=>__account,CLASSES:[],client:()=>({rpc:async(name,args)=>{if(name==='axioma_class_battle_hub')return {data:{teacher:true,classes:[],rooms:[],stats:[],leaderboards:[]}};if(name==='axioma_game_class'||/class_worker/.test(name)){__writes++;throw Error('Real battle writes forbidden');}return {data:{state:{},revision:0,players:[],invitations:[]},error:null};},functions:{invoke:async()=>{__writes++;throw Error('Real Edge calls forbidden');}}})};`});if(['/shared/axioma-game.js','/js/account-ui.js'].some(p=>u.pathname.endsWith(p)))return r.fulfill({body:''});return r.continue();});
+  await page.clock.install();
+  const returnTo=prefix+'/games/algebra-trainer/stelsels.html?game=algebra-trainer&world=systems&level=sys-substitution&screen=menu';
+  await page.goto(base+'/klasbattle/?game=algebra&view=create&simulation=1&world=systems&level=sys-substitution&returnTo='+encodeURIComponent(returnTo));
+  const module=page.frameLocator('#moduleHost iframe:not([hidden])');await module.locator('#startSimulation').waitFor();
+  assert.equal(await module.locator('body').evaluate(()=>LeraarBobClassroom.snapshot()),null,'Selecting a battle topic does not start a round');
+  assert.equal(await module.locator('[data-class-world=systems]').getAttribute('aria-pressed'),'true');
+  assert.equal(await module.locator('#seconds').inputValue(),'180');assert.equal(await module.locator('#classPresetLabel').isVisible(),false);assert.equal(await module.locator('#classAdvanced').isVisible(),false);
+  assert.equal(await page.locator('#originGame').getAttribute('href'),returnTo,'The pilot has an exact safe return to its selected level');
+  assert.equal(await page.locator('#gameCards .gameCard').count(),5,'Only five actual classroom providers');
+  await module.locator('[data-class-world=equations]').click();assert.equal(await module.locator('#classPreset option').count(),7);
+  await module.locator('#classPreset').selectOption('route-two');assert.deepEqual(await module.locator('[name=classType]:checked').evaluateAll(es=>es.map(e=>e.value)),['B1','B2']);
+  await module.locator('[data-class-world=systems]').click();await module.locator('#rounds').selectOption('3');await module.locator('#startSimulation').click();await module.locator('#session:not([hidden])').waitFor();
+  let snapshot=await module.locator('body').evaluate(()=>LeraarBobClassroom.snapshot());assert.equal(snapshot.total,3);assert.equal(snapshot.seconds,180);assert(snapshot.deck.every(s=>s.skill==='S1'));assert.equal(snapshot.phase,'lobby');const match=snapshot.id;
+  await module.locator('#start').click();await module.locator('#classSimulationControls summary').click();
+  await module.locator('#playArea').waitFor({state:'hidden'});assert.equal(await module.locator('#playArea').isVisible(),false,'Simulation options are their own inline screen, not an exercise overlay');
+  await module.locator('#simulationTry').click();const board=module.frameLocator('#board');await board.locator('#answerX').waitFor();
+  async function fits(label){
+   await page.screenshot({path:out+'/'+label+'-'+width+'.png'});
+   for(const [name,scope]of [['hub',page],['module',module],['board',board]])assert.deepEqual(await scope.locator('body').evaluate(()=>({horizontal:document.documentElement.scrollWidth>innerWidth+1,vertical:document.documentElement.scrollHeight>innerHeight+1})),{horizontal:false,vertical:false},name+' active exercise fits '+width+'×'+height);
+   const targets=await board.locator('#answerX,#answerY,#submit').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect();return {id:e.id,w:r.width,h:r.height,visible:r.left>=0&&r.right<=innerWidth+1&&r.top>=0&&r.bottom<=innerHeight+1}}));assert(targets.every(t=>t.w>=44&&t.h>=44&&t.visible),'x/y and submit fit and are touch-sized: '+JSON.stringify(targets));
+   assert.equal(await page.locator('leraarbob-topbar').count(),1);assert.equal(await module.locator('leraarbob-topbar').isVisible(),false);assert.equal(await board.locator('leraarbob-topbar').count(),0);
+   const math=await board.locator('.katex-html').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect();return {relations:e.querySelectorAll('.mrel').length,fits:r.left>=0&&r.right<=innerWidth+1&&r.top>=0&&r.bottom<=innerHeight+1}}));assert(math.length>=1&&math.every(e=>e.relations>=2&&e.fits),'Both complete equations stay visible');
+  }
+  await page.waitForFunction(()=>document.body.dataset.playing==='true');await fits('systems-answer');
+  const solution=await module.locator('body').evaluate(()=>BattleGame.generate(LeraarBobClassroom.snapshot().spec).solution);
+  const value=r=>typeof r==='object'?r.n+'/'+r.d:String(r);
+  await board.locator('#answerX').fill(value(solution.x));await board.locator('#answerY').fill('-y');assert.equal(await board.locator('#answerY').inputValue(),'-y','Native input accepts a minus and a letter; no restrictive dropdown');
+  await board.locator('#answerY').fill(value(solution.y));
+  await page.locator('leraarbob-topbar .collapse').click();await page.waitForSelector('.lb-restore:not([hidden])');const restore=await page.locator('.lb-restore').boundingBox();assert(restore.width>=44&&restore.height>=44);await fits('systems-collapsed');
+  assert.equal(await board.locator('#answerX').inputValue(),value(solution.x),'Collapsing keeps the input');
+  await page.reload();await module.locator('#session:not([hidden])').waitFor();assert.equal(await module.locator('body').evaluate(()=>LeraarBobClassroom.snapshot().id),match);
+  // Rehearsals resume as the teacher board, with the saved learner draft restored on explicit self-test.
+  await module.locator('#classSimulationControls summary').click();await module.locator('#simulationTry').click();await board.locator('#answerX').waitFor();assert.equal(await board.locator('#answerX').inputValue(),value(solution.x));assert.equal(await board.locator('#answerY').inputValue(),value(solution.y));
+  await page.locator('.lb-restore').click();await board.locator('#submit').click();await page.waitForFunction(()=>document.querySelector('#moduleHost iframe:not([hidden])').contentWindow.LeraarBobClassroom.snapshot().members[0].answered);
+  snapshot=await module.locator('body').evaluate(()=>LeraarBobClassroom.snapshot());assert.equal(snapshot.members[0].correct,true);const points=snapshot.members[0].points;assert(points>=1000);
+  await page.reload();await module.locator('#session:not([hidden])').waitFor();assert.equal(await module.locator('body').evaluate(()=>LeraarBobClassroom.snapshot().members[0].points),points,'Reload never awards a second result');
+  async function menu(name){await page.locator('leraarbob-topbar button.menu:visible,leraarbob-topbar button.mobile-menu:visible').click();await page.locator('leraarbob-topbar .menu-card:visible').filter({has:page.locator('.menu-name',{hasText:name})}).first().click();}
+  await menu('Battleoverzicht');assert.equal(await page.locator('#overviewView').isVisible(),true);await page.goBack();await module.locator('#session:not([hidden])').waitFor();assert.equal(await module.locator('body').evaluate(()=>LeraarBobClassroom.snapshot().id),match,'Browser Back preserves the existing module');await page.goForward();await page.locator('.hubNav #savedBattleNav').click();assert.equal(await module.locator('body').evaluate(()=>LeraarBobClassroom.snapshot().members[0].points),points);
+  assert.equal(await module.locator('body').evaluate(()=>window.__writes),0);assert.equal(await page.evaluate(()=>window.__writes),0);
+  await module.locator('#closeSession').click();await module.locator('#confirmStop').click();await module.locator('#newSession').waitFor();await module.locator('#newSession').click();await module.locator('#setup:not([hidden])').waitFor();await page.waitForFunction(()=>!new URL(location.href).searchParams.has('session'));await page.reload();await module.locator('#startSimulation').waitFor();assert.equal(await module.locator('body').evaluate(()=>LeraarBobClassroom.snapshot()),null,'An explicit restart does not resurrect the closed session on reload');
+  await page.evaluate(()=>LeraarBobClassHub.launch('algebra',false,'',{create:true,world:'equations',level:'route-two'}));await module.locator('#classPresetLabel').waitFor();assert.equal(await module.locator('#classPreset').inputValue(),'route-two');assert.equal(await page.evaluate(()=>LeraarBobClassHub.snapshot().simulation),false);await page.goBack();await module.locator('[data-class-world=systems][aria-pressed=true]').waitFor();assert.equal(await page.evaluate(()=>LeraarBobClassHub.snapshot().simulation),true,'Back distinguishes simulation from live settings of the same provider');await page.goForward();await module.locator('#classPresetLabel').waitFor();assert.equal(await page.evaluate(()=>LeraarBobClassHub.snapshot().simulation),false);assert.equal(await module.locator('#classPreset').inputValue(),'route-two');
+  await page.evaluate(()=>LeraarBobClassHub.launch('algebra',false,'',{create:true,world:'systems',level:'S1'}));await module.locator('[data-class-world=systems][aria-pressed=true]').waitFor();await page.goBack();await module.locator('#classPresetLabel').waitFor();assert.equal(await module.locator('#classPreset').inputValue(),'route-two','Back restores the exact settings topic and preset');assert.equal(await module.locator('body').evaluate(()=>LeraarBobClassroom.snapshot()),null,'History does not start a round');assert.equal(await module.locator('body').evaluate(()=>window.__writes),0);
+  await page.evaluate(()=>__listeners.forEach(fn=>fn({account:__account,pending:true})));assert.equal(await page.locator('#moduleHost iframe').count(),0,'Pending account switch removes all previous work immediately');
+  assert.deepEqual(errors,[]);await context.close();console.log('Passed registry → Stelsels battle → exact answer → return '+width+'×'+height);
+ }}finally{await browser.close();await new Promise(r=>server.close(r));}
+})().catch(e=>{console.error(e);process.exit(1)});

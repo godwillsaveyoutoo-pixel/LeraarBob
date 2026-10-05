@@ -12,7 +12,7 @@
     "detail": "Puntenbaai · Hellingrug · Grenspas",
     "id": "rechtenwereld",
     "progressType": "world",
-    "teacherVisible": false,
+    "teacherVisible": true,
     "gameType": "train",
     "tracking": "learning",
     "featured": true,
@@ -20,7 +20,159 @@
     "subject": "Rechten",
     "presentation": "islands",
     "coverSmall": "assets/covers/modern/rechtenwereld-small.webp",
-    "progressGameId": "rechten-trainer"
+    "progressGameId": "rechten-trainer",
+    "active": true,
+    "progressId": "rechten-trainer",
+    "route": {
+      "entry": "games/rechten/rechtenwereld/#wereld",
+      "prefix": "games/rechten/rechtenwereld/"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/rechten/rechtenwereld/#wereld",
+          "providerId": "rechtenwereld"
+        },
+        {
+          "id": "learn",
+          "participation": "group",
+          "purpose": "learn",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "href": "games/rechten/rechtenwereld/learn.html",
+          "providerId": "rechten-learn",
+          "topicParam": "world",
+          "devices": "2–3 leerlingen · elk een toestel"
+        },
+        {
+          "id": "local",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/rechten/rechtenwereld/battle.html",
+          "providerId": "rechtenwereld",
+          "topicParam": "world"
+        },
+        {
+          "id": "online",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "href": "games/rechten/rechtenwereld/online.html",
+          "providerId": "rechten-duo",
+          "topicParam": "world"
+        },
+        {
+          "id": "classroom",
+          "participation": "group",
+          "purpose": "battle",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "href": "games/rechten/rechtenwereld/classroom.html",
+          "providerId": "rechten",
+          "topicParam": "world",
+          "rpc": "axioma_game_class",
+          "topics": [
+            "puntenbaai",
+            "hellingrug",
+            "grenspas",
+            "formulewerf",
+            "signaalstad"
+          ]
+        }
+      ],
+      "worksheets": [
+        {
+          "id": "hellingrug",
+          "title": "Hellingrug",
+          "href": "games/rechten/rechtenwereld/worksheets.html?world=hellingrug",
+          "providerId": "rechtenwereld",
+          "topicId": "hellingrug",
+          "description": "Verschillen, richtingscoëfficiënt en bijzondere rechten."
+        },
+        {
+          "id": "grenspas",
+          "title": "Grenspas",
+          "href": "games/rechten/rechtenwereld/worksheets.html?world=grenspas",
+          "providerId": "rechtenwereld",
+          "topicId": "grenspas",
+          "description": "Nulwaarden, tekenschema’s en positieve of negatieve gebieden."
+        },
+        {
+          "id": "formulewerf",
+          "title": "Formulewerf",
+          "href": "games/rechten/rechtenwereld/worksheets.html?world=formulewerf",
+          "providerId": "rechtenwereld",
+          "topicId": "formulewerf",
+          "description": "Rechten tekenen, vergelijkingen herschrijven en voorschriften bepalen."
+        },
+        {
+          "id": "signaalstad",
+          "title": "Signaalstad",
+          "href": "games/rechten/rechtenwereld/worksheets.html?world=signaalstad",
+          "providerId": "rechtenwereld",
+          "topicId": "signaalstad",
+          "description": "Punten aflezen uit een tabel en de bijbehorende rechte tekenen."
+        }
+      ]
+    },
+    "modeAliases": [
+      "rechten"
+    ],
+    "engine": {
+      "modules": [
+        "games/rechten/rechtenwereld/points-core.js",
+        "games/rechten/rechtenwereld/hills-core.js",
+        "games/rechten/rechtenwereld/lines-core.js",
+        "games/rechten/rechtenwereld/ab-core.js"
+      ]
+    },
+    "topics": [
+      {
+        "id": "puntenbaai",
+        "title": "Puntenbaai",
+        "href": "games/rechten/rechtenwereld/#puntenbaai"
+      },
+      {
+        "id": "hellingrug",
+        "title": "Hellingrug",
+        "href": "games/rechten/rechtenwereld/#hellingrug"
+      },
+      {
+        "id": "grenspas",
+        "title": "Grenspas",
+        "href": "games/rechten/rechtenwereld/#grenspas"
+      },
+      {
+        "id": "formulewerf",
+        "title": "Formulewerf",
+        "href": "games/rechten/rechtenwereld/#formulewerf"
+      },
+      {
+        "id": "signaalstad",
+        "title": "Signaalstad",
+        "href": "games/rechten/rechtenwereld/#signaalstad"
+      }
+    ]
   },
   {
     "title": "Rechtenarcade",
@@ -39,7 +191,16 @@
     "gameType": "arcade",
     "tracking": "none",
     "featured": false,
-    "subject": "Rechten"
+    "subject": "Rechten",
+    "active": true,
+    "progressId": "rechten-arcade",
+    "route": {
+      "entry": "games/rechten/arcade/"
+    },
+    "capabilities": {
+      "modes": [],
+      "worksheets": []
+    }
   },
   {
     "title": "Rechtentrainer",
@@ -57,7 +218,29 @@
     "teacherVisible": true,
     "gameType": "train",
     "tracking": "learning",
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "rechten-trainer",
+    "route": {
+      "entry": "games/rechten/trainer/"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/rechten/trainer/",
+          "providerId": "rechten-trainer"
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Functies & rechten",
@@ -75,7 +258,29 @@
     "teacherVisible": false,
     "gameType": "learn",
     "tracking": "none",
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "functies-rechten",
+    "route": {
+      "entry": "games/rechten/leerpad/"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/rechten/leerpad/",
+          "providerId": "functies-rechten"
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Brandweer",
@@ -96,7 +301,29 @@
     "progressTotal": 16,
     "progressUnitSingular": "level",
     "progressUnitPlural": "levels",
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "brandweer",
+    "route": {
+      "entry": "games/rechten/brandweer/"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/rechten/brandweer/",
+          "providerId": "brandweer"
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Kleiduifschieten",
@@ -118,7 +345,42 @@
     "progressUnitSingular": "reeks",
     "progressUnitPlural": "reeksen",
     "supportsGroup": true,
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "kleiduifschieten",
+    "route": {
+      "entry": "games/rechten/kleiduiven/"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/rechten/kleiduiven/",
+          "providerId": "kleiduifschieten"
+        },
+        {
+          "id": "group",
+          "participation": "group",
+          "purpose": "battle",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "href": "games/rechten/kleiduiven/",
+          "providerId": "kleiduifschieten",
+          "title": "Groepssessie Kleiduifschieten",
+          "description": "Open de groepssessie vanuit het spelmenu. Deze sessie gebruikt de eigen Kleiduifschieten-regels."
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Rechten Zeeslag",
@@ -136,7 +398,43 @@
     "teacherVisible": false,
     "gameType": "game",
     "tracking": "multiplayer",
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "rechten-zeeslag",
+    "route": {
+      "entry": "games/rechten/zeeslag/"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "battle",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/rechten/zeeslag/",
+          "providerId": "rechten-zeeslag",
+          "title": "Solo tegen de computer",
+          "description": "Speel een zeeslag tegen de computer."
+        },
+        {
+          "id": "online",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "href": "games/rechten/zeeslag/",
+          "providerId": "rechten-zeeslag",
+          "description": "Kies online spelen in Zeeslag en nodig een leerling uit op alias."
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Pythagoras",
@@ -157,7 +455,29 @@
     "progressTotal": 10,
     "progressUnitSingular": "stap",
     "progressUnitPlural": "stappen",
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "pythagoras",
+    "route": {
+      "entry": "games/pythagoras.html?v=20260920-3"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/pythagoras.html?v=20260920-3",
+          "providerId": "pythagoras"
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Wortelbouw",
@@ -182,7 +502,98 @@
     "featureOrder": 2,
     "subject": "Pythagoras & wortels",
     "presentation": "garden",
-    "coverSmall": "assets/covers/modern/wortelbouw-small.webp"
+    "coverSmall": "assets/covers/modern/wortelbouw-small.webp",
+    "active": true,
+    "progressId": "wortelbouw",
+    "route": {
+      "entry": "games/wortelbouw_pro_v0.5.0/wortelbouw/index.html",
+      "prefix": "games/wortelbouw_pro_v0.5.0/wortelbouw/"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/wortelbouw_pro_v0.5.0/wortelbouw/index.html",
+          "providerId": "wortelbouw"
+        },
+        {
+          "id": "local",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/wortelbouw_pro_v0.5.0/wortelbouw/battle.html",
+          "providerId": "wortelbouw"
+        },
+        {
+          "id": "classroom",
+          "participation": "group",
+          "purpose": "battle",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "href": "games/wortelbouw_pro_v0.5.0/wortelbouw/classroom.html",
+          "providerId": "wortelbouw",
+          "rpc": "axioma_game_class",
+          "topics": [
+            "basis",
+            "groot"
+          ],
+          "topicParam": "world"
+        }
+      ],
+      "worksheets": []
+    },
+    "modeAliases": [],
+    "engine": {
+      "release": "0.5.0",
+      "modules": [
+        "games/wortelbouw_pro_v0.5.0/wortelbouw/geometry.js",
+        "games/wortelbouw_pro_v0.5.0/wortelbouw/wortelbouw.js"
+      ]
+    },
+    "topics": [
+      {
+        "id": "basis",
+        "title": "Konijnengrond · basis",
+        "scope": "classroom",
+        "routeModes": [
+          "classroom"
+        ],
+        "href": "games/wortelbouw_pro_v0.5.0/wortelbouw/classroom.html?world=basis",
+        "skillIds": [
+          "build_2",
+          "build_5",
+          "build_13",
+          "build_25"
+        ]
+      },
+      {
+        "id": "groot",
+        "title": "Grotere lengtes",
+        "scope": "classroom",
+        "routeModes": [
+          "classroom"
+        ],
+        "href": "games/wortelbouw_pro_v0.5.0/wortelbouw/classroom.html?world=groot",
+        "skillIds": [
+          "build_18",
+          "build_100",
+          "build_104"
+        ]
+      }
+    ]
   },
   {
     "title": "Vectormissie",
@@ -207,7 +618,153 @@
     "featureOrder": 3,
     "subject": "Vectoren",
     "presentation": "space",
-    "coverSmall": "assets/covers/modern/vectormissie-small.webp"
+    "coverSmall": "assets/covers/modern/vectormissie-small.webp",
+    "active": true,
+    "progressId": "vectoren-trainer",
+    "route": {
+      "entry": "games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html",
+      "prefix": "games/vectoren/"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html",
+          "providerId": "vectoren-trainer"
+        },
+        {
+          "id": "local",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/vectoren/battle.html",
+          "providerId": "vectoren-trainer"
+        },
+        {
+          "id": "classroom",
+          "participation": "group",
+          "purpose": "battle",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "href": "games/vectoren/classroom.html",
+          "providerId": "vectoren",
+          "classFunction": "vector-class",
+          "rpc": "axioma_vector_class",
+          "topics": [
+            "koerscentrum",
+            "stuwkrachtlab",
+            "dockingzone",
+            "navigatienet",
+            "manoeuvreveld"
+          ],
+          "topicParam": "world"
+        }
+      ],
+      "worksheets": []
+    },
+    "modeAliases": [
+      "vectoren"
+    ],
+    "engine": {
+      "release": "0.4",
+      "modules": [
+        "games/vectoren/vector-core.js"
+      ]
+    },
+    "topics": [
+      {
+        "id": "koerscentrum",
+        "title": "Koerscentrum",
+        "scope": "classroom",
+        "routeModes": [
+          "classroom"
+        ],
+        "href": "games/vectoren/classroom.html?world=koerscentrum",
+        "skillIds": [
+          "props",
+          "equal",
+          "free"
+        ]
+      },
+      {
+        "id": "stuwkrachtlab",
+        "title": "Stuwkrachtlab",
+        "scope": "classroom",
+        "routeModes": [
+          "classroom"
+        ],
+        "href": "games/vectoren/classroom.html?world=stuwkrachtlab",
+        "skillIds": [
+          "opposite",
+          "scalar"
+        ]
+      },
+      {
+        "id": "dockingzone",
+        "title": "Dockingzone",
+        "scope": "classroom",
+        "routeModes": [
+          "classroom"
+        ],
+        "href": "games/vectoren/classroom.html?world=dockingzone",
+        "skillIds": [
+          "sum",
+          "headtail",
+          "commute",
+          "parallelogram",
+          "difference",
+          "figure"
+        ]
+      },
+      {
+        "id": "navigatienet",
+        "title": "Navigatienet",
+        "scope": "classroom",
+        "routeModes": [
+          "classroom"
+        ],
+        "href": "games/vectoren/classroom.html?world=navigatienet",
+        "skillIds": [
+          "coords",
+          "arrow",
+          "ab",
+          "points",
+          "basis",
+          "coordadd",
+          "coordscale",
+          "coordcombo"
+        ]
+      },
+      {
+        "id": "manoeuvreveld",
+        "title": "Manoeuvreveld",
+        "scope": "classroom",
+        "routeModes": [
+          "classroom"
+        ],
+        "href": "games/vectoren/classroom.html?world=manoeuvreveld",
+        "skillIds": [
+          "decompose",
+          "combination",
+          "unknown",
+          "route",
+          "fourth"
+        ]
+      }
+    ]
   },
   {
     "title": "Reële getallen",
@@ -228,7 +785,29 @@
     "progressTotal": 12,
     "progressUnitSingular": "vaardigheid",
     "progressUnitPlural": "vaardigheden",
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "reele-getallen-trainer",
+    "route": {
+      "entry": "games/reele-getallen/"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/reele-getallen/",
+          "providerId": "reele-getallen-trainer"
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Stelsels",
@@ -249,7 +828,29 @@
     "progressTotal": 14,
     "progressUnitSingular": "oefening",
     "progressUnitPlural": "oefeningen",
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "stelsels",
+    "route": {
+      "entry": "games/stelsels.html?v=20260920-2"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/stelsels.html?v=20260920-2",
+          "providerId": "stelsels"
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Algebra Smederij",
@@ -269,7 +870,29 @@
     "tracking": "progress",
     "progressUnitSingular": "oefening",
     "progressUnitPlural": "oefeningen",
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "algebra-smederij",
+    "route": {
+      "entry": "games/algebra-smederij.html?v=20260920-2"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/algebra-smederij.html?v=20260920-2",
+          "providerId": "algebra-smederij"
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Taartenwinkel",
@@ -290,7 +913,29 @@
     "progressTotal": 7,
     "progressUnitSingular": "dienst",
     "progressUnitPlural": "diensten",
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "taartenwinkel",
+    "route": {
+      "entry": "games/taartenwinkel.html?v=20260920-2"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/taartenwinkel.html?v=20260920-2",
+          "providerId": "taartenwinkel"
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Kubusbouw",
@@ -311,7 +956,29 @@
     "progressTotal": 22,
     "progressUnitSingular": "oefening",
     "progressUnitPlural": "oefeningen",
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "kubusbouw",
+    "route": {
+      "entry": "games/kubusbouw.html?v=20260920-2"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/kubusbouw.html?v=20260920-2",
+          "providerId": "kubusbouw"
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Verfwinkel",
@@ -332,7 +999,29 @@
     "progressTotal": 16,
     "progressUnitSingular": "bestelling",
     "progressUnitPlural": "bestellingen",
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "verfwinkel",
+    "route": {
+      "entry": "games/verfwinkel.html?v=20260920-2"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/verfwinkel.html?v=20260920-2",
+          "providerId": "verfwinkel"
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Data Check",
@@ -353,7 +1042,29 @@
     "progressTotal": 22,
     "progressUnitSingular": "dossier",
     "progressUnitPlural": "dossiers",
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "data-check",
+    "route": {
+      "entry": "games/data-check.html?v=20260920-2"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/data-check.html?v=20260920-2",
+          "providerId": "data-check"
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Signal Lab",
@@ -374,7 +1085,29 @@
     "progressTotal": 12,
     "progressUnitSingular": "proef",
     "progressUnitPlural": "proeven",
-    "featured": false
+    "featured": false,
+    "active": true,
+    "progressId": "signal-lab",
+    "route": {
+      "entry": "games/signal-lab.html?v=20260920-2"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/signal-lab.html?v=20260920-2",
+          "providerId": "signal-lab"
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "title": "Gravity Maze",
@@ -399,7 +1132,29 @@
     "featureOrder": 4,
     "subject": "Logica & zwaartekracht",
     "presentation": "gravity",
-    "coverSmall": "assets/covers/modern/gravity-maze-small.webp"
+    "coverSmall": "assets/covers/modern/gravity-maze-small.webp",
+    "active": true,
+    "progressId": "gravity-maze",
+    "route": {
+      "entry": "games/gravity/?v=20260920-2"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/gravity/?v=20260920-2",
+          "providerId": "gravity-maze"
+        }
+      ],
+      "worksheets": []
+    }
   },
   {
     "id": "algebra-trainer",
@@ -424,7 +1179,106 @@
     "progressUnitPlural": "levels",
     "teacherVisible": true,
     "gameType": "train",
-    "tracking": "progress"
+    "tracking": "progress",
+    "active": true,
+    "progressId": "algebra-trainer",
+    "route": {
+      "entry": "games/algebra-trainer/",
+      "prefix": "games/algebra-trainer/"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/algebra-trainer/",
+          "providerId": "algebra-trainer"
+        },
+        {
+          "id": "classroom",
+          "participation": "group",
+          "purpose": "battle",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "href": "games/algebra-trainer/classroom.html",
+          "providerId": "algebra",
+          "classFunction": "algebra-class",
+          "topics": [
+            "equations",
+            "systems"
+          ],
+          "topicParam": "world",
+          "rpc": "axioma_game_class"
+        }
+      ],
+      "worksheets": [
+        {
+          "id": "equations",
+          "title": "Vergelijkingen",
+          "href": "games/algebra-trainer/?world=equations&screen=menu",
+          "providerId": "algebra-trainer",
+          "topicId": "equations",
+          "description": "Kies een level en maak het bijbehorende oefenblad met verbetersleutel."
+        },
+        {
+          "id": "systems",
+          "title": "Stelsels",
+          "href": "games/algebra-trainer/stelsels.html?world=systems&screen=menu",
+          "providerId": "algebra-trainer",
+          "topicId": "systems",
+          "description": "Kies een level en maak het bijbehorende oefenblad met verbetersleutel."
+        }
+      ]
+    },
+    "modeAliases": [
+      "algebra"
+    ],
+    "topics": [
+      {
+        "id": "equations",
+        "title": "Vergelijkingen",
+        "href": "games/algebra-trainer/?world=equations&screen=menu",
+        "levelIds": [
+          "route-inverse",
+          "route-two",
+          "route-sign",
+          "route-both",
+          "route-brackets",
+          "route-fractions",
+          "route-check"
+        ]
+      },
+      {
+        "id": "systems",
+        "title": "Stelsels",
+        "href": "games/algebra-trainer/stelsels.html?world=systems&screen=menu",
+        "levelIds": [
+          "sys-graphic",
+          "sys-substitution",
+          "sys-combination",
+          "sys-unique",
+          "sys-none",
+          "sys-infinite"
+        ]
+      }
+    ],
+    "engine": {
+      "release": "0.6.0",
+      "modules": [
+        "games/algebra-trainer/core.js",
+        "games/algebra-trainer/journey-core.js",
+        "games/algebra-trainer/stelsels/core.js"
+      ],
+      "storageSchema": 1
+    }
   },
   {
     "title": "Getallenwereld",
@@ -449,7 +1303,99 @@
     "featureOrder": 6,
     "subject": "Machten & wortels",
     "presentation": "formal",
-    "coverSmall": "games/getallenwereld/cover.svg"
+    "coverSmall": "games/getallenwereld/cover.svg",
+    "active": true,
+    "progressId": "getallenwereld",
+    "route": {
+      "entry": "games/getallenwereld/",
+      "prefix": "games/getallenwereld/"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/getallenwereld/",
+          "providerId": "getallenwereld"
+        },
+        {
+          "id": "local",
+          "participation": "duo",
+          "purpose": "battle",
+          "title": "Duo-battle in Bewerkingentrainer",
+          "reference": {
+            "gameId": "bewerkingen-trainer",
+            "modeId": "local"
+          }
+        },
+        {
+          "id": "classroom",
+          "participation": "group",
+          "purpose": "battle",
+          "title": "Klasbattle in Bewerkingentrainer",
+          "reference": {
+            "gameId": "bewerkingen-trainer",
+            "modeId": "classroom"
+          }
+        }
+      ],
+      "worksheets": [
+        {
+          "id": "operations",
+          "title": "Oefenblad in Bewerkingentrainer",
+          "description": "Getallenwereld heeft geen eigen printprovider. Stel een oefenblad met machten en wortels samen in Bewerkingentrainer.",
+          "reference": {
+            "gameId": "bewerkingen-trainer",
+            "worksheetId": "operations"
+          }
+        }
+      ]
+    },
+    "engine": {
+      "sourceVersion": "0.2",
+      "modules": [
+        "games/getallenwereld/lessons.js",
+        "games/bewerkingen-trainer/core.js"
+      ],
+      "storageSchema": 1
+    },
+    "topics": [
+      {
+        "id": "machten",
+        "title": "Machten",
+        "href": "games/getallenwereld/?world=getallen&topic=machten&screen=chapter",
+        "levelIds": [
+          "machten-betekenis",
+          "machten-product",
+          "machten-quotient",
+          "machten-macht",
+          "machten-factoren",
+          "machten-haakjes",
+          "machten-negatief",
+          "machten-mix"
+        ]
+      },
+      {
+        "id": "wortels",
+        "title": "Vierkantswortels",
+        "href": "games/getallenwereld/?world=getallen&topic=wortels&screen=chapter",
+        "levelIds": [
+          "wortels-factor",
+          "wortels-product",
+          "wortels-quotient",
+          "wortels-macht",
+          "wortels-vereenvoudigen",
+          "wortels-som",
+          "wortels-regels"
+        ]
+      }
+    ]
   },
   {
     "id": "bewerkingen-trainer",
@@ -470,6 +1416,140 @@
     "progressUnitPlural": "vraagvormen",
     "teacherVisible": true,
     "gameType": "train",
-    "tracking": "progress"
+    "tracking": "progress",
+    "active": true,
+    "progressId": "bewerkingen-trainer",
+    "route": {
+      "entry": "games/bewerkingen-trainer/",
+      "prefix": "games/bewerkingen-trainer/"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/bewerkingen-trainer/",
+          "providerId": "bewerkingen-trainer"
+        },
+        {
+          "id": "local",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/bewerkingen-trainer/battle.html",
+          "providerId": "bewerkingen-trainer"
+        },
+        {
+          "id": "classroom",
+          "participation": "group",
+          "purpose": "battle",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "href": "games/bewerkingen-trainer/classroom.html",
+          "providerId": "bewerkingen",
+          "classFunction": "bewerkingen-class",
+          "rpc": "axioma_game_class",
+          "topics": [
+            "machten",
+            "wetenschappelijk",
+            "wortels"
+          ],
+          "topicParam": "world"
+        },
+        {
+          "id": "teacher",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "teacher"
+          ],
+          "href": "games/bewerkingen-trainer/?mode=teacher",
+          "providerId": "bewerkingen-trainer",
+          "title": "Samen leren op het klasbord",
+          "description": "De leerkracht begeleidt één uitwerking op het klasbord. Geen aparte leerlinginzendingen.",
+          "devices": "Leerkracht en klas · één scherm"
+        }
+      ],
+      "worksheets": [
+        {
+          "id": "operations",
+          "title": "Machten, schrijfwijze en wortels",
+          "href": "games/bewerkingen-trainer/?mode=teacher",
+          "providerId": "bewerkingen-trainer",
+          "description": "Stel een reeks samen en kies Oefenblad. Met verbetersleutel."
+        }
+      ]
+    },
+    "modeAliases": [
+      "bewerkingen"
+    ],
+    "engine": {
+      "modules": [
+        "games/bewerkingen-trainer/core.js"
+      ]
+    },
+    "topics": [
+      {
+        "id": "machten",
+        "title": "Machten & letters",
+        "scope": "classroom",
+        "routeModes": [
+          "classroom"
+        ],
+        "href": "games/bewerkingen-trainer/classroom.html?world=machten",
+        "skillIds": [
+          "power-power",
+          "power-product",
+          "power-quotient",
+          "power-monomial",
+          "power-negative",
+          "power-mixed"
+        ]
+      },
+      {
+        "id": "wetenschappelijk",
+        "title": "Wetenschappelijke schrijfwijze",
+        "scope": "classroom",
+        "routeModes": [
+          "classroom"
+        ],
+        "href": "games/bewerkingen-trainer/classroom.html?world=wetenschappelijk",
+        "skillIds": [
+          "scientific"
+        ]
+      },
+      {
+        "id": "wortels",
+        "title": "Vierkantswortels",
+        "scope": "classroom",
+        "routeModes": [
+          "classroom"
+        ],
+        "href": "games/bewerkingen-trainer/classroom.html?world=wortels",
+        "skillIds": [
+          "square-factor",
+          "root-product",
+          "root-quotient",
+          "root-fraction",
+          "root-power",
+          "root-simplify",
+          "root-letters",
+          "root-sum",
+          "root-sum-mixed"
+        ]
+      }
+    ]
   }
 ]

@@ -11,3 +11,7 @@ html[data-mode=dark]{--paper:#1c2a30;--card:#24363e;--ink:#f3f4ed;--muted:#bfced
 /* The central breadcrumb and Menu stay available while the module uses the screen. */
 body[data-view=session] .hubNav{display:none}
 body[data-view=session].topbar-collapsed .sessionHeading{padding-left:56px}
+body[data-view=session][data-playing=true] .sessionHeading{display:none}
+body[data-view=session][data-playing=true] .simulationNote{display:none}
+.gameCard>p:empty{display:none}
+.notice:empty{display:none}

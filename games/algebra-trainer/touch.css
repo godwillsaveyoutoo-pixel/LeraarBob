@@ -94,3 +94,26 @@
  .algebraPlatform .production .termTile .choiceMath{font-size:24px}
  .algebraPlatform .termHead{font-size:13px;gap:5px}
 }
+@media(max-height:500px) and (min-width:601px){
+ .algebraPlatform .production.touchProduction{gap:4px}
+ .algebraPlatform .production .termPalette{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+ .algebraPlatform .production .termTile{height:76px;min-height:76px;padding:4px 2px}
+ .algebraPlatform .production .termTile:has(.signPreview){height:80px;min-height:80px}
+ .algebraPlatform .production .termTile .choiceMath{font-size:23px;line-height:1.4}
+ .algebraPlatform .production .signPreview{font-size:13px;line-height:1.15}
+ .algebraPlatform .termHead{height:44px;font-size:13px;gap:4px}
+ .algebraPlatform .termHead>span{font-size:13px;line-height:1.15}
+ .algebraPlatform .termHead button{font-size:13px!important}
+ .algebraPlatform .touchField{min-height:60px}
+ .algebraPlatform .touchFieldMath{font-size:25px;line-height:1.8}
+ .algebraPlatform .verifyProof{gap:2px}
+ .algebraPlatform .proofLine .touchFieldMath{font-size:23px;line-height:1.6}
+ .algebraPlatform .touchPrompt{font-size:13px;line-height:1.15}
+ .algebraPlatform .production .verifyChoice button,.algebraPlatform .production .faultChoices button{font-size:14px;min-height:52px}
+}
+.routeChoices{display:flex;flex-direction:column;gap:8px}
+@media(max-height:500px) and (min-width:601px){
+ .algebraPlatform .routeChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+ .algebraPlatform .routeChoices .operationChoice{height:76px;min-height:76px;font-size:23px}
+ .algebraPlatform .production:not(.touchProduction)>button[type=submit]{display:none}
+}

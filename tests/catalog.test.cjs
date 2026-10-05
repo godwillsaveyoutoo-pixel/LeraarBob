@@ -27,7 +27,7 @@ test('catalog generation rejects duplicate identities instead of mixing saved pr
 test('featured games have subject, responsive artwork and an explicit ordering', () => {
   const game = { id: 'new-game', title: 'Nieuw spel', subtitle: 'Ontdek', href: 'games/new/', featured: true };
   assert.throws(() => render([game]), /subject ontbreekt/);
-  const complete = { ...game, subject: 'Algebra', cover: 'wide.webp', coverSmall: 'small.webp', presentation: 'algebra', featureOrder: 4 };
+  const complete = { ...game, active: true, progressId: 'new-game', route:{entry:'games/new/'}, capabilities:{modes:[],worksheets:[]}, subject: 'Algebra', cover: 'wide.webp', coverSmall: 'small.webp', presentation: 'algebra', featureOrder: 4 };
   assert.doesNotThrow(() => render([complete]));
   assert.throws(() => render([{ ...complete, featureOrder: 0 }]), /featureOrder/);
   const catalog = JSON.parse(fs.readFileSync(path.join(root, 'games.json'), 'utf8'));

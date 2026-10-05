@@ -2,7 +2,7 @@
 'use strict';
 const {gcd,lcm,Rat,R,ratKey,reciprocal,terminatingPlaces,N,V,Add,Mul,Div,EQ,cloneExpr,cloneEq,isNum,isVar,num,linearCoeff,makeLinearTerm,simplify,negExpr,simplifyEq,exprSig,eqSig,exprNodeCount,equationComplexity,containsVar,countType,solvedEquation,operandIsNumeric,applyEquation,decimalText,hashRat,autoNumberFormat,ratLatex,splitSign,latexExpr,latexEq,operationLatex,fallbackText,texHTML,renderMathNodes,TYPES,LEVEL_META,INT_COEFF,INT_SHIFT,FRAC_COEFF,FRAC_SHIFT,DEC_COEFF,DEC_SHIFT,pick,chance,currentPolicy,pickFmt,pickParam,pickSolution,numNodeFromParam,nice,rhsFmt,positiveDifferentCoeffs,step,generateExercise,topTerms,absExpr,exprIsZero,collectNumericDenominators,outerScalar,operandRepresentable,canonicalStepAt,candidateOperands}=window.AlgebraCore;
 const {contextOperations,checkProgress}=window.AlgebraWorkbench;
-const L=AlgebraLearning,J=AlgebraJourney;let chapterJourney=J.normalize(null);let paperSelection=null;let runs={},learningRun=null,freeSession=null,historyIndex=0;
+const L=AlgebraLearning,J=AlgebraJourney;let chapterJourney=J.normalize(null);let paperSelection=null;let routeContext={};let runs={},learningRun=null,freeSession=null,historyIndex=0;
 const selection={};
 TYPES.forEach(t=>selection[t.id]={checked:t.level==='beginner',count:t.level==='beginner'?2:1});
 let activeLevel='beginner';
@@ -12,7 +12,23 @@ let trainerStates=[];
 let trainerStepLog=[];
 let selectedOp=null;
 let manualOpen=false,valuePage=0;let navigation=null;
-const VALUE_PAGE_SIZE=6;
+const compactQuery=matchMedia("(max-height:500px) and (min-width:601px)");
+const choicePages=new Map();
+function compactControls(){return compactQuery.matches;}
+// Paging changes only the visible choices, never the task or answer.
+function pageChoices(host,selector,label){
+ if(!host)return;host.parentElement.querySelectorAll("[data-choice-pager=\""+host.id+"\"]").forEach(n=>n.remove());
+ const choices=[...host.querySelectorAll(selector)];choices.forEach(b=>b.hidden=false);
+ if(!compactControls()||choices.length<=2)return;
+ const key=mission+":"+trainerIndex+":"+host.id+":"+choices.map(b=>b.textContent).join("|");
+ const pages=Math.ceil(choices.length/2);let page=Math.max(0,Math.min(choicePages.get(key)||0,pages-1));
+ const bar=document.createElement("div");bar.className="choicePagination";bar.dataset.choicePager=host.id;
+ const prev=document.createElement("button"),next=document.createElement("button"),range=document.createElement("output");
+ prev.type=next.type="button";prev.textContent="←";next.textContent="→";prev.setAttribute("aria-label","Vorige "+label);next.setAttribute("aria-label","Volgende "+label);prev.setAttribute("aria-controls",host.id);next.setAttribute("aria-controls",host.id);range.setAttribute("aria-live","polite");
+ function show(){choices.forEach((b,i)=>{b.hidden=Math.floor(i/2)!==page;b.setAttribute("aria-keyshortcuts",String(i%2+1));});prev.disabled=page===0;next.disabled=page===pages-1;range.textContent=(page*2+1)+"–"+Math.min((page+1)*2,choices.length)+" / "+choices.length;choicePages.set(key,page);}
+ prev.onclick=()=>{page--;show();};next.onclick=()=>{page++;show();};bar.append(prev,range,next);host.after(bar);bar.hidden=host.hidden||host.classList.contains("hidden");show();
+}
+function pageProduction(){const form=$("#production");for(const [selector,label,id] of [[".routeChoices","bewerkingsroutes","routeChoices"],[".termPalette","bouwstenen","termChoices"],[".fractionNumbers","getallen","fractionNumberChoices"],[".fractionOperations","bewerkingen","fractionOperationChoices"]]){const host=form.querySelector(selector);if(host){host.id=id;pageChoices(host,"button",label);}}}
 let currentSolved=false;
 let settingsDirty=true;
 let screen='menu',restoring=false,perExercise={},solvedTypes=new Set();
@@ -129,7 +145,7 @@ function showScreen(name){
   $('#historyScreen').classList.toggle('hidden',name!=='history');$('#summaryScreen').classList.toggle('hidden',name!=='summary');
   document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===name));
   if(name==='preview'){renderPreview();renderMathNodes(previewScreen)}
-  persist();
+  navigation?.sync();persist();
 }
 function refreshNav(){
   document.querySelectorAll('[data-nav=trainer],[data-nav=preview]').forEach(b=>b.setAttribute('aria-disabled',String(!activeSet.length)));
@@ -322,9 +338,10 @@ function productionMessage(t,r,checked){
 function renderProduction(){
  const t=task(),r=result(),form=$('#production');if(!t||t.kind==='solve'){form.classList.add('hidden');return;}form.classList.remove('hidden');
  form.classList.toggle('fractionProduction',t.kind==='fractions');
- if(t.kind==='fractions'){fractionView.renderControls(t,r);return;}
+ if(t.kind==='fractions'){fractionView.renderControls(t,r);pageProduction();return;}
  const touch=touchKinds.includes(t.kind);form.classList.toggle('touchProduction',touch);let fields='';
- if(t.kind==='routes')fields=t.routes.map((st,i)=>`<button type="button" class="operationChoice" data-route="${i}" data-op-kind="${operationKinds[st.op]}" aria-pressed="${r.choice===String(i)}" aria-keyshortcuts="${i+1}" aria-label="${escapeHTML(L.operationText(st,t.ex.policy))} op beide leden">${choiceMath(actionLatex(st.op,st.operand,t.ex.policy),i,operationNames[st.op])}</button>`).join('');
+ if(r.done)fields='';
+ else if(t.kind==='routes')fields='<div class="routeChoices">'+t.routes.map((st,i)=>`<button type="button" class="operationChoice" data-route="${i}" data-op-kind="${operationKinds[st.op]}" aria-pressed="${r.choice===String(i)}" aria-keyshortcuts="${i+1}" aria-label="${escapeHTML(L.operationText(st,t.ex.policy))} op beide leden">${choiceMath(actionLatex(st.op,st.operand,t.ex.policy),i,operationNames[st.op])}</button>`).join('')+'</div>';
  else if(!r.done){
   if(t.kind==='verify'){
    const phase=verifyPhase();
@@ -345,6 +362,7 @@ function renderProduction(){
  form.querySelector('[data-edit-action]')?.addEventListener('click',clearTerms);
  form.querySelector('#substituteBtn')?.addEventListener('click',startVerification);
  form.querySelectorAll('[data-proof-value]').forEach(b=>b.onclick=()=>chooseProofValue(AlgebraTouch.valueChoices(t,verifyPhase()===1?'left':'right')[Number(b.dataset.proofValue)]));
+ pageProduction();
  form.onsubmit=e=>{e.preventDefault();if(r.done)return;try{
   if(t.kind==='verify'&&verifyPhase()!==3)return;
   if(['predict','repair','expand'].includes(t.kind)&&(!touchValue('lhs')||!touchValue('rhs'))){feedback.textContent='Vul links en rechts met bouwstenen.';return;}
@@ -377,9 +395,11 @@ function renderTrainer(animateNew=false){
   const operations=contextOperations(ex,eq);
   direct.innerHTML=operations.map((choice,i)=>`<button class="contextOp operationChoice ${choice.op==='*'||choice.op==='/'?'is-scale':''}" data-choice="${i}" data-op-kind="${operationKinds[choice.op]}" aria-keyshortcuts="${i+1}" aria-label="${escapeHTML(stepText(choice.op,choice.operand,ex.policy))}">${choiceMath(actionLatex(choice.op,choice.operand,ex.policy),i,operationNames[choice.op])}</button>`).join('');
   direct.querySelectorAll('.contextOp').forEach((button,i)=>button.onclick=()=>performOperation(operations[i].op,operations[i].operand));
+  pageChoices(direct,'.contextOp','bewerkingskeuzes');
 
   document.querySelectorAll('.opBtn').forEach(b=>b.classList.toggle('active',b.dataset.op===selectedOp));
   if(selectedOp&&!currentSolved&&!production){
+    const VALUE_PAGE_SIZE=compactControls()?2:6;
     const vals=candidateOperands(ex,eq,selectedOp);
     const pages=Math.ceil(vals.length/VALUE_PAGE_SIZE);valuePage=Math.max(0,Math.min(valuePage,pages-1));
     valueZone.classList.remove('hidden');
@@ -393,7 +413,7 @@ function renderTrainer(animateNew=false){
   }else valueZone.classList.add('hidden');
 
   nextBox.classList.toggle('hidden',!currentSolved);
-  $('#checkBtn').hidden=currentSolved||t?.kind==='fractions'&&r.fraction?.phase!=='build'||t?.kind==='verify'||t?.kind==='repair'&&r.location!=='group'||(production&&!touchKinds.includes(t.kind));$('#production').classList.toggle('hidden',!production);if(production)renderProduction();
+  $('#checkBtn').hidden=currentSolved||t?.kind==='fractions'&&r.fraction?.phase!=='build'||t?.kind==='verify'||t?.kind==='repair'&&r.location!=='group'||(production&&!touchKinds.includes(t.kind)&&!(compactControls()&&t.kind==='routes'));$('#production').classList.toggle('hidden',!production);if(production)renderProduction();
   $('#undoBtn').disabled=t?.kind==='fractions'?!r.fractionUndo?.length:production?!r.done&&!r.input&&!r.choice&&!r.buildHistory?.length:trainerStates.length<=1;$('#prevExerciseBtn').disabled=trainerIndex===0;$('#forwardExerciseBtn').disabled=trainerIndex>=activeSet.length-1||!!learningRun&&!r.done;
   document.querySelectorAll('.opBtn').forEach(b=>{b.disabled=currentSolved;b.setAttribute('aria-pressed',String(b.dataset.op===selectedOp));b.setAttribute('aria-label',({'+' :'Optellen','-':'Aftrekken','*':'Vermenigvuldigen','/':'Delen'})[b.dataset.op]+' aan beide kanten')});
   $('#nextExerciseBtn').textContent=trainerIndex===activeSet.length-1?(learningRun?'Missie afronden →':'Bekijk je reeks →'):t?.kind==='fractions'?'Volgende →':'Volgende oefening →';
@@ -423,11 +443,11 @@ $('#moreOperationsBtn').onclick=()=>{manualOpen=!manualOpen;selectedOp=null;valu
 $('#prevValuesBtn').onclick=()=>{valuePage--;renderTrainer()};
 $('#nextValuesBtn').onclick=()=>{valuePage++;renderTrainer()};
 document.addEventListener('keydown',event=>{
- if(screen!=='trainer'||lesson||motionPlayer.active||event.repeat||event.ctrlKey||event.metaKey||event.altKey||document.querySelector('dialog[open]'))return;
+ if(screen!=='trainer'||lesson||motionPlayer.active||event.repeat||event.ctrlKey||event.metaKey||event.altKey||document.querySelector('dialog[open]')||[...document.querySelectorAll('leraarbob-topbar')].some(host=>host.shadowRoot?.querySelector('dialog[open]')))return;
  // Account/menu controls (including the shared topbar's shadow DOM) keep their
  // own keyboard behavior. Exercise shortcuts are local to the workboard.
  if(event.target!==document.body&&event.target!==document.documentElement&&!trainerScreen.contains(event.target))return;
- if(event.target.closest('input,textarea,select,[contenteditable="true"]'))return;
+ if(event.composedPath().some(node=>node instanceof Element&&node.matches('input,textarea,select,[contenteditable="true"],dialog[open]')))return;
  const visible=el=>el&&el.getClientRects().length&&!el.closest('.hidden,[hidden]');
  let button=null;const key=event.key.toLowerCase(),t=task();
  if(/^[1-6]$/.test(key)){
@@ -442,12 +462,12 @@ document.addEventListener('keydown',event=>{
   button=t?.kind==='fractions'?$('[data-fraction-field="'+side+'"]'):$('[data-edit-field="'+side+'"]');
  }else if(key==='backspace')button=$('#undoBtn');
  else if(key==='enter'&&!event.target.closest('button,a'))button=currentSolved?$('#nextExerciseBtn'):visible($('#substituteBtn'))?$('#substituteBtn'):visible($('#checkBtn'))?$('#checkBtn'):$('#production button[type="submit"]');
- else if(key==='pagedown')button=$('#nextValuesBtn');
- else if(key==='pageup')button=$('#prevValuesBtn');
+ else if(key==='pagedown')button=[...document.querySelectorAll('.choicePagination button:last-child,#nextValuesBtn')].find(visible);
+ else if(key==='pageup')button=[...document.querySelectorAll('.choicePagination button:first-child,#prevValuesBtn')].find(visible);
  if(visible(button)&&!button.disabled){event.preventDefault();button.click();}
 });
 $('#checkBtn').onclick=()=>{
-  if(task()&&touchKinds.includes(task().kind)){$('#production').requestSubmit();return;}
+  if(task()&&(touchKinds.includes(task().kind)||task().kind==='routes')){$('#production').requestSubmit();return;}
   const checked=checkProgress(currentEquation());
   feedback.className='feedback'+(checked.solved?' good':'');feedback.textContent=checked.message;
 };
@@ -585,7 +605,7 @@ function rememberExercise(){if(learningRun){learningRun.index=trainerIndex;learn
 function persist(){
  if(restoring||!window.AxiomaGame?.active)return;
  rememberExercise();
- const save={version:1,chapterJourney,paperSelection,runs,freeSession,journey,worldLegacy,mission,mapLocation,activeLevel,selection,settings:currentSettings(),includeKey:$('#includeKey').checked,shuffle:$('#shuffleQuestions').checked,activeSet,trainerIndex,perExercise,solvedTypes:[...solvedTypes],screen,settingsDirty};
+ const save={version:1,routeContext,chapterJourney,paperSelection,runs,freeSession,journey,worldLegacy,mission,mapLocation,activeLevel,selection,settings:currentSettings(),includeKey:$('#includeKey').checked,shuffle:$('#shuffleQuestions').checked,activeSet,trainerIndex,perExercise,solvedTypes:[...solvedTypes],screen,settingsDirty};
  AxiomaGame.storage.setItem(SAVE_KEY,JSON.stringify(save));let systems=null;try{systems=JSON.parse(AxiomaGame.storage.getItem('leraarbob.stelsels.workshop.v1')||'null')}catch{}const routeProgress=J.platform(chapterJourney,journey,systems?.journey);AxiomaGame.report(routeProgress.completed,routeProgress.total);
  const badge=$('#algebraProgress');badge.dataset.platformProgress='xp';badge.dataset.value=String(AlgebraWorld.xp(worldView?.progress()||journey)+J.xp(chapterJourney)+J.xp(systems?.roundJourney));badge.textContent=badge.dataset.value+' XP';
  AxiomaGame.emit(routeProgress.completed,routeProgress.total);
@@ -595,7 +615,7 @@ function restore(){
  try{
   const raw=AxiomaGame.storage.getItem(SAVE_KEY);if(!raw)return;
   const saved=JSON.parse(raw,(k,v)=>v&&typeof v==='object'&&Object.keys(v).length===2&&Number.isSafeInteger(v.n)&&Number.isSafeInteger(v.d)?new Rat(v.n,v.d):v);
-  if(saved.version!==1)return;
+  if(saved.version!==1)return;routeContext=saved.routeContext||{};
   runs=saved.runs&&typeof saved.runs==='object'?saved.runs:{};freeSession=saved.freeSession||null;
   chapterJourney=J.normalize(saved.chapterJourney);paperSelection=J.stop(saved.paperSelection?.id)&&saved.paperSelection?.run?.tasks?.length===6?saved.paperSelection:null;mapLocation=J.worldFor(saved.mapLocation);journey=AlgebraWorld.normalize(saved.journey);worldLegacy=(Array.isArray(saved.worldLegacy)?saved.worldLegacy:saved.solvedTypes||[]).filter(id=>TYPES.some(t=>t.id===id));mission=J.stop(saved.mission)||AlgebraWorld.topic(saved.mission)?.engine==='equations'?saved.mission:null;
   learningRun=mission&&runs[mission]?.version===2?runs[mission]:null;
@@ -619,6 +639,12 @@ function startTopic(id){
  activeSet=learningRun.tasks.map(t=>t.ex);perExercise=learningRun.work||{};trainerStates=[];
  const i=learningRun.results.findIndex(r=>!r.done);startExercise(i<0?activeSet.length-1:i);showScreen('trainer');
 }
+function resumeRoute(id){
+ if(!id||id===mission)return !!activeSet.length;
+ const saved=runs[id];if(saved?.version!==2)return false;
+ rememberExercise();if(learningRun)learningRun.work=perExercise;
+ mission=id;learningRun=saved;activeSet=saved.tasks.map(t=>t.ex);perExercise=saved.work||{};trainerStates=[];trainerIndex=Math.max(0,Math.min(activeSet.length-1,saved.index||0));startExercise(trainerIndex);return true;
+}
 function finishMission(){
  if(!learningRun||learningRun.results.some(r=>!r.done))return;if(learningRun.completed){renderSummary();showScreen('summary');return;}learningRun.completed=true;
  const reward=J.stop(mission)?J.record(chapterJourney,mission,learningRun.results,journey):AlgebraWorld.recordMission(journey,mission,learningRun.results,worldView.legacy());if(J.stop(mission))chapterJourney=reward.progress;else journey=reward.progress;const round=J.rewardRound(chapterJourney,mission,learningRun,learningRun.results,reward.xp);chapterJourney=round.progress;learningRun.lastReward=round.xp;renderSummary();showScreen('summary');
@@ -640,11 +666,12 @@ function renderHistory(){const entries=historyEntries();historyIndex=Math.max(0,
 $('#historyBtn').onclick=()=>{historyIndex=historyEntries().length-1;renderHistory();showScreen('history')};$('#closeHistoryBtn').onclick=()=>showScreen('trainer');$('#historyPrevBtn').onclick=()=>{historyIndex--;renderHistory()};$('#historyNextBtn').onclick=()=>{historyIndex++;renderHistory()};
 $('#resumeFreeBtn').onclick=()=>{rememberExercise();if(learningRun)learningRun.work=perExercise;mission=null;learningRun=null;activeSet=freeSession.activeSet;perExercise=freeSession.perExercise;trainerStates=[];startExercise(freeSession.trainerIndex);showScreen('trainer')};
 window.addEventListener('resize',fitMath);
+compactQuery.addEventListener('change',()=>{if(screen==='trainer'&&!lesson&&!motionPlayer.active)renderTrainer();});
 function init(){
   restore();
-  worldView=AlgebraWorldView.mount({progress:()=>journey,chapter:()=>chapterJourney,runs:()=>runs,current:()=>mission,solved:()=>worldLegacy,location:()=>mapLocation,remember:id=>{mapLocation=id;persist();},run:id=>runs[id],canResume:()=>activeSet.length>0&&(!learningRun||!learningRun.completed),openWorld:id=>{if(id==='systems')location.href='stelsels.html?screen=menu';else navigation.open();},start:startTopic,resume:()=>{if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer')}});
+  worldView=AlgebraWorldView.mount({progress:()=>journey,chapter:()=>chapterJourney,runs:()=>runs,current:()=>mission,solved:()=>worldLegacy,location:()=>mapLocation,remember:id=>{mapLocation=id;persist();if(screen==='world')navigation?.sync();},run:id=>runs[id],canResume:()=>activeSet.length>0&&(!learningRun||!learningRun.completed),openWorld:id=>{if(id==='systems')location.href=LeraarBobRoutes.href('games/algebra-trainer/stelsels.html',{gameId:'algebra-trainer',world:'systems',topic:'systems',level:'',screen:'menu'});else navigation.open();},start:startTopic,resume:()=>{if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer')}});
   navigation=AlgebraNavigation.mount({
-   screen:()=>screen,show:showScreen,canResume:()=>!!activeSet.length,canResumeFree:()=>mission?!!freeSession:!!activeSet.length,resumeFree:()=>mission?$('#resumeFreeBtn').click():showScreen('trainer'),
+   activeLevel:()=>mission||'',routeResume:resumeRoute,routeApply:c=>{if(c.screen==='world'){if(c.world==='overview')worldView.open(null);else if(J.world(c.world)||AlgebraWorld.world(c.world))worldView.open(c.world);}},routeRead:()=>routeContext,routeSave:c=>{routeContext=c;persist();},routeWorld:()=>screen==='world'?(mapLocation||'overview'):'equations',screen:()=>screen,show:showScreen,canResume:()=>!!activeSet.length,canResumeFree:()=>mission?!!freeSession:!!activeSet.length,resumeFree:()=>mission?$('#resumeFreeBtn').click():showScreen('trainer'),
    navigate:name=>{if(name==='world'){if(mission)worldView.open(J.worldFor(mission));showScreen('world');}else if(name==='trainer'){if(activeSet.length){if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer');}}else if(name==='preview')levelWorksheet(navigation.selected());else showScreen(name);},
    title:()=>J.stop(mission)?.title||AlgebraWorld.topic(mission)?.title||'Bewaard werk',position:()=>activeSet.length?(trainerIndex+1)+' / '+activeSet.length:'',
    worksheet:levelWorksheet,world:()=> 'Vergelijkingen',stops:()=>J.stops.map((st,i)=>{const info=J.info(chapterJourney,st.id,runs,journey,worldLegacy);return {id:st.id,number:i+1,title:st.title,status:info.status,startId:info.activeId,total:info.total,current:st.id===mission||st.skills.some(k=>'eq-'+k===mission)};}),start:startTopic
@@ -653,8 +680,11 @@ function init(){
   const navigationType=performance.getEntriesByType('navigation')[0]?.type;
   if(navigationType&&navigationType!=='reload')screen='menu';
   const params=new URLSearchParams(location.search),requestedWorld=params.get('world');if(J.world(requestedWorld)||AlgebraWorld.world(requestedWorld)){worldView.open(requestedWorld);if(performance.getEntriesByType('navigation')[0]?.type!=='reload')screen='world';}
-  const requestedTopic=J.stop(params.get('topic'))||AlgebraWorld.topic(params.get('topic'));if((J.stop(requestedTopic?.id)||requestedTopic?.engine==='equations')&&performance.getEntriesByType('navigation')[0]?.type!=='reload'){startTopic(requestedTopic.id);screen='trainer';}
-  if(['setup','preview','tools','menu','world'].includes(params.get('screen'))&&performance.getEntriesByType('navigation')[0]?.type!=='reload')screen=params.get('screen');
+  const requestedTopic=J.stop(params.get('topic'))||AlgebraWorld.topic(params.get('topic'));if((J.stop(requestedTopic?.id)||requestedTopic?.engine==='equations')&&!params.has('level')&&performance.getEntriesByType('navigation')[0]?.type!=='reload'){startTopic(requestedTopic.id);navigation.select(J.stop(requestedTopic.id)?.id||J.stops.find(st=>st.skills.includes(requestedTopic.skill))?.id);screen='trainer';}
+  if(['setup','preview','tools','menu','world'].includes(params.get('screen')))screen=params.get('screen');
+  if(J.stop(params.get('level')))navigation.select(params.get('level'));
+  if(['trainer','history','summary'].includes(params.get('screen'))){screen=resumeRoute(params.get('activeLevel')||params.get('level'))?params.get('screen'):'menu';}
+  navigation.connect();
   renderTypeLevel();updateTotal();refreshNav();if(screen==='summary')renderSummary();if(screen==='history'&&activeSet.length)renderHistory();showScreen(screen);
   /* Wanneer KaTeX later klaar is dan de app, render nogmaals zonder de toestand te wijzigen. */
   setTimeout(()=>{

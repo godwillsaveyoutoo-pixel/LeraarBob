@@ -14,3 +14,6 @@ verify_jwt = true
 
 [functions.bewerkingen-class]
 verify_jwt = true
+
+[functions.algebra-class]
+verify_jwt = true

@@ -2,6 +2,11 @@
 
 Analyse van de bestaande website en voorstel voor verdere ontwikkeling, 5 oktober 2026.
 
+**Update:** [Fase 1 is geïmplementeerd](fase-1-implementatie.md): één spelregister,
+hervatbare Algebra-/Getallenroutes en compacte klasbattles, inclusief eenvoudige
+stelsels met servercontrole. Het document hieronder blijft de analyse voor de
+verdere fases; de implementatienotitie beschrijft wat nu echt werkt en wat nog volgt.
+
 De aanbevolen richting is één platform met gedeelde accounts, navigatie, sessies,
 activiteitenregistratie en oefenbladen, waarop verschillende wiskundemotoren
 aansluiten. De spellen behouden hun eigen leerstof en werkborden. Een leerling
@@ -51,7 +56,7 @@ ontbreekt; het zegt niet dat de wiskundige inhoud ongeschikt is voor die vorm.
 | Onderdeel | Solo | Duo | Groepsbattle | Samen leren | Papier | Leerkracht |
 | --- | --- | --- | --- | --- | --- | --- |
 | Rechtenwereld | Eigen leerroute | Lokaal en online, met eigen toelatingsregels | Ja | Bestaande route voor 2–3 leerlingen met ideeën, bouwen en eigen eindcheck | Vier werkbladwerelden | Oefenen en lokale battle-simulatie |
-| Algebrawereld | Levels, expliciet starten, herhaal-XP | Niet aangesloten | Vergelijkingen; niet automatisch alle stelselopgaven | Niet aangesloten | Vergelijkingen en stelsels | Oefenen en lokale simulatie |
+| Algebrawereld | Levels, expliciet starten, herhaal-XP | Niet aangesloten | Vergelijkingen en eenvoudige unieke stelsels (`S1`) | Niet aangesloten | Vergelijkingen en stelsels | Oefenen en lokale simulatie |
 | Vectormissie | Adaptieve leerroute | Lokaal | Ja | Niet aangesloten | Niet aangesloten | Oefenen en lokale simulatie |
 | Bewerkingentrainer | Eigen route | Lokaal | Ja | Niet aangesloten | Eigen oefenbladen | Bespreekmodus met stappen en lokale simulatie |
 | Wortelbouw | Eigen bouwpuzzels | Eigen lokale arena | Ja | Niet aangesloten | Niet aangesloten | Oefenen en lokale simulatie |

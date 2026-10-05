@@ -165,10 +165,10 @@
     const modes=window.LeraarBobPlayModes;
     if(!modes)return '<p>Spelkeuzes konden niet laden. <a href="'+esc(new URL('games/rechten/rechtenwereld/play.html',base).href)+'">Open leren en spelen</a></p>';
     selectedGame ||= modes.current()?.id || 'rechten';
-    const game=modes.game(selectedGame);
+    const game=modes.game(selectedGame)||modes.game('rechtenwereld');selectedGame=game.id;
     const picker=modes.games.map(g=>`<button type="button" data-action="choose-game" data-id="${g.id}" aria-pressed="${g.id===selectedGame}" aria-controls="selected-game-modes">${g.name}</button>`).join('');
     const select=`<label class="game-picker-mobile">Spel<select data-action="choose-game" aria-controls="selected-game-modes">${modes.games.map(g=>`<option value="${g.id}" ${g.id===selectedGame?'selected':''}>${g.name}</option>`).join('')}</select></label>`;
-    return `${select}<div class="game-picker" role="group" aria-label="Kies een spel">${picker}</div><section id="selected-game-modes" aria-label="Spelvormen voor ${game.name}"><div class="modern-game"><img src="${esc(new URL('assets/covers/modern/'+game.cover+'-small.webp',base).href)}" alt=""><div class="modern-copy"><span class="subject">${game.subject}</span><h3>${game.name}</h3></div></div>${modes.cards(game.id,{role:account?.role})}</section>`;
+    return `${select}<div class="game-picker" role="group" aria-label="Kies een spel">${picker}</div><section id="selected-game-modes" aria-label="Spelvormen voor ${game.name}"><div class="modern-game"><img src="${esc(new URL(game.coverSmall||game.cover,base).href)}" alt=""><div class="modern-copy"><span class="subject">${game.subject}</span><h3>${game.name}</h3></div></div>${modes.cards(game.id,{solo:true,role:account?.role})}</section>`;
   }
   function updateSection(selector, html) {
     const section=content.querySelector(selector);
@@ -286,6 +286,7 @@
     });
     if (document.readyState === 'loading') await new Promise(resolve => document.addEventListener('DOMContentLoaded',resolve,{once:true}));
     await modesReady;
+    await window.LeraarBobPlayModes?.ready();
     buildUI();
     AxiomaAuth.onChange(authChanged);
     try { await AxiomaAuth.ready(); authChanged({ account:await AxiomaAuth.getAccount(), session:await AxiomaAuth.getSession() }); } catch { /* Guests can still play. */ }

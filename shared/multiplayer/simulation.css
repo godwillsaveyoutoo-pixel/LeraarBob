@@ -30,14 +30,17 @@ html[data-mode=dark] .class-simulation-setup,html[data-mode=dark] .class-simulat
 html[data-mode=dark] .class-simulation-setup select,html[data-mode=dark] .class-simulation-controls select,html[data-mode=dark] .class-simulation-controls button{background:#1c384a;color:#eef4f8}
 html[data-mode=dark] .class-simulation-learners .simulation-answer{color:#b5ccd8}
 @media(max-width:700px){.class-simulation-learners{grid-template-columns:1fr}.class-simulation-learners li{grid-template-columns:minmax(72px,1fr) minmax(88px,1fr) minmax(80px,1fr)}.class-simulation-setup,.class-simulation-controls{padding:12px}.class-simulation-actions button{flex:1 1 140px}}
-/* A short portal frame scrolls as one module instead of crushing its workboard. */
+/* Active rounds fit the portal; configuration is a separate inline screen. */
 @media(max-height:520px){
- body.classroom-embedded[data-playing=true]{display:block;height:auto;min-height:100dvh;overflow:auto}
- body.classroom-embedded[data-playing=true]>main{display:block;height:auto;min-height:0;padding:4px 8px}
- body.classroom-embedded[data-playing=true] #session{display:flex;flex-direction:column;gap:4px}
- body.classroom-embedded[data-playing=true] .session-bar{min-height:44px}
- body.classroom-embedded[data-playing=true] #playArea{display:grid;grid-template-rows:auto minmax(280px,1fr)}
- body.classroom-embedded[data-playing=true] #board{height:max(280px,calc(100dvh - 120px));min-height:280px}
+ body.classroom-embedded[data-playing=true]{height:100dvh;min-height:0;overflow:hidden}
+ body.classroom-embedded[data-playing=true]>main{height:100%;min-height:0;padding:2px 6px}
+ body.classroom-embedded[data-playing=true] #session{min-height:0}
+ body.classroom-embedded[data-playing=true] #playArea{grid-template-rows:44px minmax(0,1fr)}
+ body.classroom-embedded[data-playing=true] #board{height:100%;min-height:0}
  body.classroom-embedded[data-playing=true] .class-simulation-controls{flex:none}
- body.classroom-embedded[data-playing=true] .class-simulation-controls[open]{max-height:none}
 }
+body[data-simulation-settings=true] .class-simulation-controls{max-height:none;overflow:visible}
+body.classroom-embedded.portal-collapsed[data-playing=true] .session-bar{padding-left:56px}
+body[data-playing=true] .class-simulation-controls:not([open]){flex:none;min-height:44px;max-height:44px;overflow:hidden}
+body[data-playing=true] .round-status{min-height:44px}
+body.classroom-embedded[data-playing=true] #notice:empty{display:none}

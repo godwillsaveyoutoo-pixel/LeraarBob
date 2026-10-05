@@ -69,7 +69,7 @@
   }
 
   function savedFor(game, overview) {
-    return game.progressType === 'trainer' ? overview?.trainer : overview?.games?.find(row => row.game_id === (game.progressGameId || game.id));
+    return game.progressType === 'trainer' ? overview?.trainer : overview?.games?.find(row => row.game_id === (game.progressId || game.progressGameId || game.id));
   }
   function earnedXP(game, saved) {
     if (['local','none','multiplayer'].includes(game.progressType)) return null;
@@ -115,7 +115,7 @@
     for (const game of catalog) {
       if (['none','local','multiplayer'].includes(game.progressType)) continue;
       // A world and an older trainer may share a row but read separate, explicit records.
-      const source = game.progressType === 'trainer' ? 'legacy-trainer' : (game.progressGameId || game.id) + (game.progressType === 'world' ? ':rechtenV2' : '');
+      const source = game.progressType === 'trainer' ? 'legacy-trainer' : (game.progressId || game.progressGameId || game.id) + (game.progressType === 'world' ? ':rechtenV2' : '');
       if (seen.has(source)) continue;
       seen.add(source);
       const saved = savedFor(game, overview), progress = summarize(game, saved);

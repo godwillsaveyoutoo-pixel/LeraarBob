@@ -4,8 +4,24 @@ const L=GetallenLessons,C=BewerkingenCore,$=id=>document.getElementById(id),KEY=
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const math=t=>katex.renderToString(t,{throwOnError:false,strict:'ignore',output:'htmlAndMathml'});
 const seed=()=>crypto.getRandomValues(new Uint32Array(1))[0];
-const external=path=>'../'+path;
+const R=window.LeraarBobRoutes;let router=null;
 let state={version:1,screen:'home',theme:'machten',selected:'machten-betekenis',entries:{},runs:{},mission:null},message='',error=false,ok=false,activeSlot=0,wrongRule='',helpTask=null,helpStep=0,previous='home';
+function context(){return {gameId:'getallenwereld',world:'getallen',topic:state.theme,level:state.selected,runLevel:state.mission?.id||'',screen:state.screen,returnTo:R?.read(location.href).returnTo||state.navigation?.returnTo||''};}
+function sync(){router?.update(context());}
+function referenceLinks(){
+ const registry=window.LeraarBobGameRegistry;if(!registry)return '';
+ const entries=[...registry.modes('getallenwereld',{includeReferences:true}).filter(e=>e.reference),...registry.worksheets('getallenwereld')];
+ return entries.map(e=>{
+  const provider=e.reference?.gameId||e.providerId,game=registry.game(provider),title=e.title||e.label||(e.id==='classroom'?'Klasbattle':e.id==='local'?'Duo-battle':'Oefenblad');
+  const returnTo=router?.returnTo('chapter')||R.href(location.href,{...context(),screen:'chapter',returnTo:''});
+  const ctx={gameId:game?.id||provider,world:state.theme,topic:state.theme,returnTo};
+  let destination=e.id==='classroom'?registry.destination('getallenwereld','classroom',{topicId:state.theme,hub:true,returnTo}):e.href;
+  if(e.id==='classroom'&&destination){const url=new URL(destination,R.root);url.searchParams.set('view','create');destination=url.href;}
+  const label=title.toLocaleLowerCase().includes((game?.title||provider).toLocaleLowerCase())?title:title+' · '+(game?.title||provider);
+  return '<a data-reference-link data-platform-route href="'+esc(R.href(destination,ctx))+'">'+esc(label)+'<small>Opent '+esc(game?.title||provider)+'; je Getallenwereld-opgave blijft bewaard.</small></a>';
+ }).join('');
+}
+function updateReferences(){const menu=$('trainerMenu');menu.querySelectorAll('a[data-reference-link]').forEach(a=>a.remove());menu.insertAdjacentHTML('beforeend',referenceLinks());}
 function task(){const m=state.mission;return m?L.make(m.id,(m.seed+Math.imul(m.index+1,2654435761))>>>0,m.index,m.edition||1):null;}
 function restoredRun(m){
  if(!m||!L.stop(m.id)||!Number.isInteger(m.seed)||m.seed<0||m.seed>4294967295||!Number.isInteger(m.index)||m.index<0||m.index>=6)return null;
@@ -21,6 +37,7 @@ function restore(){
  try{
   const saved=JSON.parse(AxiomaGame.storage.getItem(KEY)||'null');
   if(saved?.version!==1)return;
+  if(saved.navigation&&typeof saved.navigation==='object')state.navigation={...saved.navigation,returnTo:saved.navigation.returnTo?R?.safeReturn(saved.navigation.returnTo):''};
   if(L.theme(saved.theme))state.theme=saved.theme;if(L.stop(saved.selected))state.selected=saved.selected;
   for(const s of L.STOPS){const e=saved.entries?.[s.id];if(!e)continue;state.entries[s.id]={done:Array.isArray(e.done)?[...new Set(e.done.filter(x=>/^\d+:\d$/.test(x)))].slice(-6):[],independent:Array.isArray(e.independent)?[...new Set(e.independent.filter(x=>/^\d+:\d$/.test(x)))].slice(-6):[]};}
   for(const s of L.STOPS){const run=restoredRun(saved.runs?.[s.id]);if(run&&run.id===s.id)state.runs[s.id]=run;}
@@ -40,7 +57,7 @@ function persist(){
 const completed=theme=>L.STOPS.filter(s=>(!theme||s.theme===theme)&&state.entries[s.id]?.done.length===6).length;
 function status(id){const e=state.entries[id],n=e?.done.length||0,run=state.runs[id];return n===6?(e.independent.length===6?'Zelfstandig afgerond':'Afgerond · nog zelfstandig oefenen'):n?n+'/6 opgelost':run?'Bezig · '+(run.index+1)+'/6':'Nog te ontdekken';}
 function resetMessage(){message='';error=false;ok=false;wrongRule='';}
-function go(screen){resetMessage();state.screen=screen;render();persist();}
+function go(screen){resetMessage();state.screen=screen;render();persist();sync();}
 function heading(title,copy,meta){return `<div class="heading"><div><h1>${esc(title)}</h1><p>${esc(copy)}</p></div><div class="meta">${meta}</div></div>`;}
 function footer(){return `<footer class="foot"><span>Rekenregels herkennen · uitwerkingen bouwen</span><span>Je werk wordt bewaard</span></footer>`;}
 function home(){return `<section class="screen home">${heading('Getallenwereld','Kies een hoofdstuk. Je ziet meteen waarmee je gaat rekenen.',completed()+'/'+L.STOPS.length+' afgerond<small>v0.2 · machten & wortels</small>')}<div class="themes">${L.THEMES.map((t,i)=>`<button class="theme" data-theme="${t.id}"><span class="eyebrow">Hoofdstuk 0${i+1} · ${t.stops.length} onderdelen</span><span class="theme-title">${esc(t.title)} <span aria-hidden="true">↗</span></span><p>${esc(t.intro)}</p><span class="example">${math(t.example)}</span><span class="theme-bottom"><span>${completed(t.id)}/${t.stops.length} afgerond</span><strong>Bekijk de onderdelen →</strong></span></button>`).join('')}</div><div class="dock"><div><p>${state.mission?'Je oefening staat klaar.':'Begin bij de betekenis, of kies zelf een rekenregel.'}</p><small>${state.mission?esc(L.stop(state.mission.id).title)+' · opgave '+(state.mission.index+1)+'/6':'Zonder tijdsdruk. Met hulp en ruimte om te verbeteren.'}</small></div>${state.mission?'<button class="primary" data-action="resume">Oefening hervatten →</button>':'<button class="primary" data-theme="machten">Naar machten →</button>'}</div>${footer()}</section>`;}
@@ -112,7 +129,7 @@ function summary(){
  const m=state.mission,s=L.stop(m.id),e=state.entries[m.id],n=e?.independent.length||0;
  return `<section class="screen summary">${heading(L.theme(s.theme).title,'Onderdeel 0'+s.number+' · '+s.title,'6/6 uitgewerkt<small>Getallenwereld</small>')}<div class="summary-body"><div class="summary-seal" aria-hidden="true">✓</div><h2>Je hebt dit onderdeel uitgewerkt.</h2><p>${esc(s.intro)}</p><p><strong>${n}/6 verschillende opgaven zelfstandig opgelost.</strong><br>${n<6?'Oefen gerust nog eens: de vragen veranderen, de rekenregel blijft dezelfde.':'Je hebt de rekenregel op zes verschillende opgaven toegepast.'}</p></div><div class="dock"><button data-action="chapter">Naar de onderdelen</button><button data-action="again">Nog een reeks</button><button class="primary" data-action="next-stop">Volgend onderdeel →</button></div></section>`;
 }
-function menu(){return `<section class="screen menu">${heading('Menu','Getallenwereld · kies waar je naartoe wilt.',completed()+'/'+L.STOPS.length+' afgerond<small>v0.2</small>')}<div class="menu-grid"><section class="menu-group"><h2>In deze wereld</h2><div class="menu-links"><button data-action="home">Getallenwereld<small>De twee hoofdstukken</small></button><button data-action="resume" class="primary" ${!state.mission?'disabled':''}>Oefening hervatten<small>${state.mission?esc(L.stop(state.mission.id).title):'Start eerst een onderdeel'}</small></button><button data-theme="machten">Machten<small>${L.theme('machten').stops.length} onderdelen · rekenregels & toepassingen</small></button><button data-theme="wortels">Vierkantswortels<small>${L.theme('wortels').stops.length} onderdelen · kwadraten & worteltermen</small></button><button data-action="help" ${!state.mission?'disabled':''}>Hulp<small>Een ander voorbeeld, stap voor stap</small></button><button data-action="profile">Account & bewaren<small>Je account en de opslagstatus bekijken</small></button></div></section><section class="menu-group"><h2>Meer oefenen</h2><div class="menu-links"><a href="${external('bewerkingen-trainer/index.html?mode=solo')}">Bewerkingentrainer<small>Andere reeksen in de bewerkingentrainer</small></a><a href="${external('bewerkingen-trainer/index.html?mode=teacher')}">Oefenblad & bespreking<small>Opgaven, uitwerkingen en een afdrukbaar blad</small></a><a href="${external('bewerkingen-trainer/battle.html')}">Battle met machten en wortels (Bewerkingentrainer)<small>De bestaande battle op één toestel</small></a><a href="${'../../klasbattle/?game=bewerkingen'}">Klasbattle · Bewerkingen<small>De bestaande bewerkingentrainer met de klas</small></a><a href="${external('algebra-trainer/index.html')}">Algebrawereld<small>Vergelijkingen en stelsels</small></a><button data-action="fullscreen">Volledig scherm<small>Gebruik de volledige werkruimte</small></button></div><p class="menu-notice">Oefenbladen en battles openen de bestaande bewerkingentrainer.</p></section></div><div class="dock"><div><small>Je opgave en uitwerking blijven bewaard wanneer je het menu opent.</small></div><button data-action="menu-close">Menu sluiten →</button><button data-action="theme">${document.documentElement.dataset.mode==='dark'?'Lichte':'Donkere'} weergave</button></div></section>`;}
+function menu(){return `<section class="screen menu">${heading('Menu','Getallenwereld · kies waar je naartoe wilt.',completed()+'/'+L.STOPS.length+' afgerond<small>v0.2</small>')}<div class="menu-grid"><section class="menu-group"><h2>In deze wereld</h2><div class="menu-links"><button data-action="home">Getallenwereld<small>De twee hoofdstukken</small></button><button data-action="resume" class="primary" ${!state.mission?'disabled':''}>Oefening hervatten<small>${state.mission?esc(L.stop(state.mission.id).title):'Start eerst een onderdeel'}</small></button><button data-theme="machten">Machten<small>${L.theme('machten').stops.length} onderdelen · rekenregels & toepassingen</small></button><button data-theme="wortels">Vierkantswortels<small>${L.theme('wortels').stops.length} onderdelen · kwadraten & worteltermen</small></button><button data-action="help" ${!state.mission?'disabled':''}>Hulp<small>Een ander voorbeeld, stap voor stap</small></button><button data-action="profile">Account & bewaren<small>Je account en de opslagstatus bekijken</small></button></div></section><section class="menu-group"><h2>Meer oefenen</h2><div class="menu-links">${referenceLinks()}<button data-action="fullscreen">Volledig scherm<small>Gebruik de volledige werkruimte</small></button></div><p class="menu-notice">Oefenbladen en battles openen de bestaande bewerkingentrainer.</p></section></div><div class="dock"><div><small>Je opgave en uitwerking blijven bewaard wanneer je het menu opent.</small></div><button data-action="menu-close">Menu sluiten →</button><button data-action="theme">${document.documentElement.dataset.mode==='dark'?'Lichte':'Donkere'} weergave</button></div></section>`;}
 function render(){
  const focus=document.activeElement&&$('app').contains(document.activeElement);
  document.body.dataset.screen=state.screen;$('menuBtn').setAttribute('aria-expanded',String(state.screen==='menu'));$('menuBtn').innerHTML=state.screen==='menu'?'× <span>Sluiten</span>':'☰ <span>Menu</span>';
@@ -123,7 +140,7 @@ function render(){
  $('resumeMenu').disabled=!state.mission;$('helpMenu').disabled=!state.mission;
  if(state.screen==='help'&&!helpTask)state.screen='play';
  $('app').innerHTML=({home,chapter,play,help,summary,menu}[state.screen]||home)();
- if(focus)$('app').focus({preventScroll:true});
+ updateReferences();if(focus)$('app').focus({preventScroll:true});
 }
 async function fullscreen(){
  try{if(document.fullscreenElement)await document.exitFullscreen();else if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();else throw Error();}
@@ -153,7 +170,7 @@ function actions(action){
 $('app').addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b||b.disabled||!AxiomaGame.active)return;
  if(b.dataset.theme){state.theme=b.dataset.theme;state.selected=L.STOPS.find(s=>s.theme===state.theme).id;go('chapter');}
- else if(b.dataset.stop){state.selected=b.dataset.stop;resetMessage();render();persist();}
+ else if(b.dataset.stop){state.selected=b.dataset.stop;resetMessage();render();persist();sync();}
  else if(b.dataset.rule)chooseRule(b.dataset.rule);
  else if(b.dataset.slot!==undefined){activeSlot=Number(b.dataset.slot);render();}
  else if(b.dataset.square){const m=state.mission,s=m&&task().stages[m.stage];if(state.screen==='play'&&!m.done&&s?.squareChoices?.includes(Number(b.dataset.square))){m.values[0]=b.dataset.square;activeSlot=1;resetMessage();render();persist();}}
@@ -164,9 +181,9 @@ $('gameHomeBtn').onclick=()=>{if(AxiomaGame.active)go('home');};
 $('profileBtn').onclick=()=>window.LeraarBobTopbar?.openAccount();
  $('trainerMenu').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled||!AxiomaGame.active)return;if(b.dataset.theme){state.theme=b.dataset.theme;state.selected=L.STOPS.find(s=>s.theme===state.theme).id;go('chapter');}else if(b.dataset.action)actions(b.dataset.action);});
  $('crumbChapter').onclick=()=>{if(AxiomaGame.active)actions('chapter');};
-$('menuBtn').onclick=()=>{if(!AxiomaGame.active)return;if(state.screen==='menu')actions('menu-close');else{previous=state.screen;resetMessage();state.screen='menu';render();}};
+$('menuBtn').onclick=()=>{if(!AxiomaGame.active)return;if(state.screen==='menu')actions('menu-close');else{previous=state.screen;resetMessage();state.screen='menu';render();persist();sync();}};
 document.addEventListener('keydown',e=>{
- if(!AxiomaGame.active||e.composedPath().some(n=>n.id==='axioma-game-status'))return;
+ if(!AxiomaGame.active||e.composedPath().some(n=>n.id==='axioma-game-status'||n.matches?.('input,textarea,select,[contenteditable=true]')||n.tagName==='DIALOG'&&n.open))return;
  if(e.key==='Escape'){if(state.screen==='menu')actions('menu-close');else if(state.screen==='help')go('play');return;}
  if(state.screen!=='play'||!state.mission||state.mission.done||state.mission.stage<0)return;
  if(/^\d$/.test(e.key)){e.preventDefault();key(e.key);}else if(e.key==='-'||e.key==='Backspace'){e.preventDefault();key(e.key==='-'?'−':'⌫');}
@@ -175,7 +192,13 @@ document.addEventListener('keydown',e=>{
 });
 window.GetallenWorld=Object.freeze({snapshot:()=>JSON.parse(JSON.stringify(state)),task:()=>task()&&JSON.parse(JSON.stringify(task()))});
 restore();try{document.documentElement.dataset.mode=localStorage.getItem('axioma-mode')==='dark'?'dark':'light';}catch{}
-const requested=new URLSearchParams(location.search),requestedTheme=requested.get('thema'),requestedStop=L.stop(requested.get('onderdeel'));
+const requested=new URLSearchParams(location.search),requestedTheme=requested.get('topic')||requested.get('thema')||(L.theme(requested.get('world'))?requested.get('world'):null),requestedStop=L.stop(requested.get('level')||requested.get('onderdeel'));
 if(requestedStop){state.theme=requestedStop.theme;state.selected=requestedStop.id;state.screen='chapter';}else if(L.theme(requestedTheme)){state.theme=requestedTheme;state.selected=L.STOPS.find(s=>s.theme===state.theme).id;state.screen='chapter';}
+const requestedScreen=requested.get('screen');
+if(['home','chapter','menu'].includes(requestedScreen))state.screen=requestedScreen;
+if(['play','summary'].includes(requestedScreen)){const parked=state.runs[requested.get('activeLevel')||requestedStop?.id||state.mission?.id];if(parked){state.mission=parked;state.screen=requestedScreen;}else state.screen='chapter';}
+if(R)router=R.mount({gameId:'getallenwereld',enabled:()=>AxiomaGame.active,read:context,onChange:c=>{state.navigation=c;persist();},apply:c=>{const stop=L.stop(c.level);if(stop){state.selected=stop.id;state.theme=stop.theme;}else if(L.theme(c.topic))state.theme=c.topic;let screen=c.screen;if(['play','summary','help'].includes(screen)){const parked=state.runs[c.runLevel||c.level];if(parked)state.mission=parked;else screen='chapter';}if(screen==='help'&&!helpTask)screen='play';state.screen=['home','chapter','menu','play','help','summary'].includes(screen)?screen:'home';resetMessage();render();persist();}});
+window.AxiomaAuth?.onChange(detail=>{if(detail.pending||!AxiomaGame.active||detail.account?.id!==AxiomaGame.account?.id){$('app').style.visibility='hidden';$('app').inert=true;$('getallenProgress').dataset.value='0';}});
+window.LeraarBobGameRegistry?.ready().then(()=>{updateReferences();if(state.screen==='menu'&&AxiomaGame.active)render();});
 render();persist();
 })();

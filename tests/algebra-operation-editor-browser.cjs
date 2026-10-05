@@ -20,7 +20,7 @@ const out=process.env.ALGEBRA_SCREENSHOTS||'/tmp/algebra-operation-editor';fs.mk
   await page.goto('http://127.0.0.1:'+server.address().port+'/games/algebra-trainer/');await page.waitForFunction(()=>window.AlgebraTrainer);await page.clock.install();
   async function load(run,index=0){
    const fixture={version:1,runs:{[run.skill]:run},chapterJourney:J.normalize(null),mission:run.skill,activeSet:run.tasks.map(t=>t.ex),trainerIndex:index,perExercise:{},screen:'trainer',settings:{allowFractions:true,allowDecimals:false,allowNegative:true}};
-   await page.evaluate(f=>AxiomaGame.storage.setItem('leraarbob.algebra.v1',JSON.stringify(f)),fixture);await page.reload();await page.waitForSelector('#trainerScreen:not(.hidden)');await page.clock.runFor(700);await page.evaluate(()=>document.fonts.ready);
+   await page.evaluate(f=>AxiomaGame.storage.setItem('leraarbob.algebra.v1',JSON.stringify(f)),fixture);await page.goto('http://127.0.0.1:'+server.address().port+'/games/algebra-trainer/?world=equations&level='+run.skill+'&activeLevel='+run.skill+'&screen=trainer');await page.waitForSelector('#trainerScreen:not(.hidden)');await page.clock.runFor(700);await page.evaluate(()=>document.fonts.ready);
   }
   const work=()=>page.evaluate(()=>JSON.stringify(AlgebraTrainer.snapshot().trainerStates));
   const result=()=>page.evaluate(()=>{const s=AlgebraTrainer.snapshot();return s.learningRun.results[s.trainerIndex];});
@@ -51,21 +51,22 @@ const out=process.env.ALGEBRA_SCREENSHOTS||'/tmp/algebra-operation-editor';fs.mk
   await page.evaluate(()=>{document.querySelector('leraarbob-topbar').shadowRoot?.activeElement?.blur();document.activeElement?.blur();});await page.keyboard.press('+');
   assert.equal(await page.locator('#manualOperations').getAttribute('data-stage'),'operand');assert.equal(await page.locator('#manualOperations .ops').isVisible(),false);
   assert.equal(await page.locator('#valueGrid button').count(),6);assert.match(await page.locator('#valueChoiceLabel').textContent(),/Wat tel je op/);
-  for(const [width,height] of [[1280,800],[780,360],[390,844],[320,700]]){
+  for(const [width,height] of [[1280,800],[780,360],[640,360],[390,844],[320,700]]){
    await page.setViewportSize({width,height});await page.clock.runFor(40);
    const controls=page.locator('#manualOperations button:visible,#moreOperationsBtn:visible');
    for(let i=0;i<await controls.count();i++){
     const control=controls.nth(i);await control.scrollIntoViewIfNeeded();
     assert.equal(await control.evaluate(e=>{const r=e.getBoundingClientRect();return r.width>=43.9&&r.height>=43.9&&r.left>=0&&r.top>=0&&r.right<=innerWidth+1&&r.bottom<=innerHeight+1&&e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));}),true,width+'×'+height+' reachable operand control '+await control.textContent());
    }
-   assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'Only the rail may scroll');
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'Gameplay remains inside the viewport');
+   if(width>=601&&height<=500)assert.equal(await page.locator('.opRail').evaluate(e=>e.scrollHeight<=e.clientHeight+1&&e.scrollWidth<=e.clientWidth+1),true,'Landscape controls require no scrolling');
    await page.screenshot({path:path.join(out,'custom-operand-'+width+'x'+height+'.png')});
   }
   await page.locator('#changeOperationBtn').click();assert.equal(await page.locator('#manualOperations .ops').isVisible(),true);assert.equal(await work(),before,'Changing the menu preserves the equation');
   await page.keyboard.press('/');const chosen=await page.locator('#valueGrid button').first().getAttribute('data-index');assert.equal(chosen,'0');
   await page.keyboard.press('1');await page.clock.runFor(5000);assert.notEqual(await work(),before,'A numbered choice applies one real equation operation');await visibleMath('320 portrait current equation after a step');
   await page.keyboard.press('Backspace');assert.equal(await work(),before,'Keyboard undo restores the real prior equation');
-  console.log('PASS independent/context and staged custom operations, six choices, keyboard apply/undo, four viewports');
+  console.log('PASS independent/context and staged custom operations, six choices, keyboard apply/undo, five viewports');
 
   const signed=J.mission('route-sign',111),t=signed.tasks[2],start=C.EQ(C.Add(C.Mul(C.N(-7),C.V()),C.N(2)),C.N(-19)),operation={op:'-',operand:C.N(2)};
   t.kind='predict';t.ex={...t.ex,start,solution:C.R(3),states:[start],steps:[operation],policy:{allowNegative:true}};t.operation=operation;t.expected=C.applyEquation(start,operation.op,operation.operand);
@@ -98,7 +99,7 @@ const out=process.env.ALGEBRA_SCREENSHOTS||'/tmp/algebra-operation-editor';fs.mk
     if(await page.locator('#nextBox').isVisible())break;
     const label=(step.op==='*'?'·':step.op==='/'?'÷':step.op==='-'?'−':'+')+' '+C.fallbackText(C.latexExpr(step.operand,ex.policy))+' op beide leden';
     const context=page.locator('.contextOp[aria-label='+JSON.stringify(label)+']');
-    if(await context.count()){await context.click();directSteps++;}
+    if(await context.count()){for(let n=0;!await context.isVisible()&&n<4;n++)await page.locator('[data-choice-pager=contextOperations] button:last-child').click();assert.equal(await context.isVisible(),true,type.id+' expected action is available on a visible page');await context.click();directSteps++;}
     else{
      await page.locator('#moreOperationsBtn').click();await page.locator('.opBtn[data-op='+JSON.stringify(step.op)+']').click();let found=false;
      for(let p=0;p<20;p++){

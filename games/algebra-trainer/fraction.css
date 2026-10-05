@@ -54,3 +54,20 @@ body.fraction-writing .givenRow>span{font-size:12px}
  .fractionChoiceHead{gap:4px}.fractionChoiceHead .fractionLabel{font-size:14px}
  .algebraPlatform .fractionOperations .operationChoice .choiceMath{font-size:22px}
 }
+@media(max-height:500px) and (min-width:601px){
+ body.fraction-writing .trainer .givenRow{display:none}
+ .algebraPlatform .fractionProduction .termTile{height:80px;min-height:80px}
+ .algebraPlatform .fractionProduction .termPalette{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .algebraPlatform .fractionRoutes{flex-direction:row;gap:4px}
+ .algebraPlatform .fractionRoutes button{flex:1;min-width:0;min-height:100px;padding:4px}
+ .algebraPlatform .fractionRoutes strong{font-size:14px;line-height:1.2;hyphens:auto}
+ .algebraPlatform .fractionRoutes small{font-size:13px;line-height:1.15}
+ .algebraPlatform .fractionNumbers,.algebraPlatform .fractionOperations{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+ .algebraPlatform .fractionNumbers button{height:70px;min-height:70px}
+ .algebraPlatform .fractionOperations button{height:76px;min-height:76px}
+ .algebraPlatform .fractionChoiceHead{height:44px}
+ .algebraPlatform .fractionChoiceHead button{font-size:13px}
+ .algebraPlatform .fractionBefore .fractionMath{font-size:24px;line-height:1.8}
+ .algebraPlatform .fractionCurrent{font-size:32px;line-height:2}
+}
+@media(max-height:500px) and (min-width:601px){body.fraction-writing .trainer .trainStage{grid-template-rows:auto minmax(0,1fr)}}

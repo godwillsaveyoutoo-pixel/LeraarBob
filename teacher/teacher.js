@@ -1,5 +1,6 @@
-(() => {
+(async() => {
 'use strict';
+await window.LeraarBobGameRegistry.ready();
 
 const $=id=>document.getElementById(id);
 const CLASSES=window.AxiomaAuth?.CLASSES||['3TBO','3TMW','3TMWW','4TMWW','4TMW'];
@@ -10,9 +11,10 @@ const TRAINER_SKILLS={
 };
 
 const detailCache=new WeakMap();
-const catalog=window.AXIOMA_CATALOG||[];
+const registry=window.LeraarBobGameRegistry;
+const catalog=registry.list();
 const featuredCatalog=catalog.filter(g=>g.featured).sort((a,b)=>(a.featureOrder||0)-(b.featureOrder||0));
-const featuredIds=featuredCatalog.length?featuredCatalog.map(g=>g.id):['rechtenwereld','wortelbouw','vectoren-trainer','gravity-maze'];
+const featuredIds=featuredCatalog.map(g=>g.id);
 let collection='featured';
 let sb=null,account=null,students=[],games=[],genericProgress=[];
 let classFilter='',themeFilter='',gameFilter='',query='',selectedStudent=null,loadVersion=0;
@@ -22,7 +24,7 @@ const num=v=>Number.isFinite(Number(v))?Number(v):0;
 const trainerOf=row=>(Array.isArray(row.axioma_progress)?row.axioma_progress[0]:row.axioma_progress)||null;
 
 function genericFor(userId,gameId){
-  return genericProgress.find(x=>x.user_id===userId&&x.game_id===gameId)||null;
+  return genericProgress.find(x=>x.user_id===userId&&x.game_id===(registry.game(gameId)?.progressId||gameId))||null;
 }
 
 function trainerDetails(gameId,saved){
@@ -220,17 +222,14 @@ async function loadAll(){
   if(account?.role!=='teacher')return;
   if($('summary')) $('summary').textContent='Gegevens laden…';
   try{
-    const [gameRes,profileRes,progressRes]=await Promise.all([
-      sb.from('axioma_games').select('id,title,theme,game_type,progress_type,teacher_visible,sort_order,metadata').eq('active',true).order('sort_order'),
+    const [profileRes,progressRes]=await Promise.all([
       sb.from('axioma_profiles').select('user_id,alias,class_code,created_at,axioma_progress(state,revision,updated_at)').order('alias'),
       sb.from('axioma_game_progress').select('user_id,game_id,state,revision,updated_at').order('updated_at',{ascending:false})
     ]);
     if(version!==loadVersion||account?.id!==owner||account?.role!=='teacher')return;
-    if(gameRes.error) throw gameRes.error;
     if(profileRes.error) throw profileRes.error;
     if(progressRes.error) throw progressRes.error;
-    games=(gameRes.data||[]).map(g=>({...g,title:catalog.find(c=>c.id===g.id)?.title||g.title,teacher_visible:g.id==='rechtenwereld'||g.teacher_visible}));
-    if(!games.some(g=>g.id==='rechtenwereld'))games.push({id:'rechtenwereld',title:'Rechtenwereld',theme:'Functies',teacher_visible:true,progress_type:'world'});
+    games=registry.list().map(g=>({...g,game_type:g.gameType,progress_type:g.progressType,teacher_visible:g.teacherVisible,metadata:{total:g.progressTotal,unit_singular:g.progressUnitSingular,unit_plural:g.progressUnitPlural}}));
     games.sort((a,b)=>(featuredIds.includes(a.id)?featuredIds.indexOf(a.id):100)-(featuredIds.includes(b.id)?featuredIds.indexOf(b.id):100));
     students=profileRes.data||[];
     genericProgress=progressRes.data||[];

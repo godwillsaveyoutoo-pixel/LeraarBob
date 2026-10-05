@@ -40,3 +40,23 @@ body.algebra-classroom{font-family:system-ui,sans-serif;background:var(--paper,#
 .algebra-classroom[data-playing=true].topbar-collapsed .session-bar{padding-left:0}
 html[data-mode=dark] .algebra-classroom{--menu-card:#24363e;color-scheme:dark}
 @media(max-width:600px){.algebra-classroom main{padding:0 12px 20px}.algebra-classroom .algebraRouteHeading{margin:0 -12px 16px;padding:12px}.algebra-classroom .algebraRouteHeading h1{font-size:26px}.algebra-classroom h1{font-size:24px}.algebra-classroom .card{padding:14px}}
+
+/* Pick a subject and level; detailed number choices remain optional. */
+.algebra-classroom .setup-intro{display:none}
+.algebra-classroom #hostForm{max-width:740px;margin:12px auto;padding:18px;gap:12px}
+.class-worlds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.algebra-classroom .class-worlds button{min-width:0;min-height:48px;font-weight:750;background:#e7effb;color:#244e8d;border-color:#a6bedf}
+.algebra-classroom .class-worlds button[data-class-world=systems]{background:#f0e6f8;color:#69428c;border-color:#cbb0df}
+.algebra-classroom .class-worlds button[aria-pressed=true]{box-shadow:inset 0 -3px currentColor;border-color:currentColor}
+.algebra-classroom #classPresetLabel,.algebra-classroom .form-pair label{display:flex;flex-direction:column;gap:5px;min-width:0;font-size:14px}
+.algebra-classroom #hostForm select{width:100%;min-height:44px;font-size:16px}
+.algebra-classroom #classSelectionSummary{margin:0;font-size:13px}
+.algebra-classroom #classAdvanced summary{min-height:44px;align-content:center;cursor:pointer;font-size:14px;font-weight:650}
+.algebra-classroom .class-simulation-setup{max-width:740px;margin:12px auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 18px}
+.algebra-classroom .class-simulation-setup h2{font-size:16px;margin:0}
+.algebra-classroom .class-simulation-setup label{font-size:13px;margin:0;gap:6px}
+.algebra-classroom .class-simulation-setup small{font-size:12px}
+.algebra-classroom #classTypes label{min-height:44px;padding:8px}
+html[data-mode=dark] .algebra-classroom .class-worlds button{background:#263e62;color:#d6e4ff;border-color:#607fa7}
+html[data-mode=dark] .algebra-classroom .class-worlds button[data-class-world=systems]{background:#472d56;color:#edcffc;border-color:#916aa7}
+@media(max-width:440px){.algebra-classroom #hostForm{padding:14px}.algebra-classroom .form-pair{gap:8px}.algebra-classroom .class-simulation-setup{padding:12px}.algebra-classroom .algebraRouteHeading{min-height:0;margin-bottom:8px;padding:10px 12px}.algebra-classroom .algebraRouteHeading h1{font-size:23px}}

@@ -1,6 +1,6 @@
-(() => {
+(async() => {
   'use strict';
-  const modes=window.LeraarBobPlayModes,style=document.createElement('style');
+  const modes=window.LeraarBobPlayModes;await modes.ready();const style=document.createElement('style');
   style.textContent=modes.css;document.head.append(style);
   const names={puntenbaai:'Puntenbaai',hellingrug:'Hellingrug',grenspas:'Grenspas',formulewerf:'Formulewerf',signaalstad:'Signaalstad'};
   const requested=new URLSearchParams(location.search).get('world');

@@ -55,7 +55,8 @@ restore.onclick=()=>setCollapsed(false,true);
 addEventListener('storage',e=>{if(e.key===KEY)setCollapsed(e.newValue==='true');});
 function load(src){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=new URL(src,root);s.onload=resolve;s.onerror=reject;document.head.append(s);});}
 if(!window.LeraarBobAvatar){window.LeraarBobAvatarReady ||= load('shared/learner-avatar.js');window.LeraarBobAvatarReady.then(()=>syncAccount()).catch(()=>{window.LeraarBobAvatarReady=null;});}
-if(!window.LeraarBobPlayModes)load('shared/play-modes.js').catch(()=>{});
+const modesReady=(window.LeraarBobPlayModes?Promise.resolve():load('shared/play-modes.js')).then(()=>window.LeraarBobPlayModes.ready()).catch(()=>{});
+const routesReady=window.LeraarBobRoutes?Promise.resolve():load('shared/platform-routes.js').catch(()=>{});
 let loginLoading;
 async function openAccount(){
  const opener=current?.host.shadowRoot.querySelector('.account');
@@ -159,7 +160,8 @@ function goPlatformSection(id,hash){
  if(isHome){const node=document.getElementById(id);if(node){node.click();return;}}
  location.assign(home+(hash||''));
 }
-function showMenu(){
+async function showMenu(){
+ await Promise.all([modesReady,routesReady]);if(!current)return;
  const {host,header}=current,s=host.shadowRoot,dialog=s.querySelector('dialog'),list=s.querySelector('.menu-list');list.replaceChildren();
  s.querySelector('.menu-title').textContent=navPilot?(isHome?'leraarBob':title):title;
  s.querySelector('.menu-eyebrow').textContent=navPilot?'NAVIGATIE':'WAAR WIL JE HEEN?';
@@ -181,7 +183,7 @@ function showMenu(){
    const modes=window.LeraarBobPlayModes,gameId=modes?.current()?.id;
    const entries=nodes.map(node=>{const details=menuDetails(node),mode=modes?.navigation(node,gameId);if(mode)Object.assign(details,{label:mode.title,description:mode.devices,glyph:mode.glyph,group:mode.group==='battle'?'multiplayer':'learning'});return {node,details,mode};}).filter(e=>e.details.label);
    classroomEntry=entries.find(e=>e.mode?.id==='classroom'||e.node.id==='classBtn'||e.node.matches('a[href]')&&new URL(e.node.href).pathname.endsWith('/classroom.html')||/^Klasbattle$/.test(e.details.label));
-   if(classroomEntry?.node.matches('a')&&gameId)classroomEntry.node.href=modes.destination(gameId,'classroom',new URLSearchParams(location.search).get('world'));
+   if(classroomEntry?.node.matches('a')&&!classroomEntry.node.hasAttribute('data-platform-route')&&gameId&&modes.modes(gameId).some(m=>m.id==='classroom')){const params=new URLSearchParams(location.search);classroomEntry.node.href=modes.destination(gameId,'classroom',params.get('topic')||params.get('world'));}
    const isBattle=e=>e.details.group==='multiplayer'||['battleBtn','classBtn'].includes(e.node.id)||/^(Duo|Groepsbattle|Online duo|Klasmodus|Battle met twee)/i.test(e.details.label);
    const isLearning=e=>e.details.group==='learning';
    const isProgress=e=>e.node.id==='progressBtn'||e.node.dataset.screen==='book'||/^(Mijn voortgang|Spelvoortgang)$/.test(e.details.label);
@@ -202,12 +204,16 @@ function showMenu(){
    }}
    if(game.children.length===1)game.remove();
   }
+  const requestedReturn=new URLSearchParams(location.search).get('returnTo');
+  if(requestedReturn&&window.LeraarBobRoutes){const target=window.LeraarBobRoutes.safeReturn(requestedReturn),origin=window.LeraarBobGameRegistry?.current(new URL(target,root).href);const back=section('Terug naar je leerroute','menu-options menu-return');add(back,'Terug naar '+(origin?.title||'leraarBob'),()=>location.assign(target),{glyph:'route',description:'Je bewaarde werk en geselecteerde onderdeel blijven behouden.'});}
   const platform=section('leraarBob','menu-nav menu-platform');
   add(platform,'Spellen',()=>goPlatformSection('homeGames','#ontdek'),{glyph:'home'});
   add(platform,'Klasbattle',()=>{
    if(classroomEntry){classroomEntry.node.click();return;}
    const gameId=window.LeraarBobPlayModes?.current()?.id;
-   location.assign(gameId?window.LeraarBobPlayModes.destination(gameId,'classroom'):new URL('klasbattle/',root));
+   const destination=gameId&&window.LeraarBobPlayModes.destination(gameId,'classroom');
+   if(destination){location.assign(destination);return;}
+   const hub=new URL('klasbattle/',root);hub.searchParams.set('returnTo',window.LeraarBobRoutes.safeReturn(location.href));location.assign(hub);
   },{glyph:'classroom',description:'Battles en ranglijsten voor alle spellen',source:classroomEntry?.node});
   add(platform,'Alle oefenbladen',()=>location.assign(new URL('oefenbladen.html',root)),{glyph:'pencil'});
   add(platform,'Mijn leerpad',()=>goPlatformSection('homeProgress','#playerProgress'),{glyph:'chart'});
