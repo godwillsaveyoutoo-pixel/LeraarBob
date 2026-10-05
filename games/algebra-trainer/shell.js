@@ -19,7 +19,7 @@ function mount(api){
  for(const old of menu.querySelectorAll('[data-trainer-menu],[data-nav=tools]'))old.hidden=true;
  function update(){const screen=api?.screen()||'battle',id=({trainer:'menu',work:'menu',history:'menu',systemHistory:'menu',summary:'menu',systemSummary:'menu',paper:'preview'})[screen]||screen;
   nav.querySelectorAll('a').forEach(a=>a.setAttribute('aria-current',a.dataset.section===id?'page':'false'));
-  worldLink.hidden=screen==='world';section.hidden=screen==='world'||screen==='menu';section.textContent=({setup:'Eigen reeks',preview:'Oefenblad',paper:'Oefenblad',trainer:'Oefenen',work:'Oefenen',history:'Stappen',systemHistory:'Stappen',summary:'Resultaat',systemSummary:'Resultaat',tools:'Werkvormen',battle:'Klasbattle'})[screen]||'';
+  worldLink.hidden=screen==='world';section.hidden=screen==='world'||screen==='menu';section.textContent=['trainer','work'].includes(screen)?(api?.title?.()||'Oefenen'):({setup:'Eigen reeks',preview:'Oefenblad',paper:'Oefenblad',history:'Stappen',systemHistory:'Stappen',summary:'Resultaat',systemSummary:'Resultaat',tools:'Werkvormen',battle:'Klasbattle'})[screen]||'';
  }
  new MutationObserver(update).observe(document.body,{attributes:true,attributeFilter:['data-screen']});update();
 }

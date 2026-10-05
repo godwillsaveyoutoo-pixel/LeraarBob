@@ -73,3 +73,24 @@
 .termSigns button[aria-pressed=true]{background:#d8eaf2;border-color:var(--blue);color:var(--ink)}
 .termTile:disabled{opacity:.5}
 @media(max-height:500px) and (min-width:601px){.termHead{gap:4px}.termHead>span{font-size:11px}.termHead>button{padding:0 5px!important}}
+
+/* The active side and the term actually added stay visible, including double negatives. */
+.algebraPlatform .termHead>span{font-weight:650;min-width:0}
+.algebraPlatform .termHead .termSigns{flex:none}
+.algebraPlatform .termSigns button{display:flex;align-items:center;justify-content:center;gap:4px;padding:0 6px!important;font:600 22px/1 system-ui!important}
+.algebraPlatform .termSigns button small{font:13px/1 system-ui}
+.algebraPlatform .production .termTile{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.1;overflow:hidden}
+.algebraPlatform .production .termTile .choiceMath{display:block;max-width:100%;font-size:26px;line-height:1.25}
+.algebraPlatform .production .signPreview{font:13px/1.15 system-ui;color:var(--muted);max-width:100%;white-space:normal}
+.algebraPlatform .touchField[aria-pressed=true]{box-shadow:inset 0 -3px var(--accent);background:var(--soft)}
+.algebraPlatform .touchField small{font-weight:650}
+.algebraPlatform .termLabel[role=status]{font-size:13px;line-height:1.2}
+@media(max-height:500px) and (min-width:601px){
+ .algebraPlatform .production .termTile .choiceMath{font-size:22px}
+ .algebraPlatform .termLabel[role=status]{display:none}
+ .algebraPlatform .production .termTile:has(.signPreview){min-height:58px;height:auto}
+}
+@media(max-width:600px){
+ .algebraPlatform .production .termTile .choiceMath{font-size:24px}
+ .algebraPlatform .termHead{font-size:13px;gap:5px}
+}

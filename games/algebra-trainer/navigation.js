@@ -50,7 +50,7 @@ function mount(api){
  $('#trainerProfileBtn').onclick=()=>document.getElementById('axioma-game-status')?.shadowRoot?.querySelector('.dock')?.click();
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&api.screen()==='menu'){e.preventDefault();close();}});
  $('.menuContinue').onclick=()=>{const s=api.stops().find(s=>s.id===selected);if(!s)return;if(s.current&&s.status==='Bezig'&&api.canResume())api.navigate('trainer');else api.start(s.startId||s.id);};
- window.AlgebraShell?.mount({world:api.world(),screen:api.screen,navigate:id=>id==='menu'?open():api.navigate(id)});
+ window.AlgebraShell?.mount({world:api.world(),screen:api.screen,title:api.title,navigate:id=>id==='menu'?open():api.navigate(id)});
  return {render,open,select:choose,selected:()=>selected};
 }
 window.AlgebraNavigation=Object.freeze({mount});

@@ -36,17 +36,23 @@ const server=http.createServer((req,res)=>{
     if(!root)return {missing:true};
     const visible=e=>!!e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden';
     const interactive=[...root.querySelectorAll('button,input,select,a')].filter(visible),bad=[],scroll=[],clipped=[],covered=[];
+    const allowedScroll='.tools,.board,.work-grid,#systemHistory,#systemSummary';
+    const scroller=e=>{for(let p=e.parentElement;p&&p!==document.body;p=p.parentElement){const css=getComputedStyle(p);if(p.matches(allowedScroll)&&(['auto','scroll'].includes(css.overflowY)||['auto','scroll'].includes(css.overflowX)))return p;}return null;};
+    const positions=[root,...root.querySelectorAll(allowedScroll)].filter(e=>e.matches(allowedScroll)).map(e=>[e,e.scrollTop,e.scrollLeft]);
+    const onScreen=e=>{const r=e.getBoundingClientRect(),x=r.x+r.width/2,y=r.y+r.height/2;if(x<0||y<0||x>innerWidth||y>innerHeight)return false;for(let p=e.parentElement;p&&p!==root;p=p.parentElement){const css=getComputedStyle(p),q=p.getBoundingClientRect();if(['hidden','clip','auto','scroll'].includes(css.overflowY)&&(y<q.top||y>q.bottom)||['hidden','clip','auto','scroll'].includes(css.overflowX)&&(x<q.left||x>q.right))return false;}return true;};
     for(const e of [root,...root.querySelectorAll('*')]){
      if(!visible(e)||e.closest('.katex'))continue;
-     const css=getComputedStyle(e);if(['auto','scroll'].includes(css.overflowX)&&e.scrollWidth>e.clientWidth+1||['auto','scroll'].includes(css.overflowY)&&e.scrollHeight>e.clientHeight+1)scroll.push(e.id||e.className);
+     const css=getComputedStyle(e);if(['auto','scroll'].includes(css.overflowX)&&e.scrollWidth>e.clientWidth+1||['auto','scroll'].includes(css.overflowY)&&e.scrollHeight>e.clientHeight+1){if(!e.matches(allowedScroll)&&!scroller(e))scroll.push(e.id||e.className);}
     }
-    for(const e of interactive){const r=e.getBoundingClientRect();if(r.width<43.9||r.height<43.9||r.x<-.5||r.y<-.5||r.right>innerWidth+.5||r.bottom>innerHeight+.5)bad.push({id:e.id||e.textContent,rect:r.toJSON()});if(!e.disabled&&!e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)))covered.push(e.id||e.textContent);}
+    for(const e of interactive){if(scroller(e))e.scrollIntoView({block:'nearest',inline:'nearest'});const r=e.getBoundingClientRect();if(r.width<43.9||r.height<43.9||r.x<-.5||r.y<-.5||r.right>innerWidth+.5||r.bottom>innerHeight+.5)bad.push({id:e.id||e.textContent,rect:r.toJSON()});if(!e.disabled&&!e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)))covered.push(e.id||e.textContent);}
+    for(const [e,top,left]of positions){e.scrollTop=top;e.scrollLeft=left;}
     for(const e of [...root.querySelectorAll('.katex-html .base'),...root.querySelectorAll('.taskPrompt,.systemGoal,.feedback,.status,.step-label,.production label,.summaryEvidence p')].filter(visible)){
-     const r=e.getBoundingClientRect();if(r.x<-.5||r.y<-.5||r.right>innerWidth+.5||r.bottom>innerHeight+.5)clipped.push(e.className||e.id);
+     if(scroller(e))continue;const r=e.getBoundingClientRect();if(r.x<-.5||r.y<-.5||r.right>innerWidth+.5||r.bottom>innerHeight+.5)clipped.push(e.className||e.id);
      for(let p=e.parentElement;p&&p!==document.body;p=p.parentElement){const css=getComputedStyle(p),q=p.getBoundingClientRect();if(['hidden','clip','auto','scroll'].includes(css.overflowX)&&(r.x<q.x-1||r.right>q.right+1)||['hidden','clip','auto','scroll'].includes(css.overflowY)&&(r.y<q.y-1||r.bottom>q.bottom+1)){clipped.push((p.id||p.className)+'>'+e.className);break;}}
     }
-    for(let i=0;i<interactive.length;i++)for(let j=i+1;j<interactive.length;j++){const a=interactive[i],b=interactive[j],r=a.getBoundingClientRect(),q=b.getBoundingClientRect();if(!a.contains(b)&&!b.contains(a)&&Math.min(r.right,q.right)-Math.max(r.left,q.left)>1&&Math.min(r.bottom,q.bottom)-Math.max(r.top,q.top)>1)covered.push('overlap:'+(a.id||a.textContent)+'/'+(b.id||b.textContent));}
-    const restore=document.querySelector('.lb-restore:not([hidden])');if(restore){const r=restore.getBoundingClientRect();for(const e of [...interactive,...root.querySelectorAll('h1,.taskPrompt,.systemGoal')].filter(visible)){const q=e.getBoundingClientRect();if(r.left<q.right&&r.right>q.left&&r.top<q.bottom&&r.bottom>q.top)covered.push('restore>'+e.id);}}
+    for(let i=0;i<interactive.length;i++)for(let j=i+1;j<interactive.length;j++){const a=interactive[i],b=interactive[j],r=a.getBoundingClientRect(),q=b.getBoundingClientRect();if(onScreen(a)&&onScreen(b)&&!a.contains(b)&&!b.contains(a)&&Math.min(r.right,q.right)-Math.max(r.left,q.left)>1&&Math.min(r.bottom,q.bottom)-Math.max(r.top,q.top)>1)covered.push('overlap:'+(a.id||a.textContent)+'/'+(b.id||b.textContent));}
+    for(const [e,top,left]of positions){e.scrollTop=top;e.scrollLeft=left;}
+    const restore=document.querySelector('.lb-restore:not([hidden])');if(restore){const r=restore.getBoundingClientRect();for(const e of [...interactive,...root.querySelectorAll('h1,.taskPrompt,.systemGoal')].filter(e=>visible(e)&&onScreen(e))){const q=e.getBoundingClientRect();if(r.left<q.right&&r.right>q.left&&r.top<q.bottom&&r.bottom>q.top)covered.push('restore>'+e.id);}}
     return {bad,scroll,clipped,covered,bodyScroll:document.documentElement.scrollWidth>innerWidth||document.documentElement.scrollHeight>innerHeight+1};
    });report.push({label,...result});if(JSON.stringify(result)!==JSON.stringify({bad:[],scroll:[],clipped:[],covered:[],bodyScroll:false})){await page.screenshot({path:path.join(out,'failure.png')});}
    assert.deepEqual(result,{bad:[],scroll:[],clipped:[],covered:[],bodyScroll:false},label+' '+JSON.stringify(result));
@@ -57,15 +63,15 @@ const server=http.createServer((req,res)=>{
    const S=require('../games/algebra-trainer/stelsels/core.js'),ex=S.generate(321821,level,kind);
    await page.setViewportSize({width,height});await page.evaluate(async({ex,fold})=>{AxiomaGame.storage.setItem('leraarbob.stelsels.workshop.v1',JSON.stringify({version:1,settings:{level:ex.level,method:'substitution'},exercises:[ex],index:0,work:{},screen:'work'}));LeraarBobTopbar.setCollapsed(fold);await AxiomaGame.flush();},{ex,fold});await page.reload();await ready();await layout('system start '+width+' '+fold);
   }
-  async function phase(name){await page.locator('#toolPhase').selectOption(name);await layout('phase '+name);}
+  async function phase(name){const current=await page.evaluate(()=>{const s=StelselsTrainer.snapshot();return s.work[s.exercises[s.index].id].phase;});if(current!==name)await page.locator('[data-phase="'+name+'"]').click();await layout('phase '+name);}
   async function op(row,operator,q,term='c'){
-   await phase('operate');await page.locator('[data-row="'+row+'"]').click();await page.locator('[data-op="'+operator+'"]').click();await page.locator('#operand').fill(String(q));if(['+','-'].includes(operator))await page.locator('#term').selectOption(term);
+   await phase('operate');await page.locator('[data-row="'+row+'"]').click();await page.locator('[data-op="'+operator+'"]').click();const command=await page.evaluate(({operator,q,term})=>StelselsCore.operationText(operator,StelselsCore.parse(q),term),{operator,q:String(q),term});await page.locator('#operand').fill(command);
    await page.locator('#previewOperation').click();await layout('operation preview');await page.locator('#apply').click();await layout('operation committed');
   }
   const coeff=(r,side,k)=>page.evaluate(({r,side,k})=>{const s=StelselsTrainer.snapshot(),e=s.exercises[s.index],st=s.work[e.id].steps.at(-1);return StelselsCore.text(st.system[r][side][k]);},{r,side,k});
   async function normalize(r){for(const k of ['x','y']){const q=await coeff(r,'r',k);if(q!=='0')await op(r,'-',q,k);}const q=await coeff(r,'l','c');if(q!=='0')await op(r,'-',q);}
-  async function substitute(r){await phase('substitute'); // Keep selection available through operation phase.
-   const actual=await page.evaluate(()=>{const s=StelselsTrainer.snapshot();return s.work[s.exercises[s.index].id].row||0;});if(actual!==r){await phase('operate');await page.locator('[data-row="'+r+'"]').click();await phase('substitute');}
+  async function substitute(r){
+   const actual=await page.evaluate(()=>{const s=StelselsTrainer.snapshot();return s.work[s.exercises[s.index].id].row||0;});if(actual!==r){await phase('operate');await page.locator('[data-row="'+r+'"]').click();}await phase('substitute');
    await page.locator('#previewSubstitution').click();await layout('substitution preview');await page.locator('#apply').click();await layout('raw grouped substitution');await page.locator('#simplify').click();await layout('simplified substitution');
   }
   async function solve(method){
@@ -83,11 +89,11 @@ const server=http.createServer((req,res)=>{
     }
     await normalize(1);const a=await coeff(1,'l','x'),b=await coeff(1,'l','y');if(a!=='0'||b!=='0'){const variable=a==='0'?'y':'x',factor=a==='0'?b:a;if(factor!=='1')await op(1,'/',factor);await substitute(1);await normalize(0);const factor0=await coeff(0,'l',variable==='x'?'y':'x');if(factor0!=='1')await op(0,'/',factor0);}
    }
-   await phase('answer');const sol=await page.evaluate(()=>{const s=StelselsTrainer.snapshot(),sol=s.exercises[s.index].solution;return {kind:sol.kind,x:sol.x&&StelselsCore.text(sol.x),y:sol.y&&StelselsCore.text(sol.y)};});await page.locator('#conclusion').selectOption(sol.kind);if(sol.kind==='unique'){await page.locator('#answerX').fill(sol.x);await page.locator('#answerY').fill(sol.y);}
+   await phase('answer');const sol=await page.evaluate(()=>{const s=StelselsTrainer.snapshot(),sol=s.exercises[s.index].solution;return {kind:sol.kind,x:sol.x&&StelselsCore.text(sol.x),y:sol.y&&StelselsCore.text(sol.y)};});await page.locator('[data-conclusion="'+sol.kind+'"]').click();if(sol.kind==='unique'){await page.locator('#answerX').fill(sol.x);await page.locator('#answerY').fill(sol.y);}
    await page.locator('#checkAnswer').click();await layout('solution feedback');const s=await snap();assert(s.work[s.exercises[s.index].id].done,method+' solved');
   }
   await seed(640,360,false,'unique','beginner');await page.locator('[data-method=graphic]').tap();
-  const touchPoint=await page.evaluate(()=>{const s=StelselsTrainer.snapshot(),point=StelselsCore.graphPoints(s.exercises[0].start[0])[0],svg=document.querySelector('#graph svg'),matrix=svg.getScreenCTM();return {x:matrix.a*(point.x.value()+8)*37.5+matrix.e,y:matrix.d*(8-point.y.value())*37.5+matrix.f,expectedX:StelselsCore.text(point.x),expectedY:StelselsCore.text(point.y)};});
+  const touchPoint=await page.evaluate(()=>{const s=StelselsTrainer.snapshot(),point=StelselsCore.graphPoints(s.exercises[0].start[0])[0],svg=document.querySelector('#graph svg'),board=document.querySelector('.board'),first=svg.getScreenCTM(),bounds=board.getBoundingClientRect();board.scrollTop+=first.d*(8-point.y.value())*37.5+first.f-(bounds.top+bounds.height/2);const matrix=svg.getScreenCTM();return {x:matrix.a*(point.x.value()+8)*37.5+matrix.e,y:matrix.d*(8-point.y.value())*37.5+matrix.f,expectedX:StelselsCore.text(point.x),expectedY:StelselsCore.text(point.y)};});
   await page.touchscreen.tap(touchPoint.x,touchPoint.y);const placed=await page.evaluate(()=>{const s=StelselsTrainer.snapshot(),p=s.work[s.exercises[0].id].points[0][0];return {x:StelselsCore.text(p.x),y:StelselsCore.text(p.y)}});assert.deepEqual(placed,{x:touchPoint.expectedX,y:touchPoint.expectedY});await layout('real touch graph point');await page.locator('#undo').tap();assert(await page.evaluate(()=>{const s=StelselsTrainer.snapshot();return !s.work[s.exercises[0].id].points[0][0]}));await layout('touch graph undo');await page.touchscreen.tap(touchPoint.x,touchPoint.y);
   await page.locator('leraarbob-topbar .theme-toggle').tap();await layout('dark graph');await page.screenshot({path:path.join(out,'dark-graph-640.png')});await page.evaluate(()=>AxiomaGame.flush());await page.reload();await ready();assert.equal(await page.evaluate(()=>document.documentElement.dataset.mode),'dark');await page.locator('leraarbob-topbar .theme-toggle').tap();if(process.env.STELSELS_TOUCH_ONLY){assert.deepEqual(errors,[]);console.log('PASS touch, point undo, dark graph and theme reload');return;}
   for(const [width,height] of [[640,360],[780,360],[1366,768]])for(const fold of [false,true])for(const method of ['substitution','combination','graphic']){

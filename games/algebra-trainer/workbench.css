@@ -127,3 +127,51 @@ body[data-screen=trainer] .sectionNav{display:none}
 }
 @media(max-width:400px){.trainer .trainHead h1{font-size:20px}}
 @media(forced-colors:active){.trainer .trainHead::before{background:Canvas}.contextOp,.givenRow>span,#givenEquation,.algebraReminder{background:Canvas;color:CanvasText}.contextOp{border:1px solid ButtonText}}
+
+/* An equation offers complete actions; the custom picker asks one thing at a time. */
+.algebraPlatform .trainer :is(.operationChoice,.valueBtn){position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.1;background:var(--menu-card,#fffdf8);border-color:var(--line);color:var(--ink)}
+.algebraPlatform .trainer .choiceLabel{font:600 13px/1.15 system-ui;color:inherit;white-space:normal;overflow-wrap:anywhere}
+.algebraPlatform .trainer .choiceMath{display:block;min-width:0;font-size:24px;line-height:1.2}
+.algebraPlatform .trainer .choiceMath>.katex{font-size:1em}
+.choiceShortcut{position:absolute;right:5px;top:3px;font:11px/1 system-ui;color:var(--muted);background:transparent;pointer-events:none}
+.algebraPlatform .trainer .opBtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px;font-size:26px;min-width:0;min-height:62px;height:auto}
+.algebraPlatform .trainer .opBtn small{font:600 13px/1.15 system-ui;max-width:100%;overflow-wrap:anywhere}
+.algebraPlatform .trainer .opBtn.active small{color:inherit}
+.algebraPlatform .manualOperations[data-stage=operand] .ops{display:none}
+.algebraPlatform .trainer .operandLabel{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:0 0 6px;font:600 13px/1.2 system-ui;min-width:0}
+.operandLabel span{min-width:0}
+.algebraPlatform .trainer #changeOperationBtn{flex:none;min-height:44px;padding:4px 7px;font:12px/1.15 system-ui;max-width:104px;background:transparent;color:var(--ink);border:1px solid var(--line)}
+.algebraPlatform .trainer #valueGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.algebraPlatform .trainer .ops{grid-template-columns:repeat(2,minmax(0,1fr))}
+.algebraPlatform .trainer .contextOperations{grid-template-columns:repeat(2,minmax(0,1fr))}
+.algebraPlatform .trainer .contextOp{height:auto;min-height:64px;padding:6px}
+.algebraPlatform .trainer .opRail{overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;scroll-padding-top:48px;justify-content:flex-start}
+.algebraPlatform .trainer .operationHead{position:sticky;top:0;z-index:1;background:var(--paper);padding-bottom:4px}
+.algebraPlatform .trainer :is(.contextOperations,.manualOperations,.production){flex-shrink:0}
+.algebraPlatform .trainer .valuePages{gap:4px;margin-top:4px}
+.algebraPlatform .trainer .valuePages output{flex:1;font-size:12px}
+.algebraPlatform .trainer button:focus-visible{outline:3px solid #e97615;outline-offset:2px}
+@media(max-height:500px) and (min-width:601px){
+ .algebraPlatform .trainer .choiceMath{font-size:23px}
+ .algebraPlatform .trainer .operandLabel{margin-bottom:3px;font-size:12px}
+ .choiceShortcut{display:none}
+}
+@media(max-width:600px){
+ .algebraPlatform .trainer .choiceMath{font-size:24px}
+ .algebraPlatform .trainer .mathArea{min-height:88px;container-type:size;container-name:algebra-math}
+ .algebraPlatform .trainer .opRail{max-height:min(34dvh,max(88px,calc(100dvh - var(--lb-header-height,80px) - 44px - 44px - 92px - 200px - 24px)))}
+ .choiceShortcut{display:none}
+}
+@container algebra-math (max-height:136px){
+ .previousEquation{display:none}
+}
+.algebraPlatform .trainer button[data-op-kind=add]{background:#e1f2eb;border-color:#9ecbb7;color:#23664c;-webkit-text-fill-color:currentColor}
+.algebraPlatform .trainer button[data-op-kind=subtract]{background:#e7effb;border-color:#a6bedf;color:#244e8d;-webkit-text-fill-color:currentColor}
+.algebraPlatform .trainer button[data-op-kind=multiply]{background:#f0e6f8;border-color:#cbb0df;color:#69428c;-webkit-text-fill-color:currentColor}
+.algebraPlatform .trainer button[data-op-kind=divide]{background:#fff0dc;border-color:#ddbd8c;color:#875000;-webkit-text-fill-color:currentColor}
+.algebraPlatform .trainer button[data-op-kind]:hover:not(:disabled){filter:brightness(.97);border-color:currentColor}
+.algebraPlatform .trainer button[data-op-kind][aria-pressed=true]{box-shadow:inset 0 0 0 2px currentColor}
+html[data-mode=dark] .algebraPlatform .trainer button[data-op-kind=add]{background:#1c4937;border-color:#50846b;color:#bcead3}
+html[data-mode=dark] .algebraPlatform .trainer button[data-op-kind=subtract]{background:#263e62;border-color:#607fa7;color:#d6e4ff}
+html[data-mode=dark] .algebraPlatform .trainer button[data-op-kind=multiply]{background:#472d56;border-color:#916aa7;color:#edcffc}
+html[data-mode=dark] .algebraPlatform .trainer button[data-op-kind=divide]{background:#503a17;border-color:#a17c42;color:#ffdfaa}

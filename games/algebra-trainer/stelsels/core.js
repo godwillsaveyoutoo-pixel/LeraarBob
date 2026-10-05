@@ -9,8 +9,29 @@ const add=(a,b)=>expr(a.x.add(b.x),a.y.add(b.y),a.c.add(b.c));
 const scale=(a,k)=>expr(a.x.mul(k),a.y.mul(k),a.c.mul(k));
 const sub=(a,b)=>add(a,scale(b,R(-1)));
 const reduced=e=>sub(e.l,e.r);
-function parse(s){s=String(s).trim().replace(',','.');if(!/^[+-]?(?:\d{1,6}(?:\.\d{1,4})?|\d{1,6}\s*\/\s*[+-]?\d{1,6})$/.test(s))throw Error('Gebruik een getal, bijvoorbeeld −2, 0,5 of 1/2.');if(s.includes('/')){const [n,d]=s.split('/').map(Number);return R(n,d)}const n=Number(s),d=s.includes('.')?10**s.split('.')[1].length:1;return R(Math.round(n*d),d)}
+function parse(s){s=String(s).trim().replace(/[−–]/g,'-').replace(',','.');if(!/^[+-]?(?:\d{1,6}(?:\.\d{1,4})?|\d{1,6}\s*\/\s*[+-]?\d{1,6})$/.test(s))throw Error('Gebruik een getal, bijvoorbeeld −2, 0,5 of 1/2.');if(s.includes('/')){const [n,d]=s.split('/').map(Number);return R(n,d)}const n=Number(s),d=s.includes('.')?10**s.split('.')[1].length:1;return R(Math.round(n*d),d)}
 const text=q=>q.d===1?String(q.n):`${q.n}/${q.d}`;
+// One written action, e.g. -y or ÷-2, rather than a sign hidden in two controls.
+function operationText(op,value,term='c'){
+ value=R(value);if(!['+','-','*','/'].includes(op)||!['x','y','c'].includes(term))throw Error('Kies een geldige bewerking.');
+ if(['*','/'].includes(op)){if(term!=='c')throw Error('Vermenigvuldig of deel door een getal, bijvoorbeeld ÷2.');return (op==='*'?'×':'÷')+text(value);}
+ if(value.n<0){value=value.neg();op=op==='-'?'+':'-';}
+ return op+(term!=='c'&&value.isOne()?'':text(value))+(term==='c'?'':term);
+}
+function parseOperation(input,fallbackOp='-'){
+ let body=String(input).trim().replace(/[−–]/g,'-').replace(/[×·]/g,'*').replace(/÷/g,'/').replace(/\s+/g,'');
+ if(!body)throw Error('Vul een bewerking in, bijvoorbeeld −y, +3x of ÷2.');
+ let op=fallbackOp;if(/^[+*/-]/.test(body)){op=body[0];body=body.slice(1);}
+ if(!['+','-','*','/'].includes(op))throw Error('Kies optellen, aftrekken, vermenigvuldigen of delen.');
+ const term=/[xy]$/i.test(body)?body.at(-1).toLowerCase():'c';if(term!=='c')body=body.slice(0,-1);
+ if(['*','/'].includes(op)&&term!=='c')throw Error('Vermenigvuldig of deel door een getal, bijvoorbeeld ÷2.');
+ const value=parse(body||(term==='c'?'': '1'));
+ const command=operationText(op,value,term);
+ // Fold a negative denominator or a second sign into the single visible action.
+ if(['+','-'].includes(op)&&value.n<0){op=op==='-'?'+':'-';return {op,value:value.neg(),term,command};}
+ return {op,value,term,command};
+}
+
 function format(e,tex=false){let out='';for(const k of ['x','y','c']){const q=e[k];if(q.isZero())continue;const a=q.abs();let term=k==='c'||!a.isOne()?(tex?C.ratLatex(a,{}):text(a)):'';if(k!=='c')term+=k;out+=(out?(q.n<0?' − ':' + '):(q.n<0?'−':''))+term}return out||'0'}
 const eqText=(e,tex=false)=>format(e.l,tex)+' = '+format(e.r,tex);
 const systemTex=(s,raw)=>'\\left\\{\\begin{aligned}'+s.map((e,i)=>raw&&raw.row===i?raw.tex:eqText(e,true)).join('\\\\')+'\\end{aligned}\\right.';
@@ -45,5 +66,5 @@ function canonical(ex,method='substitution'){
 }
 function graphPoints(e){const points=[];for(let x=-8;x<=8;x++){const r=reduced(e);if(!r.y.isZero()){const y=r.x.mul(R(x)).add(r.c).neg().div(r.y);if(Math.abs(y.value())<=8)points.push({x:R(x),y})}}if(!points.length){const r=reduced(e);if(!r.x.isZero()){const x=r.c.neg().div(r.x);points.push({x,y:R(-3)},{x,y:R(3)})}}return [points[0],points.at(-1)]}
 function revive(s){return JSON.parse(s,(k,v)=>v&&typeof v==='object'&&Object.keys(v).length===2&&Number.isSafeInteger(v.n)&&Number.isSafeInteger(v.d)?R(v.n,v.d):v)}
-return {R,Rat,expr,equation,clone,add,scale,sub,reduced,parse,text,format,eqText,systemTex,solution,operate,isolated,substitute,combine,solved,containsPoint,generate,canonical,graphPoints,revive};
+return {R,Rat,expr,equation,clone,add,scale,sub,reduced,parse,parseOperation,operationText,text,format,eqText,systemTex,solution,operate,isolated,substitute,combine,solved,containsPoint,generate,canonical,graphPoints,revive};
 });

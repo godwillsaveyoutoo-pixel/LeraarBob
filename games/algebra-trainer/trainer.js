@@ -12,7 +12,7 @@ let trainerStates=[];
 let trainerStepLog=[];
 let selectedOp=null;
 let manualOpen=false,valuePage=0;let navigation=null;
-const VALUE_PAGE_SIZE=2;
+const VALUE_PAGE_SIZE=6;
 let currentSolved=false;
 let settingsDirty=true;
 let screen='menu',restoring=false,perExercise={},solvedTypes=new Set();
@@ -158,7 +158,15 @@ function stepText(op,operand,policy){
 function actionLatex(op,operand,policy){
   const expression=latexExpr(operand,policy);
   const symbol=op==='*'?'\\cdot':op==='/'?'\\div':op==='-'?'-':'+';
-  return `${symbol}\\;${operand.t==='add'?`\\left(${expression}\\right)`:expression}`;
+  return `${symbol}\\;${operand.t==='add'||splitSign(operand).neg?`\\left(${expression}\\right)`:expression}`;
+}
+const operationNames={'+':'Optellen','-':'Aftrekken','*':'Vermenigvuldigen','/':'Delen'};
+const operationKinds={'+':'add','-':'subtract','*':'multiply','/':'divide'};
+function choiceMath(tex,index,label=''){return (label?'<small class="choiceLabel">'+escapeHTML(label)+'</small>':'')+'<span class="choiceMath">'+texHTML(tex)+'</span><kbd class="choiceShortcut" aria-hidden="true">'+(index+1)+'</kbd>';}
+function termChoice(item,sign,policy,index){
+ const added=sign==='-'?negExpr(cloneExpr(item.expr)):item.expr;
+ const tex=latexExpr(added,policy);
+ return choiceMath(tex,index)+(sign==='-'&&splitSign(item.expr).neg?'<small class="signPreview">− ('+escapeHTML(fallbackText(item.tex))+') = '+escapeHTML(fallbackText(tex))+'</small>':'');
 }
 function task(){return learningRun?.tasks[trainerIndex]||null}
 function result(){return learningRun?.results[trainerIndex]||null}
@@ -262,7 +270,7 @@ function renderTouchAnswer(){
  if(t.kind==='repair'&&r.location!=='group'&&!r.done){host.innerHTML='<div class="verifyCandidate"><small>Foute regel</small>'+texHTML(latexEq(t.fault,t.ex.policy))+'</div><p class="touchPrompt">Vergelijk met de haakjes bovenaan.</p>';return;}
  const labels={lhs:'Links',rhs:'Rechts',input:'Ontbrekend getal'};
  const context=t.kind==='repair'?'<div class="touchContext"><small>Foute regel</small>'+texHTML(latexEq(t.fault,t.ex.policy))+'</div>':'';
- host.innerHTML=context+'<div class="touchFields">'+names.map((name,i)=>(i?'<span class="touchEquals">=</span>':'')+'<button type="button" class="touchField" data-edit-field="'+name+'" aria-label="'+labels[name]+'" aria-pressed="'+(name===touchField)+'" '+(r.done?'disabled':'')+'><small>'+labels[name]+'</small><span class="touchFieldMath" data-answer-name="'+name+'"></span></button>').join('')+'</div><p class="touchPrompt">'+(r.done?'Jouw regel klopt.':'Kies een term. Kies daarna + of − en de volgende term.')+'</p>';
+ host.innerHTML=context+'<div class="touchFields">'+names.map((name,i)=>(i?'<span class="touchEquals">=</span>':'')+'<button type="button" class="touchField" data-edit-field="'+name+'" aria-label="'+labels[name]+' bewerken" aria-keyshortcuts="'+(name==='lhs'?'L':name==='rhs'?'R':'')+'" aria-pressed="'+(name===touchField)+'" '+(r.done?'disabled':'')+'><small>'+labels[name]+(name===touchField&&!r.done?' · actief':'')+'</small><span class="touchFieldMath" data-answer-name="'+name+'"></span></button>').join('')+'</div><p class="touchPrompt">'+(r.done?'Jouw regel klopt.':'Kies een bouwsteen voor '+(touchField==='lhs'?'links':'rechts')+'.')+'</p>';
  if(t.kind==='build')host.querySelector('.touchPrompt').textContent=r.done?'Het getal klopt.':'Kies het getal dat in het vak past.';
  host.querySelectorAll('[data-answer-name]').forEach(el=>{const name=el.dataset.answerName,items=blocks[name]||[],base=items.length?AlgebraTouch.blockTex(items,t.ex.policy):touchValue(name)?AlgebraTouch.preview(touchValue(name)):'',sign=r.pendingSigns?.[name],tex=(base+(sign?' '+sign+' \\square':''))||'\\square';el.dataset.mathTex=tex;el.innerHTML=texHTML(tex);});
  host.querySelectorAll('[data-edit-field]').forEach(el=>el.onclick=()=>{touchField=el.dataset.editField;renderTouchAnswer();renderProduction();});fitMath();
@@ -316,17 +324,17 @@ function renderProduction(){
  form.classList.toggle('fractionProduction',t.kind==='fractions');
  if(t.kind==='fractions'){fractionView.renderControls(t,r);return;}
  const touch=touchKinds.includes(t.kind);form.classList.toggle('touchProduction',touch);let fields='';
- if(t.kind==='routes')fields=t.routes.map((st,i)=>`<button type="button" data-route="${i}" aria-pressed="${r.choice===String(i)}">${escapeHTML(L.operationText(st,t.ex.policy))} op beide leden</button>`).join('');
+ if(t.kind==='routes')fields=t.routes.map((st,i)=>`<button type="button" class="operationChoice" data-route="${i}" data-op-kind="${operationKinds[st.op]}" aria-pressed="${r.choice===String(i)}" aria-keyshortcuts="${i+1}" aria-label="${escapeHTML(L.operationText(st,t.ex.policy))} op beide leden">${choiceMath(actionLatex(st.op,st.operand,t.ex.policy),i,operationNames[st.op])}</button>`).join('');
  else if(!r.done){
   if(t.kind==='verify'){
    const phase=verifyPhase();
    if(phase===0)fields='<button type="button" id="substituteBtn" class="primarybtn">Vervang x door '+texHTML(AlgebraCore.ratLatex(t.proposed,'auto',t.ex.policy))+'</button>';
    else if(phase===3)fields='<div class="verifyChoice"><button type="button" data-answer="yes">Gelijk '+texHTML('=')+'</button><button type="button" data-answer="no">Verschillend '+texHTML('\\ne')+'</button></div>';
-   else{const options=AlgebraTouch.valueChoices(t,phase===1?'left':'right');fields='<p class="termLabel">Kies de uitkomst '+(phase===1?'links':'rechts')+'</p><div class="termPalette">'+options.map((item,i)=>'<button type="button" class="termTile" data-proof-value="'+i+'">'+texHTML(item.tex)+'</button>').join('')+'</div>';}
+   else{const options=AlgebraTouch.valueChoices(t,phase===1?'left':'right');fields='<p class="termLabel">Uitkomst '+(phase===1?'links':'rechts')+'</p><div class="termPalette">'+options.map((item,i)=>'<button type="button" class="termTile" data-proof-value="'+i+'" aria-keyshortcuts="'+(i+1)+'">'+choiceMath(item.tex,i)+'</button>').join('')+'</div>';}
   }else if(t.kind==='repair'&&r.location!=='group'){fields='<p class="termLabel">Waar zit de fout?</p><div class="faultChoices"><button type="button" data-location="group">Term uit de haakjes</button><button type="button" data-location="both">Rechter lid</button></div>';}else{
    const options=AlgebraTouch.palette(t),name=t.kind==='build'?'dit vak':touchField==='lhs'?'links':'rechts',sign=r.pendingSigns?.[touchField],needsSign=t.kind!=='build'&&touchBlocks()[touchField]?.length&&!sign;
-   const signs=t.kind==='build'?'':'<div class="termSigns" role="group" aria-label="Teken voor de volgende term">'+['+','-'].map(op=>'<button type="button" data-term-sign="'+op+'" aria-label="'+(op==='+'?'Optellen':'Aftrekken')+'" aria-pressed="'+(sign===op)+'">'+(op==='+'?'+':'−')+'</button>').join('')+'</div>';
-   fields='<div class="termHead"><span>Bouwstenen</span>'+signs+'<button type="button" data-edit-action="clear">Wis '+name+'</button></div><div class="termPalette">'+options.map((item,i)=>'<button type="button" class="termTile" '+(needsSign?'disabled ':'')+'data-term="'+item.key+'" data-term-index="'+i+'" aria-label="Bouwsteen '+escapeHTML(fallbackText(item.tex))+'">'+texHTML(item.tex)+'</button>').join('')+'</div>';
+   const signs=t.kind==='build'?'':'<div class="termSigns" role="group" aria-label="Teken voor de volgende bouwsteen">'+['+','-'].map(op=>'<button type="button" data-term-sign="'+op+'" data-op-kind="'+operationKinds[op]+'" aria-label="'+(op==='+'?'Volgende bouwsteen optellen':'Volgende bouwsteen aftrekken')+'" aria-keyshortcuts="'+op+'" aria-pressed="'+(sign===op)+'">'+(op==='+'?'+':'−')+'<small>term</small></button>').join('')+'</div>';
+   fields='<div class="termHead"><span>'+ (t.kind==='build'?'Kies het getal':'Bouw '+name)+'</span>'+signs+'<button type="button" data-edit-action="clear">Wis</button></div><p class="termLabel" role="status">'+(needsSign?'Kies + of − voor de volgende bouwsteen.':sign==='-'?'Nieuwe term na −':sign==='+'?'Nieuwe term na +':'Kies een bouwsteen.')+'</p><div class="termPalette">'+options.map((item,i)=>'<button type="button" class="termTile" '+(needsSign?'disabled ':'')+'data-term="'+item.key+'" data-term-index="'+i+'" aria-keyshortcuts="'+(i+1)+'" aria-label="Voeg '+escapeHTML(fallbackText(latexExpr(sign==='-'?negExpr(item.expr):item.expr,t.ex.policy)))+' toe '+name+'">'+termChoice(item,sign,t.ex.policy,i)+'</button>').join('')+'</div>';
   }
  }
  form.innerHTML=fields+(r.done?'<p class="productionSuccess">✓ Opdracht afgerond</p>':touch?'':'<button class="primarybtn" type="submit">Controleer →</button>');
@@ -357,16 +365,17 @@ function renderTrainer(animateNew=false){
   renderDerivation(animateNew);
   trainProgress.textContent=`${trainerIndex+1} / ${activeSet.length}`;
   trainProgress.title=TYPES.find(t=>t.id===ex.type)?.label||ex.type;
-  $('#operationTitle').textContent=currentSolved?'Afgerond':production?({predict:'Produceer de volgende regel',repair:'Lokaliseer en herstel',expand:'Werk zelf uit',build:'Bouw de vergelijking',verify:'Controleer door invullen',routes:'Vergelijk routes',fractions:'Breuken'})[t.kind]:manualOpen?'Bewerking op beide leden':'Kies een bewerking';
-  $('#moreOperationsBtn').textContent=manualOpen?'Terug':'Andere';
+  $('#operationTitle').textContent=currentSolved?'Afgerond':production?({predict:'Nieuwe regel',repair:'Herstel de regel',expand:'Werk de haakjes uit',build:'Vul aan',verify:'Controleer x',routes:'Kies je bewerking',fractions:'Breuken'})[t.kind]:manualOpen?'Eigen bewerking':'Op beide leden';
+  $('#moreOperationsBtn').textContent=manualOpen?'Bij deze regel':'Eigen keuze';
   $('#moreOperationsBtn').hidden=currentSolved||production;
   $('#moreOperationsBtn').setAttribute('aria-expanded',String(manualOpen));
   $('#solvedNote').classList.toggle('hidden',!currentSolved);
   $('#manualOperations').classList.toggle('hidden',!manualOpen||currentSolved||production);
+  $('#manualOperations').dataset.stage=selectedOp?'operand':'operation';
   const direct=$('#contextOperations');
   direct.classList.toggle('hidden',manualOpen||currentSolved||production);
-  const operations=contextOperations(ex,eq);if(t&&!t.guided&&!manualOpen&&!production&&!currentSolved){manualOpen=true;$('#manualOperations').classList.remove('hidden');direct.classList.add('hidden');$('#operationTitle').textContent='Taak: maak x vrij';}
-  direct.innerHTML=operations.map((choice,i)=>`<button class="contextOp ${choice.op==='*'||choice.op==='/'?'is-scale':''}" data-choice="${i}" aria-label="${escapeHTML(stepText(choice.op,choice.operand,ex.policy))}">${texHTML(actionLatex(choice.op,choice.operand,ex.policy))}</button>`).join('');
+  const operations=contextOperations(ex,eq);
+  direct.innerHTML=operations.map((choice,i)=>`<button class="contextOp operationChoice ${choice.op==='*'||choice.op==='/'?'is-scale':''}" data-choice="${i}" data-op-kind="${operationKinds[choice.op]}" aria-keyshortcuts="${i+1}" aria-label="${escapeHTML(stepText(choice.op,choice.operand,ex.policy))}">${choiceMath(actionLatex(choice.op,choice.operand,ex.policy),i,operationNames[choice.op])}</button>`).join('');
   direct.querySelectorAll('.contextOp').forEach((button,i)=>button.onclick=()=>performOperation(operations[i].op,operations[i].operand));
 
   document.querySelectorAll('.opBtn').forEach(b=>b.classList.toggle('active',b.dataset.op===selectedOp));
@@ -374,11 +383,12 @@ function renderTrainer(animateNew=false){
     const vals=candidateOperands(ex,eq,selectedOp);
     const pages=Math.ceil(vals.length/VALUE_PAGE_SIZE);valuePage=Math.max(0,Math.min(valuePage,pages-1));
     valueZone.classList.remove('hidden');
-    valueGrid.innerHTML=vals.slice(valuePage*VALUE_PAGE_SIZE,(valuePage+1)*VALUE_PAGE_SIZE).map((v,i)=>`<button class="valueBtn" data-index="${valuePage*VALUE_PAGE_SIZE+i}" aria-label="${escapeHTML(stepText(selectedOp,v,ex.policy))}"><span data-tex="${escapeHTML(latexExpr(v,ex.policy))}"></span></button>`).join('');
+    $('#valueChoiceLabel span').textContent=({'+':'Wat tel je op?','-':'Wat trek je af?','*':'Waarmee vermenigvuldig je?','/':'Waardoor deel je?'})[selectedOp];
+    valueGrid.innerHTML=vals.slice(valuePage*VALUE_PAGE_SIZE,(valuePage+1)*VALUE_PAGE_SIZE).map((v,i)=>`<button class="valueBtn" data-index="${valuePage*VALUE_PAGE_SIZE+i}" data-op-kind="${operationKinds[selectedOp]}" aria-keyshortcuts="${i+1}" aria-label="${escapeHTML(stepText(selectedOp,v,ex.policy))}">${choiceMath(actionLatex(selectedOp,v,ex.policy),i)}</button>`).join('');
     renderMathNodes(valueGrid);
     valueGrid.querySelectorAll('.valueBtn').forEach(btn=>btn.onclick=()=>performOperation(selectedOp,vals[Number(btn.dataset.index)]));
     $('#valuePages').hidden=pages<=1;
-    $('#valuePageLabel').textContent=`${valuePage+1} / ${pages}`;
+    $('#valuePageLabel').textContent=`Keuzes ${valuePage*VALUE_PAGE_SIZE+1}–${Math.min((valuePage+1)*VALUE_PAGE_SIZE,vals.length)} / ${vals.length}`;
     $('#prevValuesBtn').disabled=valuePage===0;$('#nextValuesBtn').disabled=valuePage>=pages-1;
   }else valueZone.classList.add('hidden');
 
@@ -399,17 +409,43 @@ function startExercise(index){
   derivationStack.innerHTML='';
   renderTrainer(true);
 }
-document.querySelectorAll('.opBtn').forEach(b=>b.onclick=()=>{
+const valueChoiceLabel=document.createElement('div');valueChoiceLabel.id='valueChoiceLabel';valueChoiceLabel.className='operandLabel';valueChoiceLabel.innerHTML='<span></span><button type="button" id="changeOperationBtn">Bewerking wijzigen</button>';valueZone.prepend(valueChoiceLabel);
+$('#changeOperationBtn').onclick=()=>{selectedOp=null;valuePage=0;renderTrainer();$('#manualOperations .opBtn').focus({preventScroll:true});};
+document.querySelectorAll('.opBtn').forEach(b=>{b.dataset.opKind=operationKinds[b.dataset.op];b.innerHTML='<span class="opSymbol" aria-hidden="true">'+({'+':'+','-':'−','*':'·','/':'÷'})[b.dataset.op]+'</span><small>'+operationNames[b.dataset.op]+'</small>';b.setAttribute('aria-keyshortcuts',b.dataset.op);b.onclick=()=>{
   if(currentSolved)return;
   manualOpen=true;valuePage=0;
   selectedOp=selectedOp===b.dataset.op?null:b.dataset.op;
   feedback.className='feedback';
-  feedback.textContent=selectedOp?'Kies nu waarmee je die bewerking op beide leden uitvoert.':'Kies een bewerking.';
+  feedback.textContent='';
   renderTrainer();
-});
+};});
 $('#moreOperationsBtn').onclick=()=>{manualOpen=!manualOpen;selectedOp=null;valuePage=0;renderTrainer()};
 $('#prevValuesBtn').onclick=()=>{valuePage--;renderTrainer()};
 $('#nextValuesBtn').onclick=()=>{valuePage++;renderTrainer()};
+document.addEventListener('keydown',event=>{
+ if(screen!=='trainer'||lesson||motionPlayer.active||event.repeat||event.ctrlKey||event.metaKey||event.altKey||document.querySelector('dialog[open]'))return;
+ // Account/menu controls (including the shared topbar's shadow DOM) keep their
+ // own keyboard behavior. Exercise shortcuts are local to the workboard.
+ if(event.target!==document.body&&event.target!==document.documentElement&&!trainerScreen.contains(event.target))return;
+ if(event.target.closest('input,textarea,select,[contenteditable="true"]'))return;
+ const visible=el=>el&&el.getClientRects().length&&!el.closest('.hidden,[hidden]');
+ let button=null;const key=event.key.toLowerCase(),t=task();
+ if(/^[1-6]$/.test(key)){
+  const choices=[...document.querySelectorAll('#contextOperations button,#valueGrid button,#production [data-term],#production [data-proof-value],#production [data-route],#production [data-answer],#production [data-fraction-route],#production [data-fraction-number],#production [data-fraction-operation],#production [data-fraction-index]')].filter(visible);
+  button=choices[Number(key)-1];
+ }else if(['+','-','*','/'].includes(key)){
+  button=t?.kind==='fractions'?$('#production [data-fraction-sign="'+key+'"]'):t&&touchKinds.includes(t.kind)?$('#production [data-term-sign="'+key+'"]'):$('.opBtn[data-op="'+key+'"]');
+  // The manual picker is the same control opened by its visible menu button.
+  if(button?.classList.contains('opBtn')&&!currentSolved){manualOpen=true;$('#manualOperations').classList.remove('hidden');$('#manualOperations').dataset.stage='operation';}
+ }else if(['l','r','='].includes(key)){
+  const side=key==='='?(t?.kind==='fractions'?result().fraction?.field:touchField)==='lhs'?'rhs':'lhs':key==='l'?'lhs':'rhs';
+  button=t?.kind==='fractions'?$('[data-fraction-field="'+side+'"]'):$('[data-edit-field="'+side+'"]');
+ }else if(key==='backspace')button=$('#undoBtn');
+ else if(key==='enter'&&!event.target.closest('button,a'))button=currentSolved?$('#nextExerciseBtn'):visible($('#substituteBtn'))?$('#substituteBtn'):visible($('#checkBtn'))?$('#checkBtn'):$('#production button[type="submit"]');
+ else if(key==='pagedown')button=$('#nextValuesBtn');
+ else if(key==='pageup')button=$('#prevValuesBtn');
+ if(visible(button)&&!button.disabled){event.preventDefault();button.click();}
+});
 $('#checkBtn').onclick=()=>{
   if(task()&&touchKinds.includes(task().kind)){$('#production').requestSubmit();return;}
   const checked=checkProgress(currentEquation());

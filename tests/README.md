@@ -477,7 +477,7 @@ Zie [v10-verslag](../docs/v10-online-duo.md) voor uitrol en resterende grenzen.
 
 ## Algebra Trainer
 
-De huidige Algebrawereld 0.5.0 en centrale Klasbattle worden beschreven in
+De huidige Algebrawereld 0.5.1 en centrale Klasbattle worden beschreven in
 [`docs/klasbattle/README.md`](../docs/klasbattle/README.md). Nieuwe lokale proeven:
 
 ```bash
@@ -491,6 +491,21 @@ NODE_PATH=/pad/naar/node_modules ALGEBRA_CHROMIUM_PATH=/pad/naar/chromium node t
 ```
 
 `node --test tests/algebra-trainer.test.cjs` controleert alle 17 vormen met exacte breuken. `node tests/algebra-trainer-browser.cjs` gebruikt dezelfde geïsoleerde browser en webserver als de Rechtenwereld-releaseproeven en controleert formaat, navigatie, hervatten, afdrukken, accountwissel en offline opslag.
+
+De invoerproeven gebruiken fictieve accounts en blokkeren externe diensten:
+
+```bash
+node --test tests/stelsels-workshop.test.cjs tests/algebra-v04-choices.test.cjs
+NODE_PATH=/pad/naar/node_modules ALGEBRA_CHROMIUM_PATH=/pad/naar/chromium node tests/algebra-operation-editor-browser.cjs
+NODE_PATH=/pad/naar/node_modules ALGEBRA_CHROMIUM_PATH=/pad/naar/chromium node tests/algebra-intuitive-browser.cjs
+```
+
+Deze controleren de zichtbare bewerkingen, toetsenbediening, dubbele mintekens,
+letterlijke stelselinvoer zoals `-y`, de volledige formules op kleine schermen,
+ongedaan maken en behoud van werk bij inklappen en herladen. Met
+`ALGEBRA_PUBLIC_URL=https://godwillsaveyoutoo-pixel.github.io/LeraarBob` kan de
+laatste proef dezelfde bediening op de gepubliceerde versie controleren;
+accounts en voortgang blijven daarbij fictief.
 
 ## Rechtenwereld: XP naar het centrale profiel
 

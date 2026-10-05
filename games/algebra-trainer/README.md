@@ -1,9 +1,30 @@
-# Algebrawereld v0.5.0
+# Algebrawereld v0.5.1
 
 De platformversie uit `Axioma-Algebrawereld-v0.4.5.zip` vervangt het eerdere
 algebraspel op dezelfde ingang: `games/algebra-trainer/`. De spel-id
 `algebra-trainer`, het centrale account en de bestaande opslagsleutels blijven
 behouden. De catalogus toont één hoofdkaart voor Algebrawereld.
+
+## Leesbare bewerkingen
+
+Stelsels gebruikt één bewerkingsveld: `−y`, `+3x`, `÷2` of `×−2`.
+De leerling hoeft een losse letter niet als coëfficiënt `1` in een getalveld
+te vertalen. De knoppen benoemen de bewerking, de geselecteerde vergelijking
+heeft een eigen kleur en een korte vooruitblik toont wat aan beide leden
+gebeurt. Enter opent de vooruitblik; een aparte actie voert de stap uit.
+Een oude opgeslagen keuze van teken/getal/letter wordt exact naar deze
+invoer vertaald. De bestaande uitwerking en beloningen blijven staan.
+
+De handelingen volgen de huidige uitwerking: bewerken, invullen wanneer een
+onbekende vrijstaat, combineren bij die methode, en de oplossing controleren.
+Getallen, letters en tekens hebben directe toetsen. Combinatie en aantal
+oplossingen gebruiken zichtbare keuzeknoppen.
+
+Vergelijkingen toont herkenbare complete acties met naam en formule. Een
+eigen bewerking wordt in twee stappen gekozen: de bewerking, dan een passende
+waarde. Termen en breuken laten de actieve invoer en het effect van het teken
+zien. Leesbare labels blijven aanwezig op een telefoon; op korte schermen
+scrollt de bediening binnen haar eigen paneel.
 
 ## Startmenu en hervatten
 
@@ -76,9 +97,8 @@ bouwen kiest de leerling expliciet + of − tussen termen. Vermenigvuldigen
 wordt met de maalpunt · aangeduid. De breukenhalte biedt Gelijknamig maken,
 Noemers wegwerken en eigen opbouw van de volledige volgende regel.
 
-Het kaartjesmenu biedt Vrij oefenen, Oefenblad en Klasbattle.
-**Werkvormen** in het gedeelde menu biedt ook vrije reeksen, oefenbladen met
-verbetersleutel, stelsels, machten en wortels en de bestaande klasbattles.
+Het kaartjesmenu biedt een levelselectie met Spelen en Oefenblad. Klasbattle
+staat naast Werelden en Levels in de vaste navigatie.
 De stelselsmodule behoudt grafisch oplossen, substitutie en combinatie.
 De oudere wereldkaart blijft beschikbaar via `legacy.html`.
 

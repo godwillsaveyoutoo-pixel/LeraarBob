@@ -44,3 +44,13 @@ body.fraction-writing .givenRow>span{font-size:12px}
  .fractionOperations button{min-height:54px}
  .fractionProduction .termPalette{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
+.fractionChoiceHead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.fractionChoiceHead button{flex:none;max-width:110px;font-size:12px;min-height:44px}
+.fractionNumbers button{position:relative;display:flex;align-items:center;justify-content:center}
+.algebraPlatform .fractionOperations .operationChoice .choiceMath{font-size:24px}
+.algebraPlatform .fractionOperations .operationChoice .choiceLabel{font-size:13px}
+.algebraPlatform .fractionProduction .termTile .choiceMath{font-size:24px;line-height:1.6}
+@media(max-height:500px) and (min-width:601px){
+ .fractionChoiceHead{gap:4px}.fractionChoiceHead .fractionLabel{font-size:14px}
+ .algebraPlatform .fractionOperations .operationChoice .choiceMath{font-size:22px}
+}

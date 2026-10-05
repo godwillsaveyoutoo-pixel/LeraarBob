@@ -1,7 +1,7 @@
 /* Contextual controls for the solo paper workbench. Shared battle math stays in core.js. */
 (function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory(require('./core.js'));else root.AlgebraWorkbench=factory(root.AlgebraCore);})(globalThis,function(C){
 'use strict';
-const {R,N,isNum,simplify,exprSig,exprIsZero,containsVar,linearCoeff,topTerms,absExpr,outerScalar,candidateOperands}=C;
+const {N,simplify,exprSig,exprIsZero,containsVar,linearCoeff,topTerms,absExpr,outerScalar,candidateOperands}=C;
 // Paired choices describe the current equation, without ranking a solution path.
 // The full operand picker remains available for every equivalent detour.
 function contextOperations(ex,eq){
@@ -27,12 +27,8 @@ function contextOperations(ex,eq){
   // Undo a factor in either notation: ÷ a and · (1/a).
   // Reserve both places before filling the compact menu with extra choices.
   if(scalar){add('/',N(scalar));add('*',N(C.reciprocal(scalar)));}
-  else{add('/',N(2));add('*',N(2));}
-  for(const op of ['/','*','-','+'])for(const operand of candidateOperands(ex,eq,op)){
-    if(choices.length>=6)break;
-    if(isNum(operand)&&operand.q.eq(1))continue;
-    add(op,operand);
-  }
+  // Do not fill empty places with unrelated divisors or factors. Every other
+  // equivalent detour remains available in the explicit custom operation picker.
   return choices.slice(0,6);
 }
 
