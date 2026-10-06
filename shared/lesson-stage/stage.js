@@ -69,7 +69,8 @@
  function renderDesk(){
   const {room,lesson:state,account}=live.state,active=!!room&&room.phase!=='closed',teacher=account?.role==='teacher',locked=busy||deskLoading||sessionTransition;
   $('deskStatus').textContent=deskLoading?'Je lessessies worden opgehaald…':active?`Les loopt · code ${room.code} · ${room.members.length} leerlingen aangesloten`:room?`Les ${room.code} beëindigd · resultaten bewaard`:teacher?'Er loopt geen lessessie.':'Gebruik je bestaande leerkrachtaccount.';
-  $('sessionDesk').textContent=active?'Les '+room.code:'Les starten';
+  $('deskLabel').textContent=active?'Live les':'Les starten';$('deskCompact').textContent=active?'Live':'Start';
+  $('sessionDesk').dataset.active=String(active);$('sessionDesk').setAttribute('aria-label',active?'Lessessie beheren · code '+room.code:'Lessessie starten');$('sessionDesk').title=active?'Lessessie beheren · code '+room.code:'Een lessessie starten';
   $('deskPrepare').hidden=active;$('deskPrepare').disabled=locked||!teacher;
   $('resumeSession').hidden=!active;$('resumeSession').disabled=locked;
   $('closeSession').hidden=!active;$('closeSession').disabled=locked;
@@ -169,8 +170,7 @@
   try{if(live.state.room?.phase!=='finished'&&live.state.lesson?.poll&&!live.state.lesson.poll.closed)await live.act('close_poll');if(live.state.lesson?.activity&&['waiting','running','finished'].includes(live.state.lesson.activity.status))await live.act('stop_clay');await live.battle('close');await live.refresh();engine.go('uitloop');$('stopDialog').close();$('settings').close();await openSessionDesk();notice('Les beëindigd. Je kunt het lesverslag bekijken of een nieuwe les starten.');}
   finally{sessionTransition=false;$('confirmClose').disabled=false;}
  });
- let awake;function wake(){document.body.classList.add('controls-awake');clearTimeout(awake);awake=setTimeout(()=>document.body.classList.remove('controls-awake'),2400);}addEventListener('pointermove',wake);addEventListener('pointerdown',wake);wake();
- addEventListener('keydown',e=>{if(e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey||e.repeat||e.target.closest('input,textarea,select,button,a,[contenteditable]')||document.querySelector('dialog[open]'))return;if(['ArrowRight',' ','PageDown'].includes(e.key)){e.preventDefault();advance();}else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();engine.previous();}else if(e.key.toLowerCase()==='r'){e.preventDefault();engine.restart();}wake();});
+ addEventListener('keydown',e=>{if(e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey||e.repeat||e.target.closest('input,textarea,select,button,a,[contenteditable]')||document.querySelector('dialog[open]'))return;if(['ArrowRight',' ','PageDown'].includes(e.key)){e.preventDefault();advance();}else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();engine.previous();}else if(e.key.toLowerCase()==='r'){e.preventDefault();engine.restart();}});
  const theme=read('lesson-stage-theme','light');function applyTheme(mode){document.documentElement.dataset.mode=mode;$('themeBtn').setAttribute('aria-pressed',String(mode==='dark'));$('themeBtn').textContent=mode==='dark'?'Lichte weergave':'Donkere weergave';save('lesson-stage-theme',mode);}applyTheme(theme);$('themeBtn').onclick=()=>applyTheme(document.documentElement.dataset.mode==='dark'?'light':'dark');
  window.lessonStage=engine;engine.show();if(location.hash==='#lessessie')queueMicrotask(openSessionDesk);
 })();
