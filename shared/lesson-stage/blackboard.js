@@ -70,6 +70,22 @@
   function along(points,q){const n=clamp(q)*(points.length-1),i=Math.floor(n),a=points[i],b=points[Math.min(i+1,points.length-1)];return [a[0]+(b[0]-a[0])*(n-i),a[1]+(b[1]-a[1])*(n-i)];}
   const route=[[170,350],[290,350],[365,270],[470,300],[575,225],[670,245],[815,175]];
   if(art==='opening'){const q=ease(t/.9);ctx.save();ctx.lineWidth=4;line([[140,310],[870,310]],q,accent);dot(140+730*q,310,5,accent);ctx.restore();burst(870,310,.62,88,10);line([[140,326],[260,326]],ease((t-.7)/.5),accent);}
+  if(art==='slope'){
+   const blue=palette('blue',dark),green=palette('teal',dark),red=palette('red',dark);
+   if(!phase){
+    wash(165,80,680,435,.06);ctx.save();ctx.lineWidth=1;ctx.globalAlpha=.16;
+    for(let x=200;x<=800;x+=200)line([[x,110],[x,490]],1,ink);
+    for(let y=50;y<=450;y+=200)line([[180,y],[820,y]],1,ink);ctx.restore();
+    ctx.lineWidth=3;line([[180,450],[840,450]],1,ink);line([[200,490],[200,95]],1,ink);text('x',852,461,30);text('y',186,78,30);
+    ctx.lineWidth=8;line([[200,400],[800,100]],ease(t/1.4),blue);
+    const q=ease((t-.7)/1.2);ctx.lineWidth=6;line([[300,350],[700,350]],q,green);line([[700,350],[700,150]],ease((t-1.5)/1.1),red);
+    dot(300,350,10,blue);dot(700,150,10,blue);text('2 naar rechts',500,390,34,green,{align:'center'});text('1 omhoog',720,260,30,red);text('a = 1 / 2',500,555,54,blue,{align:'center'});
+   }else{
+    for(const [i,label,c,a,b] of [[0,'POSITIEF',green,390,190],[1,'NEGATIEF',red,190,390],[2,'NUL',blue,290,290]]){
+     const x=45+i*320;ctx.save();ctx.fillStyle=dark?'#ffffff08':'#ffffff90';ctx.beginPath();ctx.roundRect(x,105,290,405,22);ctx.fill();ctx.lineWidth=2;line([[x+30,450],[x+260,450]],1,ink);line([[x+45,465],[x+45,145]],1,ink);ctx.lineWidth=8;line([[x+55,a],[x+245,b]],ease((t-i*.2)/1.2),c);dot(x+245,b,8,c);text(label,x+145,560,32,c,{align:'center'});ctx.restore();
+    }
+   }
+  }
   if(art==='horizon'){line([[90,350],[230,348],[375,351],[550,347],[720,349],[910,346]]);line([[340,345],[500,165],[660,345]],p,accent);circle(500,165,9,accent);}
   if(art==='package'){
    const open=phase?1:spring((t-.35)/1.3);

@@ -2,6 +2,7 @@ const {test}=require('node:test'),assert=require('node:assert/strict');
 const Engine=require('../shared/lesson-stage/engine.js'),Lesson=require('../lessons/rechten-arbeid/lesson.js'),Game=require('../games/rechten/rechtenwereld/battle-config.js');
 test('content schema and every native battle task are deterministic',()=>{
  Engine.validate(Lesson);assert.equal(Lesson.deck.length,20);for(const spec of Lesson.deck)assert.deepEqual(Game.generate(spec),Game.generate(spec));
+ assert(Lesson.steps.findIndex(s=>s.id==='kleiduiven-opwarming')<10);assert.equal(Lesson.steps.find(s=>s.id==='kleiduiven-opwarming').events[0].type,'clay');
  assert.equal(Lesson.band(19),'LAATSTE RECHTE');assert.equal(new Set(Lesson.steps.map(s=>s.id)).size,Lesson.steps.length);
  assert.throws(()=>Engine.validate({...Lesson,steps:[{id:'a',events:[{type:'unknown'}]}]}));
 });

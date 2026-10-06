@@ -5,15 +5,15 @@ const BASE=process.env.VECTOR_BASE_URL||'http://127.0.0.1:8775',OUT=process.env.
  try{const context=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'}),page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
  await context.route('**/*',r=>{const u=new URL(r.request().url());if(u.pathname.endsWith('/axioma-auth.js'))return r.fulfill({contentType:'text/javascript',body:'window.AxiomaAuth={CLASSES:[],ready:async()=>({account:null}),getAccount:async()=>null,onChange:()=>()=>{},configured:()=>true};'});return u.origin===BASE?r.continue():r.abort();});
  await page.goto(BASE+'/lessons/rechten-arbeid/');await page.waitForFunction(()=>!!window.lessonStage);
- const shots=new Set(['opening','sessie-starten','zelf-lopen','regel-werk','overload','processor','denkruimte','helpen','helpen-zelf','parasiet','anderhalve-maand','uitloop','gebouwd','middelen','wiskunde','vaardigheden','contract','reisweg','onze-les','eerlijk-startpunt','waar-sta-ik']);
+ const shots=new Set(['helling-opfrissen','helling-richting','opening','sessie-starten','zelf-lopen','regel-werk','overload','processor','denkruimte','helpen','helpen-zelf','parasiet','anderhalve-maand','uitloop','gebouwd','middelen','wiskunde','vaardigheden','contract','reisweg','onze-les','eerlijk-startpunt','waar-sta-ik']);
  for(const size of [{width:1440,height:900},{width:390,height:844},{width:812,height:375}]){
   await page.setViewportSize(size);
   for(const step of lesson.steps.filter(s=>s.events.some(e=>e.type==='scene'))){await page.evaluate(id=>lessonStage.go(id),step.id);await page.waitForTimeout(410);
    const issues=await page.evaluate(()=>{const ids=['words','sceneNote','sceneChoices','readingBar'],issues=[];for(const id of ids){const e=document.getElementById(id);if(!e.textContent)continue;const r=e.getBoundingClientRect();if(r.top<0||r.bottom>innerHeight-45||r.left<0||r.right>innerWidth)issues.push(id+' outside viewport');}return issues;});assert.deepEqual(issues,[],step.id+' at '+size.width);
-   if(size.width===1440&&shots.has(step.id)||size.width!==1440&&['zelf-lopen','server-uitleg','overload','nog-niet','contract','waar-sta-ik'].includes(step.id))await page.screenshot({path:`${OUT}/${step.id}-${size.width}.png`});
+   if(size.width===1440&&shots.has(step.id)||size.width!==1440&&['helling-opfrissen','helling-richting','zelf-lopen','server-uitleg','overload','nog-niet','contract','waar-sta-ik'].includes(step.id))await page.screenshot({path:`${OUT}/${step.id}-${size.width}.png`});
   }
  }
- await page.evaluate(()=>lessonStage.go('sessie-starten'));await page.waitForTimeout(410);await page.click('#sceneChoices button:first-child');assert.equal(await page.evaluate(()=>lessonStage.step.id),'gebouwd');
+ await page.evaluate(()=>lessonStage.go('sessie-starten'));await page.waitForTimeout(410);await page.click('#sceneChoices button:first-child');assert.equal(await page.evaluate(()=>lessonStage.step.id),'helling-opfrissen');
  await page.evaluate(()=>lessonStage.go('zelf-lopen'));await page.waitForTimeout(410);const before=await page.locator('#words').textContent();await page.waitForTimeout(1600);assert.equal(await page.locator('#words').textContent(),before);
  await page.evaluate(()=>lessonStage.go('onze-les'));await page.waitForTimeout(410);assert.equal(await page.locator('#readingNames').textContent(),'Imane / Ibtissam');assert.equal(await page.locator('#sceneNote').textContent(),'Onze les is wiskunde!');assert.equal(await page.locator('#readingHint').textContent(),'Kies zelf wie leest');
  // Painter is deterministic at a chosen timestamp; overload and silence differ.

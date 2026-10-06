@@ -19,6 +19,9 @@
   scene('samen-lezen','Zo lezen we samen','empty','We gaan samen lezen.',{delay:0,note:'Jullie namen in beeld? Kies zelf wie leest.\nTegelijk begonnen? Kan gebeuren.\nDe rest leest mee. Ik klik verder.',notes:'Kondig eerst de leesafspraak aan: het duo kiest zelf wie leest, zonder vaste verdeling per zin. Is iemand afwezig, dan neemt de duopartner of een andere leerling over. Jij houdt de regie en klikt verder wanneer iedereen klaar is.'}),
   scene('opening','LeraarBob // sessie 01','opening','LERAARBOB',{tone:'night',note:'SESSIE 01 / RECHTENWERELD',notes:'Een dunne lijn. Laat het even stil zijn. De intro is een gesprek van ongeveer 6–8 minuten; jij bepaalt elk volgend betekenisvol moment.'}),
   scene('sessie-starten','Sessie starten?','opening','SESSIE STARTEN?',{tone:'night',choices:['JA','we zitten hier toch'],notes:'Droge opening. Beide knoppen starten hetzelfde verhaal, geen leerlingstemming.'}),
+  scene('helling-opfrissen','Even opfrissen · helling','slope','Helling: hoeveel verandert y\nals x één stap groeit?',{chapter:'EVEN OPWARMEN',color:'blue',note:'a = Δy / Δx · kijk van links naar rechts.',notes:'Wijs de twee stappen naar rechts en de ene stap omhoog aan. De helling is 1/2: per stap naar rechts stijgt y met een halve eenheid.'}),
+  scene('helling-richting','Stijgen, dalen of vlak','slope','Omhoog: positief. Omlaag: negatief.',{phase:1,color:'teal',note:'Horizontaal? Helling 0.',notes:'Laat het duo de drie richtingen benoemen. Daarna proberen we dit meteen zelf in het spel.'}),
+  {id:'kleiduiven-opwarming',title:'Kleiduifschieten · eerst proberen, dan samen',notes:'Open de twee oefenschoten. Geef iedereen tijd om de knoppen te proberen; start dan pas de gezamenlijke race. Daarna ga je verder met het lesverhaal.',events:[{type:'clay'}]},
   scene('gebouwd','Iets voor jullie gebouwd','package','Ik heb iets voor jullie gebouwd.',{chapter:'01 / DE OVEREENKOMST',notes:'Jij opent met wat je hebt voorbereid. Daarna nemen de twee leerlingen het over: de voorbereiding is er, de les maken we samen.'}),
   scene('als-we-dit-doen','De voorbereiding','package','U hebt de les voorbereid.',{phase:1}),
   scene('les','Samen maken we de les','empty','Wij maken er samen iets van.',{tone:'night',notes:'Hetzelfde duo kiest zelf wie verder leest. Bevestig kort: precies, deze les maken we samen.'}),
@@ -86,7 +89,7 @@
  const readers=['Liana','Amal','Doae','Neva','Emelly','Zemrita','Alae','Lina','Hala','Berfin','Imane','Ibtissam','Shakira','Nilay','Ecrin','Anas','Nadia','Djenaba','Paris','Souraya'];
  const readerPairs=Array.from({length:10},(_,i)=>readers.slice(i*2,i*2+2));
  const readingGroups=[
-  ['gebouwd','als-we-dit-doen','les'],
+  ['helling-richting','gebouwd','als-we-dit-doen','les'],
   ['contract','reisweg','zelf-lopen'],
   ['software-update','regel-upload','regel-account','regel-werk','server-uitleg'],
   ['middelen','leerdoel'],
@@ -97,7 +100,7 @@
   ['samen','ruimte-geven'],
   ['boot','boot-samen','anderhalve-maand']
  ];
- const teacherSteps=new Set(['aftellen','samen-lezen','opening','sessie-starten','gebouwd','contract','zelf-lopen','processor','nee','belofte-leraar','deal','werkelijkheid','dank-u','bewijzen','achtergelaten','ronde2','werktijd','geleverd','kijken','bewijs-van-arbeid','mooi-kijken']);
+ const teacherSteps=new Set(['helling-opfrissen','aftellen','samen-lezen','opening','sessie-starten','gebouwd','contract','zelf-lopen','processor','nee','belofte-leraar','deal','werkelijkheid','dank-u','bewijzen','achtergelaten','ronde2','werktijd','geleverd','kijken','bewijs-van-arbeid','mooi-kijken']);
  for(const step of steps){
   const text=step.events.find(e=>e.type==='text');if(!text)continue;
   let pair=readingGroups.findIndex(ids=>ids.includes(step.id));

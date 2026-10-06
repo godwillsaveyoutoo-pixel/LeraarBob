@@ -1,7 +1,7 @@
 /* Data-only sequences; adapters own effects, never the sequence cursor. */
 (function(root,factory){if(typeof module==='object')module.exports=factory();else root.LessonStage=factory();})(globalThis,()=>{
  'use strict';
- const types=Object.freeze(['scene','text','draw','animate','audio','pause','poll','liveJoin','pdf','exercise','game','battle','results']);
+ const types=Object.freeze(['scene','text','draw','animate','audio','pause','poll','liveJoin','pdf','exercise','game','battle','clay','results']);
  const pathsValid=paths=>Array.isArray(paths)&&paths.length>0&&paths.every(path=>Array.isArray(path)&&path.length>=2&&path.every(point=>Array.isArray(point)&&point.length===2&&point.every(Number.isFinite)));
  function validate(lesson){
   if(!lesson?.id||lesson.version!==1||!Array.isArray(lesson.steps)||!lesson.steps.length)throw Error('Ongeldige les.');
