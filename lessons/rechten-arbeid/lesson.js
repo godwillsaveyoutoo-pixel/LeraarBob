@@ -29,7 +29,7 @@
   scene('regel-upload','Uploaddeadline','terminal','Upload sluit om 23:00.',{drawing:{installed:1},note:'De avond vóór de les.'}),
   scene('regel-account','Eigen account','terminal','We gebruiken ons eigen account.',{drawing:{installed:2},note:'Papier of digitaal: we leveren ons eigen werk.'}),
   scene('regel-werk','Individueel bewijs','terminal','Een individuele taak toont ons eigen werk.',{drawing:{installed:3}}),
-  scene('server-uitleg','Onderhandelen met de server','terminal','En onderhandelen met de server?',{drawing:{installed:3},note:'niet geïnstalleerd',notes:'De computer is opvallend ongevoelig voor creatieve uitleg achteraf. Droog brengen, daarna verder.'}),
+  scene('server-uitleg','Onderhandelen met de server','terminal','Maar kunnen we over die deadline onderhandelen?',{drawing:{installed:3},note:'Nee. Die functie is niet geïnstalleerd.\nOm 23:00 sluit de upload.',notes:'De leerling vraagt of de deadline verschoven kan worden. Jij antwoordt: de server onderhandelt niet. Breng de eerste zin droog en maak daarna de afspraak concreet: uploaden vóór 23:00, de avond voor de les.'}),
   scene('middelen','Wat is een les?','tools','Onze les heeft meer dan één vorm.',{chapter:'04 / HET GEREEDSCHAP',phase:0}),
   scene('leerdoel','Het doel blijft','tools','Soms papier. Soms digitaal.\nHet doel blijft hetzelfde.',{phase:1,note:'De leerkracht kiest het gereedschap.'}),
   scene('bandwidth','Grote oren en ogen','bandwidth','Onze leerkracht heeft grote oren en ogen.',{chapter:'05 / BANDWIDTH',phase:0}),

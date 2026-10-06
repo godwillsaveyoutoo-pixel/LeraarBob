@@ -61,3 +61,6 @@ body:is([data-lesson-role=checking],[data-lesson-role=student]) #stage,body:is([
 @media(max-height:520px){#stage[data-step=aftellen] .caption{gap:4px}#stage[data-step=aftellen] #clock{font-size:80px}#stage[data-step=aftellen] #words{font-size:30px}#stage[data-step=aftellen] #sceneNote{font-size:14px}#stage[data-step=samen-lezen] #sceneNote{line-height:1.4}}
 
 #countdownJoin{display:none}#stage[data-step=aftellen] #countdownJoin:not(:empty){display:block;order:3;margin:0;font-weight:700;font-size:clamp(20px,3vw,32px);letter-spacing:.08em;color:var(--ink)}
+
+#stage[data-step=server-uitleg] .reply-reader{display:block;margin-bottom:6px;color:var(--ink)}
+#stage[data-step=server-uitleg] #sceneNote{line-height:1.45}

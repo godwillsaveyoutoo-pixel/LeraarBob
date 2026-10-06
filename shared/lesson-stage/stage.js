@@ -24,7 +24,7 @@
   $('readingRole').textContent=role.lead==='teacher'?'LERAAR':'LEEST';
   $('readingHint').textContent=resolved.speakers.length>1?'Om beurten · één zin per lezer':'';
   $('changeReader').hidden=role.pair==null;
-  if(spokenEvent){$('sceneNote').replaceChildren();if(spokenEvent.noteSpeaker!=null){const reply=LessonReaders.resolve({...role,lead:spokenEvent.noteSpeaker},lesson,readerState).speakers.join(' & ');$('sceneNote').append(node('span',reply+' · ','reply-reader'));}$('sceneNote').append(document.createTextNode(spokenEvent.note||''));}
+  if(spokenEvent){$('sceneNote').replaceChildren();if(spokenEvent.noteSpeaker!=null){const reply=LessonReaders.resolve({...role,lead:spokenEvent.noteSpeaker},lesson,readerState).speakers.join(' & ');$('sceneNote').append(node('span',reply+': ','reply-reader'));}$('sceneNote').append(document.createTextNode(spokenEvent.note||''));}
  }
  function saveReaders(){save(readerKey,readerState);renderReading();syncScene();}
  function renderAttendance(){

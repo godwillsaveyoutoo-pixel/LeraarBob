@@ -30,7 +30,7 @@ const BASE=process.env.VECTOR_BASE_URL||'http://127.0.0.1:8775',OUT=process.env.
  await page.evaluate(()=>lessonStage.go('boot'));await page.waitForTimeout(410);assert.equal(await page.locator('#readingNames').textContent(),'Paris');
  await page.evaluate(()=>lessonStage.next());await page.waitForTimeout(410);assert.equal(await page.locator('#readingNames').textContent(),'Souraya');
  await page.evaluate(()=>lessonStage.go('belofte-leraar'));await page.waitForTimeout(410);assert.equal(await page.locator('#readingNames').textContent(),'LeraarBob');
- await page.evaluate(()=>lessonStage.go('server-uitleg'));await page.waitForTimeout(410);assert.match(await page.locator('#sceneNote').textContent(),/^LeraarBob · niet geïnstalleerd$/);
+ await page.evaluate(()=>lessonStage.go('server-uitleg'));await page.waitForTimeout(410);assert.match(await page.locator('#sceneNote').textContent(),/^LeraarBob: Nee\. Die functie is niet geïnstalleerd\.\nOm 23:00 sluit de upload\.$/);
  // Real-time rendering: buildup, one impact, settled hold, continuation and replay.
  await page.setViewportSize({width:1440,height:900});await page.clock.install();await page.emulateMedia({reducedMotion:'no-preference'});
  const pixels=()=>page.locator('#blackboard').evaluate(c=>c.toDataURL());
