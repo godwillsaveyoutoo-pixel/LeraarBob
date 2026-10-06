@@ -1,6 +1,6 @@
 /* The existing classroom owns identity, membership, codes, grading and scores. */
 (()=>{
- function create(onState,onError){let account=null,id=null,room=null,lesson=null,timer,epoch=0,queue=Promise.resolve(),disconnected=false;
+ function create(onState,onError){let account=null,id=null,room=null,lesson=null,timer,epoch=0,queue=Promise.resolve(),disconnected=false,initialized=false;
   const key=()=>`lesson-stage-room:${account?.id}`;
   function save(){try{if(id)localStorage.setItem(key(),id);}catch{}}
   async function request(kind,action,data={}){const version=epoch;
@@ -14,7 +14,7 @@
    });queue=work;return work;
   }
   async function refresh(){clearTimeout(timer);const version=epoch;if(!id||!account)return;try{await request('battle','state');await request('lesson','state');if(disconnected&&version===epoch){disconnected=false;onError('');}}catch(e){if(version===epoch){disconnected=true;onError(e);}}if(version===epoch)timer=setTimeout(refresh,1800);}
-  function identity({account:a,pending}){if(pending||account?.id===a?.id)return;epoch++;clearTimeout(timer);account=a;room=null;lesson=null;id=null;try{id=account&&localStorage.getItem(key());}catch{}onState({account,id,room,lesson});if(id)refresh();}
+  function identity({account:a,pending}){if(pending||initialized&&account?.id===a?.id)return;initialized=true;epoch++;clearTimeout(timer);account=a;room=null;lesson=null;id=null;try{id=account&&localStorage.getItem(key());}catch{}onState({account,id,room,lesson});if(id)refresh();}
   AxiomaAuth.onChange(identity);AxiomaAuth.ready().then(identity).catch(onError);addEventListener('online',refresh);
   return {get state(){return {account,id,room,lesson}},async create(deck){const s=await request('lesson','create',{deck,seconds:120});id=s.room;save();await refresh();return s;},async join(code){await request('battle','join',{code});await refresh();},battle:(action,data)=>request('battle',action,data),act:(action,data)=>request('lesson',action,data),inspect:(action,data)=>request('read',action,data),refresh};
  }

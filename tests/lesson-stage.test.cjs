@@ -36,3 +36,12 @@ test('all twenty readers have a stable duo and absence never leaves an empty rea
  assert.equal(new Set(['boot','boot-samen','anderhalve-maand'].map(id=>Lesson.steps.find(s=>s.id===id).reading.pair)).size,1);
  assert.equal(Lesson.steps.find(s=>s.id==='belofte-leraar').reading.lead,'teacher');
 });
+
+test('live identity initializes the signed-out view and follows later account changes once',async()=>{
+ const vm=require('node:vm'),fs=require('node:fs'),seen=[];let identity;
+ const context={window:{},AxiomaAuth:{onChange:fn=>{identity=fn;},ready:async()=>({account:null})},addEventListener:()=>{},localStorage:{getItem:()=>null},clearTimeout,setTimeout};
+ vm.runInNewContext(fs.readFileSync(require.resolve('../shared/lesson-stage/live.js'),'utf8'),context);
+ context.window.LessonLive.create(state=>seen.push(state.account?.id||null),error=>{throw error;});await new Promise(resolve=>setImmediate(resolve));
+ identity({account:null});identity({account:{id:'teacher',role:'teacher'}});identity({account:{id:'teacher',role:'teacher'}});identity({account:null});
+ assert.deepEqual(seen,[null,'teacher',null]);
+});
