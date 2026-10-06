@@ -49,3 +49,15 @@ body:is([data-lesson-role=checking],[data-lesson-role=student]) #stage,body:is([
 #battleWaiting{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;padding:20px}#battleWaiting h1{font:clamp(30px,4vw,58px) StageHand,serif;margin:0}#battleWaiting p{max-width:650px;line-height:1.6}
 #followStatus{display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px;flex:none}#followStatus #joinStatus{margin:0;font-size:12px}#interactionMode{font-size:12px;font-weight:650;color:var(--accent);margin-left:auto}#changeSession{font-size:11px;background:transparent;border-color:transparent;padding:4px 8px}#studentResults{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;justify-content:safe center;align-items:center;text-align:center;padding:12px}#studentResults h2{font:clamp(26px,3vw,44px) StageHand,serif}#studentResults .poll-bars{max-width:100%;width:min(640px,85vw)}#studentResults .skill-summary{width:100%;font-size:14px}#studentResults>p{font-size:13px}#studentResults #resultsContent{max-width:100%}.following #narrative{cursor:default}
 @media(max-width:430px){#followStatus{gap:0 6px}#interactionMode{font-size:10px}#changeSession{font-size:10px}#studentResults{padding:8px}#studentResults h2{font-size:25px}.following #words{font-size:26px}}
+
+/* Opening countdown: readable from the back of the room and on a pupil's phone. */
+#stage[data-step=aftellen] #readingBar{display:none}
+#stage[data-step=aftellen] #narrative{grid-template-rows:minmax(0,1fr)}
+#stage[data-step=aftellen] .caption{display:flex;flex-direction:column;align-items:center;gap:12px}
+#stage[data-step=aftellen] #words{order:0;font-size:clamp(30px,4vw,60px)}
+#stage[data-step=aftellen] #clock{order:1;margin:0;color:#ffe095;font-size:clamp(88px,17vw,200px);font-weight:750;line-height:1.1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+#stage[data-step=aftellen] #sceneNote{order:2;max-width:640px;margin:0;font:clamp(15px,1.6vw,22px)/1.5 system-ui,sans-serif}
+#stage[data-step=samen-lezen] #sceneNote{line-height:1.7}
+@media(max-height:520px){#stage[data-step=aftellen] .caption{gap:4px}#stage[data-step=aftellen] #clock{font-size:80px}#stage[data-step=aftellen] #words{font-size:30px}#stage[data-step=aftellen] #sceneNote{font-size:14px}#stage[data-step=samen-lezen] #sceneNote{line-height:1.4}}
+
+#countdownJoin{display:none}#stage[data-step=aftellen] #countdownJoin:not(:empty){display:block;order:3;margin:0;font-weight:700;font-size:clamp(20px,3vw,32px);letter-spacing:.08em;color:var(--ink)}

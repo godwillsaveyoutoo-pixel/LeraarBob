@@ -15,6 +15,8 @@
    {type:'text',text,emphasis:accents[id]||[],impact:punch.has(id),note:options.note||'',choices:options.choices||[],at:options.delay??350},...(options.events||[])]
  });
  const steps=[
+  scene('aftellen','We starten weldra · 3 minuten','empty','We starten weldra.',{tone:'night',delay:0,note:'Leg je materiaal klaar. Meld je aan bij leraarBob en sluit aan via Live.',events:[{type:'pause',duration:180000,next:'samen-lezen',finished:'We gaan beginnen.'}],notes:'Drie minuten om rustig aan te sluiten. De aftelling gaat vanzelf naar de leesafspraak. Je kunt eerder verder klikken; R begint opnieuw bij drie minuten.'}),
+  scene('samen-lezen','Zo lezen we samen','empty','We gaan samen lezen.',{delay:0,note:'Zie je jouw naam? Lees de zin hardop.\nStaan jullie met twee? Lees om de beurt.\nDe rest leest mee. Ik klik verder.',notes:'Kondig eerst de leesafspraak aan. Is iemand afwezig, dan neemt de duopartner of een andere leerling over. Jij houdt de regie en klikt verder wanneer iedereen klaar is.'}),
   scene('opening','LeraarBob // sessie 01','opening','LERAARBOB',{tone:'night',note:'SESSIE 01 / RECHTENWERELD',notes:'Een dunne lijn. Laat het even stil zijn. De intro is een gesprek van ongeveer 6–8 minuten; jij bepaalt elk volgend betekenisvol moment.'}),
   scene('sessie-starten','Sessie starten?','opening','SESSIE STARTEN?',{tone:'night',choices:['JA','we zitten hier toch'],notes:'Droge opening. Beide knoppen starten hetzelfde verhaal, geen leerlingstemming.'}),
   scene('gebouwd','Iets voor jullie gebouwd','package','Ik heb iets voor jullie gebouwd.',{chapter:'01 / DE OVEREENKOMST',notes:'Jij opent met wat je hebt voorbereid. Daarna nemen de twee leerlingen het over: de voorbereiding is er, de les maken we samen.'}),
@@ -95,7 +97,7 @@
   ['samen','ruimte-geven'],
   ['boot','boot-samen','anderhalve-maand']
  ];
- const teacherSteps=new Set(['opening','sessie-starten','gebouwd','contract','zelf-lopen','processor','nee','belofte-leraar','deal','werkelijkheid','dank-u','bewijzen','achtergelaten','ronde2','werktijd','geleverd','kijken','bewijs-van-arbeid','mooi-kijken']);
+ const teacherSteps=new Set(['aftellen','samen-lezen','opening','sessie-starten','gebouwd','contract','zelf-lopen','processor','nee','belofte-leraar','deal','werkelijkheid','dank-u','bewijzen','achtergelaten','ronde2','werktijd','geleverd','kijken','bewijs-van-arbeid','mooi-kijken']);
  const duoSteps=new Set(['reisweg','leerdoel','vaardigheden','waar-sta-ik','ruimte-geven']);
  for(const step of steps){
   const text=step.events.find(e=>e.type==='text');if(!text)continue;
