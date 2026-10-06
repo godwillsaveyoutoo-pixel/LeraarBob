@@ -27,9 +27,10 @@ let misses=0,shots=0,started=0,elapsed=0,runId='',team='Jij',selected=null,busy=
 let raf=0,lastHud=0,barrelAngle=-45,wantedAngle=-45,particles=[],impactAt=0,muted=false,audio=null,persistent=true,history=[];
 
 let groupData=null,groupMode=false,groupVersion=-1,groupSessionId=null,groupRequest=null,groupNextTimer=null,groupDismissed=null,groupPrompt=null;
+let practice=null,practiceRoom=null;
 const scheduled=new Set();
 function later(fn,ms){const id=setTimeout(()=>{scheduled.delete(id);fn()},ms);scheduled.add(id);return id}
-function stopGame(){cancelAnimationFrame(raf);for(const id of scheduled)clearTimeout(id);scheduled.clear();clearTimeout(groupNextTimer);groupNextTimer=null;attempt=null;busy=false;$('countdown').hidden=true}
+function stopGame(){practice=null;$('practiceTools').hidden=true;cancelAnimationFrame(raf);for(const id of scheduled)clearTimeout(id);scheduled.clear();clearTimeout(groupNextTimer);groupNextTimer=null;attempt=null;busy=false;$('countdown').hidden=true}
 
 const reduced=matchMedia('(prefers-reduced-motion:reduce)');
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -53,7 +54,7 @@ function pxX(x){return 500+x*70}
 function pxY(y){return 310-y*70}
 function targetPos(r){return{x:pxX(r.x),y:pxY(r.a*r.x)}}
 function targetAt(A,time){
-  const u=clamp((time-A.start)/(A.deadline-A.start),0,1);
+  const u=practice ? .25 : clamp((time-A.start)/(A.deadline-A.start),0,1);
   const vx=A.p.x-500,vy=A.p.y-310,len=Math.hypot(vx,vy)||1;
   const ux=vx/len,uy=vy/len;
   const outer=250,inner=118;
@@ -79,10 +80,10 @@ function updateHud(){
   for(const [index,r] of rounds.entries()){const e=document.createElement('span');e.className='dot'+((groupMode?index<mastered.size:mastered.has(r.id))?' hit':(groupMode?index===mastered.size:attempt?.id===r.id)?' current':retry.includes(r.id)?' retry':'');$('progress').append(e)}
   if(groupMode){$('reserve').textContent='Foutloos: '+mastered.size+' / 7';$('wave').textContent='GROEPSWEDSTRIJD · 7 OP RIJ'}
 }
-function fractionChoice(value,den){return (value<0?'−':'')+'<span class="arcade-fraction" aria-label="'+Math.abs(Math.round(value*den))+' gedeeld door '+den+'"><span>'+Math.abs(Math.round(value*den))+'</span><span>'+den+'</span></span>';}
+function fractionChoice(value,den){return '<span class="choiceSign">'+(value<0?'−':'')+'</span>'+'<span class="arcade-fraction" aria-label="'+Math.abs(Math.round(value*den))+' gedeeld door '+den+'"><span>'+Math.abs(Math.round(value*den))+'</span><span>'+den+'</span></span>';}
 function renderChoices(r){
   $('choices').replaceChildren();
-  r.choices.forEach((v,i)=>{const b=document.createElement('button');b.className='choice';b.dataset.a=String(v);b.innerHTML=`<span>${r.labels?.[i]?.includes('⅓')?fractionChoice(v,3):r.labels?.[i]?.includes('¼')?fractionChoice(v,4):r.labels?.[i]?.includes('½')?fractionChoice(v,2):fmt(v)}</span><span class="choiceKey">${i+1}</span>`;b.onclick=()=>{if(state!=='playing'||busy||!attempt||attempt.resolved)return;selected=v;fire()};$('choices').append(b)})
+  r.choices.forEach((v,i)=>{const b=document.createElement('button');b.className='choice';b.dataset.a=String(v);b.setAttribute('aria-label','Richtingscoëfficiënt '+(r.labels?.[i]||fmt(v)));b.innerHTML=`<span class="choiceValue">${r.labels?.[i]?.includes('⅓')?fractionChoice(v,3):r.labels?.[i]?.includes('¼')?fractionChoice(v,4):r.labels?.[i]?.includes('½')?fractionChoice(v,2):fmt(v).replace('-','−')}</span><span class="choiceKey" aria-hidden="true">${i+1}</span>`;b.onclick=()=>{if(state!=='playing'||busy||!attempt||attempt.resolved)return;selected=v;fire()};$('choices').append(b)})
 }
 function burst(x,y){
   impactAt=performance.now();$('impact').setAttribute('cx',x);$('impact').setAttribute('cy',y);$('particles').replaceChildren();particles=[];
@@ -95,7 +96,7 @@ function renderFx(now){
 function frame(now){
   if(!['countdown','playing','gap'].includes(state))return;
   raf=requestAnimationFrame(frame);
-  if(now-lastHud>30){$('total').textContent=clockText(started?now-started:0);lastHud=now}
+  if(!practice&&now-lastHud>30){$('total').textContent=clockText(started?now-started:0);lastHud=now}
   if(state==='countdown'){$('countNum').textContent=String(Math.max(1,Math.ceil(($('countdown').dataset.end-now)/1000)));return}
   if(!reduced.matches){let diff=(wantedAngle-barrelAngle+540)%360-180;barrelAngle+=diff*.2}else barrelAngle=wantedAngle;
   $('turretBarrel').setAttribute('transform',`rotate(${barrelAngle} 500 310)`);renderFx(now);
@@ -107,8 +108,8 @@ function frame(now){
     $('projectile').style.opacity='1';$('shotTrail').style.opacity=String(.9-t*.2);$('projectile').setAttribute('cx',x);$('projectile').setAttribute('cy',y);$('shotTrail').setAttribute('x1',500+(x-500)*.62);$('shotTrail').setAttribute('y1',310+(y-310)*.62);$('shotTrail').setAttribute('x2',x);$('shotTrail').setAttribute('y2',y);
     if(t>=1){A.shot.correct?hit():fail('mis')}
   }else{
-    setTimer((A.deadline-now)/1000);
-    if(now>=A.deadline)fail('tijd')
+    if(practice){$('timer').textContent='Geen klok';$('timer').classList.remove('urgent');$('timeFill').style.transform='scaleX(1)';}else setTimer((A.deadline-now)/1000);
+    if(!practice&&now>=A.deadline)fail('tijd')
   }
 }
 function beginAttempt(){
@@ -123,16 +124,17 @@ function beginAttempt(){
   $('status').textContent=roundNo===1?'Lees de richting. Kies a en vuur.':'Alleen de gemiste richtingen komen terug.'
 }
 function fire(){
-  if(groupMode){submitGroupAnswer(selected);return}
+  if(groupMode&&!practice){submitGroupAnswer(selected);return}
   const A=attempt;if(state!=='playing'||!A||A.resolved||busy||selected===null)return;
-  const now=performance.now();if(now>=A.deadline){fail('tijd');return}
-  busy=true;shots++;const correct=Math.abs(selected-A.r.a)<1e-6;
+  const now=performance.now();if(!practice&&now>=A.deadline){fail('tijd');return}
+  busy=true;if(!practice)shots++;const correct=Math.abs(selected-A.r.a)<1e-6;
   const future=targetAt(A,now+SHOT_MS),radius=Math.hypot(future.x-500,future.y-310),sign=A.p.x>=500?1:-1,dx=sign*radius/Math.hypot(1,selected),dy=-selected*dx;
   const end=correct?future:{x:500+dx,y:310+dy};
   A.shot={start:now,correct,end};wantedAngle=Math.atan2(end.y-310,end.x-500)*180/Math.PI;
   $('choices').querySelectorAll('button').forEach(b=>{b.disabled=true;b.classList.toggle('selected',Number(b.dataset.a)===selected)});setTimer(-1);sShot()
 }
 function hit(){
+  if(practice){finishPracticeShot(true);return}
   if(groupMode){finishGroupVisual(true);return}
   const A=attempt;if(!A||A.resolved)return;A.resolved=true;window.RechtenArcade?.record({kind:'attempt',task:A.id,skill:'helling',attempt:roundNo,answer:{a:selected},correct:true});state='gap';mastered.add(A.id);$('target').style.opacity='0';$('wake').style.opacity='0';$('approachRing').style.opacity='0';resetProjectile();burst(A.shot.end.x,A.shot.end.y);sHit();
   $('choices').querySelectorAll('button').forEach(b=>{b.classList.remove('selected');b.classList.toggle('correct',Number(b.dataset.a)===A.r.a)});updateHud();$('status').textContent='Raak. Deze richting is binnen.';
@@ -140,6 +142,7 @@ function hit(){
   later(()=>{attempt=null;beginAttempt()},GAP_MS)
 }
 function fail(kind){
+  if(practice){finishPracticeShot(false);return}
   if(groupMode){if(attempt?.shot)finishGroupVisual(false);else submitGroupAnswer(null);return}
   const A=attempt;if(!A||A.resolved)return;A.resolved=true;window.RechtenArcade?.record({kind:'attempt',task:A.id,skill:'helling',attempt:roundNo,answer:{a:kind==='tijd'?null:selected},correct:false});state='gap';misses++;if(!retry.includes(A.id)&&!mastered.has(A.id))retry.push(A.id);
   $('target').style.opacity='0';$('wake').style.opacity='0';$('approachRing').style.opacity='0';resetProjectile();sTimeout();
@@ -147,8 +150,8 @@ function fail(kind){
   updateHud();$('status').textContent=kind==='tijd'?'Te laat. Deze richting komt terug.':'Mis. Deze richting komt terug.';kind==='tijd'?sTimeout():sMiss();
   later(()=>{attempt=null;beginAttempt()},650)
 }
-function startGame(){
-  if(groupMode){openGroupMenu();return}stopGame();
+function startGame(skipPractice=false){
+  if(groupMode){openGroupMenu();return}if(skipPractice!==true){startPractice(()=>startGame(true));return}stopGame();
   const seed=window.RechtenArcade?.params.get('seed')||crypto.randomUUID();window.RechtenArcade?.start({seed,tempo:speed,expected:7});rounds=Array.from({length:7},(_,i)=>questions.round(questions.question(seed,i)));
   duration=speed;misses=0;shots=0;retry=[];mastered=new Set();roundNo=1;queue=rounds.map(r=>r.id);attempt=null;elapsed=0;started=0;impactAt=0;particles=[];busy=false;selected=null;
   runId=Date.now()+'-'+Math.random().toString(36).slice(2,7);team=window.AxiomaGame?.account?.alias||'Jij';
@@ -171,13 +174,37 @@ function showTimes(){
   $('storageNote').textContent=persistent?(window.AxiomaGame?.account?.role==='student'?'Je eigen tijden worden bij je account bewaard.':'Tijden worden op dit toestel bewaard.'):'Tijden blijven alleen bewaard zolang deze pagina open is.'
 }
 document.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>{if(!['lobby','groupdone'].includes(state))return;speed=Number(b.dataset.speed);duration=speed;document.querySelectorAll('[data-speed]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));setTimer(speed)});
-$('start').onclick=startGame;
+$('start').onclick=()=>startGame();
 $('restart').onclick=()=>{if(groupMode){openGroupMenu();return}if(state==='lobby')return;stopGame();state='lobby';$('results').hidden=true;$('lobby').hidden=false};
 $('again').onclick=()=>{stopGame();state='lobby';$('results').hidden=true;$('lobby').hidden=false};
 $('backLobby').onclick=()=>{stopGame();state='lobby';$('results').hidden=true;$('lobby').hidden=false};
 function toggleMute(){muted=!muted;$('mute').textContent=muted?'×':'♪';$('mute').setAttribute('aria-pressed',String(muted));$('lobbyMute').textContent=muted?'Geluid uit':'Geluid aan'}
 $('mute').onclick=toggleMute;$('lobbyMute').onclick=toggleMute;
 addEventListener('keydown',e=>{if(state!=='playing'||e.repeat||e.target.matches('input,select')||$('groupDialog').open||$('rankingDialog').open)return;const i=Number(e.key)-1;if(i>=0&&i<3){e.preventDefault();$('choices').children[i]?.click()}});
+
+// Two untimed familiarisation shots never enter scores, history or the server grader.
+function startPractice(after){
+ stopGame();practice={index:0,after};$('lobby').hidden=true;$('results').hidden=true;$('practiceTools').hidden=false;
+ if($('groupDialog').open)$('groupDialog').close();nextPractice();
+}
+function nextPractice(){
+ const r=practice.index===0?{id:'practice-up',a:1,x:2.3,choices:[-1,0,1]}:{id:'practice-down',a:-.5,x:2.3,choices:[.5,-.5,-2],labels:['½','−½','−2']};
+ state='playing';busy=false;selected=null;resetProjectile();particles=[];impactAt=0;$('particles').replaceChildren();$('impact').style.opacity='0';$('target').style.opacity='1';
+ attempt={id:r.id,r,p:targetPos(r),start:performance.now(),deadline:performance.now()+8000,shot:null,resolved:false};
+ renderChoices(r);$('wave').textContent=`OEFENRONDE ${practice.index+1} / 2`;$('reserve').textContent='Telt niet mee';$('total').textContent='—';
+ $('practiceNext').hidden=true;$('practiceNote').textContent='Kies rechts de helling. Je hebt alle tijd.';
+ $('status').textContent=practice.index===0?'Eén naar rechts, één omhoog. Welke helling?':'Twee naar rechts, één omlaag. Welke helling?';
+ cancelAnimationFrame(raf);raf=requestAnimationFrame(frame);
+}
+function finishPracticeShot(correct){
+ const A=attempt;if(!A||A.resolved)return;A.resolved=true;state='gap';busy=false;
+ if(correct){burst(A.shot.end.x,A.shot.end.y);sHit();$('target').style.opacity='0';}else sMiss();resetProjectile();
+ for(const b of $('choices').querySelectorAll('button')){b.disabled=true;b.classList.remove('selected');b.classList.toggle('correct',Number(b.dataset.a)===A.r.a);b.classList.toggle('wrong',!correct&&Number(b.dataset.a)===selected);}
+ $('status').textContent=(correct?'Raak! ':'Nog even kijken. ')+(practice.index===0?'a = 1: één omhoog per stap naar rechts.':'a = −½: één omlaag per twee stappen naar rechts.');
+ $('practiceNote').textContent=correct?'Goed gericht.':'De groene knop toont de juiste helling.';$('practiceNext').textContent=practice.index===0?'Tweede oefenronde →':groupMode?'Klaar · naar de groep':'Klaar · verder →';$('practiceNext').hidden=false;
+}
+$('practiceNext').onclick=()=>{if(!practice||!attempt?.resolved)return;if(practice.index===0){practice.index=1;nextPractice();}else{const after=practice.after;stopGame();after();}};
+function practiceGroup(){startPractice(()=>{state='groupwait';updateHud();openGroupMenu();});}
 
 // Group race controller. The server checks each answer and selects one winner.
 const groupEscape=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -206,6 +233,7 @@ function renderGroupMenu(){
     html+=`<p>${g.speed} seconden per doel${g.elapsed_ms?' · winnende tijd '+clockText(g.elapsed_ms):''}</p>`;
     html+=d.members.map(m=>`<div class="groupRow"><div><strong>${groupEscape(m.alias)}</strong><small>${g.status==='finished'&&m.participated?'Afgerond':m.left_at?'Gestopt':m.online?'Online':'Verbinding onderbroken'}</small></div><span>${m.streak} / 7 · ${m.misses} missers</span></div>`).join('');
     if(active){
+      if(g.status==='waiting'&&groupOwnTab(d))html+='<button class="utilityBtn" data-group-action="practice">Twee oefenrondes · zonder score</button>';
       html+='<div class="groupActions">';
       if(g.status==='waiting'&&g.host_id===d.account.id)html+=`<button class="primary" data-group-action="start" ${disabled||d.members.filter(m=>!m.left_at&&m.online).length<2?'disabled':''}>Start samen</button>`;
       else if(g.status==='waiting')html+='<span>De organisator start de wedstrijd.</span>';
@@ -233,11 +261,13 @@ function updateGroup(d){
   if(groupData?.account?.id!==d.account?.id){rankingRequest++;$('groupRankingContent').textContent='';if($('rankingDialog').open)$('rankingDialog').close()}
   groupData=d;
   const g=d.current;
+  if(practice&&groupMode&&(!d.account||!groupActive(d)||!groupOwnTab(d)||g.status!=='waiting')){stopGame();state='groupwait';}
   if(!d.account){if(groupMode){stopGame();groupMode=false;state='lobby';$('lobby').hidden=false}renderGroupMenu();return}
   if(groupActive(d)&&groupOwnTab(d)){
     if(groupSessionId!==g.id){stopGame();rounds=legacyRounds;groupMode=true;groupSessionId=g.id;groupVersion=-1;groupRequest=null;state='groupwait';groupDismissed=null;$('groupRankSpeed').value=String(g.speed)}
     $('lobby').hidden=true;$('results').hidden=true;team=d.account.alias||'Leerkracht';duration=g.speed;
     if(g.status==='waiting'){
+      if(practiceRoom!==g.id){practiceRoom=g.id;groupPrompt=g.id+':waiting';practiceGroup();}if(practice){renderGroupMenu();return;}
       if(groupPrompt!==g.id+':waiting'){groupPrompt=g.id+':waiting';if($('rankingDialog').open)$('rankingDialog').close();if(!$('groupDialog').open)$('groupDialog').showModal()}
     }
     else if(state==='groupwait'&&d.connected){
@@ -326,6 +356,7 @@ $('lobbyGroupList').onclick=$('groupContent').onclick=async e=>{
   const action=b.dataset.groupAction;$('groupMessage').textContent='';
   try{
     if(action==='new'||action==='done'){if(groupOwnTab())await AxiomaGroups.leave();stopGame();groupDismissed=groupData.current?.id;groupSessionId=null;groupMode=false;state='lobby';$('lobby').hidden=false;renderGroupMenu();if(action==='done')$('groupDialog').close();return}
+    if(action==='practice'){practiceGroup();return}
     if(action==='again')await AxiomaGroups.create(groupData.current.speed);
     if(action==='create')await AxiomaGroups.create(Number($('groupSpeed').value));
     if(action==='join')await AxiomaGroups.join(b.dataset.id);
@@ -360,5 +391,5 @@ if(window.AxiomaGroups)connectGroups();else window.addEventListener('axioma:grou
 
 initField();readHistory();updateHud();setTimer(speed);
 if(window.RechtenArcade){const locked=RechtenArcade.params.get('mode')==='class'||RechtenArcade.params.get('lockTempo')==='1';document.querySelectorAll('[data-speed]').forEach(b=>{b.disabled=locked;b.setAttribute('aria-pressed',String(Number(b.dataset.speed)===speed));});}
-window.AxiomaClay=Object.freeze({snapshot:()=>({state,speed,barrelAngle,wantedAngle,origin:{x:500,y:310},target:attempt?targetAt(attempt,performance.now()):null,mastered:mastered.size,misses,shots})});
+window.AxiomaClay=Object.freeze({snapshot:()=>({state,practice:practice?practice.index+1:null,speed,barrelAngle,wantedAngle,origin:{x:500,y:310},target:attempt?targetAt(attempt,performance.now()):null,mastered:mastered.size,misses,shots})});
 })();

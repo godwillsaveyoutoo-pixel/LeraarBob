@@ -6,6 +6,11 @@ const Q = require('../shared/axioma-clay-questions.js');
 const {randomUUID} = require('node:crypto');
 const PORT=process.env.VECTOR_BROWSER_PORT||9245,BASE=process.env.VECTOR_BASE_URL||'http://127.0.0.1:8775';
 const delay = ms => new Promise(r => setTimeout(r,ms));
+async function finishClayPractice(c){
+ await c.wait('window.AxiomaClay?.snapshot().practice===1');
+ for(const value of [1,-.5]){await c.eval(`document.querySelector('#choices [data-a="${value}"]').click()`);await c.wait('!document.querySelector("#practiceNext").hidden');await c.eval('document.querySelector("#practiceNext").click()');}
+}
+
 class CDP {
   async connect(url) {
     this.ws = new WebSocket(url); this.pending = new Map(); this.id = 0; this.errors=[];
@@ -365,12 +370,12 @@ async function setup(browser,uid){
   await b.eval(`document.querySelector('#rankingClose').click()`);
   await a.eval(`document.querySelector('[data-speed="8"]').click();document.querySelector('#openGroup').click()`);
   await a.wait(`AxiomaGroups.state().current?.status==='waiting'`);
-  assert.equal(groupSession.speed,8,'lobby tempo applies directly to the new group');
+  assert.equal(groupSession.speed,8,'lobby tempo applies directly to the new group');await finishClayPractice(a);
   await a.wait(`location.pathname.includes('/kleiduiven/')&&document.querySelector('#groupDialog')?.open`);
   await b.eval('AxiomaGroups.refresh()');await b.wait(`document.querySelector('#lobbyGroupList').textContent.includes('Groep van Test-A')`);
   await b.go('games/pythagoras.html');await b.wait('window.AxiomaGroups?.state().connected');
   await b.eval('AxiomaGroups.refresh();AxiomaSocial.open()');await b.wait(`${panel}.querySelector('[data-action="group-join"]')`);
-  await click(b,'[data-action="group-join"]');await b.wait(`location.pathname.includes('/kleiduiven/')&&document.querySelector('#groupDialog')?.open`);
+  await click(b,'[data-action="group-join"]');await finishClayPractice(b);await b.wait(`location.pathname.includes('/kleiduiven/')&&document.querySelector('#groupDialog')?.open`);
   await a.eval('AxiomaGroups.refresh()');await a.wait(`!document.querySelector('[data-group-action="start"]').disabled`);
   await a.eval(`document.querySelector('[data-group-action="start"]').click()`);
   for(const c of [a,b])await c.wait(`document.querySelector('#choices button:not(:disabled)')&&!document.querySelector('#groupDialog').open`);
@@ -413,10 +418,10 @@ async function setup(browser,uid){
   console.log('PASS: student creates group in game, visible in lobby, join from another game, shared start, mistake resets all, seven correct wins and ranks');
   const firstGroup=groupSession.id;
   await a.eval(`document.querySelector('[data-group-action="again"]').click()`);await a.wait(`AxiomaGroups.state().current?.status==='waiting'`);
-  assert.notEqual(groupSession.id,firstGroup);assert.equal(groupSessions.get(firstGroup).status,'finished');
+  await finishClayPractice(a);assert.notEqual(groupSession.id,firstGroup);assert.equal(groupSessions.get(firstGroup).status,'finished');
   await b.eval('AxiomaGroups.refresh()');await b.wait(`!document.querySelector('#groupContent [data-group-action="join"]').disabled`);
   await b.eval(`document.querySelector('#groupContent [data-group-action="join"]').click()`);await b.wait(`AxiomaGroups.state().current?.status==='waiting'`);
-  assert.equal(await b.eval('AxiomaGroups.state().current.id'),groupSession.id);
+  await finishClayPractice(b);assert.equal(await b.eval('AxiomaGroups.state().current.id'),groupSession.id);
   await b.eval(`document.querySelector('[data-group-action="leave"]').click()`);await b.wait(`!!AxiomaGroups.state().member.left_at`);
   assert.equal(groupSession.status,'waiting','participant leaving keeps host lobby open');
   await a.go('');await a.wait('window.AxiomaGroups?.state().connected');await a.eval('AxiomaSocial.open()');
@@ -427,7 +432,7 @@ async function setup(browser,uid){
   await a.eval(`document.querySelector('#groupMenu').click()`);await a.wait(`document.querySelector('[data-group-action="done"]')`);
   await a.eval(`document.querySelector('[data-group-action="done"]').click()`);await a.wait(`!document.querySelector('#groupDialog').open`);
   await a.eval('AxiomaGroups.refresh()');assert.equal(await a.eval(`document.querySelector('#groupDialog').open`),false,'completed session stays dismissed after refresh');
-  await a.eval(`document.querySelector('#start').click()`);await a.wait(`!document.querySelector('#countdown').hidden`);await a.eval(`document.querySelector('#restart').click()`);await a.wait(`!document.querySelector('#lobby').hidden`);
+  await a.eval(`document.querySelector('#start').click()`);await finishClayPractice(a);await a.wait(`!document.querySelector('#countdown').hidden`);await a.eval(`document.querySelector('#restart').click()`);await a.wait(`!document.querySelector('#lobby').hidden`);
   console.log('PASS: host opens fresh round, participant opts in and leaves, host ends group from global Online menu; previous result retained');
   // Popover layout and keyboard dismissal on small screens.
   await a.go('');await a.wait('window.AxiomaSocial?.state().connected');

@@ -19,7 +19,7 @@ function game(){
   const document={getElementById:get,createElement:tag=>new Element(tag),createElementNS:(_,tag)=>new Element(tag),querySelectorAll:()=>speeds};
   const account={id:'player-a',alias:'Testspeler'},tabId='tab-a';let snapshot,listener;
   const copies=x=>structuredClone(x);
-  const answerCalls=[];
+  const answerCalls=[],arcadeEvents=[];
   const emit=()=>{snapshot.server_time=new Date(now).toISOString();snapshot.clockOffset=0;listener?.(copies(snapshot))};
   const api={state:()=>copies(snapshot),ready:async()=>copies(snapshot),onChange:fn=>{listener=fn},refresh:async()=>{emit()},answer:async packet=>{
     answerCalls.push(packet);const m=snapshot.member;
@@ -34,7 +34,7 @@ function game(){
     matchMedia:()=>({matches:true}),localStorage:{getItem:()=>null,setItem:()=>{}},location:{search:''},URLSearchParams,
     setTimeout:(fn,ms)=>{const id=++timerId;timers.set(id,{fn,at:now+ms});return id},clearTimeout:id=>timers.delete(id),
     requestAnimationFrame:fn=>{const id=++timerId;frames.set(id,fn);return id},cancelAnimationFrame:id=>frames.delete(id),
-    addEventListener:()=>{},AxiomaClayQuestions:Q,AxiomaGame:{state:{},storage:{getItem:()=>null,setItem:()=>{}},report:()=>{}},AxiomaGroups:api,AxiomaProgress:{completeUnit:async()=>{}}};
+    addEventListener:()=>{},RechtenArcade:{params:new URLSearchParams(),start:e=>arcadeEvents.push(['start',e]),record:e=>arcadeEvents.push(['record',e]),finish:e=>arcadeEvents.push(['finish',e])},AxiomaClayQuestions:Q,AxiomaGame:{state:{},storage:{getItem:()=>null,setItem:()=>{}},report:()=>{}},AxiomaGroups:api,AxiomaProgress:{completeUnit:async()=>{}}};
   ctx.window=ctx;vm.createContext(ctx);
   let script=fs.readFileSync('games/rechten/kleiduiven/kleiduiven.js','utf8');
   script=script.replace('initField();readHistory();',`window.testGame={updateGroup,startGame,stopGame,fire,fail,groupState:()=>({groupMode,groupVersion,state,streak:mastered.size,attempt:attempt?.id}),renderGroupMenu};initField();readHistory();`);
@@ -42,7 +42,7 @@ function game(){
   async function tick(ms){const until=now+ms;while(now<until){now=Math.min(until,now+20);for(const [id,t]of[...timers])if(t.at<=now){timers.delete(id);t.fn()}const fs=[...frames];frames.clear();for(const[,fn]of fs)fn(now);await Promise.resolve();await Promise.resolve()}}
   function startGroup(question_version=1){snapshot.current={id:'12345678-1111-4111-8111-111111111111',question_version,status:'running',speed:5,host_id:account.id,host_alias:account.alias,starts_at:new Date(now+5000).toISOString()};snapshot.member={user_id:account.id,tab_id:tabId,left_at:null,streak:0,misses:0,version:0,next_at:snapshot.current.starts_at};snapshot.members=[{...snapshot.member,alias:account.alias,online:true}];emit()}
   async function choose(value){const b=get('choices').children.find(b=>Number(b.dataset.a)===value);assert(b,'answer choice exists');b.onclick();await tick(1200)}
-  return {ctx,get,tick,startGroup,choose,snapshot,answerCalls,emit};
+  return {ctx,get,tick,startGroup,choose,snapshot,answerCalls,arcadeEvents,emit};
 }
 test('group race starts together, resets the entire streak on a miss and finishes on seven correct answers',async()=>{
  const g=game();await Promise.resolve();await Promise.resolve();g.startGroup();
@@ -62,9 +62,9 @@ test('a timeout submits one miss and a remote winner stops the remaining animati
  await g.tick(6000);assert.equal(g.answerCalls.length,1);assert.equal(g.ctx.testGame.groupState().state,'groupdone');assert.match(g.get('groupContent').innerHTML,/Andere speler wint/);
 });
 test('standalone still runs and restart cancels its delayed countdown',async()=>{
- const g=game();await Promise.resolve();await Promise.resolve();g.ctx.testGame.startGame();assert.equal(g.ctx.testGame.groupState().state,'countdown');
+ const g=game();await Promise.resolve();await Promise.resolve();g.ctx.testGame.startGame(true);assert.equal(g.ctx.testGame.groupState().state,'countdown');
  g.get('restart').onclick();await g.tick(4000);assert.equal(g.ctx.testGame.groupState().state,'lobby');assert.equal(g.ctx.testGame.groupState().attempt,undefined);
- g.ctx.testGame.startGame();await g.tick(3100);assert.equal(g.ctx.testGame.groupState().state,'playing');assert.equal(g.ctx.testGame.groupState().attempt,'mixed-0');
+ g.ctx.testGame.startGame(true);await g.tick(3100);assert.equal(g.ctx.testGame.groupState().state,'playing');assert.equal(g.ctx.testGame.groupState().attempt,'mixed-0');
 });
 
 test('mixed group advances to a new shared question after a miss and wins at seven consecutive correct answers',async()=>{
@@ -88,4 +88,17 @@ test('ranking keeps the selected tempo when an older request completes later and
  pending[0].resolve({ranking:[]});await Promise.resolve();assert.equal(g.get('groupRankingContent').innerHTML,html);
  g.snapshot.account=null;g.emit();assert.equal(g.get('rankingDialog').open,false);assert.equal(g.get('groupRankingContent').textContent,'');
  g.get('rankingMenu').onclick();assert.match(g.get('groupRankingContent').innerHTML,/Log in/);assert.equal(pending.length,2);
+});
+
+test('two untimed practice shots teach the controls without submitting or changing scores',async()=>{
+ const g=game();await Promise.resolve();await Promise.resolve();g.get('start').onclick();await g.tick(30000);
+ assert.equal(g.ctx.testGame.groupState().attempt,'practice-up');assert.equal(g.get('timer').textContent,'Geen klok');assert.equal(g.answerCalls.length,0);
+ await g.choose(-1);assert.match(g.get('status').textContent,/a = 1/);assert.equal(g.ctx.testGame.groupState().streak,0);
+ g.get('practiceNext').onclick();await g.choose(-.5);assert.match(g.get('status').textContent,/a = −½/);assert.equal(g.arcadeEvents.length,0);g.get('practiceNext').onclick();assert.equal(g.arcadeEvents.length,1);
+ assert.equal(g.ctx.testGame.groupState().state,'countdown');await g.tick(3100);assert.equal(g.ctx.testGame.groupState().attempt,'mixed-0');assert.equal(g.answerCalls.length,0);assert.equal(g.get('attempts').textContent,'0 missers');
+});
+test('waiting group offers practice and a remote start safely interrupts it',async()=>{
+ const g=game();await Promise.resolve();await Promise.resolve();g.startGroup();g.snapshot.current.status='waiting';g.emit();
+ assert.equal(g.ctx.testGame.groupState().attempt,'practice-up');await g.choose(1);assert.equal(g.answerCalls.length,0);assert.equal(g.snapshot.member.version,0);
+ g.snapshot.current.status='running';g.emit();await g.tick(5100);assert.equal(g.ctx.testGame.groupState().attempt,'p1');await g.choose(1);assert.equal(g.answerCalls.length,1);
 });

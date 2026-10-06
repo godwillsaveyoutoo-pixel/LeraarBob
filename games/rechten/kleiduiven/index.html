@@ -167,6 +167,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 <link rel="stylesheet" href="../arcade/theme.css">
 <script src="../arcade/core.js"></script>
 <script src="../arcade/bridge.js" data-arena="kleiduiven"></script>
+<link rel="stylesheet" href="choices.css">
 </head>
 <body data-arcade="kleiduiven">
 <div id="app">
@@ -227,6 +228,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
     <div class="consoleTop"><span class="eyebrow">KIES & VUUR</span><div class="question">Welke <i>a</i>?</div><p>Lees de richting van links naar rechts.</p></div>
     <div class="deadline"><span>TIJD VOOR DIT DOEL</span><strong id="timer">5,0 s</strong><div class="timeTrack"><i id="timeFill"></i></div></div>
     <div id="choices" aria-label="Kies de richtingscoëfficiënt en vuur"></div>
+    <div id="practiceTools" hidden><p id="practiceNote"></p><button id="practiceNext" class="primary" hidden></button></div>
     <div class="consoleFoot"><span id="teamLabel">Jij</span><span id="attempts">0 missers</span></div>
   </aside>
 </main>
