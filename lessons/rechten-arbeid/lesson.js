@@ -58,8 +58,8 @@
   scene('samen','Ethiek in moeilijke wiskundetijden','ethics','Ervoor zorgen dat anderen hier ook kunnen leren.',{chapter:'10 / ETHIEK',note:'Ook tijdens deze heel moeilijke wiskundetijden.'}),
   scene('ruimte-geven','Zorgen voor elkaar','ethics','Helpen wanneer je kunt.\nRuimte geven wanneer iemand denkt.',{phase:1,note:'Niemand is een gratis oplossingsmachine.'}),
   scene('boot','Hetzelfde schuitje','boat','We zitten in hetzelfde schuitje.',{chapter:'11 / DEZELFDE BOOT',drawing:{passengers:1}}),
-  scene('boot-samen','Iedereen aan boord','boat','De enige optie is samen ons doel bereiken.',{drawing:{passengers:7}}),
-  scene('anderhalve-maand','Voorlopig samen','boat','…voor minstens anderhalve maand.',{drawing:{passengers:7,sailing:true},notes:'Laat het kleine bootje een paar seconden verder varen. Dit is de droge eindnoot, geen grootse climax.'}),
+  scene('boot-samen','Iedereen aan boord','boat','De enige optie is samen ons doel bereiken.',{drawing:{passengers:21}}),
+  scene('anderhalve-maand','Voorlopig samen','boat','…voor minstens anderhalve maand.',{drawing:{passengers:21,sailing:true},notes:'Laat het kleine bootje een paar seconden verder varen. Dit is de droge eindnoot, geen grootse climax.'}),
   scene('belofte-leraar','Mijn belofte','contract','Ik probeer een goede route te bouwen.',{chapter:'12 / DE AFSPRAAK',phase:1}),
   scene('belofte-leerling','Jullie belofte','contract','Wij beloven niet dat alles meteen lukt.',{phase:2}),
   scene('meedoen','Werkelijk meedoen','contract','Wel dat we werkelijk meedoen.',{phase:2}),
@@ -82,8 +82,8 @@
   scene('mooi-kijken','Geen punten voor mooi kijken','paper','Geen punten voor mooi kijken.',{note:'Niet gokken. Werk het uit.'}),
   {id:'battle',title:'Klasbattle · 20 vragen',events:[{type:'battle',preset:'arbeid'}]},
   {id:'klasbeeld',title:'Wat de arbeid achterliet',events:[{type:'results',source:'battle'}]},
-  scene('voltooid','Sessie voltooid','boat','SESSIE VOLTOOID',{drawing:{passengers:7,sailing:true},note:'Vandaag hebben we niet bewezen dat iedereen alles kan.'}),
-  scene('uitloop','Wel dat we kunnen werken','boat','Wel dat we kunnen werken.',{drawing:{passengers:7,sailing:true},note:'volgende sessie → verder'})
+  scene('voltooid','Sessie voltooid','boat','SESSIE VOLTOOID',{drawing:{passengers:21,sailing:true},note:'Vandaag hebben we niet bewezen dat iedereen alles kan.'}),
+  scene('uitloop','Wel dat we kunnen werken','boat','Wel dat we kunnen werken.',{drawing:{passengers:21,sailing:true},note:'volgende sessie → verder'})
  ];
  // Stable duos share a chapter; a reading turn never advances the teacher's cursor.
  const readers=['Liana','Amal','Doae','Neva','Emelly','Zemrita','Alae','Lina','Hala','Berfin','Imane','Ibtissam','Shakira','Nilay','Ecrin','Anas','Nadia','Djenaba','Paris','Souraya'];
