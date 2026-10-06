@@ -15,20 +15,21 @@ const BASE=process.env.VECTOR_BASE_URL||'http://127.0.0.1:8775',OUT=process.env.
  }
  await page.evaluate(()=>lessonStage.go('sessie-starten'));await page.waitForTimeout(410);await page.click('#sceneChoices button:first-child');assert.equal(await page.evaluate(()=>lessonStage.step.id),'gebouwd');
  await page.evaluate(()=>lessonStage.go('zelf-lopen'));await page.waitForTimeout(410);const before=await page.locator('#words').textContent();await page.waitForTimeout(1600);assert.equal(await page.locator('#words').textContent(),before);
+ await page.evaluate(()=>lessonStage.go('onze-les'));await page.waitForTimeout(410);assert.equal(await page.locator('#readingNames').textContent(),'Imane / Ibtissam');assert.equal(await page.locator('#sceneNote').textContent(),'Onze les is wiskunde!');assert.equal(await page.locator('#readingHint').textContent(),'Kies zelf wie leest');
  // Painter is deterministic at a chosen timestamp; overload and silence differ.
  const drawings=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=1000;canvas.height=620;const c=canvas.getContext('2d'),draw=(phase,t)=>{LivingBlackboard.paint(c,'bandwidth',t,{phase,seed:37});return canvas.toDataURL();};return [draw(1,2500),draw(1,2500),draw(3,2500)];});assert(drawings[0]===drawings[1],'same timestamp gives the same drawing');assert(drawings[0]!==drawings[2],'noise and calm have different drawings');assert.deepEqual(errors,[]);
  // Reading changes affect the whole block, while the scene and narrative stay put.
  await page.setViewportSize({width:1440,height:900});await page.evaluate(()=>lessonStage.go('waar-sta-ik'));await page.waitForTimeout(410);
- assert.equal(await page.locator('#readingNames').textContent(),'Shakira & Nilay');const spoken=await page.locator('#words').textContent();
+ assert.equal(await page.locator('#readingNames').textContent(),'Shakira / Nilay');const spoken=await page.locator('#words').textContent();
  await page.click('#changeReader');assert.equal(await page.evaluate(()=>lessonStage.step.id),'waar-sta-ik');
  await page.selectOption('#readerFirst','Liana');await page.selectOption('#readerSecond','Amal');await page.click('#readerForm button[type=submit]');
- assert.equal(await page.locator('#readingNames').textContent(),'Liana & Amal');assert.equal(await page.locator('#words').textContent(),spoken);
- await page.reload();await page.waitForFunction(()=>window.lessonStage);await page.waitForTimeout(410);assert.equal(await page.locator('#readingNames').textContent(),'Liana & Amal');
+ assert.equal(await page.locator('#readingNames').textContent(),'Liana / Amal');assert.equal(await page.locator('#words').textContent(),spoken);
+ await page.reload();await page.waitForFunction(()=>window.lessonStage);await page.waitForTimeout(410);assert.equal(await page.locator('#readingNames').textContent(),'Liana / Amal');
  await page.click('#teacherMenu');await page.click('#readerSetup summary');await page.click('#resetReaders');await page.locator('#readerAttendance input[value="Shakira"]').uncheck();
  assert.equal(await page.locator('#readingNames').textContent(),'Nilay');await page.locator('#readerAttendance input[value="Nilay"]').uncheck();
  assert(!/Shakira|Nilay/.test(await page.locator('#readingNames').textContent()));await page.click('#resetReaders');await page.locator('#settings .close').click();
- await page.evaluate(()=>lessonStage.go('boot'));await page.waitForTimeout(410);assert.equal(await page.locator('#readingNames').textContent(),'Paris');
- await page.evaluate(()=>lessonStage.next());await page.waitForTimeout(410);assert.equal(await page.locator('#readingNames').textContent(),'Souraya');
+ await page.evaluate(()=>lessonStage.go('boot'));await page.waitForTimeout(410);assert.equal(await page.locator('#readingNames').textContent(),'Paris / Souraya');
+ await page.evaluate(()=>lessonStage.next());await page.waitForTimeout(410);assert.equal(await page.locator('#readingNames').textContent(),'Paris / Souraya');
  await page.evaluate(()=>lessonStage.go('belofte-leraar'));await page.waitForTimeout(410);assert.equal(await page.locator('#readingNames').textContent(),'LeraarBob');
  await page.evaluate(()=>lessonStage.go('server-uitleg'));await page.waitForTimeout(410);assert.match(await page.locator('#sceneNote').textContent(),/^LeraarBob: Nee\. Die functie is niet geïnstalleerd\.\nOm 23:00 sluit de upload\.$/);
  // Real-time rendering: buildup, one impact, settled hold, continuation and replay.

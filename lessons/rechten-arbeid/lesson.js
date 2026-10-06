@@ -16,12 +16,12 @@
  });
  const steps=[
   scene('aftellen','We starten weldra · 3 minuten','empty','We starten weldra.',{tone:'night',delay:0,note:'Leg je materiaal klaar. Meld je aan bij leraarBob en sluit aan via Live.',events:[{type:'pause',duration:180000,next:'samen-lezen',finished:'We gaan beginnen.'}],notes:'Drie minuten om rustig aan te sluiten. De aftelling gaat vanzelf naar de leesafspraak. Je kunt eerder verder klikken; R begint opnieuw bij drie minuten.'}),
-  scene('samen-lezen','Zo lezen we samen','empty','We gaan samen lezen.',{delay:0,note:'Zie je jouw naam? Lees de zin hardop.\nStaan jullie met twee? Lees om de beurt.\nDe rest leest mee. Ik klik verder.',notes:'Kondig eerst de leesafspraak aan. Is iemand afwezig, dan neemt de duopartner of een andere leerling over. Jij houdt de regie en klikt verder wanneer iedereen klaar is.'}),
+  scene('samen-lezen','Zo lezen we samen','empty','We gaan samen lezen.',{delay:0,note:'Jullie namen in beeld? Kies zelf wie leest.\nTegelijk begonnen? Kan gebeuren.\nDe rest leest mee. Ik klik verder.',notes:'Kondig eerst de leesafspraak aan: het duo kiest zelf wie leest, zonder vaste verdeling per zin. Is iemand afwezig, dan neemt de duopartner of een andere leerling over. Jij houdt de regie en klikt verder wanneer iedereen klaar is.'}),
   scene('opening','LeraarBob // sessie 01','opening','LERAARBOB',{tone:'night',note:'SESSIE 01 / RECHTENWERELD',notes:'Een dunne lijn. Laat het even stil zijn. De intro is een gesprek van ongeveer 6–8 minuten; jij bepaalt elk volgend betekenisvol moment.'}),
   scene('sessie-starten','Sessie starten?','opening','SESSIE STARTEN?',{tone:'night',choices:['JA','we zitten hier toch'],notes:'Droge opening. Beide knoppen starten hetzelfde verhaal, geen leerlingstemming.'}),
   scene('gebouwd','Iets voor jullie gebouwd','package','Ik heb iets voor jullie gebouwd.',{chapter:'01 / DE OVEREENKOMST',notes:'Jij opent met wat je hebt voorbereid. Daarna nemen de twee leerlingen het over: de voorbereiding is er, de les maken we samen.'}),
   scene('als-we-dit-doen','De voorbereiding','package','U hebt de les voorbereid.',{phase:1}),
-  scene('les','Samen maken we de les','empty','Wij maken er samen iets van.',{tone:'night',notes:'De tweede lezer antwoordt op de eerste. Bevestig kort: precies, deze les maken we samen.'}),
+  scene('les','Samen maken we de les','empty','Wij maken er samen iets van.',{tone:'night',notes:'Hetzelfde duo kiest zelf wie verder leest. Bevestig kort: precies, deze les maken we samen.'}),
   scene('contract','Ons doel: begrijpen en gebruiken','contract','Ik wil dat jullie rechten begrijpen\nen zelf kunnen gebruiken.',{chapter:'02 / TWEE VERANTWOORDELIJKHEDEN',phase:0,notes:'Mijn verantwoordelijkheid: weten waar we naartoe gaan, een route voorbereiden en bijsturen.'}),
   scene('reisweg','Wij leggen de weg af','contract','Wij leggen de weg af.\nIeder vanaf zijn eigen startpunt.',{phase:1,notes:'De leerling vertrekt, werkt, vraagt en controleert. Die reis is niet voor iedereen even lang.'}),
   scene('zelf-lopen','Zelf de weg afleggen','contract','Ik kan de route bouwen.\nJullie zetten zelf de stappen.',{phase:2}),
@@ -98,15 +98,11 @@
   ['boot','boot-samen','anderhalve-maand']
  ];
  const teacherSteps=new Set(['aftellen','samen-lezen','opening','sessie-starten','gebouwd','contract','zelf-lopen','processor','nee','belofte-leraar','deal','werkelijkheid','dank-u','bewijzen','achtergelaten','ronde2','werktijd','geleverd','kijken','bewijs-van-arbeid','mooi-kijken']);
- const duoSteps=new Set(['reisweg','leerdoel','vaardigheden','waar-sta-ik','ruimte-geven']);
  for(const step of steps){
   const text=step.events.find(e=>e.type==='text');if(!text)continue;
   let pair=readingGroups.findIndex(ids=>ids.includes(step.id));
   if(pair<0)pair=['voltooid','uitloop'].includes(step.id)?9:['belofte-leerling','meedoen','deal','jezelf'].includes(step.id)?0:null;
-  const group=readingGroups[pair]||[],index=group.filter(id=>!teacherSteps.has(id)).indexOf(step.id);
-  step.reading={pair,lead:teacherSteps.has(step.id)?'teacher':duoSteps.has(step.id)?'pair':Math.max(0,index)%2};
-  if(['meedoen','uitloop'].includes(step.id))step.reading.lead=1;
-  if(step.id==='onze-les')text.noteSpeaker=0;
+  step.reading={pair,lead:teacherSteps.has(step.id)?'teacher':'pair'};
   if(step.id==='server-uitleg')text.noteSpeaker='teacher';
   if(step.id==='deal')text.noteSpeaker='pair';
  }

@@ -35,6 +35,8 @@ test('all twenty readers have a stable duo and absence never leaves an empty rea
  assert.deepEqual(Readers.resolve({pair:6,lead:'teacher'},Lesson,{absent:Lesson.readers}).speakers,['LeraarBob']);
  assert.equal(new Set(['boot','boot-samen','anderhalve-maand'].map(id=>Lesson.steps.find(s=>s.id===id).reading.pair)).size,1);
  assert.equal(Lesson.steps.find(s=>s.id==='belofte-leraar').reading.lead,'teacher');
+ for(const step of Lesson.steps.filter(s=>s.reading&&s.reading.lead!=='teacher'))assert.equal(step.reading.lead,'pair',step.id);
+ assert.equal(Lesson.steps.find(s=>s.id==='onze-les').events.find(e=>e.type==='text').noteSpeaker,undefined);
 });
 
 test('live identity initializes the signed-out view and follows later account changes once',async()=>{
