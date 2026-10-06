@@ -48,3 +48,14 @@ test('live identity initializes the signed-out view and follows later account ch
  identity({account:null});identity({account:{id:'teacher',role:'teacher'}});identity({account:{id:'teacher',role:'teacher'}});identity({account:null});
  assert.deepEqual(seen,[null,'teacher',null]);
 });
+
+test('class snapshot uses only the 15 supplied records and counts every value once',()=>{
+ const step=Lesson.steps.find(s=>s.id==='voortgang-klas'),scene=step.events[0];
+ const values=[20,22,21,18,15,16,13,13,12,10,11,11,9,1,0];
+ assert.equal(values.reduce((a,b)=>a+b,0),192);
+ assert.equal(scene.bins.reduce((sum,b)=>sum+b.count,0),values.length);
+ assert.deepEqual(scene.bins.map(b=>b.count),[2,7,4,2]);
+ assert.match(step.events[1].note,/15 leerlingen.*momentopname\nGemiddeld 12,8 van 28/);
+ assert.equal(step.reading,undefined);
+ assert.equal(Lesson.steps[Lesson.steps.indexOf(step)+1].id,'eerlijk');
+});

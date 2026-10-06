@@ -203,6 +203,18 @@
    }
    if(phase){line([[161,533],[872,533]],ease((t-.8)/1.3),accent);text('ONZE LES',515,579,28,accent,{mono:true,align:'center'});}
   }
+  if(art==='progress'){
+   const bins=options.bins||[],max=Math.max(1,...bins.map(b=>b.count));
+   text('AANTAL LEERLINGEN',500,63,32,ink,{align:'center'});
+   for(let i=0;i<bins.length;i++){
+    const b=bins[i],x=110+i*210,q=ease((t-i*.12)/1.3),h=300*b.count/max*q;
+    shape(c=>c.roundRect(x,465-h,150,h,8),accent,null);
+    text(String(b.count),x+75,440-h,54,ink,{align:'center'});
+    text(b.label,x+75,522,44,ink,{align:'center'});
+   }
+   line([[80,466],[920,466]],1,ink);
+   text('AFGERONDE ONDERDELEN (VAN 28)',500,589,30,ink,{align:'center'});
+  }
   if(art==='thinking'){
    person(500,260,1.25);paper(540,330,80,95);line([[420,355],[620,355]],1);
    const words=['plannen','volhouden','controleren','twijfelen','opnieuw proberen','uitleggen'];for(let i=0;i<words.length;i++){const a=-Math.PI+i*Math.PI/3,x=500+Math.cos(a)*280,y=265+Math.sin(a)*150;const q=phase?1:ease((t-i*.35)/1.3);ctx.globalAlpha=q;text(words[i],x,y,26,ink,{align:'center'});line([[x,y+10],[500+(x-500)*.4,265+(y-265)*.4]],q,accent);ctx.globalAlpha=1;}
@@ -274,6 +286,8 @@
   reduced.addEventListener('change',schedule);
   document.fonts?.addEventListener('loadingdone',schedule);
   return {start(e,signal,{continueScene=false,elapsed=0}={}){
+   canvas.setAttribute('aria-hidden',e.description?'false':'true');
+   if(e.description){canvas.setAttribute('role','img');canvas.setAttribute('aria-label',e.description);}else{canvas.removeAttribute('role');canvas.removeAttribute('aria-label');}
    const next=JSON.stringify(e);if(!continueScene||next!==signature)started=performance.now()-Math.max(0,elapsed);signature=next;art=e.art||'horizon';options=e;silence=false;active=!signal.aborted;schedule();
    signal.addEventListener('abort',()=>{active=false;cancelAnimationFrame(raf);},{once:true});
   },silence(){silence=true;schedule();},paint};

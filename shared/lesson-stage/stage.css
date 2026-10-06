@@ -68,3 +68,8 @@ body:is([data-lesson-role=checking],[data-lesson-role=student]) #stage,body:is([
 .session-actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.session-actions button{margin:0;flex:1 1 180px}#deskPrepare,#resumeSession{background:var(--ink);color:var(--paper);font-weight:650}#closeSession{border:2px solid var(--accent);font-weight:650}#sessionHelp{font-size:14px}#sessionDesk{opacity:1!important;border:1px solid var(--accent)!important}#teacherControls:has(#sessionDesk){opacity:1}
 
 #lessonActivityTools,#lessonReports{border-top:1px solid #8885;margin-top:16px;padding-top:8px}#lessonActivityTools>summary,#lessonReports>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:650}#lessonActivityTools>summary::before,#lessonReports>summary::before{content:'▸';margin-right:10px}#lessonActivityTools[open]>summary::before,#lessonReports[open]>summary::before{content:'▾'}
+
+/* A quiet statistics moment has no assigned reading turn. */
+#stage[data-art=progress] #readingBar{display:none}
+#stage[data-art=progress] #narrative{grid-template-rows:minmax(0,1fr) auto}
+#stage[data-art=progress] #eyebrow{display:none}

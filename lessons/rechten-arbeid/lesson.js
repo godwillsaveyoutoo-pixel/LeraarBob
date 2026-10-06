@@ -14,6 +14,11 @@
   events:[{type:'scene',art,seed:37,phase:options.phase||0,tone:options.tone||'paper',color:options.color||sceneColor(art,options.phase||0),...options.drawing},
    {type:'text',text,emphasis:accents[id]||[],impact:punch.has(id),note:options.note||'',choices:options.choices||[],at:options.delay??350},...(options.events||[])]
  });
+ // Anonymous, supplied snapshot; this is not a live account-progress query.
+ const progressValues=[20,22,21,18,15,16,13,13,12,10,11,11,9,1,0];
+ const progressBins=[[0,6],[7,13],[14,20],[21,28]].map(([lo,hi])=>({label:`${lo}–${hi}`,count:progressValues.filter(n=>n>=lo&&n<=hi).length}));
+ const progressMean=(progressValues.reduce((sum,n)=>sum+n,0)/progressValues.length).toLocaleString('nl-BE',{maximumFractionDigits:1});
+ const progressDescription=progressBins.map(b=>`${b.label} onderdelen: ${b.count} leerlingen`).join('. ')+'.';
  const steps=[
   scene('aftellen','We starten weldra · 5 minuten','empty','We starten weldra.',{tone:'night',delay:0,note:'Leg je materiaal klaar. Meld je aan bij leraarBob en sluit aan via Live.',events:[{type:'pause',duration:300000,next:'samen-lezen',finished:'We gaan beginnen.'}],notes:'Vijf minuten om rustig aan te sluiten. De aftelling gaat vanzelf naar de leesafspraak. Je kunt eerder verder klikken; R begint opnieuw bij vijf minuten.'}),
   scene('samen-lezen','Zo lezen we samen','empty','We gaan samen lezen.',{delay:0,note:'Jullie namen in beeld? Kies zelf wie leest.\nTegelijk begonnen? Kan gebeuren.\nDe rest leest mee. Ik klik verder.',notes:'Kondig eerst de leesafspraak aan: het duo kiest zelf wie leest, zonder vaste verdeling per zin. Is iemand afwezig, dan neemt de duopartner of een andere leerling over. Jij houdt de regie en klikt verder wanneer iedereen klaar is.'}),
@@ -66,6 +71,7 @@
   scene('deal','Deal?','empty','Deal?',{tone:'night',note:'Deal.',notes:'Jij stelt de vraag. Het duo antwoordt. Geef ruimte voor een echte korte reactie vóór je verder klikt.'}),
   scene('werkelijkheid','Dan nu de werkelijkheid','opening','OKÉ. DAN NU DE WERKELIJKHEID.',{tone:'night'}),
   {id:'join',title:'Sessie open · aansluiten',events:[{type:'liveJoin'}]},
+  scene('voortgang-klas','Voortgang · 4TMW','progress','Afgeronde onderdelen',{color:'teal',delay:0,drawing:{bins:progressBins,description:progressDescription},note:`4TMW · ${progressValues.length} leerlingen · momentopname\nGemiddeld ${progressMean} van 28 onderdelen`,notes:'Statische momentopname van de 15 aangeleverde voortgangsstanden. Geen namen, geen leesbeurt en geen extra commentaar.'}),
   {id:'eerlijk',title:'De papieren taak',events:[{type:'poll',id:'eigen-werk',anonymous:false,question:'Heb jij deze papieren taak volledig zelf gemaakt?',options:['Ja','Neen']}]},
   {id:'polluitslag',title:'De groep',notes:'Geen “aha!” en geen oordeel bij de aantallen. Gewoon: dank u.',events:[{type:'results',source:'poll',poll:'eigen-werk'}]},
   scene('dank-u','Dank u','empty','Dank u.',{note:'Meer hoef ik daar eigenlijk niet over te weten.'}),
@@ -102,7 +108,7 @@
  ];
  const teacherSteps=new Set(['helling-opfrissen','aftellen','samen-lezen','opening','sessie-starten','gebouwd','contract','zelf-lopen','processor','nee','belofte-leraar','deal','werkelijkheid','dank-u','bewijzen','achtergelaten','ronde2','werktijd','geleverd','kijken','bewijs-van-arbeid','mooi-kijken']);
  for(const step of steps){
-  const text=step.events.find(e=>e.type==='text');if(!text)continue;
+  const text=step.events.find(e=>e.type==='text');if(!text||step.id==='voortgang-klas')continue;
   let pair=readingGroups.findIndex(ids=>ids.includes(step.id));
   if(pair<0)pair=['voltooid','uitloop'].includes(step.id)?9:['belofte-leerling','meedoen','deal','jezelf'].includes(step.id)?0:null;
   step.reading={pair,lead:teacherSteps.has(step.id)?'teacher':'pair'};

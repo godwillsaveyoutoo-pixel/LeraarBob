@@ -18,7 +18,7 @@ Direct na **Sessie starten?** komt een vaste opwarming: twee hellingbeelden (ver
 
 ## Verloop
 
-De presentatie volgt het nadien aangeleverde gesprek: 69 stappen, gegroepeerd rond de twaalf korte hoofdstukken van de inleiding en de echte lesactiviteiten. De intro is bedoeld als gesprek van ongeveer 6–8 minuten. Sommige momenten zijn één zin of een stilte van enkele seconden; het zijn geen 69 volgeschreven slides.
+De presentatie volgt het nadien aangeleverde gesprek: 70 stappen, gegroepeerd rond de twaalf korte hoofdstukken van de inleiding en de echte lesactiviteiten. De intro is bedoeld als gesprek van ongeveer 6–8 minuten. Sommige momenten zijn één zin of een stilte van enkele seconden; het zijn geen 70 volgeschreven slides.
 
 De film bevat nu de donkere systeemstart, het pakketje, de twee verantwoordelijkheden, LeraarBob OS met cumulatieve regels en serverhumor, het gereedschap dat naar één doel terugkeert, een hoofd met grote oren/ogen en een oplopende CPU-meter, expliciete stilte en werkgesprekken, een geïllustreerde stad die teruggaat naar een leerling met papier, verschillende startpunten, HELPEN.EXE met terugspoelen, het kopieerwezentje, ethiek, het kleine schuitje dat volloopt en verder vaart, de wederzijdse belofte en de stille “Deal?”. Daarna volgen dezelfde live lesactiviteiten. Het slot luidt “Vandaag hebben we niet bewezen dat iedereen alles kan. Wel dat we kunnen werken.”
 
@@ -119,3 +119,5 @@ Aanvullend gecontroleerd: live scènewissels en leesnamen, eigenaarcontrole, laa
 Productie: beide migraties zijn op 6 oktober 2026 toegepast op de bestaande LeraarBob-database. De bestaande account- en Edge Function-configuratie is behouden. De tabellen blijven privé en de publieke les-RPC vereist een bestaand account; er zijn geen leerlinggegevens gebruikt voor de productiecontrole.
 
 De productiecontrole bevestigt RLS, geen directe tabeltoegang en de authenticatiecontrole. De Supabase-advisor meldt voor deze private tabellen alleen [RLS zonder directe policies](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy): toegang loopt bewust uitsluitend via de gecontroleerde RPC. Bestaande waarschuwingen van andere platformonderdelen zijn ongewijzigd.
+
+De stap `voortgang-klas` toont vóór de vraag over de papieren taak een anonieme, statische momentopname van de 15 aangeleverde voortgangsstanden van 4TMW: gemiddeld 12,8/28 onderdelen, verdeeld over 0–6 (2), 7–13 (7), 14–20 (4) en 21–28 (2). Geen leesbeurt, waardeoordeel of verzonnen voldoendegrens. Dezelfde grafiek volgt live op het leerlingenscherm; deze momentopname verandert geen opgeslagen leerlingvoortgang.
