@@ -7,7 +7,7 @@ const BASE=process.env.VECTOR_BASE_URL||'http://127.0.0.1:8775';
   await page.goto(BASE+path);await page.locator('leraarbob-topbar').waitFor();const bar=page.locator('leraarbob-topbar'),live=bar.locator('.live-entry');assert(!(await live.isVisible()));
   for(const role of ['student','teacher']){
    await page.evaluate(role=>dispatchEvent(new CustomEvent('axioma:login-complete',{detail:{account:{id:'live-test',alias:'Leerling',role}}})),role);
-   assert((await live.getAttribute('href')).endsWith(role==='student'?'join.html':'index.html'));
+   assert((await live.getAttribute('href')).endsWith(role==='student'?'join.html':'index.html#lessessie'));
    for(const width of [320,390,844,1440]){
     await page.setViewportSize({width,height:844});await page.waitForTimeout(80);
     const issues=await bar.evaluate(host=>[...host.shadowRoot.querySelectorAll('.row button,.row a')].filter(e=>e.getClientRects().length).flatMap(e=>{const b=e.getBoundingClientRect();return b.width<44||b.height<44||b.x<0||b.right>innerWidth+1?[e.className+': '+JSON.stringify(b)]:[]}));assert.deepEqual(issues,[],path+' '+role+' '+width);

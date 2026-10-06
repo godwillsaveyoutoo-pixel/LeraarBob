@@ -81,7 +81,7 @@ function syncAccount(){if(!current)return;syncLiveEntry();const b=current.host.s
 function syncLiveEntry(){
  if(!current)return;const link=current.host.shadowRoot.querySelector('.live-entry');link.hidden=!account;
  if(!account)return;let joined=false;try{joined=!!localStorage.getItem('lesson-stage-room:'+account.id);}catch{}
- link.href=new URL('lessons/rechten-arbeid/'+(account.role==='teacher'?'index.html':'join.html'),root).href;
+ link.href=new URL('lessons/rechten-arbeid/'+(account.role==='teacher'?'index.html#lessessie':'join.html'),root).href;
  const label=account.role==='teacher'?'Live les geven':joined?'Live les hervatten':'Deelnemen aan een live les';link.title=label;link.setAttribute('aria-label',label);link.classList.toggle('joined',joined);
  if(location.pathname===new URL(link.href).pathname)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
 }
