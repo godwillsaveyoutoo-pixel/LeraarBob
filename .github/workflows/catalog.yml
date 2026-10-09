@@ -17,4 +17,23 @@ jobs:
           node-version: '24'
           package-manager-cache: false
       - run: node scripts/build-catalog.cjs --check
-      - run: node --test tests/catalog.test.cjs tests/catalog-progress.test.cjs
+      - run: node --test tests/catalog.test.cjs tests/catalog-progress.test.cjs tests/desktop-model.test.cjs
+      - run: node --check os/desktop.js
+      - run: node tests/desktop-package-check.cjs
+      - name: Bureaubladbediening controleren
+        run: |
+          npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-desktop-tests" jsdom@26
+          NODE_PATH="$RUNNER_TEMP/leraarbob-desktop-tests/node_modules" node --test --test-isolation=none tests/desktop-dom.test.cjs tests/topbar-desktop.test.cjs
+      - name: Pilotapps en bestaande klasproviders in Chromium controleren
+        run: |
+          npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-browser-tests" playwright@1.64.0 @electric-sql/pglite@0.5.8
+          "$RUNNER_TEMP/leraarbob-browser-tests/node_modules/.bin/playwright" install --with-deps chromium
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" OS_SCREENSHOTS="$RUNNER_TEMP/os-qa/pilots" node tests/desktop-pilot-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/live" node tests/desktop-live-browser.cjs
+      - name: Screenshots en browserrapporten bewaren
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: os-pilot-browser-qa
+          path: ${{ runner.temp }}/os-qa
+          if-no-files-found: ignore

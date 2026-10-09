@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-09",
+  "branch": "codex/os-pilot-20261009",
+  "base_commit": "6056ac4e7445f6bb15fa1b15dce43df32a6e17e6",
+  "original_local_head": "cbbbf6d6663aac9ac51ee5cb7b29b2ffbe48c99f",
+  "original_local_files_preserved": 93,
+  "local_snapshot_branch": "codex/local-work-preserved-20261009",
+  "local_snapshot_commit": "2793263",
+  "package_sha256_checks": {
+    "passed": 13,
+    "total": 13
+  },
+  "patch_apply_check": "passed on current GitHub main; local pre-fetch topbar conflict recorded",
+  "required_unit_dom_tests": {
+    "passed": 46,
+    "failed": 0,
+    "report": "required-unit-tests.txt"
+  },
+  "relevant_native_tests": {
+    "passed": 41,
+    "failed": 0,
+    "report": "relevant-native-tests.txt"
+  },
+  "all_unit_tests": {
+    "passed": 475,
+    "total": 477,
+    "failed": 2,
+    "baseline_reproduced": true,
+    "report": "all-unit-tests.txt",
+    "baseline_report": "baseline-unit-failures.txt"
+  },
+  "catalog": "offline copy equal; aliases/progress ids/providers/roles validated",
+  "active_routes_verified": 114,
+  "desktop_controls_verified": 61,
+  "local_frontend_dependencies_verified": 15,
+  "lesson_database_tests": "both existing tests passed: role/privacy/grading/idempotence/live/report/history",
+  "pilot_browser_report": "pilot-browser-report.json",
+  "live_browser_report": "live/results.json",
+  "existing_platform_live_browser": {
+    "passed": true,
+    "report": "existing-platform-live.txt"
+  },
+  "existing_social_browser": {
+    "naval_online_full_game": "passed",
+    "naval_solo_full_game": "passed",
+    "rejoin_retry_rematch": "passed",
+    "suite_complete": false,
+    "blocker": "preexisting Clay lobby overflow at 320x568; later group rounds not executed",
+    "baseline_reproduced": true,
+    "report": "existing-social-browser.txt"
+  },
+  "production_auth": "not tested: usable credentials or signed-in browser contexts unavailable",
+  "production_external_websocket_sessions": "not tested; auth/social/groups boundaries use fixtures, class/lesson handlers use actual local SQL",
+  "github_publish": {
+    "branch_creation": "403 Resource not accessible by integration",
+    "cli_auth": "invalid",
+    "remote_branch_created": false,
+    "pull_request_created": false
+  },
+  "preview": "http://127.0.0.1:8787/os/",
+  "production_homepage_replaced": false,
+  "frontend_preview_access_tests": "passed: frontend routes and .git/.env/SQL/tests/docs/path-traversal rejection",
+  "dependencies": {
+    "node": "24.18.1",
+    "playwright": "1.64.0",
+    "jsdom": "26.1.0",
+    "pglite": "0.5.8"
+  },
+  "scope": "Existing app state/learning/answer handlers and backend sources unchanged; native Zeeslag responsive CSS only",
+  "pilot_browser": {
+    "passed": true,
+    "actual_check_groups": 31,
+    "layouts": 23,
+    "page_errors": 0,
+    "missing_routes": 0,
+    "viewport": "1366x768 at 100% zoom; 390x844 and 844x390 compact checks",
+    "native_home_and_login": "passed in actual native apps",
+    "report": "pilot-browser-report.json"
+  },
+  "live_browser": {
+    "passed": true,
+    "full_class_questions": 15,
+    "completed_runs": [
+      "Klas Learn",
+      "Getallen Klas Battle",
+      "Rechten Klas Battle",
+      "live lesson vote/results/report"
+    ],
+    "production_auth": false,
+    "report": "live/results.json"
+  }
+}

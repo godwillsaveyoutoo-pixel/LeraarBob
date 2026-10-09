@@ -318,7 +318,9 @@ async function setup(browser,uid){
     await b.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:true});
     await b.eval(`document.querySelector('#endMatchBtn').scrollIntoView({block:'nearest'})`);
     assert.equal(await b.eval(`document.querySelector('#matchResult').scrollWidth>document.querySelector('#matchResult').clientWidth`),false,'result overflow '+width);
-    assert(await b.eval(`(()=>{const r=document.querySelector('#endMatchBtn').getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight})()`),'end button reachable '+width);
+    // Fractional scrolling can leave a subpixel edge outside the viewport.
+    // Match the existing 1 px geometry tolerance and verify the touch target is uncovered.
+    assert(await b.eval(`(()=>{const button=document.querySelector('#endMatchBtn'),r=button.getBoundingClientRect();return r.top>=-1&&r.bottom<=innerHeight+1&&r.left>=-1&&r.right<=innerWidth+1&&document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===button})()`),'end button reachable '+width);
     const shot=await b.send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(`/tmp/leraarbob-naval-result-${width}.png`,Buffer.from(shot.data,'base64'));
   }
   await b.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});

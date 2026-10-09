@@ -1,0 +1,66 @@
+✖ legacy exercise engines, authentication and storage stay byte-identical outside explicit integrations (2.100455ms)
+✔ every semantic/decorative asset resolves with a documented fallback and bounded size (5.916116ms)
+✔ paper, text, feedback and primary-action design tokens meet 4.5:1 text contrast (0.528841ms)
+✖ paper exactly covers released Signaalstad content and matches digital drawing checks (1.272633ms)
+✔ empty student graphs have no solution; separate keys contain the line and all three points (14.033997ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 49.2037
+
+✖ failing tests:
+
+test at tests/rechten-v2-regression.test.cjs:7:1
+✖ legacy exercise engines, authentication and storage stay byte-identical outside explicit integrations (2.100455ms)
+  AssertionError [ERR_ASSERTION]: shared/axioma-progress.js changed outside integration
+  + actual - expected
+
+  + '80b32f1b331ae1aca05a96e9b7d3dba29e407c2d32177f23d8cc9b3a14e303bb'
+  - '9b230d40315f5ead2425f210f77d8aec0b9a93b580dc6d7a08421f655f2913c6'
+
+      at TestContext.<anonymous> (/tmp/leraarbob-os-main-baseline/tests/rechten-v2-regression.test.cjs:14:44)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '80b32f1b331ae1aca05a96e9b7d3dba29e407c2d32177f23d8cc9b3a14e303bb',
+    expected: '9b230d40315f5ead2425f210f77d8aec0b9a93b580dc6d7a08421f655f2913c6',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/signaalstad-worksheets.test.cjs:3:1
+✖ paper exactly covers released Signaalstad content and matches digital drawing checks (1.272633ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+    [
+  -   'intercept',
+  -   'ab',
+  -   'fx',
+  -   'table',
+  -   'input_from_output',
+  -   'point_on_line',
+      'graph_from_table'
+    ]
+
+      at TestContext.<anonymous> (/tmp/leraarbob-os-main-baseline/tests/signaalstad-worksheets.test.cjs:4:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [Array],
+    expected: [Array],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
