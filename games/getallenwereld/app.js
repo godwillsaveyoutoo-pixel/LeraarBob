@@ -101,11 +101,19 @@ function play(){
  const workFooter=`<footer class="workfoot"><p class="feedback" role="status" data-error="${error}" data-ok="${ok}">${esc(m.done?(m.assisted?'Met hulp uitgewerkt.':'Zelfstandig uitgewerkt.'):(message||(m.stage<0?'Kies de passende regel.':'Tik een antwoorddeel aan en kies.')))}</p><button data-action="undo" ${m.stage<0?'disabled':''}>↶ Vorige stap</button><button data-action="help">Hulp</button>${m.done?'<button class="primary" data-action="next">'+(m.index===5?'Bekijk resultaat':'Volgende opgave')+' →</button>':m.stage>=0?'<button class="primary" data-action="check">Controleer →</button>':''}</footer>`;
  return W.play({task:t,mission:m,work,question:question(t),head:playHead(t),footer:workFooter,math,error});
 }
+function freshRunSeed(id,edition){
+ const distinct=candidate=>new Set(Array.from({length:6},(_,index)=>L.make(id,(candidate+Math.imul(index+1,2654435761))>>>0,index,edition).expression)).size===6;
+ for(let i=0;i<500;i++){const candidate=seed();if(distinct(candidate))return candidate;}
+ // Some native generators have very few seeds with six distinct expressions.
+ // Probe independently of random retries; keep the native questions and grader.
+ for(let i=0;i<4096;i++){const candidate=Math.imul(i+1,2654435761)>>>0;if(distinct(candidate))return candidate;}
+ throw new Error('Geen reeks met zes verschillende opgaven gevonden.');
+}
 function start(track='basis'){
  const parked=state.runs[state.selected];if(W.resumable(parked)){state.mission=parked;activeSlot=0;go('play');return;}
  if(state.mission?.id===state.selected&&W.resumable(state.mission)){go('play');return;}
  const pilot=state.selected==='machten-product',edition=pilot&&track==='basis'?1:2;
- let fresh;for(let i=0;i<500;i++){fresh=seed();const expressions=Array.from({length:6},(_,index)=>L.make(state.selected,(fresh+Math.imul(index+1,2654435761))>>>0,index,edition).expression);if(new Set(expressions).size===6)break;}
+ const fresh=freshRunSeed(state.selected,edition);
  state.mission={id:state.selected,edition,seed:fresh,index:0,stage:-1,values:[],done:false,assisted:false,attempts:0,...(pilot?{pathVersion:W.VERSION,track}:{})};activeSlot=0;go('play');
 }
 function chooseRule(id){

@@ -7,6 +7,15 @@ async function setup({account=null,overview,storage={},topbar=false}={}){
   const errors=[],vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e));
   const dom=new JSDOM(read('os/index.html'),{url:'https://school.example/LeraarBob/os/',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:vc});
   const w=dom.window;Object.entries(storage).forEach(([k,v])=>w.localStorage.setItem(k,v));
+  // jsdom clears the body during close(), which can notify observers after its
+  // timer cleanup and schedule a new animation frame against a deleted document.
+  // Dispose the fixture's observers and pending frames before destroying it.
+  const observers=new Set(),animationFrames=new Set(),NativeObserver=w.MutationObserver;
+  const requestFrame=w.requestAnimationFrame.bind(w),cancelFrame=w.cancelAnimationFrame.bind(w),closeWindow=w.close.bind(w);
+  w.MutationObserver=class extends NativeObserver{constructor(callback){super(callback);observers.add(this);}};
+  w.requestAnimationFrame=callback=>{const handle=requestFrame(time=>{animationFrames.delete(handle);callback(time);});animationFrames.add(handle);return handle;};
+  w.cancelAnimationFrame=handle=>{animationFrames.delete(handle);cancelFrame(handle);};
+  w.close=()=>{observers.forEach(observer=>observer.disconnect());observers.clear();animationFrames.forEach(cancelFrame);animationFrames.clear();closeWindow();};
   w.HTMLDialogElement.prototype.showModal=function(){this.setAttribute('open','');};
   w.HTMLDialogElement.prototype.close=function(){if(!this.open)return;this.removeAttribute('open');this.dispatchEvent(new w.Event('close'));};
   w.ResizeObserver=class{observe(){}disconnect(){}};
@@ -28,6 +37,13 @@ async function setup({account=null,overview,storage={},topbar=false}={}){
   }
   return {dom,w,errors,$:id=>w.document.getElementById(id),emit:next=>{account=next?.account||null;listeners.forEach(cb=>cb(next));}};
 }
+test('Closing a settled desktop fixture cancels pending rendering before jsdom destroys its document',async t=>{
+  const f=await setup({topbar:true});t.after(()=>{if(f.w.document)f.w.close();});
+  await new Promise(resolve=>f.w.requestAnimationFrame(()=>f.w.requestAnimationFrame(resolve)));
+  let renderedAfterClose=false;f.w.requestAnimationFrame(()=>{renderedAfterClose=true;});f.w.close();
+  await new Promise(resolve=>setTimeout(resolve,40));
+  assert.equal(renderedAfterClose,false);assert.equal(f.w.document,undefined);assert.equal(f.errors.length,0);
+});
 test('The desktop presents eight themes, four pinned pilots and distinct work forms',async t=>{
   const f=await setup();t.after(()=>f.dom.window.close());
   assert.equal(f.$('themeFolders').children.length,8);assert.equal(f.$('pinnedApps').children.length,4);

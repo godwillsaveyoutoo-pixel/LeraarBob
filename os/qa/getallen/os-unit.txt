@@ -1,33 +1,34 @@
-✔ The desktop presents eight themes, four pinned pilots and distinct work forms (242.839194ms)
-✔ Back, Start, global menu and collapsing the platform row retain the exact native DOM and handlers (200.341255ms)
-✔ A second visit restores the explicit topbar preference and has a reachable restore control (70.851332ms)
-✔ Learner startup and direct launches reject class creation; teacher options use the trusted auth result (121.675627ms)
-✔ Saving is a desktop shortcut; closing is explicit; reopening a running online app keeps that mode (83.905914ms)
-✔ Account changes clear live apps and separate pins, shortcuts and stale progress responses (251.38916ms)
-✔ An unrecognized account can discover guest apps without fake learner progress or class controls (49.833332ms)
-✔ The laptop cache limit rejects a seventh app without discarding the six live screens (106.948193ms)
-✔ Each pilot keeps its own folder, filter and search when switching through the taskbar (122.848687ms)
-✔ Launching through Start gives the new app its theme while saved shortcuts return to My tasks (97.303235ms)
-✔ Start works from a native answer field and Escape returns focus without changing native keys or input (58.665832ms)
-✔ Resuming a pinned app retains its own return place and restores the native answer focus (53.591145ms)
-✔ Start and resume retain focus from a nested native workboard without intercepting ordinary answers (66.591844ms)
-✔ Actual atelier progress keeps its native unit and does not leak into another app (69.585923ms)
-✔ Native sign-in actions reach the central account panel and the bridge is removed on close (60.372481ms)
-✔ Guest live lesson sign-in captures the real native account handler and preserves the join screen (61.929971ms)
-✔ The pupil Learn entrance reaches the original code form and joins a class; teachers reach class setup (116.81562ms)
-✔ The actual powers workbench keeps its clickable answer, seed and native document through desktop navigation (488.480991ms)
-✔ Every public build has a theme and its own work form; historical identities stay intact (1.474569ms)
-✔ All app, mode, worksheet and artwork routes exist, including project subdirectory deployment (6.230285ms)
-✔ Learners participate in classes but cannot create them through startup options or direct launch (9.009457ms)
-✔ Search distinguishes work forms and tolerates accents (0.489596ms)
-✔ Desktop preferences are per account and never overwrite a learning progress key (0.530627ms)
-✔ Desktop home is optional and remains inside the platform origin and path (122.200558ms)
-✔ Existing live lesson roles and membership survive mounting the desktop additions (28.681385ms)
-ℹ tests 25
+✔ Closing a settled desktop fixture cancels pending rendering before jsdom destroys its document (309.360068ms)
+✔ The desktop presents eight themes, four pinned pilots and distinct work forms (157.48661ms)
+✔ Back, Start, global menu and collapsing the platform row retain the exact native DOM and handlers (181.492645ms)
+✔ A second visit restores the explicit topbar preference and has a reachable restore control (60.945668ms)
+✔ Learner startup and direct launches reject class creation; teacher options use the trusted auth result (107.071694ms)
+✔ Saving is a desktop shortcut; closing is explicit; reopening a running online app keeps that mode (95.860421ms)
+✔ Account changes clear live apps and separate pins, shortcuts and stale progress responses (243.316547ms)
+✔ An unrecognized account can discover guest apps without fake learner progress or class controls (60.537842ms)
+✔ The laptop cache limit rejects a seventh app without discarding the six live screens (105.327207ms)
+✔ Each pilot keeps its own folder, filter and search when switching through the taskbar (124.814466ms)
+✔ Launching through Start gives the new app its theme while saved shortcuts return to My tasks (92.874453ms)
+✔ Start works from a native answer field and Escape returns focus without changing native keys or input (60.451851ms)
+✔ Resuming a pinned app retains its own return place and restores the native answer focus (52.584952ms)
+✔ Start and resume retain focus from a nested native workboard without intercepting ordinary answers (64.939355ms)
+✔ Actual atelier progress keeps its native unit and does not leak into another app (74.226067ms)
+✔ Native sign-in actions reach the central account panel and the bridge is removed on close (60.891848ms)
+✔ Guest live lesson sign-in captures the real native account handler and preserves the join screen (68.476623ms)
+✔ The pupil Learn entrance reaches the original code form and joins a class; teachers reach class setup (126.744799ms)
+✔ The actual powers workbench keeps its clickable answer, seed and native document through desktop navigation (491.656535ms)
+✔ Every public build has a theme and its own work form; historical identities stay intact (0.892545ms)
+✔ All app, mode, worksheet and artwork routes exist, including project subdirectory deployment (3.293544ms)
+✔ Learners participate in classes but cannot create them through startup options or direct launch (9.314243ms)
+✔ Search distinguishes work forms and tolerates accents (0.482188ms)
+✔ Desktop preferences are per account and never overwrite a learning progress key (0.569029ms)
+✔ Desktop home is optional and remains inside the platform origin and path (134.988885ms)
+✔ Existing live lesson roles and membership survive mounting the desktop additions (31.615859ms)
+ℹ tests 26
 ℹ suites 0
-ℹ pass 25
+ℹ pass 26
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 2770.664116
+ℹ duration_ms 3013.618691

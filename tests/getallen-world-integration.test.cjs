@@ -7,13 +7,15 @@ const L=require('../games/getallenwereld/lessons.js'),C=require('../games/bewerk
 const KEY='leraarbob.getallenwereld.v1',tick=()=>new Promise(resolve=>setImmediate(resolve));
 const plain=value=>JSON.parse(JSON.stringify(value));
 
-async function open({saved,url='',role='student'}={}){
+async function open({saved,url='',role='student',randomSeed}={}){
  const errors=[],reports=[],storage=new Map(saved?[[KEY,JSON.stringify(saved)]]:[]),console=new VirtualConsole();
  console.on('jsdomError',error=>errors.push(error.message));
  const dom=new JSDOM(read('games/getallenwereld/index.html'),{
   url:'https://school.example/LeraarBob/games/getallenwereld/'+url,
   runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:console
  }),w=dom.window;
+ let randomCalls=0;
+ if(randomSeed!==undefined)w.crypto.getRandomValues=values=>{randomCalls++;values.fill(randomSeed);return values;};
  w.AxiomaGame={active:true,account:{id:'qa-learner',role},storage:{
   getItem:key=>storage.get(key)||null,setItem:(key,value)=>storage.set(key,value)
  },report:(...values)=>reports.push(plain(values)),emit:()=>{}};
@@ -26,7 +28,7 @@ async function open({saved,url='',role='student'}={}){
  await tick();await tick();
  const state=()=>plain(w.GetallenWorld.snapshot()),task=()=>plain(w.GetallenWorld.task());
  const click=selector=>{const node=w.document.querySelector(selector);assert(node,'Missing native action '+selector);assert(!node.disabled,'Disabled native action '+selector);node.click();};
- return {dom,w,state,task,click,errors,reports,storage,saved:()=>JSON.parse(storage.get(KEY)),url:()=>w.location.href,close:()=>w.close()};
+ return {dom,w,state,task,click,errors,reports,storage,randomCalls:()=>randomCalls,saved:()=>JSON.parse(storage.get(KEY)),url:()=>w.location.href,close:()=>w.close()};
 }
 function nativeTask(mission){return L.make(mission.id,(mission.seed+Math.imul(mission.index+1,2654435761))>>>0,mission.index,mission.edition);}
 function fixture(id,{edition=2,index=4,done=false}={}){
@@ -70,6 +72,48 @@ test('All fifteen native routes complete six real questions each, with genuine s
   assert.equal(f.w.document.getElementById('getallenProgress').dataset.value,'15');
   assert.deepEqual([...f.storage.keys()],[KEY],'No fake XP or new progress identity');assert.deepEqual(f.errors,[]);
  }finally{f.close();}
+});
+
+test('Every original unit and edition has a verified six-question seed within the bounded fallback',()=>{
+ for(const stop of L.STOPS)for(const edition of [1,2]){
+  let valid=false;
+  for(let probe=0;probe<4096;probe++){
+   const seed=Math.imul(probe+1,2654435761)>>>0;
+   const expressions=Array.from({length:6},(_,index)=>nativeTask({id:stop.id,seed,index,edition}).expression);
+   if(new Set(expressions).size===6){valid=true;break;}
+  }
+  assert(valid,stop.id+' edition '+edition+' has six different original questions before the fallback bound');
+ }
+});
+
+test('Exhausted random seeds still start six distinct native questions with genuine separate evidence',async()=>{
+ // These real generator seeds produce duplicate expressions. Other units have
+ // structurally distinct questions and can accept the fixed zero seed at once.
+ const badSeeds={'machten-product':2654435761,'machten-quotient':2654435761,'machten-macht':2654435761,'machten-haakjes':2654435761,'machten-mix':2654435761};
+ const variants=[...L.STOPS.map(stop=>({stop,edition:2})),{stop:L.stop('machten-product'),edition:1}];
+ for(const {stop,edition} of variants){
+  const randomSeed=edition===1?0:(badSeeds[stop.id]||0),f=await open({url:'?level='+stop.id,randomSeed});
+  try{
+   const generated=Array.from({length:6},(_,index)=>nativeTask({id:stop.id,seed:randomSeed,index,edition}).expression);
+   const exhausted=new Set(generated).size<6;
+   f.click(stop.id==='machten-product'&&edition===2?'[data-action="start-advanced"]':'[data-action="start"]');
+   assert.equal(f.state().mission.edition,edition);
+   assert.equal(f.randomCalls(),exhausted?500:1,stop.id+' uses actual crypto attempts before any deterministic fallback');
+   if(exhausted)assert.notEqual(f.state().mission.seed,randomSeed,'A failed final random seed is never used for a new run');
+   const expressions=[];
+   for(let index=0;index<6;index++){
+    const mission=f.state().mission;assert.equal(mission.index,index);
+    assert.deepEqual(f.task(),nativeTask(mission),stop.id+' uses the unchanged native generator and grader');
+    expressions.push(f.task().expression);solve(f);
+    assert.equal(f.state().entries[stop.id].done.length,index+1);
+    assert.equal(f.state().entries[stop.id].independent.length,index+1);
+    f.click('[data-action="next"]');
+   }
+   assert.equal(new Set(expressions).size,6,stop.id+' edition '+edition+' starts six different questions even with fixed crypto');
+   assert.equal(f.state().screen,'summary');assert.equal(f.w.document.getElementById('getallenProgress').dataset.value,'1');
+   assert.deepEqual([...f.storage.keys()],[KEY]);assert.deepEqual(f.errors,[]);
+  }finally{f.close();}
+ }
 });
 
 for(const stop of L.STOPS)for(const edition of [1,2])test('Historical '+stop.id+' edition '+edition+' preserves the exact unfinished work',async()=>{

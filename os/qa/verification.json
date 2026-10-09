@@ -22,8 +22,8 @@
     "report": "relevant-native-tests.txt"
   },
   "all_unit_tests": {
-    "passed": 544,
-    "total": 546,
+    "passed": 547,
+    "total": 549,
     "failed": 2,
     "baseline_reproduced": true,
     "report": "getallen/all-unit-tests.txt",
@@ -135,14 +135,17 @@
       "report": "getallen/module-dom.txt"
     },
     "world_integration": {
-      "passed": 50,
-      "native_questions": 90,
+      "passed": 52,
+      "native_questions": 186,
       "historical_runs": 30,
       "solved_pending_runs": 15,
-      "report": "getallen/world-integration.txt"
+      "report": "getallen/world-integration.txt",
+      "forced_random_seed_runs": 16,
+      "exhausted_random_seed_cases": 11,
+      "bounded_fallback_unit_editions": 30
     },
     "os_model_dom_topbar": {
-      "passed": 25,
+      "passed": 26,
       "report": "getallen/os-unit.txt"
     },
     "native_formula_browser_checks": {
@@ -196,7 +199,13 @@
       "Scientific notation retains native series provider, no sixteenth guided unit; existing levels 1 and 2 are identical",
       "Duo Learn uses own answers and shared discussion confirmation",
       "Power meaning/zero and root-rule validity link explicitly to a chapter selection in the provider"
-    ]
+    ],
+    "ci_findings_fixed": {
+      "native_seed_exhaustion": "After 500 unsuccessful random seeds, use verified bounded deterministic probes; six distinct unchanged native questions; historical seeds preserved",
+      "jsdom_fixture_teardown": "Disconnect fixture observers and cancel pending render callbacks before jsdom closes its document; no production change or swallowed errors",
+      "focused_world_tests": 52,
+      "focused_os_model_dom_topbar_tests": 26
+    }
   },
   "os_pilot_baseline_combined_patch_apply_check": {
     "passed": true,

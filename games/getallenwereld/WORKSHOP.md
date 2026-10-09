@@ -50,6 +50,12 @@ bestaande negatieve varianten. Nieuwe productreeksen bewaren aanvullend
 velden worden alleen hersteld als de editie klopt. Alle andere onderdelen
 gebruiken hun bestaande generatie en exacte antwoordcontrole.
 
+Nieuwe reeksen kiezen zes verschillende oorspronkelijke opgaven. Als 500
+willekeurige seeds daarvoor niet volstaan, zoekt de startactie langs een
+afzonderlijke, vaste reeks seeds. Dit voorkomt de zeldzame terugval op dubbele
+vragen bij negatieve machten. De rekenmotor en historische seeds veranderen
+hierdoor niet.
+
 De opslag blijft `leraarbob.getallenwereld.v1` via `AxiomaGame.storage`.
 Historische reeksen bewaren hun seed, index, editie, waarden, hulpmarkering,
 pogingen en oplossingsbewijzen. De bestaande editieovergang naar editie 2 blijft
