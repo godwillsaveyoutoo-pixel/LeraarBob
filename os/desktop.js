@@ -30,7 +30,7 @@
   const M=window.LeraarBobDesktopModel,base=Registry.baseURL,home=new URL('os/',base).href;
   function MBase(){return base;}
   let account=null,resolved=false,authPending=true,prefs=M.sanitize(null),overview=null,progressState='guest',request=0,controller=null;
-  let view={kind:'desktop',themeId:'',type:'all',query:''},activeKey=null,toastTimer,progressTimer,startReturnFocus=null;
+  let view={kind:'desktop',themeId:'',type:'all',query:''},activeKey=null,toastTimer,progressTimer,startReturnFocus=null,crumbDocument=null,crumbSignature='';
   const frames=new Map();
   const role=()=>['student','teacher'].includes(account?.role)?account.role:'guest';
   const safeStorage=()=>{try{return localStorage;}catch{return {getItem:()=>null,setItem:()=>{throw Error('Opslag niet beschikbaar');}};}};
@@ -158,11 +158,18 @@
     $('viewContent').append(list,el('p','section-note','Bureaubladvoorkeuren wijzigen je antwoorden, levels en spelvoortgang niet.'));
   }
   function applyPrefs(){document.body.dataset.wallpaper=prefs.wallpaper;document.body.dataset.reducedMotion=String(prefs.reducedMotion);}
-  function setSiteTheme(dark){document.documentElement.dataset.mode=dark?'dark':'light';try{localStorage.setItem('axioma-mode',dark?'dark':'light');}catch{}syncThemeControl();}
+  function setSiteTheme(dark){
+    const mode=dark?'dark':'light';document.documentElement.dataset.mode=mode;
+    try{localStorage.setItem('axioma-mode',mode);}catch{}
+    // Site-palette apps keep their native DOM; a display action needs no rerender.
+    frames.forEach(item=>{try{const doc=item.frame.contentDocument;if(doc?.querySelector('script[data-theme-mode="site"]')){doc.documentElement.dataset.mode=mode;const color=doc.querySelector('meta[name="theme-color"]');if(color)color.content=dark?'#14241e':'#f7f8f4';}}catch{}});
+    syncThemeControl();
+  }
   function syncThemeControl(){
     const frame=frames.get(activeKey),doc=frame?.frame.contentDocument;
     const native=doc?.querySelector('#themeBtn,#modeBtn[aria-pressed],#theme');
-    const dark=native?.hasAttribute('aria-pressed')?native.getAttribute('aria-pressed')==='true':doc?.documentElement?.dataset.mode==='dark'||document.documentElement.dataset.mode==='dark';
+    const mode=doc?.documentElement?.dataset.mode||document.documentElement.dataset.mode;
+    const dark=native?.hasAttribute('aria-pressed')?native.getAttribute('aria-pressed')==='true':mode==='dark';
     $('modeBtn').setAttribute('aria-pressed',String(dark));$('modeBtn').setAttribute('aria-label',native?.getAttribute('aria-label')||(dark?'Lichte weergave':'Donkere weergave'));
   }
   function showView(next,{route=true}={}){
@@ -179,6 +186,25 @@
     const place=current?.app.desktopTheme&&view.themeId!==current.app.desktopTheme?{kind:'theme',themeId:current.app.desktopTheme}:view;
     folder.hidden=place.kind==='desktop';folder.textContent=place.kind==='theme'?M.theme(place.themeId).title:viewNames[place.kind]||'';
     folder.onclick=()=>showView(place);app.hidden=!current;app.textContent=current?.app.title||'';
+    let doc,nodes=[];
+    if(current?.app.id==='getallenwereld')try{
+      doc=current.frame.contentDocument;
+      const crumbs=doc?.querySelector('header .breadcrumbs');
+      if(crumbs)nodes=[...crumbs.children].filter(n=>!n.hidden&&n.matches('button,a,span')&&n.textContent.trim());
+      else{const topic=doc?.querySelector('#spaceCrumb');if(topic?.textContent.trim())nodes=[topic];}
+      $('openOriginal').href=M.safeURL(current.frame.contentWindow.location.href)||current.href;
+    }catch{}
+    app.hidden=!current||nodes.some(n=>n.id==='gameHomeBtn');
+    const signature=nodes.map(n=>n.tagName+':'+n.textContent.trim()).join('|');
+    if(doc!==crumbDocument||signature!==crumbSignature){
+      app.parentElement.querySelectorAll('[data-native-crumb]').forEach(n=>n.remove());
+      nodes.forEach(source=>{
+        const node=el(source.matches('button,a')?'button':'span','',source.textContent.trim());node.dataset.nativeCrumb='true';
+        if(node.tagName==='BUTTON'){node.type='button';node.onclick=()=>{source.click();const target=doc.querySelector('#app');if(target){if(!target.hasAttribute('tabindex'))target.tabIndex=-1;target.focus({preventScroll:true});}};}
+        app.parentElement.append(node);
+      });
+      crumbDocument=doc;crumbSignature=signature;
+    }
   }
   function updateRoute(){const url=new URL(location.href);url.searchParams.delete('app');url.searchParams.delete('mode');url.searchParams.delete('theme');url.searchParams.delete('place');if(view.kind==='theme')url.searchParams.set('theme',view.themeId);else if(view.kind!=='desktop')url.searchParams.set('place',view.kind);history.replaceState(null,'',url);}
   function openModes(id){
@@ -211,7 +237,7 @@
       const fallback=el('a','', 'Open de oorspronkelijke app apart');fallback.href=config.href;fallback.target='_blank';fallback.rel='noopener';loading.append(fallback);wrapper.append(frame,loading);$('appFrames').append(wrapper);
       const origin=activeKey?{kind:config.utility?'live':'theme',themeId:config.app.desktopTheme||'',type:'all',query:''}:{...view};
       const item={...config,origin,frame,wrapper,owner:M.key(account),cleanup:null};frames.set(config.key,item);
-      frame.addEventListener('load',()=>{if(!frames.has(config.key)||item.owner!==M.key(account))return;loading.hidden=true;connectNative(item);if(activeKey===item.key){syncThemeControl();syncProgressBadge();}});
+      frame.addEventListener('load',()=>{if(!frames.has(config.key)||item.owner!==M.key(account))return;loading.hidden=true;connectNative(item);if(activeKey===item.key){updateCrumbs();syncThemeControl();syncProgressBadge();}});
     }
     if(!activeKey&&frames.get(config.key)!==config)frames.get(config.key).origin={...view};activateFrame(config.key);return true;
   }
@@ -260,6 +286,9 @@
     doc.addEventListener('click',click,true);doc.addEventListener('keydown',keydown,true);doc.addEventListener('focusin',focus);item.frame.contentWindow.addEventListener('axioma:game-progress',progress);doc.addEventListener('click',theme);
     const observer=new MutationObserver(()=>{if(activeKey===item.key)syncProgressBadge();});
     const progressNode=doc.querySelector('[data-platform-progress],#xpLabel,#xp,#completedCount');if(progressNode)observer.observe(progressNode,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['data-value','data-total','data-unit']});
+    const contextObserver=new MutationObserver(()=>{if(activeKey===item.key)updateCrumbs();});
+    const contextNode=item.app.id==='getallenwereld'&&doc.querySelector('header .breadcrumbs,#spaceCrumb');
+    if(contextNode)contextObserver.observe(contextNode,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']});
     // Keyboard events do not bubble out of a native battle's inner workboard.
     // Follow same-origin child frames without replacing their DOM or handlers.
     const children=new Map();
@@ -279,12 +308,12 @@
       });
     }
     const childObserver=new MutationObserver(()=>scanChildren(doc));childObserver.observe(doc,{childList:true,subtree:true});scanChildren(doc);
-    item.cleanup=()=>{doc.removeEventListener('click',click,true);doc.removeEventListener('keydown',keydown,true);doc.removeEventListener('focusin',focus);doc.removeEventListener('click',theme);observer.disconnect();childObserver.disconnect();children.forEach((child,frame)=>{child.cleanup?.();frame.removeEventListener('load',child.load);});children.clear();embedStyle.remove();try{win.removeEventListener('axioma:game-progress',progress);if(accountBridge&&win.LeraarBobTopbar===accountBridge)delete win.LeraarBobTopbar;}catch{}};
+    item.cleanup=()=>{doc.removeEventListener('click',click,true);doc.removeEventListener('keydown',keydown,true);doc.removeEventListener('focusin',focus);doc.removeEventListener('click',theme);observer.disconnect();contextObserver.disconnect();childObserver.disconnect();children.forEach((child,frame)=>{child.cleanup?.();frame.removeEventListener('load',child.load);});children.clear();embedStyle.remove();try{win.removeEventListener('axioma:game-progress',progress);if(accountBridge&&win.LeraarBobTopbar===accountBridge)delete win.LeraarBobTopbar;}catch{}};
   }
   function renderRunning(){$('runningApps').replaceChildren(...[...frames.values()].map(f=>{const b=button('','running-app',()=>activateFrame(f.key));b.append(imageFor(f.app),el('span','',f.app.title));b.title=f.app.title+' · '+f.label;b.setAttribute('aria-label',`Terug naar ${f.app.title}`);b.setAttribute('aria-pressed',String(activeKey===f.key));return b;}));}
   function closeFrame(key){const current=frames.get(key);if(!current)return;current.cleanup?.();current.frame.src='about:blank';current.wrapper.remove();frames.delete(key);if(activeKey===key)showView(current.origin);else renderRunning();}
   function discardFrames(){frames.forEach(f=>{f.cleanup?.();f.frame.src='about:blank';f.wrapper.remove();});frames.clear();activeKey=null;renderRunning();}
-  function saveCurrent(){const f=frames.get(activeKey);if(!f||f.utility)return;let href=f.href;try{href=M.safeURL(f.frame.contentWindow.location.href)||href;}catch{}const saved={key:f.key,id:f.app.id,mode:f.mode,title:f.app.title,href,label:f.label,date:new Date().toISOString()};prefs.saved=[saved,...prefs.saved.filter(s=>s.key!==f.key)].slice(0,50);persist();toast('Bewaard in Mijn taken.');}
+  function saveCurrent(){const f=frames.get(activeKey);if(!f||f.utility)return;let href=f.href,title=f.app.title,label=f.label;try{href=M.safeURL(f.frame.contentWindow.location.href)||href;if(f.app.id==='getallenwereld'){const doc=f.frame.contentDocument,part=doc.querySelector('#crumbLevel:not([hidden])')?.textContent.trim(),chapter=doc.querySelector('#crumbChapter:not([hidden]),#spaceCrumb')?.textContent.trim();if(part)title+=' · '+part;if(chapter)label+=' · '+chapter;}}catch{}const saved={key:f.key,id:f.app.id,mode:f.mode,title,href,label,date:new Date().toISOString()};prefs.saved=[saved,...prefs.saved.filter(s=>s.key!==f.key)].slice(0,50);persist();toast('Bewaard in Mijn taken.');}
   function openSaved(s){
     if(s.mode.startsWith('worksheet:')){openWorksheet(s.id,s.mode.slice(10));return;}
     if(!M.modes(s.id,role()).some(m=>m.id===s.mode)){toast('Deze ingang is niet beschikbaar voor dit account.');return;}

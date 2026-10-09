@@ -6,11 +6,20 @@ Deze integratie gebruikt de aangeleverde `Speel-Getallenwereld-v0.2.html`:
 Een onderdeel aanklikken selecteert het; de knop **Start dit onderdeel** of
 **Verder oefenen** opent de werkbank. Herhalen maakt een nieuwe reeks.
 
+De werkplaats groepeert de acht bestaande machtenonderdelen in Begrijpen,
+Bewerken, Haakjes en Zelf kiezen. De zeven wortelonderdelen krijgen hun eigen
+pad: Begrijpen, Bewerken, Vereenvoudigen en Zelf kiezen. Alle vijftien gebruiken
+dezelfde verzorgde werkbank, hulpweergave en resultaatpagina, met hun originele
+vragen en antwoorddelen. Wetenschappelijke schrijfwijze opent de bestaande
+reekscomponent. Lees [WORKSHOP.md](WORKSHOP.md) voor de behouden identiteit,
+bewaarde reeksen en controles.
+
 De leerling kiest eerst de rekenregel en bouwt vervolgens de uitwerking met
 aanklikbare antwoorddelen. Bij elk deel verschijnen passende getalkeuzes,
 ook voor negatieve exponenten, tellers/noemers en kwadraatfactoren. Er is geen
 cijferkeyboard of antwoordtekstveld. De bestaande exacte kern blijft beoordelen.
-Hulp gebruikt een ander voorbeeld en bewaart de eigen invoer. Een onderdeel
+Hulp gebruikt een ander voorbeeld en bewaart de eigen invoer. Ook het exacte
+hulpvoorbeeld en de hulpstap blijven bij herladen of een menu-uitstap bewaard. Een onderdeel
 is afgerond na zes verschillende uitgewerkte opgaven; de interface vermeldt
 apart hoeveel daarvan zelfstandig zijn opgelost. Afgerond is dus geen
 uitspraak dat een leerling de vaardigheid beheerst.
@@ -68,6 +77,11 @@ vragen. Checkboxkeuzes houden hun focus. Meer over beoordeling, XP en de
 scheiding van simulatie/echte deelname staat in
 [de reekscomponent](../bewerkingen-trainer/README.md).
 
+Bij de bestaande wetenschappelijke generator zijn de niveaus 1 en 2 nog
+inhoudelijk gelijk. De wereldingang noemt daarom instelbare oefenreeksen.
+Deze integratie behoudt die generator; een afzonderlijke inhoudelijke
+niveauherwerking staat nog open.
+
 De opgeslagen momentopname bevat de reeks, invoer, hulp en oplossingsbewijzen,
 maar geen volledige tijdlijn, actieve oefentijd of gebeurtenissenlogboek.
 Die behoren tot de toekomstige centrale analysearchitectuur.
@@ -77,6 +91,7 @@ Die behoren tot de toekomstige centrale analysearchitectuur.
 ```sh
 node --test tests/getallenwereld.test.cjs tests/getallen-guided-choices.test.cjs tests/catalog.test.cjs
 node scripts/build-catalog.cjs --check
+NODE_PATH=/pad/naar/node_modules node --test tests/getallen-workshop-dom.test.cjs
 NODE_PATH=/pad/naar/node_modules ALGEBRA_CHROMIUM_PATH=/pad/naar/chromium \
   node tests/getallenwereld-browser.cjs
 ```
@@ -88,9 +103,16 @@ Ze speelt alle vijftien routes, controleert herladen en accountwisseling en
 bekijkt vijf schermmaten in beide topbarstanden. Screenshots staan in
 `/tmp/leraarbob-getallenwereld/`.
 
-De interactieve stappen zijn bovendien op 640×360 en 390×844 gecontroleerd
+De oorspronkelijke interactieve stappen zijn bovendien op 640×360 en 390×844 gecontroleerd
 met `tests/getallen-guided-layout.cjs`: 92 bestaande formulevarianten met
 zichtbare aanraakdoelen en echte antwoordcontrole. De keuzetoets dekt 11.941
 antwoorddelen uit oude en nieuwe opgaven, inclusief alternatieve geldige
 kwadraatfactoren. Accountisolatie, terugkeer en bewaarde invoer worden in de
 bestaande Getallenwereld-browsertests gecontroleerd.
+
+De uitgebreide werkplaats wordt daarnaast met `tests/getallen-workshop-dom.test.cjs`
+gecontroleerd: beide paden, alle vijftien oorspronkelijke antwoordflows, fouten,
+zelfstandig/hulp, historische negatieve vragen, resultaatlinks, bewaren en
+providerlinks. De actuele browsercontroles en eventuele beperkingen staan in
+[os/PILOT.md](../../os/PILOT.md). Deze lokale controles vervangen geen bewijs
+van een echte, ingelogde klasactiviteit op de productieomgeving.

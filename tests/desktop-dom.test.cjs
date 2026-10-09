@@ -214,3 +214,27 @@ test('The pupil Learn entrance reaches the original code form and joins a class;
   const teacher=await nativeNumbers(f.$('appFrames').querySelector('iframe').src,{id:'teacher-a',role:'teacher'});t.after(()=>teacher.dom.window.close());
   assert.equal(teacher.w.NumbersSpace.snapshot().view,'selection');assert.equal(teacher.w.document.getElementById('sessionAudience').value,'class');assert(teacher.w.document.getElementById('createSpace'));assert.equal(teacher.calls.some(c=>c.action==='create'),false);
 });
+
+test('The actual powers workbench keeps its clickable answer, seed and native document through desktop navigation',async t=>{
+  const f=await setup({account:{id:'learner-a',role:'student',alias:'Ada'},topbar:true});const D=f.w.LeraarBobDesktop;t.after(async()=>{if(D.state().activeKey){f.$('closeApp').click();f.$('acceptClose').click();}await tick();f.dom.window.close();});
+  D.showView({kind:'theme',themeId:'getallen'});assert(D.openApp('getallenwereld','solo',{topicId:'machten'}));
+  const frame=f.$('appFrames').querySelector('iframe'),w=frame.contentWindow,doc=frame.contentDocument;doc.open();doc.write(read('games/getallenwereld/index.html'));doc.close();
+  const storage=new Map();w.AxiomaGame={active:true,account:{id:'learner-a',role:'student'},storage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},report:()=>{},emit:()=>w.dispatchEvent(new w.Event('axioma:game-progress'))};
+  w.eval(read('shared/vendor/katex/katex.min.js'));w.eval(read('js/catalog.js'));
+  Object.defineProperty(doc,'currentScript',{configurable:true,value:{src:'https://school.example/LeraarBob/shared/platform-routes.js'}});w.eval(read('shared/platform-routes.js'));
+  Object.defineProperty(doc,'currentScript',{configurable:true,value:{src:'https://school.example/LeraarBob/shared/game-registry.js'}});w.eval(read('shared/game-registry.js'));
+  for(const file of ['games/bewerkingen-trainer/core.js','games/getallenwereld/lessons.js','games/getallenwereld/guided-answer.js','games/getallenwereld/workshop.js','games/getallenwereld/app.js'])w.eval(read(file));
+  await tick();frame.dispatchEvent(new f.w.Event('load'));
+  doc.querySelector('[data-stop="machten-product"]').click();doc.querySelector('[data-action="start"]').click();doc.querySelector('[data-rule="'+w.GetallenWorld.task().correct+'"]').click();
+  const answer=w.GetallenWorld.task().stages[0].slots[0].answer;doc.querySelector('[data-choice="'+answer+'"]').click();const before=JSON.stringify(w.GetallenWorld.snapshot().mission),slot=doc.querySelector('[data-slot]');
+  await tick();const crumbs=()=>[...f.$('headerApp').parentElement.querySelectorAll('[data-native-crumb]')].map(n=>n.textContent);assert.deepEqual(crumbs(),['Getallenwereld','Machten','Machten vermenigvuldigen']);
+  f.$('modeBtn').click();assert.equal(doc.documentElement.dataset.mode,'dark');assert.equal(doc.querySelector('[data-slot]'),slot);assert.equal(JSON.stringify(w.GetallenWorld.snapshot().mission),before);assert.equal(f.w.localStorage.getItem('axioma-mode'),'dark');
+  f.$('modeBtn').click();assert.equal(doc.documentElement.dataset.mode,'light');
+  f.$('saveActivity').click();
+  const prefs=f.w.LeraarBobDesktopModel.read(f.w.localStorage,{id:'learner-a'});assert.equal(prefs.saved.length,1);assert.match(prefs.saved[0].title,/Machten vermenigvuldigen/);assert.match(prefs.saved[0].label,/Machten/);assert.equal(new URL(prefs.saved[0].href).searchParams.get('level'),'machten-product');assert.equal(f.$('openOriginal').href,prefs.saved[0].href);
+  f.$('minimizeApp').click();f.$('runningApps').firstElementChild.click();assert.equal(frame.contentDocument,doc);assert.equal(doc.querySelector('[data-slot]'),slot);assert.equal(JSON.stringify(w.GetallenWorld.snapshot().mission),before);
+  f.$('appBack').click();assert.equal(D.state().view.themeId,'getallen');D.openApp('getallenwereld');f.$('startButton').click();f.w.document.dispatchEvent(new f.w.KeyboardEvent('keydown',{key:'Escape'}));
+  assert.equal(frame.contentDocument,doc);assert.equal(doc.querySelector('[data-slot]'),slot);assert.equal(JSON.stringify(w.GetallenWorld.snapshot().mission),before);
+  doc.querySelector('[data-action="check"]').click();assert.equal(w.GetallenWorld.snapshot().mission.done,true);assert.equal(w.GetallenWorld.snapshot().entries['machten-product'].done.length,1);await tick();assert.equal(doc.querySelectorAll('leraarbob-topbar').length,0);
+  [...f.$('headerApp').parentElement.querySelectorAll('button[data-native-crumb]')].find(n=>n.textContent==='Machten').click();await tick();assert.equal(w.GetallenWorld.snapshot().screen,'chapter');assert.equal(doc.activeElement,doc.getElementById('app'));assert.equal(w.GetallenWorld.snapshot().mission.done,true);doc.querySelector('[data-action=start]').click();await tick();assert.equal(w.GetallenWorld.snapshot().screen,'play');assert.equal(w.GetallenWorld.snapshot().mission.done,true);assert.equal(crumbs().length,3);assert.equal(f.errors.length,0);
+});
