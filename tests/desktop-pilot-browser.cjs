@@ -22,6 +22,21 @@ const report={scope:'Real Chromium UI in localhost /os/ with guest auth fixture;
 let page,browser,base;
 function check(name,detail){report.checks.push({name,...(detail?{detail}:{} )});console.log('PASS '+name);}
 async function settle(){await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));}
+async function settleNativeLayout(frame,selectors){
+ const size=await (await frame.frameElement()).evaluate(e=>({width:e.clientWidth,height:e.clientHeight}));
+ await frame.waitForFunction(size=>innerWidth===size.width&&innerHeight===size.height&&document.fonts.status==='loaded',size,{timeout:5000});
+ // Parent animation frames do not flush a resized child document's container
+ // queries. Measure only after its own viewport and selected rects settle.
+ await frame.evaluate(async selectors=>{
+  await document.fonts.ready;let previous,stable=0;const start=performance.now();
+  while(stable<3){
+   await new Promise(resolve=>requestAnimationFrame(resolve));
+   const current=JSON.stringify([innerWidth,innerHeight,...selectors.map(selector=>document.querySelector(selector)?.getBoundingClientRect().toJSON())]);
+   stable=current===previous?stable+1:0;previous=current;
+   if(performance.now()-start>5000)throw Error('Native layout did not settle within 5 seconds');
+  }
+ },selectors);
+}
 async function shot(name){await settle();await page.screenshot({path:path.join(out,name+'.png')});}
 async function currentFrame(){const h=await page.locator('.frame-wrapper:not([hidden]) iframe').elementHandle();return h.contentFrame();}
 async function desktopState(){return page.evaluate(()=>LeraarBobDesktop.state());}
@@ -58,7 +73,7 @@ async function startAndFocus(frame,selector){
  check('Start Ctrl K / Escape restores native focus: '+selector);
 }
 async function layout(name,frame,selectors){
- await settle();const shell=await page.evaluate(()=>{
+ await settle();if(frame)await settleNativeLayout(frame,selectors);const shell=await page.evaluate(()=>{
   const issues=[],bar=document.querySelector('leraarbob-topbar'),shadow=bar.shadowRoot;
   const startOpen=!document.querySelector('#startPanel').hidden,controls=startOpen?[...document.querySelectorAll('#startPanel button,#startPanel input')]:[...shadow.querySelectorAll('.row button,.row a'),...document.querySelectorAll('.app-toolbar button,.app-toolbar a,.lb-restore:not([hidden])')];
   for(const e of controls){
@@ -101,7 +116,10 @@ async function pythagoras(){
  await f.waitForFunction(()=>Pythagoras.snapshot().placed.includes('3'));
  for(const n of [4,5]){await f.locator('#square'+n).click();await f.locator(`[data-slot="${n}"]`).click();}
  await f.waitForFunction(()=>Pythagoras.snapshot().phase===5&&!Pythagoras.snapshot().locked);await f.locator('#numberTile').click();await f.locator('[data-slot="numeric"]').click();
- await f.waitForFunction(()=>Pythagoras.snapshot().phase===9,{timeout:15000});await f.locator('#nextLevel').click();
+ await f.waitForFunction(()=>Pythagoras.snapshot().phase===9,null,{timeout:15000});await f.locator('#nextLevel').click();
+ // The original click handler records completion in setTimeout(0). Wait for
+ // that account progress before navigating again, so it sees level 1 -> 2.
+ await f.waitForFunction(()=>AxiomaGame.state.completed.length===1&&AxiomaGame.state.completed.includes('1'),null,{timeout:5000});
  await f.locator('#level3 .levelJump').selectOption('5');await f.locator('#lfHypHit').click();await f.locator('[data-formula-tile="a"]').click();await f.locator('[data-formula-slot="0"]').click();
  const snap=()=>f.evaluate(()=>({level:[...document.querySelectorAll('.levelJump')].find(e=>!e.closest('[hidden]'))?.value,slots:[...document.querySelectorAll('[data-formula-slot]')].map(e=>e.textContent),completed:AxiomaGame.state.completed}));
  assert.equal((await snap()).completed.length,1);assert.equal(await page.locator('leraarbob-topbar .progress-value').textContent(),'1/10 levels');

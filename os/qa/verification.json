@@ -79,7 +79,15 @@
     "missing_routes": 0,
     "viewport": "1366x768 at 100% zoom; 390x844 and 844x390 compact checks",
     "native_home_and_login": "passed in Pythagoras, Rechtenwereld and guest live lesson",
-    "report": "pilot-browser-report.json"
+    "report": "pilot-browser-report.json",
+    "ci_chromium_equivalent": {
+      "version": "156.0.8078.4",
+      "playwright": "1.64.0",
+      "passed": true,
+      "actual_check_groups": 32,
+      "layouts": 23,
+      "report": "chromium-ci-browser-report.json"
+    }
   },
   "live_browser": {
     "passed": true,
@@ -96,6 +104,7 @@
   "github_actions": {
     "initial_push": "passed",
     "run_url": "https://github.com/godwillsaveyoutoo-pixel/LeraarBob/actions/runs/37969267063",
-    "final_head": "pending after guest login follow-up commit"
+    "final_head": "pending after native-state/iframe-layout test synchronization",
+    "test_synchronization": "waits for actual native level completion and stable child iframe dimensions; checks remain strict"
   }
 }
