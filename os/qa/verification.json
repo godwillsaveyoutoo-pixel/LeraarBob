@@ -12,7 +12,7 @@
   },
   "patch_apply_check": "passed on current GitHub main; local pre-fetch topbar conflict recorded",
   "required_unit_dom_tests": {
-    "passed": 46,
+    "passed": 47,
     "failed": 0,
     "report": "required-unit-tests.txt"
   },
@@ -22,8 +22,8 @@
     "report": "relevant-native-tests.txt"
   },
   "all_unit_tests": {
-    "passed": 475,
-    "total": 477,
+    "passed": 476,
+    "total": 478,
     "failed": 2,
     "baseline_reproduced": true,
     "report": "all-unit-tests.txt",
@@ -53,9 +53,13 @@
   "production_external_websocket_sessions": "not tested; auth/social/groups boundaries use fixtures, class/lesson handlers use actual local SQL",
   "github_publish": {
     "branch_creation": "403 Resource not accessible by integration",
-    "cli_auth": "invalid",
-    "remote_branch_created": false,
-    "pull_request_created": false
+    "cli_auth": "passed with network access; existing keyring account",
+    "remote_branch_created": true,
+    "pull_request_created": true,
+    "git_push": "passed using existing Git credentials",
+    "branch_url": "https://github.com/godwillsaveyoutoo-pixel/LeraarBob/tree/codex/os-pilot-20261009",
+    "pull_request_url": "https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7",
+    "draft": true
   },
   "preview": "http://127.0.0.1:8787/os/",
   "production_homepage_replaced": false,
@@ -69,12 +73,12 @@
   "scope": "Existing app state/learning/answer handlers and backend sources unchanged; native Zeeslag responsive CSS only",
   "pilot_browser": {
     "passed": true,
-    "actual_check_groups": 31,
+    "actual_check_groups": 32,
     "layouts": 23,
     "page_errors": 0,
     "missing_routes": 0,
     "viewport": "1366x768 at 100% zoom; 390x844 and 844x390 compact checks",
-    "native_home_and_login": "passed in actual native apps",
+    "native_home_and_login": "passed in Pythagoras, Rechtenwereld and guest live lesson",
     "report": "pilot-browser-report.json"
   },
   "live_browser": {
@@ -88,5 +92,10 @@
     ],
     "production_auth": false,
     "report": "live/results.json"
+  },
+  "github_actions": {
+    "initial_push": "passed",
+    "run_url": "https://github.com/godwillsaveyoutoo-pixel/LeraarBob/actions/runs/37969267063",
+    "final_head": "pending after guest login follow-up commit"
   }
 }

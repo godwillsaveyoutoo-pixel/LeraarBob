@@ -102,6 +102,12 @@
     },
     {
       "name": "Original Rechtenwereld profile sign-in opens central account and retains native screen/state"
+    },
+    {
+      "name": "Original guest live-lesson sign-in opens only central account and retains code/input/submit handler",
+      "detail": {
+        "provider": "Guest auth fixture; pending code initialized through native ?code=A1B2C3 deep link"
+      }
     }
   ],
   "layout": [

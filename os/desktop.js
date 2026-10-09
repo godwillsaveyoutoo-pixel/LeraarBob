@@ -249,7 +249,10 @@
     // Native sign-in buttons use the desktop account panel without mounting another bar.
     const accountBridge=win.LeraarBobTopbar?null:Object.freeze({openAccount,setCollapsed:(...args)=>window.LeraarBobTopbar?.setCollapsed(...args)});if(accountBridge)win.LeraarBobTopbar=accountBridge;
     // Only redundant links out of the app are handled here; game controls stay native.
-    const click=e=>{const a=e.target.closest?.('a[href]');if(!a||a.target==='_blank'||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;const target=M.safeURL(a.href);if(!target)return;const u=new URL(target),b=new URL(base),os=new URL(home);if(u.pathname===b.pathname||u.pathname===b.pathname+'index.html'||u.pathname===os.pathname){e.preventDefault();e.stopImmediatePropagation();if(u.searchParams.get('login')==='1')openAccount();else showView(item.origin);}};
+    const click=e=>{
+      if(e.target.closest?.('[data-axioma-login]')){e.preventDefault();e.stopImmediatePropagation();openAccount();return;}
+      const a=e.target.closest?.('a[href]');if(!a||a.target==='_blank'||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;const target=M.safeURL(a.href);if(!target)return;const u=new URL(target),b=new URL(base),os=new URL(home);if(u.pathname===b.pathname||u.pathname===b.pathname+'index.html'||u.pathname===os.pathname){e.preventDefault();e.stopImmediatePropagation();if(u.searchParams.get('login')==='1')openAccount();else showView(item.origin);}
+    };
     const keydown=e=>{if(activeKey===item.key)desktopShortcut(e);};
     const focus=e=>{const owner=e.target.ownerDocument;if(activeKey===item.key&&e.target!==owner.body&&e.target!==owner.documentElement)item.lastFocus=e.target;};
     const progress=()=>{if(activeKey===item.key)syncProgressBadge();clearTimeout(progressTimer);progressTimer=setTimeout(refreshProgress,1200);};

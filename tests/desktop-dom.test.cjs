@@ -183,6 +183,25 @@ test('Native sign-in actions reach the central account panel and the bridge is r
   const nativeLink=doc.createElement('a');nativeLink.href='https://school.example/LeraarBob/?login=1&return=games/rechten/rechtenwereld/';doc.body.append(nativeLink);nativeLink.click();assert.equal(calls,2);assert.equal(D.state().activeKey,'pythagoras|solo|','Native sign-in keeps the app open');
   const win=frame.contentWindow;f.$('closeApp').click();f.$('acceptClose').click();assert.equal(win.LeraarBobTopbar,undefined);assert.equal(typeof f.w.LeraarBobTopbar.openAccount,'function');
 });
+test('Guest live lesson sign-in captures the real native account handler and preserves the join screen',async t=>{
+  const f=await setup();t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;
+  const central=f.w.document.createElement('dialog');central.id='authOverlay';central.dataset.authContext='embedded';central.hidden=true;central.innerHTML='<h2 id="authTitle">Aanmelden</h2><button id="authClose">Sluiten</button><div id="authContent"></div>';f.w.document.body.append(central);
+  const trigger=f.w.document.createElement('button');trigger.dataset.axiomaLogin='';trigger.hidden=true;f.w.document.body.append(trigger);f.w.AxiomaAuth.CLASSES=['TEST'];
+  Object.defineProperty(f.w.document,'currentScript',{configurable:true,value:{src:'https://school.example/LeraarBob/js/account-ui.js'}});f.w.eval(read('js/account-ui.js'));await tick();
+  let calls=0;f.w.LeraarBobTopbar={openAccount:()=>{calls++;f.w.LeraarBobAccount.open();}};
+  D.showView({kind:'live'});[...f.$('viewContent').querySelectorAll('button')].find(button=>button.textContent==='Live les').click();
+  const frame=f.$('appFrames').querySelector('iframe'),doc=frame.contentDocument,win=frame.contentWindow;doc.open();doc.write(read('lessons/rechten-arbeid/join.html'));doc.close();
+  win.HTMLDialogElement.prototype.showModal=function(){this.setAttribute('open','');};win.HTMLDialogElement.prototype.close=function(){this.removeAttribute('open');};
+  win.AxiomaAuth={CLASSES:['TEST'],ready:async()=>({account:null}),onChange:()=>()=>{}};
+  Object.defineProperty(doc,'currentScript',{configurable:true,value:{src:'https://school.example/LeraarBob/js/account-ui.js'}});win.eval(read('js/account-ui.js'));await tick();frame.dispatchEvent(new f.w.Event('load'));
+  const code=doc.getElementById('joinCode'),native=doc.getElementById('authOverlay'),signIn=doc.querySelector('[data-axioma-login]');code.value='A1';
+  win.LeraarBobAccount.open(signIn);assert.equal(native.open,true,'The actual native handler can open its own dialog');win.LeraarBobAccount.close();
+  let submits=0;doc.getElementById('joinForm').addEventListener('submit',event=>{event.preventDefault();submits++;});
+  signIn.click();assert.equal(calls,1);assert.equal(central.open,true);assert.equal(native.open,false);assert.equal(native.hidden,true);
+  assert.equal(D.state().activeKey,'utility:lesson-join');assert.equal(f.$('appFrames').querySelector('iframe'),frame);assert.equal(code.value,'A1');
+  f.w.LeraarBobAccount.close();f.$('minimizeApp').click();f.$('runningApps').firstChild.click();assert.equal(frame.contentDocument.getElementById('joinCode'),code);assert.equal(code.value,'A1');
+  doc.getElementById('joinForm').dispatchEvent(new win.Event('submit',{bubbles:true,cancelable:true}));assert.equal(submits,1);assert.deepEqual(f.errors.map(error=>error.message),[]);
+});
 test('The pupil Learn entrance reaches the original code form and joins a class; teachers reach class setup',async t=>{
   const account={id:'learner-a',role:'student',alias:'Ada'},f=await setup({account});t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;
   D.showView({kind:'live'});[...f.$('viewContent').querySelectorAll('button')].find(b=>b.textContent==='Learn-sessie').click();
