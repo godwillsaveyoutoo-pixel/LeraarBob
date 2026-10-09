@@ -102,9 +102,17 @@
     "report": "live/results.json"
   },
   "github_actions": {
-    "initial_push": "passed",
-    "run_url": "https://github.com/godwillsaveyoutoo-pixel/LeraarBob/actions/runs/37969267063",
-    "final_head": "pending after native-state/iframe-layout test synchronization",
+    "code_commit": "324dc3300a143e695425f368bea78dd55fe6d424",
+    "push": "passed",
+    "pull_request": "passed",
+    "push_run": "https://github.com/godwillsaveyoutoo-pixel/LeraarBob/actions/runs/37970415172",
+    "pull_request_run": "https://github.com/godwillsaveyoutoo-pixel/LeraarBob/actions/runs/37970421658",
+    "scope": "catalog/model/DOM/topbar and actual pilot/class/live browser runs",
     "test_synchronization": "waits for actual native level completion and stable child iframe dimensions; checks remain strict"
+  },
+  "combined_patch_apply_check": {
+    "passed": true,
+    "base": "6056ac4e7445f6bb15fa1b15dce43df32a6e17e6",
+    "code_commit": "324dc3300a143e695425f368bea78dd55fe6d424"
   }
 }
