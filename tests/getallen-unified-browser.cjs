@@ -153,15 +153,15 @@ async function main(){
   await page.locator('[data-rule="'+task.correct+'"]').click();
   await page.locator('[data-slot="0"]').click();await page.locator('[data-choice]').first().click();
   const guidedWork=await getLive();
-  await page.locator('.playhead [data-action=chapter]').click();
+  await page.locator('.workshop-nav [data-action=chapter]').click();
   const returnPath=new URL(page.url()).pathname+new URL(page.url()).search+new URL(page.url()).hash;
   await page.locator('[data-stop=machten-product]').click();
-  for(const mode of ['series','worksheet']){const u=new URL(await page.locator('.world-actions [data-world-mode='+mode+']').getAttribute('href'),base);assert.equal(u.searchParams.get('skills'),'power-product','Selected learning goal follows '+mode);}
+  for(const mode of ['series','worksheet']){const u=new URL(await page.locator('#app [data-world-mode='+mode+']').getAttribute('href'),base);assert.equal(u.searchParams.get('skills'),'power-product','Selected learning goal follows '+mode);}
   await page.locator('[data-stop=machten-betekenis]').click();
-  const actionLinks=await page.locator('.world-actions [data-world-mode]').evaluateAll(es=>es.map(e=>({mode:e.dataset.worldMode,href:e.href})));
+  const actionLinks=await page.locator('#app [data-world-mode]').evaluateAll(es=>es.map(e=>({mode:e.dataset.worldMode,href:e.href})));
   for(const id of ['series','worksheet','rankings','students'])assert(actionLinks.some(link=>link.mode===id),'World action '+id);
   for(const link of actionLinks){assert.equal(new URL(link.href).searchParams.get('returnTo'),returnPath,'Exact selected-level return for '+link.mode);}
-  await page.locator('.world-actions [data-world-mode=series]').click();await page.locator('[data-go=solo]').click();await seriesReady();
+  await page.locator('#app [data-world-mode=series]').click();await page.locator('[data-go=solo]').click();await seriesReady();
   assert.equal(await page.locator('#axioma-game-status').evaluate(e=>e.shadowRoot.querySelector('.dock').hidden),true,'The shared topbar owns the account and progress controls');
   assert.match(await page.locator('leraarbob-topbar [part=crumb-game]').textContent(),/Getallenwereld/);
   assert.doesNotMatch(await page.locator('leraarbob-topbar [part=crumb-game]').textContent(),/Bewerkingentrainer/);

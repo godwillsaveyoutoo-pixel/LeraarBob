@@ -20,6 +20,14 @@ Mijn taken bevat persoonlijke snelkoppelingen, geen door een leraar uitgedeelde 
 
 Alleen werkende providers worden aangeboden. Pythagoras krijgt geen verzonnen trainer, Battle of oefenbladgenerator. Productieauthenticatie en echte externe WebSocketverbindingen zijn nog niet met twee ingelogde testaccounts gecontroleerd.
 
+## Getallenwereld
+
+Alle acht machtenonderdelen en zeven vierkantswortelonderdelen gebruiken de nieuwe werkplaats: hoofdstukpad, oorspronkelijke klikantwoorden, hulp en resultaat. Je kiest vrij; beginnen blijft een expliciete actie. Oude vragen, invoer, voortgang, hulpvoorbeeld/hulpstap en correcte antwoorden die op Volgende wachten blijven hervatbaar. Het OS-kruimelpad volgt het actuele hoofdstuk/onderdeel, Bewaren bewaart die ingang en de directe weergaveknop verandert ook het native werkbord zonder herladen.
+
+Wetenschappelijke notatie opent de oorspronkelijke reeksprovider. Die blijft, samen met solo met XP, Bordduo, Duo Learn, Duo Battle, Klaslearn, Klasbattle, borduitleg en oefenbladen, via dezelfde wereld bereikbaar. Leraarstart en leerlingdeelname blijven afzonderlijk. De begeleide leerroute telt vijftien onderdelen zonder XP; de reeksprovider behoudt zestien vraagvormen en zijn eigen XP/opslag. Zie [WORKSHOP.md](../games/getallenwereld/WORKSHOP.md) en [de uitgevoerde controle](PILOT.md).
+
+Wetenschappelijke notatie heeft nog geen apart begeleid onderdeel. De bestaande generator gebruikt dezelfde inhoud voor niveau 1 en 2. Duo Learn gebruikt eigen antwoorden en gezamenlijk bevestigde bespreking. Betekenis/nulmacht en het toetsen van wortelregels openen expliciet een hoofdstukselectie bij de reeksprovider, omdat die geen equivalente vraagvorm heeft.
+
 ## Lokale preview
 
 ```sh
@@ -40,8 +48,10 @@ NODE_PATH=/tmp/leraarbob-os-tests/node_modules node --test --test-isolation=none
 /tmp/leraarbob-os-tests/node_modules/.bin/playwright install chromium
 NODE_PATH=/tmp/leraarbob-os-tests/node_modules node tests/desktop-pilot-browser.cjs
 NODE_PATH=/tmp/leraarbob-os-tests/node_modules node tests/desktop-live-browser.cjs
+NODE_PATH=/tmp/leraarbob-os-tests/node_modules node --test --test-isolation=none tests/getallen-workshop-dom.test.cjs tests/getallen-world-integration.test.cjs
+NODE_PATH=/tmp/leraarbob-os-tests/node_modules node tests/getallen-os-browser.cjs
 ```
 
 Een geïnstalleerde Brave wordt automatisch gebruikt. `LB_CHROMIUM` kan een andere browserbinary kiezen. Anders gebruiken de tests de geïnstalleerde Playwright Chromium. Authenticatie is fictief en gescheiden; de live-test voert de bestaande Edge-handlers en SQL-migraties daadwerkelijk uit in een tijdelijke PostgreSQL/PGlite-database. Productiegegevens worden niet geschreven.
 
-Zie [PILOT.md](PILOT.md) voor de afgevinkte praktijkcontrole en [REVIEW.md](REVIEW.md) voor vergelijking, fixes, testresultaten, screenshots en resterende beperkingen. De catalogusworkflow draait de DOM-controles en beide browserpilots en bewaart QA-artifacts.
+Zie [PILOT.md](PILOT.md) voor de afgevinkte praktijkcontrole en [REVIEW.md](REVIEW.md) voor vergelijking, fixes, testresultaten, screenshots en resterende beperkingen. De catalogusworkflow draait de DOM-controles en de drie OS-browserpilots en bewaart QA-artifacts. `GETALLEN_SCREENSHOTS` bepaalt de uitvoermap van de Getallenwereldcontrole.

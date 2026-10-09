@@ -22,11 +22,11 @@
     "report": "relevant-native-tests.txt"
   },
   "all_unit_tests": {
-    "passed": 476,
-    "total": 478,
+    "passed": 544,
+    "total": 546,
     "failed": 2,
     "baseline_reproduced": true,
-    "report": "all-unit-tests.txt",
+    "report": "getallen/all-unit-tests.txt",
     "baseline_report": "baseline-unit-failures.txt"
   },
   "catalog": "offline copy equal; aliases/progress ids/providers/roles validated",
@@ -70,7 +70,7 @@
     "jsdom": "26.1.0",
     "pglite": "0.5.8"
   },
-  "scope": "Existing app state/learning/answer handlers and backend sources unchanged; native Zeeslag responsive CSS only",
+  "scope": "OS pilot plus all fifteen guided Getallenwereld screens and native resume; original exact math/auth/progress/provider/database sources preserved",
   "pilot_browser": {
     "passed": true,
     "actual_check_groups": 32,
@@ -101,7 +101,15 @@
     "production_auth": false,
     "report": "live/results.json"
   },
-  "github_actions": {
+  "os_pilot_baseline_all_unit_tests": {
+    "passed": 476,
+    "total": 478,
+    "failed": 2,
+    "baseline_reproduced": true,
+    "report": "all-unit-tests.txt",
+    "baseline_report": "baseline-unit-failures.txt"
+  },
+  "os_pilot_baseline_github_actions": {
     "code_commit": "324dc3300a143e695425f368bea78dd55fe6d424",
     "push": "passed",
     "pull_request": "passed",
@@ -110,9 +118,92 @@
     "scope": "catalog/model/DOM/topbar and actual pilot/class/live browser runs",
     "test_synchronization": "waits for actual native level completion and stable child iframe dimensions; checks remain strict"
   },
-  "combined_patch_apply_check": {
+  "github_actions": {
+    "workflow": ".github/workflows/catalog.yml",
+    "scope": "Original desktop/class/live pilots plus all new Getallenwereld DOM and browser checks",
+    "current_commit_checks": "https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7/checks"
+  },
+  "getallenwereld": {
+    "package_sha256": "6d65e33249ee1376bd708ce1d2fbf19a0a32e4828472e541b8ece48baf442a02",
+    "package_file_hashes_verified": 21,
+    "merge": "Only new Getallenwereld module copied; older packaged OS/shared files excluded; latest pilot fixes preserved",
+    "guided_unit_ids_preserved": 15,
+    "provider_skill_ids_preserved": 16,
+    "invented_xp": 0,
+    "module_dom": {
+      "passed": 17,
+      "report": "getallen/module-dom.txt"
+    },
+    "world_integration": {
+      "passed": 50,
+      "native_questions": 90,
+      "historical_runs": 30,
+      "solved_pending_runs": 15,
+      "report": "getallen/world-integration.txt"
+    },
+    "os_model_dom_topbar": {
+      "passed": 25,
+      "report": "getallen/os-unit.txt"
+    },
+    "native_formula_browser_checks": {
+      "passed": 92,
+      "viewports": [
+        "640x360",
+        "390x844"
+      ],
+      "report": "getallen/guided-layout.txt"
+    },
+    "existing_native_browsers": {
+      "passed": true,
+      "reports": [
+        "getallen/native-browser.txt",
+        "getallen/unified-browser.txt",
+        "getallen/numbers-space-browser.txt"
+      ]
+    },
+    "actual_os_browser": {
+      "passed": true,
+      "interaction_groups": 128,
+      "layouts": 876,
+      "actual_compact_answers": 30,
+      "internal_scroll_actions": 22,
+      "local_session_creations": 6,
+      "page_errors": 0,
+      "missing_routes": 0,
+      "report": "getallen/report.json",
+      "viewports": [
+        "1366x768 at 100% zoom",
+        "390x844",
+        "844x390"
+      ]
+    },
+    "original_pilot_regression": {
+      "passed": true,
+      "groups": 32,
+      "layouts": 23,
+      "report": "getallen/four-pilots-report.json"
+    },
+    "class_live_regression": {
+      "passed": true,
+      "provider": "Original Edge handlers and actual SQL in temporary local PGlite; auth/external transport fixtures",
+      "report": "getallen/class-live-report.json"
+    },
+    "working_tree_hashes_preserved_including_old_copy": 678,
+    "known_limits": [
+      "No production authentication/cloud resume/external multiplayer with two actual logged-in accounts",
+      "Scientific notation retains native series provider, no sixteenth guided unit; existing levels 1 and 2 are identical",
+      "Duo Learn uses own answers and shared discussion confirmation",
+      "Power meaning/zero and root-rule validity link explicitly to a chapter selection in the provider"
+    ]
+  },
+  "os_pilot_baseline_combined_patch_apply_check": {
     "passed": true,
     "base": "6056ac4e7445f6bb15fa1b15dce43df32a6e17e6",
     "code_commit": "324dc3300a143e695425f368bea78dd55fe6d424"
+  },
+  "combined_patch_apply_check": {
+    "passed": true,
+    "base": "6056ac4e7445f6bb15fa1b15dce43df32a6e17e6",
+    "scope": "Complete OS and Getallenwereld staged review patch; checked against a fresh export of the base before committing"
   }
 }

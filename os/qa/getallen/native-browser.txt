@@ -1,0 +1,1 @@
+PASS: 15 actual gameplay routes, 5 screen sizes, select then play, help, partial work/reload, collapse and account isolation; catalog.

@@ -168,3 +168,23 @@ body.topbar-collapsed .workshop-nav{padding-left:64px}
  .summary-rule{font-size:20px;margin:0}
  .summary-actions{margin:0;gap:8px}.summary-actions>button{min-height:48px;padding:5px 10px}
 }
+/* Small OS windows keep their launch and result actions in the visible frame. */
+@media(min-width:600px) and (max-height:500px){
+ .path-group .workshop-art{display:none}
+ .path-detail{gap:4px;padding:8px 12px}
+ .path-detail>*{flex-shrink:0}
+ .path-detail>.eyebrow{order:-4;font-size:9px}
+ .path-detail>h2{order:-3;font-size:20px;line-height:1.05}
+ .path-detail>.path-run{order:-2;font-size:10px}
+ .path-detail>.primary{order:-1;min-height:48px;margin-top:3px}
+ .workshop-summary{display:grid;grid-template-columns:minmax(0,1fr) 240px;grid-template-rows:auto auto auto minmax(0,1fr) auto;gap:3px 12px;padding:6px 14px;overflow:hidden;align-content:center;align-items:center}
+ .workshop-summary>.eyebrow{grid-column:1;grid-row:1;font-size:9px}
+ .workshop-summary>h1{grid-column:1;grid-row:2}
+ .workshop-summary>h2{grid-column:1;grid-row:3}
+ .workshop-summary>.summary-rule,.workshop-summary>.summary-seal{display:none}
+ .workshop-summary>p:not(.summary-note){grid-column:1;grid-row:4}
+ .workshop-summary>.summary-note{grid-column:1;grid-row:5;font-size:10px}
+ .workshop-summary>.summary-actions{grid-column:2;grid-row:1/6;display:grid;grid-template-columns:1fr 1fr;gap:6px;align-self:center;width:100%}
+ .workshop-summary .summary-actions>button{min-width:44px;min-height:44px;padding:5px;font-size:12px}
+ .workshop-summary .summary-actions>.primary{grid-column:1/-1}
+}

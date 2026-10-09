@@ -1,0 +1,25 @@
+✔ The four phases contain exactly the eight existing goals; selection preserves work and uses real progress (347.870902ms)
+✔ A complete six-question basis run uses the original clickable answers and exact grader, and stays basis after reload (731.405979ms)
+✔ Wrong rules, missing answers and wrong clickable choices remain uncompleted until explicit correct control (319.187279ms)
+✔ Hulp remains a different example, preserves the exact input and marks assisted work honestly (215.065198ms)
+✔ A solved question waiting for Next resumes exactly instead of being replaced by a new seed (318.298865ms)
+✔ Legacy edition-two negative tasks keep their seed, edition, stage and input; new verdieping remains available (601.980103ms)
+✔ A second goal parks the first goal; switching and a fresh document retain actual input and completion (392.510814ms)
+✔ Focused worksheet and practice links use existing providers, preserve the return path and teacher-only controls (184.351421ms)
+✔ All fourteen other routes share the workshop and retain original questions, guided choices and exact answer flow (2873.71506ms)
+✔ The root path contains all seven native units in four coherent freely accessible groups (177.369707ms)
+✔ World home keeps three chapters and all existing practice and paper entrances (62.936194ms)
+✔ Help keeps the exact different example and step through reload and menu return (273.658171ms)
+✔ Old unfinished result URLs display and preserve the actual unfinished native question (32.706276ms)
+✔ A legacy lone minus keeps its input without pretending the answer is ready for checking (43.401467ms)
+✔ A finished root series reports the original unit and honest historical independent counts (1294.612565ms)
+✔ All world screens keep the original hidden native breadcrumb and progress nodes (147.833851ms)
+✔ The last root unit ends at the world entrance without inventing an additional unit (736.689575ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9018.294891

@@ -1,6 +1,20 @@
 # Review · OS-ontwikkelpilot · 9 oktober 2026
 
-De ontwikkelpilot staat op `/os/`, naast de bestaande startpagina. Preview: <http://127.0.0.1:8787/os/>. Branch: `codex/os-pilot-20261009`. [Draft PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7).
+De ontwikkelpilot staat op `/os/`, naast de bestaande startpagina. Preview: <http://127.0.0.1:8787/os/>; zelfstandig <http://127.0.0.1:8787/games/getallenwereld/>. Branch: `codex/os-pilot-20261009`. [Draft PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7).
+
+## Getallenwereld-uitbreiding
+
+De volledige Getallenwereld is aangesloten: acht machtenonderdelen en zeven wortelonderdelen hebben dezelfde hoofdstukpaden, werkbank, hulp en resultaatpagina. Hun oorspronkelijke rekenregels en aanklikbare antwoorddelen blijven de leerflow bepalen. Wetenschappelijke notatie en solo-, duo-, klas-, bord- en papiermodi gebruiken de oorspronkelijke reeks-/sessieproviders met hun eigen stijl en voortgang.
+
+Het OS leest het actuele native kruimelpad en geeft klikken door aan de bestaande handlers. Bewaren gebruikt de actuele onderdeel-URL/titel. De directe licht/donkerknop wijzigt bij apps met een gedeelde siteweergave alleen de presentatie; het antwoorddocument wordt niet vervangen. Hulpvoorbeeld/hulpstap, menuterugkeer, invoer en correcte tussenvragen blijven bewaard. Een oude resultaatlink stelt een onafgewerkte reeks niet meer als voltooid voor.
+
+`leraarbob-bureaublad (1).zip` heeft SHA-256 `6d65e33249ee1376bd708ce1d2fbf19a0a32e4828472e541b8ece48baf442a02`; alle 21 geleverde bestandshashes kloppen. De nieuwe module is gericht samengevoegd. De OS-/topbarbronnen uit dat pakket zijn ouder dan de geteste pilotfixes en zijn niet overgenomen. De tijdelijke uitbreiding is na verlies van de werkkopie hersteld, opnieuw gecontroleerd en duurzaam op de lokale ontwikkelbranch vastgelegd.
+
+Nieuwe/verder gewijzigde bestanden: `games/getallenwereld/{app.js,index.html,workshop.js,workshop.css,assets/machtenwerkplaats.png,README.md,WORKSHOP.md}`, `os/desktop.js`, drie nieuwe/uitgebreide DOM-/integratietests, `tests/getallen-os-browser.cjs`, twee bestaande browserselectorupdates en de catalogusworkflow. De oorspronkelijke `lessons.js`, `guided-answer.js`, `bewerkingen-trainer/core.js`, account-/voortgangsbronnen en provider-/databasebronnen zijn bytegelijk aan de gepubliceerde pilotbasis.
+
+Uitgevoerd: 17 modulecontroles, 50 onafhankelijke integratiecontroles (90 echte klikopgaven, 30 historische runs, 15 opgeloste tussenvragen), 25 OS/model/topbarcontroles, 92 native browserformulecontroles, beide bestaande Getallenwereldbrowsers en de Numbers Space-browser. De vier OS-pilots en volledige klas/live-runs zijn opnieuw geslaagd met Chromium 156. De nieuwe OS-matrix telt 128 interactiegroepen en 876 layouts, met 30 echte compacte OS-antwoordflows, 25 interne scrollacties, nul browserfouten/404 en 17 screenshots. De brede units tellen 544/546: alleen de twee hieronder beschreven oorspronkelijke fouten blijven. Rapporten en screenshots staan in [qa/getallen/](qa/getallen/) en [qa/verification.json](qa/verification.json). De CI draait de nieuwe DOM-/browsercontroles naast de oorspronkelijke pilots.
+
+Wetenschappelijke notatie heeft nog geen eigen begeleid zestiende onderdeel; de generator onderscheidt niveau 0 van 1/2, terwijl 1 en 2 gelijk zijn. Duo Learn behoudt eigen antwoorden en gezamenlijke bespreking. Betekenis/nulmacht en het beoordelen van geldige wortelregels hebben expliciete hoofdstukselectie-links wegens ontbrekende equivalente providerdoelen. Echte productieauthenticatie en externe multiplayer zijn nog niet gecontroleerd met twee ingelogde accounts.
 
 ## Basis en behoud van huidig werk
 
@@ -10,7 +24,7 @@ De lokale checkout stond op `cbbbf6d6663aac9ac51ee5cb7b29b2ffbe48c99f`, met 93 g
 
 De oorspronkelijke lokale werkmap is ongewijzigd en alle 93 bestandshashes zijn na het werk opnieuw gecontroleerd. Een volledige lokale snapshot staat apart op `codex/local-work-preserved-20261009`, commit `2793263`. Die lokale experimenten zijn niet over de latere GitHub-platformversie heen geschreven. De OS-reviewbranch bevat de actuele gepubliceerde providers en de gerichte pilotwijzigingen.
 
-Bestaande accountopslag, voortgangsidentiteiten, XP-logica, sessieproviders en vragen/antwoordhandlers zijn behouden. De enige native productwijziging is responsive CSS voor Zeeslag; andere appbestanden, auth, voortgangscode en databasebestanden blijven gelijk aan main.
+Bestaande accountopslag, voortgangsidentiteiten, XP-logica, sessieproviders en oorspronkelijke vragen/antwoordbeoordeling zijn behouden. De eerste pilot wijzigde native alleen Zeeslag-CSS; de Getallenwereld-uitbreiding wijzigt daarnaast presentatie en hervatting zoals hierboven beschreven. Auth, voortgangscode, rekenmotoren en databasebestanden blijven gelijk aan main.
 
 ## Gewijzigde bestanden en gedrag
 
