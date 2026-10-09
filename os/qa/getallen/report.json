@@ -38852,6 +38852,29 @@
       }
     },
     {
+      "name": "Actual 844 OS machten-product rule",
+      "before": {
+        "x": 304.25,
+        "y": 144.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 144.1875,
+        "right": 834,
+        "bottom": 188.1875,
+        "left": 304.25
+      },
+      "after": {
+        "x": 304.25,
+        "y": 114.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 114.1875,
+        "right": 834,
+        "bottom": 158.1875,
+        "left": 304.25
+      }
+    },
+    {
       "name": "Actual 844 OS machten-product value 0",
       "before": {
         "x": 639.859375,
@@ -38921,26 +38944,49 @@
       }
     },
     {
+      "name": "Actual 844 OS machten-macht rule",
+      "before": {
+        "x": 304.25,
+        "y": 191.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 191.1875,
+        "right": 834,
+        "bottom": 235.1875,
+        "left": 304.25
+      },
+      "after": {
+        "x": 304.25,
+        "y": 114.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 114.1875,
+        "right": 834,
+        "bottom": 158.1875,
+        "left": 304.25
+      }
+    },
+    {
       "name": "Actual 844 OS machten-macht value 0",
       "before": {
-        "x": 705.5625,
+        "x": 639.859375,
         "y": 161.1875,
         "width": 62.703125,
         "height": 44,
         "top": 161.1875,
-        "right": 768.265625,
+        "right": 702.5625,
         "bottom": 205.1875,
-        "left": 705.5625
+        "left": 639.859375
       },
       "after": {
-        "x": 705.5625,
+        "x": 639.859375,
         "y": 114.1875,
         "width": 62.703125,
         "height": 44,
         "top": 114.1875,
-        "right": 768.265625,
+        "right": 702.5625,
         "bottom": 158.1875,
-        "left": 705.5625
+        "left": 639.859375
       }
     },
     {
@@ -38967,26 +39013,49 @@
       }
     },
     {
+      "name": "Actual 844 OS machten-haakjes rule",
+      "before": {
+        "x": 304.25,
+        "y": 191.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 191.1875,
+        "right": 834,
+        "bottom": 235.1875,
+        "left": 304.25
+      },
+      "after": {
+        "x": 304.25,
+        "y": 114.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 114.1875,
+        "right": 834,
+        "bottom": 158.1875,
+        "left": 304.25
+      }
+    },
+    {
       "name": "Actual 844 OS machten-haakjes value 0",
       "before": {
-        "x": 705.5625,
+        "x": 639.859375,
         "y": 161.1875,
         "width": 62.703125,
         "height": 44,
         "top": 161.1875,
-        "right": 768.265625,
+        "right": 702.5625,
         "bottom": 205.1875,
-        "left": 705.5625
+        "left": 639.859375
       },
       "after": {
-        "x": 705.5625,
+        "x": 639.859375,
         "y": 114.1875,
         "width": 62.703125,
         "height": 44,
         "top": 114.1875,
-        "right": 768.265625,
+        "right": 702.5625,
         "bottom": 158.1875,
-        "left": 705.5625
+        "left": 639.859375
       }
     },
     {
@@ -39015,47 +39084,24 @@
     {
       "name": "Actual 844 OS machten-haakjes value 1",
       "before": {
-        "x": 705.5625,
+        "x": 639.859375,
         "y": 161.1875,
         "width": 62.703125,
         "height": 44,
         "top": 161.1875,
-        "right": 768.265625,
+        "right": 702.5625,
         "bottom": 205.1875,
-        "left": 705.5625
+        "left": 639.859375
       },
       "after": {
-        "x": 705.5625,
+        "x": 639.859375,
         "y": 114.1875,
         "width": 62.703125,
         "height": 44,
         "top": 114.1875,
-        "right": 768.265625,
+        "right": 702.5625,
         "bottom": 158.1875,
-        "left": 705.5625
-      }
-    },
-    {
-      "name": "Actual 844 OS machten-negatief rule",
-      "before": {
-        "x": 304.25,
-        "y": 191.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 191.1875,
-        "right": 834,
-        "bottom": 235.1875,
-        "left": 304.25
-      },
-      "after": {
-        "x": 304.25,
-        "y": 114.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 114.1875,
-        "right": 834,
-        "bottom": 158.1875,
-        "left": 304.25
+        "left": 639.859375
       }
     },
     {
@@ -39082,29 +39128,6 @@
       }
     },
     {
-      "name": "Actual 844 OS machten-mix rule",
-      "before": {
-        "x": 304.25,
-        "y": 144.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 144.1875,
-        "right": 834,
-        "bottom": 188.1875,
-        "left": 304.25
-      },
-      "after": {
-        "x": 304.25,
-        "y": 114.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 114.1875,
-        "right": 834,
-        "bottom": 158.1875,
-        "left": 304.25
-      }
-    },
-    {
       "name": "Actual 844 OS machten-mix value 0",
       "before": {
         "x": 639.859375,
@@ -39128,6 +39151,29 @@
       }
     },
     {
+      "name": "Actual 844 OS wortels-product rule",
+      "before": {
+        "x": 304.25,
+        "y": 191.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 191.1875,
+        "right": 834,
+        "bottom": 235.1875,
+        "left": 304.25
+      },
+      "after": {
+        "x": 304.25,
+        "y": 114.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 114.1875,
+        "right": 834,
+        "bottom": 158.1875,
+        "left": 304.25
+      }
+    },
+    {
       "name": "Actual 844 OS wortels-product value 0",
       "before": {
         "x": 639.859375,
@@ -39148,29 +39194,6 @@
         "right": 702.5625,
         "bottom": 158.1875,
         "left": 639.859375
-      }
-    },
-    {
-      "name": "Actual 844 OS wortels-quotient rule",
-      "before": {
-        "x": 304.25,
-        "y": 191.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 191.1875,
-        "right": 834,
-        "bottom": 235.1875,
-        "left": 304.25
-      },
-      "after": {
-        "x": 304.25,
-        "y": 114.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 114.1875,
-        "right": 834,
-        "bottom": 158.1875,
-        "left": 304.25
       }
     },
     {
@@ -39246,6 +39269,29 @@
       "name": "Actual 844 OS wortels-vereenvoudigen rule",
       "before": {
         "x": 304.25,
+        "y": 191.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 191.1875,
+        "right": 834,
+        "bottom": 235.1875,
+        "left": 304.25
+      },
+      "after": {
+        "x": 304.25,
+        "y": 114.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 114.1875,
+        "right": 834,
+        "bottom": 158.1875,
+        "left": 304.25
+      }
+    },
+    {
+      "name": "Actual 844 OS wortels-som rule",
+      "before": {
+        "x": 304.25,
         "y": 144.1875,
         "width": 529.75,
         "height": 44,
@@ -39266,49 +39312,49 @@
       }
     },
     {
-      "name": "Actual 844 OS wortels-som value 0",
+      "name": "Actual 844 OS wortels-regels rule",
       "before": {
-        "x": 639.859375,
-        "y": 161.1875,
-        "width": 62.703125,
+        "x": 304.25,
+        "y": 144.1875,
+        "width": 529.75,
         "height": 44,
-        "top": 161.1875,
-        "right": 702.5625,
-        "bottom": 205.1875,
-        "left": 639.859375
+        "top": 144.1875,
+        "right": 834,
+        "bottom": 188.1875,
+        "left": 304.25
       },
       "after": {
-        "x": 639.859375,
+        "x": 304.25,
         "y": 114.1875,
-        "width": 62.703125,
+        "width": 529.75,
         "height": 44,
         "top": 114.1875,
-        "right": 702.5625,
+        "right": 834,
         "bottom": 158.1875,
-        "left": 639.859375
+        "left": 304.25
       }
     },
     {
       "name": "Actual 844 OS wortels-regels slot 1",
       "before": {
-        "x": 465.078125,
+        "x": 508.234375,
         "y": 130.6875,
         "width": 44,
         "height": 44,
         "top": 130.6875,
-        "right": 509.078125,
+        "right": 552.234375,
         "bottom": 174.6875,
-        "left": 465.078125
+        "left": 508.234375
       },
       "after": {
-        "x": 465.078125,
+        "x": 508.234375,
         "y": 113.6875,
         "width": 44,
         "height": 44,
         "top": 113.6875,
-        "right": 509.078125,
+        "right": 552.234375,
         "bottom": 157.6875,
-        "left": 465.078125
+        "left": 508.234375
       }
     }
   ],

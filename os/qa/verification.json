@@ -166,7 +166,7 @@
       "interaction_groups": 128,
       "layouts": 876,
       "actual_compact_answers": 30,
-      "internal_scroll_actions": 22,
+      "internal_scroll_actions": 24,
       "local_session_creations": 6,
       "page_errors": 0,
       "missing_routes": 0,
@@ -175,7 +175,9 @@
         "1366x768 at 100% zoom",
         "390x844",
         "844x390"
-      ]
+      ],
+      "process_exit": 0,
+      "log": "getallen/os-browser.txt"
     },
     "original_pilot_regression": {
       "passed": true,
