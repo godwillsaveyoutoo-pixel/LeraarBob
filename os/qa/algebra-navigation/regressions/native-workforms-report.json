@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "checks": [
+    "equations 1366×768 platform/menu/native setup/reload",
+    "systems 1366×768 platform/menu/native setup/reload",
+    "equations 390×844 platform/menu/native setup/reload",
+    "systems 390×844 platform/menu/native setup/reload",
+    "equations 320×700 platform/menu/native setup/reload",
+    "systems 320×700 platform/menu/native setup/reload"
+  ]
+}

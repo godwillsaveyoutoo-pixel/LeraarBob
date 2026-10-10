@@ -7,7 +7,7 @@
   <meta name="description" content="Jouw leraarBob-bureaublad. Lessen, trainers, spellen en ateliers, geordend per thema.">
   <title>leraarBob · Mijn bureaublad</title>
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="stylesheet" href="desktop.css?v=20261010-folders">
+  <link rel="stylesheet" href="desktop.css?v=20261010-algebra">
   <link rel="stylesheet" href="../shared/leraarbob-topbar.css">
   <script>try{document.documentElement.dataset.mode=localStorage.getItem('axioma-mode')==='dark'?'dark':'light';}catch{}</script>
   <script src="../shared/vendor/supabase.js" defer></script>
@@ -20,7 +20,7 @@
   <script src="../js/catalog-progress.js" defer></script>
   <script src="desktop-model.js" defer></script>
   <script src="../shared/worksheet-library.js?v=20261010-folders" defer></script>
-  <script src="desktop.js?v=20261010-folders" defer></script>
+  <script src="desktop.js?v=20261010-algebra" defer></script>
   <script src="../shared/leraarbob-topbar.js" data-title="Bureaublad" data-home="os/" data-context="none" data-page="desktop" data-theme-mode="site" data-nav-pilot="true" defer></script>
 </head>
 <body>
@@ -60,7 +60,7 @@
     </section>
 
     <section id="appWorkspace" class="app-workspace" aria-label="Geopende app" hidden>
-      <div class="app-toolbar"><button id="appBack" class="app-back" title="Naar je map; de app blijft geopend"><span data-icon="back"></span><span>Terug naar mijn map</span></button><div class="active-app-copy"><span id="activeAppType" class="type-badge"></span><strong id="activeAppTitle"></strong><span id="activeAppMode"></span></div><div class="app-actions"><button id="saveActivity" title="Bewaar deze ingang in Mijn taken"><span data-icon="bookmark"></span><span>Bewaren</span></button><a id="openOriginal" target="_blank" rel="noopener" title="Open de oorspronkelijke app in een nieuw tabblad"><span data-icon="external"></span><span>Apart openen</span></a><button id="minimizeApp" aria-label="App minimaliseren" title="App blijft geopend"><span data-icon="minus"></span></button><button id="closeApp" aria-label="App afsluiten" title="App afsluiten"><span data-icon="close"></span></button></div></div>
+      <div class="app-toolbar"><button id="appBack" class="app-back" aria-label="Terug naar mijn map" title="Naar je map; de app blijft geopend"><span data-icon="back"></span><span>Terug naar mijn map</span></button><div class="active-app-copy"><span id="activeAppType" class="type-badge"></span><strong id="activeAppTitle"></strong><span id="activeAppMode"></span></div><nav id="nativeAppNavigation" aria-label="Algebrawereld" hidden></nav><div class="app-actions"><button id="saveActivity" aria-label="Bewaren" title="Bewaar deze ingang in Mijn taken"><span data-icon="bookmark"></span><span>Bewaren</span></button><a id="openOriginal" target="_blank" rel="noopener" aria-label="Apart openen" title="Open de oorspronkelijke app in een nieuw tabblad"><span data-icon="external"></span><span>Apart openen</span></a><button id="minimizeApp" aria-label="App minimaliseren" title="App blijft geopend"><span data-icon="minus"></span></button><button id="closeApp" aria-label="App afsluiten" title="App afsluiten"><span data-icon="close"></span></button></div></div>
       <div id="appFrames" class="app-frames"></div>
     </section>
   </main>

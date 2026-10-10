@@ -149,6 +149,7 @@ function showScreen(name){
   navigation?.sync();persist();
 }
 function refreshNav(){
+  document.querySelectorAll('[data-current-series]').forEach(button=>button.disabled=!activeSet.length);
   document.querySelectorAll('[data-nav=trainer],[data-nav=preview]').forEach(b=>b.setAttribute('aria-disabled',String(!activeSet.length)));
 }
 document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>{
@@ -679,7 +680,7 @@ window.addEventListener('resize',fitMath);
 compactQuery.addEventListener('change',()=>{if(screen==='trainer'&&!lesson&&!motionPlayer.active)renderTrainer();});
 function init(){
   restore();
-  worldView=AlgebraWorldView.mount({progress:()=>journey,chapter:()=>chapterJourney,runs:()=>runs,current:()=>mission,solved:()=>worldLegacy,location:()=>mapLocation,remember:id=>{mapLocation=id;persist();if(screen==='world')navigation?.sync();},run:id=>runs[id],canResume:()=>activeSet.length>0&&(!learningRun||!learningRun.completed),openWorld:id=>{if(id==='systems')location.href=LeraarBobRoutes.href('games/algebra-trainer/stelsels.html',{gameId:'algebra-trainer',world:'systems',topic:'systems',level:'',screen:'menu'});else navigation.open();},start:startTopic,resume:()=>{if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer')}});
+  worldView=AlgebraWorldView.mount({progress:()=>journey,chapter:()=>chapterJourney,runs:()=>runs,current:()=>mission,solved:()=>worldLegacy,location:()=>mapLocation,remember:id=>{mapLocation=id;persist();if(screen==='world')navigation?.sync();},run:id=>runs[id],canResume:()=>activeSet.length>0&&(!learningRun||!learningRun.completed),openWorld:id=>{if(id==='systems')AlgebraShell.openRoute(LeraarBobRoutes.href('games/algebra-trainer/stelsels.html',{gameId:'algebra-trainer',world:'systems',topic:'systems',level:'',screen:'menu'}));else navigation.open();},start:startTopic,resume:()=>{if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer')}});
   navigation=AlgebraNavigation.mount({
    activeLevel:()=>mission||'',routeResume:resumeRoute,routeApply:c=>{if(c.screen==='world'){if(c.world==='overview')worldView.open(null);else if(J.world(c.world)||AlgebraWorld.world(c.world))worldView.open(c.world);}},routeRead:()=>routeContext,routeSave:c=>{routeContext=c;persist();},routeWorld:()=>screen==='world'?(mapLocation||'overview'):'equations',screen:()=>screen,show:showScreen,canResume:()=>!!activeSet.length,canResumeFree:()=>mission?!!freeSession:!!activeSet.length,resumeFree:()=>mission?$('#resumeFreeBtn').click():showScreen('trainer'),
    navigate:name=>{if(name==='world'){if(mission)worldView.open(J.worldFor(mission));showScreen('world');}else if(name==='trainer'){if(activeSet.length){if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer');}}else if(name==='preview')levelWorksheet(navigation.selected());else showScreen(name);},

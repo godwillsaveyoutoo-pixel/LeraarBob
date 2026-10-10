@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-10",
+  "base": "a365d15413c1352f4057c97066889a337383e71b",
+  "browser": {
+    "report": "report.json",
+    "groups": 18,
+    "measuredTargets": 252,
+    "screenshots": 39,
+    "sourceHashCount": 16,
+    "sourceHashesVerified": true
+  },
+  "regressions": {
+    "desktopPlatformTests": 123,
+    "algebraCatalogUnits": 76,
+    "stelselsBrowserAssertions": 795,
+    "osPilotGroups": 32,
+    "osPilotLayouts": 23
+  },
+  "protectedSources": {
+    "file": "protected-sources.json",
+    "count": 13,
+    "unchanged": true
+  },
+  "originalWorkspace": {
+    "path": "/home/johan/Documenten/GitHub/LeraarBob",
+    "hashesCompared": 1517,
+    "changes": 0,
+    "verification": "Root-agent comparison; original checkout untouched"
+  },
+  "additionalSourceHashes": {
+    "tests/desktop-dom.test.cjs": "be67e8159b34d87d1a86f3d35bcd8c0d157ef6171ecc2d2bb1edb0d2142370ea",
+    ".github/workflows/catalog.yml": "b45c2a5412f99a470fb6e57d6452f04c3e0367c7a6064de55deaab4cc6f1bfa5",
+    "tests/algebra-v050-flow-browser.cjs": "7236c9413cd23958a1bf04a6386fa018c6b2f3ce65fd72ebf670f82fda924fdb"
+  },
+  "limits": [
+    "Auth, progress transport and remote class borders use isolated fixtures; no production login or real multiplayer test.",
+    "OS reload restores its folder; native saved work resumes after reopening its module.",
+    "Compact landscape uses internal native-panel scrolling.",
+    "Pilot Rechtenwereld retains original rotate guidance at 390 px."
+  ]
+}

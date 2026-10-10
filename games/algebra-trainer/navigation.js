@@ -20,7 +20,7 @@ function mount(api){
  selected=R?.read(location.href).level||api.routeRead?.()?.level||null;
  const worldId=()=>api.world()==='Stelsels'?'systems':'equations';
  function context(){return {gameId:'algebra-trainer',world:api.routeWorld?.()||worldId(),topic:api.routeWorld?.()||worldId(),level:selected||'',runLevel:api.activeLevel?.()||'',screen:api.screen(),returnTo:R?.read(location.href).returnTo||api.routeRead?.()?.returnTo||''};}
- function sync(){if(router)router.update(context());else api.routeSave?.(context());}
+ function sync(){if(router)router.update(context());else api.routeSave?.(context());window.AlgebraShell?.refresh();}
  function choose(id){if(window.AxiomaGame?.active===false)return;if(!api.stops().some(s=>s.id===id))return;selected=id;render();sync();}
  function connect(){if(!R||router)return;const owner=AxiomaGame.account?.id;window.AxiomaAuth?.onChange(detail=>{if(detail.pending||!AxiomaGame.active||detail.account?.id!==owner){const main=document.querySelector('main');if(main){main.style.visibility='hidden';main.inert=true;}const badge=document.querySelector('#algebraProgress,#seriesProgress');if(badge){badge.dataset.value='0';badge.textContent='';}}});router=R.mount({gameId:'algebra-trainer',enabled:()=>AxiomaGame.active,read:context,onChange:c=>api.routeSave?.(c),apply:c=>{if(api.stops().some(s=>s.id===c.level))selected=c.level;api.routeApply?.(c);const target=c.screen;if(['preview','paper'].includes(target)&&c.level){api.worksheet?.(c.level);render();return;}if(['trainer','work','history','systemHistory','summary','systemSummary'].includes(target)&&api.routeResume?.(c.runLevel||c.level)===false){api.show('menu');render();return;}if(['trainer','work','history','systemHistory','summary','systemSummary'].includes(target)&&!api.canResume())api.show('menu');else if(['world','menu','setup','tools','trainer','work','history','systemHistory','summary','systemSummary','preview','paper'].includes(target))api.show(target);else api.show('menu');render();}});}
  function externalContext(){const back=api.screen()==='world'?'world':'menu';return {...context(),returnTo:router?.returnTo(back)||R?.href(location.href,{...context(),screen:back,returnTo:''})};}
@@ -56,7 +56,7 @@ function mount(api){
  $('#trainerProfileBtn').onclick=()=>document.getElementById('axioma-game-status')?.shadowRoot?.querySelector('.dock')?.click();
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&api.screen()==='menu'&&!e.composedPath().some(n=>n.id==='axioma-game-status'||n.tagName==='DIALOG'&&n.open)){e.preventDefault();close();}});
  $('.menuContinue').onclick=()=>{const s=api.stops().find(s=>s.id===selected);if(!s)return;if(s.current&&s.status==='Bezig'&&api.canResume())api.navigate('trainer');else api.start(s.startId||s.id);};
- window.AlgebraShell?.mount({world:api.world(),screen:api.screen,title:api.title,route:externalContext,navigate:id=>id==='menu'?open():api.navigate(id)});
+ window.AlgebraShell?.mount({world:api.world(),screen:api.screen,title:api.title,route:externalContext,state:()=>{const level=['trainer','work','history','systemHistory','summary','systemSummary'].includes(api.screen())?api.activeLevel?.()||'':selected;return {level,levelTitle:api.stops().find(stop=>stop.id===level)?.title||api.title?.()||''};},navigate:id=>id==='menu'?open():api.navigate(id)});
  return {render,open,select:choose,selected:()=>selected,sync,connect,context,externalContext};
 }
 window.AlgebraNavigation=Object.freeze({mount});

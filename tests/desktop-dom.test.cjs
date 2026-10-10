@@ -119,6 +119,44 @@ test('The laptop cache limit rejects a seventh app without discarding the six li
   const screens=[...f.$('appFrames').querySelectorAll('iframe')];assert.equal(D.openApp('vectoren-trainer'),false);assert.equal(D.state().openApps.length,6);
   assert.deepEqual([...f.$('appFrames').querySelectorAll('iframe')],screens);D.showView({kind:'desktop'});assert.equal(D.openApp('pythagoras'),true);assert.equal(D.state().activeKey,'pythagoras|solo|');
 });
+function algebraFixture(f,frame,world){
+  const doc=frame.contentDocument;doc.open();doc.write('<!doctype html><html><head></head><body><input id="answer"><span id="algebraProgress" data-platform-progress="xp" data-value="30"></span></body></html>');doc.close();
+  const calls=[],listeners=new Set(),context={gameId:'algebra-trainer',world,worldTitle:world==='systems'?'Stelsels':'Vergelijkingen',screen:'work',level:world==='systems'?'sys-substitution':'route-two',levelTitle:'Eigen level',destinations:[{id:'world',label:'Werelden'},{id:'menu',label:'Levels',active:true},{id:'tools',label:'Werkvormen'}]};let disposed=0;
+  frame.contentWindow.AlgebraShell={setEmbedded:value=>calls.push(['embedded',value]),subscribe:cb=>{listeners.add(cb);cb(context);return()=>{listeners.delete(cb);disposed++;};},navigate:id=>{calls.push(['navigate',id]);context.screen=id;listeners.forEach(cb=>cb(context));}};
+  frame.dispatchEvent(new f.w.Event('load'));return {doc,calls,input:doc.getElementById('answer'),disposed:()=>disposed};
+}
+test('Algebra routes keep separate live modules, one projected navigation, exact saved URLs and cached class returns',async t=>{
+  const f=await setup();t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;
+  D.showView({kind:'theme',themeId:'algebra',type:'train',query:'algebra'});assert(D.openApp('algebra-trainer'));
+  const eqFrame=f.$('appFrames').querySelector('iframe'),eq=algebraFixture(f,eqFrame,'equations');eq.input.value='tussenstap';
+  assert.equal(new URL(eqFrame.src).searchParams.get('osEmbed'),'1');assert.deepEqual(eq.calls,[['embedded',true]]);
+  assert.deepEqual([...f.$('nativeAppNavigation').children].map(n=>n.textContent),['Werelden','Levels','Werkvormen']);assert.equal(f.$('nativeAppNavigation').hidden,false);
+  f.$('nativeAppNavigation').querySelector('[data-algebra-section=tools]').click();assert.deepEqual(eq.calls.at(-1),['navigate','tools']);
+  const systems='https://school.example/LeraarBob/games/algebra-trainer/stelsels.html?screen=menu';
+  const route=new eqFrame.contentWindow.CustomEvent('leraarbob:algebra-route',{detail:{href:systems},cancelable:true});eq.doc.dispatchEvent(route);assert(route.defaultPrevented);
+  const sysFrame=f.$('appFrames').querySelectorAll('iframe')[1],sys=algebraFixture(f,sysFrame,'systems');sys.input.value='1/';
+  assert.equal(eqFrame.contentDocument,eq.doc);assert.equal(eq.input.value,'tussenstap');assert.equal(D.state().openApps.length,2);
+  assert.deepEqual([...f.$('runningApps').children].map(n=>n.getAttribute('aria-label')),['Terug naar Vergelijkingen','Terug naar Stelsels']);
+  f.$('saveActivity').click();const preferences=Object.values(f.w.localStorage).map(value=>{try{return JSON.parse(value);}catch{return null;}}).find(value=>value?.saved?.length);
+  assert.equal(new URL(preferences.saved[0].href).pathname,'/LeraarBob/games/algebra-trainer/stelsels.html');assert.equal(new URL(preferences.saved[0].href).searchParams.has('osEmbed'),false);
+  for(const alias of ['algebra','algebra-trainer']){
+    const battle=sys.doc.createElement('a');battle.href='https://school.example/LeraarBob/klasbattle/?game='+alias+'&world=systems';sys.doc.body.append(battle);
+    const click=new sysFrame.contentWindow.MouseEvent('click',{bubbles:true,cancelable:true});battle.dispatchEvent(click);assert(click.defaultPrevented);
+    const hub=f.$('appFrames').querySelectorAll('iframe')[2];assert(hub);assert.equal(D.state().openApps.length,3);assert.equal(f.$('nativeAppNavigation').hidden,true);
+    const doc=hub.contentDocument;doc.open();doc.write('<!doctype html><html><head></head><body><a id="origin" href="'+systems+'">Terug</a></body></html>');doc.close();hub.dispatchEvent(new f.w.Event('load'));
+    const back=new hub.contentWindow.MouseEvent('click',{bubbles:true,cancelable:true});doc.getElementById('origin').dispatchEvent(back);assert(back.defaultPrevented);assert.equal(D.state().activeKey,'algebra-trainer|solo|systems');
+    assert.equal(sys.input.value,'1/');assert.equal(sysFrame.contentDocument,sys.doc);assert.equal(f.$('nativeAppNavigation').hidden,false);assert.equal(f.$('nativeAppNavigation').children.length,3);
+  }
+  D.showView({kind:'saved'});f.$('viewContent').querySelector('.saved-row button').click();assert.equal(sysFrame.contentDocument,sys.doc);assert.equal(sys.input.value,'1/');assert.equal(D.state().view.kind,'saved');
+  f.emit({account:{id:'next-pupil',role:'student'}});await tick();assert.equal(D.state().openApps.length,0);assert.equal(eq.disposed(),1);assert.equal(sys.disposed(),1);assert.equal(f.$('nativeAppNavigation').hidden,true);assert.equal(f.errors.length,0);
+});
+test('Algebra route at the six-window limit keeps the original answer instead of navigating its iframe',async t=>{
+  const f=await setup();t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;D.openApp('algebra-trainer');
+  const frame=f.$('appFrames').querySelector('iframe'),algebra=algebraFixture(f,frame,'equations');algebra.input.value='bewaarde invoer';
+  for(const id of ['pythagoras','rechtenwereld','rechten-zeeslag','glasraam','wortelbouw'])assert(D.openApp(id));f.$('runningApps').firstElementChild.click();
+  const event=new frame.contentWindow.CustomEvent('leraarbob:algebra-route',{detail:{href:'https://school.example/LeraarBob/games/algebra-trainer/stelsels.html?screen=menu'},cancelable:true});algebra.doc.dispatchEvent(event);
+  assert(event.defaultPrevented);assert.equal(D.state().openApps.length,6);assert.equal(D.state().activeKey,'algebra-trainer|solo|');assert.equal(frame.contentDocument,algebra.doc);assert.equal(algebra.input.value,'bewaarde invoer');assert.match(f.$('toast').textContent,/zes apps/);assert.equal(f.errors.length,0);
+});
 test('Each pilot keeps its own folder, filter and search when switching through the taskbar',async t=>{
   const f=await setup();t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;
   const pilots=[['pythagoras','pythagoras','learn','pythagoras'],['rechtenwereld','rechten','train','wereld'],['rechten-zeeslag','rechten','game','zeeslag'],['glasraam','rechten','atelier','glas']];

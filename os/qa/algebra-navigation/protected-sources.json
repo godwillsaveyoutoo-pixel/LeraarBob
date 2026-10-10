@@ -1,0 +1,54 @@
+{
+  "shared/axioma-auth.js": {
+    "unchanged": true,
+    "sha256": "9b4f1daa0e161713b450fd3758a8f4d3ea372c298e70bdd39b1ae9955a9a9917"
+  },
+  "shared/axioma-progress.js": {
+    "unchanged": true,
+    "sha256": "80b32f1b331ae1aca05a96e9b7d3dba29e407c2d32177f23d8cc9b3a14e303bb"
+  },
+  "shared/axioma-game.js": {
+    "unchanged": true,
+    "sha256": "ff0af6b84c4ab3353fe9d1a89873f4773454df16a2a62305a62e4b64d8eafea3"
+  },
+  "shared/platform-routes.js": {
+    "unchanged": true,
+    "sha256": "7cb5f27d448086f0de4be9d80f652bb100ffb25a15652c617a5f47e5db090267"
+  },
+  "shared/leraarbob-topbar.js": {
+    "unchanged": true,
+    "sha256": "ebd762eb3627b6a669ec0c10c76bc73eed24a5744212181dccc86d4c8664af2c"
+  },
+  "games/algebra-trainer/core.js": {
+    "unchanged": true,
+    "sha256": "725b147122536aa0106bb8866bfdc3dc423060e15ba759c4ffff648c23e3707d"
+  },
+  "games/algebra-trainer/world-core.js": {
+    "unchanged": true,
+    "sha256": "cde51dd678ad00c81e14974abe6555a5b0d4b0993e36eba4eda8be131d1decf6"
+  },
+  "games/algebra-trainer/journey-core.js": {
+    "unchanged": true,
+    "sha256": "d49ea4bc1f7eacdf460637fdbb1e9ab9915651599ada1196f4236c01e384018a"
+  },
+  "games/algebra-trainer/workbench-core.js": {
+    "unchanged": true,
+    "sha256": "75523356b5afca4e88842a4ce00b7914db7d21d4e9b15e8c54cacac33ddc13d6"
+  },
+  "games/algebra-trainer/learning-core.js": {
+    "unchanged": true,
+    "sha256": "60ae8b498e62af01bfc19f8f839f005500c8a643fbcd7de0c10ec8f36de8a0be"
+  },
+  "games/algebra-trainer/stelsels/core.js": {
+    "unchanged": true,
+    "sha256": "9b4b8a70b3eaca85e177b9a7da15eb12533a69447acc91f6dd259bdca8327118"
+  },
+  "games/algebra-trainer/battle-config.js": {
+    "unchanged": true,
+    "sha256": "1d31230021c3ab8ebe5e6efd73e4fe7663c45131246ca322b1fd6272037171dc"
+  },
+  "games/algebra-trainer/stelsels/paper.js": {
+    "unchanged": true,
+    "sha256": "5e97ea8239e208c199117868f5524df8dc9c26298e7ff55374a7390428134652"
+  }
+}
