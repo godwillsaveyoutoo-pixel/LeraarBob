@@ -22,6 +22,12 @@ const THEMES=[
   ['vereenvoudigen','Wortels vereenvoudigen','Vereenvoudigen','\\sqrt{48}=4\\sqrt{3}','Haal de grootste kwadraatfactor uit de wortel.'],
   ['som','Worteltermen samenvoegen','Samenvoegen','2\\sqrt{3}+4\\sqrt{3}=6\\sqrt{3}','Vereenvoudig eerst; tel alleen gelijksoortige wortels op.'],
   ['regels','Mag deze rekenregel?','Regel of valkuil?','\\sqrt{9+16}\\ne\\sqrt{9}+\\sqrt{16}','Product en quotiënt mogen; som en verschil niet zomaar.']
+ ]},
+ {id:'wetenschappelijk',title:'Wetenschappelijke schrijfwijze',intro:'Schrijf grote en kleine getallen met machten van tien. Houd de waarde gelijk.',example:'320\\,000=3{,}2\\cdot10^5',stops:[
+  ['groot','Grote getallen schrijven','Grote getallen','320\\,000=3{,}2\\cdot10^5','Maak een factor van 1 tot 10 en tel hoeveel plaatsen de komma naar links schuift.'],
+  ['klein','Kleine getallen schrijven','Kleine getallen','0{,}00032=3{,}2\\cdot10^{-4}','Een klein getal krijgt een negatieve exponent. De factor blijft tussen 1 en 10.'],
+  ['terug','Terug naar een gewoon getal','Terugschrijven','3{,}2\\cdot10^{-4}=0{,}00032','Een positieve exponent schuift de komma naar rechts; een negatieve naar links.'],
+  ['normaliseren','De factor goed zetten','Normaliseren','32\\cdot10^4=3{,}2\\cdot10^5','Staat de factor buiten het interval van 1 tot 10? Pas factor en exponent samen aan.']
  ]}
 ];
 const stops=THEMES.flatMap(t=>t.stops.map((s,i)=>({id:t.id+'-'+s[0],theme:t.id,kind:s[0],title:s[1],short:s[2],example:s[3],intro:s[4],number:i+1})));
@@ -34,7 +40,9 @@ const PRACTICE={
  'machten-mix':['power-mixed'],'wortels-factor':['square-factor'],
  'wortels-product':['root-product'],'wortels-quotient':['root-quotient','root-fraction'],
  'wortels-macht':['root-power','root-letters'],'wortels-vereenvoudigen':['root-simplify'],
- 'wortels-som':['root-sum','root-sum-mixed']
+ 'wortels-som':['root-sum','root-sum-mixed'],
+ 'wetenschappelijk-groot':['scientific'],'wetenschappelijk-klein':['scientific'],
+ 'wetenschappelijk-terug':[],'wetenschappelijk-normaliseren':[]
 };
 const practiceSkills=id=>PRACTICE[id]?[...PRACTICE[id]]:[];
 const rule=(id,label,tex)=>({id,label,tex});
@@ -53,17 +61,26 @@ const R={
  rootpower:rule('rootpower','Een kwadraat en een wortel heffen elkaar op','\\sqrt{a^2}=|a|'),
  rootlike:rule('rootlike','Tel de coëfficiënten van gelijke wortels op','p\\sqrt r+q\\sqrt r=(p+q)\\sqrt r'),
  invalidsum:rule('invalidsum','Bij een som mag je niet zomaar splitsen','\\sqrt{a+b}\\not\\equiv\\sqrt a+\\sqrt b'),
- invaliddifference:rule('invaliddifference','Bij een verschil mag je niet zomaar splitsen','\\sqrt{a-b}\\not\\equiv\\sqrt a-\\sqrt b')
+ invaliddifference:rule('invaliddifference','Bij een verschil mag je niet zomaar splitsen','\\sqrt{a-b}\\not\\equiv\\sqrt a-\\sqrt b'),
+ scientificlarge:rule('scientificlarge','Komma naar links: positieve exponent','320\\,000=3{,}2\\cdot10^5'),
+ scientificsmall:rule('scientificsmall','Komma naar rechts: negatieve exponent','0{,}00032=3{,}2\\cdot10^{-4}'),
+ decimalright:rule('decimalright','Positieve exponent: komma naar rechts','3{,}2\\cdot10^3=3200'),
+ decimalleft:rule('decimalleft','Negatieve exponent: komma naar links','3{,}2\\cdot10^{-3}=0{,}0032'),
+ normalizelarge:rule('normalizelarge','Factor delen door 10: exponent 1 groter','32\\cdot10^4=3{,}2\\cdot10^5'),
+ normalizesmall:rule('normalizesmall','Factor maal 10: exponent 1 kleiner','0{,}32\\cdot10^4=3{,}2\\cdot10^3')
 };
 function rng(seed){let v=seed>>>0;return()=>{v=(Math.imul(v,1664525)+1013904223)>>>0;return v/4294967296;};}
 function radical(n){let k=1,r=n;for(let f=2;f*f<=r;f++)while(r%(f*f)===0){r/=f*f;k*=f;}return[k,r];}
 const slot=(label,value)=>({label,answer:String(value)});
+// Decimal digits stay separate integer choices. This preserves the saved answer
+// format and lets the existing rational engine grade without rounding a float.
+const digitSlot=(label,value)=>({...slot(label,value),choices:Array.from({length:5},(_,i)=>String((value+i+8)%10)).sort((a,b)=>Number(a)-Number(b))});
 const stage=(prompt,template,slots,expression,explanation)=>({prompt,template,slots,expression,explanation});
 function make(id,seed,index=0,edition=2){
  const s=stop(id);if(!s)throw Error('Onbekend onderdeel');
  const random=rng(seed),pick=a=>a[Math.floor(random()*a.length)],int=(a,b)=>a+Math.floor(random()*(b-a+1));
  const a=int(2,5),b=int(2,4),m=int(2,5),n=int(2,4),r=pick([2,3,5,6,7]),v=((index%6)+6)%6;
- let expression,correct,choices,stages=[],condition='',note='',finalExpression,rulePrompt;
+ let expression,correct,choices,stages=[],condition='',note='',finalExpression,finalTex,rulePrompt;
  const set=(key,others)=>{correct=key;choices=[R[key],...others.map(k=>R[k])];};
  const positivePower=e=>e<0?stage('Schrijf met een positieve exponent.','\\frac{1}{x^{[[0]]}}',[slot('Exponent in noemer',-e)],'1/(x^([[0]]))','Een negatieve exponent betekent het omgekeerde.'):stage('Maak de nulmacht af.','[[0]]',[slot('Uitkomst',1)],'[[0]]','Een niet-nul grondtal tot de macht nul is 1.');
  if(s.theme==='machten'){
@@ -107,6 +124,31 @@ function make(id,seed,index=0,edition=2){
     else if(v%2===0){const k=int(1,m+n-1);expression=`(x^${m}*x^${n})/x^${k}`;condition='x ≠ 0';set('product',['power','distribute']);stages=[stage('Neem eerst het product in de teller samen.','\\frac{x^{[[0]]}}{x^{'+k+'}}',[slot('Exponent teller',m+n)],`x^([[0]])/x^${k}`,'Tel de exponenten in het product op.'),stage('Deel nu de machten.','x^{[[0]]}',[slot('Exponent',m+n-k)],'x^([[0]])',`Trek daarna ${k} af van de exponent in de teller.`)];}
     else{expression=`(${a}*x^${m})^2*${b}*x^${n}`;set('distribute',['quotient','product']);stages=[stage('Werk eerst de haakjes uit.','[[0]]\\,x^{[[1]]}\\cdot '+b+'x^{'+n+'}',[slot('Coëfficiënt',a*a),slot('Exponent',2*m)],`([[0]])*x^([[1]])*${b}*x^${n}`,'Kwadrateer de coëfficiënt en verdubbel de exponent.'),stage('Neem de factoren samen.','[[0]]\\,x^{[[1]]}',[slot('Coëfficiënt',a*a*b),slot('Exponent',2*m+n)],'([[0]])*x^([[1]])','Vermenigvuldig de coëfficiënten en tel de exponenten op.')];}break;
   }
+ }else if(s.theme==='wetenschappelijk'){
+  const whole=int(1,9),tenth=v%3===0?0:int(1,9),digits=10*whole+tenth,negative=edition>=2&&v>=4,sign=negative?'-':'',coefficient=sign+whole+'.'+tenth;
+  const decimal=exponent=>exponent>=1?sign+String(digits)+'0'.repeat(exponent-1):sign+'0.'+'0'.repeat(-exponent-1)+String(digits);
+  const normalized=(exponent,prompt,explanation)=>stage(prompt,sign+'[[0]]{,}[[1]]\\cdot10^{[[2]]}',[digitSlot('Cijfer vóór de komma',whole),digitSlot('Cijfer na de komma',tenth),slot('Exponent van tien',exponent)],sign+'(([[0]])+([[1]])/10)*10^([[2]])',explanation);
+  condition='De absolute waarde van de factor is minstens 1 en kleiner dan 10.';
+  if(negative)note='Het minteken blijft bij het getal; de komma verplaatsen verandert het teken niet.';
+  rulePrompt='Welke regel houdt de waarde van het getal gelijk?';
+  switch(s.kind){
+   case 'groot':{
+    const exponent=int(2,6);expression=decimal(exponent);set('scientificlarge',['scientificsmall','normalizesmall']);
+    stages=[normalized(exponent,'Kies de twee cijfers van de factor en de exponent van tien.',`De komma schuift ${exponent} plaatsen naar links. Compenseer dat met 10 tot de positieve macht ${exponent}.`)];break;}
+   case 'klein':{
+    const exponent=-int(2,6);expression=decimal(exponent);set('scientificsmall',['scientificlarge','normalizelarge']);
+    stages=[normalized(exponent,'Kies de factor tussen 1 en 10 en de negatieve exponent.',`De komma schuift ${-exponent} plaatsen naar rechts. Compenseer dat met 10 tot de macht ${exponent}.`)];break;}
+   case 'terug':{
+    const exponent=(v%2?-1:1)*int(2,5);expression=coefficient+'*10^('+exponent+')';set(exponent>0?'decimalright':'decimalleft',exponent>0?['decimalleft','normalizelarge']:['decimalright','normalizesmall']);
+    condition='Behoud alle cijfers en het teken van het getal.';
+    if(exponent>0)stages=[stage('Schuif de komma naar rechts en maak het getal af.',sign+'[[0]]',[slot(negative?'Grootte van het getal; het minteken staat vast':'Gewoon getal',Number(String(digits)+'0'.repeat(exponent-1)))],sign+'([[0]])',`Vermenigvuldigen met 10 tot de macht ${exponent} schuift de komma ${exponent} plaatsen naar rechts.`)];
+    else stages=[stage('Schuif de komma naar links. De benodigde nullen staan al klaar.',sign+'0{,}'+'0'.repeat(-exponent-1)+'[[0]][[1]]',[digitSlot('Eerste cijfer na de nullen',whole),digitSlot('Laatste cijfer',tenth)],sign+'(10*([[0]])+([[1]]))/'+String(10**(1-exponent)),`Delen door 10 tot de macht ${-exponent} schuift de komma ${-exponent} plaatsen naar links. De twee gekozen cijfers blijven in dezelfde volgorde.`)];
+    finalExpression=decimal(exponent);finalTex=C.tex(finalExpression);break;}
+   case 'normaliseren':{
+    const large=v%2===0,originalExponent=int(-4,5),exponent=originalExponent+(large?1:-1);expression=sign+(large?String(digits):'0.'+String(digits))+'*10^('+originalExponent+')';set(large?'normalizelarge':'normalizesmall',large?['normalizesmall','decimalright']:['normalizelarge','decimalleft']);
+    stages=[normalized(exponent,'Zet de factor tussen 1 en 10 en pas de exponent mee aan.',large?'Je deelt de factor door 10. Maak de exponent daarom 1 groter: de waarde blijft gelijk.':'Je vermenigvuldigt de factor met 10. Maak de exponent daarom 1 kleiner: de waarde blijft gelijk.')];break;}
+  }
+  if(!finalTex)finalTex=fillScientific(stages.at(-1));
  }else{
   switch(s.kind){
    case 'factor':case 'vereenvoudigen':{
@@ -148,13 +190,15 @@ function make(id,seed,index=0,edition=2){
  for(let i=choices.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[choices[i],choices[j]]=[choices[j],choices[i]];}
  const fill=(template,values)=>template.replace(/\[\[(\d+)\]\]/g,(_,i)=>values[i]);
  const final=finalExpression||fill(stages.at(-1).expression,stages.at(-1).slots.map(x=>x.answer));
- const answerTex=s.kind==='factor'?C.tex(final):C.tex(C.plain(C.parse(final).value));
+ const answerTex=finalTex||(s.kind==='factor'?C.tex(final):C.tex(C.plain(C.parse(final).value)));
  return {id:s.id,seed:seed>>>0,index:v,expression,tex:C.tex(expression),condition,note,correct,choices,stages,answer:final,answerTex,...(rulePrompt?{rulePrompt}:{})};
 }
 function fill(template,values){return template.replace(/\[\[(\d+)\]\]/g,(_,i)=>values[i]);}
+function fillScientific(s){return fill(s.template,s.slots.map(x=>x.answer));}
 function checkStage(t,index,values){
  const s=t.stages[index];if(!s||!Array.isArray(values)||values.length!==s.slots.length)return{ok:false,message:'Vul elk vak in.'};
  if(values.some(v=>!/^[-]?\d{1,7}$/.test(String(v))))return{ok:false,message:'Vul elk vak in met een geheel getal.'};
+ if(s.slots.some((x,i)=>x.choices&&!x.choices.includes(String(values[i]))))return{ok:false,message:'Kies één cijfer per cijfervak.'};
  if(s.accept==='square-factor'){
   const [factor,rest]=values.map(BigInt),root=BigInt(Math.floor(Math.sqrt(Math.max(0,Number(factor)))));
   if(factor<=1n||rest<=0n||root*root!==factor)return{ok:false,message:'De eerste factor moet een volkomen kwadraat groter dan 1 zijn. Kies een kwadraat uit de knoppen.'};

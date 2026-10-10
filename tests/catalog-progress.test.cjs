@@ -179,7 +179,7 @@ test('Getallenwereld keeps its guided route and historical series separate while
   ]};
   const totals=api.aggregate([...family,family[1]],overview);
   assert.equal(totals.xp,30);assert.equal(totals.entries.length,2);
-  assert.equal(totals.entries[0].label,'2 van 15 onderdelen');assert.equal(totals.entries[1].label,'3 van 16 vraagvormen');
+  assert.equal(totals.entries[0].label,'2 van 19 onderdelen');assert.equal(totals.entries[1].label,'3 van 16 vraagvormen');
   assert.equal(totals.entries[1].title,'Getallenwereld · Reeksen');assert(!totals.entries.some(e=>e.label.includes('31')));
   assert.equal(api.savedFor(family[0],overview).game_id,'getallenwereld');assert.equal(api.savedFor(family[1],overview).game_id,'bewerkingen-trainer');
   overview.games[0].state.completed.push('machten-macht');assert.equal(api.summarize(family[1],api.savedFor(family[1],overview)).completed,3,'Guided work never rewrites the historical series total');
@@ -191,4 +191,18 @@ test('online numbers awards add once to saved solo XP, never to duplicated compo
  const overview={errors:{},numbers:{solo_xp:10,online_xp:25,xp:35},games:[{game_id:'bewerkingen-trainer',state:{storage:{'leraarbob.bewerkingen.v1':JSON.stringify({practiceXP:10})}}}]};
  assert.equal(api.aggregate(catalog,overview).xp,35);
  assert.equal(api.aggregate(catalog,{...overview,errors:{numbers:true}}),null,'Unavailable online XP must not be reported as zero');
+});
+
+
+test('Scientific learning adds four real units while preserving all fifteen existing completions',()=>{
+ const api=context.window.LeraarBobCatalogProgress,game=JSON.parse(script('games.json')).find(g=>g.id==='getallenwereld');
+ const L=require('../games/getallenwereld/lessons.js'),evidence=()=>({done:['1:0','1:1','1:2','1:3','1:4','1:5'],independent:['1:0','1:1','1:2','1:3','1:4','1:5']});
+ const entries=Object.fromEntries(L.STOPS.filter(s=>s.theme!=='wetenschappelijk').map(s=>[s.id,evidence()]));
+ const saved={state:{completed:Object.keys(entries),total:15,storage:{'leraarbob.getallenwereld.v1':JSON.stringify({version:1,entries})}}};
+ const before=JSON.stringify(saved),old=api.summarize(game,saved);
+ assert.equal(old.completed,15);assert.equal(old.max,19);assert.equal(old.status,'started');assert.equal(old.label,'15 van 19 onderdelen');assert.equal(JSON.stringify(saved),before);
+ for(const stop of L.STOPS.filter(s=>s.theme==='wetenschappelijk'))entries[stop.id]=evidence();
+ entries['wetenschappelijk-unknown']=evidence();saved.state.storage['leraarbob.getallenwereld.v1']=JSON.stringify({version:1,entries});
+ const complete=api.summarize(game,saved);assert.equal(complete.completed,19);assert.equal(complete.max,19);assert.equal(complete.status,'complete');assert.match(complete.detail,/19 zelfstandig/);assert.equal(api.earnedXP(game,saved),null);
+ const legacy=api.summarize(game,{state:{completed:['machten-product','wortels-factor'],total:15}});assert.equal(legacy.completed,2);assert.equal(legacy.max,19);
 });

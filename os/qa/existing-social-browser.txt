@@ -1,0 +1,18 @@
+PASS: Online game suggestions open both lobbies without starting matches
+PASS: cross-page online list, menu invitation, explicit refusal
+PASS: invitation survives navigation; acceptance opens the same private match for both
+PASS: ship placement, private transport, misses change turns, hits retain turns, duplicate shots, reload recovery
+PASS: forfeit, victory/result screen, save retry, rematch from both result screens, end before battle, no duplicate results
+PASS: solo entry, placement, miss/bot turn, victory, return to online lobby; no fabricated players or ranked results
+AssertionError [ERR_ASSERTION]: battle lobby fits vertically 320x568
+
+true !== false
+
+    at /tmp/leraarbob-os-pilot/tests/social-browser.cjs:363:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: true,
+  expected: false,
+  operator: 'strictEqual',
+  diff: 'simple'
+}

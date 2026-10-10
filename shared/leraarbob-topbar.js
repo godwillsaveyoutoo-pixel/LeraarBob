@@ -5,12 +5,15 @@
 // Exit before creating observers, loading helpers or mounting hidden chrome.
 if(location.pathname.endsWith('/classroom.html')&&new URLSearchParams(location.search).get('hub')==='1'&&window.parent!==window)return;
 if(window.LeraarBobTopbar||window.VectorBattlePlayer||window!==window.top)return;
-const script=document.currentScript,root=new URL('../',script.src),home=new URL('index.html',root).href;
+const script=document.currentScript,root=new URL('../',script.src);
+// A platform shell may supply its own home; ordinary games keep their current home.
+const requestedHome=new URL(script.dataset.home||'index.html',root);
+const home=requestedHome.origin===root.origin&&requestedHome.pathname.startsWith(root.pathname)?requestedHome.href:new URL('index.html',root).href;
 const title=script.dataset.title||document.title.split('·')[0].trim();
 const navPilot=script.dataset.navPilot==='true';
 document.body.dataset.platformPage=title;
 document.body.classList.toggle('lb-nav-pilot',navPilot);
-const isHome=script.dataset.page==='home',selector=script.dataset.header||'header';
+const isHome=script.dataset.page==='home',isDesktop=script.dataset.page==='desktop',selector=script.dataset.header||'header';
 const KEY='leraarbob-topbar-collapsed',mounted=new WeakSet();let collapsed=false,current=null,account=null,queued=false;
 try{collapsed=localStorage.getItem(KEY)==='true';}catch{}
 const icon={account:'<circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/>',menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',up:'<path d="m6 15 6-6 6 6"/>',down:'<path d="m6 9 6 6 6-6"/>'};
@@ -90,7 +93,7 @@ addEventListener('lesson:membership',syncLiveEntry);addEventListener('storage',e
 function progressSummary(){
  if(window.AxiomaGame&&!window.AxiomaGame.active)return null;
  const source=current?.header.querySelector('[data-platform-progress]');
- if(source)return {kind:source.dataset.platformProgress,value:Number(source.dataset.value),total:Number(source.dataset.total),unit:source.dataset.unit};
+ if(source)return {kind:source.dataset.platformProgress,value:Number(source.dataset.value),total:Number(source.dataset.total),unit:source.dataset.unit,title:source.dataset.title};
  if(isHome){const value=document.getElementById('totalXP')?.textContent.trim();return {kind:'xp',value:value&&value!=='—'?Number(value.replace(/[^0-9]/g,'')):null,home:true};}
  const xp=document.getElementById('xpLabel')||document.getElementById('xp');
  if(xp){xp.closest('.xp-chip')?.classList.add('lb-progress-source');return {kind:'xp',value:Number(xp.textContent.replace(/[^0-9]/g,''))};}
@@ -107,7 +110,8 @@ function syncProgress(){
  const total=Number.isFinite(summary.total)?Math.max(0,Math.floor(summary.total)):0;
  const value=count===null?'—':Math.min(count,summary.kind==='levels'&&total?total:Infinity).toLocaleString('nl-BE');
  const label=summary.kind==='xp'?value+' XP':value+(total?'/'+total:'')+' '+(summary.unit||'levels');
- const description=summary.kind==='xp'?(summary.home?'Totale XP over je spellen':'XP in '+title)+': '+value:(count??0)+' van '+total+' '+(summary.unit||'levels')+' afgerond in '+title;
+ const progressTitle=summary.title||title;
+ const description=summary.kind==='xp'?(summary.home?'Totale XP over je spellen':'XP in '+progressTitle)+': '+value:(count??0)+' van '+total+' '+(summary.unit||'levels')+' afgerond in '+progressTitle;
  if(badge.dataset.signature===label+'|'+description)return;
  badge.dataset.signature=label+'|'+description;
  badge.dataset.kind=summary.kind;
@@ -184,7 +188,7 @@ async function showMenu(){
   b.onclick=()=>{dialog.close();action();};group.append(b);return b;
  };
   let classroomEntry=null;
-  if(!isHome){
+  if(!isHome&&!isDesktop){
    const game=section('Huidig spel','menu-options menu-game');
    const menu=nativeMenu(header);
    const nodes=[...(menu||header).querySelectorAll(menu?'button,a':'.lb-gamebar button,.lb-gamebar a')].filter(node=>!node.hidden&&!node.matches('[data-nav-hidden],[data-collapse-topbar],#themeBtn,#modeBtn[aria-pressed],#theme,#fullBtn,[data-fullscreen],[data-platform-home],.axiomaHome,.lb-legacy-brand,#logout')&&(menu||!node.closest('[hidden]')));
@@ -215,6 +219,12 @@ async function showMenu(){
   const requestedReturn=new URLSearchParams(location.search).get('returnTo');
   if(requestedReturn&&window.LeraarBobRoutes){const target=window.LeraarBobRoutes.safeReturn(requestedReturn),origin=window.LeraarBobGameRegistry?.current(new URL(target,root).href);const back=section('Terug naar je leerroute','menu-options menu-return');add(back,'Terug naar '+(origin?.title||'leraarBob'),()=>location.assign(target),{glyph:'route',description:'Je bewaarde werk en geselecteerde onderdeel blijven behouden.'});}
   const platform=section('leraarBob','menu-nav menu-platform');
+  if(isDesktop){
+   // Desktop places are live controls. Following them must not reload open apps.
+   for(const node of header.querySelectorAll('[data-platform-sections] button')){
+    const details=menuDetails(node);add(platform,details.label,()=>node.click(),{...details,source:node});
+   }
+  }else{
   add(platform,'Spellen',()=>goPlatformSection('homeGames','#ontdek'),{glyph:'home'});
   add(platform,'Klasbattle',()=>{
    if(classroomEntry){classroomEntry.node.click();return;}
@@ -228,6 +238,7 @@ async function showMenu(){
   add(platform,'Alle ranglijsten',()=>location.assign(window.LeraarBobPlayModes.hubDestination('rankings')),{glyph:'chart',description:'Resultaten per klas en wereld'});
   add(platform,'Mijn leerpad',()=>goPlatformSection('homeProgress','#playerProgress'),{glyph:'chart'});
   if(account?.role==='teacher'&&script.dataset.page!=='teacher')add(platform,'Mijn klassen',()=>location.assign(new URL('teacher/',root)),{glyph:'classroom'});
+  }
   if(window.AxiomaSocial&&script.dataset.social!=='false'){
    const entry=add(platform,'Uitnodigingen',()=>window.AxiomaSocial.open(s.querySelector(getComputedStyle(s.querySelector('.mobile-menu')).display!=='none'?'.mobile-menu':'.menu')),{description:'Een leerling uitnodigen of reageren',glyph:'battle'});
    entry.classList.add('social-entry');entry.setAttribute('aria-haspopup','dialog');syncSocialMenu();
@@ -289,6 +300,10 @@ function syncMobileContext(){
  if(!current||!navPilot)return;
  const s=current.host.shadowRoot,titleNode=s.querySelector('.mobile-title'),detailNode=s.querySelector('.mobile-detail');
  if(!titleNode||!detailNode)return;
+ if(isDesktop){
+  const places=[...s.querySelectorAll('.crumbs button,.crumbs>span')].map(n=>n.textContent.trim()).filter(n=>n&&n!=='›');
+  titleNode.textContent=places.at(-1)||title;detailNode.textContent='';detailNode.hidden=true;return;
+ }
  titleNode.textContent=isHome?'leraarBob':title;
  let detail='';
  if(script.dataset.mobileContext){try{detail=document.querySelector(script.dataset.mobileContext)?.textContent.trim()||'';}catch{}}

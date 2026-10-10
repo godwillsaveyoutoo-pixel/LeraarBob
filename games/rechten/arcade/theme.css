@@ -83,6 +83,23 @@ body[data-arcade=zeeslag] .history{width:100%;min-height:0;max-width:none;font-s
 body[data-arcade=zeeslag] .matchResult{inset:32px 0 0;background:#10242af0}body[data-arcade=zeeslag] :is(.rankBtn,.smallBtn){background:#213b3e;color:#efddba}body[data-arcade=zeeslag] :is(.rankTable,.rankTable th,.rankTable td){color:#f1e1c1;border-color:#896e4c}body[data-arcade=zeeslag] .rankTable tr.me{background:#5b3531}
 @media(max-height:500px){body[data-arcade=redding] .controlBoard{padding:4px 8px;gap:6px;grid-template-columns:80px minmax(0,1fr) auto}body[data-arcade=redding] .formula{font-size:27px;gap:4px}body[data-arcade=redding] #targetLabel{font-size:20px}body[data-arcade=redding] .missionText,body[data-arcade=redding] .missionText .infoPrompt{font-size:12px;line-height:1.25}body[data-arcade=redding] .actionButton{font-size:13px;padding:4px 8px}body[data-arcade=kleiduiven] .console{padding:4px 8px;gap:8px}body[data-arcade=kleiduiven] .caption,body[data-arcade=kleiduiven] .fieldLabel{font-size:10px}body[data-arcade=zeeslag] .boardTitle span,body[data-arcade=zeeslag] .placementInfo span{display:none}body[data-arcade=zeeslag] .boards{gap:6px;padding:2px 6px}body[data-arcade=zeeslag] .boardSide{grid-template-rows:20px minmax(0,1fr) 14px}body[data-arcade=zeeslag] .boardTitle strong{font-size:12px}body[data-arcade=zeeslag] .history{font-size:9px}body[data-arcade=zeeslag] .equationBuilder{font-size:23px;gap:4px}body[data-arcade=zeeslag] .paramValue{font-size:23px}body[data-arcade=zeeslag] .aimCard{gap:8px}body[data-arcade=zeeslag] .bottom{padding:4px 8px;min-height:60px}}
 @media(prefers-reduced-motion:reduce){.arcade-scored,.arcade-score-pop{animation:none}}
+/* Keep the original naval controls reachable in a narrow app window. */
+@media(max-width:600px){
+ body[data-arcade=zeeslag] #app,body[data-arcade=zeeslag] main,body[data-arcade=zeeslag] #gameScreen,body[data-arcade=zeeslag] .bottom{min-width:0}
+ body[data-arcade=zeeslag] .boards{gap:6px;padding-inline:6px}
+ body[data-arcade=zeeslag] .boardTitle span{display:none}
+ body[data-arcade=zeeslag] .boardTitle strong{font-size:12px}
+ body[data-arcade=zeeslag] .aimCard{flex-wrap:wrap;gap:6px}
+ body[data-arcade=zeeslag] .equationBuilder{font-size:23px;gap:4px}
+ body[data-arcade=zeeslag] .paramControl{gap:2px}
+ body[data-arcade=zeeslag] .paramValue{font-size:23px;min-width:28px}
+ body[data-arcade=zeeslag] .fireBtn{min-width:100px;min-height:44px;font-size:17px;padding:4px 16px}
+ body[data-arcade=zeeslag] .placementBar{flex-wrap:wrap;gap:6px}
+ body[data-arcade=zeeslag] .placementInfo{flex:1 1 100%;min-width:0}
+ body[data-arcade=zeeslag] .placementInfo span{display:none}
+ body[data-arcade=zeeslag] .fleetCount{font-size:18px;margin-right:auto}
+ body[data-arcade=zeeslag] .readyBtn{margin-left:0;font-size:12px;padding:6px 10px;min-height:44px}
+}
 @media(max-height:500px) and (min-width:600px){
  body[data-arcade=zeeslag] .screen.active#gameScreen{grid-template-rows:minmax(0,1fr) auto}
  body[data-arcade=zeeslag] .matchbar{display:none}

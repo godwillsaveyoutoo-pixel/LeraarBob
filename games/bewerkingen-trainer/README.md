@@ -5,7 +5,7 @@ Bewerkingentrainer als onderdeel van Getallenwereld: eigen reeksen, bordduo,
 samen leren, oefenbladen en de klasbattle. Oude links blijven bruikbaar.
 De opslag-ID `bewerkingen-trainer`, sleutel `leraarbob.bewerkingen.v1` en
 klasprovider `bewerkingen` blijven intact. De 16 vraagvormen zijn een aparte
-voortgangsreeks naast de 15 begeleide onderdelen; de aantallen worden niet opgeteld.
+voortgangsreeks naast de 19 begeleide onderdelen; de aantallen worden niet opgeteld.
 
 De rekenkern heeft zestien vraagvormen op drie niveaus: machten van machten,
 producten/quotiënten van machten, eentermen, negatieve machten, gemengde
@@ -141,6 +141,91 @@ inzendingen gebruiken dezelfde request-ID, zodat reconnect geen dubbele XP geeft
 Geen brede `supabase db push`: bestaande productiemigraties hebben deels andere
 tijdstempels. Deploy daarna `numbers-session` met `verify_jwt=true` en de bestanden
 `index.ts`, `handler.js`, `core.js`; publiceer vervolgens de frontend.
+
+## Wetenschappelijke schrijfwijze: drie nieuwe niveaus en veilig hervatten
+
+Nieuwe eigen reeksen, Bordduo, borduitleg, oefenbladen en simulaties gebruiken
+voor de bestaande vraagvorm `scientific` generatorversie 2:
+
+- Start: grote gehele getallen met één significant cijfer en exponenten 2–6.
+- Basis: grote en kleine getallen met twee of drie significante cijfers,
+  met positieve en negatieve exponenten van −6 tot 7.
+- Verdieping: vier of vijf significante cijfers met interne nullen, bij heel
+  grote en heel kleine getallen, met exponenten tot ±20.
+
+De bestaande aanklikbare keuze voor het voorgetal en de exponent blijft intact.
+De BigInt-controle vergelijkt de waarde exact en eist nog steeds 1 ≤ a < 10.
+Opgeslagen taken bevatten `generatorVersion: 2` naast skill, seed, level en
+variant. Taken zonder versie zijn altijd historisch versie 1, ook na herladen
+van een solo- of duoreeks, blad of actieve online sessie. Nieuwe taken hebben
+een `:v2`-suffix in hun taak-ID zodat oude conceptinvoer nooit ongemerkt aan een
+andere vraag wordt gekoppeld. Accountopslag, voortgangs-ID `scientific`, de
+16 vraagvormen, geschiedenis en XP-regels veranderen niet.
+
+De productiebackend voor de drie nieuwe online niveaus is op **10 oktober
+2026** uitgerold. De gerichte migratie is toegepast; `numbers-session` is actief
+als versie 2 met `verify_jwt=true`. De gedeployde `index.ts`, `handler.js` en
+`core.js` zijn bytegelijk aan de reviewbranch. Het catalogustotaal is 19 en de
+RPC-rechten blijven beperkt tot de service-role. Hashes vóór en na uitrol
+bevestigen behoud van de oorspronkelijke sessiefunctie, alle 41 voortgangsrijen
+en de bestaande ruimte met twee deelnemers. De anonieme HTTP-controle geeft
+401. Er zijn geen nieuwe sessies of leerlingantwoorden aangemaakt.
+
+De frontend wordt via GitHub Pages vanaf `main` gepubliceerd; publieke ingangen
+zijn [het bureaublad](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/)
+en [Getallenwereld](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/).
+Actuele releasecontroles staan in [PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7)
+en [het verificatierapport](../../os/qa/verification.json).
+Oude servers blijven de historische reeksen aanbieden; de instellingen
+melden dan dat Basis en Verdieping dezelfde bestaande vraagmix gebruiken.
+De oude klasprovider `bewerkingen-class` houdt zijn historische generator en
+sessiecontract. Een volledige controle met twee ingelogde productieaccounts
+blijft open.
+
+Uitrolvolgorde; stap 1 en 2 zijn op 10 oktober 2026 afgerond:
+
+1. Pas uitsluitend
+   `supabase/migrations/20261009202541_numbers_scientific_generator_versions.sql`
+   toe na de bestaande numbers- en Getallenwereld-migraties. De oorspronkelijke
+   private sessiefunctie blijft als `numbers_session_v1` beschikbaar voor de
+   wrapper, maar is niet rechtstreeks aanroepbaar door een client of service-
+   rol. De wrapper controleert de benodigde generator vóór inschrijving,
+   vraagbediening of beoordeling. Hij verandert geen bestaande vragen,
+   deelnemerschappen, antwoorden, XP, RLS of leerlingvoortgang. Alleen het
+   catalogustotaal van Getallenwereld wordt 19 begeleide onderdelen.
+2. Bouw `core.js` met de bestaande `scripts/build-numbers-session.cjs` en deploy
+   `numbers-session` met de gewijzigde `handler.js` en `core.js`. Het frontend
+   verklaart versie 2; de handler kiest versie 2 alleen als de database de
+   versiecontrole ondersteunt. Een nieuwe handler op de oude database valt
+   veilig terug op versie 1. Een oude handler op de nieuwe database maakt ook
+   nog versie-1-ruimtes. In beide gevallen blijven de zichtbare vragen en de
+   serverbeoordeling gelijk.
+3. Publiceer de frontend met de bijgewerkte scriptversies. Een oude client mag
+   nog eigen versie-1-sessies gebruiken, maar krijgt vóór inschrijving in een
+   versie-2-ruimte de melding Getallenwereld te vernieuwen. Het openbare RPC-
+   delegaat wordt opnieuw aangemaakt zodat eerder gecachte SQL-plannen de
+   nieuwe guard niet kunnen omzeilen.
+4. Controleer met twee bestaande echte accounts een wetenschappelijke Duo
+   Learn, Duo Battle, Klaslearn en Klasbattle. De lokale test is bewijs voor
+   SQL/Edge en browsergedrag, niet voor productie-login of internetverbindingen.
+
+Gebruik geen brede `supabase db push`: historische productietijdstempels kunnen
+afwijken. Deze uitrol heeft uitsluitend de gerichte migratie en Edge Function
+bijgewerkt; de bestaande leerling- en sessiegegevens bleven behouden.
+
+Gerichte verificatie:
+
+```sh
+node --test --test-isolation=none tests/scientific-provider.test.cjs
+NODE_PATH=/pad/naar/node_modules node --test --test-isolation=none tests/scientific-session-version.test.cjs
+```
+
+De providercontrole bevriest 3600 historische taken met een SHA-256-controle en
+controleert 3600 nieuwe taken met onafhankelijke gehele-decimaalrekenkunde.
+De sessiecontrole gebruikt de echte lokale SQL-migraties en Edge-handler,
+bedient alle vier online werkvormen op elk niveau, en controleert afwijzing vóór
+inschrijving, geen dubbele XP, historische sessies, catalogusbehoud, veilige
+terugval op een oude database en de gelijkheid van browser- en Edge-generatie.
 
 Aanvullende controle:
 

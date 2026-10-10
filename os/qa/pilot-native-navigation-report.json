@@ -1,0 +1,38 @@
+{
+  "scope": "Real Chromium UI in localhost /os/ with guest auth fixture; no production account or remote session writes",
+  "viewport": {
+    "width": 1366,
+    "height": 768,
+    "deviceScaleFactor": 1,
+    "zoom": 1
+  },
+  "checks": [
+    {
+      "name": "Original Pythagoras leraarBob brand returns to own map and resumes same formula/iframe"
+    },
+    {
+      "name": "Original Rechtenwereld profile sign-in opens central account and retains native screen/state"
+    },
+    {
+      "name": "Original guest live-lesson sign-in opens only central account and retains code/input/submit handler",
+      "detail": {
+        "provider": "Guest auth fixture; pending code initialized through native ?code=A1B2C3 deep link"
+      }
+    }
+  ],
+  "layout": [
+    {
+      "name": "desktop-expanded",
+      "shell": {
+        "issues": [],
+        "collapsed": false
+      },
+      "native": null
+    }
+  ],
+  "integrationIssues": [],
+  "blocked": [],
+  "errors": [],
+  "missing": [],
+  "passed": true
+}

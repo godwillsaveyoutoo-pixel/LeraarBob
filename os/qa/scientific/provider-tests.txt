@@ -1,0 +1,25 @@
+✔ Klaslearn: identity, own drafts, retry, once-only XP, late join, teacher pacing, reports (1950.383947ms)
+✔ online duo: capacity, trusted battle answers, hidden correctness, server deadline, finish (1574.366842ms)
+✔ Duo Learn requires both own solutions and a separate discussion confirmation (1595.015155ms)
+✔ period reports include recorded solo evidence; other classes remain private (1435.057022ms)
+✔ a pupil hosting a duo cannot inspect the opponent answer during a battle (1356.648702ms)
+✔ a departed duo member cannot reclaim an occupied second seat (1428.965862ms)
+✔ central overview lists only owned or joined sessions and never leaks live grading (1417.360828ms)
+✔ scientific version 1 reproduces all 3600 frozen historical task specifications (47.867895ms)
+✔ 3600 new tasks use three distinct progressions and exact touch answers (1035.852946ms)
+✔ version 2 does not change the other fifteen provider skills or their identities (76.843251ms)
+✔ unknown generator versions fail instead of silently creating a different question (0.46435ms)
+✔ new scientific questions work through the real SQL/Edge in all four online workforms and all three levels (1734.950623ms)
+✔ old clients cannot join, render, pace or answer v2 rooms, and rejection creates no member, attempt or XP (1451.764183ms)
+✔ an updated Edge on an unmigrated database safely creates and grades version 1 for a version 2 client (1435.668235ms)
+✔ migration preserves a live historical room, old cached RPC callers, saved learner evidence and catalog settings (1449.191345ms)
+✔ the generated Edge arithmetic reproduces both browser versions exactly (174.997045ms)
+✔ a partially updated Edge with an old arithmetic bundle cannot create or misgrade version 2 (1426.430416ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19638.756962

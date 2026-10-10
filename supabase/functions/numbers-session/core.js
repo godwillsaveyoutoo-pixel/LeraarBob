@@ -1,6 +1,10 @@
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  try {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  } catch (e) {
+    throw mod = 0, e;
+  }
 };
 
 // games/bewerkingen-trainer/core.js
@@ -322,14 +326,20 @@ var require_core = __commonJS({
         ["root-sum-mixed", "wortels", "Eerst vereenvoudigen, dan optellen", "Vereenvoudig de wortels v\xF3\xF3r je termen samenneemt."]
       ].map(([id, group, label, hint]) => ({ id, group, label, hint }));
       const GROUPS = [{ id: "machten", label: "Machten & letters" }, { id: "wetenschappelijk", label: "Wetenschappelijke schrijfwijze" }, { id: "wortels", label: "Vierkantswortels" }];
+      const SCIENTIFIC_VERSION = 2;
+      const SCIENTIFIC_LEVELS = Object.freeze([
+        Object.freeze({ level: 0, label: "Start", description: "Grote gehele getallen met \xE9\xE9n significant cijfer; positieve exponenten van 2 tot 6." }),
+        Object.freeze({ level: 1, label: "Basis", description: "Grote en kleine getallen met twee of drie significante cijfers; exponenten van \u22126 tot 7." }),
+        Object.freeze({ level: 2, label: "Verdieping", description: "Heel grote en heel kleine getallen met vier of vijf significante cijfers en nullen in het voorgetal; exponenten tot \xB120." })
+      ]);
       function decimal(digits, exponent) {
         const point = 1 + exponent;
         if (point <= 0) return "0." + "0".repeat(-point) + digits;
         if (point >= digits.length) return digits + "0".repeat(point - digits.length);
         return digits.slice(0, point) + "." + digits.slice(point);
       }
-      function generate(skill, seed = 1, level = 1, variant = 0) {
-        if (!SKILLS.some((s) => s.id === skill) || !Number.isInteger(seed) || seed < 0 || seed > 4294967295 || ![0, 1, 2].includes(level) || !Number.isInteger(variant) || variant < 0 || variant > 3) throw Error("Ongeldige opgave.");
+      function generate(skill, seed = 1, level = 1, variant = 0, generatorVersion = 1) {
+        if (!SKILLS.some((s) => s.id === skill) || !Number.isInteger(seed) || seed < 0 || seed > 4294967295 || ![0, 1, 2].includes(level) || !Number.isInteger(variant) || variant < 0 || variant > 3 || ![1, SCIENTIFIC_VERSION].includes(generatorVersion)) throw Error("Ongeldige opgave.");
         let state = (seed ^ Math.imul(variant + 1, 2654435761)) >>> 0;
         const rnd = () => {
           state = Math.imul(state, 1664525) + 1013904223 >>> 0;
@@ -383,8 +393,8 @@ var require_core = __commonJS({
             break;
           }
           case "scientific": {
-            const digits = level === 0 ? pick(["4", "17", "82"]) : pick(["499", "10845", "332", "43", "214", "82", "17"]);
-            const exponent = pick(level === 0 ? [-4, -2, 3, 5, 8] : [-14, -7, -4, -1, 5, 8, 9, 14]);
+            const digits = generatorVersion === 1 ? level === 0 ? pick(["4", "17", "82"]) : pick(["499", "10845", "332", "43", "214", "82", "17"]) : pick(level === 0 ? ["2", "3", "4", "5", "6", "7", "8", "9"] : level === 1 ? ["17", "24", "43", "82", "125", "214", "332", "499"] : ["1005", "10204", "12004", "40801", "90807", "10304", "4007", "8009"]);
+            const exponent = generatorVersion === 1 ? pick(level === 0 ? [-4, -2, 3, 5, 8] : [-14, -7, -4, -1, 5, 8, 9, 14]) : pick(level === 0 ? [2, 3, 4, 5, 6] : level === 1 ? [-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7] : [-20, -16, -12, -9, -7, 9, 12, 16, 20]);
             expression = decimal(digits, exponent);
             answer = (digits.length === 1 ? digits : digits[0] + "." + digits.slice(1)) + `*10^(${exponent})`;
             steps = [`\\text{Verplaats de komma ${Math.abs(exponent)} plaatsen ${exponent >= 0 ? "naar links" : "naar rechts"}.}`];
@@ -442,7 +452,8 @@ var require_core = __commonJS({
         answer = answer || plain(parse(expression).value);
         const answerTex = tex(answer);
         if (skill !== "square-factor" && steps.at(-1) !== answerTex) steps.push(answerTex);
-        return { id: `${skill}:${seed}:${level}:${variant}`, skill, seed, level, variant, expression, tex: tex(expression), answer, answerTex, steps, condition, hint: SKILLS.find((s) => s.id === skill).hint, ...skill === "square-factor" ? { instruction: "Schrijf het getal als een product van twee natuurlijke factoren. Minstens \xE9\xE9n factor is een volkomen kwadraat.", answerLabel: "Jouw product van twee factoren", inputHelp: "Typ bijvoorbeeld 3*2^2 of 3*4. Je mag de factoren ook omwisselen." } : {} };
+        const versioned = skill === "scientific" && generatorVersion === SCIENTIFIC_VERSION;
+        return { id: `${skill}:${seed}:${level}:${variant}${versioned ? ":v" + SCIENTIFIC_VERSION : ""}`, skill, seed, level, variant, ...versioned ? { generatorVersion: SCIENTIFIC_VERSION } : {}, expression, tex: tex(expression), answer, answerTex, steps, condition, hint: SKILLS.find((s) => s.id === skill).hint, ...skill === "square-factor" ? { instruction: "Schrijf het getal als een product van twee natuurlijke factoren. Minstens \xE9\xE9n factor is een volkomen kwadraat.", answerLabel: "Jouw product van twee factoren", inputHelp: "Typ bijvoorbeeld 3*2^2 of 3*4. Je mag de factoren ook omwisselen." } : {} };
       }
       function check(task, input) {
         try {
@@ -469,7 +480,7 @@ var require_core = __commonJS({
           return { ok: false, message: e.message };
         }
       }
-      return Object.freeze({ SKILLS, GROUPS, generate, check, parse, plain, tex, signature, normalize });
+      return Object.freeze({ SKILLS, GROUPS, SCIENTIFIC_VERSION, SCIENTIFIC_LEVELS, generate, check, parse, plain, tex, signature, normalize });
     });
   }
 });

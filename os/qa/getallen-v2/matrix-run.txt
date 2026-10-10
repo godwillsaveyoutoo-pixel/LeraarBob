@@ -1,0 +1,150 @@
+PASS OS Start / Escape restores exact native answer focus
+PASS OS central account opens/closes without resetting native input
+PASS OS save keeps actual selected lesson URL and descriptive title
+PASS OS #appBack keeps same iframe, input, mission, focus and return place
+PASS OS #minimizeApp keeps same iframe, input, mission, focus and return place
+PASS OS pinned resume keeps original filtered theme return
+PASS OS native chapter breadcrumb and resume preserve current mission and focus
+PASS OS display updates native palette, preserves input/DOM and reload preference
+PASS OS collapsed preference and native input survive full desktop reload
+PASS retention completed question actual rule, every answer part and original Check
+PASS Solved pending Next resumes unchanged from native chapter
+PASS OS machten free original 8 chapter routes
+PASS OS wortels free original 7 chapter routes
+PASS OS wetenschappelijk free original 4 chapter routes
+PASS OS machten-betekenis actual rule, every answer part and original Check
+PASS OS machten-quotient actual rule, every answer part and original Check
+PASS OS machten-macht actual rule, every answer part and original Check
+PASS OS machten-factoren actual rule, every answer part and original Check
+PASS OS machten-haakjes actual rule, every answer part and original Check
+PASS OS machten-negatief actual rule, every answer part and original Check
+PASS OS machten-mix actual rule, every answer part and original Check
+PASS OS wortels-factor actual rule, every answer part and original Check
+PASS OS wortels-product actual rule, every answer part and original Check
+PASS OS wortels-quotient actual rule, every answer part and original Check
+PASS OS wortels-macht actual rule, every answer part and original Check
+PASS OS wortels-vereenvoudigen actual rule, every answer part and original Check
+PASS OS wortels-som actual rule, every answer part and original Check
+PASS OS wortels-regels actual rule, every answer part and original Check
+PASS OS wetenschappelijk-groot actual rule, every answer part and original Check
+PASS OS wetenschappelijk-klein actual rule, every answer part and original Check
+PASS OS wetenschappelijk-terug actual rule, every answer part and original Check
+PASS OS wetenschappelijk-normaliseren actual rule, every answer part and original Check
+PASS OS help exact distinct help example, help step, menu/reload and original input
+PASS OS product basis question 2 actual rule, every answer part and original Check
+PASS OS product basis question 3 actual rule, every answer part and original Check
+PASS OS product basis question 4 actual rule, every answer part and original Check
+PASS OS product basis question 5 actual rule, every answer part and original Check
+PASS OS product basis question 6 actual rule, every answer part and original Check
+PASS OS product basis complete six original questions and result
+PASS OS roots question 2 actual rule, every answer part and original Check
+PASS OS roots question 3 actual rule, every answer part and original Check
+PASS OS roots question 4 actual rule, every answer part and original Check
+PASS OS roots question 5 actual rule, every answer part and original Check
+PASS OS roots question 6 actual rule, every answer part and original Check
+PASS OS roots complete six original questions and result
+PASS OS actual 2/19 guided completions with own unchanged storage and no invented XP
+PASS Standalone machten free original 8 chapter routes
+PASS Standalone wortels free original 7 chapter routes
+PASS Standalone wetenschappelijk free original 4 chapter routes
+PASS Standalone machten-betekenis actual rule, every answer part and original Check
+PASS Standalone machten-product actual rule, every answer part and original Check
+PASS Standalone machten-quotient actual rule, every answer part and original Check
+PASS Standalone machten-macht actual rule, every answer part and original Check
+PASS Standalone machten-factoren actual rule, every answer part and original Check
+PASS Standalone machten-haakjes actual rule, every answer part and original Check
+PASS Standalone machten-negatief actual rule, every answer part and original Check
+PASS Standalone machten-mix actual rule, every answer part and original Check
+PASS Standalone wortels-factor actual rule, every answer part and original Check
+PASS Standalone wortels-product actual rule, every answer part and original Check
+PASS Standalone wortels-quotient actual rule, every answer part and original Check
+PASS Standalone wortels-macht actual rule, every answer part and original Check
+PASS Standalone wortels-vereenvoudigen actual rule, every answer part and original Check
+PASS Standalone wortels-som actual rule, every answer part and original Check
+PASS Standalone wortels-regels actual rule, every answer part and original Check
+PASS Standalone wetenschappelijk-groot actual rule, every answer part and original Check
+PASS Standalone wetenschappelijk-klein actual rule, every answer part and original Check
+PASS Standalone wetenschappelijk-terug actual rule, every answer part and original Check
+PASS Standalone wetenschappelijk-normaliseren actual rule, every answer part and original Check
+PASS standalone help exact distinct help example, help step, menu/reload and original input
+PASS Standalone product basis question 2 actual rule, every answer part and original Check
+PASS Standalone product basis question 3 actual rule, every answer part and original Check
+PASS Standalone product basis question 4 actual rule, every answer part and original Check
+PASS Standalone product basis question 5 actual rule, every answer part and original Check
+PASS Standalone product basis question 6 actual rule, every answer part and original Check
+PASS Standalone product basis complete six original questions and result
+PASS Standalone roots question 2 actual rule, every answer part and original Check
+PASS Standalone roots question 3 actual rule, every answer part and original Check
+PASS Standalone roots question 4 actual rule, every answer part and original Check
+PASS Standalone roots question 5 actual rule, every answer part and original Check
+PASS Standalone roots question 6 actual rule, every answer part and original Check
+PASS Standalone roots complete six original questions and result
+PASS Standalone actual 2/19 guided completions with own unchanged storage and no invented XP
+PASS Actual 390 OS machten-betekenis actual rule, every answer part and original Check
+PASS Actual 390 OS machten-product actual rule, every answer part and original Check
+PASS Actual 390 OS machten-quotient actual rule, every answer part and original Check
+PASS Actual 390 OS machten-macht actual rule, every answer part and original Check
+PASS Actual 390 OS machten-factoren actual rule, every answer part and original Check
+PASS Actual 390 OS machten-haakjes actual rule, every answer part and original Check
+PASS Actual 390 OS machten-negatief actual rule, every answer part and original Check
+PASS Actual 390 OS machten-mix actual rule, every answer part and original Check
+PASS Actual 390 OS wortels-factor actual rule, every answer part and original Check
+PASS Actual 390 OS wortels-product actual rule, every answer part and original Check
+PASS Actual 390 OS wortels-quotient actual rule, every answer part and original Check
+PASS Actual 390 OS wortels-macht actual rule, every answer part and original Check
+PASS Actual 390 OS wortels-vereenvoudigen actual rule, every answer part and original Check
+PASS Actual 390 OS wortels-som actual rule, every answer part and original Check
+PASS Actual 390 OS wortels-regels actual rule, every answer part and original Check
+PASS Actual 390 OS wetenschappelijk-groot actual rule, every answer part and original Check
+PASS Actual 390 OS wetenschappelijk-klein actual rule, every answer part and original Check
+PASS Actual 390 OS wetenschappelijk-terug actual rule, every answer part and original Check
+PASS Actual 390 OS wetenschappelijk-normaliseren actual rule, every answer part and original Check
+PASS All nineteen native answers actually clicked at 390×844 with 44px targets, hit testing and legitimate internal scrolling
+PASS Actual 844 OS machten-betekenis actual rule, every answer part and original Check
+PASS Actual 844 OS machten-product actual rule, every answer part and original Check
+PASS Actual 844 OS machten-quotient actual rule, every answer part and original Check
+PASS Actual 844 OS machten-macht actual rule, every answer part and original Check
+PASS Actual 844 OS machten-factoren actual rule, every answer part and original Check
+PASS Actual 844 OS machten-haakjes actual rule, every answer part and original Check
+PASS Actual 844 OS machten-negatief actual rule, every answer part and original Check
+PASS Actual 844 OS machten-mix actual rule, every answer part and original Check
+PASS Actual 844 OS wortels-factor actual rule, every answer part and original Check
+PASS Actual 844 OS wortels-product actual rule, every answer part and original Check
+PASS Actual 844 OS wortels-quotient actual rule, every answer part and original Check
+PASS Actual 844 OS wortels-macht actual rule, every answer part and original Check
+PASS Actual 844 OS wortels-vereenvoudigen actual rule, every answer part and original Check
+PASS Actual 844 OS wortels-som actual rule, every answer part and original Check
+PASS Actual 844 OS wortels-regels actual rule, every answer part and original Check
+PASS Actual 844 OS wetenschappelijk-groot actual rule, every answer part and original Check
+PASS Actual 844 OS wetenschappelijk-klein actual rule, every answer part and original Check
+PASS Actual 844 OS wetenschappelijk-terug actual rule, every answer part and original Check
+PASS Actual 844 OS wetenschappelijk-normaliseren actual rule, every answer part and original Check
+PASS All nineteen native answers actually clicked at 844×390 with 44px targets, hit testing and legitimate internal scrolling
+PASS Historical edition 1 exact preserved question actual rule, every answer part and original Check
+PASS Historical edition 1 seed/index/answer/help/attempts and original edition transition
+PASS Historical edition 2 exact preserved question actual rule, every answer part and original Check
+PASS Historical edition 2 seed/index/answer/help/attempts and original edition transition
+PASS Historical last pending question actual rule, every answer part and original Check
+PASS Advanced product question 1 actual rule, every answer part and original Check
+PASS Advanced product question 2 actual rule, every answer part and original Check
+PASS Advanced product question 3 actual rule, every answer part and original Check
+PASS Advanced product question 4 actual rule, every answer part and original Check
+PASS Advanced negative product question actual rule, every answer part and original Check
+PASS Actual verdieping retains original negative product variants
+PASS Scientific OS provider exposes existing solo/board duo/Learn/Battle/class Learn/class Battle/teacher/paper modes
+PASS Scientific notation uses original two-part answer and exact Check in OS
+AssertionError [ERR_ASSERTION]: Provider returns to the exact captured scientific chapter
++ actual - expected
+
++ 'http://127.0.0.1:33363/games/getallenwereld/?screen=chapter&game=getallenwereld&world=getallen&topic=wetenschappelijk&level=wetenschappelijk-groot&returnTo=%2Fos%2F'
+- 'http://127.0.0.1:33363/games/getallenwereld/?screen=chapter&game=getallenwereld&world=getallen&topic=wetenschappelijk&level=wetenschappelijk-groot'
+
+    at providers (/tmp/leraarbob-os-pilot/tests/getallen-os-browser.cjs:117:355)
+    at async main (/tmp/leraarbob-os-pilot/tests/getallen-os-browser.cjs:135:468) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'http://127.0.0.1:33363/games/getallenwereld/?screen=chapter&game=getallenwereld&world=getallen&topic=wetenschappelijk&level=wetenschappelijk-groot&returnTo=%2Fos%2F',
+  expected: 'http://127.0.0.1:33363/games/getallenwereld/?screen=chapter&game=getallenwereld&world=getallen&topic=wetenschappelijk&level=wetenschappelijk-groot',
+  operator: 'strictEqual',
+  diff: 'simple'
+}

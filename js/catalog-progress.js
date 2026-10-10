@@ -8,11 +8,12 @@
       try {
         const savedWorld=JSON.parse(state?.storage?.['leraarbob.getallenwereld.v1']||'null');
         if(savedWorld?.version===1){
-          const entries=Object.entries(savedWorld.entries||{}).filter(([id])=>/^(machten-(betekenis|product|quotient|macht|factoren|haakjes|negatief|mix)|wortels-(factor|product|quotient|macht|vereenvoudigen|som|regels))$/.test(id));
+          const entries=Object.entries(savedWorld.entries||{}).filter(([id])=>/^(machten-(betekenis|product|quotient|macht|factoren|haakjes|negatief|mix)|wortels-(factor|product|quotient|macht|vereenvoudigen|som|regels)|wetenschappelijk-(groot|klein|terug|normaliseren))$/.test(id));
+          const total=count(game.progressTotal)||19;
           const done=entries.filter(([,e])=>new Set(e?.done||[]).size===6).length;
           const independent=entries.filter(([,e])=>new Set(e?.independent||[]).size===6).length;
           const started=done>0||entries.some(([,e])=>e?.done?.length)||!!savedWorld.mission;
-          return {status:done===15?'complete':started?'started':'saved',label:`${done} van 15 onderdelen`,detail:`${independent} zelfstandig afgerond · machten en vierkantswortels`,completed:done,value:done,max:15};
+          return {status:done===total?'complete':started?'started':'saved',label:`${done} van ${total} onderdelen`,detail:`${independent} zelfstandig afgerond · machten, wortels en wetenschappelijke notatie`,completed:done,value:done,max:total};
         }
       }catch{}
     }
@@ -54,7 +55,7 @@
     const completed = Array.isArray(raw)
       ? new Set(raw.filter(v => (typeof v === 'string' && v.trim()) || (typeof v === 'number' && Number.isFinite(v))).map(String)).size
       : count(raw);
-    const total = count(state?.total) || count(state?.totalLevels) || count(state?.levelCount) || count(game.progressTotal);
+    const total = (game.id === 'getallenwereld' ? count(game.progressTotal) : 0) || count(state?.total) || count(state?.totalLevels) || count(state?.levelCount) || count(game.progressTotal);
     const done = total ? Math.min(completed, total) : completed;
     const finished = total > 0 && done >= total;
     const unit = total === 1 ? (game.progressUnitSingular || 'onderdeel') : (game.progressUnitPlural || 'onderdelen');

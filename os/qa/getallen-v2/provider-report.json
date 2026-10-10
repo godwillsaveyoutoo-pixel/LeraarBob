@@ -1,0 +1,205 @@
+{
+  "scope": "Real Chromium UI, 100% zoom and scale 1; fictitious accounts, in-memory progress and local lobby response fixtures. No production authentication, cloud writes or external multiplayer.",
+  "viewports": [
+    {
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 844,
+      "height": 390
+    }
+  ],
+  "checks": [
+    {
+      "name": "Scientific OS provider exposes existing solo/board duo/Learn/Battle/class Learn/class Battle/teacher/paper modes",
+      "passed": true
+    },
+    {
+      "name": "Scientific notation uses original two-part answer and exact Check in OS",
+      "passed": true
+    },
+    {
+      "name": "Scientific provider returns to exact captured Getallenwereld scientific chapter",
+      "passed": true
+    },
+    {
+      "name": "Scientific OS worksheet actual questions, answer spaces, optional solutions and print without learning attempts",
+      "passed": true
+    },
+    {
+      "name": "Scientific OS board duo keeps two separate real answer drafts",
+      "passed": true
+    },
+    {
+      "name": "OS machten duo-learn actual selection/create/lobby with local response fixture",
+      "passed": true
+    },
+    {
+      "name": "OS machten duo-battle actual selection/create/lobby with local response fixture",
+      "passed": true
+    },
+    {
+      "name": "OS wortels duo-learn actual selection/create/lobby with local response fixture",
+      "passed": true
+    },
+    {
+      "name": "OS wortels duo-battle actual selection/create/lobby with local response fixture",
+      "passed": true
+    },
+    {
+      "name": "OS wetenschappelijk duo-learn actual selection/create/lobby with local response fixture",
+      "passed": true
+    },
+    {
+      "name": "OS wetenschappelijk duo-battle actual selection/create/lobby with local response fixture",
+      "passed": true
+    },
+    {
+      "name": "OS teacher mode dialog includes original online Duo Learn/Battle, class starts, board explanation and paper",
+      "passed": true
+    },
+    {
+      "name": "OS pupil modes allow duo and join; account change discards teacher documents",
+      "passed": true
+    }
+  ],
+  "layout": [],
+  "scrollActions": [],
+  "localSessionRequests": [
+    {
+      "action": "create",
+      "accountId": "getallen-provider",
+      "role": "teacher",
+      "data": {
+        "skills": [
+          "power-power",
+          "power-product",
+          "power-quotient",
+          "power-monomial",
+          "power-negative",
+          "power-mixed"
+        ],
+        "level": 1,
+        "count": 5,
+        "seconds": 180,
+        "activity": "learn",
+        "audience": "duo",
+        "participate": true,
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "create",
+      "accountId": "getallen-provider",
+      "role": "teacher",
+      "data": {
+        "id": "fixture-0",
+        "skills": [
+          "power-power",
+          "power-product",
+          "power-quotient",
+          "power-monomial",
+          "power-negative",
+          "power-mixed"
+        ],
+        "level": 1,
+        "count": 5,
+        "seconds": 180,
+        "activity": "battle",
+        "audience": "duo",
+        "participate": true,
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "create",
+      "accountId": "getallen-provider",
+      "role": "teacher",
+      "data": {
+        "id": "fixture-1",
+        "skills": [
+          "square-factor"
+        ],
+        "level": 1,
+        "count": 5,
+        "seconds": 180,
+        "activity": "learn",
+        "audience": "duo",
+        "participate": true,
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "create",
+      "accountId": "getallen-provider",
+      "role": "teacher",
+      "data": {
+        "id": "fixture-2",
+        "skills": [
+          "square-factor"
+        ],
+        "level": 1,
+        "count": 5,
+        "seconds": 180,
+        "activity": "battle",
+        "audience": "duo",
+        "participate": true,
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "create",
+      "accountId": "getallen-provider",
+      "role": "teacher",
+      "data": {
+        "id": "fixture-3",
+        "skills": [
+          "scientific"
+        ],
+        "level": 1,
+        "count": 5,
+        "seconds": 180,
+        "activity": "learn",
+        "audience": "duo",
+        "participate": true,
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "create",
+      "accountId": "getallen-provider",
+      "role": "teacher",
+      "data": {
+        "id": "fixture-4",
+        "skills": [
+          "scientific"
+        ],
+        "level": 1,
+        "count": 5,
+        "seconds": 180,
+        "activity": "battle",
+        "audience": "duo",
+        "participate": true,
+        "generatorVersion": 2
+      },
+      "fixture": true
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "blocked": [
+    "Production authentication and external multiplayer require actual test account sessions."
+  ],
+  "passed": true,
+  "browser": "156.0.8078.4"
+}

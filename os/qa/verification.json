@@ -1,0 +1,313 @@
+{
+  "date": "2026-10-10",
+  "branch": "codex/os-pilot-20261009",
+  "base_commit": "6056ac4e7445f6bb15fa1b15dce43df32a6e17e6",
+  "original_local_head": "cbbbf6d6663aac9ac51ee5cb7b29b2ffbe48c99f",
+  "original_local_files_preserved": 93,
+  "local_snapshot_branch": "codex/local-work-preserved-20261009",
+  "local_snapshot_commit": "2793263",
+  "package_sha256_checks": {
+    "passed": 13,
+    "total": 13
+  },
+  "patch_apply_check": "passed on current GitHub main; local pre-fetch topbar conflict recorded",
+  "required_unit_dom_tests": {
+    "passed": 47,
+    "failed": 0,
+    "report": "required-unit-tests.txt"
+  },
+  "relevant_native_tests": {
+    "passed": 41,
+    "failed": 0,
+    "report": "relevant-native-tests.txt"
+  },
+  "all_unit_tests": {
+    "passed": 580,
+    "total": 582,
+    "failed": 2,
+    "baseline_reproduced": true,
+    "report": "scientific/all-unit-tests.txt",
+    "baseline_report": "baseline-unit-failures.txt"
+  },
+  "catalog": "offline copy equal; aliases/progress ids/providers/roles validated",
+  "active_routes_verified": 114,
+  "desktop_controls_verified": 61,
+  "local_frontend_dependencies_verified": 15,
+  "lesson_database_tests": "both existing tests passed: role/privacy/grading/idempotence/live/report/history",
+  "pilot_browser_report": "pilot-browser-report.json",
+  "live_browser_report": "live/results.json",
+  "existing_platform_live_browser": {
+    "passed": true,
+    "report": "existing-platform-live.txt"
+  },
+  "existing_social_browser": {
+    "naval_online_full_game": "passed",
+    "naval_solo_full_game": "passed",
+    "rejoin_retry_rematch": "passed",
+    "suite_complete": false,
+    "blocker": "preexisting Clay lobby overflow at 320x568; later group rounds not executed",
+    "baseline_reproduced": true,
+    "report": "existing-social-browser.txt"
+  },
+  "production_auth": "not tested: usable credentials or signed-in browser contexts unavailable",
+  "production_external_websocket_sessions": "not tested; auth/social/groups boundaries use fixtures, class/lesson handlers use actual local SQL",
+  "github_publish": {
+    "branch_creation": "403 Resource not accessible by integration",
+    "cli_auth": "passed with network access; existing keyring account",
+    "remote_branch_created": true,
+    "pull_request_created": true,
+    "git_push": "passed using existing Git credentials",
+    "branch_url": "https://github.com/godwillsaveyoutoo-pixel/LeraarBob/tree/codex/os-pilot-20261009",
+    "pull_request_url": "https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7",
+    "draft": true
+  },
+  "preview": "http://127.0.0.1:8787/os/",
+  "production_homepage_replaced": false,
+  "frontend_preview_access_tests": "passed: frontend routes and .git/.env/SQL/tests/docs/path-traversal rejection",
+  "dependencies": {
+    "node": "24.18.1",
+    "playwright": "1.64.0",
+    "jsdom": "26.1.0",
+    "pglite": "0.5.8"
+  },
+  "scope": "OS plus nineteen guided Getallenwereld units, sixteen separate provider skills, versioned scientific generator and additive online rollout; existing auth/progress/XP preserved",
+  "pilot_browser": {
+    "passed": true,
+    "actual_check_groups": 32,
+    "layouts": 23,
+    "page_errors": 0,
+    "missing_routes": 0,
+    "viewport": "1366x768 at 100% zoom; 390x844 and 844x390 compact checks",
+    "native_home_and_login": "passed in Pythagoras, Rechtenwereld and guest live lesson",
+    "report": "pilot-browser-report.json",
+    "ci_chromium_equivalent": {
+      "version": "156.0.8078.4",
+      "playwright": "1.64.0",
+      "passed": true,
+      "actual_check_groups": 32,
+      "layouts": 23,
+      "report": "chromium-ci-browser-report.json"
+    }
+  },
+  "live_browser": {
+    "passed": true,
+    "full_class_questions": 15,
+    "completed_runs": [
+      "Klas Learn",
+      "Getallen Klas Battle",
+      "Rechten Klas Battle",
+      "live lesson vote/results/report"
+    ],
+    "production_auth": false,
+    "report": "live/results.json"
+  },
+  "os_pilot_baseline_all_unit_tests": {
+    "passed": 476,
+    "total": 478,
+    "failed": 2,
+    "baseline_reproduced": true,
+    "report": "all-unit-tests.txt",
+    "baseline_report": "baseline-unit-failures.txt"
+  },
+  "os_pilot_baseline_github_actions": {
+    "code_commit": "324dc3300a143e695425f368bea78dd55fe6d424",
+    "push": "passed",
+    "pull_request": "passed",
+    "push_run": "https://github.com/godwillsaveyoutoo-pixel/LeraarBob/actions/runs/37970415172",
+    "pull_request_run": "https://github.com/godwillsaveyoutoo-pixel/LeraarBob/actions/runs/37970421658",
+    "scope": "catalog/model/DOM/topbar and actual pilot/class/live browser runs",
+    "test_synchronization": "waits for actual native level completion and stable child iframe dimensions; checks remain strict"
+  },
+  "github_actions": {
+    "workflow": ".github/workflows/catalog.yml",
+    "scope": "Original desktop/class/live pilots plus all new Getallenwereld DOM and browser checks",
+    "current_commit_checks": "https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7/checks"
+  },
+  "getallenwereld": {
+    "package_sha256": "6d65e33249ee1376bd708ce1d2fbf19a0a32e4828472e541b8ece48baf442a02",
+    "package_file_hashes_verified": 21,
+    "merge": "Only new Getallenwereld module copied; older packaged OS/shared files excluded; latest pilot fixes preserved",
+    "guided_unit_ids_preserved": 15,
+    "provider_skill_ids_preserved": 16,
+    "invented_xp": 0,
+    "module_dom": {
+      "passed": 17,
+      "report": "getallen/module-dom.txt"
+    },
+    "world_integration": {
+      "passed": 52,
+      "native_questions": 186,
+      "historical_runs": 30,
+      "solved_pending_runs": 15,
+      "report": "getallen/world-integration.txt",
+      "forced_random_seed_runs": 16,
+      "exhausted_random_seed_cases": 11,
+      "bounded_fallback_unit_editions": 30
+    },
+    "os_model_dom_topbar": {
+      "passed": 26,
+      "report": "getallen/os-unit.txt"
+    },
+    "native_formula_browser_checks": {
+      "passed": 92,
+      "viewports": [
+        "640x360",
+        "390x844"
+      ],
+      "report": "getallen/guided-layout.txt"
+    },
+    "existing_native_browsers": {
+      "passed": true,
+      "reports": [
+        "getallen/native-browser.txt",
+        "getallen/unified-browser.txt",
+        "getallen/numbers-space-browser.txt"
+      ]
+    },
+    "actual_os_browser": {
+      "passed": true,
+      "interaction_groups": 128,
+      "layouts": 876,
+      "actual_compact_answers": 30,
+      "internal_scroll_actions": 24,
+      "local_session_creations": 6,
+      "page_errors": 0,
+      "missing_routes": 0,
+      "report": "getallen/report.json",
+      "viewports": [
+        "1366x768 at 100% zoom",
+        "390x844",
+        "844x390"
+      ],
+      "process_exit": 0,
+      "log": "getallen/os-browser.txt"
+    },
+    "original_pilot_regression": {
+      "passed": true,
+      "groups": 32,
+      "layouts": 23,
+      "report": "getallen/four-pilots-report.json"
+    },
+    "class_live_regression": {
+      "passed": true,
+      "provider": "Original Edge handlers and actual SQL in temporary local PGlite; auth/external transport fixtures",
+      "report": "getallen/class-live-report.json"
+    },
+    "working_tree_hashes_preserved_including_old_copy": 678,
+    "known_limits": [
+      "Production authentication/cloud resume/external multiplayer still require two actual signed-in test accounts",
+      "Duo Learn retains own answers and joint discussion confirmation",
+      "Power meaning/zero, root-rule validity, scientific reverse and normalization link explicitly to chapter selection for additional practice"
+    ],
+    "ci_findings_fixed": {
+      "native_seed_exhaustion": "After 500 unsuccessful random seeds, use verified bounded deterministic probes; six distinct unchanged native questions; historical seeds preserved",
+      "jsdom_fixture_teardown": "Disconnect fixture observers and cancel pending render callbacks before jsdom closes its document; no production change or swallowed errors",
+      "focused_world_tests": 52,
+      "focused_os_model_dom_topbar_tests": 26
+    }
+  },
+  "os_pilot_baseline_combined_patch_apply_check": {
+    "passed": true,
+    "base": "6056ac4e7445f6bb15fa1b15dce43df32a6e17e6",
+    "code_commit": "324dc3300a143e695425f368bea78dd55fe6d424"
+  },
+  "combined_patch_apply_check": {
+    "passed": true,
+    "base": "6056ac4e7445f6bb15fa1b15dce43df32a6e17e6",
+    "scope": "Complete OS and Getallenwereld staged review patch; checked against a fresh export of the base before committing"
+  },
+  "getallen_v1_all_unit_tests": {
+    "passed": 547,
+    "total": 549,
+    "failed": 2,
+    "baseline_reproduced": true,
+    "report": "getallen/all-unit-tests.txt",
+    "baseline_report": "baseline-unit-failures.txt"
+  },
+  "scientific_extension": {
+    "guided_units": 4,
+    "guided_total": 19,
+    "provider_skills_preserved": 16,
+    "generator_version": 2,
+    "historical_guided_task_objects_unchanged": 5400,
+    "historical_provider_task_objects_unchanged": 3600,
+    "new_exact_provider_tasks": 3600,
+    "guided_math_tests": 10,
+    "provider_sql_version_tests": 17,
+    "provider_report": "scientific/provider-tests.txt",
+    "focused_unit_dom_tests": 106,
+    "focused_report": "scientific/focused-unit-dom.txt",
+    "os_unit_tests": 26,
+    "os_unit_report": "scientific/os-unit.txt",
+    "native_browser_routes": 19,
+    "native_formula_browser_stages": 106,
+    "actual_scientific_browser": {
+      "passed": true,
+      "interaction_groups": 67,
+      "layouts": 190,
+      "scroll_actions": 5,
+      "page_errors": 0,
+      "missing_assets": 0,
+      "process_exit": 0,
+      "report": "scientific/report.json",
+      "log": "scientific/browser.txt"
+    },
+    "four_pilot_regression": {
+      "passed": true,
+      "groups": 32,
+      "layouts": 23,
+      "report": "scientific/four-pilots-report.json"
+    },
+    "class_live_regression": {
+      "passed": true,
+      "auth": "Fictitious accounts; actual local SQL/Edge",
+      "report": "scientific/class-live-report.json"
+    },
+    "production_backend": {
+      "date": "2026-10-10",
+      "migration_applied": true,
+      "numbers_session_version": 2,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "deployed_sources_match": true,
+      "old_function_body_preserved": true,
+      "existing_progress_and_session_snapshots_identical": true,
+      "catalog_total": 19,
+      "unauthenticated_http_status": 401,
+      "production_authenticated_multiplayer_tested": false
+    },
+    "original_working_tree_hashes_preserved": 678,
+    "existing_unified_browser": {
+      "passed": true,
+      "process_exit": 0,
+      "historical_saved_totals_preserved": "19 guided / 16 provider; legacy saved rows retain data",
+      "report": "scientific/unified-browser.txt"
+    },
+    "compact_home_correction": {
+      "passed": true,
+      "layouts": 6,
+      "scope": "Actual OS home 1366/390/844, both topbar states; 44px targets and hit checks",
+      "screenshot": "scientific/os-home-844-expanded-corrected.png"
+    },
+    "expanded_getallen_browser": {
+      "local_native_matrix_layouts": 1076,
+      "all_layouts_passed": true,
+      "native_matrix_original_process_exit": 1,
+      "native_matrix_original_failure": "Test expectation omitted remembered outer desktop returnTo; assertion corrected to exact native entry",
+      "native_matrix_report": "getallen-v2/native-matrix-report.json",
+      "final_provider_phase_passed": true,
+      "final_provider_phase_process_exit": 0,
+      "final_provider_phase_groups": 13,
+      "final_provider_report": "getallen-v2/provider-report.json",
+      "combined_unique_local_groups": 146,
+      "complete_final_runner": "Required in GitHub catalog CI before merging PR7"
+    }
+  },
+  "original_pilot_date": "2026-10-09",
+  "publication": {
+    "target": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/",
+    "getallenwereld": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/",
+    "method": "GitHub Pages legacy main /; PR7 after passing workflow",
+    "actual_live_report": "Final release result in PR7; this file records pre-merge verification"
+  }
+}
