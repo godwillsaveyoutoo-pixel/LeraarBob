@@ -24,7 +24,7 @@ async function setup({account=null,overview,storage={},topbar=false}={}){
   w.LeraarBobAvatar={create:()=>{const s=w.document.createElement('span');s.textContent='avatar';return s;}};
   w.eval(read('js/catalog.js'));
   Object.defineProperty(w.document,'currentScript',{configurable:true,value:{src:'https://school.example/LeraarBob/shared/game-registry.js'}});
-  w.eval(read('shared/game-registry.js'));w.eval(read('js/catalog-progress.js'));w.eval(read('os/desktop-model.js'));w.eval(read('os/desktop.js'));
+  w.eval(read('shared/game-registry.js'));w.eval(read('js/catalog-progress.js'));w.eval(read('os/desktop-model.js'));w.eval(read('os/personal-home.js'));w.eval(read('os/activity-entry.js'));w.eval(read('os/desktop.js'));
   await tick();await tick();
   if(topbar){
     w.LeraarBobPlayModes={ready:()=>Promise.resolve(),current:()=>null};
@@ -44,13 +44,13 @@ test('Closing a settled desktop fixture cancels pending rendering before jsdom d
   await new Promise(resolve=>setTimeout(resolve,40));
   assert.equal(renderedAfterClose,false);assert.equal(f.w.document,undefined);assert.equal(f.errors.length,0);
 });
-test('The desktop presents eight themes, four pinned pilots and distinct work forms',async t=>{
+test('The desktop starts with one app and Add; the catalog retains themes and distinct work forms',async t=>{
   const f=await setup();t.after(()=>f.dom.window.close());
-  assert.equal(f.$('themeFolders').children.length,8);assert.equal(f.$('pinnedApps').children.length,4);
+  assert.equal(f.$('pinnedApps').querySelectorAll('.personal-app').length,1);assert.equal(f.$('pinnedApps').querySelectorAll('.personal-add').length,1);
   f.w.LeraarBobDesktop.showView({kind:'theme',themeId:'rechten'});
   assert.deepEqual(new Set([...f.$('viewContent').querySelectorAll('.type-badge')].map(n=>n.dataset.type)),new Set(['train','learn','game','atelier']));
   f.$('typeFilters').querySelectorAll('button')[1].click();assert([...f.$('viewContent').querySelectorAll('.type-badge')].every(n=>n.dataset.type==='learn'));
-  f.w.LeraarBobDesktop.showView({kind:'all'});assert.equal(f.$('viewContent').querySelectorAll('.app-card').length,24);
+  f.w.LeraarBobDesktop.showView({kind:'all'});assert.equal(f.$('personalDialog').querySelectorAll('[data-pick-app]').length,24);assert.equal(f.$('libraryWindow').hidden,true);f.$('personalDialog').close();
   f.$('startButton').click();assert.equal(f.$('startButton').getAttribute('aria-expanded'),'true');assert.equal(f.$('startPanel').inert,false);
   f.$('startSearch').value='pythagoras les';f.$('startSearch').dispatchEvent(new f.w.Event('input'));assert.equal(f.$('startResults').children.length,1);
   f.w.document.dispatchEvent(new f.w.KeyboardEvent('keydown',{key:'Escape'}));assert.equal(f.$('startPanel').hidden,true);assert.equal(f.$('startButton').getAttribute('aria-expanded'),'false');
@@ -100,12 +100,12 @@ test('Saving is a desktop shortcut; closing is explicit; reopening a running onl
 });
 test('Account changes clear live apps and separate pins, shortcuts and stale progress responses',async t=>{
   const pending=[];const f=await setup({account:{id:'learner-a',role:'student',alias:'Ada'},overview:(id,signal)=>new Promise(resolve=>pending.push({id,signal,resolve}))});t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;
-  D.showView({kind:'all'});f.$('viewContent').querySelector('[data-app-id=pythagoras] .card-pin').click();D.openApp('pythagoras');f.$('saveActivity').click();assert.equal(D.state().pins.includes('pythagoras'),false);
+  D.showView({kind:'theme',themeId:'rechten'});f.$('viewContent').querySelector('[data-app-id=rechtenwereld] .card-pin').click();D.openApp('pythagoras');f.$('saveActivity').click();assert.equal(D.state().pins.includes('rechtenwereld'),false);
   const old=pending[0];f.emit({account:null,pending:true});assert.equal(D.state().openApps.length,0);assert.equal(D.state().savedCount,0);assert.equal(old.signal.aborted,true);
-  f.emit({account:{id:'learner-b',role:'student',alias:'Milan'}});await tick();assert.equal(D.state().pins.includes('pythagoras'),true);assert.equal(D.state().savedCount,0);
+  f.emit({account:{id:'learner-b',role:'student',alias:'Milan'}});await tick();assert.equal(D.state().pins.includes('rechtenwereld'),true);assert.equal(D.state().savedCount,0);
   old.resolve({...emptyOverview('learner-a'),games:[{game_id:'pythagoras',state:{completed:['old'],total:1}}]});await tick();assert.equal(D.state().progressState,'loading');assert.equal(f.$('greeting').textContent,'Welkom, Milan.');
   pending.find(p=>p.id==='learner-b').resolve(emptyOverview('learner-b'));await tick();assert.equal(D.state().progressState,'ready');D.showView({kind:'profile'});assert(!f.$('viewContent').textContent.includes('old'));
-  f.emit({account:{id:'learner-a',role:'student',alias:'Ada'}});await tick();assert.equal(D.state().savedCount,1);assert.equal(D.state().pins.includes('pythagoras'),false);
+  f.emit({account:{id:'learner-a',role:'student',alias:'Ada'}});await tick();assert.equal(D.state().savedCount,1);assert.equal(D.state().pins.includes('rechtenwereld'),false);
   pending.filter(p=>p.id==='learner-a').at(-1).resolve(emptyOverview('learner-a'));await tick();assert.equal(f.errors.length,0);
 });
 test('An unrecognized account can discover guest apps without fake learner progress or class controls',async t=>{
@@ -260,10 +260,11 @@ test('The pupil Learn entrance reaches the original code form and joins a class;
   const account={id:'learner-a',role:'student',alias:'Ada'},f=await setup({account});t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;
   D.showView({kind:'live'});[...f.$('viewContent').querySelectorAll('button')].find(b=>b.textContent==='Learn-sessie').click();
   const pupil=await nativeNumbers(f.$('appFrames').querySelector('iframe').src,account);t.after(()=>pupil.dom.window.close());
-  assert.equal(pupil.w.NumbersSpace.snapshot().view,'home');assert(pupil.w.document.getElementById('joinSpace'));assert.equal(pupil.w.document.getElementById('createSpace'),null);
+  assert.equal(pupil.w.NumbersSpace.snapshot().view,'join');assert.equal(pupil.w.document.querySelectorAll('[data-go]').length,0);assert(pupil.w.document.getElementById('joinSpace'));assert.equal(pupil.w.document.getElementById('createSpace'),null);
   assert.equal(f.$('activeAppType').textContent,'Sessie');assert.equal(pupil.w.document.querySelector('[data-go=class-learn]'),null);
   pupil.w.document.getElementById('sessionCode').value='A1B2C3D4';pupil.w.document.getElementById('joinSpace').dispatchEvent(new pupil.w.Event('submit',{bubbles:true,cancelable:true}));await tick();await tick();
   assert.equal(pupil.calls.find(c=>c.action==='join').data.code,'A1B2C3D4');assert.equal(pupil.calls.some(c=>c.action==='create'),false);assert.equal(pupil.w.NumbersSpace.snapshot().state.audience,'class');assert.equal(pupil.w.NumbersSpace.snapshot().view,'session');
+  pupil.w.document.getElementById('sessionBack').click();assert.equal(pupil.w.NumbersSpace.snapshot().view,'join');assert.equal(pupil.w.document.querySelectorAll('[data-go]').length,0);assert.equal(new URL(pupil.w.location.href).searchParams.get('entry'),'join');
   f.emit({account:{id:'teacher-a',role:'teacher'}});await tick();D.openApp('getallenwereld','classlearn');
   const teacher=await nativeNumbers(f.$('appFrames').querySelector('iframe').src,{id:'teacher-a',role:'teacher'});t.after(()=>teacher.dom.window.close());
   assert.equal(teacher.w.NumbersSpace.snapshot().view,'selection');assert.equal(teacher.w.document.getElementById('sessionAudience').value,'class');assert(teacher.w.document.getElementById('createSpace'));assert.equal(teacher.calls.some(c=>c.action==='create'),false);

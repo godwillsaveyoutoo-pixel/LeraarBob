@@ -1,5 +1,17 @@
 (() => {
   'use strict';
+  // OS frames share the top-level service and tab reservation. No second presence
+  // client; subscriptions are detached when a native app window is destroyed.
+  if(window!==window.top){
+    try{if(window.parent.location.origin===location.origin&&window.parent.LeraarBobDesktop){
+      const service=()=>window.parent.AxiomaSocial,stops=new Set();let closed=false;
+      const ready=async()=>{for(let i=0;i<100&&!closed;i++){if(service())return service().ready();await new Promise(r=>setTimeout(r,100));}throw Error('Uitnodigingen zijn nog niet bereikbaar. Probeer opnieuw.');};
+      const forward=name=>async(...args)=>{await ready();return service()[name](...args);};
+      window.AxiomaSocial=Object.freeze({ready,state:()=>service()?.state()||{players:[],invitations:[],account:null,connected:false},refresh:forward('refresh'),open:forward('open'),invite:forward('invite'),join:forward('join'),finish:forward('finish'),answerInvitation:forward('answerInvitation'),onChange(fn){let stopped=false,off;ready().then(()=>{if(!stopped&&!closed)off=service().onChange(fn);}).catch(()=>{});const stop=()=>{stopped=true;off?.();stops.delete(stop);};stops.add(stop);return stop;}});
+      addEventListener('pagehide',()=>{closed=true;stops.forEach(stop=>stop());},{once:true});
+    }}catch{/* Cross-origin previews do not get access to the account service. */}
+    return;
+  }
   // One shared service per top-level page; catalog previews never go online.
   if (window !== window.top || window.AxiomaSocial || new URLSearchParams(location.search).get('demo') === '1') return;
   const base = new URL('../', document.currentScript.src);
@@ -23,7 +35,7 @@
     render();
     for (const fn of listeners) { try { fn(state()); } catch (error) { console.error(error); } }
   }
-  function state() { return { ...snapshot, account, connected, matchId, tabId }; }
+  function state() { return { ...snapshot, account, connected, matchId, tabId, pending, note }; }
   const invitationLabel = i => i.game==='rechten-learn'?'Samen leren in Rechtenwereld':i.game==='rechten-duo'?'een online duel in Rechtenwereld':'Rechten Zeeslag';
   function invitationURL(invite) {
     const learn=invite.game==='rechten-learn';
@@ -154,6 +166,8 @@
   async function open(opener) {
     await ready;
     if (!account) return;
+    const request=new CustomEvent('leraarbob:social-open',{cancelable:true,detail:{opener}});
+    document.dispatchEvent(request);if(request.defaultPrevented){refresh();return;}
     returnFocus = opener || document.querySelector('leraarbob-topbar')?.shadowRoot?.querySelector('.menu') || document.activeElement;
     panel.showPopover();
     panel.querySelector('.close').focus();
@@ -302,11 +316,11 @@
   window.AxiomaSocial = Object.freeze({
     ready: () => ready, state, refresh, open,
     async answerInvitation(id, action) {
-      await ready;if(!['accept','decline'].includes(action))return null;
+      await ready;if(!['accept','decline','cancel'].includes(action))return null;
       return act(action,{p_invite_id:id});
     },
     onChange(fn) { listeners.add(fn); return () => listeners.delete(fn); },
-    async invite(id) { await ready; open(); return act('invite',{p_target_id:id}); },
+    async invite(id, {showPanel=true}={}) { await ready; if(showPanel)open(); return act('invite',{p_target_id:id}); },
     async join(id) {
       await ready;
       const data = await request('join',{p_invite_id:id});

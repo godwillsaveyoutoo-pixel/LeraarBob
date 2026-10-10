@@ -2,7 +2,7 @@
 // Public frontend files only: no repository listing, credentials, SQL or test data.
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
-const folders=new Set(['os','assets','css','js','shared','games','lessons','klasbattle','teacher']);
+const folders=new Set(['oefenbladen','os','assets','css','js','shared','games','lessons','klasbattle','teacher']);
 const files=new Set(['index.html','games.json','oefenbladen.html','axioma-platform-game-bridge.js']);
 const types={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.jpeg':'image/jpeg','.gif':'image/gif','.ico':'image/x-icon','.ttf':'font/ttf','.woff':'font/woff','.woff2':'font/woff2','.mp3':'audio/mpeg','.wav':'audio/wav','.ogg':'audio/ogg','.pdf':'application/pdf'};
 function frontendFile(url){

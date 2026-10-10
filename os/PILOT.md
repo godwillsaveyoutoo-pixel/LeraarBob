@@ -2,6 +2,45 @@
 
 Doel: overgang tussen bureaublad, themamap, werkvorm en app, met behoud van oorspronkelijke vragen, antwoordbediening, stijl en leerflow. Gewone bezoeken aan `/` en `/index.html` openen het bureaublad op `/os/`. De eerdere catalogus blijft beschikbaar via [`/index.html?view=catalog`](../index.html?view=catalog) en OS Instellingen; bestaande accountlinks behouden de oorspronkelijke accountingang.
 
+## Persoonlijk bureaublad en focus · 10 oktober 2026
+
+De actuele eerste pilot sluit Rechtenwereld aan op persoonlijke appkaarten, centrale uitnodigingen en een directe klasflow. Binnen deze app is één gedeelde bovenbalk overgebleven. De taakbalk bevat de vensteracties en Focus; de herstelknop blijft buiten de oefening. Andere apps worden stapsgewijs aangesloten.
+
+- [x] Echte Rechten-opgave: antwoord kiezen; beide balken verbergen en herstellen; hetzelfde antwoord en dezelfde iframe blijven behouden.
+- [x] 1366 × 768 bij 100% zoom, 390 × 844 en 640 × 360: herstelknoppen minstens 44 × 44 px, bereikbaar en niet over het werkbord; voorkeur na herladen behouden.
+- [x] Bovenbalk afzonderlijk inklappen, focusstand in beide standen gebruiken, heropenen; de twee voorkeuren blijven onafhankelijk.
+- [x] Wereldkaart, spelvoortgang en spelprofiel via de gedeelde navigatie; compacte titel blijft de actieve app noemen.
+- [x] Echte Rechten-eilandlink en ‘Andere spelvorm kiezen’ in Duo Battle openen de OS-werkvormkeuze, zonder `play.html` te laden. Hellingrug wordt meegenomen naar Learn en de leraarklasstart; terugkeren behoudt het oorspronkelijke scherm, de selectie en focus. Getest op 1366/390/640 px in beide balkstanden.
+- [x] Werkvormen vanuit een echte Puntenbaai-opgave behouden het antwoord en bieden geen onbeschikbare papiergenerator. Vanuit Hellingrug is een oefenblad daadwerkelijk gemaakt, bewaard en teruggevonden in dezelfde OS-onderwerpmap.
+- [x] Toevoegen: acht themagroepen met 24 apps, elk met afbeelding, naam en type (Trainer/Spel/Les/Atelier), meerdere toevoegingen, vinkjes en bescherming tegen duplicaten, Klaar/Escape en herstel van focus; werkelijke swipe en PageDown gecontroleerd.
+- [x] Toevoegen, Start → Alle apps en de bestaande `place=all`-link openen dezelfde compacte appkiezer; de link blijft werken na accountinitialisatie.
+- [x] Oefenbladen en Mijn oefenbladen tonen alleen eigen mappen, pad en acties; geen algemene zijbalk naar Samen & live of de catalogus. Negen echte native reeksen met sleutel gemaakt, automatisch bewaard en na herladen exact heropend.
+- [x] OS-bovenbalk zonder Live-knop, voor leerling en leraar. Bestaande live-lesroutes via Start blijven werken.
+- [x] Learn-deelname opent direct het sessiecodeformulier, zonder solo-/duo-/papiermenu. Terug en heropenen behouden de gedeeltelijke code en dezelfde iframe; na een sessie en herladen blijft de directe ingang behouden. Op 1366/390/640 px in beide bovenbalkstanden bediend.
+- [x] Kaarten met beschikbare werkvormen, pins/herladen, rechterklik/Meer/Shift+F10, onderwerpmapjes en volledige oefenbladcollectie via Start.
+- [x] Samen leren: echte lokale provider voor maken, uitnodigen, weigeren, intrekken, accepteren en starten. Native invoer blijft behouden bij Start, bewaren en hervatten.
+- [x] Klasbattle: directe leraarinrichting, code/link voor leerling, oorspronkelijke wachtkamer/start en hervatten zonder dubbele sessie-iframe.
+- [x] Ranglijst uit echt beoordeelde lokale klasvragen; eigen klas voor leerling, klaskeuze voor leraar. Accountwisseling sluit oude privévensters en frames.
+- [ ] Echte productieaanmelding en sessies tussen externe toestellen: geen bruikbare ingelogde testaccounts beschikbaar.
+- [ ] Nieuwe klasuitnodigingen automatisch uitzenden en meerdere gelijktijdige/kruisende duo-uitnodigingen uniform afhandelen: vereist een afzonderlijke providerwijziging.
+- [ ] Getallenwereld visueel ombouwen naar wereld/subwerelden, daarna de overige trainers op dezelfde compacte navigatie aansluiten.
+
+De [bewijsmap](qa/personal/README.md) bevat de actuele browserrapporten, screenshots en herhaalcommando’s. Onderstaande oudere rapporten blijven historisch bewijs voor hun beschreven versies.
+
+## Centrale oefenbladen · 10 oktober 2026
+
+- [x] Alle negen onderwerpingangen openen dezelfde aparte papierwerkruimte; Stelsels opent geen trainer meer. Geen spelcontroller of leerlingvoortgang nodig voor generatie.
+- [x] Alle zes Stelsels-onderdelen en zeven Vergelijkingen-onderdelen daadwerkelijk gemaakt; eigen wiskundige generators en uitwerkingen behouden.
+- [x] Oorspronkelijke Algebra-oefening, tussenstappen, onafgemaakte invoer en 30 native XP blijven intact bij centraal papier maken en terugkeren. Oude papierknoppen zijn niet zichtbaar in de trainer.
+- [x] 1366 × 768 bij 100% zoom, 390 × 844 en 640 × 360; één OS-bovenbalk in beide standen, herstel en formulierdoelen minstens 44 px en bereikbaar.
+- [x] Automatische bewaring van negen echte opgaven-/sleutelparen, terugvinden per onderwerp, exact heropenen na reload, geen dubbele bewaring, JSON-export/import en A4-PDF.
+- [x] Onderwerp wisselen opent de eigen papierwerkruimte; elke terugknop gaat naar de bijbehorende onderwerpmap. Minimaliseren bewaart formulier én gegenereerd document.
+- [x] Oude Algebra-, Rechten- en Getallen-papieradressen leiden naar de centrale ingang. Accountwisseling tijdens daadwerkelijke asynchrone generatie bewaart geen reeks voor het volgende account.
+- [x] Opslagfout zichtbaar; opgaven en afdrukken blijven bruikbaar. Doorlopende Getallen-nummering blijft ook na archiveren behouden.
+- [ ] Cloudsync en productieaanmelding met echte accounts: niet toegevoegd of getest; documenten blijven per account op dit toestel.
+
+Zie [centrale papierwerkruimte: bewijs en grenzen](qa/central-paper/README.md). De eerder beschreven native papierpagina’s zijn nu compatibiliteitsroutes; hun oudere rapporten blijven historisch.
+
 ## Algebrawereld-navigatie · 10 oktober 2026
 
 De [definitieve browserrun](qa/algebra-navigation/report.json) telt **18 interactiegroepen, 252 doelmetingen en 39 screenshots**, zonder browserexceptions of ontbrekende bronnen. Gecontroleerd op **1366 × 768 bij 100% zoom**, 390 × 844 en 640 × 360, `deviceScaleFactor: 1`, met de bovenbalk uitgeklapt en ingeklapt. Alle zestien bronhashes kloppen met de definitieve implementatie.
@@ -132,3 +171,24 @@ Hashes vóór en na uitrol bevestigen behoud van alle 41 bestaande voortgangsrij
 - Afzonderlijke bestaande fouten opvolgen: verouderde voortgangshash in de Rechten-regressietest, Signaalstad-oefenbladdekking en de Kleiduif-lobby op 320 × 568. Zij zijn ook op de oorspronkelijke main gereproduceerd. De vier OS-pilots en hun volledige klasruns slagen.
 
 Na acceptatie kunnen de overige bouwsels op dezelfde aansluiting aansluiten. Centrale door leraren uitgedeelde taken en nieuwe profiel-/werkvormfuncties zijn vervolgstappen.
+
+## Zeeslag · formulebediening
+
+De gekozen rechte staat volledig leesbaar naast twee afzonderlijke regelaars voor helling a en startwaarde b; op een smal scherm komen de regelaars eronder. Native knoppen/handlers, waarden, beurtvergrendeling en schotberekening blijven behouden. Werkelijk gecontroleerd: alle 63 combinaties, echte plaatsing en schot, toetsenbord, minimaliseren/hervatten, beide balkstanden en herstel op vijf schermmaten (1366 × 768 bij 100%, 844 × 390, 640 × 360, 390 × 844, 320 × 568). Bestaande vierpilottest en arcade-browser slagen eveneens. [Details, grenzen, screenshots en rapporten](qa/zeeslag-controls/README.md).
+
+## Brandweer · formulebediening
+
+Brandweer gebruikt nu dezelfde scheiding als Zeeslag: een leesbare functie naast regelaars voor helling a en starthoogte b. Breuken, decimalen, negatieve waarden en alle oorspronkelijke invoerhandlers blijven behouden. De gerichte browsercontrole slaagt voor toetsenbord, wiel/slepen, grenzen, focus, minimaliseren/hervatten, een echte redding en twaalf metingen op vier liggende schermmaten. De bestaande arcadetest slaagt voor alle zestien reddingen en beide duo-flows. Op 568 × 320 is Balken verbergen nodig om de volledige instructie te zien; de bestaande portretbeperking blijft behouden. [Rapport, screenshots en testgrenzen](qa/brandweer-controls/README.md).
+
+De ramen en verdiepingslijnen van Brandweer blijven nu onder het dak; de oude vaste tien rijen tekenden bij lagere gevels boven het gebouw door. De werkelijke SVG-contouren en het behoud van precies één doelraam zijn voor alle acht straten gecontroleerd op 1366 en 640 px.
+
+## Vensterbediening · terug en sluiten zonder grote balken
+
+Zeeslag heeft nu net als Rechtenwereld één OS-bovenbalk. Terug en Sluiten staan direct in de taakbalk. **Balken verbergen** verbergt boven- en onderbalk; Terug, Balken tonen en Sluiten blijven in een gereserveerde strook buiten de oefening bereikbaar. Werkelijk sluiten, annuleren, terugkeren en hervatten zijn met echte native schermen gecontroleerd op laptop en compacte schermen, inclusief behoud van een tweede geopende app. De eerdere eigen inklap- en focusvoorkeur blijven behouden. [Rapporten en screenshots](qa/window-controls/README.md): Rechtenwereld 5 groepen / 39 metingen, Zeeslag 6 / 21, vier pilots 32 / 23 en centrale papierwerkruimte 8 / 39; alle geslaagd met lokale testaccounts.
+
+
+## Centrale werkvormen · ontwikkelpreview 10 oktober 2026
+
+Appkaart, rechtermuisknop en het gedeelde OS-menu openen dezelfde compacte werkvormkeuze. De actieve keuze gaat rechtstreeks naar het eigen formulier of werkbord. Rechtenwereld, Zeeslag, Getallenwereld, Algebra, Vectormissie, Wortelbouw en Kleiduifschieten delen de startbediening; de eigen oefeningen en providers blijven behouden. Klasstart gaat zonder extra hub, de desktopcode ondersteunt de bestaande zes- en achttekencodes, en oefenbladen openen de centrale themamappen/maker. Alle appvensters gebruiken de compacte OS-balk; Algebra's native secties blijven via het gedeelde menu bereikbaar.
+
+Werkelijk gecontroleerd: 20 werkvormgroepen / 102 aanraakdoelen, de vier pilots, Algebra, volledige lokale Learn-/Battle-/live-lesruns, centrale papieropslag en providercompatibiliteit. [Rapport, precieze testgrenzen, wijzigingen per app en screenshots](qa/workforms/README.md). De preview op <http://127.0.0.1:8795/> gebruikt fictieve lokale accounts. Productieauthenticatie en externe WebSockets blijven te controleren; Getallenwereld gebruikt voorlopig sessiecodes, Rechtenwereld/Zeeslag uitnodigingen op alias. Dit is een reviewversie in PR #13, geen nieuwe publieke uitrol.

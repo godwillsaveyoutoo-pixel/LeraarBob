@@ -82,8 +82,8 @@ function watchAccount(){if(watched||!window.AxiomaAuth)return;watched=true;Axiom
 addEventListener('axioma:login-complete',event=>{account=event.detail.account;syncAccount();});
 function syncAccount(){if(!current)return;syncLiveEntry();const b=current.host.shadowRoot.querySelector('.account');const label=account?.role==='teacher'?'Leerkracht':account?.alias||'Inloggen';b.querySelector('.account-label').textContent=label;const mark=b.querySelector('.account-mark'),signature=account?[account.id,account.avatar_id,account.alias,account.role].join(':'):'guest';if(mark&&mark.dataset.signature!==signature){mark.dataset.signature=signature;if(account&&window.LeraarBobAvatar){mark.replaceChildren(LeraarBobAvatar.create(account));}else{mark.innerHTML=svg('account');if(account)delete mark.dataset.signature;}}b.title='leraarBob-account · '+label;b.setAttribute('aria-label',b.title);current.host.shadowRoot.querySelector('.teacher-link').hidden=account?.role!=='teacher'||script.dataset.page==='teacher';}
 function syncLiveEntry(){
- if(!current)return;const link=current.host.shadowRoot.querySelector('.live-entry');link.hidden=!account;
- if(!account)return;let joined=false;try{joined=!!localStorage.getItem('lesson-stage-room:'+account.id);}catch{}
+ if(!current)return;const link=current.host.shadowRoot.querySelector('.live-entry');link.hidden=!account||isDesktop;
+ if(!account||isDesktop)return;let joined=false;try{joined=!!localStorage.getItem('lesson-stage-room:'+account.id);}catch{}
  link.href=new URL('lessons/rechten-arbeid/'+(account.role==='teacher'?'index.html#lessessie':'join.html'),root).href;
  const label=account.role==='teacher'?'Live les geven':joined?'Live les hervatten':'Deelnemen aan een live les';link.title=label;link.setAttribute('aria-label',label);link.classList.toggle('joined',joined);
  if(location.pathname===new URL(link.href).pathname)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
@@ -277,7 +277,7 @@ function watchSocial(){
   socialLoading=true;
   const existing=document.querySelector('script[src*="/axioma-social.js"]');
   if(existing)existing.addEventListener('load',watchSocial,{once:true});
-  else load('shared/axioma-social.js?v=0.6.1').then(watchSocial).catch(()=>{});
+  else load('shared/axioma-social.js?v=20261010-workforms').then(watchSocial).catch(()=>{});
  }
 }
 function navigateGame(){const node=current.header.querySelector('#crumbWorld,[data-screen="world"],#gameHomeBtn,#brandBtn,#homeBtn:not([data-platform-home]),#home');if(node)node.click();else if(script.dataset.gameHref)location.assign(new URL(script.dataset.gameHref,root));else if(!isHome)location.assign(location.pathname);}
@@ -302,7 +302,7 @@ function syncMobileContext(){
  if(!titleNode||!detailNode)return;
  if(isDesktop){
   const places=[...s.querySelectorAll('.crumbs button,.crumbs>span')].map(n=>n.textContent.trim()).filter(n=>n&&n!=='›');
-  titleNode.textContent=places.at(-1)||title;detailNode.textContent='';detailNode.hidden=true;return;
+  titleNode.textContent=current.header.dataset.platformAppTitle||places.at(-1)||title;detailNode.textContent='';detailNode.hidden=true;return;
  }
  titleNode.textContent=isHome?'leraarBob':title;
  let detail='';
@@ -463,7 +463,7 @@ function mount(header){
  syncCrumbs();syncAccount();syncProgress();syncMobileContext();syncDisplayControls();setCollapsed(collapsed);
 }
 function scan(){queued=false;if(!cssReady)return;const header=document.querySelector(selector);if(header){mount(header);if(header.inert!==collapsed)header.inert=collapsed;syncCrumbs();syncProgress();syncMobileContext();syncDisplayControls();}watchAccount();watchSocial();}
-new MutationObserver(()=>{if(!queued){queued=true;requestAnimationFrame(scan);}}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','inert']});
+new MutationObserver(()=>{if(!queued){queued=true;requestAnimationFrame(scan);}}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','inert','data-platform-app-title']});
 for(const event of ['axioma:game-ready','axioma:game-progress'])window.addEventListener(event,syncProgress);
 window.LeraarBobTopbar=Object.freeze({setCollapsed,openAccount,openMenu:()=>showMenu()});scan();
 })();

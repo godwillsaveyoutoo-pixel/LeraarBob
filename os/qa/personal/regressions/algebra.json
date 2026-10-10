@@ -1,0 +1,5473 @@
+{
+  "scope": "Real native Algebra browser interactions with isolated guest/teacher/student auth and local progress fixtures; no production account, progress or session writes",
+  "viewports": [
+    {
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 640,
+      "height": 360
+    }
+  ],
+  "deviceScaleFactor": 1,
+  "zoom": 1,
+  "checks": [
+    {
+      "name": "werelden three viewports, both topbar states, real controls and intact native work"
+    },
+    {
+      "name": "vergelijkingen-levels three viewports, both topbar states, real controls and intact native work"
+    },
+    {
+      "name": "vergelijkingen-werkbord three viewports, both topbar states, real controls and intact native work"
+    },
+    {
+      "name": "Vergelijkingen actual Start/focus, Bewaren, minimize/resume, own return/filter and direct display/fullscreen without reset"
+    },
+    {
+      "name": "Vergelijkingen seven available levels; explicit start; actual intermediate operation, help/pause/history and exact independent archived sheet"
+    },
+    {
+      "name": "Six genuine equation answers finish one round; shared OS badge equals native 30 XP without conversion"
+    },
+    {
+      "name": "stelsels-levels three viewports, both topbar states, real controls and intact native work"
+    },
+    {
+      "name": "stelsels-voorstel three viewports, both topbar states, real controls and intact native work"
+    },
+    {
+      "name": "Stelsels actual Start/focus, Bewaren, minimize/resume, own return/filter and direct display/fullscreen without reset"
+    },
+    {
+      "name": "Stelsels six available levels; real pending/apply step, help/history, unfinished input, other-level paper, Werkvormen and full OS reload"
+    },
+    {
+      "name": "Central account panel retains native work; guest→student disposes old frames and isolates native work, 30 XP and exact worksheet library"
+    },
+    {
+      "name": "OS guest exact selected-world Klasbattle entry and own return reuse the same level/module DOM",
+      "detail": {
+        "sessionScope": "Teacher creation vs student/guest entry UI; no remote class created"
+      }
+    },
+    {
+      "name": "OS teacher exact selected-world Klasbattle entry and own return reuse the same level/module DOM",
+      "detail": {
+        "sessionScope": "Teacher creation vs student/guest entry UI; no remote class created"
+      }
+    },
+    {
+      "name": "OS student exact selected-world Klasbattle entry and own return reuse the same level/module DOM",
+      "detail": {
+        "sessionScope": "Teacher creation vs student/guest entry UI; no remote class created"
+      }
+    },
+    {
+      "name": "standalone-levels three viewports, both topbar states, real controls and intact native work"
+    },
+    {
+      "name": "Standalone guest one platform bar, Werelden/Levels/Werkvormen and class entry retaining selected equation level",
+      "detail": {
+        "sessionScope": "Role entry UI and exact world/level/return route, not a created remote class session"
+      }
+    },
+    {
+      "name": "Standalone teacher one platform bar, Werelden/Levels/Werkvormen and class entry retaining selected equation level",
+      "detail": {
+        "sessionScope": "Role entry UI and exact world/level/return route, not a created remote class session"
+      }
+    },
+    {
+      "name": "Standalone student one platform bar, Werelden/Levels/Werkvormen and class entry retaining selected equation level",
+      "detail": {
+        "sessionScope": "Role entry UI and exact world/level/return route, not a created remote class session"
+      }
+    }
+  ],
+  "layout": [
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation world",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 163.15625,
+        "y": 60,
+        "width": 81.84375,
+        "height": 44,
+        "top": 60,
+        "right": 245,
+        "bottom": 104,
+        "left": 163.15625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation menu",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 249,
+        "y": 60,
+        "width": 62.53125,
+        "height": 44,
+        "top": 60,
+        "right": 311.53125,
+        "bottom": 104,
+        "left": 249
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation tools",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 315.53125,
+        "y": 60,
+        "width": 100.78125,
+        "height": 44,
+        "top": 60,
+        "right": 416.3125,
+        "bottom": 104,
+        "left": 315.53125
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden [data-world=\"equations\"]",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 137,
+        "y": 124,
+        "width": 538,
+        "height": 273.484375,
+        "top": 124,
+        "right": 675,
+        "bottom": 397.484375,
+        "left": 137
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden [data-world=\"systems\"]",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 691,
+        "y": 124,
+        "width": 538,
+        "height": 273.484375,
+        "top": 124,
+        "right": 1229,
+        "bottom": 397.484375,
+        "left": 691
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation world",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 207.15625,
+        "y": 2.5,
+        "width": 81.84375,
+        "height": 44,
+        "top": 2.5,
+        "right": 289,
+        "bottom": 46.5,
+        "left": 207.15625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation menu",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 293,
+        "y": 2.5,
+        "width": 62.53125,
+        "height": 44,
+        "top": 2.5,
+        "right": 355.53125,
+        "bottom": 46.5,
+        "left": 293
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation tools",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 359.53125,
+        "y": 2.5,
+        "width": 100.78125,
+        "height": 44,
+        "top": 2.5,
+        "right": 460.3125,
+        "bottom": 46.5,
+        "left": 359.53125
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden [data-world=\"equations\"]",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 137,
+        "y": 124,
+        "width": 538,
+        "height": 273.484375,
+        "top": 124,
+        "right": 675,
+        "bottom": 397.484375,
+        "left": 137
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden [data-world=\"systems\"]",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 691,
+        "y": 124,
+        "width": 538,
+        "height": 273.484375,
+        "top": 124,
+        "right": 1229,
+        "bottom": 397.484375,
+        "left": 691
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation world",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 58,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 164,
+        "bottom": 124,
+        "left": 58
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation menu",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 167,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 273,
+        "bottom": 124,
+        "left": 167
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation tools",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 276,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 382,
+        "bottom": 124,
+        "left": 276
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden [data-world=\"equations\"]",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 12,
+        "y": 107,
+        "width": 366,
+        "height": 190,
+        "top": 107,
+        "right": 378,
+        "bottom": 297,
+        "left": 12
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden [data-world=\"systems\"]",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 12,
+        "y": 309,
+        "width": 366,
+        "height": 208.1875,
+        "top": 309,
+        "right": 378,
+        "bottom": 517.1875,
+        "left": 12
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation world",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 106,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 196,
+        "bottom": 47,
+        "left": 106
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation menu",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 199,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 289,
+        "bottom": 47,
+        "left": 199
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation tools",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 292,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 382,
+        "bottom": 47,
+        "left": 292
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden [data-world=\"equations\"]",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 12,
+        "y": 107,
+        "width": 366,
+        "height": 190,
+        "top": 107,
+        "right": 378,
+        "bottom": 297,
+        "left": 12
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden [data-world=\"systems\"]",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 12,
+        "y": 309,
+        "width": 366,
+        "height": 208.1875,
+        "top": 309,
+        "right": 378,
+        "bottom": 517.1875,
+        "left": 12
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation world",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 62,
+        "y": 60,
+        "width": 81.84375,
+        "height": 44,
+        "top": 60,
+        "right": 143.84375,
+        "bottom": 104,
+        "left": 62
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation menu",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 147.84375,
+        "y": 60,
+        "width": 62.53125,
+        "height": 44,
+        "top": 60,
+        "right": 210.375,
+        "bottom": 104,
+        "left": 147.84375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation tools",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 214.375,
+        "y": 60,
+        "width": 100.78125,
+        "height": 44,
+        "top": 60,
+        "right": 315.15625,
+        "bottom": 104,
+        "left": 214.375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden [data-world=\"equations\"]",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 8,
+        "y": 37,
+        "width": 307,
+        "height": 148,
+        "top": 37,
+        "right": 315,
+        "bottom": 185,
+        "left": 8
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden [data-world=\"systems\"]",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 325,
+        "y": 37,
+        "width": 307,
+        "height": 148,
+        "top": 37,
+        "right": 632,
+        "bottom": 185,
+        "left": 325
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation world",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 112,
+        "y": 2.5,
+        "width": 81.84375,
+        "height": 44,
+        "top": 2.5,
+        "right": 193.84375,
+        "bottom": 46.5,
+        "left": 112
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation menu",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 197.84375,
+        "y": 2.5,
+        "width": 62.53125,
+        "height": 44,
+        "top": 2.5,
+        "right": 260.375,
+        "bottom": 46.5,
+        "left": 197.84375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden navigation tools",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 264.375,
+        "y": 2.5,
+        "width": 100.78125,
+        "height": 44,
+        "top": 2.5,
+        "right": 365.15625,
+        "bottom": 46.5,
+        "left": 264.375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden [data-world=\"equations\"]",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 8,
+        "y": 37,
+        "width": 307,
+        "height": 148,
+        "top": 37,
+        "right": 315,
+        "bottom": 185,
+        "left": 8
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "werelden [data-world=\"systems\"]",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 325,
+        "y": 37,
+        "width": 307,
+        "height": 148,
+        "top": 37,
+        "right": 632,
+        "bottom": 185,
+        "left": 325
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation world",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 163.15625,
+        "y": 60,
+        "width": 81.84375,
+        "height": 44,
+        "top": 60,
+        "right": 245,
+        "bottom": 104,
+        "left": 163.15625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation menu",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 249,
+        "y": 60,
+        "width": 62.53125,
+        "height": 44,
+        "top": 60,
+        "right": 311.53125,
+        "bottom": 104,
+        "left": 249
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation tools",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 315.53125,
+        "y": 60,
+        "width": 100.78125,
+        "height": 44,
+        "top": 60,
+        "right": 416.3125,
+        "bottom": 104,
+        "left": 315.53125
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels [data-menu-stop=\"route-two\"]",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 357,
+        "y": 100,
+        "width": 319,
+        "height": 186.5,
+        "top": 100,
+        "right": 676,
+        "bottom": 286.5,
+        "left": 357
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels .menuContinue",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1112,
+        "y": 513.5,
+        "width": 230,
+        "height": 48,
+        "top": 513.5,
+        "right": 1342,
+        "bottom": 561.5,
+        "left": 1112
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels #navigationWorksheet",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 997.109375,
+        "y": 513.5,
+        "width": 102.890625,
+        "height": 48,
+        "top": 513.5,
+        "right": 1100,
+        "bottom": 561.5,
+        "left": 997.109375
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation world",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 207.15625,
+        "y": 2.5,
+        "width": 81.84375,
+        "height": 44,
+        "top": 2.5,
+        "right": 289,
+        "bottom": 46.5,
+        "left": 207.15625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation menu",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 293,
+        "y": 2.5,
+        "width": 62.53125,
+        "height": 44,
+        "top": 2.5,
+        "right": 355.53125,
+        "bottom": 46.5,
+        "left": 293
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation tools",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 359.53125,
+        "y": 2.5,
+        "width": 100.78125,
+        "height": 44,
+        "top": 2.5,
+        "right": 460.3125,
+        "bottom": 46.5,
+        "left": 359.53125
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels [data-menu-stop=\"route-two\"]",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 357,
+        "y": 100,
+        "width": 319,
+        "height": 215,
+        "top": 100,
+        "right": 676,
+        "bottom": 315,
+        "left": 357
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels .menuContinue",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1112,
+        "y": 570.5,
+        "width": 230,
+        "height": 48,
+        "top": 570.5,
+        "right": 1342,
+        "bottom": 618.5,
+        "left": 1112
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels #navigationWorksheet",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 997.109375,
+        "y": 570.5,
+        "width": 102.890625,
+        "height": 48,
+        "top": 570.5,
+        "right": 1100,
+        "bottom": 618.5,
+        "left": 997.109375
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation world",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 58,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 164,
+        "bottom": 124,
+        "left": 58
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation menu",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 167,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 273,
+        "bottom": 124,
+        "left": 167
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation tools",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 276,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 382,
+        "bottom": 124,
+        "left": 276
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels [data-menu-stop=\"route-two\"]",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 198,
+        "y": 70,
+        "width": 182,
+        "height": 93.25,
+        "top": 70,
+        "right": 380,
+        "bottom": 163.25,
+        "left": 198
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels .menuContinue",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 198,
+        "y": 522.1875,
+        "width": 182,
+        "height": 44,
+        "top": 522.1875,
+        "right": 380,
+        "bottom": 566.1875,
+        "left": 198
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels #navigationWorksheet",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 10,
+        "y": 522.1875,
+        "width": 182,
+        "height": 44,
+        "top": 522.1875,
+        "right": 192,
+        "bottom": 566.1875,
+        "left": 10
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation world",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 106,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 196,
+        "bottom": 47,
+        "left": 106
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation menu",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 199,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 289,
+        "bottom": 47,
+        "left": 199
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation tools",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 292,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 382,
+        "bottom": 47,
+        "left": 292
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels [data-menu-stop=\"route-two\"]",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 198,
+        "y": 70,
+        "width": 182,
+        "height": 112.5,
+        "top": 70,
+        "right": 380,
+        "bottom": 182.5,
+        "left": 198
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels .menuContinue",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 198,
+        "y": 599.1875,
+        "width": 182,
+        "height": 44,
+        "top": 599.1875,
+        "right": 380,
+        "bottom": 643.1875,
+        "left": 198
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels #navigationWorksheet",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 10,
+        "y": 599.1875,
+        "width": 182,
+        "height": 44,
+        "top": 599.1875,
+        "right": 192,
+        "bottom": 643.1875,
+        "left": 10
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation world",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 62,
+        "y": 60,
+        "width": 81.84375,
+        "height": 44,
+        "top": 60,
+        "right": 143.84375,
+        "bottom": 104,
+        "left": 62
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation menu",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 147.84375,
+        "y": 60,
+        "width": 62.53125,
+        "height": 44,
+        "top": 60,
+        "right": 210.375,
+        "bottom": 104,
+        "left": 147.84375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation tools",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 214.375,
+        "y": 60,
+        "width": 100.78125,
+        "height": 44,
+        "top": 60,
+        "right": 315.15625,
+        "bottom": 104,
+        "left": 214.375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels [data-menu-stop=\"route-two\"]",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 167.5,
+        "y": 42,
+        "width": 149.5,
+        "height": 64,
+        "top": 42,
+        "right": 317,
+        "bottom": 106,
+        "left": 167.5
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels .menuContinue",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 492,
+        "y": 121.5,
+        "width": 136,
+        "height": 44,
+        "top": 121.5,
+        "right": 628,
+        "bottom": 165.5,
+        "left": 492
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels #navigationWorksheet",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 406.953125,
+        "y": 121.5,
+        "width": 77.046875,
+        "height": 44,
+        "top": 121.5,
+        "right": 484,
+        "bottom": 165.5,
+        "left": 406.953125
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation world",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 112,
+        "y": 2.5,
+        "width": 81.84375,
+        "height": 44,
+        "top": 2.5,
+        "right": 193.84375,
+        "bottom": 46.5,
+        "left": 112
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation menu",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 197.84375,
+        "y": 2.5,
+        "width": 62.53125,
+        "height": 44,
+        "top": 2.5,
+        "right": 260.375,
+        "bottom": 46.5,
+        "left": 197.84375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels navigation tools",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 264.375,
+        "y": 2.5,
+        "width": 100.78125,
+        "height": 44,
+        "top": 2.5,
+        "right": 365.15625,
+        "bottom": 46.5,
+        "left": 264.375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels [data-menu-stop=\"route-two\"]",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 167.5,
+        "y": 42,
+        "width": 149.5,
+        "height": 64,
+        "top": 42,
+        "right": 317,
+        "bottom": 106,
+        "left": 167.5
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels .menuContinue",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 492,
+        "y": 178.5,
+        "width": 136,
+        "height": 44,
+        "top": 178.5,
+        "right": 628,
+        "bottom": 222.5,
+        "left": 492
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-levels #navigationWorksheet",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 406.953125,
+        "y": 178.5,
+        "width": 77.046875,
+        "height": 44,
+        "top": 178.5,
+        "right": 484,
+        "bottom": 222.5,
+        "left": 406.953125
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation world",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 163.15625,
+        "y": 60,
+        "width": 81.84375,
+        "height": 44,
+        "top": 60,
+        "right": 245,
+        "bottom": 104,
+        "left": 163.15625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation menu",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 249,
+        "y": 60,
+        "width": 62.53125,
+        "height": 44,
+        "top": 60,
+        "right": 311.53125,
+        "bottom": 104,
+        "left": 249
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation tools",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 315.53125,
+        "y": 60,
+        "width": 100.78125,
+        "height": 44,
+        "top": 60,
+        "right": 416.3125,
+        "bottom": 104,
+        "left": 315.53125
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord .derivationMath",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 26,
+        "y": 351.6875,
+        "width": 766.40625,
+        "height": 72,
+        "top": 351.6875,
+        "right": 792.40625,
+        "bottom": 423.6875,
+        "left": 26
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #contextOperations button",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 823.40625,
+        "y": 128,
+        "width": 245.78125,
+        "height": 64,
+        "top": 128,
+        "right": 1069.1875,
+        "bottom": 192,
+        "left": 823.40625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #watchDemoBtn",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 68,
+        "y": 543,
+        "width": 61.40625,
+        "height": 44,
+        "top": 543,
+        "right": 129.40625,
+        "bottom": 587,
+        "left": 68
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #historyBtn",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 135.40625,
+        "y": 543,
+        "width": 75.453125,
+        "height": 44,
+        "top": 543,
+        "right": 210.859375,
+        "bottom": 587,
+        "left": 135.40625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #checkBtn",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1237.5625,
+        "y": 543,
+        "width": 110.421875,
+        "height": 44,
+        "top": 543,
+        "right": 1347.984375,
+        "bottom": 587,
+        "left": 1237.5625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation world",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 207.15625,
+        "y": 2.5,
+        "width": 81.84375,
+        "height": 44,
+        "top": 2.5,
+        "right": 289,
+        "bottom": 46.5,
+        "left": 207.15625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation menu",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 293,
+        "y": 2.5,
+        "width": 62.53125,
+        "height": 44,
+        "top": 2.5,
+        "right": 355.53125,
+        "bottom": 46.5,
+        "left": 293
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation tools",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 359.53125,
+        "y": 2.5,
+        "width": 100.78125,
+        "height": 44,
+        "top": 2.5,
+        "right": 460.3125,
+        "bottom": 46.5,
+        "left": 359.53125
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord .derivationMath",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 26,
+        "y": 380.1875,
+        "width": 766.40625,
+        "height": 72,
+        "top": 380.1875,
+        "right": 792.40625,
+        "bottom": 452.1875,
+        "left": 26
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #contextOperations button",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 823.40625,
+        "y": 128,
+        "width": 242.78125,
+        "height": 64,
+        "top": 128,
+        "right": 1066.1875,
+        "bottom": 192,
+        "left": 823.40625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #watchDemoBtn",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 72,
+        "y": 600,
+        "width": 61.40625,
+        "height": 44,
+        "top": 600,
+        "right": 133.40625,
+        "bottom": 644,
+        "left": 72
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #historyBtn",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 139.40625,
+        "y": 600,
+        "width": 75.453125,
+        "height": 44,
+        "top": 600,
+        "right": 214.859375,
+        "bottom": 644,
+        "left": 139.40625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #checkBtn",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1237.5625,
+        "y": 600,
+        "width": 110.421875,
+        "height": 44,
+        "top": 600,
+        "right": 1347.984375,
+        "bottom": 644,
+        "left": 1237.5625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation world",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 58,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 164,
+        "bottom": 124,
+        "left": 58
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation menu",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 167,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 273,
+        "bottom": 124,
+        "left": 167
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation tools",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 276,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 382,
+        "bottom": 124,
+        "left": 276
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord .derivationMath",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 8,
+        "y": 244,
+        "width": 374,
+        "height": 56,
+        "top": 244,
+        "right": 382,
+        "bottom": 300,
+        "left": 8
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #contextOperations button",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 8,
+        "y": 361,
+        "width": 177,
+        "height": 64,
+        "top": 361,
+        "right": 185,
+        "bottom": 425,
+        "left": 8
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #watchDemoBtn",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 58,
+        "y": 561,
+        "width": 61.40625,
+        "height": 44,
+        "top": 561,
+        "right": 119.40625,
+        "bottom": 605,
+        "left": 58
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #historyBtn",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 125.40625,
+        "y": 561,
+        "width": 75.453125,
+        "height": 44,
+        "top": 561,
+        "right": 200.859375,
+        "bottom": 605,
+        "left": 125.40625
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #checkBtn",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 271.578125,
+        "y": 561,
+        "width": 110.421875,
+        "height": 44,
+        "top": 561,
+        "right": 382,
+        "bottom": 605,
+        "left": 271.578125
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation world",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 106,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 196,
+        "bottom": 47,
+        "left": 106
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation menu",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 199,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 289,
+        "bottom": 47,
+        "left": 199
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation tools",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 292,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 382,
+        "bottom": 47,
+        "left": 292
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord .derivationMath",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 8,
+        "y": 268.71875,
+        "width": 374,
+        "height": 56,
+        "top": 268.71875,
+        "right": 382,
+        "bottom": 324.71875,
+        "left": 8
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #contextOperations button",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 8,
+        "y": 408.453125,
+        "width": 177,
+        "height": 64,
+        "top": 408.453125,
+        "right": 185,
+        "bottom": 472.453125,
+        "left": 8
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #watchDemoBtn",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 58,
+        "y": 638,
+        "width": 61.40625,
+        "height": 44,
+        "top": 638,
+        "right": 119.40625,
+        "bottom": 682,
+        "left": 58
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #historyBtn",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 125.40625,
+        "y": 638,
+        "width": 75.453125,
+        "height": 44,
+        "top": 638,
+        "right": 200.859375,
+        "bottom": 682,
+        "left": 125.40625
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #checkBtn",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 271.578125,
+        "y": 638,
+        "width": 110.421875,
+        "height": 44,
+        "top": 638,
+        "right": 382,
+        "bottom": 682,
+        "left": 271.578125
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation world",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 62,
+        "y": 60,
+        "width": 81.84375,
+        "height": 44,
+        "top": 60,
+        "right": 143.84375,
+        "bottom": 104,
+        "left": 62
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation menu",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 147.84375,
+        "y": 60,
+        "width": 62.53125,
+        "height": 44,
+        "top": 60,
+        "right": 210.375,
+        "bottom": 104,
+        "left": 147.84375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation tools",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 214.375,
+        "y": 60,
+        "width": 100.78125,
+        "height": 44,
+        "top": 60,
+        "right": 315.15625,
+        "bottom": 104,
+        "left": 214.375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord .derivationMath",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 10,
+        "y": 83.1875,
+        "width": 370.421875,
+        "height": 49.390625,
+        "top": 83.1875,
+        "right": 380.421875,
+        "bottom": 132.578125,
+        "left": 10
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #contextOperations button",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 395.421875,
+        "y": 56,
+        "width": 106.78125,
+        "height": 76,
+        "top": 56,
+        "right": 502.203125,
+        "bottom": 132,
+        "left": 395.421875
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #watchDemoBtn",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 58,
+        "y": 137,
+        "width": 61.40625,
+        "height": 44,
+        "top": 137,
+        "right": 119.40625,
+        "bottom": 181,
+        "left": 58
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #historyBtn",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 125.40625,
+        "y": 137,
+        "width": 63.25,
+        "height": 44,
+        "top": 137,
+        "right": 188.65625,
+        "bottom": 181,
+        "left": 125.40625
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #checkBtn",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 538.78125,
+        "y": 137,
+        "width": 93.21875,
+        "height": 44,
+        "top": 137,
+        "right": 632,
+        "bottom": 181,
+        "left": 538.78125
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation world",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 112,
+        "y": 2.5,
+        "width": 81.84375,
+        "height": 44,
+        "top": 2.5,
+        "right": 193.84375,
+        "bottom": 46.5,
+        "left": 112
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation menu",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 197.84375,
+        "y": 2.5,
+        "width": 62.53125,
+        "height": 44,
+        "top": 2.5,
+        "right": 260.375,
+        "bottom": 46.5,
+        "left": 197.84375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord navigation tools",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 264.375,
+        "y": 2.5,
+        "width": 100.78125,
+        "height": 44,
+        "top": 2.5,
+        "right": 365.15625,
+        "bottom": 46.5,
+        "left": 264.375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord .derivationMath",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 10,
+        "y": 140.1875,
+        "width": 370.421875,
+        "height": 49.390625,
+        "top": 140.1875,
+        "right": 380.421875,
+        "bottom": 189.578125,
+        "left": 10
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #contextOperations button",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 395.421875,
+        "y": 66,
+        "width": 106.78125,
+        "height": 76,
+        "top": 66,
+        "right": 502.203125,
+        "bottom": 142,
+        "left": 395.421875
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #watchDemoBtn",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 58,
+        "y": 194,
+        "width": 61.40625,
+        "height": 44,
+        "top": 194,
+        "right": 119.40625,
+        "bottom": 238,
+        "left": 58
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #historyBtn",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 125.40625,
+        "y": 194,
+        "width": 63.25,
+        "height": 44,
+        "top": 194,
+        "right": 188.65625,
+        "bottom": 238,
+        "left": 125.40625
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Vergelijkingen in OS",
+      "label": "vergelijkingen-werkbord #checkBtn",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 538.78125,
+        "y": 194,
+        "width": 93.21875,
+        "height": 44,
+        "top": 194,
+        "right": 632,
+        "bottom": 238,
+        "left": 538.78125
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation world",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 163.15625,
+        "y": 60,
+        "width": 81.84375,
+        "height": 44,
+        "top": 60,
+        "right": 245,
+        "bottom": 104,
+        "left": 163.15625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation menu",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 249,
+        "y": 60,
+        "width": 62.53125,
+        "height": 44,
+        "top": 60,
+        "right": 311.53125,
+        "bottom": 104,
+        "left": 249
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation tools",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 315.53125,
+        "y": 60,
+        "width": 100.78125,
+        "height": 44,
+        "top": 60,
+        "right": 416.3125,
+        "bottom": 104,
+        "left": 315.53125
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels [data-menu-stop=\"sys-substitution\"]",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 468,
+        "y": 100,
+        "width": 430,
+        "height": 186.5,
+        "top": 100,
+        "right": 898,
+        "bottom": 286.5,
+        "left": 468
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels .menuContinue",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1112,
+        "y": 513.5,
+        "width": 230,
+        "height": 48,
+        "top": 513.5,
+        "right": 1342,
+        "bottom": 561.5,
+        "left": 1112
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels #navigationWorksheet",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 993.234375,
+        "y": 513.5,
+        "width": 106.765625,
+        "height": 48,
+        "top": 513.5,
+        "right": 1100,
+        "bottom": 561.5,
+        "left": 993.234375
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation world",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 207.15625,
+        "y": 2.5,
+        "width": 81.84375,
+        "height": 44,
+        "top": 2.5,
+        "right": 289,
+        "bottom": 46.5,
+        "left": 207.15625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation menu",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 293,
+        "y": 2.5,
+        "width": 62.53125,
+        "height": 44,
+        "top": 2.5,
+        "right": 355.53125,
+        "bottom": 46.5,
+        "left": 293
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation tools",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 359.53125,
+        "y": 2.5,
+        "width": 100.78125,
+        "height": 44,
+        "top": 2.5,
+        "right": 460.3125,
+        "bottom": 46.5,
+        "left": 359.53125
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels [data-menu-stop=\"sys-substitution\"]",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 468,
+        "y": 100,
+        "width": 430,
+        "height": 215,
+        "top": 100,
+        "right": 898,
+        "bottom": 315,
+        "left": 468
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels .menuContinue",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1112,
+        "y": 570.5,
+        "width": 230,
+        "height": 48,
+        "top": 570.5,
+        "right": 1342,
+        "bottom": 618.5,
+        "left": 1112
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels #navigationWorksheet",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 993.234375,
+        "y": 570.5,
+        "width": 106.765625,
+        "height": 48,
+        "top": 570.5,
+        "right": 1100,
+        "bottom": 618.5,
+        "left": 993.234375
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation world",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 58,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 164,
+        "bottom": 124,
+        "left": 58
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation menu",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 167,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 273,
+        "bottom": 124,
+        "left": 167
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation tools",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 276,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 382,
+        "bottom": 124,
+        "left": 276
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels [data-menu-stop=\"sys-substitution\"]",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 198,
+        "y": 70,
+        "width": 182,
+        "height": 126.328125,
+        "top": 70,
+        "right": 380,
+        "bottom": 196.328125,
+        "left": 198
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels .menuContinue",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 198,
+        "y": 522.1875,
+        "width": 182,
+        "height": 44,
+        "top": 522.1875,
+        "right": 380,
+        "bottom": 566.1875,
+        "left": 198
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels #navigationWorksheet",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 10,
+        "y": 522.1875,
+        "width": 182,
+        "height": 44,
+        "top": 522.1875,
+        "right": 192,
+        "bottom": 566.1875,
+        "left": 10
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation world",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 106,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 196,
+        "bottom": 47,
+        "left": 106
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation menu",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 199,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 289,
+        "bottom": 47,
+        "left": 199
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation tools",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 292,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 382,
+        "bottom": 47,
+        "left": 292
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels [data-menu-stop=\"sys-substitution\"]",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 198,
+        "y": 70,
+        "width": 182,
+        "height": 152,
+        "top": 70,
+        "right": 380,
+        "bottom": 222,
+        "left": 198
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels .menuContinue",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 198,
+        "y": 599.1875,
+        "width": 182,
+        "height": 44,
+        "top": 599.1875,
+        "right": 380,
+        "bottom": 643.1875,
+        "left": 198
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels #navigationWorksheet",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 10,
+        "y": 599.1875,
+        "width": 182,
+        "height": 44,
+        "top": 599.1875,
+        "right": 192,
+        "bottom": 643.1875,
+        "left": 10
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation world",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 62,
+        "y": 60,
+        "width": 81.84375,
+        "height": 44,
+        "top": 60,
+        "right": 143.84375,
+        "bottom": 104,
+        "left": 62
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation menu",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 147.84375,
+        "y": 60,
+        "width": 62.53125,
+        "height": 44,
+        "top": 60,
+        "right": 210.375,
+        "bottom": 104,
+        "left": 147.84375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation tools",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 214.375,
+        "y": 60,
+        "width": 100.78125,
+        "height": 44,
+        "top": 60,
+        "right": 315.15625,
+        "bottom": 104,
+        "left": 214.375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels [data-menu-stop=\"sys-substitution\"]",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 219.328125,
+        "y": 32,
+        "width": 201.328125,
+        "height": 64,
+        "top": 32,
+        "right": 420.65625,
+        "bottom": 96,
+        "left": 219.328125
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels .menuContinue",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 492,
+        "y": 125.5,
+        "width": 136,
+        "height": 44,
+        "top": 125.5,
+        "right": 628,
+        "bottom": 169.5,
+        "left": 492
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels #navigationWorksheet",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 403.625,
+        "y": 125.5,
+        "width": 80.375,
+        "height": 44,
+        "top": 125.5,
+        "right": 484,
+        "bottom": 169.5,
+        "left": 403.625
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation world",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 112,
+        "y": 2.5,
+        "width": 81.84375,
+        "height": 44,
+        "top": 2.5,
+        "right": 193.84375,
+        "bottom": 46.5,
+        "left": 112
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation menu",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 197.84375,
+        "y": 2.5,
+        "width": 62.53125,
+        "height": 44,
+        "top": 2.5,
+        "right": 260.375,
+        "bottom": 46.5,
+        "left": 197.84375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels navigation tools",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 264.375,
+        "y": 2.5,
+        "width": 100.78125,
+        "height": 44,
+        "top": 2.5,
+        "right": 365.15625,
+        "bottom": 46.5,
+        "left": 264.375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels [data-menu-stop=\"sys-substitution\"]",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 219.328125,
+        "y": 32,
+        "width": 201.328125,
+        "height": 70,
+        "top": 32,
+        "right": 420.65625,
+        "bottom": 102,
+        "left": 219.328125
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels .menuContinue",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 492,
+        "y": 182.5,
+        "width": 136,
+        "height": 44,
+        "top": 182.5,
+        "right": 628,
+        "bottom": 226.5,
+        "left": 492
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-levels #navigationWorksheet",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 403.625,
+        "y": 182.5,
+        "width": 80.375,
+        "height": 44,
+        "top": 182.5,
+        "right": 484,
+        "bottom": 226.5,
+        "left": 403.625
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation world",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 163.15625,
+        "y": 60,
+        "width": 81.84375,
+        "height": 44,
+        "top": 60,
+        "right": 245,
+        "bottom": 104,
+        "left": 163.15625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation menu",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 249,
+        "y": 60,
+        "width": 62.53125,
+        "height": 44,
+        "top": 60,
+        "right": 311.53125,
+        "bottom": 104,
+        "left": 249
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation tools",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 315.53125,
+        "y": 60,
+        "width": 100.78125,
+        "height": 44,
+        "top": 60,
+        "right": 416.3125,
+        "bottom": 104,
+        "left": 315.53125
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #activeRow0",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 49,
+        "y": 331.625,
+        "width": 706.15625,
+        "height": 48.90625,
+        "top": 331.625,
+        "right": 755.15625,
+        "bottom": 380.53125,
+        "left": 49
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #activeRow1",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 49,
+        "y": 408.53125,
+        "width": 706.15625,
+        "height": 48.90625,
+        "top": 408.53125,
+        "right": 755.15625,
+        "bottom": 457.4375,
+        "left": 49
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #apply",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 830.15625,
+        "y": 231.640625,
+        "width": 238.90625,
+        "height": 44,
+        "top": 231.640625,
+        "right": 1069.0625,
+        "bottom": 275.640625,
+        "left": 830.15625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #cancel",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1077.0625,
+        "y": 231.640625,
+        "width": 238.921875,
+        "height": 44,
+        "top": 231.640625,
+        "right": 1315.984375,
+        "bottom": 275.640625,
+        "left": 1077.0625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #systemHistoryBtn",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1210.546875,
+        "y": 12,
+        "width": 83.453125,
+        "height": 44,
+        "top": 12,
+        "right": 1294,
+        "bottom": 56,
+        "left": 1210.546875
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 593
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation world",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 207.15625,
+        "y": 2.5,
+        "width": 81.84375,
+        "height": 44,
+        "top": 2.5,
+        "right": 289,
+        "bottom": 46.5,
+        "left": 207.15625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation menu",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 293,
+        "y": 2.5,
+        "width": 62.53125,
+        "height": 44,
+        "top": 2.5,
+        "right": 355.53125,
+        "bottom": 46.5,
+        "left": 293
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation tools",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 359.53125,
+        "y": 2.5,
+        "width": 100.78125,
+        "height": 44,
+        "top": 2.5,
+        "right": 460.3125,
+        "bottom": 46.5,
+        "left": 359.53125
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #activeRow0",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 49,
+        "y": 360.125,
+        "width": 706.15625,
+        "height": 48.90625,
+        "top": 360.125,
+        "right": 755.15625,
+        "bottom": 409.03125,
+        "left": 49
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #activeRow1",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 49,
+        "y": 437.03125,
+        "width": 706.15625,
+        "height": 48.90625,
+        "top": 437.03125,
+        "right": 755.15625,
+        "bottom": 485.9375,
+        "left": 49
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #apply",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 830.15625,
+        "y": 231.640625,
+        "width": 238.90625,
+        "height": 44,
+        "top": 231.640625,
+        "right": 1069.0625,
+        "bottom": 275.640625,
+        "left": 830.15625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #cancel",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1077.0625,
+        "y": 231.640625,
+        "width": 238.921875,
+        "height": 44,
+        "top": 231.640625,
+        "right": 1315.984375,
+        "bottom": 275.640625,
+        "left": 1077.0625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #systemHistoryBtn",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1210.546875,
+        "y": 12,
+        "width": 83.453125,
+        "height": 44,
+        "top": 12,
+        "right": 1294,
+        "bottom": 56,
+        "left": 1210.546875
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 650
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation world",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 58,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 164,
+        "bottom": 124,
+        "left": 58
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation menu",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 167,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 273,
+        "bottom": 124,
+        "left": 167
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation tools",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 276,
+        "y": 80,
+        "width": 106,
+        "height": 44,
+        "top": 80,
+        "right": 382,
+        "bottom": 124,
+        "left": 276
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #activeRow0",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 33,
+        "y": 212.9375,
+        "width": 324,
+        "height": 36.984375,
+        "top": 212.9375,
+        "right": 357,
+        "bottom": 249.921875,
+        "left": 33
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #activeRow1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 33,
+        "y": 278.9375,
+        "width": 324,
+        "height": 36.984375,
+        "top": 278.9375,
+        "right": 357,
+        "bottom": 315.921875,
+        "left": 33
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #apply",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 34,
+        "y": 464.078125,
+        "width": 157,
+        "height": 44,
+        "top": 464.078125,
+        "right": 191,
+        "bottom": 508.078125,
+        "left": 34
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #cancel",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 199,
+        "y": 464.078125,
+        "width": 157,
+        "height": 44,
+        "top": 464.078125,
+        "right": 356,
+        "bottom": 508.078125,
+        "left": 199
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #systemHistoryBtn",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 259.65625,
+        "y": 8,
+        "width": 73.34375,
+        "height": 44,
+        "top": 8,
+        "right": 333,
+        "bottom": 52,
+        "left": 259.65625
+      },
+      "issues": [],
+      "width": 390,
+      "height": 607
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation world",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 106,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 196,
+        "bottom": 47,
+        "left": 106
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation menu",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 199,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 289,
+        "bottom": 47,
+        "left": 199
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation tools",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 292,
+        "y": 3,
+        "width": 90,
+        "height": 44,
+        "top": 3,
+        "right": 382,
+        "bottom": 47,
+        "left": 292
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #activeRow0",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 33,
+        "y": 212.9375,
+        "width": 324,
+        "height": 36.984375,
+        "top": 212.9375,
+        "right": 357,
+        "bottom": 249.921875,
+        "left": 33
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #activeRow1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 33,
+        "y": 278.9375,
+        "width": 324,
+        "height": 36.984375,
+        "top": 278.9375,
+        "right": 357,
+        "bottom": 315.921875,
+        "left": 33
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #apply",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 34,
+        "y": 464.078125,
+        "width": 157,
+        "height": 44,
+        "top": 464.078125,
+        "right": 191,
+        "bottom": 508.078125,
+        "left": 34
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #cancel",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 199,
+        "y": 464.078125,
+        "width": 157,
+        "height": 44,
+        "top": 464.078125,
+        "right": 356,
+        "bottom": 508.078125,
+        "left": 199
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #systemHistoryBtn",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 259.65625,
+        "y": 8,
+        "width": 73.34375,
+        "height": 44,
+        "top": 8,
+        "right": 333,
+        "bottom": 52,
+        "left": 259.65625
+      },
+      "issues": [],
+      "width": 390,
+      "height": 684
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation world",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 62,
+        "y": 60,
+        "width": 81.84375,
+        "height": 44,
+        "top": 60,
+        "right": 143.84375,
+        "bottom": 104,
+        "left": 62
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation menu",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 147.84375,
+        "y": 60,
+        "width": 62.53125,
+        "height": 44,
+        "top": 60,
+        "right": 210.375,
+        "bottom": 104,
+        "left": 147.84375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation tools",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 214.375,
+        "y": 60,
+        "width": 100.78125,
+        "height": 44,
+        "top": 60,
+        "right": 315.15625,
+        "bottom": 104,
+        "left": 214.375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #activeRow0",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 23,
+        "y": 55.578125,
+        "width": 279,
+        "height": 37.25,
+        "top": 55.578125,
+        "right": 302,
+        "bottom": 92.828125,
+        "left": 23
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #activeRow1",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 23,
+        "y": 121.578125,
+        "width": 279,
+        "height": 37.25,
+        "top": 121.578125,
+        "right": 302,
+        "bottom": 158.828125,
+        "left": 23
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #apply",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 337,
+        "y": 110.390625,
+        "width": 136.5,
+        "height": 44,
+        "top": 110.390625,
+        "right": 473.5,
+        "bottom": 154.390625,
+        "left": 337
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #cancel",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 481.5,
+        "y": 110.390625,
+        "width": 136.5,
+        "height": 44,
+        "top": 110.390625,
+        "right": 618,
+        "bottom": 154.390625,
+        "left": 481.5
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #systemHistoryBtn",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 524.859375,
+        "y": 4,
+        "width": 59.140625,
+        "height": 44,
+        "top": 4,
+        "right": 584,
+        "bottom": 48,
+        "left": 524.859375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 185
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation world",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 112,
+        "y": 2.5,
+        "width": 81.84375,
+        "height": 44,
+        "top": 2.5,
+        "right": 193.84375,
+        "bottom": 46.5,
+        "left": 112
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation menu",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 197.84375,
+        "y": 2.5,
+        "width": 62.53125,
+        "height": 44,
+        "top": 2.5,
+        "right": 260.375,
+        "bottom": 46.5,
+        "left": 197.84375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel navigation tools",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 264.375,
+        "y": 2.5,
+        "width": 100.78125,
+        "height": 44,
+        "top": 2.5,
+        "right": 365.15625,
+        "bottom": 46.5,
+        "left": 264.375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #activeRow0",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 23,
+        "y": 84.078125,
+        "width": 279,
+        "height": 37.25,
+        "top": 84.078125,
+        "right": 302,
+        "bottom": 121.328125,
+        "left": 23
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #activeRow1",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 23,
+        "y": 150.078125,
+        "width": 279,
+        "height": 37.25,
+        "top": 150.078125,
+        "right": 302,
+        "bottom": 187.328125,
+        "left": 23
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #apply",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 337,
+        "y": 110.390625,
+        "width": 136.5,
+        "height": 44,
+        "top": 110.390625,
+        "right": 473.5,
+        "bottom": 154.390625,
+        "left": 337
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #cancel",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 481.5,
+        "y": 110.390625,
+        "width": 136.5,
+        "height": 44,
+        "top": 110.390625,
+        "right": 618,
+        "bottom": 154.390625,
+        "left": 481.5
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "stelsels-voorstel #systemHistoryBtn",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 524.859375,
+        "y": 4,
+        "width": 59.140625,
+        "height": 44,
+        "top": 4,
+        "right": 584,
+        "bottom": 48,
+        "left": 524.859375
+      },
+      "issues": [],
+      "width": 640,
+      "height": 242
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "Reachable restore control",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Stelsels in OS",
+      "label": "Reloaded Algebra OS restore",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation world",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 0,
+        "y": 63,
+        "width": 455.328125,
+        "height": 44,
+        "top": 63,
+        "right": 455.328125,
+        "bottom": 107,
+        "left": 0
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation menu",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 455.328125,
+        "y": 63,
+        "width": 455.328125,
+        "height": 44,
+        "top": 63,
+        "right": 910.65625,
+        "bottom": 107,
+        "left": 455.328125
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation tools",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 910.65625,
+        "y": 63,
+        "width": 455.34375,
+        "height": 44,
+        "top": 63,
+        "right": 1366,
+        "bottom": 107,
+        "left": 910.65625
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels [data-menu-stop=\"route-brackets\"]",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 24,
+        "y": 441.5,
+        "width": 430,
+        "height": 220.5,
+        "top": 441.5,
+        "right": 454,
+        "bottom": 662,
+        "left": 24
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels .menuContinue",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1112,
+        "y": 688.5,
+        "width": 230,
+        "height": 48,
+        "top": 688.5,
+        "right": 1342,
+        "bottom": 736.5,
+        "left": 1112
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels #navigationWorksheet",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 997.109375,
+        "y": 688.5,
+        "width": 102.890625,
+        "height": 48,
+        "top": 688.5,
+        "right": 1100,
+        "bottom": 736.5,
+        "left": 997.109375
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation world",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 52,
+        "y": 1,
+        "width": 438,
+        "height": 51,
+        "top": 1,
+        "right": 490,
+        "bottom": 52,
+        "left": 52
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation menu",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 490,
+        "y": 1,
+        "width": 438,
+        "height": 51,
+        "top": 1,
+        "right": 928,
+        "bottom": 52,
+        "left": 490
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation tools",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 928,
+        "y": 1,
+        "width": 438,
+        "height": 51,
+        "top": 1,
+        "right": 1366,
+        "bottom": 52,
+        "left": 928
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels [data-menu-stop=\"route-brackets\"]",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 24,
+        "y": 414,
+        "width": 430,
+        "height": 248,
+        "top": 414,
+        "right": 454,
+        "bottom": 662,
+        "left": 24
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels .menuContinue",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1112,
+        "y": 688.5,
+        "width": 230,
+        "height": 48,
+        "top": 688.5,
+        "right": 1342,
+        "bottom": 736.5,
+        "left": 1112
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels #navigationWorksheet",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 997.109375,
+        "y": 688.5,
+        "width": 102.890625,
+        "height": 48,
+        "top": 688.5,
+        "right": 1100,
+        "bottom": 736.5,
+        "left": 997.109375
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation world",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 0,
+        "y": 79,
+        "width": 130,
+        "height": 44,
+        "top": 79,
+        "right": 130,
+        "bottom": 123,
+        "left": 0
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation menu",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 130,
+        "y": 79,
+        "width": 130,
+        "height": 44,
+        "top": 79,
+        "right": 260,
+        "bottom": 123,
+        "left": 130
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation tools",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 260,
+        "y": 79,
+        "width": 130,
+        "height": 44,
+        "top": 79,
+        "right": 390,
+        "bottom": 123,
+        "left": 260
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels [data-menu-stop=\"route-brackets\"]",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 10,
+        "y": 448.5,
+        "width": 182,
+        "height": 121.75,
+        "top": 448.5,
+        "right": 192,
+        "bottom": 570.25,
+        "left": 10
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels .menuContinue",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 198,
+        "y": 759.1875,
+        "width": 182,
+        "height": 44,
+        "top": 759.1875,
+        "right": 380,
+        "bottom": 803.1875,
+        "left": 198
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels #navigationWorksheet",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 10,
+        "y": 759.1875,
+        "width": 182,
+        "height": 44,
+        "top": 759.1875,
+        "right": 192,
+        "bottom": 803.1875,
+        "left": 10
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation world",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 52,
+        "y": 1,
+        "width": 112.65625,
+        "height": 51,
+        "top": 1,
+        "right": 164.65625,
+        "bottom": 52,
+        "left": 52
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation menu",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 164.65625,
+        "y": 1,
+        "width": 112.671875,
+        "height": 51,
+        "top": 1,
+        "right": 277.328125,
+        "bottom": 52,
+        "left": 164.65625
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation tools",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 277.328125,
+        "y": 1,
+        "width": 112.65625,
+        "height": 51,
+        "top": 1,
+        "right": 389.984375,
+        "bottom": 52,
+        "left": 277.328125
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels [data-menu-stop=\"route-brackets\"]",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 10,
+        "y": 413,
+        "width": 182,
+        "height": 139.5,
+        "top": 413,
+        "right": 192,
+        "bottom": 552.5,
+        "left": 10
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels .menuContinue",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 198,
+        "y": 759.1875,
+        "width": 182,
+        "height": 44,
+        "top": 759.1875,
+        "right": 380,
+        "bottom": 803.1875,
+        "left": 198
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels #navigationWorksheet",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 10,
+        "y": 759.1875,
+        "width": 182,
+        "height": 44,
+        "top": 759.1875,
+        "right": 192,
+        "bottom": 803.1875,
+        "left": 10
+      },
+      "issues": [],
+      "width": 390,
+      "height": 844
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation world",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 0,
+        "y": 54,
+        "width": 213.328125,
+        "height": 44,
+        "top": 54,
+        "right": 213.328125,
+        "bottom": 98,
+        "left": 0
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation menu",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 213.328125,
+        "y": 54,
+        "width": 213.328125,
+        "height": 44,
+        "top": 54,
+        "right": 426.65625,
+        "bottom": 98,
+        "left": 213.328125
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation tools",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 426.65625,
+        "y": 54,
+        "width": 213.328125,
+        "height": 44,
+        "top": 54,
+        "right": 639.984375,
+        "bottom": 98,
+        "left": 426.65625
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels [data-menu-stop=\"route-brackets\"]",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 12,
+        "y": 219,
+        "width": 201.328125,
+        "height": 73,
+        "top": 219,
+        "right": 213.328125,
+        "bottom": 292,
+        "left": 12
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels .menuContinue",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 492,
+        "y": 296.5,
+        "width": 136,
+        "height": 44,
+        "top": 296.5,
+        "right": 628,
+        "bottom": 340.5,
+        "left": 492
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels #navigationWorksheet",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 406.953125,
+        "y": 296.5,
+        "width": 77.046875,
+        "height": 44,
+        "top": 296.5,
+        "right": 484,
+        "bottom": 340.5,
+        "left": 406.953125
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation world",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 52,
+        "y": 1,
+        "width": 196,
+        "height": 51,
+        "top": 1,
+        "right": 248,
+        "bottom": 52,
+        "left": 52
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation menu",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 248,
+        "y": 1,
+        "width": 196,
+        "height": 51,
+        "top": 1,
+        "right": 444,
+        "bottom": 52,
+        "left": 248
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels navigation tools",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 444,
+        "y": 1,
+        "width": 196,
+        "height": 51,
+        "top": 1,
+        "right": 640,
+        "bottom": 52,
+        "left": 444
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels [data-menu-stop=\"route-brackets\"]",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 12,
+        "y": 196,
+        "width": 201.328125,
+        "height": 96,
+        "top": 196,
+        "right": 213.328125,
+        "bottom": 292,
+        "left": 12
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels .menuContinue",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 492,
+        "y": 296.5,
+        "width": 136,
+        "height": 44,
+        "top": 296.5,
+        "right": 628,
+        "bottom": 340.5,
+        "left": 492
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "standalone-levels #navigationWorksheet",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 406.953125,
+        "y": 296.5,
+        "width": 77.046875,
+        "height": 44,
+        "top": 296.5,
+        "right": 484,
+        "bottom": 340.5,
+        "left": 406.953125
+      },
+      "issues": [],
+      "width": 640,
+      "height": 360
+    },
+    {
+      "phase": "Standalone guest",
+      "label": "Standalone reload restore",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 6,
+        "y": 6,
+        "width": 44,
+        "height": 44,
+        "top": 6,
+        "right": 50,
+        "bottom": 50,
+        "left": 6
+      },
+      "issues": [],
+      "width": 1366,
+      "height": 768
+    }
+  ],
+  "screenshots": [
+    "os-werelden-1366-expanded.png",
+    "os-werelden-1366-collapsed.png",
+    "os-werelden-390-expanded.png",
+    "os-werelden-390-collapsed.png",
+    "os-werelden-640-expanded.png",
+    "os-werelden-640-collapsed.png",
+    "os-vergelijkingen-levels-1366-expanded.png",
+    "os-vergelijkingen-levels-1366-collapsed.png",
+    "os-vergelijkingen-levels-390-expanded.png",
+    "os-vergelijkingen-levels-390-collapsed.png",
+    "os-vergelijkingen-levels-640-expanded.png",
+    "os-vergelijkingen-levels-640-collapsed.png",
+    "os-vergelijkingen-werkbord-1366-expanded.png",
+    "os-vergelijkingen-werkbord-1366-collapsed.png",
+    "os-vergelijkingen-werkbord-390-expanded.png",
+    "os-vergelijkingen-werkbord-390-collapsed.png",
+    "os-vergelijkingen-werkbord-640-expanded.png",
+    "os-vergelijkingen-werkbord-640-collapsed.png",
+    "os-stelsels-levels-1366-expanded.png",
+    "os-stelsels-levels-1366-collapsed.png",
+    "os-stelsels-levels-390-expanded.png",
+    "os-stelsels-levels-390-collapsed.png",
+    "os-stelsels-levels-640-expanded.png",
+    "os-stelsels-levels-640-collapsed.png",
+    "os-stelsels-voorstel-1366-expanded.png",
+    "os-stelsels-voorstel-1366-collapsed.png",
+    "os-stelsels-voorstel-390-expanded.png",
+    "os-stelsels-voorstel-390-collapsed.png",
+    "os-stelsels-voorstel-640-expanded.png",
+    "os-stelsels-voorstel-640-collapsed.png",
+    "standalone-standalone-levels-1366-expanded.png",
+    "standalone-standalone-levels-1366-collapsed.png",
+    "standalone-standalone-levels-390-expanded.png",
+    "standalone-standalone-levels-390-collapsed.png",
+    "standalone-standalone-levels-640-expanded.png",
+    "standalone-standalone-levels-640-collapsed.png",
+    "standalone-klasbattle-guest.png",
+    "standalone-klasbattle-teacher.png",
+    "standalone-klasbattle-student.png"
+  ],
+  "errors": [],
+  "missing": [],
+  "progressCalls": [
+    {
+      "action": "load",
+      "game": "algebra-trainer",
+      "id": "algebra-student"
+    },
+    {
+      "action": "load",
+      "game": "algebra-trainer",
+      "id": "algebra-student"
+    },
+    {
+      "action": "save",
+      "game": "algebra-trainer",
+      "id": "algebra-student"
+    },
+    {
+      "action": "load",
+      "game": "algebra-trainer",
+      "id": "algebra-student"
+    }
+  ],
+  "remoteBlocked": [],
+  "passed": true,
+  "browser": "154.0.8037.58",
+  "sourceHashes": {
+    "os/desktop.js": "712daf07ab9a728c374118aea8b936ac720a3b3221868364de216b5522dbca46",
+    "os/desktop.css": "3cea18380ec508ebef9f0bce7a2848db16f836f024dfa04415cd8af0fa78818a",
+    "os/index.html": "9f7390adabe66ecd0c775428a92c7bc963833d8af3f00409865ab3ae45517c97",
+    "shared/leraarbob-topbar.js": "c8e7424de3c3974737761136e8943a3ea18e9eeec03d488ba15aa6386c73f2fb",
+    "shared/platform-routes.js": "7cb5f27d448086f0de4be9d80f652bb100ffb25a15652c617a5f47e5db090267",
+    "games/algebra-trainer/index.html": "a1fce910394eb1eb4ac3afc20d2db11a6bbd6b4fcfae855c4801a13ae63df353",
+    "games/algebra-trainer/stelsels.html": "ad92a0656a9d509700a0593b78ea6dc104df43f3ac2f6a0b10009e89a4f555fb",
+    "games/algebra-trainer/shell.js": "5c81ba365113aeca2578ae2b3221e7dde135ca7cc8fc07430d1df3a9d0324a74",
+    "games/algebra-trainer/shell.css": "0ce6ddf4e785ea464802432741c1d582bcf2066c77cd9dfa5ce82a1f0009b988",
+    "games/algebra-trainer/navigation.js": "59073efe0e083e9e7705668569b1447058023c11ace3d9a84a416a7ff075cc5f",
+    "games/algebra-trainer/navigation.css": "cd56b5710741a5b5272ec88ba78901cf5368e406853199fe6af4693d90a8ed97",
+    "games/algebra-trainer/world.css": "ca23f0d31ef7d67ec98c6b4a8672e4e6a88e58c6f5fb453fded84cfdfae4ed8d",
+    "games/algebra-trainer/trainer.js": "d0ee98c0401d426391effbb6ca7192270911d71e87f464bc9e406c38b54abe4e",
+    "games/algebra-trainer/stelsels/app.js": "4ee36b714eac8fee1f2b3eeac885e04ab36bb4a25a0119d62be3755d0a6cf7e6",
+    "games/algebra-trainer/stelsels/workspace.css": "703ab9906b377de861bde3bb7fff03d1d2d9b08b11c43623dcb9a28f4a213e2a",
+    "tests/algebra-os-browser.cjs": "fc92e1168e3bc62111a11f430c53dd750f4df0289b0270ffd23b4d029175dfc1"
+  }
+}

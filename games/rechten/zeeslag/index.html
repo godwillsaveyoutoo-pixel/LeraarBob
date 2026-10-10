@@ -8,9 +8,9 @@
 <link rel="stylesheet" href="zeeslag.css">
 <script src="../../../shared/axioma-platform.js"></script>
 <script src="../../../shared/leraarbob-topbar.js" data-title="Rechten Zeeslag" defer></script>
-<link rel="stylesheet" href="../arcade/theme.css">
+<link rel="stylesheet" href="../arcade/theme.css?v=20261010-aim">
 <script src="../arcade/core.js"></script>
-<script src="../arcade/bridge.js" data-arena="zeeslag"></script>
+<script src="../arcade/bridge.js?v=20261010-aim" data-arena="zeeslag"></script>
 </head>
 <body data-arcade="zeeslag">
 <div id="app">
@@ -66,25 +66,26 @@
             <div class="aimComposer" id="aimComposer" hidden>
               <div class="aimCard">
                 <div class="aimEyebrow">Aanvalconsole · kies je rechte</div>
-                <div class="equationBuilder" aria-label="Kies de richtingscoëfficiënt en de startwaarde">
-                  <span>y =</span>
-                  <div>
+                <div class="equationBuilder" role="status" aria-live="polite" aria-atomic="true">
+                  <span class="equationVisual" aria-hidden="true"><span>y = </span><span class="aimSlope" id="aValue">0</span><span>x </span><span id="bSign">+</span><span class="aimIntercept" id="bValue">0</span></span>
+                  <span class="aimAccessible" id="aimEquationText">y = 0x + 0</span>
+                </div>
+                <div class="aimAdjustments" aria-label="Stel je rechte in">
+                  <div class="aimParameter" role="group" aria-labelledby="aCaption">
+                    <div class="aimLabel aimSlope" id="aCaption">Helling <i>a</i></div>
                     <div class="paramControl">
-                      <button class="paramBtn" id="aUpBtn" aria-label="Volgende coëfficiënt van x">↑</button>
-                      <div class="paramValue" id="aValue">0</div>
-                      <button class="paramBtn" id="aDownBtn" aria-label="Vorige coëfficiënt van x">↓</button>
+                      <button class="paramBtn" id="aDownBtn" aria-label="Verlaag helling a">−</button>
+                      <output class="paramValue aimSlope" id="aSettingValue" aria-labelledby="aCaption" aria-live="off">0</output>
+                      <button class="paramBtn" id="aUpBtn" aria-label="Verhoog helling a">+</button>
                     </div>
-                    <div class="paramCaption">coëfficiënt van x</div>
                   </div>
-                  <span>x</span>
-                  <span id="bSign">+</span>
-                  <div>
+                  <div class="aimParameter" role="group" aria-labelledby="bCaption">
+                    <div class="aimLabel aimIntercept" id="bCaption">Startwaarde <i>b</i></div>
                     <div class="paramControl">
-                      <button class="paramBtn" id="bUpBtn" aria-label="Verhoog b">↑</button>
-                      <div class="paramValue" id="bValue">0</div>
-                      <button class="paramBtn" id="bDownBtn" aria-label="Verlaag b">↓</button>
+                      <button class="paramBtn" id="bDownBtn" aria-label="Verlaag startwaarde b">−</button>
+                      <output class="paramValue aimIntercept" id="bSettingValue" aria-labelledby="bCaption" aria-live="off">0</output>
+                      <button class="paramBtn" id="bUpBtn" aria-label="Verhoog startwaarde b">+</button>
                     </div>
-                    <div class="paramCaption">b · van −4 tot 4</div>
                   </div>
                 </div>
                 <button class="fireBtn" id="fireBtn" disabled>VUUR</button>
@@ -130,7 +131,7 @@
 <script src="../../../shared/supabase-config.js"></script>
 <script src="../../../shared/axioma-auth.js"></script>
 <script src="../../../shared/axioma-social.js"></script>
-<script type="text/axioma-game" data-src="zeeslag.js"></script>
+<script type="text/axioma-game" data-src="zeeslag.js?v=20261010-workforms"></script>
 <script src="../../../shared/axioma-game-adapters.js"></script>
 <script src="../../../shared/axioma-game.js" data-game-id="rechten-zeeslag"></script>
 </body>

@@ -106,34 +106,34 @@ window.AXIOMA_CATALOG = [
         {
           "id": "hellingrug",
           "title": "Hellingrug",
-          "href": "games/rechten/rechtenwereld/worksheets.html?world=hellingrug",
+          "href": "oefenbladen/maken.html?source=rechtenwereld:hellingrug&topic=hellingrug",
           "providerId": "rechtenwereld",
           "topicId": "hellingrug",
-          "description": "Verschillen, richtingscoëfficiënt en bijzondere rechten."
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         },
         {
           "id": "grenspas",
           "title": "Grenspas",
-          "href": "games/rechten/rechtenwereld/worksheets.html?world=grenspas",
+          "href": "oefenbladen/maken.html?source=rechtenwereld:grenspas&topic=grenspas",
           "providerId": "rechtenwereld",
           "topicId": "grenspas",
-          "description": "Nulwaarden, tekenschema’s en positieve of negatieve gebieden."
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         },
         {
           "id": "formulewerf",
           "title": "Formulewerf",
-          "href": "games/rechten/rechtenwereld/worksheets.html?world=formulewerf",
+          "href": "oefenbladen/maken.html?source=rechtenwereld:formulewerf&topic=formulewerf",
           "providerId": "rechtenwereld",
           "topicId": "formulewerf",
-          "description": "Rechten tekenen, vergelijkingen herschrijven en voorschriften bepalen."
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         },
         {
           "id": "signaalstad",
           "title": "Signaalstad",
-          "href": "games/rechten/rechtenwereld/worksheets.html?world=signaalstad",
+          "href": "oefenbladen/maken.html?source=rechtenwereld:signaalstad&topic=signaalstad",
           "providerId": "rechtenwereld",
           "topicId": "signaalstad",
-          "description": "Punten aflezen uit een tabel en de bijbehorende rechte tekenen."
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         }
       ]
     },
@@ -1225,18 +1225,18 @@ window.AXIOMA_CATALOG = [
         {
           "id": "equations",
           "title": "Vergelijkingen",
-          "href": "games/algebra-trainer/?world=equations&screen=menu",
+          "href": "oefenbladen/maken.html?source=algebra-trainer:equations&topic=equations",
           "providerId": "algebra-trainer",
           "topicId": "equations",
-          "description": "Kies een level en maak het bijbehorende oefenblad met verbetersleutel."
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         },
         {
           "id": "systems",
           "title": "Stelsels",
-          "href": "games/algebra-trainer/stelsels.html?world=systems&screen=menu",
+          "href": "oefenbladen/maken.html?source=algebra-trainer:systems&topic=systems",
           "providerId": "algebra-trainer",
           "topicId": "systems",
-          "description": "Kies een level en maak het bijbehorende oefenblad met verbetersleutel."
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         }
       ]
     },
@@ -1473,15 +1473,15 @@ window.AXIOMA_CATALOG = [
         {
           "id": "operations",
           "title": "Machten, schrijfwijze en wortels",
-          "href": "games/bewerkingen-trainer/?intent=worksheet&screen=setup",
+          "href": "oefenbladen/maken.html?source=bewerkingen-trainer:operations",
           "providerId": "bewerkingen-trainer",
-          "description": "Kies opgaven en print met een verbetersleutel.",
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap.",
           "topics": [
             "machten",
             "wetenschappelijk",
             "wortels"
           ],
-          "topicParam": "world"
+          "topicParam": "topic"
         }
       ]
     },
@@ -1636,9 +1636,9 @@ window.AXIOMA_CATALOG = [
         {
           "id": "operations",
           "title": "Machten, schrijfwijze en wortels",
-          "href": "games/bewerkingen-trainer/?intent=worksheet&screen=setup",
+          "href": "oefenbladen/maken.html?source=bewerkingen-trainer:operations",
           "providerId": "bewerkingen-trainer",
-          "description": "Kies opgaven en print met een verbetersleutel."
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         }
       ]
     },

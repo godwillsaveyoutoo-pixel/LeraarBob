@@ -198,7 +198,7 @@ test('All three topics offer the existing role-correct modes and worksheets, wit
    if(mode==='classlearn'){assert.equal(url.searchParams.get('audience'),'class');assert.equal(url.searchParams.get('view'),'learn');}
   }
   const sheet=registry.worksheets('getallenwereld',{topicId:topic});assert.equal(sheet.length,1);
-  assert.equal(new URL(sheet[0].href,registry.baseURL).searchParams.get('intent'),'worksheet');
+  assert.equal(new URL(sheet[0].href,registry.baseURL).href,new URL('oefenbladen/maken.html?source=bewerkingen-trainer:operations',registry.baseURL).href);
  }
  assert.deepEqual(registry.components('getallenwereld').map(game=>({id:game.id,progressId:game.progressId,total:game.progressTotal})),[
   {id:'getallenwereld',progressId:'getallenwereld',total:19},{id:'bewerkingen-trainer',progressId:'bewerkingen-trainer',total:16}

@@ -1,0 +1,2419 @@
+{
+  "scope": "Actual localhost Chromium native generators and IndexedDB archive, 100% zoom. Fictitious isolated account identities; all external requests blocked. No production login, cloud storage or progress writes.",
+  "viewports": [
+    {
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": [
+    {
+      "name": "Hellingrug actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload"
+    },
+    {
+      "name": "Grenspas actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload"
+    },
+    {
+      "name": "Formulewerf actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload"
+    },
+    {
+      "name": "Signaalstad actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload"
+    },
+    {
+      "name": "Vergelijkingen actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload"
+    },
+    {
+      "name": "Stelsels actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload"
+    },
+    {
+      "name": "Machten actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload"
+    },
+    {
+      "name": "Vierkantswortels actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload"
+    },
+    {
+      "name": "Wetenschappelijke notatie actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload"
+    },
+    {
+      "name": "Thematic worksheet folders, saved folders, breadcrumb and all archive controls 1366 expanded"
+    },
+    {
+      "name": "Thematic worksheet folders, saved folders, breadcrumb and all archive controls 1366 collapsed/restore"
+    },
+    {
+      "name": "Thematic worksheet folders, saved folders, breadcrumb and all archive controls 390 expanded"
+    },
+    {
+      "name": "Thematic worksheet folders, saved folders, breadcrumb and all archive controls 390 collapsed/restore"
+    },
+    {
+      "name": "Worksheet OS collapsed preference survives full browser reload and restore"
+    },
+    {
+      "name": "Actual complete JSON export, teacher/student/guest account isolation and native frame disposal"
+    },
+    {
+      "name": "Confirmed deletion removes only the selected saved series"
+    },
+    {
+      "name": "Actual Kopie terugzetten upload restores the exact generated question/key pair after deletion"
+    },
+    {
+      "name": "Actual standalone HTML export contains both unchanged native documents and embedded styles"
+    },
+    {
+      "name": "Untrusted postMessage payload cannot add an archived worksheet"
+    },
+    {
+      "name": "Standalone and pending-account viewers clear old pages; in-flight export remains blocked and disabled after owner change"
+    },
+    {
+      "name": "Blocked local storage produces visible failed-save and archive errors; native questions and print remain usable"
+    },
+    {
+      "name": "Nine actual saved question/key documents print visibly and export to A4 PDF with original page content"
+    }
+  ],
+  "layout": [
+    {
+      "label": "Worksheet rechten folder 1366 collapsed=false",
+      "selector": "[data-worksheet-theme=\"rechten\"]",
+      "rect": {
+        "x": 54,
+        "y": 267,
+        "width": 408.65625,
+        "height": 178,
+        "top": 267,
+        "right": 462.65625,
+        "bottom": 445,
+        "left": 54
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Breadcrumb back rechten 1366 collapsed=false",
+      "selector": ".worksheet-path button:first-of-type",
+      "rect": {
+        "x": 54,
+        "y": 207,
+        "width": 111.4375,
+        "height": 44,
+        "top": 207,
+        "right": 165.4375,
+        "bottom": 251,
+        "left": 54
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Worksheet getallen folder 1366 collapsed=false",
+      "selector": "[data-worksheet-theme=\"getallen\"]",
+      "rect": {
+        "x": 478.65625,
+        "y": 267,
+        "width": 408.671875,
+        "height": 178,
+        "top": 267,
+        "right": 887.328125,
+        "bottom": 445,
+        "left": 478.65625
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Breadcrumb back getallen 1366 collapsed=false",
+      "selector": ".worksheet-path button:first-of-type",
+      "rect": {
+        "x": 54,
+        "y": 207,
+        "width": 111.4375,
+        "height": 44,
+        "top": 207,
+        "right": 165.4375,
+        "bottom": 251,
+        "left": 54
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Worksheet algebra folder 1366 collapsed=false",
+      "selector": "[data-worksheet-theme=\"algebra\"]",
+      "rect": {
+        "x": 903.328125,
+        "y": 267,
+        "width": 408.65625,
+        "height": 178,
+        "top": 267,
+        "right": 1311.984375,
+        "bottom": 445,
+        "left": 903.328125
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Breadcrumb back algebra 1366 collapsed=false",
+      "selector": ".worksheet-path button:first-of-type",
+      "rect": {
+        "x": 54,
+        "y": 207,
+        "width": 111.4375,
+        "height": 44,
+        "top": 207,
+        "right": 165.4375,
+        "bottom": 251,
+        "left": 54
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Saved theme folder 1366 collapsed=false",
+      "selector": "[data-worksheet-theme=\"rechten\"]",
+      "rect": {
+        "x": 54,
+        "y": 345,
+        "width": 408.65625,
+        "height": 178,
+        "top": 345,
+        "right": 462.65625,
+        "bottom": 523,
+        "left": 54
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Actual saved A4 pages 1366 collapsed=false",
+      "document": {
+        "viewport": {
+          "width": 1366,
+          "height": 560
+        },
+        "scrollWidth": 1366,
+        "pages": [
+          {
+            "rect": {
+              "x": 286,
+              "y": 99,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 99,
+              "right": 1079.6875,
+              "bottom": 1221.515625,
+              "left": 286
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          },
+          {
+            "rect": {
+              "x": 286,
+              "y": 1238,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 1238,
+              "right": 1079.6875,
+              "bottom": 2360.515625,
+              "left": 286
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          },
+          {
+            "rect": {
+              "x": 286,
+              "y": 2377,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 2377,
+              "right": 1079.6875,
+              "bottom": 3499.515625,
+              "left": 286
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          },
+          {
+            "rect": {
+              "x": 286,
+              "y": 3516,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 3516,
+              "right": 1079.6875,
+              "bottom": 4638.515625,
+              "left": 286
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "Archive action #printWorksheet 1366 collapsed=false",
+      "selector": "#printWorksheet",
+      "rect": {
+        "x": 908.25,
+        "y": 15.5,
+        "width": 130.75,
+        "height": 44,
+        "top": 15.5,
+        "right": 1039,
+        "bottom": 59.5,
+        "left": 908.25
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 642
+      }
+    },
+    {
+      "label": "Archive action #downloadWorksheet 1366 collapsed=false",
+      "selector": "#downloadWorksheet",
+      "rect": {
+        "x": 1047,
+        "y": 15.5,
+        "width": 160.671875,
+        "height": 44,
+        "top": 15.5,
+        "right": 1207.671875,
+        "bottom": 59.5,
+        "left": 1047
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 642
+      }
+    },
+    {
+      "label": "Archive action #downloadBackup 1366 collapsed=false",
+      "selector": "#downloadBackup",
+      "rect": {
+        "x": 1215.671875,
+        "y": 15.5,
+        "width": 130.328125,
+        "height": 44,
+        "top": 15.5,
+        "right": 1346,
+        "bottom": 59.5,
+        "left": 1215.671875
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 642
+      }
+    },
+    {
+      "label": "OS restore 1366",
+      "selector": ".lb-restore:not([hidden])",
+      "rect": {
+        "x": 1109,
+        "y": 712.5,
+        "width": 44,
+        "height": 44,
+        "top": 712.5,
+        "right": 1153,
+        "bottom": 756.5,
+        "left": 1109
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Worksheet rechten folder 1366 collapsed=true",
+      "selector": "[data-worksheet-theme=\"rechten\"]",
+      "rect": {
+        "x": 54,
+        "y": 205,
+        "width": 408.65625,
+        "height": 178,
+        "top": 205,
+        "right": 462.65625,
+        "bottom": 383,
+        "left": 54
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Breadcrumb back rechten 1366 collapsed=true",
+      "selector": ".worksheet-path button:first-of-type",
+      "rect": {
+        "x": 54,
+        "y": 145,
+        "width": 111.4375,
+        "height": 44,
+        "top": 145,
+        "right": 165.4375,
+        "bottom": 189,
+        "left": 54
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Worksheet getallen folder 1366 collapsed=true",
+      "selector": "[data-worksheet-theme=\"getallen\"]",
+      "rect": {
+        "x": 478.65625,
+        "y": 205,
+        "width": 408.671875,
+        "height": 178,
+        "top": 205,
+        "right": 887.328125,
+        "bottom": 383,
+        "left": 478.65625
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Breadcrumb back getallen 1366 collapsed=true",
+      "selector": ".worksheet-path button:first-of-type",
+      "rect": {
+        "x": 54,
+        "y": 145,
+        "width": 111.4375,
+        "height": 44,
+        "top": 145,
+        "right": 165.4375,
+        "bottom": 189,
+        "left": 54
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Worksheet algebra folder 1366 collapsed=true",
+      "selector": "[data-worksheet-theme=\"algebra\"]",
+      "rect": {
+        "x": 903.328125,
+        "y": 205,
+        "width": 408.65625,
+        "height": 178,
+        "top": 205,
+        "right": 1311.984375,
+        "bottom": 383,
+        "left": 903.328125
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Breadcrumb back algebra 1366 collapsed=true",
+      "selector": ".worksheet-path button:first-of-type",
+      "rect": {
+        "x": 54,
+        "y": 145,
+        "width": 111.4375,
+        "height": 44,
+        "top": 145,
+        "right": 165.4375,
+        "bottom": 189,
+        "left": 54
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Saved theme folder 1366 collapsed=true",
+      "selector": "[data-worksheet-theme=\"rechten\"]",
+      "rect": {
+        "x": 54,
+        "y": 283,
+        "width": 408.65625,
+        "height": 178,
+        "top": 283,
+        "right": 462.65625,
+        "bottom": 461,
+        "left": 54
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "label": "Actual saved A4 pages 1366 collapsed=true",
+      "document": {
+        "viewport": {
+          "width": 1366,
+          "height": 618
+        },
+        "scrollWidth": 1366,
+        "pages": [
+          {
+            "rect": {
+              "x": 286,
+              "y": 99,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 99,
+              "right": 1079.6875,
+              "bottom": 1221.515625,
+              "left": 286
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          },
+          {
+            "rect": {
+              "x": 286,
+              "y": 1238,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 1238,
+              "right": 1079.6875,
+              "bottom": 2360.515625,
+              "left": 286
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          },
+          {
+            "rect": {
+              "x": 286,
+              "y": 2377,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 2377,
+              "right": 1079.6875,
+              "bottom": 3499.515625,
+              "left": 286
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          },
+          {
+            "rect": {
+              "x": 286,
+              "y": 3516,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 3516,
+              "right": 1079.6875,
+              "bottom": 4638.515625,
+              "left": 286
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "Archive action #printWorksheet 1366 collapsed=true",
+      "selector": "#printWorksheet",
+      "rect": {
+        "x": 908.25,
+        "y": 15.5,
+        "width": 130.75,
+        "height": 44,
+        "top": 15.5,
+        "right": 1039,
+        "bottom": 59.5,
+        "left": 908.25
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 700
+      }
+    },
+    {
+      "label": "Archive action #downloadWorksheet 1366 collapsed=true",
+      "selector": "#downloadWorksheet",
+      "rect": {
+        "x": 1047,
+        "y": 15.5,
+        "width": 160.671875,
+        "height": 44,
+        "top": 15.5,
+        "right": 1207.671875,
+        "bottom": 59.5,
+        "left": 1047
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 700
+      }
+    },
+    {
+      "label": "Archive action #downloadBackup 1366 collapsed=true",
+      "selector": "#downloadBackup",
+      "rect": {
+        "x": 1215.671875,
+        "y": 15.5,
+        "width": 130.328125,
+        "height": 44,
+        "top": 15.5,
+        "right": 1346,
+        "bottom": 59.5,
+        "left": 1215.671875
+      },
+      "issues": [],
+      "viewport": {
+        "width": 1366,
+        "height": 700
+      }
+    },
+    {
+      "label": "Worksheet rechten folder 390 collapsed=false",
+      "selector": "[data-worksheet-theme=\"rechten\"]",
+      "rect": {
+        "x": 22,
+        "y": 149,
+        "width": 346,
+        "height": 154.5,
+        "top": 149,
+        "right": 368,
+        "bottom": 303.5,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Breadcrumb back rechten 390 collapsed=false",
+      "selector": ".worksheet-path button:first-of-type",
+      "rect": {
+        "x": 22,
+        "y": 217,
+        "width": 93.234375,
+        "height": 44,
+        "top": 217,
+        "right": 115.234375,
+        "bottom": 261,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Worksheet getallen folder 390 collapsed=false",
+      "selector": "[data-worksheet-theme=\"getallen\"]",
+      "rect": {
+        "x": 22,
+        "y": 441.5,
+        "width": 346,
+        "height": 154.5,
+        "top": 441.5,
+        "right": 368,
+        "bottom": 596,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Breadcrumb back getallen 390 collapsed=false",
+      "selector": ".worksheet-path button:first-of-type",
+      "rect": {
+        "x": 22,
+        "y": 217,
+        "width": 93.234375,
+        "height": 44,
+        "top": 217,
+        "right": 115.234375,
+        "bottom": 261,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Worksheet algebra folder 390 collapsed=false",
+      "selector": "[data-worksheet-theme=\"algebra\"]",
+      "rect": {
+        "x": 22,
+        "y": 587,
+        "width": 346,
+        "height": 154.5,
+        "top": 587,
+        "right": 368,
+        "bottom": 741.5,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Breadcrumb back algebra 390 collapsed=false",
+      "selector": ".worksheet-path button:first-of-type",
+      "rect": {
+        "x": 22,
+        "y": 217,
+        "width": 93.234375,
+        "height": 44,
+        "top": 217,
+        "right": 115.234375,
+        "bottom": 261,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Saved theme folder 390 collapsed=false",
+      "selector": "[data-worksheet-theme=\"rechten\"]",
+      "rect": {
+        "x": 22,
+        "y": 373,
+        "width": 346,
+        "height": 154.5,
+        "top": 373,
+        "right": 368,
+        "bottom": 527.5,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Actual saved A4 pages 390 collapsed=false",
+      "document": {
+        "viewport": {
+          "width": 390,
+          "height": 526
+        },
+        "scrollWidth": 390,
+        "pages": [
+          {
+            "rect": {
+              "x": 16,
+              "y": 99,
+              "width": 357.8591003417969,
+              "height": 506.12164306640625,
+              "top": 99,
+              "right": 373.8591003417969,
+              "bottom": 605.1216430664062,
+              "left": 16
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          },
+          {
+            "rect": {
+              "x": 16,
+              "y": 621.328125,
+              "width": 357.8591003417969,
+              "height": 506.12158203125,
+              "top": 621.328125,
+              "right": 373.8591003417969,
+              "bottom": 1127.44970703125,
+              "left": 16
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          },
+          {
+            "rect": {
+              "x": 16,
+              "y": 1143.65625,
+              "width": 357.8591003417969,
+              "height": 506.12158203125,
+              "top": 1143.65625,
+              "right": 373.8591003417969,
+              "bottom": 1649.77783203125,
+              "left": 16
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          },
+          {
+            "rect": {
+              "x": 16,
+              "y": 1665.984375,
+              "width": 357.8591003417969,
+              "height": 506.12158203125,
+              "top": 1665.984375,
+              "right": 373.8591003417969,
+              "bottom": 2172.10595703125,
+              "left": 16
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "Archive action #printWorksheet 390 collapsed=false",
+      "selector": "#printWorksheet",
+      "rect": {
+        "x": 156.125,
+        "y": 68,
+        "width": 111.515625,
+        "height": 44,
+        "top": 68,
+        "right": 267.640625,
+        "bottom": 112,
+        "left": 156.125
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 705
+      }
+    },
+    {
+      "label": "Archive action #downloadWorksheet 390 collapsed=false",
+      "selector": "#downloadWorksheet",
+      "rect": {
+        "x": 10,
+        "y": 118,
+        "width": 137.15625,
+        "height": 44,
+        "top": 118,
+        "right": 147.15625,
+        "bottom": 162,
+        "left": 10
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 705
+      }
+    },
+    {
+      "label": "Archive action #downloadBackup 390 collapsed=false",
+      "selector": "#downloadBackup",
+      "rect": {
+        "x": 152.15625,
+        "y": 118,
+        "width": 111.140625,
+        "height": 44,
+        "top": 118,
+        "right": 263.296875,
+        "bottom": 162,
+        "left": 152.15625
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 705
+      }
+    },
+    {
+      "label": "OS restore 390",
+      "selector": ".lb-restore:not([hidden])",
+      "rect": {
+        "x": 242,
+        "y": 791.5,
+        "width": 44,
+        "height": 44,
+        "top": 791.5,
+        "right": 286,
+        "bottom": 835.5,
+        "left": 242
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Worksheet rechten folder 390 collapsed=true",
+      "selector": "[data-worksheet-theme=\"rechten\"]",
+      "rect": {
+        "x": 22,
+        "y": 81,
+        "width": 346,
+        "height": 154.5,
+        "top": 81,
+        "right": 368,
+        "bottom": 235.5,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Breadcrumb back rechten 390 collapsed=true",
+      "selector": ".worksheet-path button:first-of-type",
+      "rect": {
+        "x": 22,
+        "y": 140,
+        "width": 93.234375,
+        "height": 44,
+        "top": 140,
+        "right": 115.234375,
+        "bottom": 184,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Worksheet getallen folder 390 collapsed=true",
+      "selector": "[data-worksheet-theme=\"getallen\"]",
+      "rect": {
+        "x": 22,
+        "y": 364.5,
+        "width": 346,
+        "height": 154.5,
+        "top": 364.5,
+        "right": 368,
+        "bottom": 519,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Breadcrumb back getallen 390 collapsed=true",
+      "selector": ".worksheet-path button:first-of-type",
+      "rect": {
+        "x": 22,
+        "y": 140,
+        "width": 93.234375,
+        "height": 44,
+        "top": 140,
+        "right": 115.234375,
+        "bottom": 184,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Worksheet algebra folder 390 collapsed=true",
+      "selector": "[data-worksheet-theme=\"algebra\"]",
+      "rect": {
+        "x": 22,
+        "y": 529,
+        "width": 346,
+        "height": 154.5,
+        "top": 529,
+        "right": 368,
+        "bottom": 683.5,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Breadcrumb back algebra 390 collapsed=true",
+      "selector": ".worksheet-path button:first-of-type",
+      "rect": {
+        "x": 22,
+        "y": 140,
+        "width": 93.234375,
+        "height": 44,
+        "top": 140,
+        "right": 115.234375,
+        "bottom": 184,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Saved theme folder 390 collapsed=true",
+      "selector": "[data-worksheet-theme=\"rechten\"]",
+      "rect": {
+        "x": 22,
+        "y": 296,
+        "width": 346,
+        "height": 154.5,
+        "top": 296,
+        "right": 368,
+        "bottom": 450.5,
+        "left": 22
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "Actual saved A4 pages 390 collapsed=true",
+      "document": {
+        "viewport": {
+          "width": 390,
+          "height": 603
+        },
+        "scrollWidth": 390,
+        "pages": [
+          {
+            "rect": {
+              "x": 16,
+              "y": 99,
+              "width": 357.8591003417969,
+              "height": 506.12164306640625,
+              "top": 99,
+              "right": 373.8591003417969,
+              "bottom": 605.1216430664062,
+              "left": 16
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          },
+          {
+            "rect": {
+              "x": 16,
+              "y": 621.328125,
+              "width": 357.8591003417969,
+              "height": 506.12158203125,
+              "top": 621.328125,
+              "right": 373.8591003417969,
+              "bottom": 1127.44970703125,
+              "left": 16
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          },
+          {
+            "rect": {
+              "x": 16,
+              "y": 1143.65625,
+              "width": 357.8591003417969,
+              "height": 506.12158203125,
+              "top": 1143.65625,
+              "right": 373.8591003417969,
+              "bottom": 1649.77783203125,
+              "left": 16
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          },
+          {
+            "rect": {
+              "x": 16,
+              "y": 1665.984375,
+              "width": 357.8591003417969,
+              "height": 506.12158203125,
+              "top": 1665.984375,
+              "right": 373.8591003417969,
+              "bottom": 2172.10595703125,
+              "left": 16
+            },
+            "width": 794,
+            "height": 1123,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "Archive action #printWorksheet 390 collapsed=true",
+      "selector": "#printWorksheet",
+      "rect": {
+        "x": 156.125,
+        "y": 68,
+        "width": 111.515625,
+        "height": 44,
+        "top": 68,
+        "right": 267.640625,
+        "bottom": 112,
+        "left": 156.125
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 782
+      }
+    },
+    {
+      "label": "Archive action #downloadWorksheet 390 collapsed=true",
+      "selector": "#downloadWorksheet",
+      "rect": {
+        "x": 10,
+        "y": 118,
+        "width": 137.15625,
+        "height": 44,
+        "top": 118,
+        "right": 147.15625,
+        "bottom": 162,
+        "left": 10
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 782
+      }
+    },
+    {
+      "label": "Archive action #downloadBackup 390 collapsed=true",
+      "selector": "#downloadBackup",
+      "rect": {
+        "x": 152.15625,
+        "y": 118,
+        "width": 111.140625,
+        "height": 44,
+        "top": 118,
+        "right": 263.296875,
+        "bottom": 162,
+        "left": 152.15625
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 782
+      }
+    },
+    {
+      "label": "OS restore 390",
+      "selector": ".lb-restore:not([hidden])",
+      "rect": {
+        "x": 242,
+        "y": 791.5,
+        "width": 44,
+        "height": 44,
+        "top": 791.5,
+        "right": 286,
+        "bottom": 835.5,
+        "left": 242
+      },
+      "issues": [],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "rechtenwereld:hellingrug",
+      "topic": "hellingrug",
+      "archiveId": "77873d88-9f0a-4542-9bce-2fa2690083b9",
+      "hashes": {
+        "questions": "9a7212a08749120f5b170723615aa81f5fca649f1382862effe3010ffb101bec",
+        "key": "a2f14bb0dc755e4a8c897aac669cfb8331e988d1ce4dcf100442ba9a98f26c5f",
+        "data": "ac21a58e6e8b7f0409c699fda630b8e39651d303cb510f26fff39c873b4dcb7d"
+      },
+      "actualNativeGeneration": true,
+      "pairedKey": true,
+      "reloadExact": true
+    },
+    {
+      "id": "rechtenwereld:grenspas",
+      "topic": "grenspas",
+      "archiveId": "8f85b0d4-27ba-447e-bad6-50b192ea0a6e",
+      "hashes": {
+        "questions": "cd311b9ff8bfaca6585c31ec02dd835e743331a029f1ef451e2ac34b708ab72c",
+        "key": "9f24e196ab541c77941486fbcf4cf5d3ea3d622c8d3eb8dd3bd4e0dc1c67314a",
+        "data": "44689fb84eaf7cabce96116d9e3bfb63fa4c8cd6fcfd75fed4fcf55ff990a4ac"
+      },
+      "actualNativeGeneration": true,
+      "pairedKey": true,
+      "reloadExact": true
+    },
+    {
+      "id": "rechtenwereld:formulewerf",
+      "topic": "formulewerf",
+      "archiveId": "3cb76fe8-30b5-4329-8bed-567e1019001b",
+      "hashes": {
+        "questions": "bbcb8d4ee94a3481c4a82e089ce9b7776b667bb1a3f8f2258838aa30bc35e1ad",
+        "key": "c7551acd79319bd5b74c79584c50adb617c48a10a961227767dfb3c8a02b1fe7",
+        "data": "aa324cfe66523ffc4beae3be540c465ace9843f25fce1d336ffd0ae00d7707b1"
+      },
+      "actualNativeGeneration": true,
+      "pairedKey": true,
+      "reloadExact": true
+    },
+    {
+      "id": "rechtenwereld:signaalstad",
+      "topic": "signaalstad",
+      "archiveId": "93b55691-acf2-4834-a5d7-3090ed0406e7",
+      "hashes": {
+        "questions": "cec79a6b0b81760fa4f5c42cee4aabd0ddf6d3280f74d67e339d095449e059b6",
+        "key": "d4c0d356c82a83aea92a18dc83d7d4068e5a6d67939315a0351711b8b1711483",
+        "data": "fe0a7ca973ffb576568e5e8a40c0fd0a9759ecc8ea78678d59ec644738dd1aa1"
+      },
+      "actualNativeGeneration": true,
+      "pairedKey": true,
+      "reloadExact": true
+    },
+    {
+      "id": "algebra-trainer:equations",
+      "topic": "equations",
+      "archiveId": "25982e48-d775-425f-8b15-48b33628bb04",
+      "hashes": {
+        "questions": "ec03f8a0d229747ca49c899ef96d4f1553a3663e598d79d5dbc3a3ccede604dc",
+        "key": "caaac4bad7818af2683a6283a8dfb5cfd8b1d709ebed70abb9f298326ca2e5c4",
+        "data": "cfde11058e344d1245073e103721566a5b46930819d926d96d4a307286b9a74d"
+      },
+      "actualNativeGeneration": true,
+      "pairedKey": true,
+      "reloadExact": true
+    },
+    {
+      "id": "algebra-trainer:systems",
+      "topic": "systems",
+      "archiveId": "c318d343-9526-4014-8161-268e07305ce2",
+      "hashes": {
+        "questions": "83cfcbb7218f952db4099bca0c594bc16533928cee45e36b376ad6b25f547b1e",
+        "key": "32daa3cd842c80c8cf1a1d0ac9cc9aadc1b104ccbebe6d9103b64d91aa18c82f",
+        "data": "5dbe9c1188ad2303f40d8896ef01ff3d264bd515d3b9fb4b4ef685437526a499"
+      },
+      "actualNativeGeneration": true,
+      "pairedKey": true,
+      "reloadExact": true
+    },
+    {
+      "id": "bewerkingen-trainer:operations",
+      "topic": "machten",
+      "archiveId": "46fca975-a9c8-4dbe-b80b-8aa89ad3aa7b",
+      "hashes": {
+        "questions": "e0bfb6f37c64f99a77cfe0813b24c88c182ed70ef14d1c5571b308e087369963",
+        "key": "ad21ffa8745b00233384427792ce2782dbf44d88d96d61aa51a3912b7638719b",
+        "data": "9a422852032975cdeb5050eec408b245e4575894a5f109d37b990902e17730ff"
+      },
+      "actualNativeGeneration": true,
+      "pairedKey": true,
+      "reloadExact": true
+    },
+    {
+      "id": "bewerkingen-trainer:operations",
+      "topic": "wortels",
+      "archiveId": "d8ee010d-057a-469a-8c00-e5aabbb46f3d",
+      "hashes": {
+        "questions": "08aa4cd3386883ed08fd535ea8924d3d0b9e3697f922dae654f4f09cc02bd4e0",
+        "key": "abc3c0f2063ad85772ca02423d927481e8246b671c06826eaaf760941fa1bddb",
+        "data": "a060766b652b81d0e37c7ef8ad95857df5c7313d2ccf366ed5ccb9f591bd2df9"
+      },
+      "actualNativeGeneration": true,
+      "pairedKey": true,
+      "reloadExact": true
+    },
+    {
+      "id": "bewerkingen-trainer:operations",
+      "topic": "wetenschappelijk",
+      "archiveId": "694aeaee-172e-40b0-b9c5-1d4ecd74d0a2",
+      "hashes": {
+        "questions": "e40125e4bb3e9255326ae57a9da42795488d3f60f49245caf927153363ca71f3",
+        "key": "f1213dea08fbfcab46802e37d80b3728e6bbb3f9887a29fdbc3c39dc90cffc8d",
+        "data": "e7b902747194d213eb0fc5d0798841ccd7366617e690b83c89a4f117216adb61"
+      },
+      "actualNativeGeneration": true,
+      "pairedKey": true,
+      "reloadExact": true
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "remoteRequests": [],
+  "blocked": [
+    "Generated worksheet folders are local to this browser and account. Production authentication and cross-device/cloud sync are not tested or provided by this archive."
+  ],
+  "passed": true,
+  "browser": "154.0.8037.58",
+  "print": [
+    {
+      "sourceId": "rechtenwereld:hellingrug",
+      "topic": "hellingrug",
+      "pdf": "pdf/rechtenwereld-hellingrug.pdf",
+      "bytes": 103147,
+      "geometry": {
+        "questions": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 0,
+              "right": 793.6875,
+              "bottom": 1122.515625,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 1122.515625,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 1122.515625,
+              "right": 793.6875,
+              "bottom": 2245.03125,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 2245.03125,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 2245.03125,
+              "right": 793.6875,
+              "bottom": 3367.546875,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 3367.546875,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 3367.546875,
+              "right": 793.6875,
+              "bottom": 4490.0625,
+              "left": 0
+            }
+          }
+        ],
+        "key": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 4490.0625,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 4490.0625,
+              "right": 793.6875,
+              "bottom": 5612.578125,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 5612.578125,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 5612.578125,
+              "right": 793.6875,
+              "bottom": 6735.09375,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 6735.09375,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 6735.09375,
+              "right": 793.6875,
+              "bottom": 7857.609375,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 7857.609375,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 7857.609375,
+              "right": 793.6875,
+              "bottom": 8980.125,
+              "left": 0
+            }
+          }
+        ],
+        "captionVisible": false
+      },
+      "questionsHash": "9a7212a08749120f5b170723615aa81f5fca649f1382862effe3010ffb101bec",
+      "keyHash": "a2f14bb0dc755e4a8c897aac669cfb8331e988d1ce4dcf100442ba9a98f26c5f"
+    },
+    {
+      "sourceId": "rechtenwereld:grenspas",
+      "topic": "grenspas",
+      "pdf": "pdf/rechtenwereld-grenspas.pdf",
+      "bytes": 99895,
+      "geometry": {
+        "questions": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 0,
+              "right": 793.6875,
+              "bottom": 1122.515625,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 1122.515625,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 1122.515625,
+              "right": 793.6875,
+              "bottom": 2245.03125,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 2245.03125,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 2245.03125,
+              "right": 793.6875,
+              "bottom": 3367.546875,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 3367.546875,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 3367.546875,
+              "right": 793.6875,
+              "bottom": 4490.0625,
+              "left": 0
+            }
+          }
+        ],
+        "key": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 4490.0625,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 4490.0625,
+              "right": 793.6875,
+              "bottom": 5612.578125,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 5612.578125,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 5612.578125,
+              "right": 793.6875,
+              "bottom": 6735.09375,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 6735.09375,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 6735.09375,
+              "right": 793.6875,
+              "bottom": 7857.609375,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 7857.609375,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 7857.609375,
+              "right": 793.6875,
+              "bottom": 8980.125,
+              "left": 0
+            }
+          }
+        ],
+        "captionVisible": false
+      },
+      "questionsHash": "cd311b9ff8bfaca6585c31ec02dd835e743331a029f1ef451e2ac34b708ab72c",
+      "keyHash": "9f24e196ab541c77941486fbcf4cf5d3ea3d622c8d3eb8dd3bd4e0dc1c67314a"
+    },
+    {
+      "sourceId": "rechtenwereld:formulewerf",
+      "topic": "formulewerf",
+      "pdf": "pdf/rechtenwereld-formulewerf.pdf",
+      "bytes": 85912,
+      "geometry": {
+        "questions": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 0,
+              "right": 793.6875,
+              "bottom": 1122.515625,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 1122.515625,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 1122.515625,
+              "right": 793.6875,
+              "bottom": 2245.03125,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 2245.03125,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 2245.03125,
+              "right": 793.6875,
+              "bottom": 3367.546875,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 3367.546875,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 3367.546875,
+              "right": 793.6875,
+              "bottom": 4490.0625,
+              "left": 0
+            }
+          }
+        ],
+        "key": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 4490.0625,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 4490.0625,
+              "right": 793.6875,
+              "bottom": 5612.578125,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 5612.578125,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 5612.578125,
+              "right": 793.6875,
+              "bottom": 6735.09375,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 6735.09375,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 6735.09375,
+              "right": 793.6875,
+              "bottom": 7857.609375,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 7857.609375,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 7857.609375,
+              "right": 793.6875,
+              "bottom": 8980.125,
+              "left": 0
+            }
+          }
+        ],
+        "captionVisible": false
+      },
+      "questionsHash": "bbcb8d4ee94a3481c4a82e089ce9b7776b667bb1a3f8f2258838aa30bc35e1ad",
+      "keyHash": "c7551acd79319bd5b74c79584c50adb617c48a10a961227767dfb3c8a02b1fe7"
+    },
+    {
+      "sourceId": "rechtenwereld:signaalstad",
+      "topic": "signaalstad",
+      "pdf": "pdf/rechtenwereld-signaalstad.pdf",
+      "bytes": 100588,
+      "geometry": {
+        "questions": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 0,
+              "right": 793.6875,
+              "bottom": 1122.515625,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 1122.515625,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 1122.515625,
+              "right": 793.6875,
+              "bottom": 2245.03125,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 2245.03125,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 2245.03125,
+              "right": 793.6875,
+              "bottom": 3367.546875,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 3367.546875,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 3367.546875,
+              "right": 793.6875,
+              "bottom": 4490.0625,
+              "left": 0
+            }
+          }
+        ],
+        "key": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 4490.0625,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 4490.0625,
+              "right": 793.6875,
+              "bottom": 5612.578125,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 5612.578125,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 5612.578125,
+              "right": 793.6875,
+              "bottom": 6735.09375,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 6735.09375,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 6735.09375,
+              "right": 793.6875,
+              "bottom": 7857.609375,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 7857.609375,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 7857.609375,
+              "right": 793.6875,
+              "bottom": 8980.125,
+              "left": 0
+            }
+          }
+        ],
+        "captionVisible": false
+      },
+      "questionsHash": "cec79a6b0b81760fa4f5c42cee4aabd0ddf6d3280f74d67e339d095449e059b6",
+      "keyHash": "d4c0d356c82a83aea92a18dc83d7d4068e5a6d67939315a0351711b8b1711483"
+    },
+    {
+      "sourceId": "algebra-trainer:equations",
+      "topic": "equations",
+      "pdf": "pdf/algebra-trainer-equations.pdf",
+      "bytes": 68839,
+      "geometry": {
+        "questions": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 0,
+              "right": 1366,
+              "bottom": 1009.125,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 1009.125,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 1009.125,
+              "right": 1366,
+              "bottom": 2018.25,
+              "left": 0
+            }
+          }
+        ],
+        "key": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 2018.25,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 2018.25,
+              "right": 1366,
+              "bottom": 3027.375,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 3027.375,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 3027.375,
+              "right": 1366,
+              "bottom": 4036.5,
+              "left": 0
+            }
+          }
+        ],
+        "captionVisible": false
+      },
+      "questionsHash": "ec03f8a0d229747ca49c899ef96d4f1553a3663e598d79d5dbc3a3ccede604dc",
+      "keyHash": "caaac4bad7818af2683a6283a8dfb5cfd8b1d709ebed70abb9f298326ca2e5c4"
+    },
+    {
+      "sourceId": "algebra-trainer:systems",
+      "topic": "systems",
+      "pdf": "pdf/algebra-trainer-systems.pdf",
+      "bytes": 783881,
+      "geometry": {
+        "questions": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 286.15625,
+              "y": 0,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 0,
+              "right": 1079.84375,
+              "bottom": 1122.515625,
+              "left": 286.15625
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 286.15625,
+              "y": 1122.515625,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 1122.515625,
+              "right": 1079.84375,
+              "bottom": 2245.03125,
+              "left": 286.15625
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 286.15625,
+              "y": 2245.03125,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 2245.03125,
+              "right": 1079.84375,
+              "bottom": 3367.546875,
+              "left": 286.15625
+            }
+          }
+        ],
+        "key": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 286.15625,
+              "y": 3367.546875,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 3367.546875,
+              "right": 1079.84375,
+              "bottom": 4490.0625,
+              "left": 286.15625
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 286.15625,
+              "y": 4490.0625,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 4490.0625,
+              "right": 1079.84375,
+              "bottom": 5612.578125,
+              "left": 286.15625
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 286.15625,
+              "y": 5612.578125,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 5612.578125,
+              "right": 1079.84375,
+              "bottom": 6735.09375,
+              "left": 286.15625
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 286.15625,
+              "y": 6735.09375,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 6735.09375,
+              "right": 1079.84375,
+              "bottom": 7857.609375,
+              "left": 286.15625
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 286.15625,
+              "y": 7857.609375,
+              "width": 793.6875,
+              "height": 1122.515625,
+              "top": 7857.609375,
+              "right": 1079.84375,
+              "bottom": 8980.125,
+              "left": 286.15625
+            }
+          }
+        ],
+        "captionVisible": false
+      },
+      "questionsHash": "83cfcbb7218f952db4099bca0c594bc16533928cee45e36b376ad6b25f547b1e",
+      "keyHash": "32daa3cd842c80c8cf1a1d0ac9cc9aadc1b104ccbebe6d9103b64d91aa18c82f"
+    },
+    {
+      "sourceId": "bewerkingen-trainer:operations",
+      "topic": "machten",
+      "pdf": "pdf/bewerkingen-trainer-operations-machten.pdf",
+      "bytes": 56089,
+      "geometry": {
+        "questions": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 0,
+              "right": 1366,
+              "bottom": 1009.125,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 1009.125,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 1009.125,
+              "right": 1366,
+              "bottom": 2018.25,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 2018.25,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 2018.25,
+              "right": 1366,
+              "bottom": 3027.375,
+              "left": 0
+            }
+          }
+        ],
+        "key": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 3027.375,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 3027.375,
+              "right": 1366,
+              "bottom": 4036.5,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 4036.5,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 4036.5,
+              "right": 1366,
+              "bottom": 5045.625,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 5045.625,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 5045.625,
+              "right": 1366,
+              "bottom": 6054.75,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 6054.75,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 6054.75,
+              "right": 1366,
+              "bottom": 7063.875,
+              "left": 0
+            }
+          }
+        ],
+        "captionVisible": false
+      },
+      "questionsHash": "e0bfb6f37c64f99a77cfe0813b24c88c182ed70ef14d1c5571b308e087369963",
+      "keyHash": "ad21ffa8745b00233384427792ce2782dbf44d88d96d61aa51a3912b7638719b"
+    },
+    {
+      "sourceId": "bewerkingen-trainer:operations",
+      "topic": "wortels",
+      "pdf": "pdf/bewerkingen-trainer-operations-wortels.pdf",
+      "bytes": 62052,
+      "geometry": {
+        "questions": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 0,
+              "right": 1366,
+              "bottom": 1009.125,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 1009.125,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 1009.125,
+              "right": 1366,
+              "bottom": 2018.25,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 2018.25,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 2018.25,
+              "right": 1366,
+              "bottom": 3027.375,
+              "left": 0
+            }
+          }
+        ],
+        "key": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 3027.375,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 3027.375,
+              "right": 1366,
+              "bottom": 4036.5,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 4036.5,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 4036.5,
+              "right": 1366,
+              "bottom": 5045.625,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 5045.625,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 5045.625,
+              "right": 1366,
+              "bottom": 6054.75,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 6054.75,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 6054.75,
+              "right": 1366,
+              "bottom": 7063.875,
+              "left": 0
+            }
+          }
+        ],
+        "captionVisible": false
+      },
+      "questionsHash": "08aa4cd3386883ed08fd535ea8924d3d0b9e3697f922dae654f4f09cc02bd4e0",
+      "keyHash": "abc3c0f2063ad85772ca02423d927481e8246b671c06826eaaf760941fa1bddb"
+    },
+    {
+      "sourceId": "bewerkingen-trainer:operations",
+      "topic": "wetenschappelijk",
+      "pdf": "pdf/bewerkingen-trainer-operations-wetenschappelijk.pdf",
+      "bytes": 48031,
+      "geometry": {
+        "questions": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 0,
+              "right": 1366,
+              "bottom": 1009.125,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 1009.125,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 1009.125,
+              "right": 1366,
+              "bottom": 2018.25,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 2018.25,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 2018.25,
+              "right": 1366,
+              "bottom": 3027.375,
+              "left": 0
+            }
+          }
+        ],
+        "key": [
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 3027.375,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 3027.375,
+              "right": 1366,
+              "bottom": 4036.5,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 4036.5,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 4036.5,
+              "right": 1366,
+              "bottom": 5045.625,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 5045.625,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 5045.625,
+              "right": 1366,
+              "bottom": 6054.75,
+              "left": 0
+            }
+          },
+          {
+            "visible": true,
+            "rect": {
+              "x": 0,
+              "y": 6054.75,
+              "width": 1366,
+              "height": 1009.125,
+              "top": 6054.75,
+              "right": 1366,
+              "bottom": 7063.875,
+              "left": 0
+            }
+          }
+        ],
+        "captionVisible": false
+      },
+      "questionsHash": "e40125e4bb3e9255326ae57a9da42795488d3f60f49245caf927153363ca71f3",
+      "keyHash": "f1213dea08fbfcab46802e37d80b3728e6bbb3f9887a29fdbc3c39dc90cffc8d"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "file": "os/index.html",
+      "sha256": "fd3c72b26a4ae837564862c84e272dde670e358f750d783dde0bfc8d225dd6cb"
+    },
+    {
+      "file": "os/desktop-model.js",
+      "sha256": "53b944f25570184bc69a372ba2934397a7625ddbf2b5950044fb9a9e96e3cf6b"
+    },
+    {
+      "file": "os/desktop.js",
+      "sha256": "a697e3dfac9e927ebe17da271b040c03089e92518d2ca4400c86657d1aaba41f"
+    },
+    {
+      "file": "os/desktop.css",
+      "sha256": "3cea18380ec508ebef9f0bce7a2848db16f836f024dfa04415cd8af0fa78818a"
+    },
+    {
+      "file": "os/worksheet.html",
+      "sha256": "c024927dfa04fd1e042a64aa7ecfb37baf549d51f64a6f4b795657e6d6f68108"
+    },
+    {
+      "file": "os/worksheet.js",
+      "sha256": "317f07b4238a941b6bcc8a7141c829b549d7948ccb30bf633265ec36e473eb72"
+    },
+    {
+      "file": "os/worksheet.css",
+      "sha256": "e4998ce1fb52da1d64f1a46377913dbfcb2e54e990ec8d497df91d0e2cba4a01"
+    },
+    {
+      "file": "shared/worksheet-library.js",
+      "sha256": "aba0626fd8807c3f7fbc1d25dd62b3cfb7c9db5dccd94f33815a4f03f6c81457"
+    },
+    {
+      "file": "shared/worksheet-save.js",
+      "sha256": "3fda9a43e32e9dd42f3e526129db54304f7f4442d6749877d6ed1b468382d091"
+    },
+    {
+      "file": "shared/worksheet-save.css",
+      "sha256": "408ce9dad33a0104dc1f1f93823be532f9bb158518f9a674bc6e9121a466a511"
+    },
+    {
+      "file": "shared/leraarbob-topbar.js",
+      "sha256": "c8e7424de3c3974737761136e8943a3ea18e9eeec03d488ba15aa6386c73f2fb"
+    },
+    {
+      "file": "shared/leraarbob-topbar.css",
+      "sha256": "59af39e1dd51d7bc308bf1d4ad10522c9de8aabdd413928e7e82a7da982726d0"
+    },
+    {
+      "file": "shared/collapsible-topbar.js",
+      "sha256": "b48315d6c741d9086a903e02c68fcec181b4a4eabdabcbf42407edd3f0de79a0"
+    },
+    {
+      "file": "shared/collapsible-topbar.css",
+      "sha256": "c3d87dfafe0b000e135306f35b84f0390532860844ab2e94050a693a234347be"
+    },
+    {
+      "file": "shared/worksheet-layout.css",
+      "sha256": "991187cad8d4dd4da79774e83f401e4153e0a1c6772de3a9b22d0759530d8be7"
+    },
+    {
+      "file": "games/rechten/rechtenwereld/worksheets.html",
+      "sha256": "6042a54a3e4bff0a0e47e530e39422262b769c2fda439689f9f26f19dce35acf"
+    },
+    {
+      "file": "games/rechten/rechtenwereld/worksheets/worksheets.js",
+      "sha256": "02e771b9bd22fafe70d968f1d7bada62e5105b1535b5b8b61b5f033f633fbcb2"
+    },
+    {
+      "file": "games/algebra-trainer/index.html",
+      "sha256": "44b8b9f2c4253d9cf68bfd61d992ebf08646d49780c59b6679f53ebd89711915"
+    },
+    {
+      "file": "games/algebra-trainer/trainer.js",
+      "sha256": "85160629bb68976484377715c5d849d73cf326e11bc9f5b5402fb312ff7914d9"
+    },
+    {
+      "file": "games/algebra-trainer/stelsels.html",
+      "sha256": "028cec69e4c86c285fe17ce116c4da7d8bf5884fac13605a83c61ae38e6fd1fd"
+    },
+    {
+      "file": "games/algebra-trainer/stelsels/app.js",
+      "sha256": "7e24dab2606c0735bc5a36e61391cfd3b4ee4bcfdae4af96ee372d3fc72faeaa"
+    },
+    {
+      "file": "games/algebra-trainer/stelsels/paper.js",
+      "sha256": "5e97ea8239e208c199117868f5524df8dc9c26298e7ff55374a7390428134652"
+    },
+    {
+      "file": "games/bewerkingen-trainer/index.html",
+      "sha256": "120181c670c194b07a7ef8a30f08c742a39cd1583666ec75e91973a9243212e9"
+    },
+    {
+      "file": "games/bewerkingen-trainer/app.js",
+      "sha256": "37072f04a33eb441db79f5af8c9a912aa29d644b84e950734d37d9ffee41ebe3"
+    }
+  ],
+  "harness": {
+    "file": "tests/desktop-worksheets-browser.cjs",
+    "sha256": "f982ab11b3e08d9bc93ed1dfbe36fb083b1a196deb8e2fec5ce77ede77ae1ed7"
+  },
+  "screenshots": [
+    "archive-1366-collapsed.png",
+    "archive-1366-expanded.png",
+    "archive-390-collapsed.png",
+    "archive-390-expanded.png",
+    "saved-algebra-trainer-systems.png",
+    "saved-bewerkingen-trainer-operations-machten.png",
+    "saved-bewerkingen-trainer-operations-wetenschappelijk.png",
+    "saved-bewerkingen-trainer-operations-wortels.png",
+    "saved-rechtenwereld-hellingrug.png",
+    "storage-blocked-generated-series.png",
+    "worksheet-folders-1366-collapsed.png",
+    "worksheet-folders-1366-expanded.png",
+    "worksheet-folders-390-collapsed.png",
+    "worksheet-folders-390-expanded.png",
+    "worksheet-topics-1366-collapsed.png",
+    "worksheet-topics-1366-expanded.png",
+    "worksheet-topics-390-collapsed.png",
+    "worksheet-topics-390-expanded.png"
+  ]
+}

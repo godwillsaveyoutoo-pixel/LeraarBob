@@ -134,6 +134,7 @@ function makeSet(){
    9. NAVIGATIE
    ============================================================ */
 function showScreen(name){
+ if(name==='preview'&&window.LeraarBobWorksheetEntry)return LeraarBobWorksheetEntry.open(navigation?.selected());
   if(lesson||motionPlayer.active){stopPresentation();if(trainerStates.length)renderTrainer();}
   screen=name;document.body.dataset.screen=name;
   $('#navigationScreen').classList.toggle('hidden',name!=='menu');if(name==='menu')navigation?.render();
@@ -584,6 +585,7 @@ function worksheetSnapshot(){
 $('#printBtn').onclick=()=>{renderMathNodes(previewScreen);setTimeout(()=>window.print(),50)};
 $('#backPaperLevels').onclick=()=>navigation.open();
 function levelWorksheet(id,fresh=false){
+ if(window.LeraarBobWorksheetEntry)return LeraarBobWorksheetEntry.open(id);
  const st=J.stop(id);if(!st)return;
  // Paper keeps its own generated series and never changes a live round or its input.
  const active=runs[id]&&!runs[id].completed?runs[id]:null;

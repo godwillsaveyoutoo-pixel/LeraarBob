@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-10",
+  "preview": "http://127.0.0.1:8795/",
+  "branch": "codex/os-personal-pilot-20261010",
+  "viewport": [
+    {
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 640,
+      "height": 360
+    }
+  ],
+  "zoom": 1,
+  "deviceScaleFactor": 1,
+  "suites": [
+    {
+      "suite": "workforms",
+      "checks": 20,
+      "targets": 102,
+      "status": "passed",
+      "report": "workforms.json"
+    },
+    {
+      "suite": "algebra",
+      "checks": 18,
+      "targets": 249,
+      "status": "passed",
+      "report": "algebra.json"
+    },
+    {
+      "suite": "live",
+      "checks": 13,
+      "targets": 0,
+      "status": "passed",
+      "report": "live.json"
+    },
+    {
+      "suite": "getallen-providers",
+      "checks": 13,
+      "targets": 0,
+      "status": "passed",
+      "report": "getallen-providers.json"
+    },
+    {
+      "suite": "scientific-providers",
+      "checks": 11,
+      "targets": 0,
+      "status": "passed",
+      "report": "scientific-providers.json"
+    },
+    {
+      "suite": "legacy-classflow",
+      "checks": 32,
+      "targets": 0,
+      "status": "passed",
+      "report": "legacy-classflow.json"
+    },
+    {
+      "suite": "pilots",
+      "checks": 32,
+      "targets": 23,
+      "status": "passed",
+      "report": "pilots.json"
+    },
+    {
+      "suite": "paper",
+      "checks": 8,
+      "targets": 39,
+      "status": "passed",
+      "report": "paper.json"
+    },
+    {
+      "suite": "navigation",
+      "checks": 7,
+      "targets": 0,
+      "status": "passed",
+      "report": "navigation.json"
+    },
+    {
+      "suite": "personal",
+      "checks": 9,
+      "targets": 0,
+      "status": "passed",
+      "report": "personal.json"
+    },
+    {
+      "suite": "chrome",
+      "checks": 5,
+      "targets": 0,
+      "status": "passed",
+      "report": "chrome.json"
+    },
+    {
+      "suite": "zeeslag-controls",
+      "checks": 6,
+      "targets": 21,
+      "status": "passed",
+      "report": "zeeslag-controls.json"
+    }
+  ],
+  "limits": [
+    "Local synthetic authentication; no production logins",
+    "Naval transport is a local BroadcastChannel fixture; no cross-device production Realtime validation",
+    "Getallen full browser command stopped at obsolete provider-menu expectation after 133 completed exercise groups; corrected provider section separately passes 13 groups",
+    "Scientific run restricted to changed provider routes; full unchanged scientific exercise matrix not repeated",
+    "Individual solo-only apps are catalog-checked; not all 24 apps have full fresh gameplay proof"
+  ]
+}

@@ -120,6 +120,11 @@ function refreshAimUI(){
   if(aVal)aVal.innerHTML=fracHtml(S.aimA);
   if(bVal)bVal.textContent=String(Math.abs(S.aimB.n));
   if(bSign)bSign.textContent=S.aimB.n<0?'−':'+';
+  const aSetting=$('#aSettingValue'),bSetting=$('#bSettingValue'),equationText=$('#aimEquationText');
+  if(aSetting)aSetting.innerHTML=fracHtml(S.aimA);
+  if(bSetting)bSetting.textContent=fracStr(S.aimB);
+  const equation=`y = ${fracStr(S.aimA)}x ${S.aimB.n<0?'−':'+'} ${Math.abs(S.aimB.n)}`;
+  if(equationText&&equationText.textContent!==equation)equationText.textContent=equation;
   if($('#aUpBtn'))$('#aUpBtn').disabled=off||slopeIndex()===ALLOWED_SLOPES.length-1;
   if($('#aDownBtn'))$('#aDownBtn').disabled=off||slopeIndex()===0;
   if($('#bUpBtn'))$('#bUpBtn').disabled=off||S.aimB.n>=4;
@@ -380,7 +385,7 @@ async function resultAction(again){
   const solo=S.demo,opponentId=S.opponent?.id;
   try{
     if(!await leaveMatch(false))return;
-    if(again){if(solo)initSolo();else await AxiomaSocial.invite(opponentId)}
+    if(again){if(solo)initSolo();else await AxiomaSocial.invite(opponentId,{showPanel:window===window.top})}
   }finally{resultActionBusy=false;renderMatchResult()}
 }
 
@@ -448,7 +453,7 @@ setInterval(()=>{
 
 function renderLobby(){if(!S.me)return;const list=[...S.players.values()].sort((a,b)=>{if(a.id===S.me.id)return -1;if(b.id===S.me.id)return 1;if(a.status!==b.status)return a.status==='available'?-1:1;return a.alias.localeCompare(b.alias,'nl')});
   $('#lobbyCount').textContent=`${list.length} online`;$('#soloBtn').disabled=!!S.pendingOutgoing;const el=$('#playerList');if(!list.length){el.innerHTML='<div class="empty">Nog niemand anders online.</div>';return}
-  el.innerHTML=list.map(p=>{const self=p.id===S.me.id,playing=p.status==='playing';const pending=S.pendingOutgoing?.to===p.id;const status=self?'Jij':playing?'In spel':'Beschikbaar';const cls=self?'self':playing?'playing':'';return `<div class="playerRow"><div><div class="playerName">${escapeHtml(p.alias)}${self?' <span style="color:#748083;font-weight:450">(jij)</span>':''}</div><div class="playerMeta">${escapeHtml(p.class_code||'')}</div></div><div class="status ${cls}"><i></i>${status}</div><button class="inviteBtn" data-invite="${p.id}" ${self||playing||pending||S.pendingOutgoing?'disabled':''}>${pending?'Wachten…':'Uitnodigen'}</button></div>`}).join('');
+  const markup=list.map(p=>{const self=p.id===S.me.id,playing=p.status==='playing';const pending=S.pendingOutgoing?.to===p.id;const status=self?'Jij':playing?'In spel':'Beschikbaar';const cls=self?'self':playing?'playing':'';return `<div class="playerRow"><div><div class="playerName">${escapeHtml(p.alias)}${self?' <span style="color:#748083;font-weight:450">(jij)</span>':''}</div><div class="playerMeta">${escapeHtml(p.class_code||'')}</div></div><div class="status ${cls}"><i></i>${status}</div><button class="inviteBtn" data-invite="${p.id}" ${self||playing||pending||S.pendingOutgoing?'disabled':''}>${pending?'Wachten…':'Uitnodigen'}</button></div>`}).join('');if(el.dataset.markup!==markup){el.dataset.markup=markup;el.innerHTML=markup;}
 }
 function syncPlatform(state){
   if(S.demo)return;
@@ -465,13 +470,24 @@ function syncPlatform(state){
   S.pendingOutgoing=pending?{to:pending.recipient_id,matchId:pending.id}:null;
   setConnection(state.connected?'online':'verbinding herstellen…',state.connected?'on':'warn');
   renderLobby();
+  if(window!==window.top){
+    let pending=$('#navalInvitations');if(!pending){pending=document.createElement('div');pending.id='navalInvitations';pending.setAttribute('aria-live','polite');$('#playerList').before(pending);}
+    const signature=JSON.stringify([state.pending,state.note,state.invitations]);
+    if(pending.dataset.state!==signature){pending.dataset.state=signature;pending.replaceChildren();
+      for(const invite of state.invitations.filter(i=>(!i.game||i.game==='rechten-zeeslag')&&i.status==='pending')){
+        const row=document.createElement('div');row.className='invitation';const mine=invite.sender_id===S.me?.id,copy=document.createElement('span');copy.textContent=mine?`Wachten op ${invite.recipient_alias}…`:`${invite.sender_alias} nodigt je uit.`;row.append(copy);
+        for(const action of mine?['cancel']:['accept','decline']){const b=document.createElement('button');b.textContent={cancel:'Intrekken',accept:'Deelnemen',decline:'Weigeren'}[action];b.disabled=state.pending;b.onclick=async()=>{b.disabled=true;await AxiomaSocial.answerInvitation(invite.id,action);syncPlatform(AxiomaSocial.state());};row.append(b);}pending.append(row);
+      }
+      if(state.note){const note=document.createElement('p');note.textContent=state.note;pending.append(note);}
+    }
+  }
 }
 async function setupLobby(){
   await AxiomaSocial.ready();
-  AxiomaSocial.onChange(syncPlatform);
+  const stop=AxiomaSocial.onChange(syncPlatform);addEventListener('pagehide',stop,{once:true});
   syncPlatform(AxiomaSocial.state());
   showScreen('lobbyScreen');
-  const id=new URLSearchParams(location.search).get('match');
+  const id=new URLSearchParams(location.search).get('match')||AxiomaSocial.state().matchId;
   if(id){
     try{await enterMatch(await AxiomaSocial.join(id))}
     catch(error){toast(error.message);history.replaceState(null,'',location.pathname)}
@@ -479,7 +495,8 @@ async function setupLobby(){
 }
 async function sendInvite(toId){
   const p=S.players.get(toId);if(!p||p.status!=='available'||S.pendingOutgoing)return;
-  await AxiomaSocial.invite(toId);
+  await AxiomaSocial.invite(toId,{showPanel:window===window.top});
+  syncPlatform(AxiomaSocial.state());
 }
 
 function renderRanking(rows){
@@ -538,5 +555,12 @@ async function boot(){
     $('#whoBtn').hidden=false;$('#whoBtn').textContent=S.profile.alias;await setupLobby();
   }catch(err){console.error(err);setConnection('verbinding mislukt','warn');showScreen('gateScreen')}
 }
+let openingMatch=false;
+window.LeraarBobNaval=Object.freeze({snapshot:()=>({accountId:S.me?.id||null,id:S.matchId,phase:S.phase,busy:openingMatch}),openMatch:async id=>{
+  if(openingMatch||S.demo||!S.me||S.matchId&&S.matchId!==id||!/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(id||''))return false;
+  if(S.matchId===id)return true;openingMatch=true;
+  try{await enterMatch(await AxiomaSocial.join(id));const u=new URL(location.href);u.searchParams.set('match',id);history.replaceState(null,'',u);return true;}catch(e){toast(e.message);return false;}finally{openingMatch=false;}
+}});
+addEventListener('pagehide',()=>{if(S.match)supa?.removeChannel(S.match).catch(()=>{});});
 boot();
 })();

@@ -9,7 +9,7 @@ const auth=`window.AxiomaAuth={CLASSES:['TEST'],ready:async()=>({session:null,ac
 const report={scope:'Actual local Chromium navigation and UI with guest auth fixture; no real production accounts',checks:[],errors:[],missing:[],passed:false};
 let browser,context,server,base;
 const check=name=>{report.checks.push({name,passed:true});console.log('PASS '+name);};
-async function desktop(page){await page.waitForFunction(()=>window.LeraarBobDesktop&&document.querySelectorAll('#themeFolders .theme-folder').length===8);assert.equal(new URL(page.url()).pathname,'/LeraarBob/os/');}
+async function desktop(page){await page.waitForFunction(()=>window.LeraarBobDesktop&&document.querySelectorAll('#pinnedApps .personal-app').length===1&&document.querySelector('.personal-add'));assert.equal(new URL(page.url()).pathname,'/LeraarBob/os/');}
 async function catalog(page){await page.waitForSelector('#featuredGrid [data-game-id]');assert.equal(new URL(page.url()).pathname,'/LeraarBob/index.html');}
 async function fit(page){assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'No horizontal overflow');}
 (async()=>{
@@ -43,7 +43,7 @@ async function fit(page){assert(await page.evaluate(()=>document.documentElement
  }
  await page.setViewportSize({width:1366,height:768});
  for(const [hash,place] of [['#ontdek','all'],['#reserve','all'],['#playerProgress','profile']]){
-  await page.goto(base+'/index.html'+hash);await desktop(page);assert.equal(await page.evaluate(()=>LeraarBobDesktop.state().view.kind),place);check('Existing '+hash+' opens OS '+place);
+  await page.goto(base+'/index.html'+hash);await desktop(page);assert.equal(await page.evaluate(()=>LeraarBobDesktop.state().view.kind),place==='all'?'desktop':place);if(place==='all'){await page.locator('#personalDialog[open]').waitFor();assert.equal(await page.locator('[data-pick-app]').count(),24);assert(!await page.locator('#libraryWindow').isVisible());}check('Existing '+hash+' opens OS '+(place==='all'?'app picker':place));
  }
  await page.goto(base+'/?theme=getallen&utm_source=old-link#bookmark');await desktop(page);
  const routed=new URL(page.url());assert.equal(routed.searchParams.get('theme'),'getallen');assert.equal(routed.searchParams.get('utm_source'),'old-link');assert.equal(routed.hash,'#bookmark');check('Unrecognized query/hash and theme bookmark remain intact');
