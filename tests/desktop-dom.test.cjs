@@ -24,7 +24,7 @@ async function setup({account=null,overview,storage={},topbar=false}={}){
   w.LeraarBobAvatar={create:()=>{const s=w.document.createElement('span');s.textContent='avatar';return s;}};
   w.eval(read('js/catalog.js'));
   Object.defineProperty(w.document,'currentScript',{configurable:true,value:{src:'https://school.example/LeraarBob/shared/game-registry.js'}});
-  w.eval(read('shared/game-registry.js'));w.eval(read('js/catalog-progress.js'));w.eval(read('os/desktop-model.js'));w.eval(read('os/personal-home.js'));w.eval(read('os/desktop.js'));
+  w.eval(read('shared/game-registry.js'));w.eval(read('js/catalog-progress.js'));w.eval(read('os/desktop-model.js'));w.eval(read('os/personal-home.js'));w.eval(read('os/activity-entry.js'));w.eval(read('os/desktop.js'));
   await tick();await tick();
   if(topbar){
     w.LeraarBobPlayModes={ready:()=>Promise.resolve(),current:()=>null};

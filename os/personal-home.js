@@ -86,7 +86,7 @@
     const players = (s?.players || []).filter(p => p.id !== ctx.account?.id);
     replace('personalPeople', JSON.stringify([owner, players, !!s?.connected]), () => {
       if (!ctx.account) return [small('Log in om je klasgenoten te zien.'), button('Inloggen', ctx.openAccount, 'personal-wide')];
-      if (ctx.account.role === 'teacher') return [small('Kies Klasbattle bij Rechtenwereld. Leerlingen sluiten aan met jouw code.')];
+      if (ctx.account.role === 'teacher') return [small('Kies Klasbattle bij een app. Leerlingen sluiten aan met jouw code.')];
       if (!s?.connected) return [small('Je online klasgenoten worden opgehaald. Je kunt alvast solo oefenen.')];
       if (!players.length) return [small('Er zijn nu geen andere klasgenoten online.')];
       const rows = players.slice(0, 5).map(p => {
@@ -159,10 +159,7 @@
     $('pickerStatus').textContent = full ? 'Je hebt 12 apps. Verwijder eerst een app van je bureaublad om plaats te maken.' : `${ctx.pins.length} ${ctx.pins.length === 1 ? 'app' : 'apps'} op je bureaublad`;
   }
   function openAppMenu(g, opener) {
-    openDialog('app', g.title, opener); dialogBody.append(small(g.subtitle));
-    for (const m of ctx.model.modes(g.id, ctx.account?.role || 'guest')) dialogBody.append(button(ctx.model.modeLabel(m), () => { closeDialog(); ctx.openApp(g.id, m.id); }, 'personal-menu-action'));
-    if (ctx.model.worksheets(g.id).length) dialogBody.append(button('Oefenbladen maken & terugvinden', () => { closeDialog(); ctx.showView({ kind: 'worksheets', themeId: g.desktopTheme }); }, 'personal-menu-action'));
-    dialogBody.append(button('Van mijn bureaublad verwijderen', () => { closeDialog(); ctx.togglePin(g.id); $('pinnedApps').querySelector('.personal-add').focus(); }, 'personal-menu-action personal-remove'));
+    ctx.openModes(g.id, {opener, remove: () => { ctx.togglePin(g.id); $('pinnedApps').querySelector('.personal-add').focus(); }});
   }
   async function refreshBoards() {
     if (!ctx?.account || ctx.authPending || !['student', 'teacher'].includes(ctx.account.role)) return;
@@ -228,16 +225,16 @@
     openDialog('code', 'Deelnemen met klascode');
     if (!ctx.account) { dialogBody.append(small('Meld je aan met je leerlingaccount om deel te nemen.'), button('Inloggen', () => { closeDialog(); ctx.openAccount(); }, 'personal-primary')); return; }
     if (ctx.account.role === 'teacher') { dialogBody.append(small('Een klasbattle starten doe je bij Rechtenwereld. Leerlingen gebruiken de klascode om deel te nemen.'), button('Klasbattle starten', () => { closeDialog(); ctx.openApp('rechtenwereld', 'classroom'); }, 'personal-primary')); return; }
-    dialogBody.append(small('Vul de code van je Rechtenwereld-klasbattle in. Je gaat rechtstreeks naar de wachtkamer.'));
-    const form = node('form', 'personal-code'), label = node('label', '', 'Klascode'), input = node('input'); input.name = 'code'; input.autocomplete = 'off'; input.maxLength = 6; input.required = true; input.pattern = '[A-Fa-f0-9]{6}'; input.placeholder = 'A1B2C3'; input.value = typeof code === 'string' && /^[a-f0-9]{6}$/i.test(code) ? code : ''; input.setAttribute('aria-label', 'Klascode'); label.append(input);
+    dialogBody.append(small('Vul de code van je sessie in. Je gaat rechtstreeks naar de juiste wereld.'));
+    const form = node('form', 'personal-code'), label = node('label', '', 'Klascode'), input = node('input'); input.name = 'code'; input.autocomplete = 'off'; input.maxLength = 8; input.required = true; input.pattern = '([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})'; input.placeholder = 'A1B2C3'; input.value = typeof code === 'string' && /^[a-f0-9]{6}$/i.test(code) ? code : ''; input.setAttribute('aria-label', 'Klascode'); label.append(input);
     const submit = node('button', 'personal-primary', 'Deelnemen'); submit.type = 'submit'; const status = node('p', 'personal-muted'); status.setAttribute('role', 'status'); form.append(label, submit, status); dialogBody.append(form);
     form.addEventListener('submit', async e => {
       e.preventDefault(); if (submit.disabled) return; const version = epoch, opened = dialogVersion; submit.disabled = true; status.textContent = 'Code controleren…';
       try {
-        const { data, error } = await window.AxiomaAuth.client().rpc('axioma_class_battle_hub', { p_action: 'code', p_data: { code: input.value.trim().toUpperCase() } });
+        const entered = input.value.trim().toUpperCase();
+        const { data, error } = /^[A-F0-9]{8}$/.test(entered) ? { data: { game: 'bewerkingen', code: entered } } : await window.AxiomaAuth.client().rpc('axioma_class_battle_hub', { p_action: 'code', p_data: { code: entered } });
         if (version !== epoch || opened !== dialogVersion || dialogKind !== 'code') return;
         if (error || !data?.game) throw Error(error?.message || 'Deze code is niet meer beschikbaar.');
-        if (data.game !== 'rechten') { status.textContent = 'Dit is een andere wereld. Open Samen & live via Start om daar deel te nemen.'; return; }
         if (ctx.joinClass(data)) closeDialog(); else status.textContent = 'Sluit eerst een geopende app om deel te nemen.';
       } catch (error) { if (version === epoch) status.textContent = error.message || 'Controleer je verbinding en probeer opnieuw.'; }
       finally { if (version === epoch) submit.disabled = false; }

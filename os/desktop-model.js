@@ -45,7 +45,9 @@
   function destination(id,mode='solo',{role='guest',topicId,returnTo}={}){
     const g=app(id),m=modes(id,role,topicId).find(e=>e.id===mode);if(!m)return null;
     if(registry.game(id)){
-      const destination=registry.destination(id,mode,{topicId,returnTo,hub:mode==='classroom'});
+      const destination=registry.destination(id,mode,{topicId,returnTo,hub:false});
+      if(mode==='classroom'&&destination){const url=new URL(id==='getallenwereld'?'games/bewerkingen-trainer/start.html':destination,base);if(id==='getallenwereld'){url.search=new URL(destination).search;url.searchParams.set('view','battle');url.searchParams.set('audience','class');}url.searchParams.set('hub','1');url.searchParams.set('classFlow','1');url.searchParams.set('osEntry','1');url.searchParams.set('create','1');return url.href;}
+      if(id==='getallenwereld'&&mode==='series'&&destination){const url=new URL('games/bewerkingen-trainer/',base);url.search=new URL(destination).search;url.searchParams.set('mode','solo');url.searchParams.set('screen','setup');return url.href;}
       if(id==='rechten-zeeslag'&&mode==='solo'&&destination){const url=new URL(destination);url.searchParams.set('solo','1');return url.href;}
       return destination;
     }

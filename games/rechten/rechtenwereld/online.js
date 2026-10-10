@@ -2,13 +2,13 @@
 (()=>{'use strict';
  const $=id=>document.getElementById(id),frame=$('board'),base=new URL('.',location.href);
  const names={hellingrug:'Hellingrug',grenspas:'Grenspas',formulewerf:'Formulewerf',signaalstad:'Signaalstad'};let lobbyData=null;
- let initialized=false,account=null,epoch=0,id=new URLSearchParams(location.search).get('match'),state=null,busy=false,timer,frameReady=false,sent='',clock={server:0,local:0},queuedAnswer=null;
+ let initialized=false,account=null,epoch=0,id=new URLSearchParams(location.search).get('match'),state=null,busy=false,busyAction='',timer,frameReady=false,sent='',clock={server:0,local:0},queuedAnswer=null;
  const tab=()=>window.AxiomaSocial?.state().tabId||sessionStorage.getItem('axioma-social-tab')||crypto.randomUUID();
  const button=(label,action)=>{const b=document.createElement('button');b.textContent=label;b.onclick=action;return b;};
  const queueKey=()=>`rechten-duo-answer:${account?.id}:${id}`;const saveQueue=()=>{try{if(queuedAnswer)localStorage.setItem(queueKey(),JSON.stringify(queuedAnswer));else localStorage.removeItem(queueKey());}catch{}};
  const message=text=>{$('error').hidden=!text;$('error').textContent=text;};
  async function call(action,data={}){
-  const turn=epoch;if(!account)return;if(busy){if(['state','lobby'].includes(action))return;await new Promise(r=>setTimeout(r,80));if(turn!==epoch)return;return call(action,data);}busy=true;
+  const turn=epoch;if(!account)return;if(busy){if(['state','lobby'].includes(action))return;await new Promise(r=>setTimeout(r,80));if(turn!==epoch)return;return call(action,data);}busy=true;busyAction=action;
   try{
    const {data:result,error}=await AxiomaAuth.client().functions.invoke('rechten-duo',{body:{action,data:{...data,tab_id:tab(),...(id?{id}: {})}}});
    if(turn!==epoch)return;
@@ -18,12 +18,13 @@
    if(result.id){state=result;id=result.id;const u=new URL(location.href);u.searchParams.set('match',id);history.replaceState(null,'',u);renderMatch();}
    else renderLobby(result);
    return result;
-  }catch(e){if(turn===epoch){message(e.message);$('soloFallback').hidden=false;}}finally{if(turn===epoch)busy=false;}
+  }catch(e){if(turn===epoch){message(e.message);$('soloFallback').hidden=false;}}finally{if(turn===epoch){busy=false;busyAction='';}}
  }
  let requestedWorld=new URLSearchParams(location.search).get('world');
  function renderLobby(data){
-  lobbyData=data;const selected=requestedWorld||$('duelWorld').value;requestedWorld=null;$('duelWorld').replaceChildren();for(const id of data.worlds||[])$('duelWorld').append(new Option(names[id]||id,id));if((data.worlds||[]).includes(selected))$('duelWorld').value=selected;$('duelWorld').disabled=!data.worlds?.length;
-  $('soloFallback').hidden=false;$('lobby').hidden=false;$('match').hidden=true;$('login').hidden=account?.role==='student';$('players').replaceChildren();$('invitations').replaceChildren();
+  lobbyData=data;const selected=requestedWorld||$('duelWorld').value;requestedWorld=null;const worlds=data.worlds||[],signature=JSON.stringify(worlds);if($('duelWorld').dataset.worlds!==signature){$('duelWorld').dataset.worlds=signature;$('duelWorld').replaceChildren();for(const id of worlds)$('duelWorld').append(new Option(names[id]||id,id));if(!worlds.length)$('duelWorld').append(new Option('Nog geen afgeronde wereld',''));}if(worlds.includes(selected))$('duelWorld').value=selected;$('duelWorld').disabled=!worlds.length;
+  $('soloFallback').hidden=false;$('lobby').hidden=false;$('match').hidden=true;$('login').hidden=account?.role==='student';
+  const invitationsKey=JSON.stringify([account?.id,data.invitations||[]]);if($('invitations').dataset.rows!==invitationsKey){$('invitations').dataset.rows=invitationsKey;$('invitations').replaceChildren();
   for(const inv of data.invitations||[]){const row=document.createElement('div');row.className='invitation';const text=document.createElement('p');const mine=inv.sender_id===account.id;text.textContent=mine?`Je hebt ${inv.recipient_alias} uitgedaagd.`:`${inv.sender_alias} daagt je uit voor ${names[inv.world]||'Rechtenwereld'}.`;row.append(text);
    const act=action=>{id=inv.id;call(action);};
    if(inv.status==='accepted')row.append(button('Battle hervatten',()=>act('state')));
@@ -31,8 +32,11 @@
    else row.append(button('Accepteren',()=>act('accept')),button('Weigeren',()=>act('decline')));
    $('invitations').append(row);
   }
+  }
+  const playersKey=JSON.stringify([account?.id,account?.role,$('duelWorld').value,data.worlds,data.players]);if($('players').dataset.rows!==playersKey){$('players').dataset.rows=playersKey;$('players').replaceChildren();
   for(const p of (data.players||[]).filter(p=>p.worlds?.includes($('duelWorld').value))){const row=document.createElement('div');row.className='person';const name=document.createElement('span');name.textContent=p.alias;row.append(name,button('Uitdagen',()=>call('invite',{target:p.id,world:$('duelWorld').value})));$('players').append(row);}
   if(!$('players').children.length)$('players').textContent=account?.role==='student'?(data.worlds?.length?'Geen geschikte klasgenoot online voor deze wereld. Je kunt alleen verder leren.':'Rond eerst een wereld af en bewaar je voortgang in je account.'):'Meld je aan met je leerlingaccount om iemand uit te dagen.';
+  }
  }
  const send=data=>frame.contentWindow?.postMessage(data,location.origin);
  function renderMatch(){
@@ -49,7 +53,7 @@
   const key=id+':'+s.round;
   if(s.phase==='playing'&&frameReady&&sent!==key){sent=key;send({type:'vector-battle-question',match:id,index:s.round,...s.task});}
   if(me.confirmed||['resolving','round_result','finished'].includes(s.phase))send({type:'vector-battle-resolved',match:id,index:s.round,message:me.confirmed?'Bevestigd · wachten op de uitslag.':'Ronde afgelopen.'});
-  const panel=$('roundPanel');panel.replaceChildren();
+  const panel=$('roundPanel'),signature=JSON.stringify([s.phase,s.round,s.reason,s.winner,s.a.correct,s.b.correct,me.ready]);if(panel.dataset.state===signature){tick();return;}panel.dataset.state=signature;panel.replaceChildren();
   if(s.phase==='invite'){
    const mine=s.a.id===account.id;panel.append(document.createTextNode(mine?`Wachten op ${s.b.alias}…`:`${s.a.alias} daagt je uit voor ${names[s.world]||'Rechtenwereld'}.`));
    panel.append(button(mine?'Intrekken':'Accepteren',()=>call(mine?'cancel':'accept')));
@@ -79,5 +83,9 @@
  async function changed(detail){if(detail.pending)return;const next=detail.account;if(initialized&&account?.id===next?.id&&account?.role===next?.role)return;initialized=true;epoch++;clearTimeout(timer);busy=false;account=next;state=null;queuedAnswer=null;sent='';frame.inert=true;frame.hidden=true;
   if(account?.role==='student'){try{queuedAnswer=JSON.parse(localStorage.getItem(queueKey())||'null');}catch{}poll();}else renderLobby({});
  }
+ window.LeraarBobDuo=Object.freeze({snapshot:()=>({accountId:account?.id||null,id,phase:state?.phase||'setup',busy,canOpenInvite:!id&&(!busy||['state','lobby'].includes(busyAction))}),openMatch:async next=>{
+  if(account?.role!=='student'||!/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(next||'')||id&&id!==next)return false;
+  if(id===next)return true;if(busy&&!['state','lobby'].includes(busyAction))return false;const turn=epoch;while(busy&&turn===epoch)await new Promise(r=>setTimeout(r,50));if(turn!==epoch||id&&id!==next)return false;id=next;await call('state');poll();return state?.id===next;
+ }});
  AxiomaAuth.onChange(changed);AxiomaAuth.ready().then(changed);setInterval(tick,200);addEventListener('online',poll);
 })();

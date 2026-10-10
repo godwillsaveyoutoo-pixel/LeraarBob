@@ -1,0 +1,325 @@
+[
+  {
+    "id": "rechtenwereld",
+    "title": "Rechtenwereld",
+    "type": "Trainer",
+    "student": [
+      "solo",
+      "learn",
+      "local",
+      "online"
+    ],
+    "teacher": [
+      "solo",
+      "local",
+      "online",
+      "classroom"
+    ],
+    "worksheets": [
+      "hellingrug",
+      "grenspas",
+      "formulewerf",
+      "signaalstad"
+    ]
+  },
+  {
+    "id": "wortelbouw",
+    "title": "Wortelbouw",
+    "type": "Spel",
+    "student": [
+      "solo",
+      "local"
+    ],
+    "teacher": [
+      "solo",
+      "local",
+      "classroom"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "vectoren-trainer",
+    "title": "Vectormissie",
+    "type": "Trainer",
+    "student": [
+      "solo",
+      "local"
+    ],
+    "teacher": [
+      "solo",
+      "local",
+      "classroom"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "gravity-maze",
+    "title": "Gravity Maze",
+    "type": "Spel",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "algebra-trainer",
+    "title": "Algebrawereld",
+    "type": "Trainer",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo",
+      "classroom"
+    ],
+    "worksheets": [
+      "equations",
+      "systems"
+    ]
+  },
+  {
+    "id": "getallenwereld",
+    "title": "Getallenwereld",
+    "type": "Les",
+    "student": [
+      "solo",
+      "series",
+      "local",
+      "learn",
+      "online"
+    ],
+    "teacher": [
+      "solo",
+      "series",
+      "local",
+      "classroom",
+      "teacher",
+      "learn",
+      "online",
+      "classlearn"
+    ],
+    "worksheets": [
+      "operations"
+    ]
+  },
+  {
+    "id": "rechten-arcade",
+    "title": "Rechtenarcade",
+    "type": "Spel",
+    "student": [],
+    "teacher": [],
+    "worksheets": []
+  },
+  {
+    "id": "rechten-trainer",
+    "title": "Rechtentrainer",
+    "type": "Trainer",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "functies-rechten",
+    "title": "Functies & rechten",
+    "type": "Les",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "brandweer",
+    "title": "Brandweer",
+    "type": "Spel",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "kleiduifschieten",
+    "title": "Kleiduifschieten",
+    "type": "Spel",
+    "student": [
+      "solo",
+      "group"
+    ],
+    "teacher": [
+      "solo",
+      "group"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "rechten-zeeslag",
+    "title": "Rechten Zeeslag",
+    "type": "Spel",
+    "student": [
+      "solo",
+      "online"
+    ],
+    "teacher": [
+      "solo",
+      "online"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "pythagoras",
+    "title": "Pythagoras",
+    "type": "Les",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "reele-getallen-trainer",
+    "title": "Reële getallen",
+    "type": "Trainer",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "stelsels",
+    "title": "Stelsels",
+    "type": "Trainer",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "algebra-smederij",
+    "title": "Algebra Smederij",
+    "type": "Trainer",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "taartenwinkel",
+    "title": "Taartenwinkel",
+    "type": "Spel",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "kubusbouw",
+    "title": "Kubusbouw",
+    "type": "Trainer",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "verfwinkel",
+    "title": "Verfwinkel",
+    "type": "Spel",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "data-check",
+    "title": "Data Check",
+    "type": "Les",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "signal-lab",
+    "title": "Signal Lab",
+    "type": "Les",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "glasraam",
+    "title": "Glasraam",
+    "type": "Atelier",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "rechten-arbeid-les",
+    "title": "Rechten & arbeid",
+    "type": "Les",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo",
+      "live"
+    ],
+    "worksheets": []
+  },
+  {
+    "id": "vectoren-canvas",
+    "title": "Vectoratelier",
+    "type": "Atelier",
+    "student": [
+      "solo"
+    ],
+    "teacher": [
+      "solo"
+    ],
+    "worksheets": []
+  }
+]

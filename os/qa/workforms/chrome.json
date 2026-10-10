@@ -1,0 +1,442 @@
+{
+  "checks": [
+    "Rechten solo has one 58px OS header; direct back/close remain available in focus, cancel-close preserves original input; independent collapse choice retained",
+    "World breadcrumb and game progress in shared Menu invoke the live native navigation after multiple rerenders",
+    "390px phone, 640px landscape and 320px phone: direct back/close in both bar states and focus; secondary actions in popover; unoccluded targets >=44px",
+    "Explicit focus preference survives reload and applies on reopening an app; home always keeps its navigation",
+    "Back from focus returns to desktop without closing; resume preserves state; Escape cancels close; confirmed close removes the app and restores desktop navigation"
+  ],
+  "measurements": [
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1109,
+      "y": 712.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1297,
+      "y": 712.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#focusRestore",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1122.734375,
+      "y": 720.5,
+      "width": 129.546875,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 12,
+      "y": 720.5,
+      "width": 184.453125,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1260.28125,
+      "y": 720.5,
+      "width": 93.71875,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1061,
+      "y": 712.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#focusRestore",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1122.734375,
+      "y": 720.5,
+      "width": 129.546875,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 12,
+      "y": 720.5,
+      "width": 184.453125,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1260.28125,
+      "y": 720.5,
+      "width": 93.71875,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 338,
+      "y": 791.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 150,
+      "y": 791.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#saveActivity",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 172,
+      "y": 624,
+      "width": 197,
+      "height": 44
+    },
+    {
+      "selector": "#minimizeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 172,
+      "y": 716,
+      "width": 197,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 194,
+      "y": 791.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 338,
+      "y": 791.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 242,
+      "y": 791.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#focusRestore",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 152.734375,
+      "y": 796.5,
+      "width": 129.546875,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 288.28125,
+      "y": 796.5,
+      "width": 93.71875,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 8,
+      "y": 796.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 588,
+      "y": 304.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 492,
+      "y": 304.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#saveActivity",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 422,
+      "y": 133,
+      "width": 197,
+      "height": 44
+    },
+    {
+      "selector": "#minimizeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 422,
+      "y": 225,
+      "width": 197,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 444,
+      "y": 304.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 588,
+      "y": 304.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 492,
+      "y": 304.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#focusRestore",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 396.734375,
+      "y": 312.5,
+      "width": 129.546875,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 534.28125,
+      "y": 312.5,
+      "width": 93.71875,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 12,
+      "y": 312.5,
+      "width": 47,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 268,
+      "y": 515.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 172,
+      "y": 515.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#saveActivity",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 102,
+      "y": 348,
+      "width": 197,
+      "height": 44
+    },
+    {
+      "selector": "#minimizeApp",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 102,
+      "y": 440,
+      "width": 197,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 124,
+      "y": 515.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 268,
+      "y": 515.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 172,
+      "y": 515.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#focusRestore",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 82.734375,
+      "y": 520.5,
+      "width": 129.546875,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 218.28125,
+      "y": 520.5,
+      "width": 93.71875,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 8,
+      "y": 520.5,
+      "width": 44,
+      "height": 44
+    }
+  ],
+  "errors": [],
+  "scope": "Actual Chromium; synthetic local account; native Rechtenwereld DOM and exercises"
+}

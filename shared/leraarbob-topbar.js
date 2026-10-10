@@ -277,7 +277,7 @@ function watchSocial(){
   socialLoading=true;
   const existing=document.querySelector('script[src*="/axioma-social.js"]');
   if(existing)existing.addEventListener('load',watchSocial,{once:true});
-  else load('shared/axioma-social.js?v=0.6.2').then(watchSocial).catch(()=>{});
+  else load('shared/axioma-social.js?v=20261010-workforms').then(watchSocial).catch(()=>{});
  }
 }
 function navigateGame(){const node=current.header.querySelector('#crumbWorld,[data-screen="world"],#gameHomeBtn,#brandBtn,#homeBtn:not([data-platform-home]),#home');if(node)node.click();else if(script.dataset.gameHref)location.assign(new URL(script.dataset.gameHref,root));else if(!isHome)location.assign(location.pathname);}

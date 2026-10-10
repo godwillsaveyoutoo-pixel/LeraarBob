@@ -18,7 +18,7 @@ jobs:
           package-manager-cache: false
       - run: node scripts/build-catalog.cjs --check
       - run: node --test --test-isolation=none tests/catalog.test.cjs tests/catalog-progress.test.cjs tests/desktop-model.test.cjs tests/getallenwereld.test.cjs tests/getallen-guided-choices.test.cjs tests/getallen-scientific-lessons.test.cjs tests/scientific-provider.test.cjs tests/algebra-class.test.cjs tests/algebra-learning.test.cjs tests/algebra-trainer.test.cjs tests/algebra-v04-choices.test.cjs tests/algebra-v04-journey.test.cjs tests/algebra-v04-motion.test.cjs tests/algebra-v045-fractions.test.cjs tests/algebra-v050-flow.test.cjs tests/algebra-world.test.cjs tests/stelsels-workshop.test.cjs
-      - run: node --check os/desktop.js && node --check os/personal-home.js
+      - run: node --check os/desktop.js && node --check os/personal-home.js && node --check os/activity-entry.js
       - run: node tests/desktop-package-check.cjs
       - name: Bureaubladbediening controleren
         run: |
@@ -32,6 +32,7 @@ jobs:
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/personal" node tests/personal-os-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/personal" node tests/personal-chrome-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" WORKFORMS_PROOF="$RUNNER_TEMP/os-qa/workforms" node tests/os-workforms-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_NAV_SCREENSHOTS="$RUNNER_TEMP/os-qa/native-navigation" node tests/rechten-os-navigation-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" OS_SCREENSHOTS="$RUNNER_TEMP/os-qa/pilots" node tests/desktop-pilot-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" ZEESLAG_SCREENSHOTS="$RUNNER_TEMP/os-qa/zeeslag-controls" node tests/zeeslag-controls-browser.cjs

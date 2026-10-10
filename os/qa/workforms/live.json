@@ -1,0 +1,60 @@
+{
+  "viewport": {
+    "width": 1366,
+    "height": 768,
+    "zoom": "100%",
+    "deviceScaleFactor": 1
+  },
+  "auth": "isolated fictional teacher/student accounts; production accounts not tested",
+  "backend": "existing numbers-session/rechten-class Edge handlers and lesson/hub migrations in local PostgreSQL/PGlite",
+  "boundaryFixtures": [
+    "Authentication identity and empty profile reads",
+    "Empty social presence and clay lobby sync responses; group games were not exercised"
+  ],
+  "checks": [
+    "Student cannot create classroom activities",
+    "Learn entrance is code-only at 1366/390/640 in both bar states; native Back and reopening retain partial code and same document",
+    "Klas Learn input expanded/collapsed and restore",
+    "Learn draft minimize/resume",
+    "Full 5-question Klas Learn: wrong/correct, 45 genuine XP, teacher review/pacing, finish/report, draft/focus/reload",
+    "Klas Battle answer expanded/collapsed and restore",
+    "Battle timer minimize/resume",
+    "Full 5-question Klas Battle: central code join, real input, timer retained, graded rankings and finish",
+    "Nested Rechten Battle minimize/resume",
+    "Full 5-question Rechten Klas Battle: central code join, original choices, nested Start/focus, results and finish",
+    "Live lesson follow minimize/resume",
+    "Live lesson: teacher create/code, pupil follow story, vote/result, minimize, teacher close and persisted named report",
+    "OS collapse preference survives full browser reload"
+  ],
+  "calls": {
+    "axioma_class_battle_hub:overview": 44,
+    "axioma_social:sync": 25,
+    "axioma_clay_v2:sync": 39,
+    "numbers-session:summary": 16,
+    "numbers-session:create": 2,
+    "numbers-session:join": 2,
+    "numbers-session:start": 2,
+    "numbers-session:pulse": 4,
+    "numbers-session:state": 26,
+    "numbers-session:submit": 11,
+    "numbers-session:end": 5,
+    "numbers-session:next": 10,
+    "rechten-class:create": 1,
+    "axioma_class_battle_hub:code": 1,
+    "rechten-class:join": 2,
+    "rechten-class:state": 22,
+    "rechten-class:start": 1,
+    "rechten-class:submit": 5,
+    "rechten-class:next": 5,
+    "axioma_lesson_stage:history": 3,
+    "axioma_lesson_stage:create": 1,
+    "axioma_lesson_stage:state": 10,
+    "axioma_lesson_stage:present": 3,
+    "axioma_lesson_stage:open_poll": 1,
+    "axioma_lesson_stage:vote": 1,
+    "axioma_lesson_stage:close_poll": 1,
+    "rechten-class:close": 1
+  },
+  "errors": [],
+  "missing": []
+}

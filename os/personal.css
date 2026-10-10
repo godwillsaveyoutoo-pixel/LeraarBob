@@ -144,3 +144,14 @@ body.os-focus #desktop{padding-bottom:52px}
 @media(max-width:700px){body[data-os-chrome=single] #focusWorkspace{min-width:44px;width:44px;padding:0}}
 body.os-focus .app-toolbar{display:none!important}
 @media(max-width:700px){#focusWorkspace>span{display:none}}
+/* One workform chooser for app cards, context actions and old mode links. */
+#modeDialog{width:min(760px,calc(100vw - 28px));padding:24px;box-sizing:border-box}
+#modeDialog #modeOptions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#modeDialog .mode-option{min-height:76px;margin:0;padding:14px;gap:12px}
+#modeDialog .mode-option strong{font-size:15px}#modeDialog .mode-option small{font-size:12px}
+#modeDialog #modeDescription{font-size:14px;margin:8px 0 18px}
+#modeDialog #modeWorksheets:not(:empty){margin-top:12px}#modeDialog .mode-join{grid-column:1/-1;font-size:14px;min-height:44px}
+#modeDialog .mode-remove{background:transparent;color:var(--muted);padding:10px 0;min-height:44px;margin-top:12px;text-align:left}
+@media(max-width:500px){#modeDialog{padding:18px}#modeDialog #modeOptions{grid-template-columns:1fr}#modeDialog .mode-option{min-height:66px}}
+
+#desktopHeader>#nativeAppNavigation{display:none!important}

@@ -179,3 +179,10 @@ De gekozen rechte staat volledig leesbaar naast twee afzonderlijke regelaars voo
 ## Vensterbediening · terug en sluiten zonder grote balken
 
 Zeeslag heeft nu net als Rechtenwereld één OS-bovenbalk. Terug en Sluiten staan direct in de taakbalk. **Balken verbergen** verbergt boven- en onderbalk; Terug, Balken tonen en Sluiten blijven in een gereserveerde strook buiten de oefening bereikbaar. Werkelijk sluiten, annuleren, terugkeren en hervatten zijn met echte native schermen gecontroleerd op laptop en compacte schermen, inclusief behoud van een tweede geopende app. De eerdere eigen inklap- en focusvoorkeur blijven behouden. [Rapporten en screenshots](qa/window-controls/README.md): Rechtenwereld 5 groepen / 39 metingen, Zeeslag 6 / 21, vier pilots 32 / 23 en centrale papierwerkruimte 8 / 39; alle geslaagd met lokale testaccounts.
+
+
+## Centrale werkvormen · ontwikkelpreview 10 oktober 2026
+
+Appkaart, rechtermuisknop en het gedeelde OS-menu openen dezelfde compacte werkvormkeuze. De actieve keuze gaat rechtstreeks naar het eigen formulier of werkbord. Rechtenwereld, Zeeslag, Getallenwereld, Algebra, Vectormissie, Wortelbouw en Kleiduifschieten delen de startbediening; de eigen oefeningen en providers blijven behouden. Klasstart gaat zonder extra hub, de desktopcode ondersteunt de bestaande zes- en achttekencodes, en oefenbladen openen de centrale themamappen/maker. Alle appvensters gebruiken de compacte OS-balk; Algebra's native secties blijven via het gedeelde menu bereikbaar.
+
+Werkelijk gecontroleerd: 20 werkvormgroepen / 102 aanraakdoelen, de vier pilots, Algebra, volledige lokale Learn-/Battle-/live-lesruns, centrale papieropslag en providercompatibiliteit. [Rapport, precieze testgrenzen, wijzigingen per app en screenshots](qa/workforms/README.md). De preview op <http://127.0.0.1:8795/> gebruikt fictieve lokale accounts. Productieauthenticatie en externe WebSockets blijven te controleren; Getallenwereld gebruikt voorlopig sessiecodes, Rechtenwereld/Zeeslag uitnodigingen op alias. Dit is een reviewversie in PR #13, geen nieuwe publieke uitrol.

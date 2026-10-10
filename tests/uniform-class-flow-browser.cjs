@@ -1,5 +1,6 @@
 'use strict';
-// Actual desktop/native UI and existing Edge handlers + PostgreSQL migrations.
+// Legacy class-hub compatibility: retained standalone/nested routes and existing Edge handlers + SQL.
+// Current direct OS workform entries are exercised by os-workforms-browser and desktop-live-browser.
 // Authentication is fictional and isolated; this does not verify production login.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {chromium}=require('playwright'),{server:numbersDatabase,ids}=require('./helpers/numbers-session-db.cjs');
@@ -41,7 +42,7 @@ const host=require('../scripts/serve-os-preview.cjs').createServer();
  async function retain(page,frame,label){const before=frame;await page.click('#minimizeApp');await page.locator('#runningApps button').last().click();assert.equal(await frameFor(page,new URL(frame.url()).pathname),before,'same native browsing context '+label);checks.push(label+' minimize/resume');}
  async function module(hub,provider){await hub.locator('#moduleHost iframe:not([hidden])').waitFor();const child=await(await hub.locator('#moduleHost iframe:not([hidden])').elementHandle()).contentFrame();await nativeWait(child,provider==='numbers'?()=>window.NumbersSpace?.ready:()=>window.LeraarBobClassroom);return child;}
  async function hubFor(page){return frameFor(page,'/klasbattle/');}
- async function launchWorld(page,world){await liveView(page);await page.getByRole('button',{name:'Klas Battle · '+world,exact:true}).click();return hubFor(page);}
+ async function launchWorld(page,world){await liveView(page);await page.getByRole('button',{name:'Klas Battle',exact:true}).click();const hub=await hubFor(page);await hub.locator('[data-launch="'+(world==='getallen'?'bewerkingen':world)+'"]:not([data-code])').click();return hub;}
  async function commonFit(page,frame,label,targets){
   assert.equal(await page.evaluate(()=>devicePixelRatio),1);
   for(const collapsed of [false,true]){await page.evaluate(v=>LeraarBobTopbar.setCollapsed(v,true),collapsed);if(collapsed){const box=await page.locator('.lb-restore:not([hidden])').boundingBox();assert(box&&box.width>=44&&box.height>=44&&box.x>=0&&box.y>=0,'reachable restore '+label);}

@@ -26,7 +26,7 @@ test('Learners participate in classes but cannot create them through startup opt
   }
   assert(M.modes('getallenwereld','teacher').some(m=>m.id==='classlearn'));
   assert(M.modes('rechtenwereld','teacher').some(m=>m.id==='classroom'));
-  assert.equal(new URL(M.destination('rechtenwereld','classroom',{role:'teacher'})).searchParams.get('view'),'create');
+  assert.equal(new URL(M.destination('rechtenwereld','classroom',{role:'teacher'})).searchParams.get('create'),'1');
   assert.equal(M.modes('pythagoras','teacher').length,1,'Do not invent future Battle or paper providers');
   assert.equal(M.worksheets('rechten-zeeslag').length,0);
 });

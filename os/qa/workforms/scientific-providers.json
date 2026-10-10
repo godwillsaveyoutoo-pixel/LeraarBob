@@ -1,0 +1,217 @@
+{
+  "scope": "Real Chromium UI, 100% zoom and scale 1; fictitious accounts, in-memory progress and local lobby response fixtures. No production authentication, cloud writes or external multiplayer. Provider routes only.",
+  "viewports": [
+    {
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 844,
+      "height": 390
+    }
+  ],
+  "checks": [
+    {
+      "name": "Scientific provider level 0 creates and exact-checks actual version 2 questions with genuine solo XP",
+      "passed": true
+    },
+    {
+      "name": "Scientific provider level 1 creates and exact-checks actual version 2 questions with genuine solo XP",
+      "passed": true
+    },
+    {
+      "name": "Scientific provider level 2 creates and exact-checks actual version 2 questions with genuine solo XP",
+      "passed": true
+    },
+    {
+      "name": "Three scientific practice levels differ for the same seed and preserve original default generator contract",
+      "passed": true
+    },
+    {
+      "name": "Scientific central worksheet uses current questions/key and prints the isolated document without loading a learning controller",
+      "passed": true
+    },
+    {
+      "name": "Scientific duo-learn actual selection/create/code/start/question with local session fixture, teacher role and level 2",
+      "passed": true
+    },
+    {
+      "name": "Scientific duo-battle actual selection/create/code/start/question with local session fixture, teacher role and level 2",
+      "passed": true
+    },
+    {
+      "name": "Scientific class-learn actual selection/create/code/start/question with local session fixture, teacher role and level 2",
+      "passed": true
+    },
+    {
+      "name": "Scientific class-battle actual selection/create/code/start/question with local session fixture, teacher role and level 2",
+      "passed": true
+    },
+    {
+      "name": "OS scientific student modes offer duo/join and teacher role owns class creation controls",
+      "passed": true
+    },
+    {
+      "name": "An older session server is identified honestly and keeps historical scientific generation without changing answers",
+      "passed": true
+    }
+  ],
+  "layout": [],
+  "scrollActions": [],
+  "localSessionRequests": [
+    {
+      "action": "create",
+      "accountId": "scientific-provider-teacher",
+      "role": "teacher",
+      "data": {
+        "skills": [
+          "scientific"
+        ],
+        "level": 2,
+        "count": 5,
+        "seconds": 180,
+        "activity": "learn",
+        "audience": "duo",
+        "participate": true,
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "start",
+      "accountId": "scientific-provider-teacher",
+      "role": "teacher",
+      "data": {
+        "id": "fixture-0",
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "create",
+      "accountId": "scientific-provider-teacher",
+      "role": "teacher",
+      "data": {
+        "id": "fixture-0",
+        "skills": [
+          "scientific"
+        ],
+        "level": 2,
+        "count": 5,
+        "seconds": 180,
+        "activity": "battle",
+        "audience": "duo",
+        "participate": true,
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "start",
+      "accountId": "scientific-provider-teacher",
+      "role": "teacher",
+      "data": {
+        "id": "fixture-1",
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "create",
+      "accountId": "scientific-provider-teacher",
+      "role": "teacher",
+      "data": {
+        "id": "fixture-1",
+        "skills": [
+          "scientific"
+        ],
+        "level": 2,
+        "count": 5,
+        "seconds": 180,
+        "activity": "learn",
+        "audience": "class",
+        "participate": true,
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "start",
+      "accountId": "scientific-provider-teacher",
+      "role": "teacher",
+      "data": {
+        "id": "fixture-2",
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "create",
+      "accountId": "scientific-provider-teacher",
+      "role": "teacher",
+      "data": {
+        "id": "fixture-2",
+        "skills": [
+          "scientific"
+        ],
+        "level": 2,
+        "count": 5,
+        "seconds": 180,
+        "activity": "battle",
+        "audience": "class",
+        "participate": true,
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "start",
+      "accountId": "scientific-provider-teacher",
+      "role": "teacher",
+      "data": {
+        "id": "fixture-3",
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "create",
+      "accountId": "scientific-old-server",
+      "role": "teacher",
+      "data": {
+        "skills": [
+          "scientific"
+        ],
+        "level": 2,
+        "count": 5,
+        "seconds": 180,
+        "activity": "learn",
+        "audience": "duo",
+        "participate": true,
+        "generatorVersion": 2
+      },
+      "fixture": true
+    },
+    {
+      "action": "start",
+      "accountId": "scientific-old-server",
+      "role": "teacher",
+      "data": {
+        "id": "fixture-0",
+        "generatorVersion": 2
+      },
+      "fixture": true
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "blocked": [
+    "Production authentication and external multiplayer require actual test account sessions."
+  ],
+  "passed": true,
+  "browser": "154.0.8037.58"
+}
