@@ -1,0 +1,18 @@
+Bron: main 296e06b7afb84564f7737ba0f790e27ebf6fa800.
+Alleen documentatie en een lokale analyseproef gewijzigd.
+
+Command (vanuit repositoryroot):
+NODE_PATH=/tmp/leraarbob-os-deps/node_modules node --test tests/game-registry.cjs tests/platform-routes.test.cjs tests/desktop-model.test.cjs tests/getallen-world-integration.test.cjs tests/worksheet-library.test.cjs
+
+Resultaat, 10 oktober 2026:
+PASS tests/desktop-model.test.cjs
+PASS tests/game-registry.cjs
+PASS tests/getallen-world-integration.test.cjs
+PASS tests/platform-routes.test.cjs
+PASS tests/worksheet-library.test.cjs
+5 bestanden, 5 geslaagd, 0 mislukt; exitcode 0; circa 37,8 seconden.
+
+De eerste poging zonder NODE_PATH kon jsdom niet vinden voor twee bestanden.
+Na gebruik van de reeds beschikbare testdependencies slaagden alle vijf.
+Geen wijzigingen of nieuwe dependency-installaties in de oorspronkelijke werkmap.
+Dit zijn lokale tests met fictieve accounts; geen productie-Supabasecontrole.

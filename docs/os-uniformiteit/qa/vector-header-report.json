@@ -1,0 +1,162 @@
+{
+  "scope": "Actual public fresh guest Vector header layout and menu availability, only same-origin GET allowed.",
+  "states": [
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "header": {
+        "height": 82,
+        "top": 0,
+        "bottom": 82,
+        "display": "flex",
+        "visibility": "hidden",
+        "hasSharedClass": false
+      },
+      "appGrid": "82px 509px",
+      "menuVisible": false,
+      "questionTop": 82,
+      "viewport": {
+        "width": 1366,
+        "height": 591
+      }
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "header": {
+        "height": 82,
+        "top": 0,
+        "bottom": 82,
+        "display": "flex",
+        "visibility": "hidden",
+        "hasSharedClass": false
+      },
+      "appGrid": "82px 567px",
+      "menuVisible": false,
+      "questionTop": 82,
+      "viewport": {
+        "width": 1366,
+        "height": 649
+      }
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "header": {
+        "height": 62,
+        "top": 0,
+        "bottom": 62,
+        "display": "flex",
+        "visibility": "hidden",
+        "hasSharedClass": false
+      },
+      "appGrid": "62px 592px",
+      "menuVisible": false,
+      "questionTop": 62,
+      "viewport": {
+        "width": 390,
+        "height": 654
+      }
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "header": {
+        "height": 62,
+        "top": 0,
+        "bottom": 62,
+        "display": "flex",
+        "visibility": "hidden",
+        "hasSharedClass": false
+      },
+      "appGrid": "62px 669px",
+      "menuVisible": false,
+      "questionTop": 62,
+      "viewport": {
+        "width": 390,
+        "height": 731
+      }
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "collapsed": false,
+      "header": {
+        "height": 52,
+        "top": 0,
+        "bottom": 52,
+        "display": "flex",
+        "visibility": "hidden",
+        "hasSharedClass": false
+      },
+      "appGrid": "52px 131px",
+      "menuVisible": false,
+      "questionTop": 52,
+      "viewport": {
+        "width": 640,
+        "height": 183
+      }
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "collapsed": true,
+      "header": {
+        "height": 52,
+        "top": 0,
+        "bottom": 52,
+        "display": "flex",
+        "visibility": "hidden",
+        "hasSharedClass": false
+      },
+      "appGrid": "52px 189px",
+      "menuVisible": false,
+      "questionTop": 52,
+      "viewport": {
+        "width": 640,
+        "height": 241
+      }
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "standaloneMenu": [
+    "Spelmenu",
+    "Spelvoortgang",
+    "OefeningenreeksVolg jouw route",
+    "Vrij oefenenKies zelf een halte",
+    "Vrij tekenenVectoren, punten en lijnen",
+    "Uitleg",
+    "Duo-battle op één toestel2 spelers · één scherm",
+    "Spellen",
+    "KlasbattleBattles en ranglijsten voor alle spellen",
+    "Samen lerenDuo Learn, Klaslearn en borduitleg",
+    "Alle oefenbladen",
+    "Alle ranglijstenResultaten per klas en wereld",
+    "Mijn leerpad",
+    "UitnodigingenEen leerling uitnodigen of reageren",
+    "Inloggen",
+    "Bovenbalk verbergen"
+  ],
+  "standaloneHeader": {
+    "height": 66,
+    "visibility": "visible",
+    "hasSharedClass": true
+  }
+}
