@@ -2,6 +2,27 @@
 
 Doel: overgang tussen bureaublad, themamap, werkvorm en app, met behoud van oorspronkelijke vragen, antwoordbediening, stijl en leerflow. Gewone bezoeken aan `/` en `/index.html` openen het bureaublad op `/os/`. De eerdere catalogus blijft beschikbaar via [`/index.html?view=catalog`](../index.html?view=catalog) en OS Instellingen; bestaande accountlinks behouden de oorspronkelijke accountingang.
 
+## Algebrawereld-navigatie · 10 oktober 2026
+
+De [definitieve browserrun](qa/algebra-navigation/report.json) telt **18 interactiegroepen, 252 doelmetingen en 39 screenshots**, zonder browserexceptions of ontbrekende bronnen. Gecontroleerd op **1366 × 768 bij 100% zoom**, 390 × 844 en 640 × 360, `deviceScaleFactor: 1`, met de bovenbalk uitgeklapt en ingeklapt. Alle zestien bronhashes kloppen met de definitieve implementatie.
+
+| Controle | Werkelijk uitgevoerd | Resultaat / grens |
+| --- | --- | --- |
+| Navigatielagen | OS: één platformbalk plus één gecombineerde appbalk; standalone: één platformbalk plus Werelden/Levels/Werkvormen | Dubbele Algebra-titel-/menurijen verborgen met behoud van nodes en handlers |
+| Wereld en level | Beide werelden, alle zeven Vergelijkingen- en zes Stelsels-levels geselecteerd | Selectie start geen vraag en wijzigt geen poging; Spelen blijft expliciet |
+| Vergelijkingen | Echte bewerking, hulp/pauze, Stappen en ongedaan maken; zes daadwerkelijke juiste antwoorden | Native 30 XP exact zichtbaar in de OS-balk |
+| Stelsels | Voorstel uitvoeren, beide actuele vergelijkingen, hulp/historie en onafgemaakte `1/`-invoer | Exact werk en invoer blijven bestaan bij navigatie en hervatten |
+| Werkvormen en papier | Eigen werkvormen per module; oefenblad van een ander level werkelijk gemaakt en automatisch bewaard | Lopende vraag, voorstel, invoer en XP veranderen niet |
+| Start en venster | Ctrl/Cmd K, Escape, antwoordfocus, Bewaren, minimaliseren/hervatten, eigen map/filter/zoekwoord, fullscreen en weergave | Dezelfde iframe en werkbordnodes; aparte taakbalknamen voor Vergelijkingen en Stelsels |
+| Balken en compacte ruimte | Beide standen, herstel ≥44 × 44 px en juiste toegankelijke status; native opgave en belangrijkste acties bereikbaar | Op 640 × 360 gebruiken de formule-/bewerkingspanelen hun eigen interne scroll |
+| Account | Centrale dialoog tijdens een opgave; gast naar leerling wisselen | Oud frame verwijderd; vragen, XP en oefenbladen niet aan volgende gebruiker getoond |
+| Klasbattle | Gast/leerling vanuit Vergelijkingen en leraar vanuit Stelsels; standalone gast/leerling/leraar; exact gekozen level en terugkeer | Rolbediening klopt; hubterugkeer hergebruikt de oorspronkelijke module met invoer. Authfixtures, geen nieuwe productieklas |
+| Herladen | Volledig OS-herladen, behouden inklapkeuze, module opnieuw openen via echte wereldkaart en native hervatting | OS herstelt de eigen map; de bestaande Algebra-opslag herstelt opgeslagen werk en draft |
+
+De [aanvullende regressies](qa/algebra-navigation/regressions/) slagen: **123 DOM-/platformcontroles**, **76 Algebra-/catalogusunits**, native flow op vijf schermmaten met twee echt gespeelde rondes (60 XP, één voltooid level), oorspronkelijke Algebra-klasbrowser, **795 Stelsels-browsercontroles** en de vier OS-pilots (**32 groepen / 23 layouts**). De native Werkvormen en hulplessen zijn daarnaast gericht uitgevoerd. [Dertien beschermde bronbestanden](qa/algebra-navigation/protected-sources.json) zijn gelijk aan de basis; de oorspronkelijke lokale werkmap heeft volgens de afzonderlijke rootvergelijking **1517 identieke hashes en nul wijzigingen**.
+
+Dit bewijs gebruikt geïsoleerde gast-, leerling- en leraarfixtures, met geblokkeerd extern netwerk. De native klasseproef gebruikt de bestaande lokale serverlogica. Twee werkelijk ingelogde productieaccounts, cloudhervatting en externe multiplayer blijven open. De eerdere Rechtenwereld-draaihulp op 390 px is behouden; de desktopopgaven van alle vier pilots zijn werkelijk bediend. [Bewijsindeling en herhaalcommando](qa/algebra-navigation/README.md).
+
 ## Oefenbladmappen · 10 oktober 2026
 
 - [x] Alle zeven bestaande generators werkelijk bediend in negen onderwerpen: vier Rechten-onderdelen, Vergelijkingen, Stelsels, Machten, Vierkantswortels en Wetenschappelijke notatie.
@@ -101,9 +122,9 @@ Productieaanmelding, cloudhervatting en externe multiplayer met **twee daadwerke
 
 ## Productie-uitrol · 10 oktober 2026
 
-De gerichte wetenschappelijke migratie is toegepast en `numbers-session` is actief als versie 2 met `verify_jwt=true`. De gedeployde `index.ts`, `handler.js` en `core.js` zijn bytegelijk aan de reviewbranch. Het catalogustotaal is 19. De oorspronkelijke sessiefunctie heeft dezelfde bronhash en de RPC blijft uitsluitend toegankelijk voor de service-role. Een anonieme HTTP-aanroep geeft 401.
+De gerichte wetenschappelijke migratie is toegepast en `numbers-session` is actief als versie 2 met `verify_jwt=true`. De gedeployde `index.ts`, `handler.js` en `core.js` zijn bytegelijk aan de toenmalige reviewbranch. Het catalogustotaal is 19. De oorspronkelijke sessiefunctie heeft dezelfde bronhash en de RPC blijft uitsluitend toegankelijk voor de service-role. Een anonieme HTTP-aanroep geeft 401.
 
-Hashes vóór en na uitrol bevestigen behoud van alle 41 bestaande voortgangsrijen en de bestaande sessiegegevens: één ruimte, twee deelnemers, nul antwoorden en nul requests. Deze controle heeft geen leerlingwerk of nieuwe sessie gemaakt. De frontend wordt via GitHub Pages vanaf `main` gepubliceerd; publieke ingangen zijn [het bureaublad](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/) en [Getallenwereld](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/). De historische Getallenwereld-releasecontroles staan in de inmiddels samengevoegde [PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7) en [het verificatierapport](qa/verification.json). [PR #8](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/8) maakt `/` de OS-hoofdingang. De huidige mappen-/klasstartwijziging staat op `codex/os-folders-classflow-20261010`; haar pull request en publicatie volgen na de definitieve branchcontrole.
+Hashes vóór en na uitrol bevestigen behoud van alle 41 bestaande voortgangsrijen en de bestaande sessiegegevens: één ruimte, twee deelnemers, nul antwoorden en nul requests. Deze controle heeft geen leerlingwerk of nieuwe sessie gemaakt. De frontend wordt via GitHub Pages vanaf `main` gepubliceerd; publieke ingangen zijn [het bureaublad](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/) en [Getallenwereld](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/). De historische Getallenwereld-releasecontroles staan in de inmiddels samengevoegde [PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7) en [het verificatierapport](qa/verification.json). [PR #8](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/8) maakt `/` de OS-hoofdingang. De mappen-/klasstartwijziging uit `codex/os-folders-classflow-20261010` is via [PR #9](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/9) samengevoegd en gepubliceerd als main `a365d15`.
 
 ## Nog open voor productiecontrole
 

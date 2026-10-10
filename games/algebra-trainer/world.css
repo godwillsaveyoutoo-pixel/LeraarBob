@@ -27,3 +27,13 @@ body[data-screen=setup] .setup{display:block;overflow:auto;padding-bottom:20px}b
 @media(max-width:650px){.worldMap{padding:12px;gap:16px;border-radius:20px}.island{grid-template-columns:56px minmax(0,1fr) 14px;gap:10px;padding:18px 12px}.islandIcon{width:56px;height:64px}.islandInfo strong{font-size:18px}}
 body[data-screen=setup] .dockBtn{scroll-margin-block:16px}
 @media print{.worldScreen,.toolsScreen{display:none!important}}
+
+/* A short OS work area still shows each world's complete opening action. */
+@media(max-height:260px) and (min-width:601px){
+ .algebraPlatform.algebra-os-embedded .worldCards{padding:8px;gap:10px}
+ .algebraPlatform.algebra-os-embedded .worldCard{min-height:148px;padding:8px;gap:4px}
+ .algebraPlatform.algebra-os-embedded .worldCard .menuStopHeading strong{font-size:20px}
+ .algebraPlatform.algebra-os-embedded .worldExample{font-size:22px;line-height:1.2;padding:0}
+ .algebraPlatform.algebra-os-embedded .worldDescription{font-size:12px;line-height:1.3}
+ .algebraPlatform.algebra-os-embedded .worldCardFoot{font-size:11px;line-height:1.3;padding-top:6px;gap:4px}
+}

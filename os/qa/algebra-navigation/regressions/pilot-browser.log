@@ -1,0 +1,33 @@
+PASS Start Ctrl K / Escape restores native focus: [data-formula-tile="b"]
+PASS Pythagoras own map/filter/query; save; same iframe and native state after back/minimize/resume
+PASS pythagoras fold/reopen 44 px restore, more app height, native state retained
+PASS Pythagoras native reveal, genuine drag, numeric tile, next level, partial formula and real completed level
+PASS Rechtenwereld own map/filter/query; save; same iframe and native state after back/minimize/resume
+PASS rechtenwereld fold/reopen 44 px restore, more app height, native state retained
+PASS Rechtenwereld uses its actual native XP without conversion
+PASS Rechtenwereld native world/stop, hint, correct answer, single recorded attempt and explicit next task
+PASS Rechten Zeeslag own map/filter/query; save; same iframe and native state after back/minimize/resume
+PASS zeeslag fold/reopen 44 px restore, more app height, native state retained
+PASS Rechten Zeeslag original fleet placement, aim controls and real fired shot; live timer remains native
+PASS Glasraam own map/filter/query; save; same iframe and native state after back/minimize/resume
+PASS Shared display button calls original Glasraam theme handler without changing drawing
+PASS glasraam fold/reopen 44 px restore, more app height, native state retained
+PASS Start Ctrl K / Escape restores native focus: #slope
+PASS Glasraam wrong point, repair, complete original window, color via keyboard, native 1/8 ramen and incomplete input focus
+PASS Four independent return locations survive cross-app taskbar switches
+PASS Saved entry opens real app and returns to Mijn taken
+PASS Compact Zeeslag VUUR is actually clickable while save toast is visible
+PASS All four native apps inspected expanded/collapsed/reopened at 390×844
+PASS Central account dialog remains accessible from native app
+PASS Explicit collapsed preference survives desktop reload and restore
+PASS Four saved native shortcuts persist after browser reload
+PASS Student online option reaches original Zeeslag lobby, native invitation and same pending lobby after resume
+PASS Actual Start button, search and result open native Glasraam
+PASS Actual profile/settings, wallpaper/display changes and return retain native iframe/drawing
+PASS Direct shared fullscreen works and retains native iframe
+PASS Actual Start search from an open app opens another app with its own theme
+PASS Compact platform title follows actual active app
+PASS Original Pythagoras leraarBob brand returns to own map and resumes same formula/iframe
+PASS Original Rechtenwereld profile sign-in opens central account and retains native screen/state
+PASS Original guest live-lesson sign-in opens only central account and retains code/input/submit handler
+PASS actual four native pilot apps in /os/; 32 checks; screenshots /tmp/leraarbob-algebra-pilot-regression

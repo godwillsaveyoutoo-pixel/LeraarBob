@@ -232,11 +232,37 @@
   function showView(next,{route=true}={}){
     rememberFocus(frames.get(activeKey));
     closeStart();if(typeof next==='string')next={kind:next};if(!['desktop','theme',...Object.keys(viewNames)].includes(next.kind)||next.kind==='theme'&&!M.theme(next.themeId))next={kind:'desktop'};
-    view={kind:next.kind,themeId:next.themeId||'',type:next.type||'all',query:next.query||''};if(next.topicId&&['worksheets','worksheet-saved'].includes(next.kind))view.topicId=next.topicId;activeKey=null;
+    view={kind:next.kind,themeId:next.themeId||'',type:next.type||'all',query:next.query||''};if(next.topicId&&['worksheets','worksheet-saved'].includes(next.kind))view.topicId=next.topicId;activeKey=null;syncNativeNavigation();
     $('homeView').hidden=view.kind!=='desktop';$('libraryWindow').hidden=view.kind==='desktop';$('appWorkspace').hidden=true;
     frames.forEach(f=>{f.wrapper.hidden=true;f.wrapper.inert=true;});
     if(view.kind==='desktop')renderHome();else renderLibrary();updateCrumbs();renderRunning();syncThemeControl();syncProgressBadge();
     if(route)updateRoute();
+  }
+  function originalURL(href){const safe=M.safeURL(href);if(!safe)return null;const url=new URL(safe);url.searchParams.delete('osEmbed');return url.href;}
+  function algebraModule(href){try{const path=new URL(href).pathname;if(path===new URL('games/algebra-trainer/stelsels.html',base).pathname)return 'systems';if([new URL('games/algebra-trainer/',base).pathname,new URL('games/algebra-trainer/index.html',base).pathname].includes(path))return 'equations';}catch{}return null;}
+  function openAlgebraRoute(item,href){
+    const safe=M.safeURL(href);if(!safe||item.owner!==M.key(account))return false;
+    const url=new URL(safe),module=algebraModule(safe),g=M.app('algebra-trainer');
+    if(module){
+      const cached=[...frames.values()].find(f=>f.app.id===g.id&&f.mode==='solo'&&algebraModule(f.href)===module),key=cached?.key||`${g.id}|solo|${module}`;
+      if(!openFrame(cached||{key,app:g,mode:'solo',label:module==='systems'?'Stelsels · op je eigen tempo':'Vergelijkingen · op je eigen tempo',href:safe,origin:{...item.origin}}))return true;
+      const next=frames.get(key),target=url.searchParams.get('screen');
+      if(cached&&['world','menu','tools','setup'].includes(target))next.algebraShell?.navigate(target);
+      return true;
+    }
+    if(url.pathname===new URL('klasbattle/',base).pathname&&['algebra','algebra-trainer'].includes(url.searchParams.get('game'))){
+      const world=url.searchParams.get('world')||url.searchParams.get('topic')||item.algebraContext?.world||'equations';
+      openFrame({key:'utility:algebra-battle:'+world,app:g,mode:'utility',label:'Klasbattle · '+(world==='systems'?'Stelsels':'Vergelijkingen'),href:safe,utility:true,origin:{...item.origin}});return true;
+    }
+    return false;
+  }
+  function syncNativeNavigation(){
+    const current=frames.get(activeKey),context=current?.algebraContext,host=$('nativeAppNavigation'),enabled=!!context;
+    host.hidden=!enabled;if(!enabled){host.replaceChildren();delete host.dataset.signature;delete document.body.dataset.nativeNavigation;return;}
+    document.body.dataset.nativeNavigation='algebra';
+    const signature=context.destinations.map(d=>d.id+':'+d.label).join('|');
+    if(host.dataset.signature!==signature){host.replaceChildren(...context.destinations.map(d=>{const node=button(d.label,'',()=>frames.get(activeKey)?.algebraShell?.navigate(d.id));node.dataset.algebraSection=d.id;return node;}));host.dataset.signature=signature;}
+    host.querySelectorAll('button').forEach(node=>{const active=context.destinations.find(d=>d.id===node.dataset.algebraSection)?.active;if(active)node.setAttribute('aria-current','page');else node.removeAttribute('aria-current');});
   }
   function updateCrumbs(){
     const folder=$('headerFolder'),app=$('headerApp'),current=frames.get(activeKey);
@@ -252,8 +278,10 @@
       else{const topic=doc?.querySelector('#spaceCrumb');if(topic?.textContent.trim())nodes=[topic];}
       $('openOriginal').href=M.safeURL(current.frame.contentWindow.location.href)||current.href;
     }catch{}
-    app.hidden=!current||nodes.some(n=>n.id==='gameHomeBtn');
-    const signature=nodes.map(n=>n.tagName+':'+n.textContent.trim()).join('|');
+    const algebra=current?.algebraContext;
+    if(algebra){doc=current.frame.contentDocument;$('openOriginal').href=originalURL(current.frame.contentWindow.location.href)||current.href;}
+    app.hidden=!current||!!algebra||nodes.some(n=>n.id==='gameHomeBtn');
+    const signature=algebra?JSON.stringify([algebra.world,algebra.screen,algebra.level,algebra.levelTitle]):nodes.map(n=>n.tagName+':'+n.textContent.trim()).join('|');
     if(doc!==crumbDocument||signature!==crumbSignature){
       app.parentElement.querySelectorAll('[data-native-crumb]').forEach(n=>n.remove());
       nodes.forEach(source=>{
@@ -261,6 +289,11 @@
         if(node.tagName==='BUTTON'){node.type='button';node.onclick=()=>{source.click();const target=doc.querySelector('#app');if(target){if(!target.hasAttribute('tabindex'))target.tabIndex=-1;target.focus({preventScroll:true});}};}
         app.parentElement.append(node);
       });
+      if(algebra){
+        const crumb=(label,destination)=>{const node=el(destination?'button':'span','',label);node.dataset.nativeCrumb='true';if(destination){node.type='button';node.onclick=()=>current.algebraShell?.navigate(destination);}app.parentElement.append(node);};
+        crumb('Algebrawereld','world');if(algebra.world!=='overview')crumb(algebra.worldTitle,'menu');
+        if(!['world','menu'].includes(algebra.screen))crumb(({tools:'Werkvormen',setup:'Eigen reeks',preview:'Oefenblad',paper:'Oefenblad',history:'Stappen',systemHistory:'Stappen',summary:'Resultaat',systemSummary:'Resultaat'})[algebra.screen]||algebra.levelTitle||'Oefenen');
+      }
       crumbDocument=doc;crumbSignature=signature;
     }
   }
@@ -291,11 +324,11 @@
     closeStart();if(!frames.has(config.key)){
       if(frames.size>=6){toast('Er staan zes apps open. Sluit eerst een app via de taakbalk om een nieuwe te openen.');return false;}
       const wrapper=el('div','frame-wrapper'),frame=el('iframe','native-app'),loading=el('div','frame-loading');
-      frame.title=config.app.title;frame.allow='fullscreen';frame.src=config.href;loading.append(icon('desktop'),el('span','',`${config.app.title} wordt geopend…`));
+      frame.title=runningTitle(config);frame.allow='fullscreen';const source=new URL(config.href);if(config.app.id==='algebra-trainer'&&algebraModule(source.href))source.searchParams.set('osEmbed','1');frame.src=source.href;loading.append(icon('desktop'),el('span','',`${frame.title} wordt geopend…`));
       const fallback=el('a','', 'Open de oorspronkelijke app apart');fallback.href=config.href;fallback.target='_blank';fallback.rel='noopener';loading.append(fallback);wrapper.append(frame,loading);$('appFrames').append(wrapper);
-      const origin=activeKey?{kind:config.utility?'live':'theme',themeId:config.app.desktopTheme||'',type:'all',query:''}:{...view};
+      const origin=config.origin?{...config.origin}:activeKey?{kind:config.utility?'live':'theme',themeId:config.app.desktopTheme||'',type:'all',query:''}:{...view};
       const item={...config,origin,frame,wrapper,owner:M.key(account),cleanup:null};frames.set(config.key,item);
-      frame.addEventListener('load',()=>{if(!frames.has(config.key)||item.owner!==M.key(account))return;loading.hidden=true;connectNative(item);if(activeKey===item.key){updateCrumbs();syncThemeControl();syncProgressBadge();}});
+      frame.addEventListener('load',()=>{if(!frames.has(config.key)||item.owner!==M.key(account))return;loading.hidden=true;connectNative(item);if(activeKey===item.key){syncNativeNavigation();updateCrumbs();syncThemeControl();syncProgressBadge();}});
     }
     if(!activeKey&&frames.get(config.key)!==config)frames.get(config.key).origin={...view};activateFrame(config.key);return true;
   }
@@ -314,17 +347,30 @@
     $('activeAppTitle').textContent=current.app.title;$('activeAppMode').textContent=current.label;
     const badge=current.utility?el('span','type-badge',current.app.id==='utility:teacher'?'Leraaromgeving':'Sessie'):typeBadge(current.app.type);
     $('activeAppType').replaceWith(Object.assign(badge,{id:'activeAppType'}));
-    let original=current.href;try{original=M.safeURL(current.frame.contentWindow.location.href)||original;}catch{}$('openOriginal').href=original;
+    let original=current.href;try{original=originalURL(current.frame.contentWindow.location.href)||original;}catch{}$('openOriginal').href=original;
     $('saveActivity').hidden=current.utility===true||current.archive===true;
     const place=current.origin.kind==='theme'?M.theme(current.origin.themeId).title:viewNames[current.origin.kind]||'bureaublad';
-    $('appBack').querySelector('span').textContent=`Terug naar ${place}`;$('appBack').title=`Terug naar ${place}; de app blijft geopend`;
-    updateCrumbs();updateRoute();renderRunning();syncThemeControl();syncProgressBadge();
+    $('appBack').querySelector('span').textContent=`Terug naar ${place}`;$('appBack').title=`Terug naar ${place}; de app blijft geopend`;$('appBack').setAttribute('aria-label',`Terug naar ${place}`);
+    syncNativeNavigation();updateCrumbs();updateRoute();renderRunning();syncThemeControl();syncProgressBadge();
     const target=current.lastFocus;
     if(target?.isConnected&&!target.closest('[hidden],[inert]'))target.focus();else current.frame.focus();
   }
   function connectNative(item){
     item.cleanup?.();let doc;try{doc=item.frame.contentDocument;if(!doc||!M.safeURL(doc.URL))return;}catch{return;}
     const win=item.frame.contentWindow;
+    item.algebraContext=null;item.algebraShell=null;let algebraUnsubscribe=null;
+    function attachAlgebra(){
+      if(algebraUnsubscribe||item.app.id!=='algebra-trainer'||!algebraModule(doc.URL))return;
+      const api=win.AlgebraShell;if(!api?.subscribe||!api?.setEmbedded)return;
+      item.algebraShell=api;api.setEmbedded(true);
+      algebraUnsubscribe=api.subscribe(context=>{
+        if(item.owner!==M.key(account)||!frames.has(item.key)||!context||context.gameId!=='algebra-trainer')return;
+        item.algebraContext={...context,destinations:context.destinations.filter(d=>['world','menu','tools'].includes(d.id))};
+        if(activeKey===item.key){syncNativeNavigation();updateCrumbs();}
+      });
+    }
+    const algebraRoute=event=>{if(item.app.id==='algebra-trainer'&&openAlgebraRoute(item,event.detail?.href))event.preventDefault();};
+    doc.addEventListener('leraarbob:algebra-route',algebraRoute);attachAlgebra();
     // This atelier header contains only controls already provided by the desktop.
     // Keep its original theme handler and progress node alive in the hidden header.
     const embedStyle=doc.createElement('style');embedStyle.textContent='#atelier-header{display:none!important}';
@@ -335,7 +381,10 @@
     // Only redundant links out of the app are handled here; game controls stay native.
     const click=e=>{
       if(e.target.closest?.('[data-axioma-login]')){e.preventDefault();e.stopImmediatePropagation();openAccount();return;}
-      const a=e.target.closest?.('a[href]');if(!a||a.target==='_blank'||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;const target=M.safeURL(a.href);if(!target)return;const u=new URL(target),b=new URL(base),os=new URL(home);if(u.pathname===b.pathname||u.pathname===b.pathname+'index.html'||u.pathname===os.pathname){e.preventDefault();e.stopImmediatePropagation();if(u.searchParams.get('login')==='1')openAccount();else showView(item.origin);}
+      const a=e.target.closest?.('a[href]');if(!a||a.target==='_blank'||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;const target=M.safeURL(a.href);if(!target)return;
+      if(item.algebraShell&&a.hasAttribute('data-section')&&!['battle'].includes(a.dataset.section))return;
+      if(item.app.id==='algebra-trainer'&&openAlgebraRoute(item,target)){e.preventDefault();e.stopImmediatePropagation();return;}
+      const u=new URL(target),b=new URL(base),os=new URL(home);if(u.pathname===b.pathname||u.pathname===b.pathname+'index.html'||u.pathname===os.pathname){e.preventDefault();e.stopImmediatePropagation();if(u.searchParams.get('login')==='1')openAccount();else showView(item.origin);}
     };
     const keydown=e=>{if(activeKey===item.key)desktopShortcut(e);};
     const focus=e=>{const owner=e.target.ownerDocument;if(activeKey===item.key&&e.target!==owner.body&&e.target!==owner.documentElement)item.lastFocus=e.target;};
@@ -344,9 +393,10 @@
     doc.addEventListener('click',click,true);doc.addEventListener('keydown',keydown,true);doc.addEventListener('focusin',focus);item.frame.contentWindow.addEventListener('axioma:game-progress',progress);doc.addEventListener('click',theme);
     const observer=new MutationObserver(()=>{if(activeKey===item.key)syncProgressBadge();});
     const progressNode=doc.querySelector('[data-platform-progress],#xpLabel,#xp,#completedCount');if(progressNode)observer.observe(progressNode,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['data-value','data-total','data-unit']});
-    const contextObserver=new MutationObserver(()=>{if(activeKey===item.key)updateCrumbs();});
+    const contextObserver=new MutationObserver(()=>{attachAlgebra();if(activeKey===item.key)updateCrumbs();});
     const contextNode=item.app.id==='getallenwereld'&&doc.querySelector('header .breadcrumbs,#spaceCrumb');
     if(contextNode)contextObserver.observe(contextNode,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']});
+    if(item.app.id==='algebra-trainer'&&algebraModule(doc.URL))contextObserver.observe(doc.body,{childList:true,subtree:true,attributes:true,attributeFilter:['data-screen']});
     // Keyboard events do not bubble out of a native battle's inner workboard.
     // Follow same-origin child frames without replacing their DOM or handlers.
     const children=new Map();
@@ -366,14 +416,15 @@
       });
     }
     const childObserver=new MutationObserver(()=>scanChildren(doc));childObserver.observe(doc,{childList:true,subtree:true});scanChildren(doc);
-    item.cleanup=()=>{doc.removeEventListener('click',click,true);doc.removeEventListener('keydown',keydown,true);doc.removeEventListener('focusin',focus);doc.removeEventListener('click',theme);observer.disconnect();contextObserver.disconnect();childObserver.disconnect();children.forEach((child,frame)=>{child.cleanup?.();frame.removeEventListener('load',child.load);});children.clear();embedStyle.remove();try{win.removeEventListener('axioma:game-progress',progress);if(accountBridge&&win.LeraarBobTopbar===accountBridge)delete win.LeraarBobTopbar;}catch{}};
+    item.cleanup=()=>{algebraUnsubscribe?.();doc.removeEventListener('leraarbob:algebra-route',algebraRoute);doc.removeEventListener('click',click,true);doc.removeEventListener('keydown',keydown,true);doc.removeEventListener('focusin',focus);doc.removeEventListener('click',theme);observer.disconnect();contextObserver.disconnect();childObserver.disconnect();children.forEach((child,frame)=>{child.cleanup?.();frame.removeEventListener('load',child.load);});children.clear();embedStyle.remove();try{win.removeEventListener('axioma:game-progress',progress);if(accountBridge&&win.LeraarBobTopbar===accountBridge)delete win.LeraarBobTopbar;}catch{}};
   }
-  function renderRunning(){$('runningApps').replaceChildren(...[...frames.values()].map(f=>{const b=button('','running-app',()=>activateFrame(f.key));b.append(imageFor(f.app),el('span','',f.app.title));b.title=f.app.title+' · '+f.label;b.setAttribute('aria-label',`Terug naar ${f.app.title}`);b.setAttribute('aria-pressed',String(activeKey===f.key));return b;}));}
+  function runningTitle(item){if(item.app.id==='algebra-trainer'){const module=algebraModule(item.href);if(item.mode==='solo'&&module)return module==='systems'?'Stelsels':'Vergelijkingen';if(item.utility&&item.key.startsWith('utility:algebra-battle:'))return item.label;}return item.app.title;}
+  function renderRunning(){$('runningApps').replaceChildren(...[...frames.values()].map(f=>{const title=runningTitle(f),b=button('','running-app',()=>activateFrame(f.key));b.append(imageFor(f.app),el('span','',title));b.title=f.app.title+' · '+f.label;b.setAttribute('aria-label',`Terug naar ${title}`);b.setAttribute('aria-pressed',String(activeKey===f.key));return b;}));}
   function closeFrame(key){const current=frames.get(key);if(!current)return;current.cleanup?.();current.frame.src='about:blank';current.wrapper.remove();frames.delete(key);if(activeKey===key)showView(current.origin);else renderRunning();}
   function discardFrames(){frames.forEach(f=>{f.cleanup?.();f.frame.src='about:blank';f.wrapper.remove();});frames.clear();activeKey=null;renderRunning();}
   function saveCurrent(){const f=frames.get(activeKey);if(!f||f.utility||f.archive)return;
     if(f.mode.startsWith('worksheet:'))try{const save=f.frame.contentDocument?.querySelector('[data-worksheet-save]');if(save){if(save.disabled)toast('Maak eerst een geldige reeks; daarna kun je de opgaven en sleutel bewaren.');else save.click();return;}}catch{}
-    let href=f.href,title=f.app.title,label=f.label;try{href=M.safeURL(f.frame.contentWindow.location.href)||href;if(f.app.id==='getallenwereld'){const doc=f.frame.contentDocument,part=doc.querySelector('#crumbLevel:not([hidden])')?.textContent.trim(),chapter=doc.querySelector('#crumbChapter:not([hidden]),#spaceCrumb')?.textContent.trim();if(part)title+=' · '+part;if(chapter)label+=' · '+chapter;}}catch{}const saved={key:f.key,id:f.app.id,mode:f.mode,title,href,label,date:new Date().toISOString()};prefs.saved=[saved,...prefs.saved.filter(s=>s.key!==f.key)].slice(0,50);persist();toast('Bewaard in Mijn taken.');}
+    let href=f.href,title=f.app.title,label=f.label;try{href=originalURL(f.frame.contentWindow.location.href)||href;if(f.algebraContext){const context=f.algebraContext;title+=' · '+context.worldTitle;if(context.levelTitle)label+=' · '+context.levelTitle;}if(f.app.id==='getallenwereld'){const doc=f.frame.contentDocument,part=doc.querySelector('#crumbLevel:not([hidden])')?.textContent.trim(),chapter=doc.querySelector('#crumbChapter:not([hidden]),#spaceCrumb')?.textContent.trim();if(part)title+=' · '+part;if(chapter)label+=' · '+chapter;}}catch{}const saved={key:f.key,id:f.app.id,mode:f.mode,title,href,label,date:new Date().toISOString()};prefs.saved=[saved,...prefs.saved.filter(s=>s.key!==f.key)].slice(0,50);persist();toast('Bewaard in Mijn taken.');}
   function openSaved(s){
     if(s.mode.startsWith('worksheet:')){openWorksheet(s.id,s.mode.slice(10));return;}
     if(!M.modes(s.id,role()).some(m=>m.id===s.mode)){toast('Deze ingang is niet beschikbaar voor dit account.');return;}
