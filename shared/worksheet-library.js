@@ -16,7 +16,7 @@
     'bewerkingen-trainer:operations':{theme:'getallen',topics:['machten','wortels','wetenschappelijk','mixed']}
   };
   const allowedStyles=new Set([
-    'shared/worksheet-layout.css','shared/worksheet-hub.css','shared/vendor/katex/katex.min.css',
+    'oefenbladen/paper.css','shared/worksheet-layout.css','shared/worksheet-hub.css','shared/vendor/katex/katex.min.css',
     'games/rechten/rechtenwereld/worksheets/worksheets.css',
     'games/rechten/rechtenwereld/styles/worksheet-sections.css',
     'games/algebra-trainer/styles.css','games/algebra-trainer/stelsels/styles.css',
@@ -78,7 +78,9 @@
       if(!safeTags.has(tag)){node.replaceWith(...node.childNodes);continue;}
       for(const attribute of [...node.attributes]){
         const name=attribute.name.toLowerCase(),value=attribute.value;
-        if(name==='style'){
+        if(tag==='ol'&&name==='start'){
+          if(!/^[1-9][0-9]{0,4}$/.test(value))node.removeAttribute(attribute.name);
+        }else if(name==='style'){
           if(/url\s*\(|expression\s*\(|@import|javascript|[\\<>]/i.test(value))node.removeAttribute(attribute.name);
         }else if(tag==='img'&&name==='src'){
           if(!/^data:image\/(?:png|jpeg);base64,[a-z0-9+/=\s]+$/i.test(value))node.removeAttribute(attribute.name);

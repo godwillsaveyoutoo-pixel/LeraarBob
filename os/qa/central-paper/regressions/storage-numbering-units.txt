@@ -1,0 +1,24 @@
+✔ Archived numbered pages preserve their next question number and strip invalid starts (59.208981ms)
+✔ The seven supported native source snapshots round-trip exact questions, paired key, config and tasks (51.811107ms)
+✔ New series coexist and account, guest and pending identity boundaries reject stale ownership (13.240363ms)
+✔ A complete JSON backup preserves the saved exact series without carrying private account identity (17.157606ms)
+✔ Archive documents preserve native MathML, safe SVG and embedded page images while stripping active content (29.219234ms)
+✔ Unknown generators, missing question payload and oversized snapshots cannot silently create entries (7.265493ms)
+✔ Unavailable IndexedDB is reported instead of claiming successful local storage (7.176003ms)
+✔ Portable backup import validates version and complete payload, deduplicates and restores the exact pair after deletion (13.827905ms)
+✔ Quota failure keeps older entries and reports a failed save without false archive success (10.427424ms)
+✔ The entry cap rejects the next new series without deleting any earlier document (431.115738ms)
+✔ An initially unresolved account cannot create a guest archive before identity resolves (6.924542ms)
+✔ Changing accounts while a snapshot is being fingerprinted never attaches that document to the new owner (6.43642ms)
+✔ two generated series capture their own exact documents before asynchronous saving (9.44558ms)
+✔ a delayed snapshot cannot be archived for a replacement account (6.658211ms)
+✔ storage failure is visible while native preview and print remain usable (6.14818ms)
+✔ changed invalid settings require a successful native generation before save (6.527781ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 962.414429

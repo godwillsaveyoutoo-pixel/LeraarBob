@@ -39,6 +39,7 @@ jobs:
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" SCIENTIFIC_SCREENSHOTS="$RUNNER_TEMP/os-qa/scientific" node tests/getallen-scientific-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CLASS_FLOW_SCREENSHOTS="$RUNNER_TEMP/os-qa/class-flow" node tests/uniform-class-flow-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" WORKSHEETS_SCREENSHOTS="$RUNNER_TEMP/os-qa/worksheets" node tests/desktop-worksheets-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CENTRAL_PAPER_SCREENSHOTS="$RUNNER_TEMP/os-qa/central-paper" node tests/central-worksheet-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" ALGEBRA_OS_SCREENSHOTS="$RUNNER_TEMP/os-qa/algebra" node tests/algebra-os-browser.cjs
       - name: Screenshots en browserrapporten bewaren
         if: always()

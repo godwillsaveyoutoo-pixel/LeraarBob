@@ -6,15 +6,15 @@ const root=path.resolve(__dirname,'..'),out=process.env.WORKSHEETS_SCREENSHOTS||
 const host=require('../scripts/serve-os-preview.cjs').createServer();
 const report={scope:'Actual localhost Chromium native generators and IndexedDB archive, 100% zoom. Fictitious isolated account identities; all external requests blocked. No production login, cloud storage or progress writes.',viewports:[{width:1366,height:768},{width:390,height:844}],checks:[],layout:[],sources:[],errors:[],missing:[],remoteRequests:[],blocked:['Generated worksheet folders are local to this browser and account. Production authentication and cross-device/cloud sync are not tested or provided by this archive.'],passed:false};
 const sourceList=[
- {id:'rechtenwereld:hellingrug',theme:'rechten',title:'Hellingrug',global:'RechtenWorksheetApp',generate:'#worksheetForm button[type=submit],#worksheetForm button.primary'},
- {id:'rechtenwereld:grenspas',theme:'rechten',title:'Grenspas',global:'RechtenWorksheetApp',generate:'#worksheetForm button[type=submit],#worksheetForm button.primary'},
- {id:'rechtenwereld:formulewerf',theme:'rechten',title:'Formulewerf',global:'RechtenWorksheetApp',generate:'#worksheetForm button[type=submit],#worksheetForm button.primary'},
- {id:'rechtenwereld:signaalstad',theme:'rechten',title:'Signaalstad',global:'RechtenWorksheetApp',generate:'#worksheetForm button[type=submit],#worksheetForm button.primary'},
- {id:'algebra-trainer:equations',theme:'algebra',title:'Vergelijkingen',global:'AlgebraTrainer',generate:'#navigationWorksheet',level:'route-inverse'},
- {id:'algebra-trainer:systems',theme:'algebra',title:'Stelsels',global:'StelselsTrainer',generate:'#navigationWorksheet',level:'sys-substitution'},
- {id:'bewerkingen-trainer:operations',topic:'machten',theme:'getallen',title:'Machten',global:'BewerkingenTrainer',generate:'#startBtn'},
- {id:'bewerkingen-trainer:operations',topic:'wortels',theme:'getallen',title:'Vierkantswortels',global:'BewerkingenTrainer',generate:'#startBtn'},
- {id:'bewerkingen-trainer:operations',topic:'wetenschappelijk',theme:'getallen',title:'Wetenschappelijke notatie',global:'BewerkingenTrainer',generate:'#startBtn'}
+ {id:'rechtenwereld:hellingrug',theme:'rechten',title:'Hellingrug',global:'LeraarBobWorksheetMaker',generate:'#generateWorksheet'},
+ {id:'rechtenwereld:grenspas',theme:'rechten',title:'Grenspas',global:'LeraarBobWorksheetMaker',generate:'#generateWorksheet'},
+ {id:'rechtenwereld:formulewerf',theme:'rechten',title:'Formulewerf',global:'LeraarBobWorksheetMaker',generate:'#generateWorksheet'},
+ {id:'rechtenwereld:signaalstad',theme:'rechten',title:'Signaalstad',global:'LeraarBobWorksheetMaker',generate:'#generateWorksheet'},
+ {id:'algebra-trainer:equations',theme:'algebra',title:'Vergelijkingen',global:'LeraarBobWorksheetMaker',generate:'#generateWorksheet',level:'route-inverse'},
+ {id:'algebra-trainer:systems',theme:'algebra',title:'Stelsels',global:'LeraarBobWorksheetMaker',generate:'#generateWorksheet',level:'sys-substitution'},
+ {id:'bewerkingen-trainer:operations',topic:'machten',theme:'getallen',title:'Machten',global:'LeraarBobWorksheetMaker',generate:'#generateWorksheet'},
+ {id:'bewerkingen-trainer:operations',topic:'wortels',theme:'getallen',title:'Vierkantswortels',global:'LeraarBobWorksheetMaker',generate:'#generateWorksheet'},
+ {id:'bewerkingen-trainer:operations',topic:'wetenschappelijk',theme:'getallen',title:'Wetenschappelijke notatie',global:'LeraarBobWorksheetMaker',generate:'#generateWorksheet'}
 ];
 let browser,context,page,base,phase='initialization';
 const sha=value=>crypto.createHash('sha256').update(value).digest('hex');
@@ -49,7 +49,7 @@ async function layout(label,selector,frame){
 }
 async function setCollapsed(collapsed){await page.evaluate(value=>LeraarBobTopbar.setCollapsed(value,true),collapsed);await settle();if(collapsed){await layout('OS restore '+(await page.viewportSize()).width,'.lb-restore:not([hidden])');assert.equal(await page.locator('.lb-restore:not([hidden])').getAttribute('aria-expanded'),'false');}}
 async function nativeSnapshot(frame,source){return frame.evaluate(name=>window[name].worksheetSnapshot(),source.global);}
-async function waitNative(frame,source){try{await frame.waitForFunction(name=>typeof window[name]?.worksheetSnapshot==='function'&&(!window.AxiomaGame||AxiomaGame.active),source.global);}catch(error){console.error('Native readiness failed',frame.url(),await frame.evaluate(name=>({api:typeof window[name]?.worksheetSnapshot,active:window.AxiomaGame?.active,title:document.title}),source.global));throw error;}}
+async function waitNative(frame,source){try{await frame.waitForFunction(name=>typeof window[name]?.worksheetSnapshot==='function'&&window[name].state().ready,source.global);}catch(error){console.error('Native readiness failed',frame.url(),await frame.evaluate(name=>({api:typeof window[name]?.worksheetSnapshot,active:window.AxiomaGame?.active,title:document.title}),source.global));throw error;}}
 async function openGenerator(source){
  await worksheetsView(source.theme);await page.locator('[data-worksheet-topic='+JSON.stringify(source.topic||source.id.split(':')[1])+']').click();const entry=page.locator('[data-worksheet-source='+JSON.stringify(source.id)+']');
  await entry.waitFor();await entry.locator('button').first().click();const frame=await currentFrame();await waitNative(frame,source);return frame;
@@ -72,21 +72,22 @@ async function generation(){
  for(const source of sourceList){
   phase='native '+source.id;const before=await libraryList(),frame=await openGenerator(source);
   assert.equal((await libraryList()).length,before.length,'Opening a generator does not archive its default example');
-  if(source.level){await frame.locator('[data-menu-stop='+JSON.stringify(source.level)+']').click();}
+  if(source.level){await frame.locator('#field-level').selectOption(source.level);}
   await frame.locator(source.generate).first().click();await frame.locator('[data-worksheet-save]').waitFor();
   await waitLibraryCount(before.length+1);
   const entries=await libraryList(),meta=entries.find(entry=>!before.some(prior=>prior.id===entry.id));assert(meta,'One newly generated series stored');
-  const original=await fullEntry(meta.id),native=await nativeSnapshot(frame,source),appTitle=await page.locator('#activeAppTitle').textContent();
+  const original=await fullEntry(meta.id),native=await nativeSnapshot(frame,source),appTitle=await page.locator('#activeAppMode').textContent();
   assert.equal(original.sourceId,source.id);assert.equal(original.theme,source.theme);
   assert(original.questionsHTML.length>20,'Actual native question pages saved');assert(original.keyHTML.length>20,'Actual native answer pages saved');
   assert.equal(original.questionsHTML,await frame.evaluate(html=>LeraarBobWorksheetLibrary.sanitizeHTML(html),native.questionsHTML),'Stored questions preserve the exact native page after inert serialization');
   assert.equal(original.keyHTML,await frame.evaluate(html=>LeraarBobWorksheetLibrary.sanitizeHTML(html),native.keyHTML),'Stored key is paired with the same generated native questions');
+  if(source.theme==='getallen'){const starts=await frame.evaluate(html=>{const t=document.createElement('template');t.innerHTML=html;return [...t.content.querySelectorAll('ol')].map(o=>o.start);},original.questionsHTML);assert.deepEqual(starts,[1,5,9],'Archived numbers worksheets keep continuous question numbers across pages');}
   const hashes={questions:sha(original.questionsHTML),key:sha(original.keyHTML),data:sha(JSON.stringify(original.data))};
   await frame.waitForFunction(()=>document.querySelector('[data-worksheet-save]')?.disabled===false);await frame.locator('[data-worksheet-save]').click();
   await frame.waitForFunction(()=>document.querySelector('[data-worksheet-save]')?.disabled===false);assert.equal((await libraryList()).length,before.length+1,'Manual save is idempotent for the same exact series');
   await page.locator('#saveActivity').click();await frame.waitForFunction(()=>document.querySelector('[data-worksheet-save]')?.disabled===false);
   assert.equal((await libraryList()).length,before.length+1,'OS Bewaren archives the actual document without duplicating it');assert.equal((await page.evaluate(()=>LeraarBobDesktop.state())).savedCount,0,'Worksheet saving does not make a misleading shortcut in Mijn taken');
-  const toggle=source.global==='RechtenWorksheetApp'?'#showKey':source.global==='StelselsTrainer'?'#paperKey':'#includeKey';if(await frame.locator(toggle).isVisible()){
+  const toggle='#includeKey';if(await frame.locator(toggle).isVisible()){
    if(toggle==='#showKey')await frame.locator(toggle).click();else await frame.locator(toggle).setChecked(!(await frame.locator(toggle).isChecked()));
    await frame.waitForFunction(()=>document.querySelector('[data-worksheet-save]')?.disabled===false);
    assert.deepEqual(await nativeSnapshot(frame,source),native,'Showing the native key does not generate a different paired series');assert.equal((await libraryList()).length,before.length+1);

@@ -1,0 +1,447 @@
+{
+  "checks": [
+    "Central Stelsels form has no game menus; 1366×768 at 100%, 390×844, 640×360, both bar states and unobscured controls >=44px",
+    "All six Stelsels topics generate five native systems and paired worked keys with independently solved solution kinds",
+    "Generated series appear in the correct OS folder; minimize/resume retains both edited form and exact previous document",
+    "All seven equation topics retain six native prompts, mathematical notation and the original answer renderer",
+    "Generating all thirteen Algebra levels does not create or change learner progress storage",
+    "Changing subject opens the matching central window and returns to its own topic folder",
+    "Old standalone paper URLs redirect to the central composer with topic and requested level",
+    "Account switch during native asynchronous generation clears the old document and never archives it under the next learner"
+  ],
+  "targets": [
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#source",
+      "w": 291,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#field-level",
+      "w": 291,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#field-count",
+      "w": 291,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#field-method",
+      "w": 291,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#generateWorksheet",
+      "w": 291,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#openFolder",
+      "w": 291,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#source",
+      "w": 291,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#field-level",
+      "w": 291,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#field-count",
+      "w": 291,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#field-method",
+      "w": 291,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#generateWorksheet",
+      "w": 291,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#openFolder",
+      "w": 291,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": ".lb-restore:not([hidden])",
+      "w": 44,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#source",
+      "w": 350,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#field-level",
+      "w": 350,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#field-count",
+      "w": 350,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#field-method",
+      "w": 350,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#generateWorksheet",
+      "w": 350,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#openFolder",
+      "w": 350,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#source",
+      "w": 350,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#field-level",
+      "w": 350,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#field-count",
+      "w": 350,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#field-method",
+      "w": 350,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#generateWorksheet",
+      "w": 350,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#openFolder",
+      "w": 350,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": ".lb-restore:not([hidden])",
+      "w": 44,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#source",
+      "w": 600,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#field-level",
+      "w": 600,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#field-count",
+      "w": 600,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#field-method",
+      "w": 600,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#generateWorksheet",
+      "w": 600,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#openFolder",
+      "w": 600,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#source",
+      "w": 600,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#field-level",
+      "w": 600,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#field-count",
+      "w": 600,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#field-method",
+      "w": 600,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#generateWorksheet",
+      "w": 600,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#openFolder",
+      "w": 600,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": ".lb-restore:not([hidden])",
+      "w": 44,
+      "h": 44,
+      "fits": true,
+      "hit": true
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "scope": "Real Chromium, isolated local accounts, native mathematical generators, no production login or cloud writes.",
+  "passed": true
+}

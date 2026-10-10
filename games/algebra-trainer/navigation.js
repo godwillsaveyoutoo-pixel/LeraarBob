@@ -40,7 +40,7 @@ function mount(api){
   $('.menuContinue').disabled=!chosen;
   $('.menuContinue').textContent=started?'Verder spelen →':/geoefend|gelukt/i.test(chosen?.status||'')?'Opnieuw spelen →':'Spelen →';
   $('#navigationResumeFree').hidden=!api.canResumeFree?.();$('#navigationWorksheet').disabled=!chosen;
-  $('#navigationStatus').textContent='Elke afgeronde speelronde: +30 XP · Oefenbladen leveren geen XP op.';
+  $('#navigationStatus').textContent='Elke afgeronde speelronde: +30 XP';
  }
  function open(button){if(window.AxiomaGame?.active===false)return;if(api.screen()!=='menu'){previous=api.screen();origin=button;if(!selected)selected=api.stops().find(s=>s.current)?.id||selected;}api.show('menu');$('#navigationStops').querySelector('[aria-pressed=true]')?.focus({preventScroll:true});}
  function close(){if(window.AxiomaGame?.active===false)return;api.show(previous==='menu'?(api.homeScreen||'world'):previous);origin?.focus({preventScroll:true});}

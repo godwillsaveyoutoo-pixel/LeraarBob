@@ -36,13 +36,17 @@ Alleen werkende providers worden aangeboden. Pythagoras krijgt geen verzonnen tr
 
 ## Oefenbladmappen en bewaarde reeksen
 
-Oefenbladen opent eerst themamappen en daarna onderwerpmapjes. Rechten bevat Hellingrug, Grenspas, Formulewerf en Signaalstad; Algebra bevat Vergelijkingen en Stelsels; Getallen bevat Machten, Vierkantswortels en Wetenschappelijke notatie. Elke ingang opent de bestaande generator met zijn eigen keuzes, vragen, opmaak en afdrukbediening. Er verschijnen alleen onderwerpen waarvoor een generator bestaat.
+Oefenbladen opent eerst themamappen en daarna onderwerpmapjes. Rechten bevat Hellingrug, Grenspas, Formulewerf en Signaalstad; Algebra bevat Vergelijkingen en Stelsels; Getallen bevat Machten, Vierkantswortels en Wetenschappelijke notatie. Alle negen ingangen openen nu de centrale papierwerkruimte op `oefenbladen/maken.html`, rechtstreeks bij het gekozen onderwerp. Deze pagina laadt alleen de bestaande wiskundige generators en uitwerkingen, zonder spelcontroller, oefenmenu of voortgangsopslag. Samenstellen, Genereer & bewaar, voorbeeld, sleutel en afdrukken werken overal hetzelfde.
+
+Vergelijkingen biedt de zeven bestaande onderdelen; Stelsels biedt zes onderdelen, niveau, aantal en uitwerkingsmethode. Rechten behoudt zijn eigen leerdoelen en opbouw; Getallen zijn vraagvormen en drie niveaus. De Algebra-papierkaarten en papierknoppen in de oefentrainers zijn verwijderd uit de bediening. Oude papieradressen worden omgeleid; binnen het OS openen oude links een afzonderlijk papiervenster en houden de oefening intact. Historische opgeslagen gamevelden en compatibiliteitsnodes blijven leesbaar. De nieuwe werkruimte gebruikt één OS-bovenbalk met de gewone inklap-/herstelbediening. Je ziet de laatste gemaakte reeksen bij het onderwerp en de volledige collectie via Start.
 
 Een nieuw gemaakte reeks wordt automatisch in **Mijn oefenbladen** bewaard. De generator en de OS-knop Bewaren bewaren de werkelijk gemaakte opgaven en hun bijbehorende verbetersleutel; dezelfde reeks opnieuw bewaren maakt geen duplicaat. Mijn oefenbladen heeft dezelfde indeling per thema en onderwerp. Bij terugkeren of herladen opent het OS de bewaarde pagina’s, zonder nieuwe willekeurige vragen te maken. Een nieuw blad vervangt oudere reeksen niet.
 
 Deze documenten worden apart van leerlingvoortgang in IndexedDB bewaard, **per account op dit toestel**. Gastbladen blijven bij de gast. Accountwisseling sluit geopende documenten en geeft geen toegang tot de vorige gebruiker. Er is geen cloudsync of automatische overdracht naar een ander toestel. Download kopie maakt een volledig JSON-bestand dat via Kopie terugzetten opnieuw in de eigen map kan worden gezet. Download oefenblad maakt een zelfstandig HTML-document met de opgaven, sleutel en ingesloten opmaak. Afdrukken / PDF gebruikt de bewaarde documentpagina’s.
 
-De map bewaart maximaal 200 reeksen en maximaal 16 MiB per reeks. Bij volle of geblokkeerde opslag verschijnt een melding dat de reeks niet bewaard is; bestaande bladen worden niet automatisch verwijderd. De oorspronkelijke generator blijft beschikbaar om het blad af te drukken of als PDF op te slaan. Een gedownloade kopie blijft bruikbaar als browsergegevens worden gewist.
+De map bewaart maximaal 200 reeksen en maximaal 16 MiB per reeks. Bij volle of geblokkeerde opslag verschijnt een melding dat de reeks niet bewaard is; bestaande bladen worden niet automatisch verwijderd. Het gemaakte voorbeeld blijft beschikbaar om af te drukken of als PDF op te slaan. Een gedownloade kopie blijft bruikbaar als browsergegevens worden gewist.
+
+De [controle van de centrale papierwerkruimte](qa/central-paper/README.md) bevat de actuele screenshots, browserproeven en afdrukcontrole. Nieuwe lokale preview: `http://127.0.0.1:8794/os/?previewUser=alex&place=worksheets&worksheetTheme=algebra&worksheetTopic=systems`. De oudere demoserver blijft draaien om zijn sessies te behouden.
 
 ## Gedeelde Klasbattle-ingang
 

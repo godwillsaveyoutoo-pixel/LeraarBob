@@ -27,6 +27,20 @@ De actuele eerste pilot sluit Rechtenwereld aan op persoonlijke appkaarten, cent
 
 De [bewijsmap](qa/personal/README.md) bevat de actuele browserrapporten, screenshots en herhaalcommando’s. Onderstaande oudere rapporten blijven historisch bewijs voor hun beschreven versies.
 
+## Centrale oefenbladen · 10 oktober 2026
+
+- [x] Alle negen onderwerpingangen openen dezelfde aparte papierwerkruimte; Stelsels opent geen trainer meer. Geen spelcontroller of leerlingvoortgang nodig voor generatie.
+- [x] Alle zes Stelsels-onderdelen en zeven Vergelijkingen-onderdelen daadwerkelijk gemaakt; eigen wiskundige generators en uitwerkingen behouden.
+- [x] Oorspronkelijke Algebra-oefening, tussenstappen, onafgemaakte invoer en 30 native XP blijven intact bij centraal papier maken en terugkeren. Oude papierknoppen zijn niet zichtbaar in de trainer.
+- [x] 1366 × 768 bij 100% zoom, 390 × 844 en 640 × 360; één OS-bovenbalk in beide standen, herstel en formulierdoelen minstens 44 px en bereikbaar.
+- [x] Automatische bewaring van negen echte opgaven-/sleutelparen, terugvinden per onderwerp, exact heropenen na reload, geen dubbele bewaring, JSON-export/import en A4-PDF.
+- [x] Onderwerp wisselen opent de eigen papierwerkruimte; elke terugknop gaat naar de bijbehorende onderwerpmap. Minimaliseren bewaart formulier én gegenereerd document.
+- [x] Oude Algebra-, Rechten- en Getallen-papieradressen leiden naar de centrale ingang. Accountwisseling tijdens daadwerkelijke asynchrone generatie bewaart geen reeks voor het volgende account.
+- [x] Opslagfout zichtbaar; opgaven en afdrukken blijven bruikbaar. Doorlopende Getallen-nummering blijft ook na archiveren behouden.
+- [ ] Cloudsync en productieaanmelding met echte accounts: niet toegevoegd of getest; documenten blijven per account op dit toestel.
+
+Zie [centrale papierwerkruimte: bewijs en grenzen](qa/central-paper/README.md). De eerder beschreven native papierpagina’s zijn nu compatibiliteitsroutes; hun oudere rapporten blijven historisch.
+
 ## Algebrawereld-navigatie · 10 oktober 2026
 
 De [definitieve browserrun](qa/algebra-navigation/report.json) telt **18 interactiegroepen, 252 doelmetingen en 39 screenshots**, zonder browserexceptions of ontbrekende bronnen. Gecontroleerd op **1366 × 768 bij 100% zoom**, 390 × 844 en 640 × 360, `deviceScaleFactor: 1`, met de bovenbalk uitgeklapt en ingeklapt. Alle zestien bronhashes kloppen met de definitieve implementatie.
