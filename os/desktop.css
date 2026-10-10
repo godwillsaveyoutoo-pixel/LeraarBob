@@ -27,3 +27,5 @@ html[data-mode=dark]{--paper:#1a303b;--panel:#203942;--ink:#eeeedd;--muted:#a4bb
 /* Notifications stay in the taskbar, outside the native answer area. */
 .toast{bottom:14px;pointer-events:none}
 @media(max-width:600px){.toast{bottom:10px;max-width:calc(100vw - 130px);padding:7px 10px;font-size:10px}}
+
+.setting .catalog-link{min-height:44px;min-width:44px;max-width:145px;flex-shrink:0}

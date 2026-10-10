@@ -1,6 +1,6 @@
 # leraarBob-bureaublad · ontwikkelpilot
 
-Open `/os/` op dezelfde webserver als de bestaande site. De startpagina op `/` blijft beschikbaar. De pilot is geïntegreerd op `codex/os-pilot-20261009`, vanaf de actuele GitHub-basis `6056ac4e7445f6bb15fa1b15dce43df32a6e17e6`.
+Het bureaublad op `/os/` is de standaardstartpagina: gewone bezoeken aan `/` en `/index.html` openen het OS. De eerdere catalogus blijft beschikbaar via [`/index.html?view=catalog`](../index.html?view=catalog) en OS Instellingen. Bestaande accountlinks voor aanmelden, terugkeer en verificatie blijven via de oorspronkelijke accountingang lopen. De oorspronkelijke pilot is geïntegreerd op `codex/os-pilot-20261009`, vanaf de GitHub-basis `6056ac4e7445f6bb15fa1b15dce43df32a6e17e6`.
 
 ## Werking
 

@@ -1,4 +1,4 @@
-// Actual game -> account service -> PostgreSQL RPC -> homepage, with synthetic accounts.
+// Actual game -> account service -> PostgreSQL RPC -> retained catalog, with synthetic accounts.
 const assert=require('node:assert/strict'),{CDP}=require('./helpers/online-cdp.cjs');
 const {createDB}=require('./helpers/rechten-progress-db.cjs');
 const base=process.env.VECTOR_BASE_URL||'http://127.0.0.1:8775',port=process.env.VECTOR_BROWSER_PORT||9245;
@@ -33,7 +33,7 @@ const base=process.env.VECTOR_BASE_URL||'http://127.0.0.1:8775',port=process.env
    return c.send('Fetch.continueRequest',{requestId:p.requestId});
   };
   await c.send('Fetch.enable',{patterns:[{urlPattern:'*'}]});
-  const game=base+'/games/rechten/rechtenwereld/#wereld',home=base+'/index.html#playerProgress';
+  const game=base+'/games/rechten/rechtenwereld/#wereld',home=base+'/index.html?view=catalog#playerProgress';
   const ready=()=>c.wait('document.querySelector("#app[data-ready=true]")');
   const progress=()=>c.wait("document.querySelector('#playerProgress[aria-busy=false]')&&document.getElementById('totalXP').textContent!=='—'");
   const xp="document.querySelector('leraarbob-topbar')?.shadowRoot.querySelector('.progress-value')?.textContent";

@@ -101,7 +101,7 @@ async function main(){
    }
   }
   // Both legacy identities resolve to one public world, without combining counters.
-  await open('/');
+  await open('/index.html?view=catalog');
   await page.waitForSelector('[data-game-id=getallenwereld]');
   assert.equal(await page.locator('[data-game-id=getallenwereld]').count(),1);
   assert.equal(await page.locator('[data-game-id=bewerkingen-trainer]').count(),0);
@@ -270,7 +270,7 @@ async function main(){
   await page.evaluate(()=>AxiomaGame.flush());
   assert.deepEqual(Object.keys(saved.get('qa-owner:getallenwereld').state.storage),['leraarbob.getallenwereld.v1']);
   assert.deepEqual(Object.keys(saved.get('qa-owner:bewerkingen-trainer').state.storage),['leraarbob.bewerkingen.v1']);
-  await page.evaluate(()=>localStorage.setItem('qa-role','student'));await open('/');
+  await page.evaluate(()=>localStorage.setItem('qa-role','student'));await open('/index.html?view=catalog');
   await page.waitForSelector('[data-game-id=getallenwereld] [data-progress-component=bewerkingen-trainer]');
   assert.equal(await page.locator('[data-game-id=getallenwereld]').count(),1);
   assert.equal(await page.locator('[data-game-id=bewerkingen-trainer]').count(),0);

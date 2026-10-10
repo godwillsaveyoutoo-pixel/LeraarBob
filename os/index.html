@@ -7,7 +7,7 @@
   <meta name="description" content="Jouw leraarBob-bureaublad. Lessen, trainers, spellen en ateliers, geordend per thema.">
   <title>leraarBob · Mijn bureaublad</title>
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="stylesheet" href="desktop.css">
+  <link rel="stylesheet" href="desktop.css?v=20261010-home">
   <link rel="stylesheet" href="../shared/leraarbob-topbar.css">
   <script>try{document.documentElement.dataset.mode=localStorage.getItem('axioma-mode')==='dark'?'dark':'light';}catch{}</script>
   <script src="../shared/vendor/supabase.js" defer></script>
@@ -19,7 +19,7 @@
   <script src="../shared/game-registry.js" defer></script>
   <script src="../js/catalog-progress.js" defer></script>
   <script src="desktop-model.js" defer></script>
-  <script src="desktop.js" defer></script>
+  <script src="desktop.js?v=20261010-home" defer></script>
   <script src="../shared/leraarbob-topbar.js" data-title="Bureaublad" data-home="os/" data-context="none" data-page="desktop" data-theme-mode="site" data-nav-pilot="true" defer></script>
 </head>
 <body>
@@ -73,6 +73,6 @@
   <dialog id="modeDialog" class="mode-dialog" aria-labelledby="modeTitle"><div class="dialog-heading"><div><p id="modeTheme" class="eyebrow"></p><h2 id="modeTitle"></h2></div><button data-close-dialog aria-label="Sluiten"><span data-icon="close"></span></button></div><p id="modeDescription"></p><div id="modeOptions"></div><div id="modeWorksheets"></div></dialog>
   <dialog id="confirmClose" class="confirm-dialog" aria-labelledby="confirmTitle"><div class="dialog-heading"><h2 id="confirmTitle">Deze app afsluiten?</h2><button data-close-dialog aria-label="Sluiten"><span data-icon="close"></span></button></div><p>Je sluit het geopende scherm. Wat de app zelf bewaart, blijft bewaard. Met minimaliseren kun je precies op dit scherm verdergaan.</p><div class="confirm-actions"><button id="cancelClose">Geopend houden</button><button id="acceptClose" class="primary">App afsluiten</button></div></dialog>
   <div id="toast" class="toast" role="status" hidden></div>
-  <noscript><p class="noscript">Dit bureaublad gebruikt JavaScript. <a href="../index.html">Open de bestaande startpagina.</a></p></noscript>
+  <noscript><p class="noscript">Dit bureaublad gebruikt JavaScript. <a href="../index.html?view=catalog">Open de eerdere startpagina.</a></p></noscript>
 </body>
 </html>

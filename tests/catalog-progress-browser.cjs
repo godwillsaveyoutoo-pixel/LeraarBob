@@ -36,7 +36,7 @@ const mockAuth = `(() => {
  await c.send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
  c.paused=p=>{const url=new URL(p.request.url);if(url.pathname.endsWith('/axioma-auth.js'))return c.send('Fetch.fulfillRequest',{requestId:p.requestId,responseCode:200,responseHeaders:[{name:'Content-Type',value:'application/javascript'}],body:Buffer.from(mockAuth).toString('base64')});if(url.hostname!=='127.0.0.1'||url.pathname.endsWith('/axioma-social.js'))return c.send('Fetch.fulfillRequest',{requestId:p.requestId,responseCode:200,body:''});return c.send('Fetch.continueRequest',{requestId:p.requestId})};
  await c.send('Fetch.enable',{patterns:[{urlPattern:'*'}]});
- await c.send('Page.navigate',{url:BASE+'/'});
+ await c.send('Page.navigate',{url:BASE+'/index.html?view=catalog'});
  await wait(`${label('pythagoras')}.includes('3 van 10')`);
  assert.equal(await ev(`document.querySelector('[data-game-id="pythagoras"] progress').value`),3);
  assert.equal(await ev(`document.querySelector('[data-game-id="pythagoras"] .card-action').textContent`),'Ga verder');
