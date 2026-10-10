@@ -42,6 +42,7 @@ const motionPlayer=new AlgebraMotion.Player(onMotionFrame,onMotionFinished);
 
 const $=s=>document.querySelector(s);
 const setupScreen=$('#setupScreen'),trainerScreen=$('#trainerScreen'),previewScreen=$('#previewScreen');
+const archive=window.LeraarBobWorksheetSave?.mount({host:previewScreen.querySelector('.previewHead'),getSnapshot:worksheetSnapshot,isValid:()=>AxiomaGame.active!==false&&!!(paperSelection?.run?.tasks?.length||learningRun?.tasks?.length||activeSet.length)});
 const typeHost=$('#typeHost'),totalCount=$('#totalCount'),selectionSummary=$('#selectionSummary');
 const levelTitle=$('#levelTitle'),levelSubtitle=$('#levelSubtitle'),setupMessage=$('#setupMessage');
 const derivationStack=$('#derivationStack'),feedback=$('#feedback'),valueZone=$('#valueZone'),valueGrid=$('#valueGrid'),nextBox=$('#nextBox'),trainProgress=$('#trainProgress');
@@ -551,6 +552,7 @@ function keyPage(items,page,total,startNo){
   </section>`;
 }
 function renderPreview(){
+  archive?.refresh();
   const host=$('#previewStack');
   if(paperSelection?.run){renderMissionPaper(host,paperSelection.run,paperSelection.id);return;}
   if(!activeSet.length){host.innerHTML='';return}
@@ -563,12 +565,20 @@ function renderPreview(){
   }
   host.innerHTML=html;renderMathNodes(host);
 }
-function renderMissionPaper(host,run=learningRun,id=mission){
+function renderMissionPaper(host,run=learningRun,id=mission,includeKey=$('#includeKey').checked,onlyKey=false){
  const tasks=run.tasks,title=J.stop(id)?.title||AlgebraWorld.topic(id)?.title||'Vergelijkingen';
  const header=(key)=>`<div class="sheetHeader"><div><h2>${key?'Verbetersleutel':'Vergelijkingen'} · ${escapeHTML(title)}</h2><p>${key?'De antwoorden horen bij deze opdrachten. Andere geldige oplosroutes zijn mogelijk.':'Lees elke opdracht. Schrijf je uitwerking en controle op.'}</p></div><div class="sheetMeta">Naam: __________________<br>Klas: ______ Datum: ______</div></div>`;
- let html=chunks(tasks,3).map((items,p)=>`<section class="paperPage missionPaper">${header(false)}<div class="missionQuestions">${items.map((t,i)=>{const q=AlgebraJourneyPaper.question(t);return `<article><h3>${p*3+i+1}. ${escapeHTML(q.prompt)}</h3><div data-tex="${escapeHTML(q.math)}"></div>${q.extra?'<p>'+escapeHTML(q.extra)+'</p>':''}<div class="writeLines"><span></span><span></span><span></span></div></article>`}).join('')}</div><div class="pageFoot">leraarBob · Opgaven ${p+1}/${Math.ceil(tasks.length/3)}</div></section>`).join('');
- if($('#includeKey').checked)html+=chunks(tasks,3).map((items,p)=>`<section class="paperPage missionPaper">${header(true)}<div class="missionAnswers">${items.map((t,i)=>{const a=AlgebraJourneyPaper.answer(t);return `<article><h3>${p*3+i+1}. ${escapeHTML(t.stage)}</h3>${a.lines.map(l=>'<div data-tex="'+escapeHTML(l)+'"></div>').join('')}<p>${escapeHTML(a.note)}</p></article>`}).join('')}</div><div class="pageFoot">leraarBob · Sleutel ${p+1}/${Math.ceil(tasks.length/3)}</div></section>`).join('');
+ let html=onlyKey?'':chunks(tasks,3).map((items,p)=>`<section class="paperPage missionPaper">${header(false)}<div class="missionQuestions">${items.map((t,i)=>{const q=AlgebraJourneyPaper.question(t);return `<article><h3>${p*3+i+1}. ${escapeHTML(q.prompt)}</h3><div data-tex="${escapeHTML(q.math)}"></div>${q.extra?'<p>'+escapeHTML(q.extra)+'</p>':''}<div class="writeLines"><span></span><span></span><span></span></div></article>`}).join('')}</div><div class="pageFoot">leraarBob · Opgaven ${p+1}/${Math.ceil(tasks.length/3)}</div></section>`).join('');
+ if(includeKey)html+=chunks(tasks,3).map((items,p)=>`<section class="paperPage missionPaper">${header(true)}<div class="missionAnswers">${items.map((t,i)=>{const a=AlgebraJourneyPaper.answer(t);return `<article><h3>${p*3+i+1}. ${escapeHTML(t.stage)}</h3>${a.lines.map(l=>'<div data-tex="'+escapeHTML(l)+'"></div>').join('')}<p>${escapeHTML(a.note)}</p></article>`}).join('')}</div><div class="pageFoot">leraarBob · Sleutel ${p+1}/${Math.ceil(tasks.length/3)}</div></section>`).join('');
  host.innerHTML=html;renderMathNodes(host);
+}
+function worksheetSnapshot(){
+ const run=paperSelection?.run||learningRun,id=paperSelection?.id||mission,questions=document.createElement('div'),key=document.createElement('div');
+ if(run){renderMissionPaper(questions,run,id,false);renderMissionPaper(key,run,id,true,true);}
+ else{if(!activeSet.length)throw Error('Maak eerst een oefenblad.');const qs=chunks(activeSet,12),ks=chunks(activeSet,6);questions.innerHTML=qs.map((c,i)=>qPage(c,i+1,qs.length,i*12)).join('');key.innerHTML=ks.map((c,i)=>keyPage(c,i+1,ks.length,i*6)).join('');renderMathNodes(questions);renderMathNodes(key);}
+ const title=J.stop(id)?.title||AlgebraWorld.topic(id)?.title||'Vergelijkingen',data=JSON.parse(JSON.stringify(run?{tasks:run.tasks,version:run.version,seed:run.seed}:{exercises:activeSet}));
+ let hash=2166136261;for(const char of questions.textContent)hash=Math.imul(hash^char.charCodeAt(0),16777619);
+ return {sourceId:'algebra-trainer:equations',title:title+' · '+(run?.tasks.length||activeSet.length)+' oefeningen',theme:'algebra',topic:id||'equations',code:(hash>>>0).toString(36).toUpperCase(),questionsHTML:'<div class="previewStack">'+questions.innerHTML+'</div>',keyHTML:'<div class="previewStack">'+key.innerHTML+'</div>',styles:['shared/vendor/katex/katex.min.css','games/algebra-trainer/style.css','games/algebra-trainer/journey.css'],config:{level:id||activeLevel,settings:currentSettings()},data};
 }
 $('#printBtn').onclick=()=>{renderMathNodes(previewScreen);setTimeout(()=>window.print(),50)};
 $('#backPaperLevels').onclick=()=>navigation.open();
@@ -577,13 +587,13 @@ function levelWorksheet(id,fresh=false){
  // Paper keeps its own generated series and never changes a live round or its input.
  const active=runs[id]&&!runs[id].completed?runs[id]:null;
  if(fresh||paperSelection?.id!==id||!paperSelection?.run)paperSelection={id,run:!fresh&&active?active:J.freshMission(id,fresh?paperSelection?.run:null,crypto.getRandomValues(new Uint32Array(1))[0])};
- showScreen('preview');
+ archive?.invalidate();showScreen('preview');archive?.save(true);
 }
 $('#regenBtn').onclick=()=>{
   if(paperSelection){levelWorksheet(paperSelection.id,true);return;}
   const set=makeSet();if(!set)return;
   trainerStates=[];trainerIndex=0;
-  showScreen('preview');
+  archive?.invalidate();showScreen('preview');archive?.save(true);
 };
 
 /* ============================================================
@@ -595,7 +605,7 @@ $('#startTrainerBtn').onclick=()=>{
 };
 $('#makeSheetBtn').onclick=()=>{
   const set=makeSet();if(!set)return;
-  trainerStates=[];trainerIndex=0;showScreen('preview');
+  trainerStates=[];trainerIndex=0;archive?.invalidate();showScreen('preview');archive?.save(true);
 };
 
 /* ============================================================
@@ -696,6 +706,6 @@ function init(){
   },500);
 }
 init();
-window.AlgebraTrainer=Object.freeze({animationSnapshot:()=>({active:motionPlayer.active,paused:motionPlayer.paused,index:motionPlayer.index||0,demo:!!lesson,finished:!!lesson?.finished,tex:motionFrame?.tex||null,example:lesson?{start:latexEq(lesson.ex.start,lesson.ex.policy),type:lesson.ex.type,steps:lesson.total||lesson.ex.steps.length}:null}),snapshot:()=>JSON.parse(JSON.stringify({screen,trainerIndex,activeSet,trainerStates,solvedTypes:[...solvedTypes],journey,chapterJourney,mission,runs,learningRun}))});
+window.AlgebraTrainer=Object.freeze({animationSnapshot:()=>({active:motionPlayer.active,paused:motionPlayer.paused,index:motionPlayer.index||0,demo:!!lesson,finished:!!lesson?.finished,tex:motionFrame?.tex||null,example:lesson?{start:latexEq(lesson.ex.start,lesson.ex.policy),type:lesson.ex.type,steps:lesson.total||lesson.ex.steps.length}:null}),snapshot:()=>JSON.parse(JSON.stringify({screen,trainerIndex,activeSet,trainerStates,solvedTypes:[...solvedTypes],journey,chapterJourney,mission,runs,learningRun})),worksheetSnapshot});
 
 })();

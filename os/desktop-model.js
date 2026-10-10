@@ -52,6 +52,19 @@
     const url=new URL(m.href,base);if(returnTo&&safeURL(returnTo)){const r=new URL(returnTo,base);url.searchParams.set('returnTo',r.pathname+r.search+r.hash);}return url.href;
   }
   function worksheets(id){return registry.game(id)?registry.worksheets(id):[];}
+  function worksheetTopics(){
+    const found=new Map();
+    for(const g of apps())for(const sheet of worksheets(g.id)){
+      const provider=sheet.providerId||sheet.providerGameId||g.id,sourceId=provider+':'+sheet.id;
+      for(const topicId of sheet.topics?.length?sheet.topics:[sheet.topicId||sheet.id]){
+        const key=sourceId+'|'+topicId;if(found.has(key))continue;
+        const title=({machten:'Machten',wortels:'Vierkantswortels',wetenschappelijk:'Wetenschappelijke notatie'})[topicId]||sheet.title;
+        const href=new URL(sheet.href,base);if(sheet.topicParam)href.searchParams.set(sheet.topicParam,topicId);
+        found.set(key,{key,sourceId,id:sheet.id,appId:g.id,providerId:provider,topicId,title,description:sheet.description,themeId:g.desktopTheme,href:href.href});
+      }
+    }
+    return [...found.values()];
+  }
   function find({query='',themeId='',type='all'}={}){
     const words=normalize(query).split(/\s+/).filter(Boolean);
     return apps().filter(g=>(!themeId||g.desktopTheme===themeId)&&(type==='all'||g.type===type)&&words.every(w=>normalize([g.title,g.subtitle,g.theme,theme(g.desktopTheme)?.title,types[g.type].label].join(' ')).includes(w)));
@@ -64,5 +77,5 @@
   }
   function read(storage,account){try{return sanitize(JSON.parse(storage.getItem(key(account))||'null'));}catch{return sanitize(null);}}
   function write(storage,account,prefs){const clean=sanitize(prefs);storage.setItem(key(account),JSON.stringify(clean));return clean;}
-  return Object.freeze({themes,types,apps,app,theme,modes,modeLabel,destination,worksheets,find,safeURL,key,read,write,sanitize,defaults});
+  return Object.freeze({themes,types,apps,app,theme,modes,modeLabel,destination,worksheets,worksheetTopics,find,safeURL,key,read,write,sanitize,defaults});
 });

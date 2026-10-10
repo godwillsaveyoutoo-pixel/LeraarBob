@@ -5,6 +5,11 @@ const requested=new URLSearchParams(location.search).get('world'),world=Object.h
 const {title,core:C,view:V}=subjects[world],KEY=`leraarbob.worksheets.${world}.v1`;
 const $=id=>document.getElementById(id),form=$('worksheetForm'),preview=$('worksheetPreview');
 let doc,kind='questions',dirty=false;
+const archive=window.LeraarBobWorksheetSave?.mount({host:document.querySelector('.preview-controls'),getSnapshot:worksheetSnapshot,isValid:()=>!!doc&&!dirty});
+function worksheetSnapshot(){
+ if(!doc||dirty)throw Error('Maak eerst je reeks met de aangepaste keuzes.');
+ return {sourceId:'rechtenwereld:'+world,title:title+' · '+doc.tasks.length+' oefeningen',theme:'rechten',topic:world,code:doc.code,questionsHTML:V.render(doc).html,keyHTML:V.render(doc,'key').html,styles:['shared/worksheet-layout.css','games/rechten/rechtenwereld/worksheets/worksheets.css'],config:JSON.parse(JSON.stringify(doc.config)),data:JSON.parse(JSON.stringify(doc))};
+}
 $('worksheetWorld').value=world;
 $('worksheetWorld').onchange=()=>{const url=new URL(location.href);url.searchParams.set('world',$('worksheetWorld').value);location.assign(url)};
 for(const id of ['worksheetWorldLink','worksheetMenuBack']){$(id).href='index.html#'+world;$(id).textContent=id==='worksheetMenuBack'?'Terug naar '+title:title;}
@@ -25,15 +30,15 @@ function render(){
  $('showQuestions').setAttribute('aria-pressed',String(kind==='questions'));$('showKey').setAttribute('aria-pressed',String(kind==='key'));
  $('printWorksheet').textContent=kind==='key'?'Sleutel: PDF / afdrukken':'Oefenblad: PDF / afdrukken';
  document.title=`${title} ${doc.code} · ${kind==='key'?'verbetersleutel':'oefenblad'} · leraarBob`;
- fit();save();
+ fit();save();archive?.refresh();
 }
 try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved){doc=C.restore(saved);kind=saved.kind==='key'?'key':'questions'}}catch{$('worksheetNotice').textContent='De vorige reeks kon niet worden hervat. Er staat een nieuw voorbeeld klaar.'}
 doc||=C.generate({seed:seed()});syncForm();render();
-form.addEventListener('change',event=>{if(event.target.id==='worksheetWorld')return;dirty=true;$('worksheetNotice').textContent='Je keuzes zijn aangepast. Klik op ‘Maak een nieuwe reeks’ om ze te gebruiken.';$('printWorksheet').disabled=true});
-form.addEventListener('submit',e=>{e.preventDefault();try{doc=C.generate({types:[...form.querySelectorAll('input:checked')].map(i=>i.value),mode:$('worksheetMode').value,count:Number($('worksheetCount').value),seed:seed()});dirty=false;kind='questions';$('printWorksheet').disabled=false;$('worksheetNotice').textContent='Nieuwe reeks klaar. Het voorbeeld en de sleutel horen bij dezelfde opgaven.';render()}catch(error){dirty=true;$('printWorksheet').disabled=true;$('worksheetNotice').textContent=error.message}});
+form.addEventListener('change',event=>{if(event.target.id==='worksheetWorld')return;dirty=true;archive?.invalidate();$('worksheetNotice').textContent='Je keuzes zijn aangepast. Klik op ‘Maak een nieuwe reeks’ om ze te gebruiken.';$('printWorksheet').disabled=true});
+form.addEventListener('submit',e=>{e.preventDefault();try{doc=C.generate({types:[...form.querySelectorAll('input:checked')].map(i=>i.value),mode:$('worksheetMode').value,count:Number($('worksheetCount').value),seed:seed()});dirty=false;kind='questions';archive?.invalidate();$('printWorksheet').disabled=false;$('worksheetNotice').textContent='Nieuwe reeks klaar. Het voorbeeld en de sleutel horen bij dezelfde opgaven.';render();archive?.save(true)}catch(error){dirty=true;archive?.invalidate();$('printWorksheet').disabled=true;$('worksheetNotice').textContent=error.message}});
 $('showQuestions').onclick=()=>{kind='questions';render()};$('showKey').onclick=()=>{kind='key';render()};
 $('printWorksheet').onclick=async()=>{if(dirty)return;await document.fonts.ready;window.print()};
 new ResizeObserver(fit).observe(preview);addEventListener('afterprint',fit);
-window.RechtenWorksheetApp=Object.freeze({snapshot:()=>JSON.parse(JSON.stringify({doc,kind,dirty}))});
+window.RechtenWorksheetApp=Object.freeze({snapshot:()=>JSON.parse(JSON.stringify({doc,kind,dirty})),worksheetSnapshot});
 window[title+'WorksheetApp']=window.RechtenWorksheetApp;
 })();

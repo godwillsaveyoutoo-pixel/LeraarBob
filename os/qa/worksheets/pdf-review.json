@@ -1,0 +1,71 @@
+{
+  "scope": "Actual archived native question and key documents exported by Chromium. Poppler-rendered visual review; no physical printer used.",
+  "renderedPages": 62,
+  "inspected": true,
+  "inspection": "All 62 pages rendered with pdftoppm; six contact sheets and a full-size roots front page viewed. No clipped content, overlap or blank page. Native worksheet writing space may carry an exercise onto the next page; content remains intact.",
+  "documents": [
+    {
+      "file": "algebra-trainer-equations.pdf",
+      "pages": 4,
+      "size": "594.96 x 841.92 pts (A4)",
+      "sizeBytes": 69125,
+      "sha256": "00949a6878738d7a2f0d87bed8f2863ec21f92236b778e9a1496f52041c6d7a8"
+    },
+    {
+      "file": "algebra-trainer-systems.pdf",
+      "pages": 8,
+      "size": "594.96 x 841.92 pts (A4)",
+      "sizeBytes": 819684,
+      "sha256": "a7745d103295f3494cc630f31c721d608e25bb942727e4c2b938519697d02c96"
+    },
+    {
+      "file": "bewerkingen-trainer-operations-machten.pdf",
+      "pages": 6,
+      "size": "595.92 x 842.88 pts (A4)",
+      "sizeBytes": 54936,
+      "sha256": "b75c1c17e0af61c3cf406afd7170bb3d2f635f0603ec5f4a7262e61e7971abcc"
+    },
+    {
+      "file": "bewerkingen-trainer-operations-wetenschappelijk.pdf",
+      "pages": 6,
+      "size": "595.92 x 842.88 pts (A4)",
+      "sizeBytes": 45645,
+      "sha256": "0618d6e496afd13e1362394e7c358444933b3ac1dbc5cad1171a12c3e1a15683"
+    },
+    {
+      "file": "bewerkingen-trainer-operations-wortels.pdf",
+      "pages": 6,
+      "size": "595.92 x 842.88 pts (A4)",
+      "sizeBytes": 59208,
+      "sha256": "3f432bb81d94a00b7c761742559f3fbdb40613bd9216d53a50e8082d81c2c843"
+    },
+    {
+      "file": "rechtenwereld-formulewerf.pdf",
+      "pages": 8,
+      "size": "594.96 x 841.92 pts (A4)",
+      "sizeBytes": 85544,
+      "sha256": "c13cbc61b2e7262040490b70215e7cdbee7573ff084dc59e82f9c48899475a1c"
+    },
+    {
+      "file": "rechtenwereld-grenspas.pdf",
+      "pages": 8,
+      "size": "594.96 x 841.92 pts (A4)",
+      "sizeBytes": 99784,
+      "sha256": "170db4c846dc07d7aa68a415de4d73206f32befb7e248f33ef81361bd4a6146b"
+    },
+    {
+      "file": "rechtenwereld-hellingrug.pdf",
+      "pages": 8,
+      "size": "594.96 x 841.92 pts (A4)",
+      "sizeBytes": 103451,
+      "sha256": "5a8d86aa1c0b79f65f6a0156ee2a04e3cf52b9f994a17d53a3809afe4a6be53d"
+    },
+    {
+      "file": "rechtenwereld-signaalstad.pdf",
+      "pages": 8,
+      "size": "594.96 x 841.92 pts (A4)",
+      "sizeBytes": 100477,
+      "sha256": "3fdd8add94191c2f681708f82f68ccf2b30565dbded4e1256b8cc4b0aabba514"
+    }
+  ]
+}

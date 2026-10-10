@@ -8,7 +8,7 @@ Acht themamappen en 24 bestaande bouwsels, met lessen, trainers, spellen en atel
 
 Maximaal zes apps blijven tegelijk geopend op dezelfde origin. Terug, minimaliseren, Start, profiel en instellingen hergebruiken de oorspronkelijke iframe en DOM. Iedere app onthoudt haar eigen map, filter en zoekwoord. Hervatten herstelt de vorige antwoordfocus, ook wanneer je eerst Bewaren gebruikte. Ctrl/Cmd K en Escape werken ook in geneste Battle-werkborden. Andere toetsen blijven bij de app.
 
-De bestaande centrale accountbediening en accountrol blijven leidend. Leraren starten klasactiviteiten; leerlingen krijgen de bestaande deelnameformulieren. Accountwisseling sluit geopende apps en isoleert pins, snelkoppelingen en vertraagde voortgangsantwoorden. XP, levels, ramen en rondes komen uit hun oorspronkelijke bronnen. Er is geen nieuw saldo of nieuwe database.
+De bestaande centrale accountbediening en accountrol blijven leidend. Leraren starten klasactiviteiten; leerlingen krijgen de bestaande deelnameformulieren. Accountwisseling sluit geopende apps en isoleert pins, snelkoppelingen en vertraagde voortgangsantwoorden. XP, levels, ramen en rondes komen uit hun oorspronkelijke bronnen. De bestaande online opslag en sessieproviders blijven leidend.
 
 Solo Zeeslag opent direct de bestaande computerpartij. De online ingang blijft de oorspronkelijke lobby. De gedeelde bovenbalk ondersteunt inklappen, heropenen, fullscreen en weergave. De expliciete inklapvoorkeur overleeft herladen. Aanraakdoelen van bureaubladnavigatie zijn minstens 44 × 44 px. De appnaam staat ook in de compacte bovenbalk.
 
@@ -20,13 +20,27 @@ Mijn taken bevat persoonlijke snelkoppelingen, geen door een leraar uitgedeelde 
 
 Alleen werkende providers worden aangeboden. Pythagoras krijgt geen verzonnen trainer, Battle of oefenbladgenerator. Productieauthenticatie en echte externe WebSocketverbindingen zijn nog niet met twee ingelogde testaccounts gecontroleerd.
 
+## Oefenbladmappen en bewaarde reeksen
+
+Oefenbladen opent eerst themamappen en daarna onderwerpmapjes. Rechten bevat Hellingrug, Grenspas, Formulewerf en Signaalstad; Algebra bevat Vergelijkingen en Stelsels; Getallen bevat Machten, Vierkantswortels en Wetenschappelijke notatie. Elke ingang opent de bestaande generator met zijn eigen keuzes, vragen, opmaak en afdrukbediening. Er verschijnen alleen onderwerpen waarvoor een generator bestaat.
+
+Een nieuw gemaakte reeks wordt automatisch in **Mijn oefenbladen** bewaard. De generator en de OS-knop Bewaren bewaren de werkelijk gemaakte opgaven en hun bijbehorende verbetersleutel; dezelfde reeks opnieuw bewaren maakt geen duplicaat. Mijn oefenbladen heeft dezelfde indeling per thema en onderwerp. Bij terugkeren of herladen opent het OS de bewaarde pagina’s, zonder nieuwe willekeurige vragen te maken. Een nieuw blad vervangt oudere reeksen niet.
+
+Deze documenten worden apart van leerlingvoortgang in IndexedDB bewaard, **per account op dit toestel**. Gastbladen blijven bij de gast. Accountwisseling sluit geopende documenten en geeft geen toegang tot de vorige gebruiker. Er is geen cloudsync of automatische overdracht naar een ander toestel. Download kopie maakt een volledig JSON-bestand dat via Kopie terugzetten opnieuw in de eigen map kan worden gezet. Download oefenblad maakt een zelfstandig HTML-document met de opgaven, sleutel en ingesloten opmaak. Afdrukken / PDF gebruikt de bewaarde documentpagina’s.
+
+De map bewaart maximaal 200 reeksen en maximaal 16 MiB per reeks. Bij volle of geblokkeerde opslag verschijnt een melding dat de reeks niet bewaard is; bestaande bladen worden niet automatisch verwijderd. De oorspronkelijke generator blijft beschikbaar om het blad af te drukken of als PDF op te slaan. Een gedownloade kopie blijft bruikbaar als browsergegevens worden gewist.
+
+## Gedeelde Klasbattle-ingang
+
+Getallenwereld en Rechtenwereld gebruiken vanuit het OS dezelfde stappen voor een klasbattle: leerstof kiezen, instellingen bepalen, een code maken, deelnemers ontvangen en de battle starten. De gezamenlijke opstartbediening gebruikt de originele velden en knoppen. De eigen vraagvormen, antwoordbediening, spelstatus, XP en bestaande providers blijven bij elke wereld. Verschillen in beschikbare leerstof of provideropties worden behouden.
+
 ## Getallenwereld
 
 De werkplaats telt negentien begeleide onderdelen: acht over machten, zeven over vierkantswortels en vier over wetenschappelijke notatie. De oorspronkelijke vijftien behouden hun vragen en antwoorddelen. De vier nieuwe onderdelen behandelen grote getallen, kleine getallen, terugschrijven en normaliseren, met regelkeuze, klikantwoorden, exacte beoordeling, hulp en resultaat. Je kiest vrij; beginnen blijft een expliciete actie. Oude vragen, invoer, voortgang, hulpvoorbeeld/hulpstap en correcte antwoorden die op Volgende wachten blijven hervatbaar. Het OS-kruimelpad volgt het actuele hoofdstuk/onderdeel, Bewaren bewaart die ingang en de directe weergaveknop verandert ook het native werkbord zonder herladen.
 
 De bestaande reeksprovider blijft, samen met solo met XP, Bordduo, Duo Learn, Duo Battle, Klaslearn, Klasbattle, borduitleg en oefenbladen, via dezelfde wereld bereikbaar. Leraarstart en leerlingdeelname blijven afzonderlijk. De begeleide leerroute rapporteert negentien onderdelen zonder XP; de reeksprovider behoudt zestien vraagvormen en zijn eigen XP/opslag. Nieuwe wetenschappelijke eigen reeksen, Bordduo, borduitleg, oefenbladen en simulaties hebben drie verschillende niveaus: grote gehele getallen, grote en kleine getallen, en interne nullen met exponenten tot ±20. Historische taken blijven hun oorspronkelijke generatie gebruiken. Zie [WORKSHOP.md](../games/getallenwereld/WORKSHOP.md) en [de uitgevoerde controle](PILOT.md).
 
-De productiebackend voor de drie nieuwe online wetenschappelijke niveaus is op **10 oktober 2026** uitgerold: de gerichte migratie en `numbers-session` versie 2 zijn actief. De gedeployde bronbestanden zijn gelijk aan deze branch; bestaande voortgang en sessiegegevens bleven ongewijzigd. De frontend wordt via GitHub Pages vanaf `main` gepubliceerd; publieke ingangen zijn [het bureaublad](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/) en [Getallenwereld](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/). Actuele releasecontroles staan in [PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7) en [het verificatierapport](qa/verification.json). Nieuwe clients volgen steeds de versie van de ontvangen sessie; historische sessies houden hun oorspronkelijke vragen. Twee echte ingelogde productieaccounts, cloudhervatting en externe realtimeverbindingen zijn nog niet gecontroleerd.
+De productiebackend voor de drie nieuwe online wetenschappelijke niveaus is op **10 oktober 2026** uitgerold: de gerichte migratie en `numbers-session` versie 2 zijn actief. De gedeployde bronbestanden zijn gelijk aan deze branch; bestaande voortgang en sessiegegevens bleven ongewijzigd. De frontend wordt via GitHub Pages vanaf `main` gepubliceerd; publieke ingangen zijn [het bureaublad](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/) en [Getallenwereld](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/). De historische releasecontroles staan in de samengevoegde [PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7) en [het verificatierapport](qa/verification.json). Nieuwe clients volgen steeds de versie van de ontvangen sessie; historische sessies houden hun oorspronkelijke vragen. Twee echte ingelogde productieaccounts, cloudhervatting en externe realtimeverbindingen zijn nog niet gecontroleerd.
 
 Duo Learn gebruikt eigen antwoorden en gezamenlijk bevestigde bespreking. Betekenis/nulmacht en het toetsen van wortelregels openen expliciet een hoofdstukselectie bij de reeksprovider, omdat die geen equivalente vraagvorm heeft. Terugschrijven en normaliseren verwijzen eveneens naar een hoofdstukselectie voor aanvullende oefeningen in de voorwaartse wetenschappelijke schrijfwijze; de provider biedt voor deze twee doelen geen gelijkwaardige vraagvorm. De vier begeleide wetenschappelijke doelen zelf werken wel volledig in de werkplaats.
 
@@ -45,7 +59,7 @@ node scripts/build-catalog.cjs --check
 node tests/game-registry.cjs
 node tests/desktop-package-check.cjs
 node --check os/desktop.js
-npm install --no-save --package-lock=false --prefix /tmp/leraarbob-os-tests jsdom@26.1.0 playwright@1.64.0 @electric-sql/pglite@0.5.8
+npm install --no-save --package-lock=false --prefix /tmp/leraarbob-os-tests jsdom@26.1.0 playwright@1.64.0 @electric-sql/pglite@0.5.8 fake-indexeddb@6.2.4
 NODE_PATH=/tmp/leraarbob-os-tests/node_modules node --test --test-isolation=none tests/desktop-model.test.cjs tests/desktop-dom.test.cjs tests/topbar-desktop.test.cjs tests/catalog.test.cjs tests/catalog-progress.test.cjs tests/platform-mode-context.test.cjs tests/platform-routes.test.cjs
 /tmp/leraarbob-os-tests/node_modules/.bin/playwright install chromium
 NODE_PATH=/tmp/leraarbob-os-tests/node_modules node tests/desktop-pilot-browser.cjs
@@ -54,8 +68,12 @@ NODE_PATH=/tmp/leraarbob-os-tests/node_modules node --test --test-isolation=none
 NODE_PATH=/tmp/leraarbob-os-tests/node_modules node tests/getallen-os-browser.cjs
 NODE_PATH=/tmp/leraarbob-os-tests/node_modules node --test --test-isolation=none tests/getallen-scientific-lessons.test.cjs tests/scientific-provider.test.cjs tests/scientific-session-version.test.cjs
 NODE_PATH=/tmp/leraarbob-os-tests/node_modules node tests/getallen-scientific-browser.cjs
+NODE_PATH=/tmp/leraarbob-os-tests/node_modules node --test --test-isolation=none tests/worksheet-library.test.cjs tests/worksheet-save.test.cjs
+WORKSHEETS_SCREENSHOTS=/tmp/leraarbob-worksheets-qa NODE_PATH=/tmp/leraarbob-os-tests/node_modules node tests/desktop-worksheets-browser.cjs
 ```
 
 Een geïnstalleerde Brave wordt automatisch gebruikt. `LB_CHROMIUM` kan een andere browserbinary kiezen. Anders gebruiken de tests de geïnstalleerde Playwright Chromium. Authenticatie is fictief en gescheiden; de live-test voert de bestaande Edge-handlers en SQL-migraties daadwerkelijk uit in een tijdelijke PostgreSQL/PGlite-database. Productiegegevens worden niet geschreven.
 
-Zie [PILOT.md](PILOT.md) voor de afgevinkte praktijkcontrole en [REVIEW.md](REVIEW.md) voor vergelijking, fixes, testresultaten, screenshots en resterende beperkingen. De catalogusworkflow draait de DOM- en browsercontroles en bewaart QA-artifacts. `GETALLEN_SCREENSHOTS` bepaalt de uitvoermap van de Getallenwereldcontrole; `SCIENTIFIC_SCREENSHOTS` die van de aanvullende wetenschappelijke controle. De eerdere matrix van 128 interactiegroepen en 876 layouts bewijst de oorspronkelijke vijftien werkbanken. De aanvullende wetenschappelijke browsercontrole slaagt met 67 interactiegroepen en 190 layouts.
+Zie [PILOT.md](PILOT.md) voor de afgevinkte praktijkcontrole en [REVIEW.md](REVIEW.md) voor vergelijking, fixes, testresultaten, screenshots en resterende beperkingen. De catalogusworkflow draait de DOM- en browsercontroles en bewaart QA-artifacts. `GETALLEN_SCREENSHOTS` bepaalt de uitvoermap van de Getallenwereldcontrole; `SCIENTIFIC_SCREENSHOTS` die van de aanvullende wetenschappelijke controle; `WORKSHEETS_SCREENSHOTS` die van de oefenbladcontrole.
+
+De huidige oefenbladcontrole slaagt met 15 unitcontroles, 22 browsergroepen, 47 layoutmetingen en 18 screenshots. Negen echte bewaarde PDF’s zijn op alle 62 pagina’s gerenderd en visueel beoordeeld. De gedeelde klasstart slaagt met 32 groepen, 78 interactieve doelen en 22 screenshots. De laatste [regressierapporten](qa/worksheets/regressions/) slagen voor de vier pilots (32 groepen / 23 layouts), Getallenwereld (146 / 1076) en wetenschappelijke schrijfwijze (67 / 190), zonder browserfouten of ontbrekende bronnen. Rechtenwereld behoudt zijn oorspronkelijke draaihulp op 390 px; de volledige opgavebediening is op 1366 px uitgevoerd. Alle auth- en externe sessiegrenzen in deze browserruns gebruiken lokale fixtures. De eerdere matrix van 128 groepen / 876 layouts blijft historisch bewijs voor de oorspronkelijke vijftien werkbanken.

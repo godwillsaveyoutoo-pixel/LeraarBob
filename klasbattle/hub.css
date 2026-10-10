@@ -30,3 +30,6 @@ body[data-view=learn] main{display:flex;flex:1;min-height:0;width:100%;padding-b
 @media(max-width:600px){.learnCards{grid-template-columns:1fr;gap:8px}.learnCard{padding:12px;gap:5px}.learnCard h2{font-size:19px}.learnCard p{font-size:13px}.learnCard .cardActions{padding-top:4px}.learnFooter{margin-top:8px}.learnFooter .muted{display:none}body[data-view=learn] .hubNav #originGame{display:none}#learnView .pageHeading>p{display:none}#learnView .pageHeading h1{font-size:23px;margin:0}}
 @media(min-width:601px) and (max-height:500px){#learnView .pageHeading{display:none}.learnCard{padding:10px;gap:4px}.learnCard h2{font-size:19px}.learnCard p{font-size:12px}.learnFooter{margin-top:6px}.learnCard .cardActions{padding-top:3px}}
 @media(max-height:500px) and (min-width:601px),(max-width:600px) and (max-height:740px){.learnCard .muted{display:none}.learnCard .cardActions button{font-size:12px;padding:5px 7px}.learnCard{padding:10px;gap:4px}.learnFooter .muted{display:none}}
+
+/* Embedded hubs use the OS bar; standalone retains its platform/account bar. */
+.hub-embedded>.hubTopbar{display:none!important}

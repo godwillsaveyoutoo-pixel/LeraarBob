@@ -7,7 +7,7 @@
   <meta name="description" content="Jouw leraarBob-bureaublad. Lessen, trainers, spellen en ateliers, geordend per thema.">
   <title>leraarBob · Mijn bureaublad</title>
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="stylesheet" href="desktop.css?v=20261010-home">
+  <link rel="stylesheet" href="desktop.css?v=20261010-folders">
   <link rel="stylesheet" href="../shared/leraarbob-topbar.css">
   <script>try{document.documentElement.dataset.mode=localStorage.getItem('axioma-mode')==='dark'?'dark':'light';}catch{}</script>
   <script src="../shared/vendor/supabase.js" defer></script>
@@ -19,7 +19,8 @@
   <script src="../shared/game-registry.js" defer></script>
   <script src="../js/catalog-progress.js" defer></script>
   <script src="desktop-model.js" defer></script>
-  <script src="desktop.js?v=20261010-home" defer></script>
+  <script src="../shared/worksheet-library.js?v=20261010-folders" defer></script>
+  <script src="desktop.js?v=20261010-folders" defer></script>
   <script src="../shared/leraarbob-topbar.js" data-title="Bureaublad" data-home="os/" data-context="none" data-page="desktop" data-theme-mode="site" data-nav-pilot="true" defer></script>
 </head>
 <body>
@@ -30,6 +31,7 @@
       <button type="button" data-view="all" data-nav-icon="compass">Alle apps</button>
       <button type="button" data-view="saved" data-nav-icon="route">Mijn taken</button>
       <button type="button" data-view="worksheets" data-nav-icon="pencil">Oefenbladen</button>
+      <button type="button" data-view="worksheet-saved" data-nav-icon="route">Mijn oefenbladen</button>
       <button type="button" data-view="live" data-nav-icon="classroom">Samen &amp; live</button>
       <button type="button" data-view="profile" data-nav-icon="chart">Mijn profiel</button>
       <button type="button" data-view="settings" data-nav-icon="menu">Instellingen</button>

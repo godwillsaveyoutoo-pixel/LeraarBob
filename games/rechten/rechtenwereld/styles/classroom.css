@@ -22,3 +22,15 @@ body[data-playing=true] .class-solo-link{display:none}
 body.classroom-app[data-playing=true].topbar-collapsed .session-bar{padding-left:52px;padding-right:4px}
 
 .members li{display:flex;gap:8px;align-items:center}.learner-avatar{display:inline-grid;place-items:center;width:32px;height:32px;flex:none;background:#deebe2;color:#235443;font-size:12px;font-weight:700}.learner-avatar img{object-fit:cover}
+
+/* The shared entry flow does not restyle the native question iframe. */
+.classroom-app[data-class-flow]{background:#f5f2e9;color:#17374a}.classroom-app[data-class-flow] main{max-width:1120px;padding:8px}.classroom-app[data-class-flow] .class-solo-link,.classroom-app[data-class-flow] .setup-intro,.classroom-app[data-class-flow] .rules,.classroom-app[data-class-flow] #classSimulationSetup{display:none!important}.classroom-app[data-class-flow] .setup{display:block}.classroom-app[data-class-flow] #hostForm{width:100%;margin:0}.classroom-app[data-class-flow] .lb-class-flow :is(h2,h3,label,button,select,p){font-family:system-ui,sans-serif}.classroom-app[data-class-flow] .lb-class-flow :is(button,select,input,.lb-class-card){border-radius:8px!important}.classroom-app[data-class-flow] .lb-class-flow h2.lb-class-title{font-size:26px;line-height:1.2;margin:0 0 10px}.classroom-app[data-class-flow] .lb-class-flow label{margin:0 0 10px}.classroom-app[data-class-flow] .lb-class-options #simulationCount{width:100%}.classroom-app[data-class-flow] .lb-class-flow .members li{background:var(--cf-paper);border-radius:7px!important}.classroom-app[data-class-flow] .lb-class-flow .lb-class-help p{margin:0}.classroom-app[data-class-flow] .lb-class-flow .lb-class-invite strong{color:var(--cf-ink);font-size:36px}.classroom-app[data-class-flow] .lb-class-flow .lb-class-actions button{min-height:44px}
+
+:root[data-mode=dark] .classroom-app[data-class-flow]{background:#152630;color:#edf5f8}
+
+.classroom-app[data-class-flow] .lb-class-flow #code{font:700 36px/1.2 system-ui,sans-serif;letter-spacing:.12em;color:var(--cf-ink)}.classroom-app[data-class-flow] .lb-class-flow #count{font:13px/1.35 system-ui,sans-serif;color:var(--cf-muted)}
+
+.classroom-app[data-class-flow=lobby] #classFlowLobby{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}
+
+/* Legacy vector selectors include IDs; override only these shared entry controls. */
+.classroom-app[data-class-flow] .setup{padding:0}.classroom-app[data-class-flow] :is(#hostForm,#classFlowLobby) .lb-class-flow :is(button,select,input){border-radius:8px!important;background:var(--cf-card);color:var(--cf-ink);border-color:var(--cf-line)}.classroom-app[data-class-flow] :is(#hostForm,#classFlowLobby) .lb-class-flow button.primary{background:#f98721;color:#172c38;border-color:#d76905}
