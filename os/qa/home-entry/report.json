@@ -1,0 +1,72 @@
+{
+  "scope": "Actual local Chromium navigation and UI with guest auth fixture; no real production accounts",
+  "checks": [
+    {
+      "name": "/ opens the desktop on the Pages prefix",
+      "passed": true
+    },
+    {
+      "name": "/index.html opens the desktop on the Pages prefix",
+      "passed": true
+    },
+    {
+      "name": "Desktop 1366 expanded/collapsed, 44px restore and persisted reload choice",
+      "passed": true
+    },
+    {
+      "name": "Desktop 390 expanded/collapsed, 44px restore and persisted reload choice",
+      "passed": true
+    },
+    {
+      "name": "Existing #ontdek opens OS all",
+      "passed": true
+    },
+    {
+      "name": "Existing #reserve opens OS all",
+      "passed": true
+    },
+    {
+      "name": "Existing #playerProgress opens OS profile",
+      "passed": true
+    },
+    {
+      "name": "Unrecognized query/hash and theme bookmark remain intact",
+      "passed": true
+    },
+    {
+      "name": "Explicit old catalog and genuine Home/Back navigation without redirect loop",
+      "passed": true
+    },
+    {
+      "name": "Settings opens the earlier catalog in another tab with reachable 44px link",
+      "passed": true
+    },
+    {
+      "name": "Native standalone app Home reaches the new desktop",
+      "passed": true
+    },
+    {
+      "name": "Existing login dialog and teacher/ return stay on original account entry",
+      "passed": true
+    },
+    {
+      "name": "Existing login dialog and games/rechten/rechtenwereld/ return stay on original account entry",
+      "passed": true
+    },
+    {
+      "name": "Original auth and recovery callback queries/hashes remain exact",
+      "passed": true
+    },
+    {
+      "name": "JavaScript-disabled desktop fallback reaches usable old catalog",
+      "passed": true
+    },
+    {
+      "name": "No JavaScript errors or missing frontend files",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "passed": true
+}

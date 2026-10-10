@@ -53,7 +53,11 @@ try{for(const item of items.filter(x=>!process.env.LB_PAGES||process.env.LB_PAGE
  for(const role of ['student','teacher']){
   await c.eval(`dispatchEvent(new CustomEvent('axioma:login-complete',{detail:{account:{id:'test-role',role:'${role}',alias:'Testleerling'}}}));LeraarBobTopbar.openMenu()`);
   const names=await c.eval("[...document.querySelector('leraarbob-topbar').shadowRoot.querySelectorAll('.menu-name')].map(e=>e.textContent)");
-  assert(names.includes('Profiel'));assert.equal(names.includes('Mijn klassen'),role==='teacher');assert.equal(names.filter(x=>x==='Mijn leerpad').length,1);
+  assert(names.includes('Profiel'));
+  if(item.href==='index.html'){
+   assert.equal(names.filter(x=>x==='Mijn profiel').length,1);assert.equal(names.filter(x=>x==='Instellingen').length,1);
+   assert.equal(await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.teacher-link').hidden"),role!=='teacher','Desktop keeps teacher class access in its shared topbar');
+  }else{assert.equal(names.includes('Mijn klassen'),role==='teacher');assert.equal(names.filter(x=>x==='Mijn leerpad').length,1);}
   await c.eval("document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.close').click()");
  }
  const start={'Algebra Smederij':'rfHomeStart','Data Check':'homeStart','Signal Lab':'signalHomeStart','Verfwinkel':'vfStart'}[item.title];

@@ -21,8 +21,8 @@ class CDP{
   const links=await c.eval(`[...document.querySelectorAll('[data-platform-home]')].map(a=>({tag:a.tagName,href:a.href,label:a.getAttribute('aria-label')}))`);
   for(const a of links){assert.equal(a.tag,'A',path);assert.equal(a.href,'http://127.0.0.1:8765/index.html',path);assert.match(a.label,/startpagina/,path)}
   await c.eval(`document.querySelector('[data-platform-home]').click()`);
-  await c.wait(`location.pathname==='/index.html'`);
+  await c.wait(`location.pathname==='/os/'&&!!window.LeraarBobDesktop`);
  }
- console.log('PASS: all '+pages.length+' catalog games have native links returning to the website');
+ console.log('PASS: all '+pages.length+' catalog games have native links returning to the desktop');
  await browser.send('Target.disposeBrowserContext',{browserContextId});c.ws.close();browser.ws.close();
 })().catch(e=>{console.error(e);process.exit(1)});

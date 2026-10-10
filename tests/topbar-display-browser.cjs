@@ -24,7 +24,7 @@ async function metrics(c){return c.eval(`(()=>{const s=${sh},issues=[],bar=s.hos
     await c.size(w,h);await frames(c);assert.deepEqual(await metrics(c),[],page.id+' controls '+w);
     await c.shot('display-'+page.id+'-'+w);
     const selector=await c.eval(`getComputedStyle(${sh}.querySelector('.mobile-menu')).display==='none'?'.menu':'.mobile-menu'`);
-    await tap(c,selector);assert.equal(await c.eval(sh+".querySelector('dialog').open"),true);assert.equal(await c.eval(sh+".querySelector('.menu-list').textContent.includes('Instellingen')"),false);await tap(c,'.close');
+    await tap(c,selector);assert.equal(await c.eval(sh+".querySelector('dialog').open"),true);assert.equal(await c.eval(sh+".querySelector('.menu-list').textContent.includes('Instellingen')"),page.id==='home','Desktop exposes its settings place; display actions remain direct');await tap(c,'.close');
    }
    await c.size(1366,768);await frames(c);
    if(page.theme){

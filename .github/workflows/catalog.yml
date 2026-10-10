@@ -28,6 +28,7 @@ jobs:
         run: |
           npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-browser-tests" playwright@1.64.0 @electric-sql/pglite@0.5.8
           "$RUNNER_TEMP/leraarbob-browser-tests/node_modules/.bin/playwright" install --with-deps chromium
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" HOME_SCREENSHOTS="$RUNNER_TEMP/os-qa/home-entry" node tests/home-entry-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" OS_SCREENSHOTS="$RUNNER_TEMP/os-qa/pilots" node tests/desktop-pilot-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/live" node tests/desktop-live-browser.cjs

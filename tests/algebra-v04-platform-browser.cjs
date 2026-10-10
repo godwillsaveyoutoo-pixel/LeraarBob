@@ -1,4 +1,4 @@
-// Verify the production entry, shared controls and preservation of real work.
+// Verify the retained catalog entry, shared controls and preservation of real work.
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),http=require('node:http');
 const {chromium}=require('playwright');
@@ -33,7 +33,7 @@ const server=http.createServer((req,res)=>{
     }return bad;
    });await page.screenshot({path:path.join(out,label+'-'+width+'.png')});assert.deepEqual(problems,[],label+' '+width);
   }
-  await page.goto(base+'/');await ready();await page.waitForSelector('#featuredGrid [data-game-id="algebra-trainer"]');
+  await page.goto(base+'/index.html?view=catalog');await ready();await page.waitForSelector('#featuredGrid [data-game-id="algebra-trainer"]');
   assert.equal(await page.locator('#featuredGrid [data-game-id="algebra-trainer"]').count(),1);
   assert.equal(await page.locator('#grid [data-game-id="rechten-arcade"]').count(),1,'the previously published arcade remains available');
   await click('#featuredGrid [data-game-id="algebra-trainer"]');await page.waitForURL('**/games/algebra-trainer/');await ready();await page.waitForSelector('#navigationScreen:not(.hidden)');

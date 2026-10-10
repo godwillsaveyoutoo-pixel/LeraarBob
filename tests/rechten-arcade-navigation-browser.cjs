@@ -19,7 +19,7 @@ const server=http.createServer((req,res)=>{
   await page.route('**/*',r=>new URL(r.request().url()).origin===base?r.continue():r.fulfill({body:''}));
   const click=selector=>width<900?page.locator(selector).tap():page.locator(selector).click();
   const ready=async()=>{await page.waitForSelector('leraarbob-topbar .collapse',{state:'attached'});await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));};
-  await page.goto(base+'/');await ready();
+  await page.goto(base+'/index.html?view=catalog');await ready();
   await page.waitForSelector('#featuredGrid [data-game-id="rechtenwereld"]');
   assert.deepEqual(await page.locator('#featuredGrid [data-game-id]').evaluateAll(es=>es.map(e=>e.dataset.gameId)),['rechtenwereld','wortelbouw','vectoren-trainer','gravity-maze','algebra-trainer']);
   assert.equal(await page.locator('#featuredGrid [data-game-id="rechten-arcade"]').count(),0,'Rechtenwereld remains the original main entry');
