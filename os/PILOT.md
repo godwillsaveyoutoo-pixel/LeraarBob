@@ -39,26 +39,51 @@ Uitgevoerd met Node/jsdom: eigen map/filter/zoekwoord per app; hervatten via taa
 
 De actuele bewijsbestanden staan in [qa/pilot-browser-report.json](qa/pilot-browser-report.json), [qa/live/results.json](qa/live/results.json) en [qa/verification.json](qa/verification.json). Screenshots staan naast de rapporten. [REVIEW.md](REVIEW.md) bevat de bestandswijzigingen, alle testgrenzen en bestaande regressiefouten.
 
-## Getallenwereld · volledige werkplaats
+## Getallenwereld · oorspronkelijke vijftien onderdelen
 
 De tweede ZIP is gericht geïntegreerd: alle 21 bestandshashes gecontroleerd, alleen de nieuwe Getallenwereldbron overgenomen en verbeterd. De oudere desktop/topbarbestanden uit het pakket zouden reeds herstelde integraties vervangen en zijn daarom niet gekopieerd.
 
 | Controle | Werkelijk uitgevoerd | Grens |
 | --- | --- | --- |
-| Vijftien leeronderdelen | Alle acht machten- en zeven wortelonderdelen: oorspronkelijke regelkeuze, alle antwoorddelen en echte beoordeling; volledige zesvragenreeksen in jsdom | Geen nieuwe of omgerekende XP |
+| Vijftien oorspronkelijke leeronderdelen | Alle acht machten- en zeven wortelonderdelen: oorspronkelijke regelkeuze, alle antwoorddelen en echte beoordeling; volledige zesvragenreeksen in jsdom | Geen nieuwe of omgerekende XP |
 | Historische opslag | 30 editie-1/2-runs en 15 correcte antwoorden vóór Volgende exact hervat; hulpseed/stap via menu en documentherladen; oude resultaatlinks gecorrigeerd | Bestaande opslagidentiteiten behouden |
 | Werkruimte | 92 controles van oorspronkelijke formulevarianten op 640 × 360 en 390 × 844, echte antwoordklikken en onbedekte knoppen ≥44 px | Grote keuzepanelen gebruiken hun eigen scrollruimte |
 | Native regressies | Bestaande Getallenwereld- en verenigde-wereldbrowsers: alle routes, vijf schermmaten, inklappen/herladen/heropenen, invoer, accountwisseling en providerterugkeer | Auth/voortgangstransport expliciete fixtures |
 | Bestaande providers | Numbers Space-browser: volledige klas, retry/reconnect/idempotentie, simulatie, solo-XP, vijf layouts en herladen; OS-klas/live-browser opnieuw volledig geslaagd | Externe auth/sessietransports vervangen door lokale testgrenzen |
 
-De aanvullende OS-browsermatrix staat in [qa/getallen/report.json](qa/getallen/report.json): 1366 × 768 bij 100% zoom, 390 × 844 en 844 × 390; beide balkstanden/herstel, alle vijftien werkbanken binnen OS én zelfstandig, Start/ESC/focus/minimaliseren/pins/Bewaren/account, exacte hulp, historische negatieve vragen en daadwerkelijke wetenschappelijke solo-/papier-/Bordduobediening. Duo Learn en Duo Battle openen voor elk van de drie onderwerpen de echte selectie, maakactie en lobby met lokale responsfixtures. Volledige klasvragen gebruiken de bestaande Edge-handlers/SQL zoals hierboven beschreven.
+De eerdere OS-browsermatrix van **128 interactiegroepen en 876 layouts** staat in [qa/getallen/report.json](qa/getallen/report.json): 1366 × 768 bij 100% zoom, 390 × 844 en 844 × 390; beide balkstanden/herstel, alle vijftien oorspronkelijke werkbanken binnen OS én zelfstandig, Start/ESC/focus/minimaliseren/pins/Bewaren/account, exacte hulp, historische negatieve vragen en daadwerkelijke wetenschappelijke solo-/papier-/Bordduobediening. Dit is het bewijs voor de versie vóór de vier nieuwe wetenschappelijke onderdelen. Duo Learn en Duo Battle openen voor elk van de drie onderwerpen de echte selectie, maakactie en lobby met lokale responsfixtures. Volledige klasvragen gebruiken de bestaande Edge-handlers/SQL zoals hierboven beschreven.
 
-Wetenschappelijke notatie blijft de oorspronkelijke reeksprovider, met eigen antwoordstijl en opslag, zonder fictief zestiende begeleid onderdeel. Niveau 1 en 2 zijn in die bestaande generator inhoudelijk gelijk. Duo Learn deelt de bespreking, met eigen oplossingen. Betekenis/nulmacht en wortelregeltoetsing hebben een expliciete hoofdstukselectie bij de provider. Productieaanmelding, cloudhervatting en externe multiplayer met twee daadwerkelijk ingelogde accounts blijven open.
+## Getallenwereld · vier nieuwe wetenschappelijke onderdelen
+
+De werkplaats telt nu **19 begeleide onderdelen**: de vijftien oorspronkelijke doelen en vier nieuwe wetenschappelijke doelen. Grote getallen, kleine getallen, terugschrijven en normaliseren hebben elk zes verschillende opgaven, regelkeuze, eigen aanklikbare antwoorddelen, exacte beoordeling, hulp en resultaat. Het bestaande opslag-ID, de oorspronkelijke voltooiingen en de grens tussen begeleide onderdelen zonder XP en de zestien provider-vraagvormen met eigen XP blijven behouden.
+
+| Controle | Werkelijk uitgevoerd | Grens |
+| --- | --- | --- |
+| Vier begeleide doelen | Vier volledige zesvragenreeksen binnen het OS, eigen voortgang op 19, zelfstandige routes en oorspronkelijke machten-/wortelopslag behouden | Voltooiing is bewijs van uitgewerkt werk, geen automatisch beheersingslabel |
+| Navigatie en bewaren | Hoofdstuk/onderdeel/werkbank, hulp en fout verbeteren, Start/ESC, focus, minimaliseren/hervatten, pins, Bewaren en herladen | De bestaande eigen appopslag blijft leidend |
+| Native regressies | Alle 19 routes op vijf schermmaten, inklappen/herladen/heropenen, invoer, accountwisseling en providerterugkeer; 106 formulecontroles op 640 × 360 en 390 × 844 met echte antwoordklikken en zichtbare doelen ≥44 px | Geïsoleerde accounts en voortgangsfixtures |
+| Wetenschappelijke interface | **67 interactiegroepen en 190 gemeten layouts**, waaronder 1366 × 768 bij 100% zoom, 390 × 844 en 844 × 390; beide balkstanden, herstel en echte antwoorden met bereikbare keuzes ≥44 px | [Rapport en screenshots](qa/scientific/report.json); fictieve authenticatie en lokaal sessietransport |
+| Drie provider-niveaus | Nieuwe wetenschappelijke solo-, Bordduo-, borduitleg-, papier- en simulatiereeksen gebruiken versie 2; Start, Basis en Verdieping verschillen inhoudelijk | Versieloze historische taken blijven versie 1 |
+| Papier | Nieuwe vragen en verbetersleutel, native afdrukactie en afdrukweergave gecontroleerd; bestaande speelreeksen blijven behouden | Geen fysieke printer of productie-export gecontroleerd |
+| Online UI en rollen | Wetenschappelijke Duo Learn, Duo Battle, Klaslearn en Klasbattle: selectie, maakactie, code, start en vraag met niveau 2; leerling krijgt deelname/duo en leraar klasstart | Browserresponses zijn expliciete lokale fixtures |
+| Online SQL/Edge | Alle vier werkvormen op elk van de drie niveaus met echte lokale migraties/handler, antwoordbeoordeling, eenmaal XP, oudere client vóór deelname afgewezen, actieve historische sessie behouden | Migratie en `numbers-session` versie 2 op 10 oktober naar productie uitgerold; geen volledige productie-accountproef |
+| Oude server | Nieuwe client houdt ontvangen historische generatie aan; instellingen vermelden dat Basis en Verdieping dezelfde bestaande vraagmix gebruiken | Compatibiliteitscontrole met een oude serverfixture; productiebackend ondersteunt nu versie 2 |
+
+De rekencontrole bevriest 3600 historische wetenschappelijke taken en controleert 3600 nieuwe taken onafhankelijk met gehele-decimaalrekenkunde. De lokale SQL/Edge-controle verifieert ook de veilige terugval bij een nog niet gemigreerde database of oude arithmetic-bundle, herhaalde request-ID’s, het openbare RPC-delegaat en behoud van catalogusinstellingen en leerlingvoortgang. [De providerdocumentatie](../games/bewerkingen-trainer/README.md) beschrijft de afzonderlijke migratie/Edge/frontend-uitrolvolgorde.
+
+Duo Learn deelt de bespreking, met eigen oplossingen. Betekenis/nulmacht en wortelregeltoetsing hebben een expliciete hoofdstukselectie bij de provider. Terugschrijven en normaliseren openen eveneens een hoofdstukselectie: de aanvullende provider oefent de voorwaartse wetenschappelijke schrijfwijze en is geen gelijkwaardige vervanging van die twee begeleide doelen.
+
+Productieaanmelding, cloudhervatting en externe multiplayer met **twee daadwerkelijk ingelogde accounts** blijven open. Het bestaande leerlingaccount `bob` en de aanduiding `Leerkracht` zijn geen bewijs van twee bediende productiesessies.
+
+## Productie-uitrol · 10 oktober 2026
+
+De gerichte wetenschappelijke migratie is toegepast en `numbers-session` is actief als versie 2 met `verify_jwt=true`. De gedeployde `index.ts`, `handler.js` en `core.js` zijn bytegelijk aan de reviewbranch. Het catalogustotaal is 19. De oorspronkelijke sessiefunctie heeft dezelfde bronhash en de RPC blijft uitsluitend toegankelijk voor de service-role. Een anonieme HTTP-aanroep geeft 401.
+
+Hashes vóór en na uitrol bevestigen behoud van alle 41 bestaande voortgangsrijen en de bestaande sessiegegevens: één ruimte, twee deelnemers, nul antwoorden en nul requests. Deze controle heeft geen leerlingwerk of nieuwe sessie gemaakt. De frontend wordt via GitHub Pages vanaf `main` gepubliceerd; publieke ingangen zijn [het bureaublad](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/) en [Getallenwereld](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/). Actuele releasecontroles staan in [PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7) en [het verificatierapport](qa/verification.json). De eerdere ontwikkelpilot stond als draft ter review.
 
 ## Nog open vóór vervanging van de hoofdstartpagina
 
 - Twee daadwerkelijke ingelogde testaccounts gebruiken voor productieauthenticatie, cloudhervatting en externe live/WebSocketverbindingen. Er is geen bruikbare loginconfiguratie of actieve browsersessie beschikbaar gesteld.
-- [Draft PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7) reviewen. De connector weigert branchcreatie, maar de bestaande Git-credentials laten pushen toe.
 - Afzonderlijke bestaande fouten opvolgen: verouderde voortgangshash in de Rechten-regressietest, Signaalstad-oefenbladdekking en de Kleiduif-lobby op 320 × 568. Zij zijn ook op de oorspronkelijke main gereproduceerd. De vier OS-pilots en hun volledige klasruns slagen.
 
 Na acceptatie kunnen de overige bouwsels op dezelfde aansluiting aansluiten. Centrale door leraren uitgedeelde taken en nieuwe profiel-/werkvormfuncties zijn vervolgstappen.

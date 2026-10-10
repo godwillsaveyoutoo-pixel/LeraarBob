@@ -4,6 +4,7 @@
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function choices(task,index,slotIndex,values=[]){
  const stage=task.stages[index],slot=stage.slots[slotIndex];
+ if(slot.choices)return [...slot.choices];
  if(slotIndex===0&&stage.squareChoices)return stage.squareChoices.map(String);
  let answer=Number(slot.answer);
  if(stage.accept==='square-factor'&&slotIndex===1){const f=Number(values[0]),n=Number(task.expression);if(f>1&&Number.isInteger(Math.sqrt(f))&&n%f===0)answer=n/f;}

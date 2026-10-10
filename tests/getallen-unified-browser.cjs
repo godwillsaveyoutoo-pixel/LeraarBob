@@ -67,7 +67,7 @@ async function main(){
   const open=async url=>{await page.goto(base+url);await page.evaluate(()=>LeraarBobGameRegistry.ready());};
   const guidedReady=()=>page.waitForFunction(()=>window.GetallenWorld&&AxiomaGame.active);
   const seriesReady=()=>page.waitForFunction(()=>window.BewerkingenTrainer&&AxiomaGame.active);
-  const getLive=()=>page.evaluate(()=>{const s=GetallenWorld.snapshot();return{entries:s.entries,runs:s.runs,mission:s.mission};});
+  const getLive=()=>page.evaluate(()=>{const s=GetallenWorld.snapshot();return{entries:s.entries,runs:s.runs,mission:s.mission,theme:s.theme};});
   const getSeries=()=>page.evaluate(()=>BewerkingenTrainer.snapshot());
   const seriesProgress=s=>({sessions:JSON.parse(JSON.stringify(s.sessions,(k,v)=>k==='activeSeconds'?undefined:v)),solved:s.solved,history:s.history,journey:s.journey,mission:s.mission});
   async function topbarFit(label){
@@ -106,7 +106,7 @@ async function main(){
   assert.equal(await page.locator('[data-game-id=getallenwereld]').count(),1);
   assert.equal(await page.locator('[data-game-id=bewerkingen-trainer]').count(),0);
   const registry=await page.evaluate(()=>({public:LeraarBobGameRegistry.list().filter(g=>g.id==='getallenwereld'||g.id==='bewerkingen-trainer').map(g=>g.id),legacy:LeraarBobGameRegistry.game('bewerkingen').id,presentation:LeraarBobGameRegistry.presentation('bewerkingen-trainer').id,components:LeraarBobGameRegistry.components('getallenwereld').map(g=>({id:g.id,progressId:g.progressId,total:g.progressTotal})),current:LeraarBobGameRegistry.current(new URL('games/bewerkingen-trainer/',LeraarBobGameRegistry.baseURL).href).id,internal:LeraarBobGameRegistry.current(new URL('games/bewerkingen-trainer/',LeraarBobGameRegistry.baseURL).href,{includeComponents:true}).id}));
-  assert.deepEqual(registry,{public:['getallenwereld'],legacy:'bewerkingen-trainer',presentation:'getallenwereld',components:[{id:'getallenwereld',progressId:'getallenwereld',total:15},{id:'bewerkingen-trainer',progressId:'bewerkingen-trainer',total:16}],current:'getallenwereld',internal:'bewerkingen-trainer'});
+  assert.deepEqual(registry,{public:['getallenwereld'],legacy:'bewerkingen-trainer',presentation:'getallenwereld',components:[{id:'getallenwereld',progressId:'getallenwereld',total:19},{id:'bewerkingen-trainer',progressId:'bewerkingen-trainer',total:16}],current:'getallenwereld',internal:'bewerkingen-trainer'});
   await open('/oefenbladen.html');
   await page.waitForSelector('#worksheetProviders .paper-subject');
   const printTitles=await page.locator('.paper-subject h2').allTextContents();
@@ -125,10 +125,10 @@ async function main(){
   assert.equal(await page.locator('[data-game=bewerkingen-trainer]').count(),0,'One teacher filter for the public world');
   await page.locator('[data-game=getallenwereld]').click();
   assert.equal(await page.locator('tbody tr:first-child td[data-label]').count(),1);
-  assert.match(await page.locator('[data-label=Getallenwereld]').textContent(),/2\/15.*3\/16/);
+  assert.match(await page.locator('[data-label=Getallenwereld]').textContent(),/2\/19.*3\/16/);
   await page.locator('[data-id=qa-pupil]').click();
   const teacherText=await page.locator('#detail').innerText();
-  assert.match(teacherText,/2\/15/);assert.match(teacherText,/3\/16/);
+  assert.match(teacherText,/2\/19/);assert.match(teacherText,/3\/16/);
   assert.doesNotMatch(teacherText,/5\/31/);
   assert.equal(await page.locator('#detail [data-progress-component=getallenwereld]').count(),1);
   assert.equal(await page.locator('#detail [data-progress-component=bewerkingen-trainer]').count(),1);
@@ -186,9 +186,9 @@ async function main(){
   assert.deepEqual(await getLive(),guidedWork);
   await page.locator('[data-action=start]').click();
   assert.equal((await getLive()).mission.values[0],guidedWork.mission.values[0]);
-  // Scientific notation opens the old provider as an internal, explicit-start route.
+  // Scientific notation opens its own chapter and keeps the original explicit-start series provider.
   await page.locator('leraarbob-topbar [part=crumb-game]').click();
-  await page.locator('.theme[data-topic=wetenschappelijk]').click();await seriesReady();
+  await page.locator('.theme[data-topic=wetenschappelijk]').click();await guidedReady();assert.equal((await getLive()).theme,'wetenschappelijk');await page.locator('.path-links [data-world-mode=series]').click();await page.waitForFunction(()=>window.NumbersSpace?.ready);await page.locator('[data-go=solo]').click();await seriesReady();
   const scientific=await getSeries();
   assert.equal(scientific.screen,'setup');
   assert.deepEqual(scientific.selected,['scientific']);

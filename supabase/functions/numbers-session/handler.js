@@ -13,9 +13,13 @@ export function createHandler({url,anonKey,serviceKey,core,fetcher=fetch}) {
    const auth=await fetcher(url+'/auth/v1/user',{headers:{apikey:anonKey,Authorization:bearer}});
    if(!auth.ok)return reply({error:'Meld je opnieuw aan.'},401);
    const user=await auth.json();if(!user.id)return reply({error:'Meld je opnieuw aan.'},401);
+   // Versionless clients and saved decks keep the exact historical generator.
+   // This is a rendering capability, never an identity or authorization claim.
+   const clientVersion=data.generatorVersion===2?2:1;
    async function rpc(name,payload){
-    const res=await fetcher(url+'/rest/v1/rpc/axioma_numbers_session',{method:'POST',headers:{apikey:serviceKey,Authorization:'Bearer '+serviceKey,'Content-Type':'application/json'},body:JSON.stringify({p_actor:user.id,p_action:name,p_data:payload})});
-    const body=await res.json();if(!res.ok)throw Error(body.message||'Sessie tijdelijk niet bereikbaar.');return body;
+    const res=await fetcher(url+'/rest/v1/rpc/axioma_numbers_session',{method:'POST',headers:{apikey:serviceKey,Authorization:'Bearer '+serviceKey,'Content-Type':'application/json'},body:JSON.stringify({p_actor:user.id,p_action:name,p_data:{...payload,client_generator_version:clientVersion}})});
+    const body=await res.json();if(!res.ok)throw Error(body.message||'Sessie tijdelijk niet bereikbaar.');
+    return {...body,protocolVersion:2,generatorVersions:core.SCIENTIFIC_VERSION===2&&Array.isArray(body.generator_versions)?body.generator_versions:[1]};
    }
    let payload=data;
    if(action==='create'){
@@ -23,14 +27,19 @@ export function createHandler({url,anonKey,serviceKey,core,fetcher=fetch}) {
     if(!skills.length||skills.some(id=>!core.SKILLS.some(s=>s.id===id)))throw Error('Kies minstens één geldige vraagvorm.');
     const level=Number(data.level),count=Math.max(skills.length,Number(data.count));
     if(![0,1,2].includes(level)||!Number.isInteger(count)||count<1||count>30)throw Error('Controleer niveau en aantal.');
-    const deck=Array.from({length:count},(_,i)=>({skill:skills[i%skills.length],seed:crypto.getRandomValues(new Uint32Array(1))[0],level,variant:i%4}));
+    // A new Edge handler on an old database must not create v2 rooms: without
+    // the SQL join guard an older client could otherwise see another question.
+    const capabilities=clientVersion===2&&skills.includes('scientific')?await rpc('summary',{}):null;
+    const scientificVersion=core.SCIENTIFIC_VERSION===2&&capabilities?.generatorVersions.includes(2)?2:1;
+    const deck=Array.from({length:count},(_,i)=>({skill:skills[i%skills.length],seed:crypto.getRandomValues(new Uint32Array(1))[0],level,variant:i%4,...(skills[i%skills.length]==='scientific'&&scientificVersion===2?{generatorVersion:2}:{})}));
     payload={activity:data.activity,audience:data.audience,participate:data.participate===true,seconds:Number(data.seconds)||180,deck};
    }
    if(action==='submit'){
     const work=await rpc('work',{id:data.id});
     if(!work.open)return reply(await rpc('state',{id:data.id}));
     if(work.round!==data.round)throw Error('De volgende opgave is al begonnen.');
-    const task=core.generate(work.spec.skill,work.spec.seed,work.spec.level,work.spec.variant);
+    if(work.spec.generatorVersion===2&&core.SCIENTIFIC_VERSION!==2)throw Error('Deze sessie vereist de bijgewerkte Getallenwereld. Probeer later opnieuw.');
+    const task=core.generate(work.spec.skill,work.spec.seed,work.spec.level,work.spec.variant,work.spec.generatorVersion??1);
     const value=String(data.value||'').slice(0,180),result=core.check(task,value);
     const state=await rpc('answer',{id:data.id,round:data.round,request_id:data.request_id,value,correct:result.ok,assisted:data.assisted===true});
     if(state.activity==='learn'&&state.round===data.round)state.feedback=result.message;

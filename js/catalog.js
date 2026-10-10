@@ -1292,13 +1292,13 @@ window.AXIOMA_CATALOG = [
     "theme": "Getallen",
     "art": "getallenwereld",
     "cover": "games/getallenwereld/cover.svg",
-    "detail": "15 onderdelen · solo, duo, klasbattle en oefenbladen",
+    "detail": "19 onderdelen · solo, duo, klasbattle en oefenbladen",
     "id": "getallenwereld",
     "progressType": "levels",
     "teacherVisible": true,
     "gameType": "learn",
     "tracking": "progress",
-    "progressTotal": 15,
+    "progressTotal": 19,
     "progressUnitSingular": "onderdeel",
     "progressUnitPlural": "onderdelen",
     "featured": true,
@@ -1512,7 +1512,7 @@ window.AXIOMA_CATALOG = [
       {
         "id": "wetenschappelijk",
         "title": "Wetenschappelijke schrijfwijze",
-        "href": "games/bewerkingen-trainer/?world=wetenschappelijk&mode=solo&screen=setup",
+        "href": "games/getallenwereld/?world=getallen&topic=wetenschappelijk&screen=chapter",
         "routeModes": [
           "solo",
           "series",
@@ -1522,6 +1522,12 @@ window.AXIOMA_CATALOG = [
         ],
         "skillIds": [
           "scientific"
+        ],
+        "levelIds": [
+          "wetenschappelijk-groot",
+          "wetenschappelijk-klein",
+          "wetenschappelijk-terug",
+          "wetenschappelijk-normaliseren"
         ]
       },
       {

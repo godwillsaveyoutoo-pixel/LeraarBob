@@ -13,24 +13,32 @@ const ROOT_PHASES=Object.freeze([
  Object.freeze({title:'Vereenvoudigen',copy:'Haal het kwadraat naar buiten.',ids:Object.freeze(['wortels-macht','wortels-vereenvoudigen'])}),
  Object.freeze({title:'Zelf kiezen',copy:'Voeg samen en toets de regel.',ids:Object.freeze(['wortels-som','wortels-regels'])})
 ]);
-const ORDER=Object.freeze(PHASES.flatMap(p=>p.ids)),ROOT_ORDER=Object.freeze(ROOT_PHASES.flatMap(p=>p.ids)),VERSION='machtenwerkplaats-v1';
-const orderFor=theme=>theme==='wortels'?ROOT_ORDER:ORDER;
-const pathLabel=theme=>theme==='wortels'?'Mijn wortelpad':'Mijn machtenpad';
+const SCIENTIFIC_PHASES=Object.freeze([
+ Object.freeze({title:'Grote getallen',copy:'Schuif de komma naar links.',ids:Object.freeze(['wetenschappelijk-groot'])}),
+ Object.freeze({title:'Kleine getallen',copy:'Schuif de komma naar rechts.',ids:Object.freeze(['wetenschappelijk-klein'])}),
+ Object.freeze({title:'Terugschrijven',copy:'Gebruik de macht van tien.',ids:Object.freeze(['wetenschappelijk-terug'])}),
+ Object.freeze({title:'Normaliseren',copy:'Maak de coëfficiënt passend.',ids:Object.freeze(['wetenschappelijk-normaliseren'])})
+]);
+const ORDER=Object.freeze(PHASES.flatMap(p=>p.ids)),ROOT_ORDER=Object.freeze(ROOT_PHASES.flatMap(p=>p.ids)),SCIENTIFIC_ORDER=Object.freeze(SCIENTIFIC_PHASES.flatMap(p=>p.ids)),VERSION='machtenwerkplaats-v1';
+const orderFor=theme=>theme==='wortels'?ROOT_ORDER:theme==='wetenschappelijk'?SCIENTIFIC_ORDER:ORDER;
+const themeFor=id=>id.startsWith('wortels-')?'wortels':id.startsWith('wetenschappelijk-')?'wetenschappelijk':'machten';
+const pathLabel=theme=>theme==='wortels'?'Mijn wortelpad':theme==='wetenschappelijk'?'Mijn schrijfwijzeroute':'Mijn machtenpad';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const resumable=run=>Boolean(run&&(!run.done||run.index<5));
-const number=id=>String(orderFor(id.startsWith('wortels-')?'wortels':'machten').indexOf(id)+1).padStart(2,'0');
+const number=id=>String(orderFor(themeFor(id)).indexOf(id)+1).padStart(2,'0');
 function art(index,extra=''){return `<div class="workshop-art ${extra}" data-art="${index}" aria-hidden="true"></div>`;}
 function nav(label,action,extra=''){return `<nav class="workshop-nav" aria-label="Binnen Getallenwereld"><button data-action="${action}">← ${esc(label)}</button><span>${extra}</span><button data-action="menu-open">Onderdelen & werkvormen</button></nav>`;}
 function chapter({lessons:L,selected,entries,runs,math,status,links}){
- const sel=L.stop(selected),theme=sel.theme,root=theme==='wortels',phases=root?ROOT_PHASES:PHASES,order=orderFor(theme),run=runs[selected],continuing=resumable(run),finished=run?.done&&run.index===5;
+ const sel=L.stop(selected),theme=sel.theme,root=theme==='wortels',scientific=theme==='wetenschappelijk',phases=root?ROOT_PHASES:scientific?SCIENTIFIC_PHASES:PHASES,order=orderFor(theme),run=runs[selected],continuing=resumable(run),finished=run?.done&&run.index===5;
  const count=order.filter(id=>entries[id]?.done.length===6).length;
  const groups=phases.map((p,i)=>`<section class="path-group" aria-labelledby="phase-${i}"><div class="phase-heading"><span>${i+1}</span><div><h2 id="phase-${i}">${p.title}</h2><p>${p.copy}</p></div></div>${art(i)}<div class="path-stops">${p.ids.map(id=>{
   const s=L.stop(id),n=entries[id]?.done.length||0,progress=n===6?'done':n||runs[id]?'started':'new';
   return `<button class="path-stop" data-stop="${id}" data-status="${progress}" ${id===selected?'aria-current="step"':''}><span class="path-marker" aria-hidden="true">${progress==='done'?'✓':number(id)}</span><span><strong>${esc(s.title)}</strong><small>${esc(status(id))}</small></span><span class="path-arrow" aria-hidden="true">›</span></button>`;
  }).join('')}</div></section>`).join('');
  let label=continuing?'Verder oefenen':finished?'Bekijk resultaat':sel.id==='machten-product'?'Start basisreeks':'Start dit onderdeel',action=finished?'results':'start';
+ const supplemental=['wetenschappelijk-terug','wetenschappelijk-normaliseren'].includes(sel.id);
  const track=run?.pathVersion===VERSION?run.track==='basis'?'Basisreeks':'Verdieping':run?'Bestaande reeks':sel.id==='machten-product'?'Basisreeks':'';
- return `<section class="screen chapter powers-path">${nav('Getallenwereld','home','Begeleide leerroute · op eigen tempo')}<div class="path-layout"><div class="path-main"><header class="path-heading"><div><span class="eyebrow">${root?'Jouw wortelpad':'Jouw machtenpad'}</span><h1>${root?'Vierkantswortels':'Machten'}</h1><p>${root?'Van kwadraten herkennen naar zelf vereenvoudigen.':'Van begrijpen naar zelf de regel kiezen.'}</p></div><span class="path-count"><b>${count}/${order.length}</b> onderdelen uitgewerkt</span></header><div class="path-groups">${groups}</div><footer class="path-legend"><span><i class="dot path-done"></i>Uitgewerkt</span><span><i class="dot path-started"></i>Bezig</span><span><i class="dot"></i>Te ontdekken</span><p>Kies vrij. Je kunt elk onderdeel herhalen.</p></footer></div><aside class="path-detail" aria-labelledby="selected-part"><span class="eyebrow">Gekozen onderdeel · ${number(selected)}</span><h2 id="selected-part">${esc(sel.title)}</h2><div class="path-example">${math(sel.example)}</div><p>${esc(sel.intro)}</p><span class="path-run">${track?esc(track)+' · ':''}${continuing?'opgave '+(run.index+1)+' van 6':'6 opgaven'}</span><button class="primary" data-action="${action}">${label} →</button>${sel.id==='machten-product'&&!continuing?(finished?'<button data-action="start-basis">Nieuwe basisreeks</button>':'')+'<button class="path-advanced" data-action="start-advanced">Verdieping · ook negatieve exponenten</button>':''}<details class="path-explanation"><summary>Uitleg bekijken</summary><p>${esc(sel.intro)}</p><div>${math(sel.example)}</div></details><div class="path-links"><span class="eyebrow">Ook bij dit onderdeel</span>${links}</div><p class="path-save">Je vorige antwoord blijft bewaard.</p></aside></div></section>`;
+ return `<section class="screen chapter powers-path">${nav('Getallenwereld','home','Begeleide leerroute · op eigen tempo')}<div class="path-layout"><div class="path-main"><header class="path-heading"><div><span class="eyebrow">${root?'Jouw wortelpad':scientific?'Jouw schrijfwijzeroute':'Jouw machtenpad'}</span><h1>${root?'Vierkantswortels':scientific?'Wetenschappelijke notatie':'Machten'}</h1><p>${root?'Van kwadraten herkennen naar zelf vereenvoudigen.':scientific?'Van grote en kleine getallen naar de juiste schrijfwijze.':'Van begrijpen naar zelf de regel kiezen.'}</p></div><span class="path-count"><b>${count}/${order.length}</b> onderdelen uitgewerkt</span></header><div class="path-groups">${groups}</div><footer class="path-legend"><span><i class="dot path-done"></i>Uitgewerkt</span><span><i class="dot path-started"></i>Bezig</span><span><i class="dot"></i>Te ontdekken</span><p>Kies vrij. Je kunt elk onderdeel herhalen.</p></footer></div><aside class="path-detail" aria-labelledby="selected-part"><span class="eyebrow">Gekozen onderdeel · ${number(selected)}</span><h2 id="selected-part">${esc(sel.title)}</h2><div class="path-example">${math(sel.example)}</div><p>${esc(sel.intro)}</p><span class="path-run">${track?esc(track)+' · ':''}${continuing?'opgave '+(run.index+1)+' van 6':'6 opgaven'}</span><button class="primary" data-action="${action}">${label} →</button>${sel.id==='machten-product'&&!continuing?(finished?'<button data-action="start-basis">Nieuwe basisreeks</button>':'')+'<button class="path-advanced" data-action="start-advanced">Verdieping · ook negatieve exponenten</button>':''}<details class="path-explanation"><summary>Uitleg bekijken</summary><p>${esc(sel.intro)}</p><div>${math(sel.example)}</div></details><div class="path-links"><span class="eyebrow">${supplemental?'Aanvullend oefenen':'Ook bij dit onderdeel'}</span>${supplemental?'<p>Van gewone getallen naar wetenschappelijke notatie.</p>':''}${links}</div><p class="path-save">Je vorige antwoord blijft bewaard.</p></aside></div></section>`;
 }
 function steps(mission,error){
  const ready=mission.stage>=0&&mission.values.length>0&&mission.values.every(v=>/^-?\d+$/.test(String(v)))&&!error;
@@ -40,7 +48,7 @@ function steps(mission,error){
 }
 function play({task,mission,work,question,head,footer,math,error}){
  const chosen=task.choices.find(c=>c.id===task.correct);
- return `<section class="screen play guided-play powers-play" data-stage="${mission.stage<0?'rule':mission.done?'done':'answer'}">${nav(pathLabel(task.id.startsWith('wortels-')?'wortels':'machten'),'chapter',mission.pathVersion===VERSION?mission.track==='basis'?'Basisreeks · alleen oefenen':'Verdieping · alleen oefenen':'Bestaande reeks · alleen oefenen')}${head}<div class="workshop-body"><div class="workshop-main"><div class="guided-question">${question}</div>${mission.stage>=0?`<p class="chosen-rule"><span aria-hidden="true">✓</span> ${esc(chosen.label)}</p>`:''}<div class="guided-work">${work}</div></div>${steps(mission,error)}</div>${footer}</section>`;
+ return `<section class="screen play guided-play powers-play" data-stage="${mission.stage<0?'rule':mission.done?'done':'answer'}">${nav(pathLabel(themeFor(task.id)),'chapter',mission.pathVersion===VERSION?mission.track==='basis'?'Basisreeks · alleen oefenen':'Verdieping · alleen oefenen':'Bestaande reeks · alleen oefenen')}${head}<div class="workshop-body"><div class="workshop-main"><div class="guided-question">${question}</div>${mission.stage>=0?`<p class="chosen-rule"><span aria-hidden="true">✓</span> ${esc(chosen.label)}</p>`:''}<div class="guided-work">${work}</div></div>${steps(mission,error)}</div>${footer}</section>`;
 }
 function summary({mission,stop,entry,math}){
  const n=entry?.independent.length||0,order=orderFor(stop.theme),last=order.indexOf(stop.id)===order.length-1;
@@ -49,5 +57,5 @@ function summary({mission,stop,entry,math}){
 function help({head,question,phase,step,explanation,footer}){
  return `<section class="screen help powers-play powers-help">${nav('Terug naar mijn opgave','help-return','Hulp · een ander voorbeeld')}${head}<div class="workshop-body"><div class="workshop-main"><div class="guided-question">${question}</div><div class="help-working"><span class="eyebrow">${esc(phase)}</span><div class="formula">${step}</div></div></div><aside class="workshop-steps"><h2>Een ander voorbeeld</h2><p class="help-explanation">${esc(explanation)}</p>${art(2,'workshop-detail-art')}<p class="steps-note">Je eigen opgave en antwoord blijven bewaard.</p></aside></div>${footer}</section>`;
 }
-return Object.freeze({PHASES,ROOT_PHASES,ORDER,ROOT_ORDER,orderFor,VERSION,resumable,chapter,play,help,summary});
+return Object.freeze({PHASES,ROOT_PHASES,SCIENTIFIC_PHASES,ORDER,ROOT_ORDER,SCIENTIFIC_ORDER,orderFor,VERSION,resumable,chapter,play,help,summary});
 });

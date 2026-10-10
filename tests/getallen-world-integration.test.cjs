@@ -51,8 +51,8 @@ function solve(f){
 }
 const helpMath=f=>f.w.document.querySelector('.help .question annotation')?.textContent;
 
-test('All fifteen native routes complete six real questions each, with genuine separate progress',async()=>{
- assert.equal(L.STOPS.length,15);assert.equal(L.STOPS.filter(stop=>stop.theme==='machten').length,8);assert.equal(L.STOPS.filter(stop=>stop.theme==='wortels').length,7);
+test('All nineteen native routes complete six real questions each, with genuine separate progress',async()=>{
+ assert.equal(L.STOPS.length,19);assert.equal(L.STOPS.filter(stop=>stop.theme==='machten').length,8);assert.equal(L.STOPS.filter(stop=>stop.theme==='wortels').length,7);
  const f=await open();try{
   for(const stop of L.STOPS){
    f.w.document.getElementById('gameHomeBtn').click();f.click('[data-theme="'+stop.theme+'"]');f.click('[data-stop="'+stop.id+'"]');
@@ -68,8 +68,8 @@ test('All fifteen native routes complete six real questions each, with genuine s
    assert.equal(new Set(expressions).size,6,stop.id+' has six different questions');
    assert.equal(f.state().screen,'summary');assert.equal(f.state().entries[stop.id].independent.length,6);
   }
-  const report=f.reports.at(-1);assert.equal(report[0].length,15);assert.equal(report[1],15);
-  assert.equal(f.w.document.getElementById('getallenProgress').dataset.value,'15');
+  const report=f.reports.at(-1);assert.equal(report[0].length,19);assert.equal(report[1],19);
+  assert.equal(f.w.document.getElementById('getallenProgress').dataset.value,'19');
   assert.deepEqual([...f.storage.keys()],[KEY],'No fake XP or new progress identity');assert.deepEqual(f.errors,[]);
  }finally{f.close();}
 });
@@ -193,7 +193,7 @@ test('All three topics offer the existing role-correct modes and worksheets, wit
   for(const mode of expected[role]){
    const url=new URL(model.destination('getallenwereld',mode,{role,topicId:topic}));
    const file=url.pathname.replace('/LeraarBob/','');assert(fs.existsSync(path.join(root,file.endsWith('/')?file+'index.html':file)));
-   assert.equal(url.searchParams.get(mode==='solo'&&topic!=='wetenschappelijk'?'topic':'world'),topic);
+   assert.equal(url.searchParams.get(mode==='solo'?'topic':'world'),topic);
    if(mode==='learn'||mode==='online'){assert.equal(url.searchParams.get('audience'),'duo');assert.equal(url.searchParams.get('view'),mode==='learn'?'learn':'battle');}
    if(mode==='classlearn'){assert.equal(url.searchParams.get('audience'),'class');assert.equal(url.searchParams.get('view'),'learn');}
   }
@@ -201,7 +201,7 @@ test('All three topics offer the existing role-correct modes and worksheets, wit
   assert.equal(new URL(sheet[0].href,registry.baseURL).searchParams.get('intent'),'worksheet');
  }
  assert.deepEqual(registry.components('getallenwereld').map(game=>({id:game.id,progressId:game.progressId,total:game.progressTotal})),[
-  {id:'getallenwereld',progressId:'getallenwereld',total:15},{id:'bewerkingen-trainer',progressId:'bewerkingen-trainer',total:16}
+  {id:'getallenwereld',progressId:'getallenwereld',total:19},{id:'bewerkingen-trainer',progressId:'bewerkingen-trainer',total:16}
  ]);
  assert.equal(C.SKILLS.filter(skill=>skill.group==='wetenschappelijk').map(skill=>skill.id).join(','),'scientific');
  for(const level of [0,1,2])for(const seed of [1,42,4294967295]){
@@ -220,6 +220,7 @@ test('Each guided goal keeps its honest targeted practice/paper links and curren
     const back=new URL(url.searchParams.get('returnTo'),url.origin);assert.equal(back.searchParams.get('level'),stop.id);assert.equal(back.searchParams.get('screen'),'chapter');
     if(mode==='worksheet')assert.equal(url.searchParams.get('intent'),'worksheet');
    }
+   if(['wetenschappelijk-terug','wetenschappelijk-normaliseren'].includes(stop.id))assert.match(f.w.document.querySelector('.path-links').textContent,/Aanvullend oefenen.*Van gewone getallen naar wetenschappelijke notatie/s);
    assert(!f.w.document.querySelector('[data-world-mode="students"]'));assert.deepEqual(f.errors,[]);
   }finally{f.close();}
  }

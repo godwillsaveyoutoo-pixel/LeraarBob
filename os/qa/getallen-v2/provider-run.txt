@@ -1,0 +1,14 @@
+PASS Scientific OS provider exposes existing solo/board duo/Learn/Battle/class Learn/class Battle/teacher/paper modes
+PASS Scientific notation uses original two-part answer and exact Check in OS
+PASS Scientific provider returns to exact captured Getallenwereld scientific chapter
+PASS Scientific OS worksheet actual questions, answer spaces, optional solutions and print without learning attempts
+PASS Scientific OS board duo keeps two separate real answer drafts
+PASS OS machten duo-learn actual selection/create/lobby with local response fixture
+PASS OS machten duo-battle actual selection/create/lobby with local response fixture
+PASS OS wortels duo-learn actual selection/create/lobby with local response fixture
+PASS OS wortels duo-battle actual selection/create/lobby with local response fixture
+PASS OS wetenschappelijk duo-learn actual selection/create/lobby with local response fixture
+PASS OS wetenschappelijk duo-battle actual selection/create/lobby with local response fixture
+PASS OS teacher mode dialog includes original online Duo Learn/Battle, class starts, board explanation and paper
+PASS OS pupil modes allow duo and join; account change discards teacher documents
+PASS provider phase: 13 interaction groups; exact scientific chapter and desktop return preserved

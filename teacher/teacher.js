@@ -80,7 +80,7 @@ function genericSummary(p,game){
   }
   if((game.progress_type||game.progressType)==='levels'){
     const done=Array.isArray(s.completed)?s.completed.length:num(s.completed);
-    const total=num(s.totalLevels||s.total||s.levelCount||game.progressTotal);
+    const total=num((game.id==='getallenwereld'&&(game.progressTotal||game.metadata?.total))||s.totalLevels||s.total||s.levelCount||game.progressTotal);
     const singular=game.metadata?.unit_singular||game.progressUnitSingular||'onderdeel';
     const plural=game.metadata?.unit_plural||game.progressUnitPlural||'onderdelen';
     const unit=done===1?singular:plural;

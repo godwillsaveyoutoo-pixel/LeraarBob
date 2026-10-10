@@ -1,0 +1,437 @@
+{
+  "scope": "Real Chromium UI, 100% zoom and scale 1; fictitious accounts, in-memory progress and local lobby response fixtures. No production authentication, cloud writes or external multiplayer.",
+  "viewports": [
+    {
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 844,
+      "height": 390
+    }
+  ],
+  "checks": [],
+  "layout": [
+    {
+      "name": "os-home-probe-1366-expanded",
+      "passed": true,
+      "native": {
+        "width": 1366,
+        "height": 591,
+        "issues": [],
+        "rects": [
+          {
+            "selector": ".theme[data-theme=machten]",
+            "rect": {
+              "x": 24,
+              "y": 104.578125,
+              "width": 426,
+              "height": 303.9375,
+              "top": 104.578125,
+              "right": 450,
+              "bottom": 408.515625,
+              "left": 24
+            }
+          },
+          {
+            "selector": ".theme[data-theme=wortels]",
+            "rect": {
+              "x": 470,
+              "y": 104.578125,
+              "width": 426,
+              "height": 303.9375,
+              "top": 104.578125,
+              "right": 896,
+              "bottom": 408.515625,
+              "left": 470
+            }
+          },
+          {
+            "selector": ".theme[data-topic=wetenschappelijk]",
+            "rect": {
+              "x": 916,
+              "y": 104.578125,
+              "width": 426,
+              "height": 303.9375,
+              "top": 104.578125,
+              "right": 1342,
+              "bottom": 408.515625,
+              "left": 916
+            }
+          },
+          {
+            "selector": ".dock .primary",
+            "rect": {
+              "x": 1132,
+              "y": 511.5,
+              "width": 210,
+              "height": 44,
+              "top": 511.5,
+              "right": 1342,
+              "bottom": 555.5,
+              "left": 1132
+            }
+          }
+        ]
+      },
+      "shell": {
+        "issues": [],
+        "zoom": 1,
+        "collapsed": false
+      }
+    },
+    {
+      "name": "os-home-probe-1366-collapsed",
+      "passed": true,
+      "native": {
+        "width": 1366,
+        "height": 649,
+        "issues": [],
+        "rects": [
+          {
+            "selector": ".theme[data-theme=machten]",
+            "rect": {
+              "x": 24,
+              "y": 104.578125,
+              "width": 426,
+              "height": 361.9375,
+              "top": 104.578125,
+              "right": 450,
+              "bottom": 466.515625,
+              "left": 24
+            }
+          },
+          {
+            "selector": ".theme[data-theme=wortels]",
+            "rect": {
+              "x": 470,
+              "y": 104.578125,
+              "width": 426,
+              "height": 361.9375,
+              "top": 104.578125,
+              "right": 896,
+              "bottom": 466.515625,
+              "left": 470
+            }
+          },
+          {
+            "selector": ".theme[data-topic=wetenschappelijk]",
+            "rect": {
+              "x": 916,
+              "y": 104.578125,
+              "width": 426,
+              "height": 361.9375,
+              "top": 104.578125,
+              "right": 1342,
+              "bottom": 466.515625,
+              "left": 916
+            }
+          },
+          {
+            "selector": ".dock .primary",
+            "rect": {
+              "x": 1132,
+              "y": 569.5,
+              "width": 210,
+              "height": 44,
+              "top": 569.5,
+              "right": 1342,
+              "bottom": 613.5,
+              "left": 1132
+            }
+          }
+        ]
+      },
+      "shell": {
+        "issues": [],
+        "zoom": 1,
+        "collapsed": true
+      }
+    },
+    {
+      "name": "os-home-probe-390-expanded",
+      "passed": true,
+      "native": {
+        "width": 390,
+        "height": 634,
+        "issues": [],
+        "rects": [
+          {
+            "selector": ".theme[data-theme=machten]",
+            "rect": {
+              "x": 12,
+              "y": 72,
+              "width": 366,
+              "height": 130,
+              "top": 72,
+              "right": 378,
+              "bottom": 202,
+              "left": 12
+            }
+          },
+          {
+            "selector": ".theme[data-theme=wortels]",
+            "rect": {
+              "x": 12,
+              "y": 209,
+              "width": 366,
+              "height": 130,
+              "top": 209,
+              "right": 378,
+              "bottom": 339,
+              "left": 12
+            }
+          },
+          {
+            "selector": ".theme[data-topic=wetenschappelijk]",
+            "rect": {
+              "x": 12,
+              "y": 346,
+              "width": 366,
+              "height": 130,
+              "top": 346,
+              "right": 378,
+              "bottom": 476,
+              "left": 12
+            }
+          },
+          {
+            "selector": ".dock .primary",
+            "rect": {
+              "x": 248.34375,
+              "y": 552,
+              "width": 129.65625,
+              "height": 44,
+              "top": 552,
+              "right": 378,
+              "bottom": 596,
+              "left": 248.34375
+            }
+          }
+        ]
+      },
+      "shell": {
+        "issues": [],
+        "zoom": 1,
+        "collapsed": false
+      }
+    },
+    {
+      "name": "os-home-probe-390-collapsed",
+      "passed": true,
+      "native": {
+        "width": 390,
+        "height": 731,
+        "issues": [],
+        "rects": [
+          {
+            "selector": ".theme[data-theme=machten]",
+            "rect": {
+              "x": 12,
+              "y": 72,
+              "width": 366,
+              "height": 162.328125,
+              "top": 72,
+              "right": 378,
+              "bottom": 234.328125,
+              "left": 12
+            }
+          },
+          {
+            "selector": ".theme[data-theme=wortels]",
+            "rect": {
+              "x": 12,
+              "y": 241.328125,
+              "width": 366,
+              "height": 162.34375,
+              "top": 241.328125,
+              "right": 378,
+              "bottom": 403.671875,
+              "left": 12
+            }
+          },
+          {
+            "selector": ".theme[data-topic=wetenschappelijk]",
+            "rect": {
+              "x": 12,
+              "y": 410.671875,
+              "width": 366,
+              "height": 162.34375,
+              "top": 410.671875,
+              "right": 378,
+              "bottom": 573.015625,
+              "left": 12
+            }
+          },
+          {
+            "selector": ".dock .primary",
+            "rect": {
+              "x": 248.34375,
+              "y": 649,
+              "width": 129.65625,
+              "height": 44,
+              "top": 649,
+              "right": 378,
+              "bottom": 693,
+              "left": 248.34375
+            }
+          }
+        ]
+      },
+      "shell": {
+        "issues": [],
+        "zoom": 1,
+        "collapsed": true
+      }
+    },
+    {
+      "name": "os-home-probe-844-expanded",
+      "passed": true,
+      "native": {
+        "width": 844,
+        "height": 213,
+        "issues": [],
+        "rects": [
+          {
+            "selector": ".theme[data-theme=machten]",
+            "rect": {
+              "x": 12,
+              "y": 50,
+              "width": 268,
+              "height": 69,
+              "top": 50,
+              "right": 280,
+              "bottom": 119,
+              "left": 12
+            }
+          },
+          {
+            "selector": ".theme[data-theme=wortels]",
+            "rect": {
+              "x": 288,
+              "y": 50,
+              "width": 268,
+              "height": 69,
+              "top": 50,
+              "right": 556,
+              "bottom": 119,
+              "left": 288
+            }
+          },
+          {
+            "selector": ".theme[data-topic=wetenschappelijk]",
+            "rect": {
+              "x": 564,
+              "y": 50,
+              "width": 268,
+              "height": 69,
+              "top": 50,
+              "right": 832,
+              "bottom": 119,
+              "left": 564
+            }
+          },
+          {
+            "selector": ".dock .primary",
+            "rect": {
+              "x": 675.484375,
+              "y": 169.5,
+              "width": 156.515625,
+              "height": 44,
+              "top": 169.5,
+              "right": 832,
+              "bottom": 213.5,
+              "left": 675.484375
+            }
+          }
+        ]
+      },
+      "shell": {
+        "issues": [],
+        "zoom": 1,
+        "collapsed": false
+      }
+    },
+    {
+      "name": "os-home-probe-844-collapsed",
+      "passed": true,
+      "native": {
+        "width": 844,
+        "height": 271,
+        "issues": [],
+        "rects": [
+          {
+            "selector": ".theme[data-theme=machten]",
+            "rect": {
+              "x": 12,
+              "y": 50,
+              "width": 268,
+              "height": 127,
+              "top": 50,
+              "right": 280,
+              "bottom": 177,
+              "left": 12
+            }
+          },
+          {
+            "selector": ".theme[data-theme=wortels]",
+            "rect": {
+              "x": 288,
+              "y": 50,
+              "width": 268,
+              "height": 127,
+              "top": 50,
+              "right": 556,
+              "bottom": 177,
+              "left": 288
+            }
+          },
+          {
+            "selector": ".theme[data-topic=wetenschappelijk]",
+            "rect": {
+              "x": 564,
+              "y": 50,
+              "width": 268,
+              "height": 127,
+              "top": 50,
+              "right": 832,
+              "bottom": 177,
+              "left": 564
+            }
+          },
+          {
+            "selector": ".dock .primary",
+            "rect": {
+              "x": 675.484375,
+              "y": 227.5,
+              "width": 156.515625,
+              "height": 44,
+              "top": 227.5,
+              "right": 832,
+              "bottom": 271.5,
+              "left": 675.484375
+            }
+          }
+        ]
+      },
+      "shell": {
+        "issues": [],
+        "zoom": 1,
+        "collapsed": true
+      }
+    }
+  ],
+  "scrollActions": [],
+  "localSessionRequests": [],
+  "errors": [],
+  "missing": [],
+  "blocked": [
+    "Production authentication and external multiplayer require actual test account sessions."
+  ],
+  "passed": true,
+  "browser": "156.0.8078.4"
+}

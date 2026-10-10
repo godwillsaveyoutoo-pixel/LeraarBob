@@ -46,7 +46,7 @@ test('A complete six-question basis run uses the original clickable answers and 
   if(index===2){const saved=f.save();f.dom.window.close();f=await setup({saved,url:'?onderdeel=machten-product&screen=play'});}
  }
  assert.equal(new Set(expressions).size,6);assert.equal(f.state().screen,'summary');assert(f.w.document.querySelector('.powers-summary'));
- assert.equal(f.state().entries['machten-product'].independent.length,6);assert.equal(f.reports.at(-1)[0][0],'machten-product');assert.equal(f.reports.at(-1)[1],15);
+ assert.equal(f.state().entries['machten-product'].independent.length,6);assert.equal(f.reports.at(-1)[0][0],'machten-product');assert.equal(f.reports.at(-1)[1],19);
  assert.equal(f.w.document.getElementById('getallenProgress').dataset.value,'1');assert.deepEqual([...f.storage.keys()],[KEY]);
  f.click('[data-action="next-stop"]');assert.equal(f.state().selected,'machten-quotient');assert.equal(f.state().screen,'chapter');assert.equal(f.errors.length,0);
 });
@@ -94,7 +94,7 @@ test('Focused worksheet and practice links use existing providers, preserve the 
  f.click('[data-stop="machten-betekenis"]');const u=new URL(d.querySelector('[data-world-mode="worksheet"]').href);assert.equal(u.searchParams.get('scope'),'chapter');assert.equal(u.searchParams.get('skills'),null);
  const teacher=await setup({role:'teacher'});t.after(()=>teacher.dom.window.close());assert(teacher.w.document.querySelector('[data-world-mode="students"]'));assert.match(teacher.w.document.querySelector('[data-world-mode="series"] small').textContent,/klas/);assert.equal(f.errors.length,0);assert.equal(teacher.errors.length,0);
 });
-test('All fourteen other routes share the workshop and retain original questions, guided choices and exact answer flow',async t=>{
+test('All eighteen other routes share the workshop and retain guided choices and exact answer flow',async t=>{
  for(const stop of L.STOPS.filter(s=>s.id!=='machten-product')){
   const f=await setup({url:'?onderdeel='+stop.id});try{f.click('[data-action="start"]');assert.equal(f.state().mission.edition,2);assert.equal(f.state().mission.id,stop.id);assert(f.w.document.querySelector('.powers-play'));solveQuestion(f);assert.equal(f.state().mission.done,true,stop.id);assert.equal(f.state().entries[stop.id].done.length,1);assert.equal(f.errors.length,0);}finally{f.dom.window.close();}
  }
@@ -112,7 +112,7 @@ test('World home keeps three chapters and all existing practice and paper entran
  const f=await setup({url:'?screen=home'});t.after(()=>f.dom.window.close());const d=f.w.document;
  assert(d.querySelector('.workshop-home'));assert.equal(d.querySelectorAll('.themes .theme').length,3);
  assert(d.querySelector('.themes [data-topic="wetenschappelijk"]'));assert(d.querySelector('.world-actions [data-world-mode="series"]'));assert(d.querySelector('.world-actions [data-world-mode="worksheet"]'));
- assert.match(d.querySelector('.themes [data-topic="wetenschappelijk"]').href,/world=wetenschappelijk/);
+ f.click('.themes [data-topic="wetenschappelijk"]');assert.equal(f.state().theme,'wetenschappelijk');assert.equal(d.querySelectorAll('[data-stop]').length,4);assert(d.querySelector('[data-world-mode=series]'));assert(d.querySelector('[data-world-mode=worksheet]'));
 });
 test('Help keeps the exact different example and step through reload and menu return',async t=>{
  let f=await setup();t.after(()=>f.dom.window.close());f.click('[data-action="start"]');f.click('[data-rule="'+f.task().correct+'"]');
@@ -140,13 +140,13 @@ test('A finished root series reports the original unit and honest historical ind
  const f=await setup({url:'?onderdeel=wortels-vereenvoudigen'});t.after(()=>f.dom.window.close());f.click('[data-action="start"]');
  for(let i=0;i<6;i++){solveQuestion(f);f.click('[data-action="next"]');}
  assert.equal(f.state().screen,'summary');assert(f.w.document.querySelector('.powers-summary'));assert.match(f.w.document.querySelector('.workshop-summary').textContent,/In dit onderdeel: 6\/6/);
- assert.match(f.w.document.querySelector('.summary-note').textContent,/Eerdere reeksen tellen mee/);assert.deepEqual(Array.from(f.reports.at(-1)[0]),['wortels-vereenvoudigen']);assert.equal(f.reports.at(-1)[1],15);
+ assert.match(f.w.document.querySelector('.summary-note').textContent,/Eerdere reeksen tellen mee/);assert.deepEqual(Array.from(f.reports.at(-1)[0]),['wortels-vereenvoudigen']);assert.equal(f.reports.at(-1)[1],19);
  f.click('[data-action="next-stop"]');assert.equal(f.state().selected,'wortels-som');assert.equal(f.state().screen,'chapter');
 });
 test('All world screens keep the original hidden native breadcrumb and progress nodes',async t=>{
  const f=await setup();t.after(()=>f.dom.window.close());const d=f.w.document,nodes=['gameHomeBtn','crumbChapter','crumbLevel','getallenProgress'].map(id=>d.getElementById(id));
  f.click('[data-action="start"]');f.click('[data-action="help"]');f.click('.workshop-nav [data-action="menu-open"]');f.click('[data-action="menu-close"]');f.click('.workfoot [data-action="help-return"]');
- nodes.forEach(n=>assert.equal(d.getElementById(n.id),n));assert.equal(d.getElementById('getallenProgress').dataset.total,'15');
+ nodes.forEach(n=>assert.equal(d.getElementById(n.id),n));assert.equal(d.getElementById('getallenProgress').dataset.total,'19');
 });
 test('The last root unit ends at the world entrance without inventing an additional unit',async t=>{
  const f=await setup({url:'?onderdeel=wortels-regels'});t.after(()=>f.dom.window.close());f.click('[data-action="start"]');for(let i=0;i<6;i++){solveQuestion(f);f.click('[data-action="next"]');}

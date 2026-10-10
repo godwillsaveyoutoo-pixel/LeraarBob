@@ -8,8 +8,9 @@ test('legacy exercise engines, authentication and storage stay byte-identical ou
  const manifest=require('../docs/rechten-v2/V1_BASELINE_SHA256.json');
  // Explicit platform integrations have behavioral coverage; the original baseline stays intact.
  // Account avatars: account-auth.test.cjs and avatar-browser.cjs (roles/account isolation).
+ // Scientific generator version2: scientific-provider.test.cjs and legacy hash parity; version1 remains unchanged.
  // Shared PDF writer: rechten-training-proof.test.cjs and progress-proof.test.cjs.
- const integrations=new Set(['shared/axioma-social.js','shared/axioma-game.js','shared/axioma-game-adapters.js','shared/axioma-auth.js','games/rechten/trainer/index.html','games/rechten/trainer/training-proof.js']);
+ const integrations=new Set(['games/bewerkingen-trainer/core.js','shared/axioma-social.js','shared/axioma-game.js','shared/axioma-game-adapters.js','shared/axioma-auth.js','games/rechten/trainer/index.html','games/rechten/trainer/training-proof.js']);
  const files=Object.entries(manifest).filter(([file])=>!file.startsWith('tests/')&&!integrations.has(file));assert(files.length>=20);
  for(const [file,expected] of files)assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex'),expected,file+' changed outside integration');
 });

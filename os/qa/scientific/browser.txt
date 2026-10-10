@@ -1,0 +1,68 @@
+PASS Scientific chapter opens all four free guided parts from the actual OS theme folder
+PASS OS wetenschappelijk-groot question 1 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-groot question 2 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-groot question 3 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-groot question 4 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-groot question 5 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-groot question 6 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-groot completes six actual exact-graded questions and own progress
+PASS OS wetenschappelijk-klein question 1 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-klein question 2 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-klein question 3 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-klein question 4 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-klein question 5 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-klein question 6 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-klein completes six actual exact-graded questions and own progress
+PASS OS wetenschappelijk-terug question 1 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-terug question 2 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-terug question 3 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-terug question 4 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-terug question 5 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-terug question 6 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-terug completes six actual exact-graded questions and own progress
+PASS OS wetenschappelijk-normaliseren question 1 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-normaliseren question 2 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-normaliseren question 3 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-normaliseren question 4 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-normaliseren question 5 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-normaliseren question 6 actual rule, every answer part and original Check
+PASS OS wetenschappelijk-normaliseren completes six actual exact-graded questions and own progress
+PASS Four scientific completions use existing getallenwereld identity, total 19 and no invented XP
+PASS Scientific wrong rule and wrong answer remain editable and increment real attempts
+PASS Scientific wrong answer corrected after own help and full OS reload actual rule, every answer part and original Check
+PASS Scientific hint/menu/reload, Start focus, account, saved part, back/minimize, native crumb and display retain exact work
+PASS Actual 390 wetenschappelijk-groot expanded actual rule, every answer part and original Check
+PASS Actual 390 wetenschappelijk-groot collapsed actual rule, every answer part and original Check
+PASS Actual 390 wetenschappelijk-klein expanded actual rule, every answer part and original Check
+PASS Actual 390 wetenschappelijk-klein collapsed actual rule, every answer part and original Check
+PASS Actual 390 wetenschappelijk-terug expanded actual rule, every answer part and original Check
+PASS Actual 390 wetenschappelijk-terug collapsed actual rule, every answer part and original Check
+PASS Actual 390 wetenschappelijk-normaliseren expanded actual rule, every answer part and original Check
+PASS Actual 390 wetenschappelijk-normaliseren collapsed actual rule, every answer part and original Check
+PASS All four scientific parts actually answered at 390×844 in both bar positions with 44px reachable choices
+PASS Actual 844 wetenschappelijk-groot expanded actual rule, every answer part and original Check
+PASS Actual 844 wetenschappelijk-groot collapsed actual rule, every answer part and original Check
+PASS Actual 844 wetenschappelijk-klein expanded actual rule, every answer part and original Check
+PASS Actual 844 wetenschappelijk-klein collapsed actual rule, every answer part and original Check
+PASS Actual 844 wetenschappelijk-terug expanded actual rule, every answer part and original Check
+PASS Actual 844 wetenschappelijk-terug collapsed actual rule, every answer part and original Check
+PASS Actual 844 wetenschappelijk-normaliseren expanded actual rule, every answer part and original Check
+PASS Actual 844 wetenschappelijk-normaliseren collapsed actual rule, every answer part and original Check
+PASS All four scientific parts actually answered at 844×390 in both bar positions with 44px reachable choices
+PASS Standalone wetenschappelijk-groot actual rule, every answer part and original Check
+PASS Standalone wetenschappelijk-klein actual rule, every answer part and original Check
+PASS Standalone wetenschappelijk-terug actual rule, every answer part and original Check
+PASS Standalone wetenschappelijk-normaliseren actual rule, every answer part and original Check
+PASS All four standalone scientific parts work with one shared bar and preserve historical powers, roots, seed, partial answer and attempts
+PASS Scientific provider level 0 creates and exact-checks actual version 2 questions with genuine solo XP
+PASS Scientific provider level 1 creates and exact-checks actual version 2 questions with genuine solo XP
+PASS Scientific provider level 2 creates and exact-checks actual version 2 questions with genuine solo XP
+PASS Three scientific practice levels differ for the same seed and preserve original default generator contract
+PASS Scientific level 2 worksheet creates real questions/key, calls native print and leaves learning sessions unchanged
+PASS Scientific duo-learn actual selection/create/code/start/question with local session fixture, teacher role and level 2
+PASS Scientific duo-battle actual selection/create/code/start/question with local session fixture, teacher role and level 2
+PASS Scientific class-learn actual selection/create/code/start/question with local session fixture, teacher role and level 2
+PASS Scientific class-battle actual selection/create/code/start/question with local session fixture, teacher role and level 2
+PASS OS scientific student modes offer duo/join and teacher role owns class creation controls
+PASS An older session server is identified honestly and keeps historical scientific generation without changing answers
+PASS 67 scientific interaction groups and 190 measured layouts
