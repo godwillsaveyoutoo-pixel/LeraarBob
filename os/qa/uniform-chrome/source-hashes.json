@@ -1,0 +1,15 @@
+{
+  "os/native-chrome.js": "f3a820d758680202658ebe357911fac630538b4b0e0ba947d52d273d285ad82d",
+  "os/native-chrome.css": "02d5ce658cd547e1bebe126475dd102327e335a93f30c5865ace09804552c23f",
+  "os/desktop.js": "b67bf25bb35858820c82664e63b423ebf51d55c48b0dde142126b34b263a9353",
+  "os/index.html": "cd115fb4a7320fcb545ca955ec9102f0ece4cc9341fe98871bd565326f9517bf",
+  "shared/leraarbob-topbar.js": "997e935c417ed5c9e0ff0717d7b7fc89d9c6f666303081b0ea5af6ab5d94d07a",
+  "tests/os-native-chrome-browser.cjs": "dea3667a0656b07ea5e9b8a46a68d1dc2a641edcae8040dfbd6c9e97458fa8b5",
+  "tests/os-native-chrome.test.cjs": "414002d91b8b826a5b806885b5547706f27f1f9611964c793f5921e5133dcf64",
+  "games/data-check.html": "37a2294137c80ca8b350f2ba6892c33cb8fa333edb4d9786f4f5f1c812bb7863",
+  "games/kubusbouw.html": "6ba89411794df93ba3da80f0e6c76514740d437576767888980c5a1cf7626f48",
+  "games/algebra-smederij.html": "d3a08306475200b4448ddb337288992c060eeb0805e1375b948ae58ff19e902d",
+  "games/taartenwinkel.html": "084462ec6bf67af3c5d16a4b7ac9562c67d7a2b5f0f92fe4dc64b057c26bcc15",
+  "games/signal-lab.html": "c8a08a548998a170c7223fa72fda7536e2d2c4b3560816daf57aa5299b9a0246",
+  "games/verfwinkel.html": "ffbbfb96968571529c512cfbb5152d7ff8add1aff6428ad5a78a49ec0c03fdab"
+}

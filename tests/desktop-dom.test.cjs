@@ -24,7 +24,7 @@ async function setup({account=null,overview,storage={},topbar=false}={}){
   w.LeraarBobAvatar={create:()=>{const s=w.document.createElement('span');s.textContent='avatar';return s;}};
   w.eval(read('js/catalog.js'));
   Object.defineProperty(w.document,'currentScript',{configurable:true,value:{src:'https://school.example/LeraarBob/shared/game-registry.js'}});
-  w.eval(read('shared/game-registry.js'));w.eval(read('js/catalog-progress.js'));w.eval(read('os/desktop-model.js'));w.eval(read('os/personal-home.js'));w.eval(read('os/activity-entry.js'));w.eval(read('os/desktop.js'));
+  w.eval(read('shared/game-registry.js'));w.eval(read('js/catalog-progress.js'));w.eval(read('os/desktop-model.js'));w.eval(read('os/personal-home.js'));w.eval(read('os/activity-entry.js'));w.eval(read('os/edge-bars.js'));w.eval(read('os/desktop.js'));
   await tick();await tick();
   if(topbar){
     w.LeraarBobPlayModes={ready:()=>Promise.resolve(),current:()=>null};
@@ -136,9 +136,9 @@ test('Algebra routes keep separate live modules, one projected navigation, exact
   const route=new eqFrame.contentWindow.CustomEvent('leraarbob:algebra-route',{detail:{href:systems},cancelable:true});eq.doc.dispatchEvent(route);assert(route.defaultPrevented);
   const sysFrame=f.$('appFrames').querySelectorAll('iframe')[1],sys=algebraFixture(f,sysFrame,'systems');sys.input.value='1/';
   assert.equal(eqFrame.contentDocument,eq.doc);assert.equal(eq.input.value,'tussenstap');assert.equal(D.state().openApps.length,2);
-  assert.deepEqual([...f.$('runningApps').children].map(n=>n.getAttribute('aria-label')),['Terug naar Vergelijkingen','Terug naar Stelsels']);
+  assert.deepEqual([...f.$('runningApps').children].map(n=>n.getAttribute('aria-label')),['Terug naar Vergelijkingen','Terug naar Stelsels','Terug naar Algebra']);
   f.$('saveActivity').click();const preferences=Object.values(f.w.localStorage).map(value=>{try{return JSON.parse(value);}catch{return null;}}).find(value=>value?.saved?.length);
-  assert.equal(new URL(preferences.saved[0].href).pathname,'/LeraarBob/games/algebra-trainer/stelsels.html');assert.equal(new URL(preferences.saved[0].href).searchParams.has('osEmbed'),false);
+  assert.equal(preferences.saved[0].title,'Stelsels');assert.equal(new URL(preferences.saved[0].href).pathname,'/LeraarBob/games/algebra-trainer/stelsels.html');assert.equal(new URL(preferences.saved[0].href).searchParams.has('osEmbed'),false);
   for(const alias of ['algebra','algebra-trainer']){
     const battle=sys.doc.createElement('a');battle.href='https://school.example/LeraarBob/klasbattle/?game='+alias+'&world=systems';sys.doc.body.append(battle);
     const click=new sysFrame.contentWindow.MouseEvent('click',{bubbles:true,cancelable:true});battle.dispatchEvent(click);assert(click.defaultPrevented);
@@ -286,10 +286,39 @@ test('The actual powers workbench keeps its clickable answer, seed and native do
   f.$('modeBtn').click();assert.equal(doc.documentElement.dataset.mode,'dark');assert.equal(doc.querySelector('[data-slot]'),slot);assert.equal(JSON.stringify(w.GetallenWorld.snapshot().mission),before);assert.equal(f.w.localStorage.getItem('axioma-mode'),'dark');
   f.$('modeBtn').click();assert.equal(doc.documentElement.dataset.mode,'light');
   f.$('saveActivity').click();
-  const prefs=f.w.LeraarBobDesktopModel.read(f.w.localStorage,{id:'learner-a'});assert.equal(prefs.saved.length,1);assert.match(prefs.saved[0].title,/Machten vermenigvuldigen/);assert.match(prefs.saved[0].label,/Machten/);assert.equal(new URL(prefs.saved[0].href).searchParams.get('level'),'machten-product');assert.equal(f.$('openOriginal').href,prefs.saved[0].href);
+  const prefs=f.w.LeraarBobDesktopModel.read(f.w.localStorage,{id:'learner-a'});assert.equal(prefs.saved.length,1);assert.match(prefs.saved[0].title,/Machten vermenigvuldigen/);assert.match(prefs.saved[0].label,/Machten/);assert.equal(new URL(prefs.saved[0].href).searchParams.get('level'),'machten-product');assert.equal(f.$('openOriginal'),null);
   f.$('minimizeApp').click();f.$('runningApps').firstElementChild.click();assert.equal(frame.contentDocument,doc);assert.equal(doc.querySelector('[data-slot]'),slot);assert.equal(JSON.stringify(w.GetallenWorld.snapshot().mission),before);
   f.$('appBack').click();assert.equal(D.state().view.themeId,'getallen');D.openApp('getallenwereld');f.$('startButton').click();f.w.document.dispatchEvent(new f.w.KeyboardEvent('keydown',{key:'Escape'}));
   assert.equal(frame.contentDocument,doc);assert.equal(doc.querySelector('[data-slot]'),slot);assert.equal(JSON.stringify(w.GetallenWorld.snapshot().mission),before);
   doc.querySelector('[data-action="check"]').click();assert.equal(w.GetallenWorld.snapshot().mission.done,true);assert.equal(w.GetallenWorld.snapshot().entries['machten-product'].done.length,1);await tick();assert.equal(doc.querySelectorAll('leraarbob-topbar').length,0);
   [...f.$('headerApp').parentElement.querySelectorAll('button[data-native-crumb]')].find(n=>n.textContent==='Machten').click();await tick();assert.equal(w.GetallenWorld.snapshot().screen,'chapter');assert.equal(doc.activeElement,doc.getElementById('app'));assert.equal(w.GetallenWorld.snapshot().mission.done,true);doc.querySelector('[data-action=start]').click();await tick();assert.equal(w.GetallenWorld.snapshot().screen,'play');assert.equal(w.GetallenWorld.snapshot().mission.done,true);assert.equal(crumbs().length,3);assert.equal(f.errors.length,0);
+});
+test('Each bar folds independently; hidden taskbar is inert, current input and native handler survive, and account preferences remain separate',async t=>{
+  const f=await setup({topbar:true,account:{id:'a',role:'student'}});t.after(()=>f.w.close());const D=f.w.LeraarBobDesktop;D.openApp('pythagoras');
+  const frame=f.$('appFrames').querySelector('iframe'),doc=frame.contentDocument;doc.open();doc.write('<!doctype html><html><body><input id="draft"><button id="answer">Answer</button></body></html>');doc.close();frame.dispatchEvent(new f.w.Event('load'));
+  doc.querySelector('input').value='same draft';let answers=0;doc.querySelector('button').onclick=()=>answers++;
+  f.$('taskbarToggle').click();assert.equal(f.$('taskbar').inert,true);assert.equal(f.$('taskbarToggle').getAttribute('aria-expanded'),'false');assert.equal(f.$('desktopHeader').inert,false);
+  f.w.LeraarBobTopbar.setCollapsed(true,true);f.$('taskbarToggle').click();assert.equal(f.$('taskbar').inert,false);assert.equal(f.$('desktopHeader').inert,true);
+  f.$('taskbarToggle').click();f.w.document.querySelector('.lb-restore').click();assert.equal(f.$('taskbar').inert,true);assert.equal(f.$('desktopHeader').inert,false);
+  assert.equal(f.$('appFrames').querySelector('iframe'),frame);assert.equal(doc.querySelector('input').value,'same draft');doc.querySelector('button').click();assert.equal(answers,1);
+  assert.equal(f.$('focusControls'),null);assert.equal(f.$('focusWorkspace'),null);assert.equal(f.$('openOriginal'),null);
+  f.emit({account:{id:'b',role:'student'}});await tick();assert.equal(f.$('taskbar').inert,false);
+  f.emit({account:{id:'a',role:'student'}});await tick();assert.equal(f.$('taskbar').inert,true);assert.equal(f.errors.length,0);
+});
+test('Folders and rankings have one resumable taskbar entry each; closing removes only the window and switching accounts clears their state',async t=>{
+  const f=await setup({account:{id:'a',role:'student'}});t.after(()=>f.w.close());f.w.LeraarBobWorksheetLibrary={list:async()=>[]};const D=f.w.LeraarBobDesktop;
+  D.showView({kind:'worksheet-saved',themeId:'rechten',topicId:'hellingrug'});await tick();
+  const folder=D.state().view;assert.equal(f.$('runningApps').querySelector('[data-window="place:worksheet-saved"]').getAttribute('aria-pressed'),'true');
+  D.showView({kind:'rankings'});await tick();assert.equal(D.state().openWindows.length,2);assert.equal(f.$('windowTitle').textContent,'Ranglijsten');
+  D.showView('desktop');f.$('runningApps').querySelector('[data-window="place:worksheet-saved"]').click();await tick();assert.deepEqual(D.state().view,folder);
+  D.openApp('pythagoras');const frame=f.$('appFrames').querySelector('iframe');
+  f.$('runningApps').querySelector('[data-window="place:rankings"]').click();await tick();assert.equal(D.state().openWindows.length,2);assert.equal(f.$('appFrames').querySelector('iframe'),frame);
+  f.$('closeLibrary').click();assert.equal(f.$('runningApps').querySelector('[data-window="place:rankings"]'),null);assert.equal(D.state().openWindows.length,1);assert(frame.isConnected);
+  f.$('runningApps').querySelector('[data-window="place:worksheet-saved"]').click();f.$('closeLibrary').click();assert.equal(D.state().openWindows.length,0);assert(frame.isConnected);
+  D.showView({kind:'worksheet-saved',themeId:'algebra',topicId:'equations'});f.emit({account:{id:'b',role:'student'}});await tick();assert.equal(D.state().openWindows.length,0);assert.equal(D.state().openApps.length,0);assert.equal(f.errors.length,0);
+});
+test('Historical Algebra shortcuts display their module names while keeping their original identity and exact destination',async t=>{
+  const saved=[{id:'algebra-trainer',key:'equations',mode:'solo',title:'Algebrawereld · Vergelijkingen',href:'https://school.example/LeraarBob/games/algebra-trainer/?level=route-two'},{id:'algebra-trainer',key:'systems',mode:'solo',title:'Algebrawereld · Stelsels',href:'https://school.example/LeraarBob/games/algebra-trainer/stelsels.html?level=sys-substitution'}];
+  const f=await setup({storage:{'leraarbob-desktop:v1:guest':JSON.stringify({saved})}});t.after(()=>f.w.close());f.w.LeraarBobDesktop.showView('saved');
+  assert.deepEqual([...f.$('viewContent').querySelectorAll('h3')].map(n=>n.textContent),['Vergelijkingen','Stelsels']);assert.deepEqual(JSON.parse(f.w.localStorage.getItem('leraarbob-desktop:v1:guest')).saved,saved);
 });

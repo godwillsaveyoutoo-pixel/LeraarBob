@@ -1160,7 +1160,7 @@ window.AXIOMA_CATALOG = [
   },
   {
     "id": "algebra-trainer",
-    "title": "Algebrawereld",
+    "title": "Vergelijkingen",
     "subtitle": "Los vergelijkingen op, bouw tussenstappen en test je oplossingen.",
     "href": "games/algebra-trainer/",
     "category": "Vergelijkingen",

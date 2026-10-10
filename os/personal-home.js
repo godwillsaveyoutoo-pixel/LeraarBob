@@ -189,11 +189,13 @@
       if (ctx.account.role === 'teacher' && !board?.class) return [small('Kies een klas om de echte resultaten te bekijken.')];
       return rows.length ? [node('p', 'personal-ranking-world', 'Rechtenwereld'), rankingRows(rows.slice(0, 3))] : [small('Nog geen afgeronde klasbattle in Rechtenwereld. Elke wereld houdt zijn eigen score.')];
     });
-    if (dialogKind === 'rankings') renderRankingDialog();
+    if ($('rankingWindowBody')) renderRankingWindow();
   }
-  function openRankings() { openDialog('rankings', 'Ranglijsten'); renderRankingDialog(); refreshBoards(); }
-  function renderRankingDialog() {
-    replace('personalDialogBody', JSON.stringify([owner, boardState, board, selectedClass, selectedGame]), () => {
+  function openRankings() { closeDialog(); ctx.showView({kind:'rankings'}); refreshBoards(); }
+  function renderRankingWindow() {
+    if (!ctx) return;
+    const root=$('rankingWindowBody');if(!root)return;if(!root.childElementCount)signatures.delete('rankingWindowBody');
+    replace('rankingWindowBody', JSON.stringify([owner, boardState, board, selectedClass, selectedGame]), () => {
       const nodes = [small('Punten uit afgeronde klasbattles. Werelden hebben elk hun eigen ranglijst; dit is geen XP-omrekening.')];
       if (!ctx.account) return [...nodes, button('Inloggen', () => { closeDialog(); ctx.openAccount(); }, 'personal-primary')];
       if (boardState === 'loading') return [...nodes, small('Ranglijsten ophalen…')];
@@ -206,7 +208,7 @@
       } else nodes.push(node('p', 'personal-ranking-world', board.class ? `Klas ${board.class}` : 'Geen klas gekoppeld'));
       const label = node('label', '', 'Wereld'), select = node('select'); select.setAttribute('aria-label', 'Wereld voor ranglijst'); select.dataset.focusKey = 'ranking-game';
       const ids = [...new Set(['rechten', ...(board.leaderboards || []).map(r => r.game)])]; ids.forEach(id => select.append(new Option(games[id] || id, id))); select.value = selectedGame;
-      select.addEventListener('change', () => { selectedGame = select.value; renderRankingDialog(); }); label.append(select); filters.append(label); nodes.push(filters);
+      select.addEventListener('change', () => { selectedGame = select.value; renderRankingWindow(); }); label.append(select); filters.append(label); nodes.push(filters);
       const rows = (board.leaderboards || []).filter(r => r.game === selectedGame);
       nodes.push(rows.length ? rankingRows(rows) : small(ctx.account.role === 'teacher' && !selectedClass ? 'Kies eerst je klas.' : 'Nog geen afgeronde klasbattles voor deze wereld.'));
       nodes.push(button('Vernieuwen', refreshBoards, 'personal-wide')); return nodes;
@@ -253,7 +255,7 @@
     $('personalRankings').onclick = openRankings; $('personalClassCode').onclick = () => openCode(); $('personalClassCode').hidden = ctx.account?.role === 'teacher';
     if (!ctx.authPending && initialAppPicker) { initialAppPicker = false; openAppPicker(); }
     if (!ctx.authPending && /^[a-f0-9]{6}$/i.test(initialClassCode || '')) { const code = initialClassCode; initialClassCode = null; openCode(code); }
-    if (!polling) polling = setInterval(() => { bindSocial(); if (!document.hidden && (!$('homeView').hidden || dialogKind === 'rankings')) refreshBoards(); }, 30000);
+    if (!polling) polling = setInterval(() => { bindSocial(); if (!document.hidden && (!$('homeView').hidden || !!$('rankingWindowBody') && !$('libraryWindow').hidden)) refreshBoards(); }, 30000);
   }
   // Topbar, native Learn and the desktop all open this same invitation surface.
   document.addEventListener('leraarbob:social-open', e => { if (!ctx) return; e.preventDefault(); openInbox(e.detail?.opener); });
@@ -261,5 +263,5 @@
   window.addEventListener('focus', () => { bindSocial(); if (ctx && !$('homeView').hidden) refreshBoards(); });
   window.addEventListener('pageshow', e => { if (e.persisted && ctx) render(ctx); });
   window.addEventListener('pagehide', () => { clearInterval(polling); polling = null; socialStop?.(); social = null; });
-  window.LeraarBobPersonalHome = Object.freeze({ render, openAppPicker, openRankings, openClassCode: openCode, refreshClasses: refreshBoards });
+  window.LeraarBobPersonalHome = Object.freeze({ render, openAppPicker, openRankings, renderRankingWindow, openClassCode: openCode, refreshClasses: refreshBoards });
 })();

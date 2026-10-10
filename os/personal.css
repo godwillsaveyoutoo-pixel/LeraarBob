@@ -108,7 +108,6 @@ body[data-os-chrome=single] .taskbar-right{display:none}
 .compact-window-controls .app-toolbar button>span,.compact-window-controls .app-toolbar a>span{display:none}
 .compact-window-controls .app-actions{gap:2px;margin:0;display:flex;align-items:center}
 .compact-window-controls .app-actions button,.compact-window-controls .app-actions a{width:44px;height:44px;min-width:44px;display:inline-flex;justify-content:center;align-items:center;border-radius:9px;padding:0;color:inherit}
-.compact-window-controls .lb-restore{position:static;inset:auto;transform:none;box-shadow:none;width:44px;height:44px;min-width:44px;margin:0;flex-shrink:0;background:#f2dcb121;color:#f2dcb1;z-index:auto}
 .compact-window-controls #windowActionsToggle{display:inline-flex;justify-content:center;align-items:center;min-width:44px;width:44px;height:44px;padding:0}
 .window-close-label{display:none}
 .compact-window-controls #closeApp{min-width:44px;width:44px;height:44px;justify-content:center;padding:0}
@@ -127,23 +126,10 @@ body[data-os-chrome=single] #runningApps{min-width:0;flex:1}
  .compact-window-controls #minimizeApp::after{content:'Minimaliseren'}
 }
 /* On the narrowest phones, Start remains the app switcher. Reserve direct exits. */
-@media(max-width:360px){body[data-os-chrome=single] #runningApps{display:none}body[data-os-chrome=single] #focusWorkspace{margin-left:auto}}
+@media(max-width:360px){body[data-os-chrome=single] #runningApps{display:none}}
 .personal-app-actions[data-mode-count="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:750px){.personal-app-actions[data-mode-count="2"] button[data-mode=solo]{grid-column:auto}}
-#focusWorkspace{flex-shrink:0}
-/* The shared topbar marks grid bodies with !important row templates. */
-body.os-focus{grid-template-rows:minmax(0,1fr)!important;background:var(--personal-paper)}
-body.os-focus #desktopHeader,body.os-focus .taskbar,body.os-focus .lb-restore{display:none!important}
-body.os-focus #desktop{padding-bottom:52px}
-#focusControls{position:fixed;bottom:0;inset-inline:0;height:52px;z-index:80;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:4px 12px;background:var(--personal-paper);color:var(--personal-ink);border-top:1px solid var(--personal-line)}
-#focusControls button{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:7px 12px;border-radius:9px;background:var(--personal-card);color:inherit;border:1px solid var(--personal-line);font-size:12px}
-#focusControls button:hover{background:var(--personal-soft)}
-#focusControls #appBack{margin-right:auto}
-#focusControls .window-close-label{display:inline}
-@media(max-width:600px){#focusControls{gap:6px;padding-inline:8px}#focusControls #appBack{padding:0;width:44px}#focusControls #appBack>span{display:none}}
-@media(max-width:700px){body[data-os-chrome=single] #focusWorkspace{min-width:44px;width:44px;padding:0}}
-body.os-focus .app-toolbar{display:none!important}
-@media(max-width:700px){#focusWorkspace>span{display:none}}
+
 /* One workform chooser for app cards, context actions and old mode links. */
 #modeDialog{width:min(760px,calc(100vw - 28px));padding:24px;box-sizing:border-box}
 #modeDialog #modeOptions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -155,3 +141,31 @@ body.os-focus .app-toolbar{display:none!important}
 @media(max-width:500px){#modeDialog{padding:18px}#modeDialog #modeOptions{grid-template-columns:1fr}#modeDialog .mode-option{min-height:66px}}
 
 #desktopHeader>#nativeAppNavigation{display:none!important}
+
+/* Each OS bar collapses independently. No replacement focus/navigation strip. */
+#desktopHeader{grid-row:1}
+#desktop{grid-row:2;padding-top:var(--os-top-reserve,0px);padding-bottom:var(--os-bottom-reserve,0px)}
+#taskbar{grid-row:3;padding-right:76px!important}
+body.os-bottom-collapsed{grid-template-rows:auto minmax(0,1fr) 0}
+body.os-bottom-collapsed #taskbar{height:0!important;min-height:0!important;padding-block:0!important;border:0!important;visibility:hidden;overflow:hidden}
+.os-edge-handle,.lb-restore.os-edge-handle{position:fixed;z-index:65;left:calc(50% - 32px);right:auto;width:64px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:12px;background:transparent;box-shadow:none;backdrop-filter:none;cursor:pointer;display:grid;place-items:center;color:#345851}
+.os-edge-handle::before{content:'';width:36px;height:6px;border-radius:9px;background:currentColor;box-shadow:0 0 0 2px #fffdf8c9,0 2px 5px #10253630}
+.os-edge-handle>span,.lb-restore.os-edge-handle svg{display:none}
+.os-edge-handle:hover,.os-edge-handle:focus-visible{background:#fffdf8e8;outline:2px solid #65866f;outline-offset:-2px}
+.lb-restore.os-edge-handle{top:0;bottom:auto}
+#taskbarToggle{bottom:0;top:auto}
+body:not(.os-bottom-collapsed) #taskbarToggle{left:auto!important;right:8px;bottom:calc((var(--taskbar-height) - 44px)/2);z-index:75;color:#eeeede}
+body:not(.os-bottom-collapsed) #taskbarToggle::before{box-shadow:none}
+body:not(.os-bottom-collapsed) #taskbarToggle:hover,body:not(.os-bottom-collapsed) #taskbarToggle:focus-visible{background:#ffffff15}
+body:has(dialog[open])>.os-edge-handle{visibility:hidden}
+body.os-bottom-collapsed .start-panel{bottom:52px;max-height:calc(100dvh - 70px)}
+
+/* Internal folders and rankings are resumable OS windows too. */
+.running-window>.icon{width:30px;height:30px;flex:none;color:#e7c47f}
+.running-window[data-window="place:rankings"]>.icon{color:#a7cec2}
+body[data-os-window] .taskbar-right{display:none}
+.window-controls button{min-width:44px!important;min-height:44px}
+#rankingWindowBody{max-width:850px;margin-inline:auto}
+#rankingWindowBody .personal-ranking-filters select{min-height:44px}
+body:not(.os-bottom-collapsed) .toast{bottom:calc(var(--taskbar-height) + 16px)}
+body.os-bottom-collapsed .toast{bottom:52px}

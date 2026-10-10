@@ -174,6 +174,7 @@ function goPlatformSection(id,hash){
 }
 async function showMenu(){
  await Promise.all([modesReady,routesReady]);if(!current)return;
+ document.dispatchEvent(new CustomEvent('leraarbob:menu-opening'));
  const {host,header}=current,s=host.shadowRoot,dialog=s.querySelector('dialog'),list=s.querySelector('.menu-list');list.replaceChildren();
  s.querySelector('.menu-title').textContent=navPilot?(isHome?'leraarBob':title):title;
  s.querySelector('.menu-eyebrow').textContent=navPilot?'NAVIGATIE':'WAAR WIL JE HEEN?';
@@ -222,7 +223,7 @@ async function showMenu(){
   if(isDesktop){
    // Desktop places are live controls. Following them must not reload open apps.
    for(const node of header.querySelectorAll('[data-platform-sections] button')){
-    const details=menuDetails(node);add(platform,details.label,()=>node.click(),{...details,source:node});
+    const details=menuDetails(node);const gameNode=node.closest('#nativeGameCommands,#activeGameSections,#nativeAppNavigation');let group=platform;if(gameNode){group=list.querySelector('.menu-native-game');if(!group){group=section('Huidig spel','menu-options menu-native-game');list.insertBefore(group,platform);}}const entry=add(group,details.label,()=>node.click(),{...details,source:node});if(node.hasAttribute('aria-pressed'))entry.setAttribute('aria-pressed',node.getAttribute('aria-pressed'));if(node.hasAttribute('aria-current'))entry.setAttribute('aria-current',node.getAttribute('aria-current'));
    }
   }else{
   add(platform,'Spellen',()=>goPlatformSection('homeGames','#ontdek'),{glyph:'home'});
@@ -441,6 +442,7 @@ function mount(header){
  :host([data-nav-pilot=true]) .row:has(.live-entry:not([hidden])) .actions{grid-column:1/3;grid-row:2;width:100%;justify-content:flex-end}
  :host([data-nav-pilot=true]) .row:has(.live-entry:not([hidden])) .progress{margin-right:auto}
  }
+ ${isDesktop?'.collapse svg{display:none}.collapse::before{content:"";width:28px;height:5px;border-radius:9px;background:currentColor}':''}
  </style><div class="row" part="row"><button part="mobile-menu" class="mobile-menu" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Menu openen" title="Menu">${svg('menu')}</button><a part="brand" class="brand" data-platform-home href="${home}" aria-label="leraarBob, startpagina">leraarBob</a><nav part="crumbs" class="crumbs" aria-label="Je locatie"></nav><div class="mobile-context" part="mobile-context" aria-live="polite"><strong class="mobile-title">${isHome?'leraarBob':title}</strong><span class="mobile-detail" hidden></span></div><div class="actions" part="actions"><output class="progress" part="progress" hidden role="status" aria-live="polite" aria-atomic="true"><span class="progress-icon" aria-hidden="true"></span><span class="progress-value" aria-hidden="true"></span></output><a class="teacher-link" part="teacher-link" href="${new URL('teacher/',root)}" hidden>Mijn klassen</a><button part="toolbar-button account" class="account" type="button"><i class="account-mark" aria-hidden="true">${svg('account')}</i><span class="account-label" part="account-label">Inloggen</span></button><a class="live-entry" part="live-entry" hidden><span class="live-dot" aria-hidden="true"></span>Live</a><button part="toolbar-button fullscreen" class="fullscreen" type="button" aria-label="Volledig scherm" title="Volledig scherm" aria-pressed="false">${svg('full')}</button><button part="toolbar-button theme-toggle" class="theme-toggle" type="button" aria-label="Donkere weergave" title="Donkere weergave" aria-pressed="false" hidden>${svg('moon')}</button><button part="toolbar-button menu" class="menu" type="button" aria-haspopup="dialog" aria-label="Menu" title="Menu">${svg('menu')}</button><button part="toolbar-button collapse" class="collapse" type="button" aria-label="Bovenbalk inklappen" title="Bovenbalk inklappen" aria-controls="${header.id}">${svg('up')}</button></div></div><div class="display-notice" role="status" hidden><span></span><button type="button" class="dismiss-notice" aria-label="Melding sluiten">${svg('close')}</button></div><dialog aria-labelledby="lb-menu-title"><div class="dialog-head"><div><span class="menu-eyebrow"></span><h2 id="lb-menu-title" class="menu-title">Menu</h2></div><button class="close" type="button" aria-label="Menu sluiten" autofocus>${svg('close')}</button></div><div class="menu-list"></div></dialog>`;
  header.append(host,context);
  const parent=header.parentElement,layout=getComputedStyle(parent);

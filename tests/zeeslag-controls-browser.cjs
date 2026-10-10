@@ -67,15 +67,17 @@ let browser,preview;
   for(const collapsed of [false,true]){
    if(collapsed){await page.locator('leraarbob-topbar .collapse').click();await layout('os-'+size.width+'-collapsed');}
    for(const selector of ['#appBack','#closeApp'])assert(await page.locator(selector).isVisible());
-   await page.locator('#focusWorkspace').click();assert(!await page.locator('#desktopHeader').isVisible());assert(!await page.locator('#taskbar').isVisible());await layout('os-'+size.width+'-focus-'+collapsed);
-   const game=await node.boundingBox();for(const selector of ['#focusRestore','#appBack','#closeApp']){const target=page.locator(selector),r=await target.boundingBox();assert(r&&r.width>=44&&r.height>=44&&r.y>=game.y+game.height&&r.x>=0&&r.x+r.width<=size.width,selector);assert(await target.evaluate(el=>{const r=el.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return el===hit||el.contains(hit);}));}
-   await page.locator('#closeApp').click();await page.locator('#cancelClose').click();assert(await node.evaluate(e=>e.isConnected));assert.equal(await frame.locator('#aimEquationText').textContent(),'y = ½x − 2');await page.locator('#focusRestore').click();
+   await page.locator('#taskbarToggle').click();assert.equal(await page.locator('#desktopHeader').isVisible(),!collapsed);assert(!await page.locator('#taskbar').isVisible());await layout('os-'+size.width+'-bottom-hidden-'+collapsed);
+   const game=await node.boundingBox(),target=page.locator('#taskbarToggle'),r=await target.boundingBox();assert(r&&r.width>=44&&r.height>=44&&r.x>=0&&r.x+r.width<=size.width);assert(await target.evaluate(el=>{const r=el.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return el===hit||el.contains(hit);}));
+   for(const t of report.layouts.at(-1).targets) assert(!(t.left+game.x<r.x+r.width && t.right+game.x>r.x && t.top+game.y<r.y+r.height && t.bottom+game.y>r.y), 'Restore does not cover '+t.label);
+   assert(!await page.locator('#closeApp').isVisible());await target.click();
+   await page.locator('#closeApp').click();await page.locator('#cancelClose').click();assert(await node.evaluate(e=>e.isConnected));assert.equal(await frame.locator('#aimEquationText').textContent(),'y = ½x − 2');
    assert.equal(await page.evaluate(()=>document.body.classList.contains('topbar-collapsed')),collapsed);
   }
   const restore=page.locator('.lb-restore:not([hidden])');assert.equal(await restore.getAttribute('aria-expanded'),'false');const r=await restore.boundingBox();assert(r.width>=44&&r.height>=44);await restore.click();
   assert.equal(await frame.locator('#aimEquationText').textContent(),'y = ½x − 2');
  }
- check('One OS header; five viewports, both collapse states and full focus: 44px controls plus direct back/close outside the game; cancel-close keeps the selected line');
+ check('One OS header; five viewports, independent bar states: 44px handles without overlap; restore then back/close; cancel-close keeps the selected line');
  await page.setViewportSize({width:1366,height:768});await frame.locator('#fireBtn').click();
  await frame.waitForFunction(()=>RechtenArcade.run().events.some(e=>e.kind==='naval-shot'));
  const shot=await frame.evaluate(()=>RechtenArcade.run().events.find(e=>e.kind==='naval-shot'));
@@ -83,9 +85,9 @@ let browser,preview;
  assert.equal(await frame.locator('#myHistory .frac .num').first().textContent(),'1');assert.equal(await frame.locator('#myHistory .frac .den').first().textContent(),'2');
  await frame.locator('#fireBtn:not([disabled])').waitFor();await layout('os-after-shot');
  check('VUUR fires the selected fractional slope and negative intercept through the original engine; computer turn completes');
- await page.locator('#focusWorkspace').click();await page.locator('#closeApp').click();await page.locator('#acceptClose').click();assert(!await node.evaluate(e=>e.isConnected));assert(await rightsNode.evaluate(e=>e.isConnected));assert.equal((await page.evaluate(()=>LeraarBobDesktop.state())).openApps.length,1);assert(await page.locator('#homeView').isVisible());assert(await page.locator('#taskbar').isVisible());
- await page.getByRole('button',{name:'Terug naar Rechtenwereld',exact:true}).click();assert(await page.locator('#focusControls').isVisible());await page.locator('#appBack').click();assert(await page.locator('#homeView').isVisible());
- check('Closing Zeeslag from focus removes only that game; Rechtenwereld remains open, resumable and can return directly to the desktop');
+ await page.locator('#taskbarToggle').click();assert(!await page.locator('#closeApp').isVisible());await page.locator('#taskbarToggle').click();await page.locator('#closeApp').click();await page.locator('#acceptClose').click();assert(!await node.evaluate(e=>e.isConnected));assert(await rightsNode.evaluate(e=>e.isConnected));assert.equal((await page.evaluate(()=>LeraarBobDesktop.state())).openApps.length,1);assert(await page.locator('#homeView').isVisible());assert(await page.locator('#taskbar').isVisible());
+ await page.getByRole('button',{name:'Terug naar Rechtenwereld',exact:true}).click();assert(await page.locator('#taskbar').isVisible());await page.locator('#appBack').click();assert(await page.locator('#homeView').isVisible());
+ check('Closing Zeeslag after restoring the taskbar removes only that game; Rechtenwereld remains open, resumable and can return directly to the desktop');
  // A standalone game uses the same controls and shared collapsible header.
  const solo=await context.newPage();await solo.goto(preview.base+'/games/rechten/zeeslag/?solo=1');await solo.locator('#gameScreen.active').waitFor();
  for(const start of ['-4,-4','-4,-2','-4,1']){await solo.locator('[data-grid="'+start+'"]').click();await solo.locator('#ownBoard .candidate').first().click();}

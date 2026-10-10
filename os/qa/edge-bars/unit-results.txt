@@ -1,0 +1,45 @@
+✔ Closing a settled desktop fixture cancels pending rendering before jsdom destroys its document (269.806087ms)
+✔ The desktop starts with one app and Add; the catalog retains themes and distinct work forms (111.196139ms)
+✔ Back, Start, global menu and collapsing the platform row retain the exact native DOM and handlers (143.247272ms)
+✔ A second visit restores the explicit topbar preference and has a reachable restore control (53.329353ms)
+✔ Learner startup and direct launches reject class creation; teacher options use the trusted auth result (59.111936ms)
+✔ Saving is a desktop shortcut; closing is explicit; reopening a running online app keeps that mode (79.484385ms)
+✔ Account changes clear live apps and separate pins, shortcuts and stale progress responses (111.658838ms)
+✔ An unrecognized account can discover guest apps without fake learner progress or class controls (47.256561ms)
+✔ The laptop cache limit rejects a seventh app without discarding the six live screens (77.058664ms)
+✔ Algebra routes keep separate live modules, one projected navigation, exact saved URLs and cached class returns (166.958493ms)
+✔ Algebra route at the six-window limit keeps the original answer instead of navigating its iframe (78.782385ms)
+✔ Each pilot keeps its own folder, filter and search when switching through the taskbar (121.107633ms)
+✔ Launching through Start gives the new app its theme while saved shortcuts return to My tasks (92.11629ms)
+✔ Start works from a native answer field and Escape returns focus without changing native keys or input (33.483465ms)
+✔ Resuming a pinned app retains its own return place and restores the native answer focus (43.585089ms)
+✔ Start and resume retain focus from a nested native workboard without intercepting ordinary answers (53.333353ms)
+✔ Actual atelier progress keeps its native unit and does not leak into another app (53.106254ms)
+✔ Native sign-in actions reach the central account panel and the bridge is removed on close (46.15512ms)
+✔ Guest live lesson sign-in captures the real native account handler and preserves the join screen (57.375135ms)
+✔ The pupil Learn entrance reaches the original code form and joins a class; teachers reach class setup (88.010399ms)
+✔ The actual powers workbench keeps its clickable answer, seed and native document through desktop navigation (378.635186ms)
+✔ Each bar folds independently; hidden taskbar is inert, current input and native handler survive, and account preferences remain separate (65.120649ms)
+✔ Every public build has a theme and its own work form; historical identities stay intact (0.93012ms)
+✔ All app, mode, worksheet and artwork routes exist, including project subdirectory deployment (3.655272ms)
+✔ Learners participate in classes but cannot create them through startup options or direct launch (9.512974ms)
+✔ Search distinguishes work forms and tolerates accents (0.472ms)
+✔ Desktop preferences are per account and never overwrite a learning progress key (0.581321ms)
+✔ Independent bottom collapse migrates the old focus preference without changing progress or another account (0.23298ms)
+✔ Native commands preserve the actual handler, current disabled state and live replacement nodes (17.759028ms)
+✔ Stelsels keeps exact method, select and undo nodes; disposal restores original attributes (9.583644ms)
+✔ Inactive Pythagoras screens do not leak their back actions or titles into the OS (10.187255ms)
+✔ Display and account/role actions remain centralized; game help and progress stay reachable (8.549063ms)
+✔ Every registered app and OS atelier has an explicit chrome adapter (8.363794ms)
+✔ Desktop home is optional and remains inside the platform origin and path (135.66778ms)
+✔ Standalone live lesson roles and membership keep their existing behavior (30.158173ms)
+✔ Compact desktop title identifies the app even when native breadcrumbs show an exercise (49.866542ms)
+✔ OS has no redundant Live link after teacher/student login or lesson membership changes (37.860237ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2827.077105

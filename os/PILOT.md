@@ -4,11 +4,11 @@ Doel: overgang tussen bureaublad, themamap, werkvorm en app, met behoud van oors
 
 ## Persoonlijk bureaublad en focus · 10 oktober 2026
 
-De actuele eerste pilot sluit Rechtenwereld aan op persoonlijke appkaarten, centrale uitnodigingen en een directe klasflow. Binnen deze app is één gedeelde bovenbalk overgebleven. De taakbalk bevat de vensteracties en Focus; de herstelknop blijft buiten de oefening. Andere apps worden stapsgewijs aangesloten.
+De actuele eerste pilot sluit Rechtenwereld aan op persoonlijke appkaarten, centrale uitnodigingen en een directe klasflow. Binnen deze app is één gedeelde bovenbalk overgebleven. De taakbalk bevat de vensteracties. Beide balken klappen onafhankelijk in; kleine herstelhandvatten blijven bereikbaar zonder extra onderstrook. Andere apps worden stapsgewijs aangesloten.
 
 - [x] Echte Rechten-opgave: antwoord kiezen; beide balken verbergen en herstellen; hetzelfde antwoord en dezelfde iframe blijven behouden.
 - [x] 1366 × 768 bij 100% zoom, 390 × 844 en 640 × 360: herstelknoppen minstens 44 × 44 px, bereikbaar en niet over het werkbord; voorkeur na herladen behouden.
-- [x] Bovenbalk afzonderlijk inklappen, focusstand in beide standen gebruiken, heropenen; de twee voorkeuren blijven onafhankelijk.
+- [x] Boven- en onderbalk afzonderlijk inklappen en heropenen; de twee voorkeuren blijven onafhankelijk.
 - [x] Wereldkaart, spelvoortgang en spelprofiel via de gedeelde navigatie; compacte titel blijft de actieve app noemen.
 - [x] Echte Rechten-eilandlink en ‘Andere spelvorm kiezen’ in Duo Battle openen de OS-werkvormkeuze, zonder `play.html` te laden. Hellingrug wordt meegenomen naar Learn en de leraarklasstart; terugkeren behoudt het oorspronkelijke scherm, de selectie en focus. Getest op 1366/390/640 px in beide balkstanden.
 - [x] Werkvormen vanuit een echte Puntenbaai-opgave behouden het antwoord en bieden geen onbeschikbare papiergenerator. Vanuit Hellingrug is een oefenblad daadwerkelijk gemaakt, bewaard en teruggevonden in dezelfde OS-onderwerpmap.
@@ -178,13 +178,13 @@ De gekozen rechte staat volledig leesbaar naast twee afzonderlijke regelaars voo
 
 ## Brandweer · formulebediening
 
-Brandweer gebruikt nu dezelfde scheiding als Zeeslag: een leesbare functie naast regelaars voor helling a en starthoogte b. Breuken, decimalen, negatieve waarden en alle oorspronkelijke invoerhandlers blijven behouden. De gerichte browsercontrole slaagt voor toetsenbord, wiel/slepen, grenzen, focus, minimaliseren/hervatten, een echte redding en twaalf metingen op vier liggende schermmaten. De bestaande arcadetest slaagt voor alle zestien reddingen en beide duo-flows. Op 568 × 320 is Balken verbergen nodig om de volledige instructie te zien; de bestaande portretbeperking blijft behouden. [Rapport, screenshots en testgrenzen](qa/brandweer-controls/README.md).
+Brandweer gebruikt nu dezelfde scheiding als Zeeslag: een leesbare functie naast regelaars voor helling a en starthoogte b. Breuken, decimalen, negatieve waarden en alle oorspronkelijke invoerhandlers blijven behouden. De gerichte browsercontrole slaagt voor toetsenbord, wiel/slepen, grenzen, focus, minimaliseren/hervatten, een echte redding en twaalf metingen op vier liggende schermmaten. De bestaande arcadetest slaagt voor alle zestien reddingen en beide duo-flows. Op 568 × 320 is beide balken inklappen nodig om de volledige instructie te zien; de bestaande portretbeperking blijft behouden. [Rapport, screenshots en testgrenzen](qa/brandweer-controls/README.md).
 
 De ramen en verdiepingslijnen van Brandweer blijven nu onder het dak; de oude vaste tien rijen tekenden bij lagere gevels boven het gebouw door. De werkelijke SVG-contouren en het behoud van precies één doelraam zijn voor alle acht straten gecontroleerd op 1366 en 640 px.
 
 ## Vensterbediening · terug en sluiten zonder grote balken
 
-Zeeslag heeft nu net als Rechtenwereld één OS-bovenbalk. Terug en Sluiten staan direct in de taakbalk. **Balken verbergen** verbergt boven- en onderbalk; Terug, Balken tonen en Sluiten blijven in een gereserveerde strook buiten de oefening bereikbaar. Werkelijk sluiten, annuleren, terugkeren en hervatten zijn met echte native schermen gecontroleerd op laptop en compacte schermen, inclusief behoud van een tweede geopende app. De eerdere eigen inklap- en focusvoorkeur blijven behouden. [Rapporten en screenshots](qa/window-controls/README.md): Rechtenwereld 5 groepen / 39 metingen, Zeeslag 6 / 21, vier pilots 32 / 23 en centrale papierwerkruimte 8 / 39; alle geslaagd met lokale testaccounts.
+Zeeslag heeft net als Rechtenwereld één OS-bovenbalk. De oude focusstand met een permanente onderstrook is vervangen door afzonderlijk inklapbare boven- en onderbalken. In ingeklapte toestand blijven alleen twee kleine herstelhandvatten staan. Terug, minimaliseren en sluiten verschijnen pas wanneer de gebruiker de onderbalk weer opent. De vorige focusvoorkeur wordt overgenomen als voorkeur voor de onderbalk. Zie de [nieuwe controle en screenshots](qa/edge-bars/README.md); [qa/window-controls](qa/window-controls/README.md) bevat uitsluitend historisch bewijs van de vervangen onderstrook.
 
 
 ## Centrale werkvormen · ontwikkelpreview 10 oktober 2026
@@ -192,3 +192,45 @@ Zeeslag heeft nu net als Rechtenwereld één OS-bovenbalk. Terug en Sluiten staa
 Appkaart, rechtermuisknop en het gedeelde OS-menu openen dezelfde compacte werkvormkeuze. De actieve keuze gaat rechtstreeks naar het eigen formulier of werkbord. Rechtenwereld, Zeeslag, Getallenwereld, Algebra, Vectormissie, Wortelbouw en Kleiduifschieten delen de startbediening; de eigen oefeningen en providers blijven behouden. Klasstart gaat zonder extra hub, de desktopcode ondersteunt de bestaande zes- en achttekencodes, en oefenbladen openen de centrale themamappen/maker. Alle appvensters gebruiken de compacte OS-balk; Algebra's native secties blijven via het gedeelde menu bereikbaar.
 
 Werkelijk gecontroleerd: 20 werkvormgroepen / 102 aanraakdoelen, de vier pilots, Algebra, volledige lokale Learn-/Battle-/live-lesruns, centrale papieropslag en providercompatibiliteit. [Rapport, precieze testgrenzen, wijzigingen per app en screenshots](qa/workforms/README.md). De preview op <http://127.0.0.1:8795/> gebruikt fictieve lokale accounts. Productieauthenticatie en externe WebSockets blijven te controleren; Getallenwereld gebruikt voorlopig sessiecodes, Rechtenwereld/Zeeslag uitnodigingen op alias. Dit is een reviewversie in PR #13, geen nieuwe publieke uitrol.
+
+## Uniforme navigatie voor alle OS-apps · 10 oktober 2026
+
+- [x] 24 beschikbare solo-ingangen: één OS-navigatiebalk; dubbele native branding/menu/schermknoppen nemen geen extra kop in. Rechtenarcade is een groepering zonder geregistreerde solo-ingang.
+- [x] Native acties via Menu → Huidig spel; actuele disabled-/schakelstanden, oorspronkelijke handlers en klikbare wereldpaden behouden.
+- [x] 144 layouts op 1366 × 768, 390 × 844 en 640 × 360 bij 100% zoom, beide balkstanden; 412 bereikbare aanraakdoelen, heropenen, minimaliseren/hervatten en Focus zonder vervanging van de iframe.
+- [x] Echte menuacties in Data Check, Gravity Maze en Wortelbouw; Stelsels-oefening/methode en herladen; lokale duo-ingangen van Rechtenwereld, Vectormissie en Wortelbouw.
+- [x] Automatische native fullscreenstart binnen iframes uitgeschakeld bij Data Check, Kubusbouw, Algebra Smederij, Signal Lab, Verfwinkel en Taartenwinkel; centrale OS-bediening blijft bereikbaar.
+- [x] 35 unit-/DOM-tests, bestaande Rechten-chromeproef, uitgebreide Algebra-proef (18 groepen / 249 doelmetingen), werkvorm-/sessieregressie (20 groepen / 102 metingen), catalogus- en pakketcontrole geslaagd.
+- [ ] Elk intern level en iedere mogelijke spelroute afzonderlijk visueel doorlopen; de brede matrix test hoofdscherm/eerste oefening, aangevuld met de genoemde diepere regressies.
+- [ ] Echte productieaccounts en externe toestellen; sessiebewijs gebruikt de lokale testproviders.
+
+Zie [testverslag en screenshots](qa/uniform-chrome/README.md) en [de afspraken voor volgende apps](NATIVE_CHROME.md). Eerdere rapporten hierboven blijven bewijs voor hun beschreven versies.
+
+Aanvullende gebruikersmelding gecontroleerd: de lokale Rechten-duobattle startte, maar haar werkborden kregen geen bruikbare hoogte na het verwijderen van de oude kopbalk. Dit is hersteld in de OS-stijl. De browserproef start nu ook werkelijk een battle, controleert beide werkborden en antwoordknoppen op drie schermmaten/in beide balkstanden, beantwoordt een vraag en hervat dezelfde volgende ronde na minimaliseren. Acht gerichte interactiegroepen en 35 unit-/DOM-tests slagen. Zie het [aanvullende bewijs](qa/uniform-chrome/duo-followup-report.json).
+
+### Stelsels: ontbrekend substitutiedoel in expertmodus
+
+De gebruikersmelding betrof oefening 7 in de oorspronkelijke Stelsels-trainer: `x − 3y = −5`, `2x + y = 4`, met de vrijgemaakte vorm `y = 4 − 2x`. De HTML-generator sloeg het vervangdoel over zolang de uitdrukking nog niet geplaatst was. Daardoor bestond het doel niet en kon iedere sleepactie uitsluitend de foutmelding opleveren. De conditie is hersteld; het doel heeft een duidelijke groene stippelrand, een toegankelijke naam en een aanraakvlak van minstens 44 × 44 px. De plaatsingsstap gebruikt de lege toetsenbordruimte; op een kort liggend scherm staan bron en doel naast elkaar. Na een correcte plaatsing verdwijnt een eerdere foutmelding.
+
+De nieuwe `tests/stelsels-expert-substitution-browser.cjs` faalt op de oorspronkelijke code wegens nul vervangdoelen en slaagt met de herstelling. Tien controles: echte muisdrag (ook fout loslaten), klikken, toetsenbord, touch, ongedaan maken, oefening 7 volledig oplossen tot `(1, 2)` inclusief oorspronkelijke voortgangsregistratie, `x` vervangen met gehele/breukcoëfficiënt, 1366 × 768 en 640 × 360 bij 100% zoom met beide bovenbalkstanden, en invoer behouden bij minimaliseren/hervatten. Geen browserexceptions of ontbrekende bronnen. [Rapport](qa/stelsels-expert/report.json), [bronhashes](qa/stelsels-expert/source-hashes.json), [zichtbaar doel](qa/stelsels-expert/expert-substitution-target.png), [geplaatste uitdrukking](qa/stelsels-expert/expert-substitution-inserted.png). Deze controle bewijst niet alle andere oefeningen of methodes, noch synchronisatie met productieaccounts.
+
+
+## Onafhankelijk inklappen zonder vervangende balk · 10 oktober 2026
+
+- [x] Boven- en onderbalk hebben elk een inklapbediening; ingeklapt zijn beide balken daadwerkelijk 0 px hoog. Kleine handvatten (64 × 44 px) brengen ze terug. Geen Focusknop, Apart openen of permanente strook met Terug/Sluiten.
+- [x] Rechtenwereld: vier schermmaten × alle vier balkcombinaties, toetsenbord/touch, herladen, annuleren/sluiten, minimaliseren/hervatten en ongewijzigd antwoord.
+- [x] Zeeslag: vijf schermmaten, 63 coëfficiëntcombinaties en een echt schot. Brandweer: vier liggende schermmaten, oorspronkelijke invoerhandlers en een echte redding. Herstelhandvatten bedekken hun antwoordknoppen niet.
+- [x] Catalogus opnieuw gecontroleerd: 24 beschikbare solo-ingangen, 144 layouts, 412 aanraakdoelen, acht interactiegroepen; 37 unit-/DOM-tests en catalogus/pakketcontrole geslaagd.
+
+[Actuele screenshots, rapporten en testgrenzen](qa/edge-bars/README.md). Historische focusrapporten hierboven beschrijven de inmiddels verwijderde onderstrook.
+
+
+## Geopende mappen en de naam Vergelijkingen · 10 oktober 2026
+
+- [x] Vergelijkingen herkenbaar in Toevoegen, appkaart, OS-kop en taakbalk; dezelfde oorspronkelijke opslagidentiteit.
+- [x] Mijn oefenbladen en Ranglijsten hebben elk één actief/minimaal taakbalkicoon. Thema- en andere OS-vensters gebruiken hetzelfde gedrag.
+- [x] Echte oefenbladreeks gegenereerd en teruggevonden; map en onderwerp behouden bij wisselen, minimaliseren en hervatten. Sluiten wist geen reeksen of andere apps.
+- [x] 1366 × 768 bij 100% zoom, 390 × 844 en 640 × 360; beide balkstanden en bediening van minstens 44 × 44 px.
+- [x] Ranglijst met echte lokale klasbattlepunten en leraarklaskeuze; vensters en privécontext worden gewist bij accountwisseling.
+
+[Rapporten en screenshots](qa/place-windows/README.md).

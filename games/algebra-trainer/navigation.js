@@ -28,7 +28,7 @@ function mount(api){
   const stops=api.stops();
   if(!stops.some(s=>s.id===selected))selected=(stops.find(s=>s.current)||stops[0])?.id;
   const chosen=stops.find(s=>s.id===selected),started=chosen?.status==='Bezig';
-  $('#navigationTitle').textContent=api.world();$('#navigationBreadcrumb').textContent='Algebrawereld › '+api.world();$('#navigationRouteTitle').textContent=stops.length+' levels';
+  $('#navigationTitle').textContent=api.world();$('#navigationBreadcrumb').textContent='Algebra › '+api.world();$('#navigationRouteTitle').textContent=stops.length+' levels';
   $('#navigationContext').innerHTML=chosen?'<strong>'+esc(chosen.title)+'</strong><span> · '+(started&&chosen.current?'opdracht '+esc(api.position()):started?'bewaarde reeks':/geoefend|gelukt/i.test(chosen.status)?'opnieuw oefenen':String(chosen.total||6)+' opdrachten')+'</span>':'Kies een level.';
   $('#navigationActions').innerHTML=[['world','Werelden'],['menu','Levels']].map(([id,title])=>'<button type="button" data-menu-nav="'+id+'">'+icon(id)+'<span>'+title+'</span></button>').join('')+(window.AXIOMA_STANDALONE?'<button type="button" data-menu-nav="battle" disabled title="Klasbattle is beschikbaar in de platformversie">'+icon('battle')+'<span>Klasbattle<small>Online</small></span></button>':'<a data-menu-nav="battle" data-platform-route href="'+esc(R?R.href('klasbattle/',externalContext()):api.battleHref||'../../klasbattle/?game=algebra')+'" title="Naar het klasbattleoverzicht van leraarBob">'+icon('battle')+'<span>Klasbattle</span></a>');
   $('#navigationStops').dataset.count=stops.length;

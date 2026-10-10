@@ -1,0 +1,786 @@
+{
+  "checks": [
+    "Start All apps and old place=all URL use the same typed app picker after account resolves; reported place=live route has no catalog sidebar or redundant topbar Live button",
+    "Add opens 25 apps in 8 theme groups without the old library; multiple additions, duplicate guard, focus return and scrollable 44px controls on three viewports; personal pins survive reload; 1366×768 at 100%, phone and short landscape: both header states, restore, direct mode targets ≥44px and unobscured",
+    "Right click, visible More and Shift+F10 offer identical native modes and remove action",
+    "App worksheet shortcut opens its topic folders; Start opens the full saved collection",
+    "Real local Learn: create/invite/decline/reinvite/cancel/reinvite/accept/start; inbox focus survives polling; acceptance stays inside OS; exact native input survives Start, minimize, resume and Save",
+    "Teacher direct class setup/create, student OS code entry/join, retained session banner and native start; no old hub or duplicate room frame",
+    "Rankings read actual local completed/graded class data, own-class pupil scope and teacher class choice; no fabricated XP",
+    "Account switch closes private dialogs and frames, isolates pins and removes teacher actions",
+    "Profile uses existing account/progress sources; direct appearance control and Start remain reachable"
+  ],
+  "measurements": [
+    {
+      "label": "1366/false/#personalInbox",
+      "x": 1014.359375,
+      "y": 112.34375,
+      "width": 154.28125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/false/.personal-app[data-app-id=rechtenwereld] [data-mode=solo]",
+      "x": 71.625,
+      "y": 356.59375,
+      "width": 81.78125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/false/.personal-app[data-app-id=rechtenwereld] [data-mode=learn]",
+      "x": 158.40625,
+      "y": 356.59375,
+      "width": 81.796875,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/false/.personal-app[data-app-id=rechtenwereld] [data-mode=online]",
+      "x": 245.203125,
+      "y": 356.59375,
+      "width": 81.78125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/false/.personal-app[data-app-id=rechtenwereld] [data-worksheets]",
+      "x": 71.625,
+      "y": 362.59375,
+      "width": 255.359375,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/false/.personal-app-more",
+      "x": 290,
+      "y": 265.1875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/false/.personal-add",
+      "x": 54.625,
+      "y": 444.59375,
+      "width": 289.375,
+      "height": 200,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/false/#personalClassCode",
+      "x": 1042.375,
+      "y": 356.78125,
+      "width": 248,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/false/#personalRankings",
+      "x": 1042.375,
+      "y": 467.15625,
+      "width": 248,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker first 1366/false",
+      "x": 631,
+      "y": 190.796875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker last 1366/false",
+      "x": 631,
+      "y": 574.375,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker done 1366/false",
+      "x": 996.421875,
+      "y": 667,
+      "width": 63.578125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/true/#personalInbox",
+      "x": 1014.359375,
+      "y": 54.34375,
+      "width": 154.28125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/true/.personal-app[data-app-id=rechtenwereld] [data-mode=solo]",
+      "x": 71.625,
+      "y": 327.59375,
+      "width": 81.78125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/true/.personal-app[data-app-id=rechtenwereld] [data-mode=learn]",
+      "x": 158.40625,
+      "y": 327.59375,
+      "width": 81.796875,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/true/.personal-app[data-app-id=rechtenwereld] [data-mode=online]",
+      "x": 245.203125,
+      "y": 327.59375,
+      "width": 81.78125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/true/.personal-app[data-app-id=rechtenwereld] [data-worksheets]",
+      "x": 71.625,
+      "y": 362.59375,
+      "width": 255.359375,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/true/.personal-app-more",
+      "x": 290,
+      "y": 207.1875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/true/.personal-add",
+      "x": 54.625,
+      "y": 444.59375,
+      "width": 289.375,
+      "height": 200,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/true/#personalClassCode",
+      "x": 1042.375,
+      "y": 327.78125,
+      "width": 248,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "1366/true/#personalRankings",
+      "x": 1042.375,
+      "y": 467.15625,
+      "width": 248,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "restore 1366",
+      "x": 651,
+      "y": 0,
+      "width": 64,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker first 1366/true",
+      "x": 631,
+      "y": 190.796875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker last 1366/true",
+      "x": 631,
+      "y": 574.375,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker done 1366/true",
+      "x": 996.421875,
+      "y": 667,
+      "width": 63.578125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/false/#personalInbox",
+      "x": 330,
+      "y": 99,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/false/.personal-app[data-app-id=rechtenwereld] [data-mode=solo]",
+      "x": 27,
+      "y": 407.984375,
+      "width": 151,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/false/.personal-app[data-app-id=rechtenwereld] [data-mode=learn]",
+      "x": 27,
+      "y": 407.984375,
+      "width": 73.5,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/false/.personal-app[data-app-id=rechtenwereld] [data-mode=online]",
+      "x": 104.5,
+      "y": 407.984375,
+      "width": 73.5,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/false/.personal-app[data-app-id=rechtenwereld] [data-worksheets]",
+      "x": 27,
+      "y": 407.984375,
+      "width": 151,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/false/.personal-app-more",
+      "x": 142,
+      "y": 247.546875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/false/.personal-add",
+      "x": 201,
+      "y": 329.984375,
+      "width": 173,
+      "height": 200,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/false/#personalClassCode",
+      "x": 33,
+      "y": 449.515625,
+      "width": 324,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/false/#personalRankings",
+      "x": 33,
+      "y": 665.296875,
+      "width": 324,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker first 390/false",
+      "x": 310,
+      "y": 228.796875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker last 390/false",
+      "x": 310,
+      "y": 532.375,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker done 390/false",
+      "x": 290.421875,
+      "y": 705,
+      "width": 63.578125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/true/#personalInbox",
+      "x": 330,
+      "y": 66,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/true/.personal-app[data-app-id=rechtenwereld] [data-mode=solo]",
+      "x": 27,
+      "y": 390.984375,
+      "width": 151,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/true/.personal-app[data-app-id=rechtenwereld] [data-mode=learn]",
+      "x": 27,
+      "y": 390.984375,
+      "width": 73.5,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/true/.personal-app[data-app-id=rechtenwereld] [data-mode=online]",
+      "x": 104.5,
+      "y": 390.984375,
+      "width": 73.5,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/true/.personal-app[data-app-id=rechtenwereld] [data-worksheets]",
+      "x": 27,
+      "y": 390.984375,
+      "width": 151,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/true/.personal-app-more",
+      "x": 142,
+      "y": 214.546875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/true/.personal-add",
+      "x": 201,
+      "y": 312.984375,
+      "width": 173,
+      "height": 200,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/true/#personalClassCode",
+      "x": 33,
+      "y": 449.515625,
+      "width": 324,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "390/true/#personalRankings",
+      "x": 33,
+      "y": 665.296875,
+      "width": 324,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "restore 390",
+      "x": 163,
+      "y": 0,
+      "width": 64,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker first 390/true",
+      "x": 310,
+      "y": 228.796875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker last 390/true",
+      "x": 310,
+      "y": 532.375,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker done 390/true",
+      "x": 290.421875,
+      "y": 705,
+      "width": 63.578125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/false/#personalInbox",
+      "x": 531,
+      "y": 80,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/false/.personal-app[data-app-id=rechtenwereld] [data-mode=solo]",
+      "x": 27,
+      "y": 152.6875,
+      "width": 276,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/false/.personal-app[data-app-id=rechtenwereld] [data-mode=learn]",
+      "x": 27,
+      "y": 152.6875,
+      "width": 136,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/false/.personal-app[data-app-id=rechtenwereld] [data-mode=online]",
+      "x": 167,
+      "y": 152.6875,
+      "width": 136,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/false/.personal-app[data-app-id=rechtenwereld] [data-worksheets]",
+      "x": 27,
+      "y": 152.6875,
+      "width": 276,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/false/.personal-app-more",
+      "x": 267,
+      "y": 152.546875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/false/.personal-add",
+      "x": 326,
+      "y": 94.6875,
+      "width": 298,
+      "height": 160,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/false/#personalClassCode",
+      "x": 33,
+      "y": 173.921875,
+      "width": 264,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/false/#personalRankings",
+      "x": 343,
+      "y": 152.609375,
+      "width": 264,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker first 640/false",
+      "x": 268,
+      "y": 161.796875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker last 640/false",
+      "x": 268,
+      "y": 194.375,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker done 640/false",
+      "x": 536.421875,
+      "y": 287,
+      "width": 63.578125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/true/#personalInbox",
+      "x": 531,
+      "y": 66,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/true/.personal-app[data-app-id=rechtenwereld] [data-mode=solo]",
+      "x": 27,
+      "y": 145.6875,
+      "width": 276,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/true/.personal-app[data-app-id=rechtenwereld] [data-mode=learn]",
+      "x": 27,
+      "y": 145.6875,
+      "width": 136,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/true/.personal-app[data-app-id=rechtenwereld] [data-mode=online]",
+      "x": 167,
+      "y": 145.6875,
+      "width": 136,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/true/.personal-app[data-app-id=rechtenwereld] [data-worksheets]",
+      "x": 27,
+      "y": 145.6875,
+      "width": 276,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/true/.personal-app-more",
+      "x": 267,
+      "y": 145.546875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/true/.personal-add",
+      "x": 326,
+      "y": 87.6875,
+      "width": 298,
+      "height": 160,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/true/#personalClassCode",
+      "x": 33,
+      "y": 173.921875,
+      "width": 264,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "640/true/#personalRankings",
+      "x": 343,
+      "y": 145.609375,
+      "width": 264,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "restore 640",
+      "x": 216,
+      "y": 0,
+      "width": 64,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker first 640/true",
+      "x": 268,
+      "y": 161.796875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker last 640/true",
+      "x": 268,
+      "y": 194.375,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker done 640/true",
+      "x": 536.421875,
+      "y": 287,
+      "width": 63.578125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "auth": "Synthetic accounts, real local Learn/class handlers + PGlite. Production login/transport not tested.",
+  "calls": {
+    "axioma_class_battle_hub:overview": 20,
+    "axioma_social:sync": 32,
+    "axioma_clay_v2:sync": 35,
+    "rechten-learn:catalog": 2,
+    "rechten-learn:create": 1,
+    "rechten-learn:state": 18,
+    "rechten-learn:invite": 3,
+    "rechten-learn:decline": 1,
+    "rechten-learn:cancel": 1,
+    "rechten-learn:accept": 1,
+    "rechten-learn:start": 1,
+    "rechten-class:create": 1,
+    "axioma_class_battle_hub:code": 1,
+    "rechten-class:join": 1,
+    "rechten-class:state": 2,
+    "rechten-class:start": 1
+  }
+}

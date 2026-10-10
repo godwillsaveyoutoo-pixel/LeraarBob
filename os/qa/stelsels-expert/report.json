@@ -1,0 +1,17 @@
+{
+  "scope": "Original Stelsels trainer in the OS; local fixture account; actual keypad and pointer/keyboard/touch interactions",
+  "checks": [
+    "Reported exercise 7: wrong drop does not advance; real mouse drag onto y produces x − 3(4−2x) = −5 and opens simplification",
+    "Undo restores the expression/target; click-click and keyboard Enter/Space both substitute correctly",
+    "Exercise 7 completes through simplification, x = 1, y = 2 and native completed-unit registration",
+    "x substitution retains its 2 coefficient in exercise 7",
+    "x substitution retains its fraction coefficient in exercise 5",
+    "Visible 44px target at 1366 × 768, collapsed=false",
+    "Visible 44px target at 1366 × 768, collapsed=true",
+    "Visible 44px target at 640 × 360, collapsed=false",
+    "Visible 44px target at 640 × 360, collapsed=true",
+    "Minimize/resume keeps the exact expression; two touch taps substitute correctly"
+  ],
+  "errors": [],
+  "missing": []
+}
