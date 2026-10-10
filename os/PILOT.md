@@ -192,3 +192,16 @@ Zeeslag heeft nu net als Rechtenwereld één OS-bovenbalk. Terug en Sluiten staa
 Appkaart, rechtermuisknop en het gedeelde OS-menu openen dezelfde compacte werkvormkeuze. De actieve keuze gaat rechtstreeks naar het eigen formulier of werkbord. Rechtenwereld, Zeeslag, Getallenwereld, Algebra, Vectormissie, Wortelbouw en Kleiduifschieten delen de startbediening; de eigen oefeningen en providers blijven behouden. Klasstart gaat zonder extra hub, de desktopcode ondersteunt de bestaande zes- en achttekencodes, en oefenbladen openen de centrale themamappen/maker. Alle appvensters gebruiken de compacte OS-balk; Algebra's native secties blijven via het gedeelde menu bereikbaar.
 
 Werkelijk gecontroleerd: 20 werkvormgroepen / 102 aanraakdoelen, de vier pilots, Algebra, volledige lokale Learn-/Battle-/live-lesruns, centrale papieropslag en providercompatibiliteit. [Rapport, precieze testgrenzen, wijzigingen per app en screenshots](qa/workforms/README.md). De preview op <http://127.0.0.1:8795/> gebruikt fictieve lokale accounts. Productieauthenticatie en externe WebSockets blijven te controleren; Getallenwereld gebruikt voorlopig sessiecodes, Rechtenwereld/Zeeslag uitnodigingen op alias. Dit is een reviewversie in PR #13, geen nieuwe publieke uitrol.
+
+## Uniforme navigatie voor alle OS-apps · 10 oktober 2026
+
+- [x] 24 beschikbare solo-ingangen: één OS-navigatiebalk; dubbele native branding/menu/schermknoppen nemen geen extra kop in. Rechtenarcade is een groepering zonder geregistreerde solo-ingang.
+- [x] Native acties via Menu → Huidig spel; actuele disabled-/schakelstanden, oorspronkelijke handlers en klikbare wereldpaden behouden.
+- [x] 144 layouts op 1366 × 768, 390 × 844 en 640 × 360 bij 100% zoom, beide balkstanden; 412 bereikbare aanraakdoelen, heropenen, minimaliseren/hervatten en Focus zonder vervanging van de iframe.
+- [x] Echte menuacties in Data Check, Gravity Maze en Wortelbouw; Stelsels-oefening/methode en herladen; lokale duo-ingangen van Rechtenwereld, Vectormissie en Wortelbouw.
+- [x] Automatische native fullscreenstart binnen iframes uitgeschakeld bij Data Check, Kubusbouw, Algebra Smederij, Signal Lab, Verfwinkel en Taartenwinkel; centrale OS-bediening blijft bereikbaar.
+- [x] 35 unit-/DOM-tests, bestaande Rechten-chromeproef, uitgebreide Algebra-proef (18 groepen / 249 doelmetingen), werkvorm-/sessieregressie (20 groepen / 102 metingen), catalogus- en pakketcontrole geslaagd.
+- [ ] Elk intern level en iedere mogelijke spelroute afzonderlijk visueel doorlopen; de brede matrix test hoofdscherm/eerste oefening, aangevuld met de genoemde diepere regressies.
+- [ ] Echte productieaccounts en externe toestellen; sessiebewijs gebruikt de lokale testproviders.
+
+Zie [testverslag en screenshots](qa/uniform-chrome/README.md) en [de afspraken voor volgende apps](NATIVE_CHROME.md). Eerdere rapporten hierboven blijven bewijs voor hun beschreven versies.

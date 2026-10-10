@@ -1,0 +1,22 @@
+/* Loaded only into an OS-owned frame. No learning state or standalone layout changes. */
+body[data-os-native-app]{--lb-header-height:0px!important;--topbar-height:0px!important;--header-height:0px!important}
+[data-os-native-header=hidden]{display:block!important;position:relative!important;inset:auto!important;box-sizing:border-box!important;height:0!important;min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important;visibility:hidden!important;pointer-events:none!important}
+[data-os-native-header=hidden][hidden]{display:none!important}
+[data-os-native-header=hidden]::before,[data-os-native-header=hidden]::after{display:none!important}
+[data-os-native-grid="2"]{grid-template-rows:auto minmax(0,1fr)!important}
+[data-os-native-grid="3"]{grid-template-rows:auto minmax(0,1fr) auto!important}
+[data-os-native-grid="4"]{grid-template-rows:auto auto minmax(0,1fr) auto!important}
+/* The few headers containing actual answer tools retain those live nodes only. */
+[data-os-native-header=tools]{position:relative!important;inset:auto!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:6px!important;height:auto!important;min-height:0!important;padding:4px 12px!important;font-size:14px!important;border-width:0 0 1px!important}
+[data-os-native-header=tools]>:not([data-os-task-control]):not([data-os-task-container]),[data-os-native-hidden]{display:none!important}
+[data-os-native-header=tools] :is(button,select){min-height:44px!important;min-width:44px!important;font-size:14px!important;touch-action:manipulation}
+[data-os-native-header=tools] :is(.method-tabs,.study-mode,.title-row,.topActions,.headerGroup){display:flex!important;gap:4px!important;flex-wrap:wrap!important;min-width:0}
+[data-os-native-header=tools] .title-row{flex:0 1 auto}
+[data-os-native-header=tools] .exercise-picker{font-size:12px!important;gap:6px!important}
+body[data-os-native-app=algebra-smederij] [data-os-native-header=tools]:not(:has(#assumptionLabel:not(:empty))){padding:0!important;border:0!important;height:0!important;overflow:hidden!important}
+body[data-os-native-app=verfwinkel] [data-os-native-header=tools]{justify-content:center}
+body[data-os-native-app=verfwinkel] #orderBox{height:auto;min-height:40px;padding:0 10px}
+body[data-os-native-app=functies-rechten] .learningChrome{flex:1;min-width:100px}
+body[data-os-native-app] :is(.rf-home,.patisserie-home,.sa-landing,.sa-levels,.vf-intro,.homeScreen,.signal-home){top:0!important;height:100dvh!important;max-height:100dvh!important}
+body[data-os-native-app] :is(.topbar-restore,.lb-restore,#topReveal){display:none!important}
+@media(max-width:600px){[data-os-native-header=tools]{padding:4px 6px!important;gap:4px!important}[data-os-native-header=tools] .method-tabs{order:1;flex-basis:100%}}

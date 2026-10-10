@@ -174,6 +174,7 @@ function goPlatformSection(id,hash){
 }
 async function showMenu(){
  await Promise.all([modesReady,routesReady]);if(!current)return;
+ document.dispatchEvent(new CustomEvent('leraarbob:menu-opening'));
  const {host,header}=current,s=host.shadowRoot,dialog=s.querySelector('dialog'),list=s.querySelector('.menu-list');list.replaceChildren();
  s.querySelector('.menu-title').textContent=navPilot?(isHome?'leraarBob':title):title;
  s.querySelector('.menu-eyebrow').textContent=navPilot?'NAVIGATIE':'WAAR WIL JE HEEN?';
@@ -222,7 +223,7 @@ async function showMenu(){
   if(isDesktop){
    // Desktop places are live controls. Following them must not reload open apps.
    for(const node of header.querySelectorAll('[data-platform-sections] button')){
-    const details=menuDetails(node);add(platform,details.label,()=>node.click(),{...details,source:node});
+    const details=menuDetails(node);const gameNode=node.closest('#nativeGameCommands,#activeGameSections,#nativeAppNavigation');let group=platform;if(gameNode){group=list.querySelector('.menu-native-game');if(!group){group=section('Huidig spel','menu-options menu-native-game');list.insertBefore(group,platform);}}const entry=add(group,details.label,()=>node.click(),{...details,source:node});if(node.hasAttribute('aria-pressed'))entry.setAttribute('aria-pressed',node.getAttribute('aria-pressed'));if(node.hasAttribute('aria-current'))entry.setAttribute('aria-current',node.getAttribute('aria-current'));
    }
   }else{
   add(platform,'Spellen',()=>goPlatformSection('homeGames','#ontdek'),{glyph:'home'});

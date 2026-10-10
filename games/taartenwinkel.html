@@ -779,6 +779,7 @@ window.AxiomaBridge=window.AxiomaBridge||{complete(){}};window.__PATISSERIE__={s
    document.querySelectorAll('#patisserieHomeDots i').forEach((dot,i)=>dot.classList.toggle('done',i<count));
  }
  async function enterImmersive(){
+   if(window!==window.top)return;
    try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen?.()}catch(_){}
    try{await screen.orientation?.lock?.('landscape')}catch(_){}
  }
