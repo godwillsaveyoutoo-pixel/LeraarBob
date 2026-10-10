@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const create=require('../shared/game-registry.js'),catalog=require('../games.json'),{render}=require('../scripts/build-catalog.cjs');
 const R=create(catalog,{baseURL:'https://school.example/LeraarBob/'});
-assert.equal(R.list().length,21);assert.equal(R.list({includeComponents:true}).length,22);assert.equal(R.list({featured:true}).length,6);
+assert.equal(R.list().length,22);assert.equal(R.list({includeComponents:true}).length,23);assert.equal(R.list({featured:true}).length,6);
 assert.equal(R.list().some(g=>g.id==='bewerkingen-trainer'),false);assert.equal(R.game('bewerkingen-trainer').parentId,'getallenwereld');
 assert.equal(R.presentation('bewerkingen').id,'getallenwereld');assert.deepEqual(R.components('getallenwereld').map(g=>[g.id,g.progressTotal]),[['getallenwereld',19],['bewerkingen-trainer',16]]);
 for(const [alias,id] of [['rechten','rechtenwereld'],['vectoren','vectoren-trainer'],['algebra','algebra-trainer'],['bewerkingen','bewerkingen-trainer']])assert.equal(R.game(alias).id,id);

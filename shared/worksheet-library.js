@@ -15,7 +15,9 @@
     'algebra-trainer:systems':{theme:'algebra',topic:'systems'},
     'bewerkingen-trainer:operations':{theme:'getallen',topics:['machten','wortels','wetenschappelijk','mixed']}
   };
+  for(let i=1;i<=6;i++)sources['logicawereld:gebied-'+i]={theme:'logica',topic:'gebied-'+i};
   const allowedStyles=new Set([
+    'games/logicawereld/paper.css',
     'oefenbladen/paper.css','shared/worksheet-layout.css','shared/worksheet-hub.css','shared/vendor/katex/katex.min.css',
     'games/rechten/rechtenwereld/worksheets/worksheets.css',
     'games/rechten/rechtenwereld/styles/worksheet-sections.css',

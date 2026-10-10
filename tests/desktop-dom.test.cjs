@@ -50,7 +50,7 @@ test('The desktop starts with one app and Add; the catalog retains themes and di
   f.w.LeraarBobDesktop.showView({kind:'theme',themeId:'rechten'});
   assert.deepEqual(new Set([...f.$('viewContent').querySelectorAll('.type-badge')].map(n=>n.dataset.type)),new Set(['train','learn','game','atelier']));
   f.$('typeFilters').querySelectorAll('button')[1].click();assert([...f.$('viewContent').querySelectorAll('.type-badge')].every(n=>n.dataset.type==='learn'));
-  f.w.LeraarBobDesktop.showView({kind:'all'});assert.equal(f.$('personalDialog').querySelectorAll('[data-pick-app]').length,24);assert.equal(f.$('libraryWindow').hidden,true);f.$('personalDialog').close();
+  f.w.LeraarBobDesktop.showView({kind:'all'});assert.equal(f.$('personalDialog').querySelectorAll('[data-pick-app]').length,25);assert.equal(f.$('libraryWindow').hidden,true);f.$('personalDialog').close();
   f.$('startButton').click();assert.equal(f.$('startButton').getAttribute('aria-expanded'),'true');assert.equal(f.$('startPanel').inert,false);
   f.$('startSearch').value='pythagoras les';f.$('startSearch').dispatchEvent(new f.w.Event('input'));assert.equal(f.$('startResults').children.length,1);
   f.w.document.dispatchEvent(new f.w.KeyboardEvent('keydown',{key:'Escape'}));assert.equal(f.$('startPanel').hidden,true);assert.equal(f.$('startButton').getAttribute('aria-expanded'),'false');

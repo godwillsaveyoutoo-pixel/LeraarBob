@@ -3,7 +3,7 @@ const {test}=require('node:test'),assert=require('node:assert/strict'),fs=requir
 const catalog=require('../games.json'),createRegistry=require('../shared/game-registry.js'),createDesktop=require('../os/desktop-model.js');
 const registry=createRegistry(catalog,{baseURL:'https://school.example/LeraarBob/'}),M=createDesktop(registry),root=path.resolve(__dirname,'..');
 test('Every public build has a theme and its own work form; historical identities stay intact',()=>{
-  assert.equal(M.apps().length,24);assert.equal(M.themes.length,8);
+  assert.equal(M.apps().length,25);assert.equal(M.themes.length,8);
   for(const g of M.apps()){assert(M.theme(g.desktopTheme),g.id);assert(M.types[g.type],g.id);}
   assert.equal(M.app('pythagoras').type,'learn');assert.equal(M.app('rechtenwereld').type,'train');assert.equal(M.app('rechten-zeeslag').type,'game');assert.equal(M.app('glasraam').type,'atelier');
   assert.equal(M.app('rechtenwereld').progressId,'rechten-trainer');assert.equal(M.app('getallenwereld').progressId,'getallenwereld');
