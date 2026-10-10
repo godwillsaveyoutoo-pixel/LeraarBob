@@ -154,7 +154,7 @@ SOFTWARE.
  -->
 <script src="../../../shared/axioma-platform.js"></script>
 <script src="../../../shared/leraarbob-topbar.js" data-title="Brandweer" defer></script>
-<link rel="stylesheet" href="../arcade/theme.css">
+<link rel="stylesheet" href="../arcade/theme.css?v=20261010-brandweer">
 <script src="../arcade/core.js"></script>
 <script src="../arcade/bridge.js" data-arena="redding"></script>
 </head>
@@ -188,7 +188,7 @@ SOFTWARE.
 
       <div id="console" class="console">
         <div class="formulaContext">Plan<div class="symbolic">y = <span class="aColor">a</span>x + <span class="bColor">b</span></div></div>
-        <div class="formulaWrap"><div id="formula" class="formula" aria-label=""></div></div>
+        <div class="formulaWrap"><div id="formula" class="formula" role="group" aria-label="Stel je functie in"></div></div>
         <div id="choices" class="choices" role="group" aria-label="Kies een waarde"></div>
         <div id="consoleNote" class="consoleNote"></div>
       </div>
@@ -832,13 +832,15 @@ function renderFormula(){
  const bNow=plan.b==null?'':` aria-valuenow="${plan.b}"`;
  const aText=plan.a==null?' aria-valuetext="nog niet gekozen"':` aria-valuetext="${aSpoken(plan.a)}"`;
  const bText=plan.b==null?' aria-valuetext="nog niet gekozen"':` aria-valuetext="${num(plan.b)}"`;
- const up='<svg class="arrowSvg" viewBox="0 0 40 24" aria-hidden="true"><path d="M5 16 C10 13 14 9 20 6 C26 9 30 13 35 16"/></svg>';
- const down='<svg class="arrowSvg" viewBox="0 0 40 24" aria-hidden="true"><path d="M5 8 C10 11 14 15 20 18 C26 15 30 11 35 8"/></svg>';
- $('formula').innerHTML=`<span class="formulaStatic formulaLead">y =</span>
- <span class="term aColor" data-param="a"><button type="button" class="paramArrow up" data-param="a" data-step="1" aria-label="a verhogen">${up}</button><span class="value ${plan.a==null?'is-placeholder':''}" data-param="a" role="spinbutton" tabindex="0" aria-label="waarde voor a" aria-valuemin="${aMin}" aria-valuemax="${aMax}"${aNow}${aText}>${aDisplay}</span><button type="button" class="paramArrow down" data-param="a" data-step="-1" aria-label="a verlagen">${down}</button></span>
- <span class="formulaStatic formulaX">x</span><span class="formulaStatic formulaPlus">${plan.b!=null&&plan.b<0?'−':'+'}</span>
- <span class="term bColor" data-param="b"><button type="button" class="paramArrow up" data-param="b" data-step="1" aria-label="b verhogen">${up}</button><span class="value ${plan.b==null?'is-placeholder':''}" data-param="b" role="spinbutton" tabindex="0" aria-label="waarde voor b" aria-valuemin="${bMin}" aria-valuemax="${bMax}"${bNow}${bText}>${bDisplay}</span><button type="button" class="paramArrow down" data-param="b" data-step="-1" aria-label="b verlagen">${down}</button></span>`;
- $('formula').setAttribute('aria-label',`Jullie functie: y is ${aSpoken(plan.a)} maal x plus ${plan.b==null?'onbekend':num(plan.b)}.`);
+ const bSign=plan.b!=null&&plan.b<0?'−':'+';
+ const equationText=`y = ${plan.a==null?'a':num(plan.a)}x ${bSign} ${plan.b==null?'b':num(Math.abs(plan.b))}`;
+ $('formula').innerHTML=`<span class="rescueEquation" role="img" aria-label="${equationText}"><span aria-hidden="true">y = <span class="aColor">${aDisplay}</span>x ${bSign} <span class="bColor">${bDisplay}</span></span></span>
+ <span class="rescueAdjustments">
+ <span class="rescueParameter" role="group" aria-labelledby="slopeCaption"><span class="rescueCaption aColor" id="slopeCaption">Helling <i>a</i></span>
+ <span class="term aColor" data-param="a"><button type="button" class="paramArrow down" data-param="a" data-step="-1" aria-label="a verlagen">−</button><span class="value ${plan.a==null?'is-placeholder':''}" data-param="a" role="spinbutton" tabindex="0" aria-label="Helling a" aria-valuemin="${aMin}" aria-valuemax="${aMax}"${aNow}${aText}>${aDisplay}</span><button type="button" class="paramArrow up" data-param="a" data-step="1" aria-label="a verhogen">+</button></span></span>
+ <span class="rescueParameter" role="group" aria-labelledby="heightCaption"><span class="rescueCaption bColor" id="heightCaption">Starthoogte <i>b</i></span>
+ <span class="term bColor" data-param="b"><button type="button" class="paramArrow down" data-param="b" data-step="-1" aria-label="b verlagen">−</button><span class="value ${plan.b==null?'is-placeholder':''}" data-param="b" role="spinbutton" tabindex="0" aria-label="Starthoogte b" aria-valuemin="${bMin}" aria-valuemax="${bMax}"${bNow}${bText}>${plan.b==null?bDisplay:num(plan.b).replace('-','−')}</span><button type="button" class="paramArrow up" data-param="b" data-step="1" aria-label="b verhogen">+</button></span></span>
+ </span>`;
  $('formula').classList.toggle('readonly',state!=='planning');
  $('formula').querySelectorAll('.paramArrow').forEach(b=>{const values=legalValues(b.dataset.param),value=plan[b.dataset.param];b.disabled=!editable()||(value!=null&&(Number(b.dataset.step)>0?value===values.at(-1):value===values[0]));});
  $('formula').querySelectorAll('.value').forEach(v=>{v.setAttribute('aria-disabled',String(!editable()));v.tabIndex=editable()?0:-1;});

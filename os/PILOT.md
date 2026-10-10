@@ -176,6 +176,10 @@ Na acceptatie kunnen de overige bouwsels op dezelfde aansluiting aansluiten. Cen
 
 De gekozen rechte staat volledig leesbaar naast twee afzonderlijke regelaars voor helling a en startwaarde b; op een smal scherm komen de regelaars eronder. Native knoppen/handlers, waarden, beurtvergrendeling en schotberekening blijven behouden. Werkelijk gecontroleerd: alle 63 combinaties, echte plaatsing en schot, toetsenbord, minimaliseren/hervatten, beide balkstanden en herstel op vijf schermmaten (1366 × 768 bij 100%, 844 × 390, 640 × 360, 390 × 844, 320 × 568). Bestaande vierpilottest en arcade-browser slagen eveneens. [Details, grenzen, screenshots en rapporten](qa/zeeslag-controls/README.md).
 
+## Brandweer · formulebediening
+
+Brandweer gebruikt nu dezelfde scheiding als Zeeslag: een leesbare functie naast regelaars voor helling a en starthoogte b. Breuken, decimalen, negatieve waarden en alle oorspronkelijke invoerhandlers blijven behouden. De gerichte browsercontrole slaagt voor toetsenbord, wiel/slepen, grenzen, focus, minimaliseren/hervatten, een echte redding en twaalf metingen op vier liggende schermmaten. De bestaande arcadetest slaagt voor alle zestien reddingen en beide duo-flows. Op 568 × 320 is Balken verbergen nodig om de volledige instructie te zien; de bestaande portretbeperking blijft behouden. [Rapport, screenshots en testgrenzen](qa/brandweer-controls/README.md).
+
 ## Vensterbediening · terug en sluiten zonder grote balken
 
 Zeeslag heeft nu net als Rechtenwereld één OS-bovenbalk. Terug en Sluiten staan direct in de taakbalk. **Balken verbergen** verbergt boven- en onderbalk; Terug, Balken tonen en Sluiten blijven in een gereserveerde strook buiten de oefening bereikbaar. Werkelijk sluiten, annuleren, terugkeren en hervatten zijn met echte native schermen gecontroleerd op laptop en compacte schermen, inclusief behoud van een tweede geopende app. De eerdere eigen inklap- en focusvoorkeur blijven behouden. [Rapporten en screenshots](qa/window-controls/README.md): Rechtenwereld 5 groepen / 39 metingen, Zeeslag 6 / 21, vier pilots 32 / 23 en centrale papierwerkruimte 8 / 39; alle geslaagd met lokale testaccounts.

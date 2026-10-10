@@ -17,7 +17,7 @@ body[data-arcade] .arcade-tools button{background:#122a2de8;color:#ead7b3;border
 .arcade-scored{animation:arcade-score .5s ease-out}@keyframes arcade-score{0%{filter:brightness(1.3)}100%{filter:brightness(1)}}
 .arcade-score-pop{position:absolute;right:24px;bottom:20px;color:#ffdc9a;font:700 32px Georgia,serif;text-shadow:0 2px 4px #08171b;pointer-events:none;animation:arcade-points 1.2s ease-out forwards;z-index:5}@keyframes arcade-points{0%{opacity:0;transform:translateY(10px) scale(.8)}20%,60%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-20px)}}
 .arcade-fraction{display:inline-flex!important;flex-direction:column;vertical-align:middle;text-align:center;font-size:.8em;line-height:1.05;margin:0 3px}.arcade-fraction>span:first-child{border-bottom:1.5px solid currentColor;padding:0 3px 2px}.arcade-fraction>span:last-child{padding-top:2px}
-/* Rescue: full stage and one horizontal control row. */
+/* Rescue: a readable equation, with coefficient controls beside it. */
 body[data-arcade=redding] .world{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;position:relative;min-height:0;padding-top:44px}
 body.arcade-embedded[data-arcade=redding] .world{padding-top:0}body[data-arcade=redding] #stage{background:radial-gradient(ellipse at 55% 25%,#304a4d,#132b31 80%)}
 body[data-arcade=redding] .controlBoard{padding:8px 12px;display:grid;grid-template-columns:100px minmax(0,1fr) auto;grid-template-rows:auto;gap:10px;align-items:center;background:#eedab7;color:#2b2720;border:2px solid #715434;border-radius:10px 10px 0 0;font-family:Georgia,serif}
@@ -28,11 +28,18 @@ body[data-arcade=redding] .missionText{position:absolute;top:44px;left:12px;z-in
 body.arcade-embedded[data-arcade=redding] .missionText{top:8px}
 body[data-arcade=redding] .missionText .infoBlock,body[data-arcade=redding] .missionText .infoBlock>*{margin:0}body[data-arcade=redding] .missionText .infoPrompt{font-size:14px}
 body[data-arcade=redding] #console{grid-column:2;padding:0;background:none;border:0;min-width:0}body[data-arcade=redding] .formulaWrap{border:0;padding:0;background:none}
-body[data-arcade=redding] .formula{display:flex;align-items:center;justify-content:center;font-size:32px;color:#28261f;gap:7px;line-height:1;white-space:nowrap}
-body[data-arcade=redding] .term{display:grid;grid-template-columns:44px minmax(44px,auto) 44px;grid-template-rows:48px;gap:2px;align-items:center;justify-items:center}
-body[data-arcade=redding] .paramArrow{width:44px;height:44px;min-height:44px;background:#e0c7a1;color:#342a20;border:1px solid #a8875a;padding:3px;border-radius:6px}
+body[data-arcade=redding] .formula{display:flex;align-items:center;justify-content:center;font-size:34px;color:#28261f;gap:24px;line-height:1;white-space:nowrap}
+body[data-arcade=redding] .rescueEquation{display:block;min-width:170px;text-align:center;font-family:Cambria,Georgia,serif}
+body[data-arcade=redding] .rescueAdjustments{display:flex;gap:16px;border-left:1px solid #b59a75;padding-left:24px}
+body[data-arcade=redding] .rescueParameter{display:grid;gap:3px}
+body[data-arcade=redding] .rescueCaption{font:600 11px/1.2 system-ui,sans-serif;text-align:center;letter-spacing:.02em}
+body[data-arcade=redding] .rescueCaption i{font:italic 15px/1 Georgia,serif}
+body[data-arcade=redding] .term{display:grid;grid-template-columns:44px minmax(44px,auto) 44px;grid-template-rows:44px;gap:0;align-items:center;justify-items:center;border:1px solid #b59a75;border-radius:9px;background:#f8ecd6}
+body[data-arcade=redding] .paramArrow{width:44px;height:44px;min-height:44px;background:transparent;color:inherit;border:0;padding:0;border-radius:8px;font:22px/1 system-ui,sans-serif}
+body[data-arcade=redding] .paramArrow:hover:not(:disabled){background:#e0c7a1}
+body[data-arcade=redding] .formula :is(.paramArrow,.value):focus-visible{outline:2px solid #794528;outline-offset:-3px}
 body[data-arcade=redding] .term .down{grid-column:1;grid-row:1}body[data-arcade=redding] .term .up{grid-column:3;grid-row:1}
-body[data-arcade=redding] .value{grid-column:2;grid-row:1;width:auto;min-width:44px;height:48px;min-height:44px;font-size:inherit;background:none}
+body[data-arcade=redding] .value{grid-column:2;grid-row:1;width:auto;min-width:44px;height:44px;min-height:44px;font:24px/1 Cambria,Georgia,serif;background:none}
 body[data-arcade=redding] .aColor{color:#6b3924}body[data-arcade=redding] .bColor{color:#275f59}body[data-arcade=redding] .choices{display:none}
 body[data-arcade=redding] #actions{grid-column:3;display:flex;flex-direction:row;gap:6px;align-items:center;padding:0;margin:0}
 body[data-arcade=redding] .roleLine{display:none}body[data-arcade=redding] .actionButton{width:auto;min-height:48px;padding:6px 12px;font:600 15px/1.2 system-ui;border-radius:7px}
@@ -132,3 +139,27 @@ body[data-arcade=zeeslag] .matchResult{inset:32px 0 0;background:#10242af0}body[
 
 body.topbar-collapsed[data-arcade] .lb-restore{top:0!important}
 body.topbar-collapsed[data-arcade] .arcade-sessionbar{padding-left:58px}
+
+/* Rescue controls stay separate from the equation in small app windows too. */
+@media(max-width:950px){
+ body[data-arcade=redding] .controlBoard{grid-template-columns:60px minmax(0,1fr) auto;gap:6px;padding:6px 8px}
+ body[data-arcade=redding] .formula{font-size:26px;gap:10px}
+ body[data-arcade=redding] .rescueEquation{min-width:110px}
+ body[data-arcade=redding] .rescueAdjustments{gap:8px;padding-left:10px}
+ body[data-arcade=redding] #targetLabel{font-size:18px;white-space:nowrap}
+ body[data-arcade=redding] .actionButton{font-size:13px;padding:4px 8px}
+}
+@media(min-width:601px) and (max-width:700px){
+ body[data-arcade=redding] #actions{flex-direction:column}
+}
+@media(max-width:600px){
+ body[data-arcade=redding] .controlBoard{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;gap:6px 12px}
+ body[data-arcade=redding] .mission{grid-column:1;grid-row:1}
+ body[data-arcade=redding] .targetCard{display:flex;align-items:baseline;gap:6px}
+ body[data-arcade=redding] #actions{grid-column:2;grid-row:2;flex-direction:row}
+ body[data-arcade=redding] #console,body[data-arcade=redding] .formulaWrap,body[data-arcade=redding] .formula{display:contents}
+ body[data-arcade=redding] .rescueEquation{grid-column:2;grid-row:1;min-width:0;text-align:right;font-size:24px}
+ body[data-arcade=redding] .rescueAdjustments{grid-column:1;grid-row:2;padding-left:0;border:0}
+ body[data-arcade=redding] .dockPanel{grid-column:1/-1;grid-row:2}
+ body[data-arcade=redding] .panelButtons{flex-wrap:wrap;justify-content:flex-end}
+}
