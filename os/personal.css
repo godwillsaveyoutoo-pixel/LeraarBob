@@ -98,8 +98,8 @@ html[data-mode=dark]{--personal-paper:#182c30;--personal-card:#21393c;--personal
 .personal-add{align-self:start;min-height:200px;height:200px}
 @media(max-height:500px){.personal-add{min-height:160px;height:160px;padding:10px}.personal-add-symbol{width:55px;height:55px;font-size:28px}}
 .personal-app-actions[data-single-mode=true] button[data-mode]{grid-column:1/-1}
-/* Rechtenwereld pilot: one platform header. Retain and move the actual window
-   controls to the taskbar, with a compact action popover on narrow screens. */
+/* One platform header for connected worlds. Back and close remain direct;
+   only secondary window actions use a popover on narrow screens. */
 .compact-window-controls{display:flex;align-items:center;gap:4px;flex-shrink:0;margin-left:auto}
 body[data-os-chrome=single] .taskbar-right{display:none}
 .compact-window-controls .app-toolbar{border:0;background:none;color:inherit;padding:0!important;min-height:44px!important;gap:4px;flex-wrap:nowrap;display:flex!important}
@@ -110,6 +110,9 @@ body[data-os-chrome=single] .taskbar-right{display:none}
 .compact-window-controls .app-actions button,.compact-window-controls .app-actions a{width:44px;height:44px;min-width:44px;display:inline-flex;justify-content:center;align-items:center;border-radius:9px;padding:0;color:inherit}
 .compact-window-controls .lb-restore{position:static;inset:auto;transform:none;box-shadow:none;width:44px;height:44px;min-width:44px;margin:0;flex-shrink:0;background:#f2dcb121;color:#f2dcb1;z-index:auto}
 .compact-window-controls #windowActionsToggle{display:inline-flex;justify-content:center;align-items:center;min-width:44px;width:44px;height:44px;padding:0}
+.window-close-label{display:none}
+.compact-window-controls #closeApp{min-width:44px;width:44px;height:44px;justify-content:center;padding:0}
+.compact-window-controls #closeApp:hover{background:#dba68b33}
 body[data-os-chrome=single] #runningApps{min-width:0;flex:1}
 @media(max-width:700px){
  body[data-os-chrome=single] .taskbar{padding-inline:8px;gap:3px}
@@ -121,8 +124,10 @@ body[data-os-chrome=single] #runningApps{min-width:0;flex:1}
  .compact-window-controls .app-actions[popover]:popover-open{position:fixed;inset:auto 12px calc(var(--taskbar-height) + 10px) auto;width:215px;max-width:calc(100vw - 24px);max-height:calc(100dvh - var(--taskbar-height) - 24px);overflow:auto;display:flex;flex-direction:column;align-items:stretch;padding:8px;border:1px solid var(--personal-line);border-radius:14px;color:var(--personal-ink);background:var(--personal-card);box-shadow:0 12px 50px #102b3855}
  .compact-window-controls .app-actions[popover] button,.compact-window-controls .app-actions[popover] a{width:100%;display:flex;justify-content:flex-start;gap:10px;padding:8px 12px;font-size:13px;background:none}
  .compact-window-controls .app-actions[popover] button>span,.compact-window-controls .app-actions[popover] a>span{display:inline}
- .compact-window-controls #minimizeApp::after{content:'Minimaliseren'}.compact-window-controls #closeApp::after{content:'App afsluiten'}
+ .compact-window-controls #minimizeApp::after{content:'Minimaliseren'}
 }
+/* On the narrowest phones, Start remains the app switcher. Reserve direct exits. */
+@media(max-width:360px){body[data-os-chrome=single] #runningApps{display:none}body[data-os-chrome=single] #focusWorkspace{margin-left:auto}}
 .personal-app-actions[data-mode-count="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:750px){.personal-app-actions[data-mode-count="2"] button[data-mode=solo]{grid-column:auto}}
 #focusWorkspace{flex-shrink:0}
@@ -130,7 +135,12 @@ body[data-os-chrome=single] #runningApps{min-width:0;flex:1}
 body.os-focus{grid-template-rows:minmax(0,1fr)!important;background:var(--personal-paper)}
 body.os-focus #desktopHeader,body.os-focus .taskbar,body.os-focus .lb-restore{display:none!important}
 body.os-focus #desktop{padding-bottom:52px}
-#focusRestore{position:fixed;bottom:4px;right:12px;z-index:80;min-height:44px;min-width:44px;display:inline-flex;align-items:center;gap:9px;padding:7px 13px;border-radius:12px;background:var(--personal-card);color:var(--personal-ink);border:1px solid var(--personal-line);font-size:12px;box-shadow:0 2px 12px #0c273b22}
+#focusControls{position:fixed;bottom:0;inset-inline:0;height:52px;z-index:80;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:4px 12px;background:var(--personal-paper);color:var(--personal-ink);border-top:1px solid var(--personal-line)}
+#focusControls button{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:7px 12px;border-radius:9px;background:var(--personal-card);color:inherit;border:1px solid var(--personal-line);font-size:12px}
+#focusControls button:hover{background:var(--personal-soft)}
+#focusControls #appBack{margin-right:auto}
+#focusControls .window-close-label{display:inline}
+@media(max-width:600px){#focusControls{gap:6px;padding-inline:8px}#focusControls #appBack{padding:0;width:44px}#focusControls #appBack>span{display:none}}
 @media(max-width:700px){body[data-os-chrome=single] #focusWorkspace{min-width:44px;width:44px;padding:0}}
 body.os-focus .app-toolbar{display:none!important}
 @media(max-width:700px){#focusWorkspace>span{display:none}}

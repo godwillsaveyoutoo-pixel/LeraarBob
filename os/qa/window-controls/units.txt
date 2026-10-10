@@ -1,0 +1,33 @@
+✔ Closing a settled desktop fixture cancels pending rendering before jsdom destroys its document (262.339073ms)
+✔ The desktop starts with one app and Add; the catalog retains themes and distinct work forms (97.812397ms)
+✔ Back, Start, global menu and collapsing the platform row retain the exact native DOM and handlers (145.1013ms)
+✔ A second visit restores the explicit topbar preference and has a reachable restore control (45.342066ms)
+✔ Learner startup and direct launches reject class creation; teacher options use the trusted auth result (60.183487ms)
+✔ Saving is a desktop shortcut; closing is explicit; reopening a running online app keeps that mode (76.145782ms)
+✔ Account changes clear live apps and separate pins, shortcuts and stale progress responses (113.622992ms)
+✔ An unrecognized account can discover guest apps without fake learner progress or class controls (43.808091ms)
+✔ The laptop cache limit rejects a seventh app without discarding the six live screens (84.07646ms)
+✔ Algebra routes keep separate live modules, one projected navigation, exact saved URLs and cached class returns (151.499621ms)
+✔ Algebra route at the six-window limit keeps the original answer instead of navigating its iframe (85.647885ms)
+✔ Each pilot keeps its own folder, filter and search when switching through the taskbar (128.638803ms)
+✔ Launching through Start gives the new app its theme while saved shortcuts return to My tasks (88.818756ms)
+✔ Start works from a native answer field and Escape returns focus without changing native keys or input (34.033647ms)
+✔ Resuming a pinned app retains its own return place and restores the native answer focus (42.921388ms)
+✔ Start and resume retain focus from a nested native workboard without intercepting ordinary answers (56.167593ms)
+✔ Actual atelier progress keeps its native unit and does not leak into another app (51.990419ms)
+✔ Native sign-in actions reach the central account panel and the bridge is removed on close (41.816094ms)
+✔ Guest live lesson sign-in captures the real native account handler and preserves the join screen (56.569345ms)
+✔ The pupil Learn entrance reaches the original code form and joins a class; teachers reach class setup (83.284676ms)
+✔ The actual powers workbench keeps its clickable answer, seed and native document through desktop navigation (388.257526ms)
+✔ Desktop home is optional and remains inside the platform origin and path (131.612702ms)
+✔ Standalone live lesson roles and membership keep their existing behavior (30.143504ms)
+✔ Compact desktop title identifies the app even when native breadcrumbs show an exercise (46.941962ms)
+✔ OS has no redundant Live link after teacher/student login or lesson membership changes (31.291517ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2628.170077

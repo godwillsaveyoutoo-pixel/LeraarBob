@@ -218,8 +218,17 @@
     $('viewContent').append(list,el('p','section-note','Bureaubladvoorkeuren wijzigen je antwoorden, levels en spelvoortgang niet.'));
   }
   function applyPrefs(){document.body.dataset.wallpaper=prefs.wallpaper;document.body.dataset.reducedMotion=String(prefs.reducedMotion);syncFocusMode();}
-  function syncFocusMode(){const focus=!!activeKey&&prefs.focusMode;document.body.classList.toggle('os-focus',focus);$('focusRestore').hidden=!focus;$('focusWorkspace').hidden=!activeKey;$('focusWorkspace').setAttribute('aria-expanded',String(!focus));}
-  function setFocusMode(value){prefs.focusMode=!!value;persist();syncFocusMode();if(value)$('focusRestore').focus({preventScroll:true});else{const input=frames.get(activeKey)?.lastFocus;if(input?.isConnected)input.focus({preventScroll:true});else $('focusWorkspace').focus({preventScroll:true});}}
+  function syncFocusMode(){
+    const focus=!!activeKey&&prefs.focusMode,toolbar=document.querySelector('.app-toolbar'),escape=$('focusControls');
+    document.body.classList.toggle('os-focus',focus);escape.hidden=!focus;$('focusRestore').hidden=!focus;
+    $('focusWorkspace').hidden=!activeKey;$('focusWorkspace').setAttribute('aria-expanded',String(!focus));
+    // Move the existing window buttons, retaining their handlers and accessible
+    // names. Leaving focus never creates a second copy of a close/back action.
+    const backHost=focus?escape:toolbar,closeHost=focus?escape:document.body.dataset.osChrome==='single'?toolbar:$('windowActions');
+    if($('appBack').parentElement!==backHost)backHost.prepend($('appBack'));
+    if($('closeApp').parentElement!==closeHost)closeHost.append($('closeApp'));
+  }
+  function setFocusMode(value){rememberFocus(frames.get(activeKey));closeStart();if(windowActionsOpen())$('windowActions').hidePopover();prefs.focusMode=!!value;persist();syncFocusMode();if(value)$('focusRestore').focus({preventScroll:true});else{const input=frames.get(activeKey)?.lastFocus;if(input?.isConnected)input.focus({preventScroll:true});else $('focusWorkspace').focus({preventScroll:true});}}
   $('focusWorkspace').onclick=()=>setFocusMode(true);$('focusRestore').onclick=()=>setFocusMode(false);
   function setSiteTheme(dark){
     const mode=dark?'dark':'light';document.documentElement.dataset.mode=mode;
@@ -266,9 +275,8 @@
   const compactControls=window.matchMedia?.('(max-width:700px)');
   function windowActionsOpen(){try{return $('windowActions').matches(':popover-open');}catch{return false;}}
   function syncWindowControls(){
-    syncFocusMode();
-    const current=frames.get(activeKey),paper=current?.archive||current?.mode.startsWith('worksheet:'),compact=paper||current?.app.id==='rechtenwereld'&&!current.archive;
-    const toolbar=$('appBack').parentElement,host=$('compactWindowControls'),actions=$('windowActions'),toggle=$('windowActionsToggle'),restore=document.querySelector('.lb-restore');
+    const current=frames.get(activeKey),paper=current?.archive||current?.mode.startsWith('worksheet:'),compact=paper||['rechtenwereld','rechten-zeeslag'].includes(current?.app.id);
+    const toolbar=document.querySelector('.app-toolbar'),host=$('compactWindowControls'),actions=$('windowActions'),toggle=$('windowActionsToggle'),restore=document.querySelector('.lb-restore');
     if(windowActionsOpen())actions.hidePopover();
     if(compact){
       document.body.dataset.osChrome='single';host.hidden=false;
@@ -283,7 +291,7 @@
     if(popover)actions.setAttribute('popover','auto');else actions.removeAttribute('popover');
     toggle.hidden=!popover;toggle.setAttribute('aria-expanded','false');
     const menu=$('activeGameSections');menu.replaceChildren();
-    if(compact&&!paper){
+    if(current?.app.id==='rechtenwereld'&&!paper){
       const doc=current.frame.contentDocument;
       if(doc?.querySelector('.atlas-header')){
         const native=(label,selector)=>menu.append(button(label,'',()=>{const active=frames.get(activeKey);active?.frame.contentDocument?.querySelector(selector)?.click();}));
@@ -293,6 +301,7 @@
       }
       menu.append(button('Rechtenwereld · Werkvormen','',()=>openModes('rechtenwereld')));
     }
+    syncFocusMode();
   }
   compactControls?.addEventListener('change',syncWindowControls);
   $('windowActionsToggle').onclick=()=>{const actions=$('windowActions');actions.togglePopover();if(windowActionsOpen())actions.querySelector('button:not([hidden]),a')?.focus();};

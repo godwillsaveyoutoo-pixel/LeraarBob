@@ -13,10 +13,14 @@ let browser,preview;
  const page=await context.newPage();page.setDefaultTimeout(20000);
  page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()===404)report.missing.push(r.url());});
  const check=s=>{report.checks.push(s);console.log('PASS '+s);};
- await page.goto(preview.base+'/os/?previewUser=alex');await page.locator('#startButton').click();await page.locator('#startSearch').fill('Zeeslag');
+ await page.goto(preview.base+'/os/?previewUser=alex');await page.locator('.personal-app [data-mode=solo]').click();
+ const rightsNode=await page.locator('.frame-wrapper:not([hidden])>iframe').elementHandle(),rights=await rightsNode.contentFrame();await rights.locator('#app[data-ready=true]').waitFor();await page.locator('#minimizeApp').click();
+ await page.locator('#startButton').click();await page.locator('#startSearch').fill('Zeeslag');
  await page.locator('#startResults .start-result').filter({hasText:'Rechten Zeeslag'}).click();
  const node=await page.locator('.frame-wrapper:not([hidden])>iframe').elementHandle(),frame=await node.contentFrame();
  await frame.locator('#gameScreen.active').waitFor();
+ assert.equal(await page.locator('#appWorkspace .app-toolbar').count(),0);assert.equal(await frame.locator('leraarbob-topbar').count(),0);assert.equal((await node.boundingBox()).y,58);
+ assert.equal(await page.locator('#windowActions #closeApp').count(),0);
  // Place three real ships, using legal candidate endpoints from the native engine.
  for(const start of ['-4,-4','-4,-2','-4,1']){await frame.locator('[data-grid="'+start+'"]').click();await frame.locator('#ownBoard .candidate').first().click();}
  assert.equal(await frame.locator('#ownBoard .ship').count(),3);await frame.locator('#readyBtn').click();await frame.locator('#fireBtn:not([disabled])').waitFor();
@@ -60,11 +64,18 @@ let browser,preview;
  }
  for(const size of [{width:1366,height:768},{width:844,height:390},{width:640,height:360},{width:390,height:844},{width:320,height:568}]){
   await page.setViewportSize(size);await layout('os-'+size.width+'-expanded');
-  await page.locator('leraarbob-topbar .collapse').click();await layout('os-'+size.width+'-collapsed');
+  for(const collapsed of [false,true]){
+   if(collapsed){await page.locator('leraarbob-topbar .collapse').click();await layout('os-'+size.width+'-collapsed');}
+   for(const selector of ['#appBack','#closeApp'])assert(await page.locator(selector).isVisible());
+   await page.locator('#focusWorkspace').click();assert(!await page.locator('#desktopHeader').isVisible());assert(!await page.locator('#taskbar').isVisible());await layout('os-'+size.width+'-focus-'+collapsed);
+   const game=await node.boundingBox();for(const selector of ['#focusRestore','#appBack','#closeApp']){const target=page.locator(selector),r=await target.boundingBox();assert(r&&r.width>=44&&r.height>=44&&r.y>=game.y+game.height&&r.x>=0&&r.x+r.width<=size.width,selector);assert(await target.evaluate(el=>{const r=el.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return el===hit||el.contains(hit);}));}
+   await page.locator('#closeApp').click();await page.locator('#cancelClose').click();assert(await node.evaluate(e=>e.isConnected));assert.equal(await frame.locator('#aimEquationText').textContent(),'y = ½x − 2');await page.locator('#focusRestore').click();
+   assert.equal(await page.evaluate(()=>document.body.classList.contains('topbar-collapsed')),collapsed);
+  }
   const restore=page.locator('.lb-restore:not([hidden])');assert.equal(await restore.getAttribute('aria-expanded'),'false');const r=await restore.boundingBox();assert(r.width>=44&&r.height>=44);await restore.click();
   assert.equal(await frame.locator('#aimEquationText').textContent(),'y = ½x − 2');
  }
- check('1366×768, 844×390, 640×360, 390×844 and 320×568: both bar states, restore, unoccluded 44px controls, boards above dock');
+ check('One OS header; five viewports, both collapse states and full focus: 44px controls plus direct back/close outside the game; cancel-close keeps the selected line');
  await page.setViewportSize({width:1366,height:768});await frame.locator('#fireBtn').click();
  await frame.waitForFunction(()=>RechtenArcade.run().events.some(e=>e.kind==='naval-shot'));
  const shot=await frame.evaluate(()=>RechtenArcade.run().events.find(e=>e.kind==='naval-shot'));
@@ -72,6 +83,9 @@ let browser,preview;
  assert.equal(await frame.locator('#myHistory .frac .num').first().textContent(),'1');assert.equal(await frame.locator('#myHistory .frac .den').first().textContent(),'2');
  await frame.locator('#fireBtn:not([disabled])').waitFor();await layout('os-after-shot');
  check('VUUR fires the selected fractional slope and negative intercept through the original engine; computer turn completes');
+ await page.locator('#focusWorkspace').click();await page.locator('#closeApp').click();await page.locator('#acceptClose').click();assert(!await node.evaluate(e=>e.isConnected));assert(await rightsNode.evaluate(e=>e.isConnected));assert.equal((await page.evaluate(()=>LeraarBobDesktop.state())).openApps.length,1);assert(await page.locator('#homeView').isVisible());assert(await page.locator('#taskbar').isVisible());
+ await page.getByRole('button',{name:'Terug naar Rechtenwereld',exact:true}).click();assert(await page.locator('#focusControls').isVisible());await page.locator('#appBack').click();assert(await page.locator('#homeView').isVisible());
+ check('Closing Zeeslag from focus removes only that game; Rechtenwereld remains open, resumable and can return directly to the desktop');
  // A standalone game uses the same controls and shared collapsible header.
  const solo=await context.newPage();await solo.goto(preview.base+'/games/rechten/zeeslag/?solo=1');await solo.locator('#gameScreen.active').waitFor();
  for(const start of ['-4,-4','-4,-2','-4,1']){await solo.locator('[data-grid="'+start+'"]').click();await solo.locator('#ownBoard .candidate').first().click();}
