@@ -30,11 +30,11 @@
     const heading = node('div', 'personal-dialog-heading'); dialogTitle = node('h2'); dialogTitle.id = 'personalDialogTitle';
     const close = button('×', closeDialog, 'personal-close'); close.setAttribute('aria-label', 'Sluiten');
     heading.append(dialogTitle, close); dialogBody = node('div', 'personal-dialog-body'); dialogBody.id = 'personalDialogBody'; dialog.append(heading, dialogBody); document.body.append(dialog);
-    dialog.addEventListener('close', () => { dialogKind = ''; dialogVersion++; if (returnFocus?.isConnected && returnFocus.getClientRects().length && !returnFocus.closest('[hidden],[inert]')) returnFocus.focus(); else $('startButton')?.focus(); });
+    dialog.addEventListener('close', () => { const wasPicker = dialogKind === 'add'; dialogKind = ''; dialogVersion++; if (wasPicker && !$('homeView').hidden) $('pinnedApps').querySelector('.personal-add')?.focus(); else if (returnFocus?.isConnected && returnFocus.getClientRects().length && !returnFocus.closest('[hidden],[inert]')) returnFocus.focus(); else $('startButton')?.focus(); });
   }
   function openDialog(kind, title, opener) {
     ensureDialog(); if (!dialog.open) returnFocus = opener || document.activeElement;
-    dialogKind = kind; dialogVersion++; dialogTitle.textContent = title; dialogBody.replaceChildren(); signatures.delete('personalDialogBody');
+    dialogKind = kind; dialog.dataset.kind = kind; dialogVersion++; dialogTitle.textContent = title; dialogBody.replaceChildren(); signatures.delete('personalDialogBody');
     if (!dialog.open) dialog.showModal();
   }
   function openInbox(opener) { openDialog('inbox', 'Uitnodigingen', opener); renderInbox(); social?.refresh(); }
@@ -125,8 +125,36 @@
       card.addEventListener('keydown', e => { if (e.key === 'ContextMenu' || e.shiftKey && e.key === 'F10') { e.preventDefault(); openAppMenu(g, more); } });
       card.append(opener, status, actions, more); return card;
     });
-    const add = button('', () => ctx.showView({ kind: 'all' }), 'personal-add'); add.append(node('span', 'personal-add-symbol', '+'), node('strong', '', 'Toevoegen'), node('small', '', 'Kies je volgende wereld')); cards.push(add);
+    const add = button('', () => openAppPicker(add), 'personal-add'); add.setAttribute('aria-haspopup', 'dialog'); add.append(node('span', 'personal-add-symbol', '+'), node('strong', '', 'Toevoegen'), node('small', '', 'Kies je volgende wereld')); cards.push(add);
     $('pinnedApps').replaceChildren(...cards);
+  }
+  function openAppPicker(opener) {
+    openDialog('add', 'Apps toevoegen', opener);
+    const list = node('div', 'personal-picker-list'); list.tabIndex = 0; list.setAttribute('role', 'region'); list.setAttribute('aria-label', 'Apps per thema');
+    const apps = ctx.model.apps();
+    for (const theme of ctx.model.themes) {
+      const choices = apps.filter(g => g.desktopTheme === theme.id); if (!choices.length) continue;
+      const section = node('section', 'personal-picker-theme'), heading = node('h3', '', theme.title), rows = node('ul', 'personal-picker-apps');
+      heading.id = 'picker-theme-' + theme.id; section.setAttribute('aria-labelledby', heading.id); section.style.setProperty('--picker-tint', theme.color);
+      for (const g of choices) {
+        const row = node('li', 'personal-picker-app'), img = node('img'); img.src = new URL(g.cover || 'assets/covers/graph.svg', ctx.base).href; img.alt = ''; img.loading = 'lazy'; img.width = 56; img.height = 56;
+        const add = button('+', () => { if (!ctx.authPending && !ctx.pins.includes(g.id) && ctx.pins.length < 12) ctx.togglePin(g.id); }, 'personal-picker-add'); add.dataset.pickApp = g.id;
+        row.append(img, node('strong', '', g.title), add); rows.append(row);
+      }
+      section.append(heading, rows); list.append(section);
+    }
+    const footer = node('div', 'personal-picker-footer'), status = node('p', 'personal-muted'); status.id = 'pickerStatus'; status.setAttribute('role', 'status');
+    footer.append(status, button('Klaar', closeDialog, 'personal-primary')); dialogBody.append(list, footer); syncAppPicker();
+  }
+  function syncAppPicker() {
+    if (dialogKind !== 'add') return;
+    const full = ctx.pins.length >= 12;
+    dialogBody.querySelectorAll('[data-pick-app]').forEach(b => {
+      const added = ctx.pins.includes(b.dataset.pickApp), title = ctx.model.app(b.dataset.pickApp).title;
+      b.textContent = added ? '✓' : '+'; b.dataset.added = String(added); b.setAttribute('aria-disabled', String(added || full || ctx.authPending));
+      b.setAttribute('aria-label', added ? `${title} staat op je bureaublad` : `${title} toevoegen`); b.title = added ? 'Toegevoegd' : full ? 'Je bureaublad is vol' : 'Toevoegen';
+    });
+    $('pickerStatus').textContent = full ? 'Je hebt 12 apps. Verwijder eerst een app van je bureaublad om plaats te maken.' : `${ctx.pins.length} ${ctx.pins.length === 1 ? 'app' : 'apps'} op je bureaublad`;
   }
   function openAppMenu(g, opener) {
     openDialog('app', g.title, opener); dialogBody.append(small(g.subtitle));
@@ -221,7 +249,7 @@
       refreshBoards();
     }
     if (!$('homeView').hidden && Date.now() - lastBoardFetch > 5000) refreshBoards();
-    renderApps(); bindSocial(); if (social) snapshot = social.state(); renderSocial(); renderBoards(); renderSession();
+    renderApps(); syncAppPicker(); bindSocial(); if (social) snapshot = social.state(); renderSocial(); renderBoards(); renderSession();
     $('personalInbox').onclick = () => openInbox($('personalInbox'));
     $('personalRankings').onclick = openRankings; $('personalClassCode').onclick = () => openCode(); $('personalClassCode').hidden = ctx.account?.role === 'teacher';
     if (!ctx.authPending && /^[a-f0-9]{6}$/i.test(initialClassCode || '')) { const code = initialClassCode; initialClassCode = null; openCode(code); }

@@ -11,7 +11,7 @@ Getest op 10 oktober 2026, op branch `codex/os-personal-pilot-20261010`, vanaf `
 | `shared/axioma-social.js` | Bestaande inbox door OS laten openen; intrekken via reeds aanwezige provider; geen extra uitnodigingsopslag |
 | `shared/leraarbob-topbar.js` | Actieve appnaam blijft herkenbaar in compacte navigatie, ook met een native oefeningskruimelpad |
 | `shared/multiplayer/classroom.js`, Rechten `classroom.html` | De directe OS-klasflow deelt een OS-code-link; overige klaslinks behouden hun bestaande bestemming |
-| Previewserver, browser-/DOM-tests en CI | Fictieve accounts en lokale providercontrole, regressie-ingangen volgen Toevoegen/themabibliotheek, nieuwe OS-tests ook in GitHub Actions |
+| Previewserver, browser-/DOM-tests en CI | Fictieve accounts en lokale providercontrole, regressie-ingangen voor de themabibliotheek lopen via Start; Toevoegen krijgt een eigen eenvoudige appkiezer, nieuwe OS-tests ook in GitHub Actions |
 
 ## Werkelijk uitgevoerd
 
@@ -19,8 +19,10 @@ Chromium/Brave met afzonderlijke testprofielen, extern netwerk geblokkeerd. Desk
 
 | Rapport | Uitgevoerd |
 | --- | --- |
-| [Persoonlijk OS](results.json) | 8 interactiegroepen en 57 doelmetingen: pins/herladen, kaartacties ≥44 px en niet bedekt, rechterklik/Meer/Shift+F10, papiermappen, uitnodigen/weigeren/intrekken/accepteren/starten, native invoer en focus, directe klasstart/code/link/hervatten, echte lokale ranglijsten en accountisolatie |
+| [Persoonlijk OS](results.json) | 8 interactiegroepen en 75 doelmetingen: appkiezer met 24 apps/8 thema’s, meerdere toevoegingen/vinkjes/duplicaatbescherming/focus, pins/herladen, kaartacties ≥44 px en niet bedekt, rechterklik/Meer/Shift+F10, papiermappen, uitnodigen/weigeren/intrekken/accepteren/starten, native invoer en focus, directe klasstart/code/link/hervatten, echte lokale ranglijsten en accountisolatie |
 | [Eén bovenbalk en focus](chrome-results.json) | 4 groepen en 13 doelmetingen: native kop nul hoogte, één gedeelde 58px-balk, bestaande vensteracties verplaatst, native antwoord behouden, beide balken verbergen/herstellen, onafhankelijke inklapkeuze, mobiele popover, herstel buiten het iframe en focusvoorkeur na herladen |
+| [Swipe en toetsenbord](picker-input.json) | Gerichte browsercontrole op 390 × 844: echte touchStart/touchMove/touchEnd-swipe en PageDown scrollen de appkiezer |
+| [Klas en live les](regressions/live.json) | 12 groepen: complete Getallen Learn/Battle, vijf echte native Rechten-vragen en live les met stemmen, afsluiten en rapport. Leraar start Rechten nu direct; bestaande leerlingcode-ingang blijft werken |
 | [Vier oorspronkelijke pilots](regressions/four-pilots.json) | 32 groepen / 23 layouts: Pythagoras-tegels en slepen, Rechten-opgave en controle, Zeeslag-plaatsing en echt schot, Glasraam-afronding; eigen terugkeerplek, originele voortgang, Start, bewaren, account en hervatten |
 | [Bestaande Rechten-ingangen](regressions/rechten-entry.json) | 11 groepen / 64 metingen: echte lokale Learn-provider met voorstellen, beide goedkeuringen en beoordeling; native klasaanmaken/deelnemen/starten; herladen en beide balkstanden |
 | [Startpagina en accountlinks](regressions/home-entry.json) | 16 groepen: standaard OS, oude catalogus, oorspronkelijke aanmelding/terugkeer/herstel en fallback |
@@ -35,6 +37,7 @@ De negen gewijzigde frontendbronnen zijn vastgelegd in [source-hashes.json](sour
 
 ## Screenshots
 
+- [Apps toevoegen op laptop](add-apps-1366.png), [telefoon](add-apps-390.png), [klein liggend scherm](add-apps-640.png)
 - [Wereldkaarten op het bureaublad](desktop-1366-expanded.png), [donkere weergave](desktop-dark.png)
 - [Rechtenwereld met één bovenbalk](rights-one-header.png)
 - [Echte opgave in focusstand](rights-question-focus-false.png), [mobiele herstelknop](rights-map-focus-390.png), [mobiele vensteracties](rights-window-menu-390.png)

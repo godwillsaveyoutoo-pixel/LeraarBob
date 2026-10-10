@@ -1,6 +1,6 @@
 {
   "checks": [
-    "Personal pins survive reload; 1366×768 at 100%, phone and short landscape: both header states, restore, direct mode targets ≥44px and unobscured",
+    "Add opens 24 apps in 8 theme groups without the old library; multiple additions, duplicate guard, focus return and scrollable 44px controls on three viewports; personal pins survive reload; 1366×768 at 100%, phone and short landscape: both header states, restore, direct mode targets ≥44px and unobscured",
     "Right click, visible More and Shift+F10 offer identical native modes and remove action",
     "App worksheet shortcut opens its topic folders; Start opens the full saved collection",
     "Real local Learn: create/invite/decline/reinvite/cancel/reinvite/accept/start; inbox focus survives polling; acceptance stays inside OS; exact native input survives Start, minimize, resume and Save",
@@ -95,6 +95,36 @@
       "x": 1042.375,
       "y": 467.15625,
       "width": 248,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker first 1366/false",
+      "x": 631,
+      "y": 190.796875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker last 1366/false",
+      "x": 631,
+      "y": 574.375,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker done 1366/false",
+      "x": 996.421875,
+      "y": 667,
+      "width": 63.578125,
       "height": 44,
       "visible": true,
       "covered": false,
@@ -201,6 +231,36 @@
       "overflow": false
     },
     {
+      "label": "picker first 1366/true",
+      "x": 631,
+      "y": 190.796875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker last 1366/true",
+      "x": 631,
+      "y": 574.375,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker done 1366/true",
+      "x": 996.421875,
+      "y": 667,
+      "width": 63.578125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
       "label": "390/false/#personalInbox",
       "x": 330,
       "y": 119,
@@ -285,6 +345,36 @@
       "x": 33,
       "y": 665.296875,
       "width": 324,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker first 390/false",
+      "x": 310,
+      "y": 228.796875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker last 390/false",
+      "x": 310,
+      "y": 612.375,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker done 390/false",
+      "x": 290.421875,
+      "y": 705,
+      "width": 63.578125,
       "height": 44,
       "visible": true,
       "covered": false,
@@ -391,6 +481,36 @@
       "overflow": false
     },
     {
+      "label": "picker first 390/true",
+      "x": 310,
+      "y": 228.796875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker last 390/true",
+      "x": 310,
+      "y": 612.375,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker done 390/true",
+      "x": 290.421875,
+      "y": 705,
+      "width": 63.578125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
       "label": "640/false/#personalInbox",
       "x": 531,
       "y": 80,
@@ -475,6 +595,36 @@
       "x": 343,
       "y": 152.609375,
       "width": 264,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker first 640/false",
+      "x": 268,
+      "y": 161.796875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker last 640/false",
+      "x": 268,
+      "y": 194.375,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker done 640/false",
+      "x": 536.421875,
+      "y": 287,
+      "width": 63.578125,
       "height": 44,
       "visible": true,
       "covered": false,
@@ -579,6 +729,36 @@
       "visible": true,
       "covered": false,
       "overflow": false
+    },
+    {
+      "label": "picker first 640/true",
+      "x": 268,
+      "y": 161.796875,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker last 640/true",
+      "x": 268,
+      "y": 194.375,
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
+    },
+    {
+      "label": "picker done 640/true",
+      "x": 536.421875,
+      "y": 287,
+      "width": 63.578125,
+      "height": 44,
+      "visible": true,
+      "covered": false,
+      "overflow": false
     }
   ],
   "errors": [],
@@ -586,11 +766,11 @@
   "auth": "Synthetic accounts, real local Learn/class handlers + PGlite. Production login/transport not tested.",
   "calls": {
     "axioma_class_battle_hub:overview": 17,
-    "axioma_social:sync": 26,
-    "axioma_clay_v2:sync": 27,
+    "axioma_social:sync": 25,
+    "axioma_clay_v2:sync": 26,
     "rechten-learn:catalog": 2,
     "rechten-learn:create": 1,
-    "rechten-learn:state": 16,
+    "rechten-learn:state": 15,
     "rechten-learn:invite": 3,
     "rechten-learn:decline": 1,
     "rechten-learn:cancel": 1,
