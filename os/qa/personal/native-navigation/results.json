@@ -1,0 +1,380 @@
+{
+  "checks": [
+    "Actual island play link opens contextual OS workforms without play.html navigation; Escape restores exact native link focus/state; controls >=44px at 1366/390/640 in both bar states",
+    "Context carries into native Learn; same-mode resume preserves selected skill/capacity and document; Solo resumes original island; every mode retains desktop origin",
+    "Contextual paper action opens OS Hellingrug folder; native generator stores an actual series and returns to the same topic with its saved record",
+    "Online duel Other mode uses OS dialog, keeps its native lobby, and exposes no teacher-only class start",
+    "Workforms from an actual native answer preserves input/focus and understands the active topic; no unavailable Puntenbaai worksheet is offered",
+    "Teacher native island choice enters direct class setup with Hellingrug selected, then resumes exact original map; trusted role controls retained",
+    "Standalone old mode page stays available; only OS navigation changes"
+  ],
+  "measurements": [
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#modeOptions [data-mode=solo]",
+      "width": 496,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#modeOptions [data-mode=learn]",
+      "width": 496,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#modeOptions [data-mode=online]",
+      "width": 496,
+      "height": 51,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#modeWorksheets [data-worksheet-folder]",
+      "width": 496,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#modeDialog [data-close-dialog]",
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#modeOptions [data-mode=solo]",
+      "width": 496,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#modeOptions [data-mode=learn]",
+      "width": 496,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#modeOptions [data-mode=online]",
+      "width": 496,
+      "height": 51,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#modeWorksheets [data-worksheet-folder]",
+      "width": 496,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#modeDialog [data-close-dialog]",
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": ".lb-restore:not([hidden])",
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#modeOptions [data-mode=solo]",
+      "width": 302,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#modeOptions [data-mode=learn]",
+      "width": 302,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#modeOptions [data-mode=online]",
+      "width": 302,
+      "height": 51,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#modeWorksheets [data-worksheet-folder]",
+      "width": 302,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#modeDialog [data-close-dialog]",
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#modeOptions [data-mode=solo]",
+      "width": 302,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#modeOptions [data-mode=learn]",
+      "width": 302,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#modeOptions [data-mode=online]",
+      "width": 302,
+      "height": 51,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#modeWorksheets [data-worksheet-folder]",
+      "width": 302,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#modeDialog [data-close-dialog]",
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": ".lb-restore:not([hidden])",
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#modeOptions [data-mode=solo]",
+      "width": 496,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#modeOptions [data-mode=learn]",
+      "width": 496,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#modeOptions [data-mode=online]",
+      "width": 496,
+      "height": 51,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#modeWorksheets [data-worksheet-folder]",
+      "width": 496,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#modeDialog [data-close-dialog]",
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#modeOptions [data-mode=solo]",
+      "width": 496,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#modeOptions [data-mode=learn]",
+      "width": 496,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#modeOptions [data-mode=online]",
+      "width": 496,
+      "height": 51,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#modeWorksheets [data-worksheet-folder]",
+      "width": 496,
+      "height": 62,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#modeDialog [data-close-dialog]",
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": ".lb-restore:not([hidden])",
+      "width": 44,
+      "height": 44,
+      "visible": true,
+      "hit": true
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "legacyRequests": [],
+  "scope": "Actual native links and controls in Chromium at 100% zoom; synthetic isolated accounts with existing local providers. Production login not tested."
+}

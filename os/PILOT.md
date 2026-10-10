@@ -10,6 +10,8 @@ De actuele eerste pilot sluit Rechtenwereld aan op persoonlijke appkaarten, cent
 - [x] 1366 × 768 bij 100% zoom, 390 × 844 en 640 × 360: herstelknoppen minstens 44 × 44 px, bereikbaar en niet over het werkbord; voorkeur na herladen behouden.
 - [x] Bovenbalk afzonderlijk inklappen, focusstand in beide standen gebruiken, heropenen; de twee voorkeuren blijven onafhankelijk.
 - [x] Wereldkaart, spelvoortgang en spelprofiel via de gedeelde navigatie; compacte titel blijft de actieve app noemen.
+- [x] Echte Rechten-eilandlink en ‘Andere spelvorm kiezen’ in Duo Battle openen de OS-werkvormkeuze, zonder `play.html` te laden. Hellingrug wordt meegenomen naar Learn en de leraarklasstart; terugkeren behoudt het oorspronkelijke scherm, de selectie en focus. Getest op 1366/390/640 px in beide balkstanden.
+- [x] Werkvormen vanuit een echte Puntenbaai-opgave behouden het antwoord en bieden geen onbeschikbare papiergenerator. Vanuit Hellingrug is een oefenblad daadwerkelijk gemaakt, bewaard en teruggevonden in dezelfde OS-onderwerpmap.
 - [x] Toevoegen: acht themagroepen met 24 apps, elk met afbeelding, naam en type (Trainer/Spel/Les/Atelier), meerdere toevoegingen, vinkjes en bescherming tegen duplicaten, Klaar/Escape en herstel van focus; werkelijke swipe en PageDown gecontroleerd.
 - [x] Toevoegen, Start → Alle apps en de bestaande `place=all`-link openen dezelfde compacte appkiezer; de link blijft werken na accountinitialisatie.
 - [x] Oefenbladen en Mijn oefenbladen tonen alleen eigen mappen, pad en acties; geen algemene zijbalk naar Samen & live of de catalogus. Negen echte native reeksen met sleutel gemaakt, automatisch bewaard en na herladen exact heropend.

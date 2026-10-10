@@ -43,7 +43,7 @@ async function fit(page){assert(await page.evaluate(()=>document.documentElement
  }
  await page.setViewportSize({width:1366,height:768});
  for(const [hash,place] of [['#ontdek','all'],['#reserve','all'],['#playerProgress','profile']]){
-  await page.goto(base+'/index.html'+hash);await desktop(page);assert.equal(await page.evaluate(()=>LeraarBobDesktop.state().view.kind),place);check('Existing '+hash+' opens OS '+place);
+  await page.goto(base+'/index.html'+hash);await desktop(page);assert.equal(await page.evaluate(()=>LeraarBobDesktop.state().view.kind),place==='all'?'desktop':place);if(place==='all'){await page.locator('#personalDialog[open]').waitFor();assert.equal(await page.locator('[data-pick-app]').count(),24);assert(!await page.locator('#libraryWindow').isVisible());}check('Existing '+hash+' opens OS '+(place==='all'?'app picker':place));
  }
  await page.goto(base+'/?theme=getallen&utm_source=old-link#bookmark');await desktop(page);
  const routed=new URL(page.url());assert.equal(routed.searchParams.get('theme'),'getallen');assert.equal(routed.searchParams.get('utm_source'),'old-link');assert.equal(routed.hash,'#bookmark');check('Unrecognized query/hash and theme bookmark remain intact');

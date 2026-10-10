@@ -22,6 +22,8 @@ Chromium/Brave met afzonderlijke testprofielen, extern netwerk geblokkeerd. Desk
 | --- | --- |
 | [Persoonlijk OS](results.json) | 9 interactiegroepen en 75 doelmetingen: appkiezer met 24 apps/8 thema’s en elk het geregistreerde type, dezelfde ingang via Start/oud adres, meerdere toevoegingen/vinkjes/duplicaatbescherming/focus, pins/herladen, kaartacties ≥44 px en niet bedekt, rechterklik/Meer/Shift+F10, papiermappen, uitnodigen/weigeren/intrekken/accepteren/starten, native invoer en focus, directe klasstart/code/link/hervatten, echte lokale ranglijsten en accountisolatie |
 | [Eén bovenbalk en focus](chrome-results.json) | 4 groepen en 13 doelmetingen: native kop nul hoogte, één gedeelde 58px-balk, bestaande vensteracties verplaatst, native antwoord behouden, beide balken verbergen/herstellen, onafhankelijke inklapkeuze, mobiele popover, herstel buiten het iframe en focusvoorkeur na herladen |
+| [Interne Rechten-navigatie](native-navigation/results.json) | 7 groepen / 33 doelen: echte eiland- en Duo Battle-links openen contextuele OS-werkvormen zonder `play.html`; Hellingrug naar Learn/klas, dezelfde schermen en invoer hervatten, Escape/focus, Puntenbaai-opgave zonder onbeschikbare papieroptie; echte Hellingrug-reeks gemaakt en teruggevonden; standalone blijft werken |
+| [Aanvullende navigatie-units](regressions/native-navigation-units.txt) | 30 tests voor desktop-DOM, app-/rolmodel en gedeelde bovenbalk; persoonlijke OS-, focus- en home-browser opnieuw geslaagd bij deze navigatiewijziging |
 | [Swipe en toetsenbord](picker-input.json) | Gerichte browsercontrole op 390 × 844: echte touchStart/touchMove/touchEnd-swipe en PageDown scrollen de appkiezer |
 | [Klas en live les](regressions/live.json) | 13 groepen: direct codeformulier op 1366/390/640 px in beide balkstanden, terugkeer met gedeeltelijke code en dezelfde iframe, complete Getallen Learn/Battle, vijf echte native Rechten-vragen en live les met stemmen, afsluiten en rapport. Leraar start Rechten nu direct; bestaande leerlingcode-ingang blijft werken |
 | [Oefenbladcollectie](regressions/worksheets.json) | 22 groepen / 47 doelen / 9 generators: exacte opgaven en sleutel automatisch bewaard, thema-/onderwerpmappen zonder algemene zijbalk, heropenen na reload, export/import, accountisolatie, zichtbare opslagfout en negen A4-PDF’s |
@@ -38,11 +40,14 @@ De nieuwe persoonlijke OS-test maakt daadwerkelijk Learn- en klasactiviteiten me
 
 De gewijzigde frontendbronnen zijn vastgelegd in [source-hashes.json](source-hashes.json). Alle genoemde browserrapporten melden nul browserexceptions en nul ontbrekende bronnen (voor zover het rapport ontbrekende bronnen meet). `build-catalog --check`, de packagecontrole en `git diff --check` slagen.
 
+De eerdere CI-run op `25a2cf0` verwachtte bij oude `#ontdek`-/`#reserve`-links nog de algemene catalogus. De home-controle verwacht nu de bedoelde appkiezer en controleert alle 24 apps en het verborgen catalogusvenster; de volledige home-browser slaagt lokaal met 16 groepen. De nieuwe interne Rechten-browser is aan CI toegevoegd.
+
 ## Screenshots
 
 - [Apps toevoegen op laptop](add-apps-1366.png), [telefoon](add-apps-390.png), [klein liggend scherm](add-apps-640.png)
 - [Wereldkaarten op het bureaublad](desktop-1366-expanded.png), [donkere weergave](desktop-dark.png)
 - [Rechtenwereld met één bovenbalk](rights-one-header.png)
+- [Contextuele Rechten-werkvormen op laptop](native-navigation/workforms-1366-expanded.png), [telefoon](native-navigation/workforms-390-expanded.png), [ingeklapte balk](native-navigation/workforms-1366-collapsed.png), [Hellingrug-map met gemaakte reeks](native-navigation/worksheet-topic-with-saved-series.png)
 - [Echte opgave in focusstand](rights-question-focus-false.png), [mobiele herstelknop](rights-map-focus-390.png), [mobiele vensteracties](rights-window-menu-390.png)
 - [Centrale uitnodigingen](invitation-inbox.png), [Learn-inrichting](learn-direct-setup.png), [native Learn-opgave](learn-native-question.png)
 - [Klasinrichting](class-direct-setup.png), [wachtkamer](class-direct-lobby.png), [ranglijst](rankings-class.png)
@@ -72,10 +77,11 @@ Benodigd: Node, `playwright`, `jsdom`, `fake-indexeddb` en `@electric-sql/pglite
 node scripts/serve-personal-os-preview.cjs
 node tests/personal-os-browser.cjs
 node tests/personal-chrome-browser.cjs
+node tests/rechten-os-navigation-browser.cjs
 node tests/desktop-worksheets-browser.cjs
 node tests/desktop-live-browser.cjs
 node tests/rechten-entry-browser.cjs
 node tests/desktop-pilot-browser.cjs
 ```
 
-Preview: `http://127.0.0.1:8793/`. De landingspagina opent Alex, Sam en leerkracht afzonderlijk. `LB_SCREENSHOT_DIR` verplaatst de persoonlijke en Rechten-entryrapporten; `OS_SCREENSHOTS` verplaatst de vierpilotrapporten. De volledige bestaande CI-matrix staat in `.github/workflows/catalog.yml`.
+Preview: `http://127.0.0.1:8793/`. De landingspagina opent Alex, Sam en leerkracht afzonderlijk. `LB_SCREENSHOT_DIR` verplaatst de persoonlijke en Rechten-entryrapporten; `LB_NAV_SCREENSHOTS` die van de interne Rechten-navigatie; `OS_SCREENSHOTS` verplaatst de vierpilotrapporten. De volledige bestaande CI-matrix staat in `.github/workflows/catalog.yml`.
