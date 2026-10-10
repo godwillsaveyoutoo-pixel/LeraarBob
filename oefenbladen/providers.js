@@ -2,7 +2,7 @@
 (()=>{
 'use strict';
 const base=new URL('../',document.currentScript.src),loaded=new Map(),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const sources=[...['hellingrug','grenspas','formulewerf','signaalstad'].map(topic=>({id:'rechtenwereld:'+topic,theme:'rechten',topic,title:topic[0].toUpperCase()+topic.slice(1),group:'Rechtenwereld'})),...['equations','systems'].map(topic=>({id:'algebra-trainer:'+topic,theme:'algebra',topic,title:topic==='systems'?'Stelsels':'Vergelijkingen',group:'Algebrawereld'})),...['machten','wortels','wetenschappelijk'].map(topic=>({id:'bewerkingen-trainer:operations',theme:'getallen',topic,title:{machten:'Machten',wortels:'Vierkantswortels',wetenschappelijk:'Wetenschappelijke notatie'}[topic],group:'Getallenwereld'}))].map(s=>({...s,key:s.id+'|'+s.topic}));
+const sources=[...['hellingrug','grenspas','formulewerf','signaalstad'].map(topic=>({id:'rechtenwereld:'+topic,theme:'rechten',topic,title:topic[0].toUpperCase()+topic.slice(1),group:'Rechtenwereld'})),...['equations','systems'].map(topic=>({id:'algebra-trainer:'+topic,theme:'algebra',topic,title:topic==='systems'?'Stelsels':'Vergelijkingen',group:'Algebrawereld'})),...['machten','wortels','wetenschappelijk'].map(topic=>({id:'bewerkingen-trainer:operations',theme:'getallen',topic,title:{machten:'Machten',wortels:'Vierkantswortels',wetenschappelijk:'Wetenschappelijke notatie'}[topic],group:'Getallenwereld'})),...['Uitspraken en negatie','Logische connectieven','Waarheidstabellen','Logische wetten en equivalenties','Implicatie en voorwaarden','Geldige redeneringen'].map((title,i)=>({id:'logicawereld:gebied-'+(i+1),theme:'logica',topic:'gebied-'+(i+1),title,group:'Logicawereld'}))].map(s=>({...s,key:s.id+'|'+s.topic}));
 const seed=()=>crypto.getRandomValues(new Uint32Array(1))[0]||1,copy=v=>JSON.parse(JSON.stringify(v));
 async function scripts(paths){for(const path of paths){if(!loaded.has(path))loaded.set(path,new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=new URL(path,base).href;script.onload=resolve;script.onerror=()=>{loaded.delete(path);script.remove();reject(Error('De opgaven konden niet laden. Probeer opnieuw.'));};document.head.append(script);}));await loaded.get(path);}}
 const select=(id,label,options,value)=>({id,label,type:'select',options:options.map(o=>Array.isArray(o)?{id:String(o[0]),label:o[1]}:o),value:String(value??options[0]?.id??options[0]?.[0])});
@@ -55,5 +55,16 @@ async function rights(s){
   return {sourceId:s.id,title:s.title+' · '+doc.tasks.length+' oefeningen',theme:s.theme,topic:s.topic,code:doc.code,questionsHTML:V.render(doc).html,keyHTML:V.render(doc,'key').html,styles:['shared/worksheet-layout.css',dir+'worksheets/worksheets.css'],config:copy(doc.config),data:copy(doc)};
  }};
 }
-window.LeraarBobWorksheetProviders=Object.freeze({sources:Object.freeze(sources),load:s=>s.theme==='algebra'?algebra(s):s.theme==='getallen'?numbers(s):rights(s)});
+async function logic(s){
+ await scripts(['games/logicawereld/logic.js','games/logicawereld/content.js','games/logicawereld/worksheet.js']);
+ const C=LogicContent,W=LogicaWorksheet,d=C.districts[Number(s.topic.slice(7))-1];
+ return {fields:[select('level','Leerstof',[['gebied','Heel het gebied'],...d.stops.map(i=>['halte-'+(i+1),C.stops[i].name])],'gebied'),number('count','Aantal opdrachten (maximaal 5 per halte)',5,1,d.stops.length*5)],async generate(c){
+  const stop=c.level==='gebied'?d.stops[0]:Number(c.level.slice(6))-1;
+  if(!d.stops.includes(stop))throw Error('Kies een halte uit dit gebied.');
+  const count=requireCount(c.count,1,c.level==='gebied'?d.stops.length*5:5),tasks=W.select(C,{stop,scope:c.level==='gebied'?'district':'stop',count}),title=c.level==='gebied'?d.name:C.stops[stop].name;
+  const html=key=>'<section class="logic-paper paper-page"><header>leraarBob · Logicawereld</header><h1>'+esc(key?'Verbetersleutel':title)+'</h1>'+(key?'':'<p>Naam: ____________________ &nbsp; Klas: ______</p>')+'<ol>'+tasks.map(t=>'<li><h2>'+esc(t.prompt)+'</h2>'+(key?'<div class="solution">'+(t.type==='table'?W.solution(t):esc(W.solution(t)))+'</div><p>'+esc(t.explanation)+'</p>':W.question(t))+'</li>').join('')+'</ol><footer>'+esc(tasks.map(t=>t.id).join(' / '))+'</footer></section>';
+  return {sourceId:s.id,theme:s.theme,topic:s.topic,title:title+' · '+tasks.length+' opdrachten',code:tasks.map(t=>t.id).join('-'),questionsHTML:html(false),keyHTML:html(true),styles:['games/logicawereld/paper.css'],config:{level:c.level,count},data:copy({version:C.version,tasks})};
+ }};
+}
+window.LeraarBobWorksheetProviders=Object.freeze({sources:Object.freeze(sources),load:s=>s.theme==='logica'?logic(s):s.theme==='algebra'?algebra(s):s.theme==='getallen'?numbers(s):rights(s)});
 })();

@@ -17,7 +17,7 @@ jobs:
           node-version: '24'
           package-manager-cache: false
       - run: node scripts/build-catalog.cjs --check
-      - run: node --test --test-isolation=none tests/catalog.test.cjs tests/catalog-progress.test.cjs tests/desktop-model.test.cjs tests/getallenwereld.test.cjs tests/getallen-guided-choices.test.cjs tests/getallen-scientific-lessons.test.cjs tests/scientific-provider.test.cjs tests/algebra-class.test.cjs tests/algebra-learning.test.cjs tests/algebra-trainer.test.cjs tests/algebra-v04-choices.test.cjs tests/algebra-v04-journey.test.cjs tests/algebra-v04-motion.test.cjs tests/algebra-v045-fractions.test.cjs tests/algebra-v050-flow.test.cjs tests/algebra-world.test.cjs tests/stelsels-workshop.test.cjs
+      - run: node --test --test-isolation=none tests/catalog.test.cjs tests/catalog-progress.test.cjs tests/desktop-model.test.cjs tests/getallenwereld.test.cjs tests/getallen-guided-choices.test.cjs tests/getallen-scientific-lessons.test.cjs tests/scientific-provider.test.cjs tests/algebra-class.test.cjs tests/algebra-learning.test.cjs tests/algebra-trainer.test.cjs tests/algebra-v04-choices.test.cjs tests/algebra-v04-journey.test.cjs tests/algebra-v04-motion.test.cjs tests/algebra-v045-fractions.test.cjs tests/algebra-v050-flow.test.cjs tests/algebra-world.test.cjs tests/stelsels-workshop.test.cjs tests/logicawereld-logic.test.cjs tests/logicawereld-flow.test.cjs tests/logicawereld-integration.test.cjs
       - run: node --check os/desktop.js && node --check os/personal-home.js && node --check os/activity-entry.js
       - run: node tests/desktop-package-check.cjs
       - name: Bureaubladbediening controleren
@@ -44,6 +44,7 @@ jobs:
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" WORKSHEETS_SCREENSHOTS="$RUNNER_TEMP/os-qa/worksheets" node tests/desktop-worksheets-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CENTRAL_PAPER_SCREENSHOTS="$RUNNER_TEMP/os-qa/central-paper" node tests/central-worksheet-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" ALGEBRA_OS_SCREENSHOTS="$RUNNER_TEMP/os-qa/algebra" node tests/algebra-os-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LOGICA_PROOF="$RUNNER_TEMP/os-qa/logica" node tests/logicawereld-os-browser.cjs
       - name: Screenshots en browserrapporten bewaren
         if: always()
         uses: actions/upload-artifact@v4

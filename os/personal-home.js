@@ -113,10 +113,10 @@
       const name = node('div', 'personal-card-heading'); name.append(node('span', 'personal-card-kind', M.types[g.type].label), node('h3', '', g.title)); opener.append(name, img); opener.setAttribute('aria-label', `Open ${g.title}`);
       const summary = ctx.summary(g); const status = node('p', 'personal-app-status', ctx.isOpen(g) ? 'Geopend · hervatten' : summary && ['started', 'complete', 'saved'].includes(summary.status) ? summary.label : M.theme(g.desktopTheme).title);
       const actions = node('div', 'personal-app-actions'), modes = M.modes(g.id, ctx.account?.role || 'guest');
-      const direct = ['solo', 'learn', ctx.account?.role === 'teacher' ? 'classroom' : 'online'];
+      const direct = g.quickModes || ['solo', 'learn', ctx.account?.role === 'teacher' ? 'classroom' : 'online'];
       for (const id of direct) {
         const mode = modes.find(m => m.id === id); if (!mode) continue;
-        const label = { solo: 'Solo', learn: 'Samen leren', online: 'Duo Battle', classroom: 'Klasbattle' }[id];
+        const label = { solo: 'Solo', learn: 'Samen leren', online: 'Duo Battle', classroom: 'Klasbattle', 'duo-local-learn': 'Samen · één toestel', local: 'Duo Battle' }[id] || mode.title;
         const b = button(label, () => ctx.openApp(g.id, id)); b.dataset.mode = id; b.setAttribute('aria-label', `${label} · ${g.title}`); actions.append(b);
       }
       actions.dataset.modeCount = String(actions.children.length); if (actions.children.length === 1) actions.dataset.singleMode = 'true';
