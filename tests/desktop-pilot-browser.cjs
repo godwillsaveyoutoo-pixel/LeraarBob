@@ -3,6 +3,7 @@
  * Run: NODE_PATH=/tmp/leraarbob-os-deps/node_modules node tests/desktop-pilot-browser.cjs
  */
 'use strict';
+// Compatibility fixture: exercise saved theme routes/filters; personal-os-browser covers the public Add and Start entrances.
 const assert=require('node:assert/strict'),http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const Glass=require('../games/rechten/rechtenwereld/glasatelier/core.js');
@@ -41,7 +42,7 @@ async function shot(name){await settle();await page.screenshot({path:path.join(o
 async function currentFrame(){const h=await page.locator('.frame-wrapper:not([hidden]) iframe').elementHandle();return h.contentFrame();}
 async function desktopState(){return page.evaluate(()=>LeraarBobDesktop.state());}
 async function openFromMap(id,title,theme,type,query){
- await page.locator('.desktop-button').click();await page.locator('#startButton').click();await page.getByRole('button',{name:'Alle apps Kies wat je op je bureaublad zet',exact:true}).click();await page.locator('#folderSidebar .sidebar-link').filter({hasText:theme}).click();
+ await page.locator('.desktop-button').click();await page.evaluate(()=>LeraarBobDesktop.showView({kind:'theme',themeId:'rechten'}));await page.locator('#folderSidebar .sidebar-link').filter({hasText:theme}).click();
  await page.locator('#typeFilters').getByRole('button',{name:type,exact:true}).click();await page.locator('#librarySearch').fill(query);
  const pin=page.locator(`[data-app-id="${id}"] .card-pin`);if(await pin.getAttribute('aria-pressed')!=='true')await pin.click();
  const origin=(await desktopState()).view;await page.locator(`[data-app-id="${id}"] .card-open`).click();
@@ -183,7 +184,7 @@ async function onlineEntryFixture(){
  const social=`(()=>{const account=${JSON.stringify(account)},peer=${JSON.stringify(peer)},listeners=[],state={account,connected:true,players:[{...account,status:'available'},{...peer,status:'available'}],invitations:[]};window.AxiomaSocial={ready:async()=>state,state:()=>state,onChange:fn=>{listeners.push(fn);return()=>{};},invite:async id=>{state.invitations=[{id:'fixture-invite',sender_id:account.id,recipient_id:id,status:'pending'}];listeners.forEach(fn=>fn(state));},finish:async()=>{}};})();`;
  await page.route('**/*',r=>{const u=new URL(r.request().url());if(u.origin!==base)return r.fulfill({body:''});const file=u.pathname.split('/').pop();if(file==='axioma-auth.js')return r.fulfill({body:auth,contentType:'application/javascript'});if(file==='axioma-progress.js')return r.fulfill({body:progress,contentType:'application/javascript'});if(file==='axioma-social.js')return r.fulfill({body:social,contentType:'application/javascript'});return r.continue();});
  try{
-  await page.goto(base+'/os/');await page.waitForFunction(()=>window.LeraarBobDesktop?.state().role==='student');await page.locator('#startButton').click();await page.getByRole('button',{name:'Alle apps Kies wat je op je bureaublad zet',exact:true}).click();await page.locator('#folderSidebar .sidebar-link').filter({hasText:'Rechten & functies'}).click();await page.locator('#librarySearch').fill('Zeeslag');await page.locator('[data-app-id="rechten-zeeslag"] .card-options').click();
+  await page.goto(base+'/os/');await page.waitForFunction(()=>window.LeraarBobDesktop?.state().role==='student');await page.evaluate(()=>LeraarBobDesktop.showView({kind:'theme',themeId:'rechten'}));await page.locator('#folderSidebar .sidebar-link').filter({hasText:'Rechten & functies'}).click();await page.locator('#librarySearch').fill('Zeeslag');await page.locator('[data-app-id="rechten-zeeslag"] .card-options').click();
   assert.equal(await page.locator('#modeOptions [data-mode="classroom"]').count(),0);assert(await page.locator('#modeOptions [data-mode="online"]').isVisible());await page.locator('#modeOptions [data-mode="online"]').click();const f=await currentFrame();await f.waitForSelector('#lobbyScreen.active');assert(!new URL(f.url()).searchParams.has('solo'));
   assert.match(await f.locator('#playerList').textContent(),/Pilot tegenstander/);await f.locator('[data-invite="fixture-b"]').click();assert.equal(await f.locator('[data-invite="fixture-b"]').textContent(),'Wachten…');
   const native=await page.locator('.frame-wrapper:not([hidden]) iframe').elementHandle(),list=await f.locator('#playerList').innerHTML();await page.locator('#minimizeApp').click();await page.getByRole('button',{name:'Terug naar Rechten Zeeslag',exact:true}).click();assert(await native.evaluate(e=>e.isConnected));assert.equal(await f.locator('#playerList').innerHTML(),list);await shot('zeeslag-online-fixture');

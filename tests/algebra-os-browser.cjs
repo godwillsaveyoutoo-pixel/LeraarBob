@@ -1,4 +1,5 @@
 'use strict';
+// Compatibility fixture: exercise saved theme routes/filters; personal-os-browser covers the public Add and Start entrances.
 // Native Algebra UI inside the desktop and standalone. Authentication and remote
 // progress are isolated fixtures; every exercise/menu/input action is real UI.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
@@ -37,7 +38,7 @@ async function snapshot(f){return f.evaluate(()=>{const s=(window.AlgebraTrainer
 async function chooseSection(id,f,standalone=false){const selector=standalone?'.algebraSectionNav [data-section="'+id+'"]':'#nativeAppNavigation [data-algebra-section="'+id+'"]';await (standalone?f:page).locator(selector).click();await settle(f);}
 async function openAlgebra(){
  await page.goto(base+'/os/');await page.waitForFunction(()=>window.LeraarBobDesktop&&document.querySelector('leraarbob-topbar')?.shadowRoot);
- await page.locator('#startButton').click();await page.getByRole('button',{name:'Alle apps Kies wat je op je bureaublad zet',exact:true}).click();await page.locator('#folderSidebar .sidebar-link').filter({hasText:/^Algebra/}).click();await page.locator('#typeFilters').getByRole('button',{name:'Trainer',exact:true}).click();await page.locator('#librarySearch').fill('Algebrawereld');
+ await page.evaluate(()=>LeraarBobDesktop.showView({kind:'theme',themeId:'algebra'}));await page.locator('#folderSidebar .sidebar-link').filter({hasText:/^Algebra/}).click();await page.locator('#typeFilters').getByRole('button',{name:'Trainer',exact:true}).click();await page.locator('#librarySearch').fill('Algebrawereld');
  const origin=(await state()).view;await page.locator('[data-app-id="algebra-trainer"] .card-open').click();const f=await frame();await ready(f);await chooseSection('world',f);await f.locator('#worldScreen:not(.hidden)').waitFor();return{f,origin};
 }
 async function chrome(f,standalone=false){
@@ -116,7 +117,7 @@ async function systemsFlow(opened){
  const beforeReload=await snapshot(f);await collapsed(true);await page.reload();await page.waitForFunction(()=>window.LeraarBobDesktop);await page.locator('.lb-restore:not([hidden])').waitFor();await measure('Reloaded Algebra OS restore',page,'.lb-restore:not([hidden])');
  // The OS reopens its own folder after a full page reload. Native account storage,
  // rather than a desktop copy of transient frame memory, resumes the saved work.
- await page.locator('.desktop-button').click();await page.locator('#startButton').click();await page.getByRole('button',{name:'Alle apps Kies wat je op je bureaublad zet',exact:true}).click();await page.locator('#folderSidebar .sidebar-link').filter({hasText:/^Algebra/}).click();await page.locator('#librarySearch').fill('Algebrawereld');await page.locator('[data-app-id="algebra-trainer"] .card-open').click();let equations=await frame();await ready(equations);await chooseSection('world',equations);await equations.locator('[data-world="systems"]').click();f=await frame();await ready(f,true);await f.locator('[data-menu-stop="sys-substitution"]').click();await f.locator('.menuContinue').click();assert.equal(await f.locator('#operand').inputValue(),'1/');assert.deepEqual(await snapshot(f),beforeReload);await page.locator('.lb-restore:not([hidden])').click();
+ await page.locator('.desktop-button').click();await page.evaluate(()=>LeraarBobDesktop.showView({kind:'theme',themeId:'algebra'}));await page.locator('#folderSidebar .sidebar-link').filter({hasText:/^Algebra/}).click();await page.locator('#librarySearch').fill('Algebrawereld');await page.locator('[data-app-id="algebra-trainer"] .card-open').click();let equations=await frame();await ready(equations);await chooseSection('world',equations);await equations.locator('[data-world="systems"]').click();f=await frame();await ready(f,true);await f.locator('[data-menu-stop="sys-substitution"]').click();await f.locator('.menuContinue').click();assert.equal(await f.locator('#operand').inputValue(),'1/');assert.deepEqual(await snapshot(f),beforeReload);await page.locator('.lb-restore:not([hidden])').click();
  check('Stelsels six available levels; real pending/apply step, help/history, unfinished input, other-level paper, Werkvormen and full OS reload');return f;
 }
 async function accountBoundaries(){

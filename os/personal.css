@@ -44,6 +44,8 @@ html[data-mode=dark]{--personal-paper:#182c30;--personal-card:#21393c;--personal
 .personal-invitation{padding:16px 0;border-bottom:1px solid var(--personal-line)}.personal-invitation strong{font-size:15px}.personal-invitation .personal-muted{margin:5px 0 12px}.personal-empty{padding:24px 12px;border:1px dashed var(--personal-line);border-radius:12px;font-size:13px;text-align:center}
 .personal-menu-action{display:block;width:100%;text-align:left;background:none;border-bottom:1px solid var(--personal-line);padding:12px 8px;color:inherit;font-size:14px}.personal-menu-action:hover{background:var(--personal-soft)}.personal-remove{margin-top:16px;font-size:12px;color:var(--personal-muted)}
 /* Add apps: one scrollable list, grouped by theme, without library navigation. */
+.library-window[data-contextual=true] .window-body{grid-template-columns:minmax(0,1fr)}
+.library-window[data-contextual=true] .folder-sidebar{display:none}
 .personal-dialog[data-kind=add]{width:min(800px,calc(100vw - 24px));height:min(680px,calc(100dvh - 32px));overflow:hidden}
 .personal-dialog[data-kind=add][open]{display:flex;flex-direction:column}
 .personal-dialog[data-kind=add] .personal-dialog-heading{flex-shrink:0}
@@ -54,7 +56,9 @@ html[data-mode=dark]{--personal-paper:#182c30;--personal-card:#21393c;--personal
 .personal-picker-apps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px;list-style:none;padding:0;margin:0}
 .personal-picker-app{display:flex;align-items:center;gap:12px;min-width:0;padding:8px 0}
 .personal-picker-app img{width:56px;height:56px;object-fit:cover;border:1px solid var(--personal-line);border-radius:13px;flex-shrink:0}
-.personal-picker-app strong{font-size:13px;font-weight:550;line-height:1.35;min-width:0;flex:1;overflow-wrap:anywhere}
+.personal-picker-copy{min-width:0;flex:1;display:flex;flex-direction:column;gap:3px}
+.personal-picker-app strong{font-size:13px;font-weight:550;line-height:1.35;overflow-wrap:anywhere}
+.personal-picker-type{font-size:12px;color:var(--personal-muted);line-height:1.35}
 .personal-picker-add{width:44px;height:44px;padding:0;flex-shrink:0;border:1px solid var(--personal-line);border-radius:50%;background:var(--personal-paper);color:var(--personal-ink);font-size:24px}
 .personal-picker-add:hover:not([aria-disabled=true]){background:var(--personal-soft);border-color:var(--personal-accent)}
 .personal-picker-add[data-added=true]{background:var(--personal-soft);color:var(--personal-accent);font-size:18px}

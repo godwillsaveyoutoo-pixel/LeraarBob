@@ -1,14 +1,17 @@
 {
   "base": "7493e52dc4a5c43830d8291e87a30d659f29e23d",
   "files": {
-    "os/index.html": "73bac9018bddc88b36aeff480daf946b486673afee7420ecb0a443cf39cf5fa2",
-    "os/desktop.js": "79ed1cc9c89735a14c6d2e778b24c6af4d480704e0890ea4df83da798277c56b",
+    "os/index.html": "9f7390adabe66ecd0c775428a92c7bc963833d8af3f00409865ab3ae45517c97",
+    "os/desktop.js": "712daf07ab9a728c374118aea8b936ac720a3b3221868364de216b5522dbca46",
     "os/desktop-model.js": "53b944f25570184bc69a372ba2934397a7625ddbf2b5950044fb9a9e96e3cf6b",
-    "os/personal-home.js": "a30236bee52e1114704ebf710635b1b2b84462f6851d6051a114131eb6f55356",
-    "os/personal.css": "221c8021db42b8f11434b0050cfe18f54ad69c5822286e43335080ada76c6d81",
+    "os/personal-home.js": "d0d28779dd5826864077f6ba58f0185e9a6b4bec51b625aa5df326942500e06e",
+    "os/personal.css": "f6f7ca9349623c4248bd13672160a31b345bd23c9325c677b61f57a7eb54f8de",
     "shared/axioma-social.js": "b700867974b74cf9f1a0843676afd55a1c517ffce16eb9f59df3c91908ebcd4c",
-    "shared/leraarbob-topbar.js": "83c63f130812e7045523e64c82cf2462dec6563a2ea4ea1add2838ffd7c099a1",
+    "shared/leraarbob-topbar.js": "c8e7424de3c3974737761136e8943a3ea18e9eeec03d488ba15aa6386c73f2fb",
     "shared/multiplayer/classroom.js": "9995ed74f03634aba1f16cfe63995bcd4155b7eb0624ca88e52b41f601ec2a32",
-    "games/rechten/rechtenwereld/classroom.html": "dbc82d81b5adfb0761a53f81cb71043cc66f0615ab045c011688b79b33e4b84a"
+    "games/rechten/rechtenwereld/classroom.html": "dbc82d81b5adfb0761a53f81cb71043cc66f0615ab045c011688b79b33e4b84a",
+    "games/bewerkingen-trainer/start.html": "6f61c2f2350af73934ddff403ee0c4f9a8b3fdc6264e3762828c16093b4b3f24",
+    "games/bewerkingen-trainer/numbers-space.js": "01cdab57287a96c76aa5f8e80133795413228fd43858953623d41349237ede26",
+    "games/bewerkingen-trainer/numbers-space.css": "679a00e06df7972487817f92bd22d0cca6b519976751c26ac0a7206897b3d774"
   }
 }

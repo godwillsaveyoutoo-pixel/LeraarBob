@@ -10,7 +10,11 @@ De actuele eerste pilot sluit Rechtenwereld aan op persoonlijke appkaarten, cent
 - [x] 1366 × 768 bij 100% zoom, 390 × 844 en 640 × 360: herstelknoppen minstens 44 × 44 px, bereikbaar en niet over het werkbord; voorkeur na herladen behouden.
 - [x] Bovenbalk afzonderlijk inklappen, focusstand in beide standen gebruiken, heropenen; de twee voorkeuren blijven onafhankelijk.
 - [x] Wereldkaart, spelvoortgang en spelprofiel via de gedeelde navigatie; compacte titel blijft de actieve app noemen.
-- [x] Toevoegen: acht themagroepen met 24 apps, meerdere toevoegingen, vinkjes en bescherming tegen duplicaten, Klaar/Escape en herstel van focus; werkelijke swipe en PageDown gecontroleerd.
+- [x] Toevoegen: acht themagroepen met 24 apps, elk met afbeelding, naam en type (Trainer/Spel/Les/Atelier), meerdere toevoegingen, vinkjes en bescherming tegen duplicaten, Klaar/Escape en herstel van focus; werkelijke swipe en PageDown gecontroleerd.
+- [x] Toevoegen, Start → Alle apps en de bestaande `place=all`-link openen dezelfde compacte appkiezer; de link blijft werken na accountinitialisatie.
+- [x] Oefenbladen en Mijn oefenbladen tonen alleen eigen mappen, pad en acties; geen algemene zijbalk naar Samen & live of de catalogus. Negen echte native reeksen met sleutel gemaakt, automatisch bewaard en na herladen exact heropend.
+- [x] OS-bovenbalk zonder Live-knop, voor leerling en leraar. Bestaande live-lesroutes via Start blijven werken.
+- [x] Learn-deelname opent direct het sessiecodeformulier, zonder solo-/duo-/papiermenu. Terug en heropenen behouden de gedeeltelijke code en dezelfde iframe; na een sessie en herladen blijft de directe ingang behouden. Op 1366/390/640 px in beide bovenbalkstanden bediend.
 - [x] Kaarten met beschikbare werkvormen, pins/herladen, rechterklik/Meer/Shift+F10, onderwerpmapjes en volledige oefenbladcollectie via Start.
 - [x] Samen leren: echte lokale provider voor maken, uitnodigen, weigeren, intrekken, accepteren en starten. Native invoer blijft behouden bij Start, bewaren en hervatten.
 - [x] Klasbattle: directe leraarinrichting, code/link voor leerling, oorspronkelijke wachtkamer/start en hervatten zonder dubbele sessie-iframe.

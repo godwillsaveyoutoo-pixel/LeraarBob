@@ -742,7 +742,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -751,10 +751,10 @@
               "x": 12,
               "y": 72,
               "width": 366,
-              "height": 130,
+              "height": 136.671875,
               "top": 72,
               "right": 378,
-              "bottom": 202,
+              "bottom": 208.671875,
               "left": 12
             }
           },
@@ -762,12 +762,12 @@
             "selector": ".theme[data-theme=wortels]",
             "rect": {
               "x": 12,
-              "y": 209,
+              "y": 215.671875,
               "width": 366,
-              "height": 130,
-              "top": 209,
+              "height": 136.671875,
+              "top": 215.671875,
               "right": 378,
-              "bottom": 339,
+              "bottom": 352.34375,
               "left": 12
             }
           },
@@ -775,12 +775,12 @@
             "selector": ".theme[data-topic=wetenschappelijk]",
             "rect": {
               "x": 12,
-              "y": 346,
+              "y": 359.34375,
               "width": 366,
-              "height": 130,
-              "top": 346,
+              "height": 136.671875,
+              "top": 359.34375,
               "right": 378,
-              "bottom": 476,
+              "bottom": 496.015625,
               "left": 12
             }
           },
@@ -788,12 +788,12 @@
             "selector": ".dock .primary",
             "rect": {
               "x": 248.34375,
-              "y": 552,
+              "y": 572,
               "width": 129.65625,
               "height": 44,
-              "top": 552,
+              "top": 572,
               "right": 378,
-              "bottom": 596,
+              "bottom": 616,
               "left": 248.34375
             }
           }
@@ -1098,7 +1098,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -1376,7 +1376,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -1409,12 +1409,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -1706,7 +1706,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -1739,12 +1739,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -2010,7 +2010,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -2030,12 +2030,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -2236,19 +2236,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -2410,19 +2410,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 242.640625,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 137.359375,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 242.640625
             }
           }
@@ -2584,19 +2584,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 562.03125,
+              "y": 582.03125,
               "width": 158.203125,
               "height": 61.96875,
-              "top": 562.03125,
+              "top": 582.03125,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -2758,19 +2758,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -2932,19 +2932,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -3106,19 +3106,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 516.6875,
+              "y": 536.6875,
               "width": 158.203125,
               "height": 107.3125,
-              "top": 516.6875,
+              "top": 536.6875,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -3280,19 +3280,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -3454,19 +3454,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -3628,19 +3628,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -3802,19 +3802,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -3976,19 +3976,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 562.03125,
+              "y": 582.03125,
               "width": 158.203125,
               "height": 61.96875,
-              "top": 562.03125,
+              "top": 582.03125,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -4150,19 +4150,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -4324,19 +4324,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -4498,19 +4498,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -4672,19 +4672,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -4846,19 +4846,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -5020,19 +5020,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -5194,19 +5194,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -5368,19 +5368,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".path-detail .primary",
             "rect": {
               "x": 221.796875,
-              "y": 539.359375,
+              "y": 559.359375,
               "width": 158.203125,
               "height": 84.640625,
-              "top": 539.359375,
+              "top": 559.359375,
               "right": 380,
-              "bottom": 624,
+              "bottom": 644,
               "left": 221.796875
             }
           }
@@ -5568,7 +5568,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -5846,7 +5846,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -5879,12 +5879,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -6176,7 +6176,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -6209,12 +6209,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -6480,7 +6480,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -6500,12 +6500,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -6732,7 +6732,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -7010,7 +7010,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -7043,12 +7043,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -7340,7 +7340,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -7373,12 +7373,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -7644,7 +7644,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -7664,12 +7664,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -7896,7 +7896,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -8174,7 +8174,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -8207,12 +8207,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -8478,7 +8478,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -8498,12 +8498,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -8730,7 +8730,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -9008,7 +9008,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -9041,12 +9041,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -9338,7 +9338,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -9371,12 +9371,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -9642,7 +9642,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -9662,12 +9662,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -9894,7 +9894,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -10172,7 +10172,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -10205,12 +10205,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -10476,7 +10476,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -10496,12 +10496,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -10728,7 +10728,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -11006,7 +11006,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -11039,12 +11039,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -11310,7 +11310,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -11330,12 +11330,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -11562,7 +11562,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -11840,7 +11840,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -11873,12 +11873,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -12170,7 +12170,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -12203,12 +12203,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -12474,7 +12474,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -12494,12 +12494,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -12726,7 +12726,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -13004,7 +13004,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -13037,12 +13037,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -13308,7 +13308,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -13328,12 +13328,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -13560,7 +13560,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -13838,7 +13838,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -13871,12 +13871,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -14168,7 +14168,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -14201,12 +14201,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -14472,7 +14472,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -14492,12 +14492,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -14724,7 +14724,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -15002,7 +15002,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -15035,12 +15035,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -15332,7 +15332,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -15365,12 +15365,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -15636,7 +15636,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -15656,12 +15656,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -15888,7 +15888,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -16166,7 +16166,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -16199,12 +16199,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -16470,7 +16470,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -16490,12 +16490,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -16722,7 +16722,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -17000,7 +17000,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -17033,12 +17033,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -17330,7 +17330,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -17363,12 +17363,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -17634,7 +17634,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -17654,12 +17654,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -17886,7 +17886,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -18164,7 +18164,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -18197,12 +18197,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -18468,7 +18468,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -18488,12 +18488,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -18720,7 +18720,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -18998,7 +18998,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -19031,12 +19031,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -19302,7 +19302,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -19322,12 +19322,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -19554,7 +19554,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -19832,7 +19832,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -19865,12 +19865,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -20136,7 +20136,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -20156,12 +20156,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -20388,7 +20388,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -20666,7 +20666,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -20699,12 +20699,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -20970,7 +20970,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -20990,12 +20990,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -21222,7 +21222,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -21500,7 +21500,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -21533,12 +21533,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -21804,7 +21804,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -21824,12 +21824,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -22056,7 +22056,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -22334,7 +22334,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -22367,12 +22367,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -22638,7 +22638,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -22658,12 +22658,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -22916,7 +22916,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -22949,12 +22949,12 @@
             "selector": "[data-action=help-next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -23194,19 +23194,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".summary-actions .primary",
             "rect": {
               "x": 12,
-              "y": 534.15625,
+              "y": 544.15625,
               "width": 366,
               "height": 48,
-              "top": 534.15625,
+              "top": 544.15625,
               "right": 378,
-              "bottom": 582.15625,
+              "bottom": 592.15625,
               "left": 12
             }
           }
@@ -45684,7 +45684,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -45704,12 +45704,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -45726,7 +45726,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -45746,12 +45746,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -45768,7 +45768,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -45788,12 +45788,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -45810,7 +45810,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -45830,12 +45830,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -45852,7 +45852,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -45872,12 +45872,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -45894,7 +45894,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -45914,12 +45914,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -45936,7 +45936,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -45956,12 +45956,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -45978,7 +45978,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -45998,12 +45998,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -46020,7 +46020,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -46040,12 +46040,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -46062,7 +46062,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -46082,12 +46082,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -46104,7 +46104,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -46124,12 +46124,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -46146,7 +46146,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -46166,12 +46166,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -46188,7 +46188,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -46208,12 +46208,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -46230,7 +46230,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -46250,12 +46250,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -46272,7 +46272,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -46292,12 +46292,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -46314,7 +46314,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -46334,12 +46334,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -46356,7 +46356,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -46376,12 +46376,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -46398,7 +46398,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -46418,12 +46418,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -46440,7 +46440,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -46460,12 +46460,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -47350,12 +47350,12 @@
       "name": "Actual 844 OS machten-quotient rule",
       "before": {
         "x": 304.25,
-        "y": 191.1875,
+        "y": 144.1875,
         "width": 529.75,
         "height": 44,
-        "top": 191.1875,
+        "top": 144.1875,
         "right": 834,
-        "bottom": 235.1875,
+        "bottom": 188.1875,
         "left": 304.25
       },
       "after": {
@@ -47393,99 +47393,30 @@
       }
     },
     {
-      "name": "Actual 844 OS machten-macht rule",
-      "before": {
-        "x": 304.25,
-        "y": 191.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 191.1875,
-        "right": 834,
-        "bottom": 235.1875,
-        "left": 304.25
-      },
-      "after": {
-        "x": 304.25,
-        "y": 114.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 114.1875,
-        "right": 834,
-        "bottom": 158.1875,
-        "left": 304.25
-      }
-    },
-    {
       "name": "Actual 844 OS machten-macht value 0",
       "before": {
-        "x": 705.5625,
+        "x": 639.859375,
         "y": 161.1875,
         "width": 62.703125,
         "height": 44,
         "top": 161.1875,
-        "right": 768.265625,
+        "right": 702.5625,
         "bottom": 205.1875,
-        "left": 705.5625
+        "left": 639.859375
       },
       "after": {
-        "x": 705.5625,
+        "x": 639.859375,
         "y": 114.1875,
         "width": 62.703125,
         "height": 44,
         "top": 114.1875,
-        "right": 768.265625,
+        "right": 702.5625,
         "bottom": 158.1875,
-        "left": 705.5625
+        "left": 639.859375
       }
     },
     {
       "name": "Actual 844 OS machten-factoren value 0",
-      "before": {
-        "x": 639.859375,
-        "y": 161.1875,
-        "width": 62.703125,
-        "height": 44,
-        "top": 161.1875,
-        "right": 702.5625,
-        "bottom": 205.1875,
-        "left": 639.859375
-      },
-      "after": {
-        "x": 639.859375,
-        "y": 114.1875,
-        "width": 62.703125,
-        "height": 44,
-        "top": 114.1875,
-        "right": 702.5625,
-        "bottom": 158.1875,
-        "left": 639.859375
-      }
-    },
-    {
-      "name": "Actual 844 OS machten-haakjes rule",
-      "before": {
-        "x": 304.25,
-        "y": 191.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 191.1875,
-        "right": 834,
-        "bottom": 235.1875,
-        "left": 304.25
-      },
-      "after": {
-        "x": 304.25,
-        "y": 114.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 114.1875,
-        "right": 834,
-        "bottom": 158.1875,
-        "left": 304.25
-      }
-    },
-    {
-      "name": "Actual 844 OS machten-haakjes value 0",
       "before": {
         "x": 639.859375,
         "y": 161.1875,
@@ -47554,6 +47485,29 @@
       }
     },
     {
+      "name": "Actual 844 OS machten-negatief rule",
+      "before": {
+        "x": 304.25,
+        "y": 191.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 191.1875,
+        "right": 834,
+        "bottom": 235.1875,
+        "left": 304.25
+      },
+      "after": {
+        "x": 304.25,
+        "y": 114.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 114.1875,
+        "right": 834,
+        "bottom": 158.1875,
+        "left": 304.25
+      }
+    },
+    {
       "name": "Actual 844 OS machten-negatief slot 0",
       "before": {
         "x": 343.578125,
@@ -47577,26 +47531,26 @@
       }
     },
     {
-      "name": "Actual 844 OS machten-mix value 0",
+      "name": "Actual 844 OS machten-mix rule",
       "before": {
-        "x": 639.859375,
-        "y": 161.1875,
-        "width": 62.703125,
+        "x": 304.25,
+        "y": 144.1875,
+        "width": 529.75,
         "height": 44,
-        "top": 161.1875,
-        "right": 702.5625,
-        "bottom": 205.1875,
-        "left": 639.859375
+        "top": 144.1875,
+        "right": 834,
+        "bottom": 188.1875,
+        "left": 304.25
       },
       "after": {
-        "x": 639.859375,
+        "x": 304.25,
         "y": 114.1875,
-        "width": 62.703125,
+        "width": 529.75,
         "height": 44,
         "top": 114.1875,
-        "right": 702.5625,
+        "right": 834,
         "bottom": 158.1875,
-        "left": 639.859375
+        "left": 304.25
       }
     },
     {
@@ -47692,29 +47646,6 @@
       }
     },
     {
-      "name": "Actual 844 OS wortels-quotient rule",
-      "before": {
-        "x": 304.25,
-        "y": 144.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 144.1875,
-        "right": 834,
-        "bottom": 188.1875,
-        "left": 304.25
-      },
-      "after": {
-        "x": 304.25,
-        "y": 114.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 114.1875,
-        "right": 834,
-        "bottom": 158.1875,
-        "left": 304.25
-      }
-    },
-    {
       "name": "Actual 844 OS wortels-quotient slot 1",
       "before": {
         "x": 353.796875,
@@ -47764,29 +47695,6 @@
       "name": "Actual 844 OS wortels-macht rule",
       "before": {
         "x": 304.25,
-        "y": 144.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 144.1875,
-        "right": 834,
-        "bottom": 188.1875,
-        "left": 304.25
-      },
-      "after": {
-        "x": 304.25,
-        "y": 114.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 114.1875,
-        "right": 834,
-        "bottom": 158.1875,
-        "left": 304.25
-      }
-    },
-    {
-      "name": "Actual 844 OS wortels-vereenvoudigen rule",
-      "before": {
-        "x": 304.25,
         "y": 191.1875,
         "width": 529.75,
         "height": 44,
@@ -47807,30 +47715,7 @@
       }
     },
     {
-      "name": "Actual 844 OS wortels-som value 0",
-      "before": {
-        "x": 705.5625,
-        "y": 161.1875,
-        "width": 62.703125,
-        "height": 44,
-        "top": 161.1875,
-        "right": 768.265625,
-        "bottom": 205.1875,
-        "left": 705.5625
-      },
-      "after": {
-        "x": 705.5625,
-        "y": 114.1875,
-        "width": 62.703125,
-        "height": 44,
-        "top": 114.1875,
-        "right": 768.265625,
-        "bottom": 158.1875,
-        "left": 705.5625
-      }
-    },
-    {
-      "name": "Actual 844 OS wortels-regels rule",
+      "name": "Actual 844 OS wortels-som rule",
       "before": {
         "x": 304.25,
         "y": 144.1875,
@@ -47839,6 +47724,29 @@
         "top": 144.1875,
         "right": 834,
         "bottom": 188.1875,
+        "left": 304.25
+      },
+      "after": {
+        "x": 304.25,
+        "y": 114.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 114.1875,
+        "right": 834,
+        "bottom": 158.1875,
+        "left": 304.25
+      }
+    },
+    {
+      "name": "Actual 844 OS wortels-regels rule",
+      "before": {
+        "x": 304.25,
+        "y": 191.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 191.1875,
+        "right": 834,
+        "bottom": 235.1875,
         "left": 304.25
       },
       "after": {
@@ -47876,15 +47784,15 @@
       }
     },
     {
-      "name": "Actual 844 OS wetenschappelijk-klein rule",
+      "name": "Actual 844 OS wetenschappelijk-groot rule",
       "before": {
         "x": 304.25,
-        "y": 144.1875,
+        "y": 191.1875,
         "width": 529.75,
         "height": 44,
-        "top": 144.1875,
+        "top": 191.1875,
         "right": 834,
-        "bottom": 188.1875,
+        "bottom": 235.1875,
         "left": 304.25
       },
       "after": {
@@ -47899,15 +47807,15 @@
       }
     },
     {
-      "name": "Actual 844 OS wetenschappelijk-terug rule",
+      "name": "Actual 844 OS wetenschappelijk-klein rule",
       "before": {
         "x": 304.25,
-        "y": 144.1875,
+        "y": 191.1875,
         "width": 529.75,
         "height": 44,
-        "top": 144.1875,
+        "top": 191.1875,
         "right": 834,
-        "bottom": 188.1875,
+        "bottom": 235.1875,
         "left": 304.25
       },
       "after": {
@@ -47942,6 +47850,29 @@
         "right": 768.265625,
         "bottom": 158.1875,
         "left": 705.5625
+      }
+    },
+    {
+      "name": "Actual 844 OS wetenschappelijk-normaliseren rule",
+      "before": {
+        "x": 304.25,
+        "y": 144.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 144.1875,
+        "right": 834,
+        "bottom": 188.1875,
+        "left": 304.25
+      },
+      "after": {
+        "x": 304.25,
+        "y": 114.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 114.1875,
+        "right": 834,
+        "bottom": 158.1875,
+        "left": 304.25
       }
     }
   ],

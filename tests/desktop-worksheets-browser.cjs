@@ -117,7 +117,7 @@ async function folderLayouts(){
  for(const viewport of report.viewports){
   await page.setViewportSize(viewport);assert.equal(await page.evaluate(()=>devicePixelRatio),1);
   for(const collapsed of[false,true]){
-   await setCollapsed(collapsed);await worksheetsView();
+   await setCollapsed(collapsed);await worksheetsView();assert(!await page.locator('#folderSidebar').isVisible());assert(!await page.locator('#viewToolbar').isVisible());assert.equal(await page.locator('#libraryWindow .sidebar-link').count(),0);
    await shot('worksheet-folders-'+viewport.width+'-'+(collapsed?'collapsed':'expanded'));
    const folders=await page.locator('[data-worksheet-theme]').evaluateAll(elements=>elements.map(element=>element.dataset.worksheetTheme));
    assert.deepEqual(new Set(folders),new Set(['rechten','getallen','algebra']),'Only themes with actual generators are offered');
@@ -135,7 +135,7 @@ async function folderLayouts(){
     const topics=await page.locator('[data-worksheet-topic]').evaluateAll(elements=>elements.map(element=>element.dataset.worksheetTopic));
     assert.deepEqual(new Set(topics),new Set(sourceList.filter(source=>source.theme===theme).map(source=>source.topic||source.id.split(':')[1])),'Saved folders retain the same nine actual native topics');
    }
-   await savedView('');await layout('Saved theme folder '+viewport.width+' collapsed='+collapsed,'[data-worksheet-theme="rechten"]');await page.locator('[data-worksheet-theme="rechten"]').click();
+   await savedView('');assert(!await page.locator('#folderSidebar').isVisible());await layout('Saved theme folder '+viewport.width+' collapsed='+collapsed,'[data-worksheet-theme="rechten"]');await page.locator('[data-worksheet-theme="rechten"]').click();
    const one=await libraryList(),id=one.find(entry=>entry.theme==='rechten').id;const archive=await openSaved(id);await archive.document.waitForLoadState();await archiveGeometry(archive.document,'Actual saved A4 pages '+viewport.width+' collapsed='+collapsed);
    for(const selector of['#printWorksheet','#downloadWorksheet','#downloadBackup'])await layout('Archive action '+selector+' '+viewport.width+' collapsed='+collapsed,selector,archive.viewer);
    await shot('archive-'+viewport.width+'-'+(collapsed?'collapsed':'expanded'));

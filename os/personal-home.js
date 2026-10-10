@@ -6,6 +6,7 @@
   const node = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined) n.textContent = text; return n; };
   const button = (label, action, cls = '') => { const b = node('button', cls, label); b.type = 'button'; b.addEventListener('click', action); return b; };
   let initialClassCode = new URLSearchParams(location.search).get('classCode');
+  let initialAppPicker = new URLSearchParams(location.search).get('place') === 'all';
   let ctx, owner, epoch = 0, social, socialStop, snapshot = null, board = null, boardState = 'loading', boardRequest = 0, selectedClass = '', selectedGame = 'rechten';
   let lastBoardFetch = 0;
   let dialog, dialogBody, dialogTitle, dialogKind = '', dialogVersion = 0, returnFocus, polling, busy = false;
@@ -139,7 +140,8 @@
       for (const g of choices) {
         const row = node('li', 'personal-picker-app'), img = node('img'); img.src = new URL(g.cover || 'assets/covers/graph.svg', ctx.base).href; img.alt = ''; img.loading = 'lazy'; img.width = 56; img.height = 56;
         const add = button('+', () => { if (!ctx.authPending && !ctx.pins.includes(g.id) && ctx.pins.length < 12) ctx.togglePin(g.id); }, 'personal-picker-add'); add.dataset.pickApp = g.id;
-        row.append(img, node('strong', '', g.title), add); rows.append(row);
+        const copy = node('span', 'personal-picker-copy'), kind = node('small', 'personal-picker-type', ctx.model.types[g.type].label); kind.id = 'picker-type-' + g.id; add.setAttribute('aria-describedby', kind.id);
+        copy.append(node('strong', '', g.title), kind); row.append(img, copy, add); rows.append(row);
       }
       section.append(heading, rows); list.append(section);
     }
@@ -252,6 +254,7 @@
     renderApps(); syncAppPicker(); bindSocial(); if (social) snapshot = social.state(); renderSocial(); renderBoards(); renderSession();
     $('personalInbox').onclick = () => openInbox($('personalInbox'));
     $('personalRankings').onclick = openRankings; $('personalClassCode').onclick = () => openCode(); $('personalClassCode').hidden = ctx.account?.role === 'teacher';
+    if (!ctx.authPending && initialAppPicker) { initialAppPicker = false; openAppPicker(); }
     if (!ctx.authPending && /^[a-f0-9]{6}$/i.test(initialClassCode || '')) { const code = initialClassCode; initialClassCode = null; openCode(code); }
     if (!polling) polling = setInterval(() => { bindSocial(); if (!document.hidden && (!$('homeView').hidden || dialogKind === 'rankings')) refreshBoards(); }, 30000);
   }
@@ -261,5 +264,5 @@
   window.addEventListener('focus', () => { bindSocial(); if (ctx && !$('homeView').hidden) refreshBoards(); });
   window.addEventListener('pageshow', e => { if (e.persisted && ctx) render(ctx); });
   window.addEventListener('pagehide', () => { clearInterval(polling); polling = null; socialStop?.(); social = null; });
-  window.LeraarBobPersonalHome = Object.freeze({ render, openRankings, openClassCode: openCode, refreshClasses: refreshBoards });
+  window.LeraarBobPersonalHome = Object.freeze({ render, openAppPicker, openRankings, openClassCode: openCode, refreshClasses: refreshBoards });
 })();

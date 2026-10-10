@@ -53,6 +53,8 @@
   const viewNames={all:'Alle apps',saved:'Mijn taken',worksheets:'Oefenbladen','worksheet-saved':'Mijn oefenbladen',live:'Samen & live',profile:'Mijn profiel',settings:'Instellingen'};
   const viewIcons={all:'desktop',saved:'folder',worksheets:'paper','worksheet-saved':'folder',live:'people',profile:'account',settings:'settings'};
   function renderSidebar(){
+    const browse=['all','theme'].includes(view.kind);$('folderSidebar').hidden=!browse;$('libraryWindow').dataset.contextual=String(!browse);
+    if(!browse){$('folderSidebar').replaceChildren();return;}
     const nodes=[];
     for(const kind of ['all','saved','worksheets','worksheet-saved','live']){const b=button('','sidebar-link',()=>showView({kind}));b.append(icon(viewIcons[kind]),document.createTextNode(viewNames[kind]));if(view.kind===kind)b.setAttribute('aria-current','page');nodes.push(b);}
     nodes.push(el('p','sidebar-heading','Thema’s'));
@@ -162,7 +164,7 @@
     function liveCard(glyph,title,copy,actions,teacher=false){const card=el('article','live-card'+(teacher?' teacher-card':''));card.append(icon(glyph),el('h2','',title),el('p','',copy));actions.forEach(a=>card.append(button(a.title,'',a.run)));grid.append(card);return card;}
     liveCard('class','Deelnemen met een code','Je leraar start de sessie. Jij sluit aan via de bestaande sessiepagina.',[
       {title:'Klas Battle',run:()=>openUtility('battle-join','Deelnemen aan Klas Battle','klasbattle/','people')},
-      {title:'Learn-sessie',run:()=>openUtility('learn-join','Deelnemen aan Learn','games/bewerkingen-trainer/start.html?view=home','people')},
+      {title:'Learn-sessie',run:()=>openUtility('learn-join','Deelnemen aan Learn','games/bewerkingen-trainer/start.html?view=join','people')},
       {title:'Live les',run:()=>openUtility('lesson-join','Deelnemen aan een live les','lessons/rechten-arbeid/join.html','people')}
     ]);
     liveCard('people','Met twee of een groepje','Kies een bestaande wereld en bekijk de beschikbare Learn- en Battle-modi.',[{title:'Rechtenwereld',run:()=>openModes('rechtenwereld')},{title:'Getallenwereld',run:()=>openModes('getallenwereld')},{title:'Rechten Zeeslag',run:()=>openModes('rechten-zeeslag')}]);
@@ -225,6 +227,7 @@
   function showView(next,{route=true}={}){
     rememberFocus(frames.get(activeKey));
     closeStart();if(typeof next==='string')next={kind:next};if(!['desktop','theme',...Object.keys(viewNames)].includes(next.kind)||next.kind==='theme'&&!M.theme(next.themeId))next={kind:'desktop'};
+    if(next.kind==='all'){showView({kind:'desktop'},{route});window.LeraarBobPersonalHome?.openAppPicker();return;}
     view={kind:next.kind,themeId:next.themeId||'',type:next.type||'all',query:next.query||''};if(next.topicId&&['worksheets','worksheet-saved'].includes(next.kind))view.topicId=next.topicId;activeKey=null;syncNativeNavigation();syncWindowControls();
     $('homeView').hidden=view.kind!=='desktop';$('libraryWindow').hidden=view.kind==='desktop';$('appWorkspace').hidden=true;
     frames.forEach(f=>{f.wrapper.hidden=true;f.wrapper.inert=true;});
@@ -296,7 +299,7 @@
     const folder=$('headerFolder'),app=$('headerApp'),current=frames.get(activeKey);
     $('desktopHeader').dataset.platformAppTitle=current?.app.title||'';
     const worksheet=current?.archive||current?.mode?.startsWith('worksheet:');
-    const place=worksheet?current.origin:current?.app.desktopTheme&&view.themeId!==current.app.desktopTheme?{kind:'theme',themeId:current.app.desktopTheme}:view;
+    const place=worksheet||current?.origin.kind==='desktop'?current.origin:current?.app.desktopTheme&&view.themeId!==current.app.desktopTheme?{kind:'theme',themeId:current.app.desktopTheme}:view;
     folder.hidden=place.kind==='desktop';folder.textContent=place.kind==='theme'?M.theme(place.themeId).title:viewNames[place.kind]||'';
     folder.onclick=()=>showView(place);app.hidden=!current;app.textContent=current?.app.title||'';
     let doc,nodes=[];
@@ -456,6 +459,7 @@
     const accountBridge=win.LeraarBobTopbar?null:Object.freeze({openAccount,setCollapsed:(...args)=>window.LeraarBobTopbar?.setCollapsed(...args)});if(accountBridge)win.LeraarBobTopbar=accountBridge;
     // Only redundant links out of the app are handled here; game controls stay native.
     const click=e=>{
+      if(item.app.id==='utility:learn-join'&&e.target.closest?.('#spaceBack')&&win.NumbersSpace?.snapshot().view==='join'){e.preventDefault();e.stopImmediatePropagation();showView(item.origin);return;}
       if(e.target.closest?.('[data-axioma-login]')){e.preventDefault();e.stopImmediatePropagation();openAccount();return;}
       const a=e.target.closest?.('a[href]');if(!a||a.target==='_blank'||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;const target=M.safeURL(a.href);if(!target)return;
       if(item.algebraShell&&a.hasAttribute('data-section')&&!['battle'].includes(a.dataset.section))return;

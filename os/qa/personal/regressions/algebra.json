@@ -5453,10 +5453,10 @@
   "passed": true,
   "browser": "154.0.8037.58",
   "sourceHashes": {
-    "os/desktop.js": "79ed1cc9c89735a14c6d2e778b24c6af4d480704e0890ea4df83da798277c56b",
+    "os/desktop.js": "712daf07ab9a728c374118aea8b936ac720a3b3221868364de216b5522dbca46",
     "os/desktop.css": "3cea18380ec508ebef9f0bce7a2848db16f836f024dfa04415cd8af0fa78818a",
-    "os/index.html": "1cd1f97c00635c59c9e3a81676dac6592d288502749093f942f106dd2be356c8",
-    "shared/leraarbob-topbar.js": "83c63f130812e7045523e64c82cf2462dec6563a2ea4ea1add2838ffd7c099a1",
+    "os/index.html": "9f7390adabe66ecd0c775428a92c7bc963833d8af3f00409865ab3ae45517c97",
+    "shared/leraarbob-topbar.js": "c8e7424de3c3974737761136e8943a3ea18e9eeec03d488ba15aa6386c73f2fb",
     "shared/platform-routes.js": "7cb5f27d448086f0de4be9d80f652bb100ffb25a15652c617a5f47e5db090267",
     "games/algebra-trainer/index.html": "a1fce910394eb1eb4ac3afc20d2db11a6bbd6b4fcfae855c4801a13ae63df353",
     "games/algebra-trainer/stelsels.html": "ad92a0656a9d509700a0593b78ea6dc104df43f3ac2f6a0b10009e89a4f555fb",
@@ -5468,6 +5468,6 @@
     "games/algebra-trainer/trainer.js": "d0ee98c0401d426391effbb6ca7192270911d71e87f464bc9e406c38b54abe4e",
     "games/algebra-trainer/stelsels/app.js": "4ee36b714eac8fee1f2b3eeac885e04ab36bb4a25a0119d62be3755d0a6cf7e6",
     "games/algebra-trainer/stelsels/workspace.css": "703ab9906b377de861bde3bb7fff03d1d2d9b08b11c43623dcb9a28f4a213e2a",
-    "tests/algebra-os-browser.cjs": "9d7ac006db10945d345f8e71b54a656a424e8c8ffce2e489331f42bdc73007f3"
+    "tests/algebra-os-browser.cjs": "fc92e1168e3bc62111a11f430c53dd750f4df0289b0270ffd23b4d029175dfc1"
   }
 }

@@ -374,7 +374,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -652,7 +652,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -685,12 +685,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -956,7 +956,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -976,12 +976,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -1208,19 +1208,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".summary-actions [data-action=chapter]",
             "rect": {
               "x": 12,
-              "y": 475.65625,
+              "y": 485.65625,
               "width": 178,
               "height": 48,
-              "top": 475.65625,
+              "top": 485.65625,
               "right": 190,
-              "bottom": 523.65625,
+              "bottom": 533.65625,
               "left": 12
             }
           },
@@ -1228,12 +1228,12 @@
             "selector": ".summary-actions [data-action=again]",
             "rect": {
               "x": 200,
-              "y": 475.65625,
+              "y": 485.65625,
               "width": 178,
               "height": 48,
-              "top": 475.65625,
+              "top": 485.65625,
               "right": 378,
-              "bottom": 523.65625,
+              "bottom": 533.65625,
               "left": 200
             }
           }
@@ -1460,7 +1460,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -1738,7 +1738,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -1771,12 +1771,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -2042,7 +2042,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -2062,12 +2062,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -2294,19 +2294,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".summary-actions [data-action=chapter]",
             "rect": {
               "x": 12,
-              "y": 475.65625,
+              "y": 485.65625,
               "width": 178,
               "height": 48,
-              "top": 475.65625,
+              "top": 485.65625,
               "right": 190,
-              "bottom": 523.65625,
+              "bottom": 533.65625,
               "left": 12
             }
           },
@@ -2314,12 +2314,12 @@
             "selector": ".summary-actions [data-action=again]",
             "rect": {
               "x": 200,
-              "y": 475.65625,
+              "y": 485.65625,
               "width": 178,
               "height": 48,
-              "top": 475.65625,
+              "top": 485.65625,
               "right": 378,
-              "bottom": 523.65625,
+              "bottom": 533.65625,
               "left": 200
             }
           }
@@ -2546,7 +2546,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -2824,7 +2824,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -2857,12 +2857,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -3128,7 +3128,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -3148,12 +3148,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -3380,19 +3380,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".summary-actions [data-action=chapter]",
             "rect": {
               "x": 12,
-              "y": 475.65625,
+              "y": 485.65625,
               "width": 178,
               "height": 48,
-              "top": 475.65625,
+              "top": 485.65625,
               "right": 190,
-              "bottom": 523.65625,
+              "bottom": 533.65625,
               "left": 12
             }
           },
@@ -3400,12 +3400,12 @@
             "selector": ".summary-actions [data-action=again]",
             "rect": {
               "x": 200,
-              "y": 475.65625,
+              "y": 485.65625,
               "width": 178,
               "height": 48,
-              "top": 475.65625,
+              "top": 485.65625,
               "right": 378,
-              "bottom": 523.65625,
+              "bottom": 533.65625,
               "left": 200
             }
           }
@@ -3632,7 +3632,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -3910,7 +3910,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -3943,12 +3943,12 @@
             "selector": "[data-action=check]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -4214,7 +4214,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -4234,12 +4234,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -4466,19 +4466,19 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
             "selector": ".summary-actions [data-action=chapter]",
             "rect": {
               "x": 12,
-              "y": 504.65625,
+              "y": 514.65625,
               "width": 178,
               "height": 48,
-              "top": 504.65625,
+              "top": 514.65625,
               "right": 190,
-              "bottom": 552.65625,
+              "bottom": 562.65625,
               "left": 12
             }
           },
@@ -4486,12 +4486,12 @@
             "selector": ".summary-actions [data-action=again]",
             "rect": {
               "x": 200,
-              "y": 504.65625,
+              "y": 514.65625,
               "width": 178,
               "height": 48,
-              "top": 504.65625,
+              "top": 514.65625,
               "right": 378,
-              "bottom": 552.65625,
+              "bottom": 562.65625,
               "left": 200
             }
           }
@@ -4744,7 +4744,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -4777,12 +4777,12 @@
             "selector": "[data-action=help-next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -4964,7 +4964,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -4984,12 +4984,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -5048,7 +5048,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -5068,12 +5068,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -5132,7 +5132,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -5152,12 +5152,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -5216,7 +5216,7 @@
       "passed": true,
       "native": {
         "width": 390,
-        "height": 634,
+        "height": 654,
         "issues": [],
         "rects": [
           {
@@ -5236,12 +5236,12 @@
             "selector": "[data-action=next]",
             "rect": {
               "x": 260,
-              "y": 583,
+              "y": 603,
               "width": 120,
               "height": 44,
-              "top": 583,
+              "top": 603,
               "right": 380,
-              "bottom": 627,
+              "bottom": 647,
               "left": 260
             }
           }
@@ -8993,30 +8993,7 @@
       }
     },
     {
-      "name": "Actual 844 wetenschappelijk-klein expanded rule",
-      "before": {
-        "x": 304.25,
-        "y": 144.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 144.1875,
-        "right": 834,
-        "bottom": 188.1875,
-        "left": 304.25
-      },
-      "after": {
-        "x": 304.25,
-        "y": 114.1875,
-        "width": 529.75,
-        "height": 44,
-        "top": 114.1875,
-        "right": 834,
-        "bottom": 158.1875,
-        "left": 304.25
-      }
-    },
-    {
-      "name": "Actual 844 wetenschappelijk-terug expanded rule",
+      "name": "Actual 844 wetenschappelijk-klein collapsed rule",
       "before": {
         "x": 304.25,
         "y": 191.1875,
@@ -9025,6 +9002,29 @@
         "top": 191.1875,
         "right": 834,
         "bottom": 235.1875,
+        "left": 304.25
+      },
+      "after": {
+        "x": 304.25,
+        "y": 172.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 172.1875,
+        "right": 834,
+        "bottom": 216.1875,
+        "left": 304.25
+      }
+    },
+    {
+      "name": "Actual 844 wetenschappelijk-terug expanded rule",
+      "before": {
+        "x": 304.25,
+        "y": 144.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 144.1875,
+        "right": 834,
+        "bottom": 188.1875,
         "left": 304.25
       },
       "after": {
@@ -9065,12 +9065,12 @@
       "name": "Actual 844 wetenschappelijk-normaliseren expanded rule",
       "before": {
         "x": 304.25,
-        "y": 144.1875,
+        "y": 191.1875,
         "width": 529.75,
         "height": 44,
-        "top": 144.1875,
+        "top": 191.1875,
         "right": 834,
-        "bottom": 188.1875,
+        "bottom": 235.1875,
         "left": 304.25
       },
       "after": {
@@ -9081,6 +9081,52 @@
         "top": 114.1875,
         "right": 834,
         "bottom": 158.1875,
+        "left": 304.25
+      }
+    },
+    {
+      "name": "Actual 844 wetenschappelijk-normaliseren expanded value 0",
+      "before": {
+        "x": 639.859375,
+        "y": 161.1875,
+        "width": 62.703125,
+        "height": 44,
+        "top": 161.1875,
+        "right": 702.5625,
+        "bottom": 205.1875,
+        "left": 639.859375
+      },
+      "after": {
+        "x": 639.859375,
+        "y": 114.1875,
+        "width": 62.703125,
+        "height": 44,
+        "top": 114.1875,
+        "right": 702.5625,
+        "bottom": 158.1875,
+        "left": 639.859375
+      }
+    },
+    {
+      "name": "Actual 844 wetenschappelijk-normaliseren collapsed rule",
+      "before": {
+        "x": 304.25,
+        "y": 191.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 191.1875,
+        "right": 834,
+        "bottom": 235.1875,
+        "left": 304.25
+      },
+      "after": {
+        "x": 304.25,
+        "y": 172.1875,
+        "width": 529.75,
+        "height": 44,
+        "top": 172.1875,
+        "right": 834,
+        "bottom": 216.1875,
         "left": 304.25
       }
     }

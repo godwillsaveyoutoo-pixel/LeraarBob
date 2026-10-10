@@ -13,6 +13,7 @@
   ],
   "checks": [
     "Student cannot create classroom activities",
+    "Learn entrance is code-only at 1366/390/640 in both bar states; native Back and reopening retain partial code and same document",
     "Klas Learn input expanded/collapsed and restore",
     "Learn draft minimize/resume",
     "Full 5-question Klas Learn: wrong/correct, 45 genuine XP, teacher review/pacing, finish/report, draft/focus/reload",
@@ -28,13 +29,13 @@
   "calls": {
     "axioma_class_battle_hub:overview": 29,
     "axioma_social:sync": 25,
-    "axioma_clay_v2:sync": 39,
+    "axioma_clay_v2:sync": 41,
     "numbers-session:summary": 16,
     "numbers-session:create": 2,
     "numbers-session:join": 2,
     "numbers-session:start": 2,
     "numbers-session:pulse": 5,
-    "numbers-session:state": 26,
+    "numbers-session:state": 27,
     "numbers-session:submit": 11,
     "numbers-session:end": 5,
     "numbers-session:next": 10,

@@ -30,8 +30,8 @@ test('Desktop home is optional and remains inside the platform origin and path',
   }
 });
 
-test('Existing live lesson roles and membership survive mounting the desktop additions',async t=>{
-  const f=await setup({home:'os/',page:'desktop'});t.after(()=>f.close());
+test('Standalone live lesson roles and membership keep their existing behavior',async t=>{
+  const f=await setup();t.after(()=>f.close());
   const live=f.shadow.querySelector('.live-entry'),teacher=f.shadow.querySelector('.teacher-link');
   assert.equal(live.hidden,true);
   const login=account=>f.w.dispatchEvent(new f.w.CustomEvent('axioma:login-complete',{detail:{account}}));
@@ -55,5 +55,18 @@ test('Compact desktop title identifies the app even when native breadcrumbs show
   f.w.document.querySelector('header').dataset.platformAppTitle='Rechtenwereld';
   await new Promise(resolve=>f.w.requestAnimationFrame(resolve));
   assert.equal(f.shadow.querySelector('.mobile-title').textContent,'Rechtenwereld');
+  assert.equal(f.errors.length,0);
+});
+
+test('OS has no redundant Live link after teacher/student login or lesson membership changes',async t=>{
+  const f=await setup({home:'os/',page:'desktop'});t.after(()=>f.close());
+  for(const role of ['teacher','student']){
+    const account={id:'test-'+role,role,alias:role};
+    f.w.dispatchEvent(new f.w.CustomEvent('axioma:login-complete',{detail:{account}}));
+    f.w.localStorage.setItem('lesson-stage-room:'+account.id,'existing-room');
+    f.w.dispatchEvent(new f.w.Event('lesson:membership'));
+    assert.equal(f.shadow.querySelector('.live-entry').hidden,true);
+    assert.equal(f.shadow.querySelector('.teacher-link').hidden,role!=='teacher');
+  }
   assert.equal(f.errors.length,0);
 });
