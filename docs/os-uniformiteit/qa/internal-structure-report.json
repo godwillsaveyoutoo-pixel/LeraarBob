@@ -1,0 +1,411 @@
+{
+  "release": "296e06b7afb84564f7737ba0f790e27ebf6fa800",
+  "scope": "Local published frontend; fresh guests, 1366x768, deviceScaleFactor 1. No real account, backend writes, session creation, grading or submission.",
+  "capabilities": [
+    {
+      "id": "getallenwereld",
+      "modes": [
+        {
+          "id": "solo",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "getallenwereld",
+          "providerId": "getallenwereld",
+          "href": "games/getallenwereld/"
+        },
+        {
+          "id": "series",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "getallenwereld",
+          "providerId": "bewerkingen-trainer",
+          "href": "games/bewerkingen-trainer/start.html"
+        },
+        {
+          "id": "local",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "getallenwereld",
+          "providerId": "bewerkingen-trainer",
+          "href": "games/bewerkingen-trainer/battle.html"
+        },
+        {
+          "id": "classroom",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "getallenwereld",
+          "providerId": "bewerkingen",
+          "href": "games/bewerkingen-trainer/classroom.html"
+        },
+        {
+          "id": "teacher",
+          "roles": [
+            "teacher"
+          ],
+          "providerGameId": "getallenwereld",
+          "providerId": "bewerkingen-trainer",
+          "href": "games/bewerkingen-trainer/?mode=teacher&screen=setup"
+        },
+        {
+          "id": "learn",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "getallenwereld",
+          "providerId": "bewerkingen-trainer",
+          "href": "games/bewerkingen-trainer/start.html?view=learn&audience=duo"
+        },
+        {
+          "id": "online",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "getallenwereld",
+          "providerId": "bewerkingen-trainer",
+          "href": "games/bewerkingen-trainer/start.html?view=battle&audience=duo"
+        },
+        {
+          "id": "classlearn",
+          "roles": [
+            "teacher"
+          ],
+          "providerGameId": "getallenwereld",
+          "providerId": "bewerkingen-trainer",
+          "href": "games/bewerkingen-trainer/start.html?view=learn&audience=class"
+        }
+      ],
+      "worksheets": [
+        "operations"
+      ]
+    },
+    {
+      "id": "algebra-trainer",
+      "modes": [
+        {
+          "id": "solo",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "algebra-trainer",
+          "providerId": "algebra-trainer",
+          "href": "games/algebra-trainer/"
+        },
+        {
+          "id": "classroom",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "algebra-trainer",
+          "providerId": "algebra",
+          "href": "games/algebra-trainer/classroom.html"
+        }
+      ],
+      "worksheets": [
+        "equations",
+        "systems"
+      ]
+    },
+    {
+      "id": "rechtenwereld",
+      "modes": [
+        {
+          "id": "solo",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "rechtenwereld",
+          "providerId": "rechtenwereld",
+          "href": "games/rechten/rechtenwereld/#wereld"
+        },
+        {
+          "id": "learn",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "rechtenwereld",
+          "providerId": "rechten-learn",
+          "href": "games/rechten/rechtenwereld/learn.html"
+        },
+        {
+          "id": "local",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "rechtenwereld",
+          "providerId": "rechtenwereld",
+          "href": "games/rechten/rechtenwereld/battle.html"
+        },
+        {
+          "id": "online",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "rechtenwereld",
+          "providerId": "rechten-duo",
+          "href": "games/rechten/rechtenwereld/online.html"
+        },
+        {
+          "id": "classroom",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "rechtenwereld",
+          "providerId": "rechten",
+          "href": "games/rechten/rechtenwereld/classroom.html"
+        }
+      ],
+      "worksheets": [
+        "hellingrug",
+        "grenspas",
+        "formulewerf",
+        "signaalstad"
+      ]
+    },
+    {
+      "id": "vectoren-trainer",
+      "modes": [
+        {
+          "id": "solo",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "vectoren-trainer",
+          "providerId": "vectoren-trainer",
+          "href": "games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html"
+        },
+        {
+          "id": "local",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "vectoren-trainer",
+          "providerId": "vectoren-trainer",
+          "href": "games/vectoren/battle.html"
+        },
+        {
+          "id": "classroom",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "providerGameId": "vectoren-trainer",
+          "providerId": "vectoren",
+          "href": "games/vectoren/classroom.html"
+        }
+      ],
+      "worksheets": []
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "getallenwereld",
+      "api": "GetallenWorld",
+      "methods": [
+        "snapshot",
+        "task"
+      ],
+      "osNavigationVisible": false
+    },
+    {
+      "id": "algebra-trainer",
+      "api": "AlgebraShell",
+      "methods": [
+        "mount",
+        "classroomOrigin",
+        "setEmbedded",
+        "context",
+        "navigate",
+        "subscribe",
+        "refresh",
+        "openRoute"
+      ],
+      "osNavigationVisible": true
+    },
+    {
+      "id": "rechtenwereld",
+      "api": "RechtenV2App",
+      "methods": [
+        "snapshot",
+        "sync"
+      ],
+      "osNavigationVisible": false
+    },
+    {
+      "id": "vectoren-trainer",
+      "api": "AxiomaVectorTrainer",
+      "methods": [
+        "inspect",
+        "project"
+      ],
+      "osNavigationVisible": false
+    }
+  ],
+  "probes": [
+    {
+      "app": "getallenwereld",
+      "action": "Actual start then OS minimize/resume",
+      "result": "Same native document and identical guided state"
+    },
+    {
+      "app": "getallenwereld",
+      "action": "Actual guided chapter → Oefenen & samen",
+      "destination": "/games/bewerkingen-trainer/start.html?mode=solo&skills=power-product&lesson=machten-product&game=getallenwereld&world=machten&topic=machten&screen=setup&returnTo=%2Fgames%2Fgetallenwereld%2F%3Fgame%3Dgetallenwereld%26world%3Dgetallen%26topic%3Dmachten%26level%3Dmachten-product%26screen%3Dchapter%26activeLevel%3Dmachten-product",
+      "result": "Replaces guided document and asks workmode again",
+      "provider": {
+        "url": "http://127.0.0.1:8791/games/bewerkingen-trainer/start.html?mode=solo&skills=power-product&lesson=machten-product&game=getallenwereld&world=machten&topic=machten&screen=setup&returnTo=%2Fgames%2Fgetallenwereld%2F%3Fgame%3Dgetallenwereld%26world%3Dgetallen%26topic%3Dmachten%26level%3Dmachten-product%26screen%3Dchapter%26activeLevel%3Dmachten-product&view=home&level=1&count=5&activity=learn&audience=duo&seconds=180&participate=1",
+        "snapshot": {
+          "view": "home",
+          "selected": [
+            "power-product"
+          ],
+          "activity": "learn",
+          "state": null,
+          "pending": null
+        },
+        "heading": "Wat wil je doen?",
+        "choices": [
+          "solo",
+          "paper",
+          "duo-learn",
+          "duo-battle",
+          "rankings",
+          "duo"
+        ]
+      }
+    },
+    {
+      "app": "rechtenwereld",
+      "action": "Actual Hellingrug → Leren, spelen of papier",
+      "destination": "play.html?world=hellingrug",
+      "result": "Separate native workmode selector repeats OS choices",
+      "choices": [
+        "Alleen leren1 leerlingKies een level en volg je eigen leerroute.Ook zonder aanmelding→",
+        "Samen leren2–3 leerlingen · elk een toestelEerst je eigen idee, daarna samen bouwen en controleren.Leerlingaccounts · uitnodiging op alias→",
+        "Duo-battle op één toestel2 spelers · één schermSpeel tegen elkaar op twee werkborden naast elkaar.Ook zonder aanmelding→",
+        "Online duel2 leerlingen · elk een toestelNodig een leerling uit op alias.Leerlingaccounts · uitnodiging→",
+        "KlasbattleDe hele klas · elk een toestelKies de instellingen en deel de sessiecode.leraarBob-account · sessiecode→"
+      ]
+    },
+    {
+      "app": "vectoren-trainer",
+      "action": "Native solo URL supplied world and stationScreen",
+      "requested": "manoeuvreveld",
+      "result": "No native station deep-link contract; stays on home",
+      "observed": {
+        "screen": "home",
+        "station": "Koerscentrum",
+        "stationVisible": false
+      },
+      "registryTopicScopes": [
+        {
+          "id": "koerscentrum",
+          "scope": "classroom",
+          "routeModes": [
+            "classroom"
+          ]
+        },
+        {
+          "id": "stuwkrachtlab",
+          "scope": "classroom",
+          "routeModes": [
+            "classroom"
+          ]
+        },
+        {
+          "id": "dockingzone",
+          "scope": "classroom",
+          "routeModes": [
+            "classroom"
+          ]
+        },
+        {
+          "id": "navigatienet",
+          "scope": "classroom",
+          "routeModes": [
+            "classroom"
+          ]
+        },
+        {
+          "id": "manoeuvreveld",
+          "scope": "classroom",
+          "routeModes": [
+            "classroom"
+          ]
+        }
+      ]
+    }
+  ],
+  "blocked": [],
+  "errors": [],
+  "sources": [
+    {
+      "file": "os/desktop.js",
+      "sha256": "15b9298d9e09a2b0066fba11d33961a165c70e928fa31d8777c5b3a854a12b3a"
+    },
+    {
+      "file": "shared/game-registry.js",
+      "sha256": "28099b863ee79819d29e9d9e6c65da9259fc51e3a8269cf8e17e362e5df8fbd9"
+    },
+    {
+      "file": "shared/play-modes.js",
+      "sha256": "98fc646f0e7024f5ac57c9a38a8fe3146f64a7aa8933ce34992eee5a63665dc7"
+    },
+    {
+      "file": "games/getallenwereld/app.js",
+      "sha256": "ea8c6f92160f80f8033cf278f4708070515ff2974daade608b1e7f44ad40fbbc"
+    },
+    {
+      "file": "games/bewerkingen-trainer/numbers-space.js",
+      "sha256": "a6b9ca873be28b95d38f6340320151344cb12182e9bb509d5d013f3718a5e449"
+    },
+    {
+      "file": "games/algebra-trainer/shell.js",
+      "sha256": "5c81ba365113aeca2578ae2b3221e7dde135ca7cc8fc07430d1df3a9d0324a74"
+    },
+    {
+      "file": "games/algebra-trainer/navigation.js",
+      "sha256": "59073efe0e083e9e7705668569b1447058023c11ace3d9a84a416a7ff075cc5f"
+    },
+    {
+      "file": "games/rechten/rechtenwereld/app-shell.js",
+      "sha256": "f1c32614a6dd0a2e787b6104848dd071e1c425cf7585f6518f3076d3ea4939c7"
+    },
+    {
+      "file": "games/rechten/rechtenwereld/play.js",
+      "sha256": "53acc81c3a5dd21bb151800ab211f23d29f9f6e07b922a1f4c53a961f9b96abd"
+    },
+    {
+      "file": "games/vectoren/vector-app.js",
+      "sha256": "820aca8f8b8934a4c1c3509457694dacca0f7e937ad0ef77d48a5329e4bd774f"
+    }
+  ],
+  "completed": true,
+  "browser": "154.0.8037.58"
+}

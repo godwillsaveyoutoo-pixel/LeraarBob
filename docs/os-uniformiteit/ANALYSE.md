@@ -4,6 +4,8 @@ Getallenwereld, Algebrawereld, Rechtenwereld en Vectormissie hebben één gedeel
 
 Dit voorstel betreft de gepubliceerde versie van 10 oktober 2026, main `296e06b7afb84564f7737ba0f790e27ebf6fa800`. De oorspronkelijke lokale werkbranch bevat afzonderlijk, nog niet gepubliceerd werk. Die werkmap is buiten deze analyse gehouden. Dit is een analyse met bewijs en een implementatievolgorde; de voorgestelde interface is nog niet ingevoerd.
 
+**Vervolgonderzoek:** [Interne structuur van de vier trainers](INTERNE-STRUCTUUR.md) werkt de concrete ingrepen per component uit en verwerkt het inmiddels gekozen ontwerp: een persoonlijk spelgrid, centrale werkvormstart en oefenbladcollectie via Start en de wereld. De permanente rij Overzicht / Onderdelen / Werkvormen hieronder is daarmee een eerdere ontwerpvariant, geen vereiste voor de nieuwe interface. De bestaande metingen en bronanalyse blijven bruikbaar.
+
 ## Wat de daadwerkelijke interface laat zien
 
 De vier apps zijn op de publieke site als frisse gast geopend, via echte knoppen naar een opgave gebracht en gemeten op 1366 × 768 bij 100% zoom, 390 × 844 en 640 × 360, telkens met de OS-balk uitgeklapt en ingeklapt. Er zijn 30 schermmetingen en 34 screenshots. Twaalf relevante gepubliceerde bronbestanden zijn bytegelijk aan de onderzochte main. Alle vier behouden hun iframe bij OS-minimaliseren en hervatten. Er zijn geen JavaScriptfouten of ontbrekende bronnen in deze navigatieproef. [Rapport](qa/report.json), [screenshotindex](qa/README.md).

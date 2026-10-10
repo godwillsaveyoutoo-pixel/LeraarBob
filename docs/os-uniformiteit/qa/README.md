@@ -8,6 +8,15 @@ Onderzochte publicatie: main `296e06b7afb84564f7737ba0f790e27ebf6fa800`, 10 okto
 
 De publieke runs hebben geen JavaScriptfouten of 404. Ze zijn geen bewijs voor productie-login, multiplayer of het volledig beantwoorden van vragen. Historische functionele regressies zijn niet opnieuw uitgevoerd.
 
+## Vervolg: interne structuur
+
+Het [vervolgonderzoek](../INTERNE-STRUCTUUR.md) bevat nieuwe lokale controles, los van de publieke runs hierboven:
+
+- [Native interfaces en vier navigatieproeven](internal-structure-report.json), met [reproduceerbaar script](internal-structure-browser.cjs): frisse gasten op 1366 × 768, 100%, alle externe verbindingen en schrijfacties geblokkeerd.
+- [Vijf opnieuw uitgevoerde testbestanden](internal-structure-tests.txt): register, routes, desktopmodel, native Getallen-integratie en documentenbibliotheek; alle geslaagd met fictieve account-/opslagconfiguratie.
+
+Start een lokale frontend met `OS_PREVIEW_PORT=8791 node scripts/serve-os-preview.cjs`. Voer de browserproef uit met `node docs/os-uniformiteit/qa/internal-structure-browser.cjs` en beschikbare Playwright-dependencies. `LB_STRUCTURE_BASE` en `LB_CHROMIUM` kunnen respectievelijk het lokale testadres en browserpad aanpassen. De proef wijzigt uitsluitend zijn JSON-rapport en lokale gastopslag.
+
 ## Screenshots
 
 De 36 onderstaande beelden zijn screenshots van bestaande interfaces; geen mock-ups van het voorstel.
