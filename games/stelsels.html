@@ -514,6 +514,11 @@ body.is-dragging{user-select:none}
   color:#657572;
 }
 .expert-sub-source{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:44px;
+  min-height:44px;
   font:800 clamp(24px,3vw,36px)/1 var(--sans);
   padding:3px 7px 5px;
   border-radius:7px;
@@ -533,14 +538,20 @@ body.is-dragging{user-select:none}
 .expert-sub-equation .eq{text-align:center;color:#74827f}
 .expert-sub-equation .rhs{text-align:left}
 .expert-sub-slot{
-  display:inline-block;
-  min-width:1.05em;
-  padding:1px 5px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  vertical-align:middle;
+  min-width:max(44px,1.05em);
+  min-height:44px;
+  padding:2px 6px;
   border-radius:7px;
-  outline:2px dashed rgba(95,143,105,.42);
+  outline:2px dashed #527747;
   outline-offset:2px;
-  background:rgba(223,241,200,.22);
+  background:#e5f0d2;
+  cursor:pointer;
 }
+.expert-sub-source:focus-visible,.expert-sub-slot:focus-visible{outline:3px solid #2e5963;outline-offset:4px}
 .expert-sub-inserted{
   display:inline-block;
   padding:2px 5px;
@@ -664,6 +675,16 @@ body.is-dragging{user-select:none}
   .expert-trail.emphasis .trail-math{font-size:24px}
 }
 
+/* Placement has no keypad: use that space for the expression and its target. */
+.expert-workspace.expert-placement{grid-template-columns:minmax(0,1fr)}
+.expert-placement .expert-feedback:empty{display:none}
+@media(max-height:400px) and (orientation:landscape){
+  .expert-placement .expert-original,.expert-placement .expert-trail{display:none}
+  .expert-placement .expert-substitution-stage{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);width:100%;gap:4px}
+  .expert-placement .expert-task-title{grid-column:1/-1}
+  .expert-placement .expert-sub-arrow{transform:rotate(-90deg)}
+  .expert-placement .expert-sub-equation{grid-template-columns:auto 17px auto}
+}
 @media(orientation:portrait){.rotate{display:grid}#app{visibility:hidden}}
 </style>
 <script src="../shared/axioma-platform.js"></script>
@@ -1100,13 +1121,13 @@ function eTrailHTML(emphasis=false){
 }
 function eWorkspace(taskHTML,checkLabel='controleer',showKeypad=true){
   const combinationFocus=method==='combination'&&state.phase>=2;
-  return `<div class="expert-workspace">
+  return `<div class="expert-workspace${showKeypad?'':' expert-placement'}">
     <div class="expert-main">
       ${eOriginalHTML(combinationFocus)}
       ${eTrailHTML(combinationFocus)}
       <div class="expert-task">${taskHTML}<div class="expert-feedback ${state.feedbackBad?'bad':''}">${state.feedback||''}</div></div>
     </div>
-    <div>${showKeypad?eKeypadHTML(checkLabel):''}</div>
+    ${showKeypad?`<div>${eKeypadHTML(checkLabel)}</div>`:''}
   </div>`
 }
 function eSetError(msg,id=null){state.feedback=msg;state.feedbackBad=true;state.badEditor=id;if(id)state.activeEditor=id;state.fracFocus=null}
@@ -1168,8 +1189,8 @@ function eSubTermHTML(coef,varName,contentHTML=null,first=false,target=false){
   if(coef.zero())return '';
   const neg=coef.n<0,abs=coef.abs();
   let body='';
-  if(contentHTML!==null){
-    const core=target?`<span class="expert-sub-slot" id="expertSubTarget">${varName}</span>`:`<span class="expert-sub-inserted">(${contentHTML})</span>`;
+  if(target||contentHTML!==null){
+    const core=target?`<span class="expert-sub-slot drop-target" id="expertSubTarget" aria-label="${varName} vervangen door je gevonden uitdrukking">${varName}</span>`:`<span class="expert-sub-inserted">(${contentHTML})</span>`;
     body=abs.one()?core:`${qHTML(abs)}${core}`
   }else{
     body=termBody(abs,varName)
@@ -1211,14 +1232,15 @@ function renderExpertSubstitution(){
       setInstruction('2 · expert','Substitueer je gevonden uitdrukking in de andere vergelijking.');
       const row=eSubVisualRow(false);
       const task=`<div class="expert-substitution-stage">
-        <div class="expert-task-title">Vervang ${v} in de andere vergelijking door je gevonden uitdrukking.</div>
-        <div class="expert-sub-source-row"><span>${v} =</span><span class="expert-sub-source" id="expertSubSource">${eStaticHTML('isoRhs')}</span></div>
+        <div class="expert-task-title">Sleep de uitdrukking naar de groen omrande ${v}, of tik eerst op de uitdrukking en dan op ${v}.</div>
+        <div class="expert-sub-source-row"><span>${v} =</span><span class="expert-sub-source drag-source" id="expertSubSource">${eStaticHTML('isoRhs')}</span></div>
         <div class="expert-sub-arrow">↓</div>
         <div class="expert-sub-equation"><span class="lhs">${row.lhs}</span><span class="eq">=</span><span class="rhs">${row.rhs}</span></div>
       </div>`;
       systemWrap.innerHTML=eWorkspace(task,'',false);
       moveControl($('#expertSubSource'),$('#expertSubSource').innerHTML,['#expertSubTarget'],()=>transition(()=>{
         state.subPlaced=true;
+        clearTimeout(showToast.t);toast.className='toast';toast.textContent='';
         eClearFeedback();
         state.activeEditor='subL'
       }));
