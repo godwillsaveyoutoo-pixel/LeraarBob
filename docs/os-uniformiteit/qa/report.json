@@ -1,0 +1,4516 @@
+{
+  "scope": "Read-only actual public frontend, fresh guest profiles. No login, class creation, answer submission or production writes. All off-origin/non-GET requests blocked.",
+  "release": "296e06b7afb84564f7737ba0f790e27ebf6fa800",
+  "files": [
+    {
+      "file": "os/desktop.js",
+      "sha256": "15b9298d9e09a2b0066fba11d33961a165c70e928fa31d8777c5b3a854a12b3a"
+    },
+    {
+      "file": "os/desktop.css",
+      "sha256": "3cea18380ec508ebef9f0bce7a2848db16f836f024dfa04415cd8af0fa78818a"
+    },
+    {
+      "file": "shared/leraarbob-topbar.js",
+      "sha256": "ebd762eb3627b6a669ec0c10c76bc73eed24a5744212181dccc86d4c8664af2c"
+    },
+    {
+      "file": "shared/play-modes.js",
+      "sha256": "98fc646f0e7024f5ac57c9a38a8fe3146f64a7aa8933ce34992eee5a63665dc7"
+    },
+    {
+      "file": "games/getallenwereld/app.js",
+      "sha256": "ea8c6f92160f80f8033cf278f4708070515ff2974daade608b1e7f44ad40fbbc"
+    },
+    {
+      "file": "games/getallenwereld/workshop.js",
+      "sha256": "c1f78d93f9418ec0c928f6cbc608e0bc47c358d5d13348acfb68bb5174fa38b2"
+    },
+    {
+      "file": "games/bewerkingen-trainer/numbers-space.js",
+      "sha256": "a6b9ca873be28b95d38f6340320151344cb12182e9bb509d5d013f3718a5e449"
+    },
+    {
+      "file": "games/algebra-trainer/shell.js",
+      "sha256": "5c81ba365113aeca2578ae2b3221e7dde135ca7cc8fc07430d1df3a9d0324a74"
+    },
+    {
+      "file": "games/rechten/rechtenwereld/app-shell.js",
+      "sha256": "f1c32614a6dd0a2e787b6104848dd071e1c425cf7585f6518f3076d3ea4939c7"
+    },
+    {
+      "file": "games/rechten/rechtenwereld/components/shell-view.js",
+      "sha256": "35374aa7dfadb920bd0894823f5a087eed95bcf4d44240e13db6e88ade364c0d"
+    },
+    {
+      "file": "games/vectoren/vector-app.js",
+      "sha256": "820aca8f8b8934a4c1c3509457694dacca0f7e937ad0ef77d48a5329e4bd774f"
+    },
+    {
+      "file": "games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html",
+      "sha256": "79fe15361240057654397d82ddeb515971a55b128228496870f96f20e9b88698"
+    }
+  ],
+  "screens": [
+    {
+      "label": "getallen-home-1366",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 58,
+          "top": 0,
+          "right": 1366,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 1366,
+          "height": 51,
+          "top": 58,
+          "right": 1366,
+          "bottom": 109,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 109,
+          "width": 1366,
+          "height": 591,
+          "top": 109,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/?returnTo=%2FLeraarBob%2Fos%2F&game=getallenwereld&world=getallen&topic=machten&level=machten-betekenis&screen=home",
+        "viewport": {
+          "width": 1366,
+          "height": 591
+        },
+        "screen": "home",
+        "topbars": [
+          {
+            "selector": "header.",
+            "text": "Getallenwereld MachtenVierkantswortelsOefening hervattenHulp bij mijn opgaveWetenschappelijke notatieOefenen & samenSolo · duo · meedoenOefenbladMet verbetersleutelRanglijstenXP en battlepunten ☰ MenuleraarBob-account",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 0,
+              "top": 0,
+              "right": 1366,
+              "bottom": 0,
+              "left": 0
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "",
+            "label": "Hoofdstuk 01 · 8 onderdelenMachten ↗Van betekenis naar rekenregel. Eerst herkennen, dan herschrijven.x3⋅x4=x7x^3\\cdot x^",
+            "rect": {
+              "x": 24,
+              "y": 104.578125,
+              "width": 426,
+              "height": 303.9375,
+              "top": 104.578125,
+              "right": 450,
+              "bottom": 408.515625,
+              "left": 24
+            }
+          },
+          {
+            "id": "",
+            "label": "Hoofdstuk 02 · 7 onderdelenVierkantswortels ↗Zoek kwadraten. Vereenvoudig en houd de worteltermen uit elkaar.12+27=53\\sq",
+            "rect": {
+              "x": 470,
+              "y": 104.578125,
+              "width": 426,
+              "height": 303.9375,
+              "top": 104.578125,
+              "right": 896,
+              "bottom": 408.515625,
+              "left": 470
+            }
+          },
+          {
+            "id": "",
+            "label": "Hoofdstuk 03 · 4 onderdelenWetenschappelijke schrijfwijze ↗Schrijf grote en kleine getallen met machten van tien. Houd d",
+            "rect": {
+              "x": 916,
+              "y": 104.578125,
+              "width": 426,
+              "height": 303.9375,
+              "top": 104.578125,
+              "right": 1342,
+              "bottom": 408.515625,
+              "left": 916
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "getallen-play-1366-expanded",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 58,
+          "top": 0,
+          "right": 1366,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 1366,
+          "height": 51,
+          "top": 58,
+          "right": 1366,
+          "bottom": 109,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 109,
+          "width": 1366,
+          "height": 591,
+          "top": 109,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/?returnTo=%2FLeraarBob%2Fos%2F&game=getallenwereld&world=getallen&topic=machten&level=machten-product&screen=play&activeLevel=machten-product",
+        "viewport": {
+          "width": 1366,
+          "height": 591
+        },
+        "screen": "play",
+        "topbars": [
+          {
+            "selector": "header.",
+            "text": "GetallenwereldMachtenMachten vermenigvuldigen MachtenVierkantswortelsOefening hervattenHulp bij mijn opgaveWetenschappelijke notatieOefenen & samenSolo · duo · meedoenOefenbladMet verbetersleutelRanglijstenXP en battlepu",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 0,
+              "top": 0,
+              "right": 1366,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          {
+            "selector": "nav.workshop-nav",
+            "text": "← Mijn machtenpadBasisreeks · alleen oefenenOnderdelen & werkvormen",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 48,
+              "top": 0,
+              "right": 1366,
+              "bottom": 48,
+              "left": 0
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "",
+            "action": "chapter",
+            "label": "← Mijn machtenpad",
+            "rect": {
+              "x": 22,
+              "y": 1.5,
+              "width": 139.359375,
+              "height": 44,
+              "top": 1.5,
+              "right": 161.359375,
+              "bottom": 45.5,
+              "left": 22
+            }
+          },
+          {
+            "id": "",
+            "action": "menu-open",
+            "label": "Onderdelen & werkvormen",
+            "rect": {
+              "x": 1174.609375,
+              "y": 1.5,
+              "width": 169.390625,
+              "height": 44,
+              "top": 1.5,
+              "right": 1344,
+              "bottom": 45.5,
+              "left": 1174.609375
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "getallen-play-1366-collapsed",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": true,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 51,
+          "top": 0,
+          "right": 1366,
+          "bottom": 51,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 51,
+          "width": 1366,
+          "height": 649,
+          "top": 51,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": {
+          "x": 6,
+          "y": 6,
+          "width": 44,
+          "height": 44,
+          "top": 6,
+          "right": 50,
+          "bottom": 50,
+          "left": 6
+        },
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/?returnTo=%2FLeraarBob%2Fos%2F&game=getallenwereld&world=getallen&topic=machten&level=machten-product&screen=play&activeLevel=machten-product",
+        "viewport": {
+          "width": 1366,
+          "height": 649
+        },
+        "screen": "play",
+        "topbars": [
+          {
+            "selector": "header.",
+            "text": "GetallenwereldMachtenMachten vermenigvuldigen MachtenVierkantswortelsOefening hervattenHulp bij mijn opgaveWetenschappelijke notatieOefenen & samenSolo · duo · meedoenOefenbladMet verbetersleutelRanglijstenXP en battlepu",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 0,
+              "top": 0,
+              "right": 1366,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          {
+            "selector": "nav.workshop-nav",
+            "text": "← Mijn machtenpadBasisreeks · alleen oefenenOnderdelen & werkvormen",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 48,
+              "top": 0,
+              "right": 1366,
+              "bottom": 48,
+              "left": 0
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "",
+            "action": "chapter",
+            "label": "← Mijn machtenpad",
+            "rect": {
+              "x": 22,
+              "y": 1.5,
+              "width": 139.359375,
+              "height": 44,
+              "top": 1.5,
+              "right": 161.359375,
+              "bottom": 45.5,
+              "left": 22
+            }
+          },
+          {
+            "id": "",
+            "action": "menu-open",
+            "label": "Onderdelen & werkvormen",
+            "rect": {
+              "x": 1174.609375,
+              "y": 1.5,
+              "width": 169.390625,
+              "height": 44,
+              "top": 1.5,
+              "right": 1344,
+              "bottom": 45.5,
+              "left": 1174.609375
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "getallen-play-390-expanded",
+      "shell": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 77,
+          "top": 0,
+          "right": 390,
+          "bottom": 77,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 77,
+          "width": 390,
+          "height": 51,
+          "top": 77,
+          "right": 390,
+          "bottom": 128,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 128,
+          "width": 390,
+          "height": 654,
+          "top": 128,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 782,
+          "width": 390,
+          "height": 62,
+          "top": 782,
+          "right": 390,
+          "bottom": 844,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/?returnTo=%2FLeraarBob%2Fos%2F&game=getallenwereld&world=getallen&topic=machten&level=machten-product&screen=play&activeLevel=machten-product",
+        "viewport": {
+          "width": 390,
+          "height": 654
+        },
+        "screen": "play",
+        "topbars": [
+          {
+            "selector": "header.",
+            "text": "GetallenwereldMachtenMachten vermenigvuldigen MachtenVierkantswortelsOefening hervattenHulp bij mijn opgaveWetenschappelijke notatieOefenen & samenSolo · duo · meedoenOefenbladMet verbetersleutelRanglijstenXP en battlepu",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          {
+            "selector": "nav.workshop-nav",
+            "text": "← Mijn machtenpadBasisreeks · alleen oefenenOnderdelen & werkvormen",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 48,
+              "top": 0,
+              "right": 390,
+              "bottom": 48,
+              "left": 0
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "",
+            "action": "chapter",
+            "label": "← Mijn machtenpad",
+            "rect": {
+              "x": 8,
+              "y": 1.5,
+              "width": 129.875,
+              "height": 44,
+              "top": 1.5,
+              "right": 137.875,
+              "bottom": 45.5,
+              "left": 8
+            }
+          },
+          {
+            "id": "",
+            "action": "menu-open",
+            "label": "Onderdelen & werkvormen",
+            "rect": {
+              "x": 238.171875,
+              "y": 1.5,
+              "width": 143.828125,
+              "height": 44,
+              "top": 1.5,
+              "right": 382,
+              "bottom": 45.5,
+              "left": 238.171875
+            }
+          },
+          {
+            "id": "",
+            "label": "Zelfde grondtal: exponenten optellenam⋅an=am+na^m\\cdot a^n=a^{m+n}am⋅an=am+n",
+            "rect": {
+              "x": 12,
+              "y": 200.390625,
+              "width": 366,
+              "height": 60,
+              "top": 200.390625,
+              "right": 378,
+              "bottom": 260.390625,
+              "left": 12
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "getallen-play-390-collapsed",
+      "shell": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "zoom": 1,
+        "collapsed": true,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 51,
+          "top": 0,
+          "right": 390,
+          "bottom": 51,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 51,
+          "width": 390,
+          "height": 731,
+          "top": 51,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 782,
+          "width": 390,
+          "height": 62,
+          "top": 782,
+          "right": 390,
+          "bottom": 844,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": {
+          "x": 6,
+          "y": 6,
+          "width": 44,
+          "height": 44,
+          "top": 6,
+          "right": 50,
+          "bottom": 50,
+          "left": 6
+        },
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/?returnTo=%2FLeraarBob%2Fos%2F&game=getallenwereld&world=getallen&topic=machten&level=machten-product&screen=play&activeLevel=machten-product",
+        "viewport": {
+          "width": 390,
+          "height": 731
+        },
+        "screen": "play",
+        "topbars": [
+          {
+            "selector": "header.",
+            "text": "GetallenwereldMachtenMachten vermenigvuldigen MachtenVierkantswortelsOefening hervattenHulp bij mijn opgaveWetenschappelijke notatieOefenen & samenSolo · duo · meedoenOefenbladMet verbetersleutelRanglijstenXP en battlepu",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          {
+            "selector": "nav.workshop-nav",
+            "text": "← Mijn machtenpadBasisreeks · alleen oefenenOnderdelen & werkvormen",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 48,
+              "top": 0,
+              "right": 390,
+              "bottom": 48,
+              "left": 0
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "",
+            "action": "chapter",
+            "label": "← Mijn machtenpad",
+            "rect": {
+              "x": 8,
+              "y": 1.5,
+              "width": 129.875,
+              "height": 44,
+              "top": 1.5,
+              "right": 137.875,
+              "bottom": 45.5,
+              "left": 8
+            }
+          },
+          {
+            "id": "",
+            "action": "menu-open",
+            "label": "Onderdelen & werkvormen",
+            "rect": {
+              "x": 238.171875,
+              "y": 1.5,
+              "width": 143.828125,
+              "height": 44,
+              "top": 1.5,
+              "right": 382,
+              "bottom": 45.5,
+              "left": 238.171875
+            }
+          },
+          {
+            "id": "",
+            "label": "Zelfde grondtal: exponenten optellenam⋅an=am+na^m\\cdot a^n=a^{m+n}am⋅an=am+n",
+            "rect": {
+              "x": 12,
+              "y": 200.390625,
+              "width": 366,
+              "height": 60,
+              "top": 200.390625,
+              "right": 378,
+              "bottom": 260.390625,
+              "left": 12
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "getallen-play-640-expanded",
+      "shell": {
+        "viewport": {
+          "width": 640,
+          "height": 360
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 640,
+          "height": 58,
+          "top": 0,
+          "right": 640,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 640,
+          "height": 51,
+          "top": 58,
+          "right": 640,
+          "bottom": 109,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 109,
+          "width": 640,
+          "height": 183,
+          "top": 109,
+          "right": 640,
+          "bottom": 292,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 292,
+          "width": 640,
+          "height": 68,
+          "top": 292,
+          "right": 640,
+          "bottom": 360,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/?returnTo=%2FLeraarBob%2Fos%2F&game=getallenwereld&world=getallen&topic=machten&level=machten-product&screen=play&activeLevel=machten-product",
+        "viewport": {
+          "width": 640,
+          "height": 183
+        },
+        "screen": "play",
+        "topbars": [
+          {
+            "selector": "header.",
+            "text": "GetallenwereldMachtenMachten vermenigvuldigen MachtenVierkantswortelsOefening hervattenHulp bij mijn opgaveWetenschappelijke notatieOefenen & samenSolo · duo · meedoenOefenbladMet verbetersleutelRanglijstenXP en battlepu",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 0,
+              "top": 0,
+              "right": 640,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          {
+            "selector": "nav.workshop-nav",
+            "text": "← Mijn machtenpadBasisreeks · alleen oefenenOnderdelen & werkvormen",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 44,
+              "top": 0,
+              "right": 640,
+              "bottom": 44,
+              "left": 0
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "",
+            "label": "Zelfde grondtal: exponenten optellenam⋅an=am+na^m\\cdot a^n=a^{m+n}am⋅an=am+n",
+            "rect": {
+              "x": 232.84375,
+              "y": 97.1875,
+              "width": 397.15625,
+              "height": 44,
+              "top": 97.1875,
+              "right": 630,
+              "bottom": 141.1875,
+              "left": 232.84375
+            }
+          },
+          {
+            "id": "",
+            "label": "Zelfde grondtal: exponenten aftrekkenaman=am−n(a≠0)\\frac{a^m}{a^n}=a^{m-n}\\quad(a\\ne0)anam​=am−n(a=0)",
+            "rect": {
+              "x": 232.84375,
+              "y": 144.1875,
+              "width": 397.15625,
+              "height": 44,
+              "top": 144.1875,
+              "right": 630,
+              "bottom": 188.1875,
+              "left": 232.84375
+            }
+          },
+          {
+            "id": "",
+            "label": "Macht van een macht: exponenten vermenigvuldigen(am)n=am⋅n(a^m)^n=a^{m\\cdot n}(am)n=am⋅n",
+            "rect": {
+              "x": 232.84375,
+              "y": 191.1875,
+              "width": 397.15625,
+              "height": 44,
+              "top": 191.1875,
+              "right": 630,
+              "bottom": 235.1875,
+              "left": 232.84375
+            }
+          },
+          {
+            "id": "",
+            "action": "undo",
+            "label": "↶ Vorige stap",
+            "rect": {
+              "x": 483.09375,
+              "y": 135.5,
+              "width": 97.109375,
+              "height": 44,
+              "top": 135.5,
+              "right": 580.203125,
+              "bottom": 179.5,
+              "left": 483.09375
+            }
+          },
+          {
+            "id": "",
+            "action": "help",
+            "label": "Hulp",
+            "rect": {
+              "x": 585.203125,
+              "y": 135.5,
+              "width": 44.796875,
+              "height": 44,
+              "top": 135.5,
+              "right": 630,
+              "bottom": 179.5,
+              "left": 585.203125
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "getallen-play-640-collapsed",
+      "shell": {
+        "viewport": {
+          "width": 640,
+          "height": 360
+        },
+        "zoom": 1,
+        "collapsed": true,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 0,
+          "width": 640,
+          "height": 51,
+          "top": 0,
+          "right": 640,
+          "bottom": 51,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 51,
+          "width": 640,
+          "height": 241,
+          "top": 51,
+          "right": 640,
+          "bottom": 292,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 292,
+          "width": 640,
+          "height": 68,
+          "top": 292,
+          "right": 640,
+          "bottom": 360,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": {
+          "x": 6,
+          "y": 6,
+          "width": 44,
+          "height": 44,
+          "top": 6,
+          "right": 50,
+          "bottom": 50,
+          "left": 6
+        },
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/?returnTo=%2FLeraarBob%2Fos%2F&game=getallenwereld&world=getallen&topic=machten&level=machten-product&screen=play&activeLevel=machten-product",
+        "viewport": {
+          "width": 640,
+          "height": 241
+        },
+        "screen": "play",
+        "topbars": [
+          {
+            "selector": "header.",
+            "text": "GetallenwereldMachtenMachten vermenigvuldigen MachtenVierkantswortelsOefening hervattenHulp bij mijn opgaveWetenschappelijke notatieOefenen & samenSolo · duo · meedoenOefenbladMet verbetersleutelRanglijstenXP en battlepu",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 0,
+              "top": 0,
+              "right": 640,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          {
+            "selector": "nav.workshop-nav",
+            "text": "← Mijn machtenpadBasisreeks · alleen oefenenOnderdelen & werkvormen",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 640,
+              "height": 44,
+              "top": 0,
+              "right": 640,
+              "bottom": 44,
+              "left": 0
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "",
+            "label": "Zelfde grondtal: exponenten optellenam⋅an=am+na^m\\cdot a^n=a^{m+n}am⋅an=am+n",
+            "rect": {
+              "x": 232.84375,
+              "y": 97.1875,
+              "width": 397.15625,
+              "height": 44,
+              "top": 97.1875,
+              "right": 630,
+              "bottom": 141.1875,
+              "left": 232.84375
+            }
+          },
+          {
+            "id": "",
+            "label": "Zelfde grondtal: exponenten aftrekkenaman=am−n(a≠0)\\frac{a^m}{a^n}=a^{m-n}\\quad(a\\ne0)anam​=am−n(a=0)",
+            "rect": {
+              "x": 232.84375,
+              "y": 144.1875,
+              "width": 397.15625,
+              "height": 44,
+              "top": 144.1875,
+              "right": 630,
+              "bottom": 188.1875,
+              "left": 232.84375
+            }
+          },
+          {
+            "id": "",
+            "label": "Macht van een macht: exponenten vermenigvuldigen(am)n=am⋅n(a^m)^n=a^{m\\cdot n}(am)n=am⋅n",
+            "rect": {
+              "x": 232.84375,
+              "y": 191.1875,
+              "width": 397.15625,
+              "height": 44,
+              "top": 191.1875,
+              "right": 630,
+              "bottom": 235.1875,
+              "left": 232.84375
+            }
+          },
+          {
+            "id": "",
+            "action": "undo",
+            "label": "↶ Vorige stap",
+            "rect": {
+              "x": 483.09375,
+              "y": 193.5,
+              "width": 97.109375,
+              "height": 44,
+              "top": 193.5,
+              "right": 580.203125,
+              "bottom": 237.5,
+              "left": 483.09375
+            }
+          },
+          {
+            "id": "",
+            "action": "help",
+            "label": "Hulp",
+            "rect": {
+              "x": 585.203125,
+              "y": 193.5,
+              "width": 44.796875,
+              "height": 44,
+              "top": 193.5,
+              "right": 630,
+              "bottom": 237.5,
+              "left": 585.203125
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "getallen-native-menu",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 58,
+          "top": 0,
+          "right": 1366,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 1366,
+          "height": 51,
+          "top": 58,
+          "right": 1366,
+          "bottom": 109,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 109,
+          "width": 1366,
+          "height": 591,
+          "top": 109,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/?returnTo=%2FLeraarBob%2Fos%2F&game=getallenwereld&world=getallen&topic=machten&level=machten-product&screen=menu&activeLevel=machten-product",
+        "viewport": {
+          "width": 1366,
+          "height": 591
+        },
+        "screen": "menu",
+        "topbars": [
+          {
+            "selector": "header.",
+            "text": "Getallenwereld MachtenVierkantswortelsOefening hervattenHulp bij mijn opgaveWetenschappelijke notatieOefenen & samenSolo · duo · meedoenOefenbladMet verbetersleutelRanglijstenXP en battlepunten × SluitenleraarBob-account",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 0,
+              "top": 0,
+              "right": 1366,
+              "bottom": 0,
+              "left": 0
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "",
+            "action": "home",
+            "label": "GetallenwereldAlle hoofdstukken",
+            "rect": {
+              "x": 24,
+              "y": 148.1875,
+              "width": 354.4375,
+              "height": 75,
+              "top": 148.1875,
+              "right": 378.4375,
+              "bottom": 223.1875,
+              "left": 24
+            }
+          },
+          {
+            "id": "",
+            "action": "resume",
+            "label": "Oefening hervattenMachten vermenigvuldigen",
+            "rect": {
+              "x": 388.4375,
+              "y": 148.1875,
+              "width": 354.4375,
+              "height": 75,
+              "top": 148.1875,
+              "right": 742.875,
+              "bottom": 223.1875,
+              "left": 388.4375
+            }
+          },
+          {
+            "id": "",
+            "label": "Oefenen & samenSolo · duo · meedoen",
+            "rect": {
+              "x": 766.875,
+              "y": 148.1875,
+              "width": 282.546875,
+              "height": 75,
+              "top": 148.1875,
+              "right": 1049.421875,
+              "bottom": 223.1875,
+              "left": 766.875
+            }
+          },
+          {
+            "id": "",
+            "label": "OefenbladMet verbetersleutel",
+            "rect": {
+              "x": 1059.421875,
+              "y": 148.1875,
+              "width": 282.5625,
+              "height": 75,
+              "top": 148.1875,
+              "right": 1341.984375,
+              "bottom": 223.1875,
+              "left": 1059.421875
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "algebra-home-1366",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 58,
+          "top": 0,
+          "right": 1366,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 1366,
+          "height": 51,
+          "top": 58,
+          "right": 1366,
+          "bottom": 109,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 109,
+          "width": 1366,
+          "height": 591,
+          "top": 109,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/algebra-trainer/?returnTo=%2FLeraarBob%2Fos%2F&osEmbed=1&game=algebra-trainer&world=equations&topic=equations&screen=menu&level=route-inverse",
+        "viewport": {
+          "width": 1366,
+          "height": 591
+        },
+        "screen": "menu",
+        "topbars": [
+          {
+            "selector": "#navigationStops",
+            "text": "01Eén bewerkingx+4=9x+4=9x+4=9Nog te oefenen02Twee stappen3x+6=183x+6=183x+6=18Nog te oefenen03Negatieve x-term10−2x=410-2x=410−2x=4Nog te oefenen04x aan beide leden3x=x+83x=x+83x=x+8Nog te oefenen05Haakjes2(x+3)=142(x+3",
+            "rect": {
+              "x": 0,
+              "y": 82,
+              "width": 1366,
+              "height": 421,
+              "top": 82,
+              "right": 1366,
+              "bottom": 503,
+              "left": 0
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "",
+            "label": "01Eén bewerkingx+4=9x+4=9x+4=9Nog te oefenen",
+            "rect": {
+              "x": 24,
+              "y": 100,
+              "width": 319,
+              "height": 185.5,
+              "top": 100,
+              "right": 343,
+              "bottom": 285.5,
+              "left": 24
+            }
+          },
+          {
+            "id": "",
+            "label": "02Twee stappen3x+6=183x+6=183x+6=18Nog te oefenen",
+            "rect": {
+              "x": 357,
+              "y": 100,
+              "width": 319,
+              "height": 185.5,
+              "top": 100,
+              "right": 676,
+              "bottom": 285.5,
+              "left": 357
+            }
+          },
+          {
+            "id": "",
+            "label": "03Negatieve x-term10−2x=410-2x=410−2x=4Nog te oefenen",
+            "rect": {
+              "x": 690,
+              "y": 100,
+              "width": 319,
+              "height": 185.5,
+              "top": 100,
+              "right": 1009,
+              "bottom": 285.5,
+              "left": 690
+            }
+          },
+          {
+            "id": "",
+            "label": "04x aan beide leden3x=x+83x=x+83x=x+8Nog te oefenen",
+            "rect": {
+              "x": 1023,
+              "y": 100,
+              "width": 319,
+              "height": 185.5,
+              "top": 100,
+              "right": 1342,
+              "bottom": 285.5,
+              "left": 1023
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "algebra-play-1366-expanded",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 58,
+          "top": 0,
+          "right": 1366,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 1366,
+          "height": 49,
+          "top": 58,
+          "right": 1366,
+          "bottom": 107,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 107,
+          "width": 1366,
+          "height": 593,
+          "top": 107,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": true,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/algebra-trainer/?returnTo=%2FLeraarBob%2Fos%2F&osEmbed=1&game=algebra-trainer&world=equations&topic=equations&screen=trainer&level=route-inverse&activeLevel=route-inverse",
+        "viewport": {
+          "width": 1366,
+          "height": 593
+        },
+        "screen": "trainer",
+        "topbars": [
+          {
+            "selector": "header.trainHead",
+            "text": "←→ Eén bewerkingOntdek 1 / 6 ☰ Menu",
+            "rect": {
+              "x": 18,
+              "y": 8,
+              "width": 1329.984375,
+              "height": 48,
+              "top": 8,
+              "right": 1347.984375,
+              "bottom": 56,
+              "left": 18
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "prevExerciseBtn",
+            "label": "Vorige oefening",
+            "rect": {
+              "x": 22,
+              "y": 10,
+              "width": 44,
+              "height": 44,
+              "top": 10,
+              "right": 66,
+              "bottom": 54,
+              "left": 22
+            }
+          },
+          {
+            "id": "forwardExerciseBtn",
+            "label": "Volgende oefening",
+            "rect": {
+              "x": 70,
+              "y": 10,
+              "width": 44,
+              "height": 44,
+              "top": 10,
+              "right": 114,
+              "bottom": 54,
+              "left": 70
+            }
+          },
+          {
+            "id": "moreOperationsBtn",
+            "label": "Eigen keuze",
+            "rect": {
+              "x": 1233.546875,
+              "y": 72,
+              "width": 85.4375,
+              "height": 44,
+              "top": 72,
+              "right": 1318.984375,
+              "bottom": 116,
+              "left": 1233.546875
+            }
+          },
+          {
+            "id": "",
+            "label": "+ 4 op beide leden",
+            "rect": {
+              "x": 823.40625,
+              "y": 128,
+              "width": 245.78125,
+              "height": 64,
+              "top": 128,
+              "right": 1069.1875,
+              "bottom": 192,
+              "left": 823.40625
+            }
+          },
+          {
+            "id": "",
+            "label": "− 4 op beide leden",
+            "rect": {
+              "x": 1073.1875,
+              "y": 128,
+              "width": 245.796875,
+              "height": 64,
+              "top": 128,
+              "right": 1318.984375,
+              "bottom": 192,
+              "left": 1073.1875
+            }
+          },
+          {
+            "id": "",
+            "label": "+ 8 op beide leden",
+            "rect": {
+              "x": 823.40625,
+              "y": 196,
+              "width": 245.78125,
+              "height": 64,
+              "top": 196,
+              "right": 1069.1875,
+              "bottom": 260,
+              "left": 823.40625
+            }
+          },
+          {
+            "id": "",
+            "label": "− 8 op beide leden",
+            "rect": {
+              "x": 1073.1875,
+              "y": 196,
+              "width": 245.796875,
+              "height": 64,
+              "top": 196,
+              "right": 1318.984375,
+              "bottom": 260,
+              "left": 1073.1875
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "algebra-play-1366-collapsed",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": true,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 50,
+          "top": 0,
+          "right": 1366,
+          "bottom": 50,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 50,
+          "width": 1366,
+          "height": 650,
+          "top": 50,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": true,
+        "restore": {
+          "x": 6,
+          "y": 6,
+          "width": 44,
+          "height": 44,
+          "top": 6,
+          "right": 50,
+          "bottom": 50,
+          "left": 6
+        },
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/algebra-trainer/?returnTo=%2FLeraarBob%2Fos%2F&osEmbed=1&game=algebra-trainer&world=equations&topic=equations&screen=trainer&level=route-inverse&activeLevel=route-inverse",
+        "viewport": {
+          "width": 1366,
+          "height": 650
+        },
+        "screen": "trainer",
+        "topbars": [
+          {
+            "selector": "header.trainHead",
+            "text": "←→ Eén bewerkingOntdek 1 / 6 ☰ Menu",
+            "rect": {
+              "x": 18,
+              "y": 8,
+              "width": 1329.984375,
+              "height": 48,
+              "top": 8,
+              "right": 1347.984375,
+              "bottom": 56,
+              "left": 18
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "prevExerciseBtn",
+            "label": "Vorige oefening",
+            "rect": {
+              "x": 26,
+              "y": 10,
+              "width": 44,
+              "height": 44,
+              "top": 10,
+              "right": 70,
+              "bottom": 54,
+              "left": 26
+            }
+          },
+          {
+            "id": "forwardExerciseBtn",
+            "label": "Volgende oefening",
+            "rect": {
+              "x": 74,
+              "y": 10,
+              "width": 44,
+              "height": 44,
+              "top": 10,
+              "right": 118,
+              "bottom": 54,
+              "left": 74
+            }
+          },
+          {
+            "id": "moreOperationsBtn",
+            "label": "Eigen keuze",
+            "rect": {
+              "x": 1219.59375,
+              "y": 72,
+              "width": 99.390625,
+              "height": 44,
+              "top": 72,
+              "right": 1318.984375,
+              "bottom": 116,
+              "left": 1219.59375
+            }
+          },
+          {
+            "id": "",
+            "label": "+ 4 op beide leden",
+            "rect": {
+              "x": 823.40625,
+              "y": 128,
+              "width": 242.78125,
+              "height": 64,
+              "top": 128,
+              "right": 1066.1875,
+              "bottom": 192,
+              "left": 823.40625
+            }
+          },
+          {
+            "id": "",
+            "label": "− 4 op beide leden",
+            "rect": {
+              "x": 1076.1875,
+              "y": 128,
+              "width": 242.796875,
+              "height": 64,
+              "top": 128,
+              "right": 1318.984375,
+              "bottom": 192,
+              "left": 1076.1875
+            }
+          },
+          {
+            "id": "",
+            "label": "+ 8 op beide leden",
+            "rect": {
+              "x": 823.40625,
+              "y": 202,
+              "width": 242.78125,
+              "height": 64,
+              "top": 202,
+              "right": 1066.1875,
+              "bottom": 266,
+              "left": 823.40625
+            }
+          },
+          {
+            "id": "",
+            "label": "− 8 op beide leden",
+            "rect": {
+              "x": 1076.1875,
+              "y": 202,
+              "width": 242.796875,
+              "height": 64,
+              "top": 202,
+              "right": 1318.984375,
+              "bottom": 266,
+              "left": 1076.1875
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "algebra-play-390-expanded",
+      "shell": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 77,
+          "top": 0,
+          "right": 390,
+          "bottom": 77,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 77,
+          "width": 390,
+          "height": 98,
+          "top": 77,
+          "right": 390,
+          "bottom": 175,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 175,
+          "width": 390,
+          "height": 607,
+          "top": 175,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 782,
+          "width": 390,
+          "height": 62,
+          "top": 782,
+          "right": 390,
+          "bottom": 844,
+          "left": 0
+        },
+        "nativeNavigation": true,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/algebra-trainer/?returnTo=%2FLeraarBob%2Fos%2F&osEmbed=1&game=algebra-trainer&world=equations&topic=equations&screen=trainer&level=route-inverse&activeLevel=route-inverse",
+        "viewport": {
+          "width": 390,
+          "height": 607
+        },
+        "screen": "trainer",
+        "topbars": [
+          {
+            "selector": "header.trainHead",
+            "text": "←→ Eén bewerkingOntdek 1 / 6 ☰ Menu",
+            "rect": {
+              "x": 8,
+              "y": 4,
+              "width": 374,
+              "height": 44,
+              "top": 4,
+              "right": 382,
+              "bottom": 48,
+              "left": 8
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "prevExerciseBtn",
+            "label": "Vorige oefening",
+            "rect": {
+              "x": 8,
+              "y": 4,
+              "width": 44,
+              "height": 44,
+              "top": 4,
+              "right": 52,
+              "bottom": 48,
+              "left": 8
+            }
+          },
+          {
+            "id": "forwardExerciseBtn",
+            "label": "Volgende oefening",
+            "rect": {
+              "x": 56,
+              "y": 4,
+              "width": 44,
+              "height": 44,
+              "top": 4,
+              "right": 100,
+              "bottom": 48,
+              "left": 56
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "algebra-play-390-collapsed",
+      "shell": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "zoom": 1,
+        "collapsed": true,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 98,
+          "top": 0,
+          "right": 390,
+          "bottom": 98,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 98,
+          "width": 390,
+          "height": 684,
+          "top": 98,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 782,
+          "width": 390,
+          "height": 62,
+          "top": 782,
+          "right": 390,
+          "bottom": 844,
+          "left": 0
+        },
+        "nativeNavigation": true,
+        "restore": {
+          "x": 6,
+          "y": 6,
+          "width": 44,
+          "height": 44,
+          "top": 6,
+          "right": 50,
+          "bottom": 50,
+          "left": 6
+        },
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/algebra-trainer/?returnTo=%2FLeraarBob%2Fos%2F&osEmbed=1&game=algebra-trainer&world=equations&topic=equations&screen=trainer&level=route-inverse&activeLevel=route-inverse",
+        "viewport": {
+          "width": 390,
+          "height": 684
+        },
+        "screen": "trainer",
+        "topbars": [
+          {
+            "selector": "header.trainHead",
+            "text": "←→ Eén bewerkingOntdek 1 / 6 ☰ Menu",
+            "rect": {
+              "x": 8,
+              "y": 4,
+              "width": 374,
+              "height": 44,
+              "top": 4,
+              "right": 382,
+              "bottom": 48,
+              "left": 8
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "prevExerciseBtn",
+            "label": "Vorige oefening",
+            "rect": {
+              "x": 8,
+              "y": 4,
+              "width": 44,
+              "height": 44,
+              "top": 4,
+              "right": 52,
+              "bottom": 48,
+              "left": 8
+            }
+          },
+          {
+            "id": "forwardExerciseBtn",
+            "label": "Volgende oefening",
+            "rect": {
+              "x": 56,
+              "y": 4,
+              "width": 44,
+              "height": 44,
+              "top": 4,
+              "right": 100,
+              "bottom": 48,
+              "left": 56
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "algebra-play-640-expanded",
+      "shell": {
+        "viewport": {
+          "width": 640,
+          "height": 360
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 640,
+          "height": 58,
+          "top": 0,
+          "right": 640,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 640,
+          "height": 49,
+          "top": 58,
+          "right": 640,
+          "bottom": 107,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 107,
+          "width": 640,
+          "height": 185,
+          "top": 107,
+          "right": 640,
+          "bottom": 292,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 292,
+          "width": 640,
+          "height": 68,
+          "top": 292,
+          "right": 640,
+          "bottom": 360,
+          "left": 0
+        },
+        "nativeNavigation": true,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/algebra-trainer/?returnTo=%2FLeraarBob%2Fos%2F&osEmbed=1&game=algebra-trainer&world=equations&topic=equations&screen=trainer&level=route-inverse&activeLevel=route-inverse",
+        "viewport": {
+          "width": 640,
+          "height": 185
+        },
+        "screen": "trainer",
+        "topbars": [
+          {
+            "selector": "header.trainHead",
+            "text": "←→ Eén bewerkingOntdek 1 / 6 ☰ Menu",
+            "rect": {
+              "x": 8,
+              "y": 2,
+              "width": 624,
+              "height": 44,
+              "top": 2,
+              "right": 632,
+              "bottom": 46,
+              "left": 8
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "prevExerciseBtn",
+            "label": "Vorige oefening",
+            "rect": {
+              "x": 12,
+              "y": 2,
+              "width": 44,
+              "height": 44,
+              "top": 2,
+              "right": 56,
+              "bottom": 46,
+              "left": 12
+            }
+          },
+          {
+            "id": "forwardExerciseBtn",
+            "label": "Volgende oefening",
+            "rect": {
+              "x": 60,
+              "y": 2,
+              "width": 44,
+              "height": 44,
+              "top": 2,
+              "right": 104,
+              "bottom": 46,
+              "left": 60
+            }
+          },
+          {
+            "id": "moreOperationsBtn",
+            "label": "Eigen keuze",
+            "rect": {
+              "x": 521.609375,
+              "y": 50,
+              "width": 91.390625,
+              "height": 44,
+              "top": 50,
+              "right": 613,
+              "bottom": 94,
+              "left": 521.609375
+            }
+          },
+          {
+            "id": "",
+            "label": "+ 4 op beide leden",
+            "rect": {
+              "x": 395.421875,
+              "y": 98,
+              "width": 106.78125,
+              "height": 76,
+              "top": 98,
+              "right": 502.203125,
+              "bottom": 174,
+              "left": 395.421875
+            }
+          },
+          {
+            "id": "",
+            "label": "− 4 op beide leden",
+            "rect": {
+              "x": 506.203125,
+              "y": 98,
+              "width": 106.796875,
+              "height": 76,
+              "top": 98,
+              "right": 613,
+              "bottom": 174,
+              "left": 506.203125
+            }
+          },
+          {
+            "id": "",
+            "label": "Vorige bewerkingskeuzes",
+            "rect": {
+              "x": 395.421875,
+              "y": 178,
+              "width": 44,
+              "height": 44,
+              "top": 178,
+              "right": 439.421875,
+              "bottom": 222,
+              "left": 395.421875
+            }
+          },
+          {
+            "id": "",
+            "label": "Volgende bewerkingskeuzes",
+            "rect": {
+              "x": 569,
+              "y": 178,
+              "width": 44,
+              "height": 44,
+              "top": 178,
+              "right": 613,
+              "bottom": 222,
+              "left": 569
+            }
+          },
+          {
+            "id": "undoBtn",
+            "label": "Laatste stap ongedaan maken",
+            "rect": {
+              "x": 8,
+              "y": 135.5,
+              "width": 44,
+              "height": 47,
+              "top": 135.5,
+              "right": 52,
+              "bottom": 182.5,
+              "left": 8
+            }
+          },
+          {
+            "id": "watchDemoBtn",
+            "label": "Hulp: bekijk een live voorbeeld met andere getallen",
+            "rect": {
+              "x": 58,
+              "y": 137,
+              "width": 61.40625,
+              "height": 44,
+              "top": 137,
+              "right": 119.40625,
+              "bottom": 181,
+              "left": 58
+            }
+          },
+          {
+            "id": "historyBtn",
+            "label": "Bekijk volledige uitwerking",
+            "rect": {
+              "x": 125.40625,
+              "y": 137,
+              "width": 63.25,
+              "height": 44,
+              "top": 137,
+              "right": 188.65625,
+              "bottom": 181,
+              "left": 125.40625
+            }
+          },
+          {
+            "id": "checkBtn",
+            "label": "Controleer →",
+            "rect": {
+              "x": 538.78125,
+              "y": 137,
+              "width": 93.21875,
+              "height": 44,
+              "top": 137,
+              "right": 632,
+              "bottom": 181,
+              "left": 538.78125
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "algebra-play-640-collapsed",
+      "shell": {
+        "viewport": {
+          "width": 640,
+          "height": 360
+        },
+        "zoom": 1,
+        "collapsed": true,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 0,
+          "width": 640,
+          "height": 50,
+          "top": 0,
+          "right": 640,
+          "bottom": 50,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 50,
+          "width": 640,
+          "height": 242,
+          "top": 50,
+          "right": 640,
+          "bottom": 292,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 292,
+          "width": 640,
+          "height": 68,
+          "top": 292,
+          "right": 640,
+          "bottom": 360,
+          "left": 0
+        },
+        "nativeNavigation": true,
+        "restore": {
+          "x": 6,
+          "y": 6,
+          "width": 44,
+          "height": 44,
+          "top": 6,
+          "right": 50,
+          "bottom": 50,
+          "left": 6
+        },
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/algebra-trainer/?returnTo=%2FLeraarBob%2Fos%2F&osEmbed=1&game=algebra-trainer&world=equations&topic=equations&screen=trainer&level=route-inverse&activeLevel=route-inverse",
+        "viewport": {
+          "width": 640,
+          "height": 242
+        },
+        "screen": "trainer",
+        "topbars": [
+          {
+            "selector": "header.trainHead",
+            "text": "←→ Eén bewerkingOntdek 1 / 6 ☰ Menu",
+            "rect": {
+              "x": 8,
+              "y": 2,
+              "width": 624,
+              "height": 44,
+              "top": 2,
+              "right": 632,
+              "bottom": 46,
+              "left": 8
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "prevExerciseBtn",
+            "label": "Vorige oefening",
+            "rect": {
+              "x": 12,
+              "y": 2,
+              "width": 44,
+              "height": 44,
+              "top": 2,
+              "right": 56,
+              "bottom": 46,
+              "left": 12
+            }
+          },
+          {
+            "id": "forwardExerciseBtn",
+            "label": "Volgende oefening",
+            "rect": {
+              "x": 60,
+              "y": 2,
+              "width": 44,
+              "height": 44,
+              "top": 2,
+              "right": 104,
+              "bottom": 46,
+              "left": 60
+            }
+          },
+          {
+            "id": "moreOperationsBtn",
+            "label": "Eigen keuze",
+            "rect": {
+              "x": 521.609375,
+              "y": 50,
+              "width": 91.390625,
+              "height": 44,
+              "top": 50,
+              "right": 613,
+              "bottom": 94,
+              "left": 521.609375
+            }
+          },
+          {
+            "id": "",
+            "label": "+ 4 op beide leden",
+            "rect": {
+              "x": 395.421875,
+              "y": 98,
+              "width": 106.78125,
+              "height": 76,
+              "top": 98,
+              "right": 502.203125,
+              "bottom": 174,
+              "left": 395.421875
+            }
+          },
+          {
+            "id": "",
+            "label": "− 4 op beide leden",
+            "rect": {
+              "x": 506.203125,
+              "y": 98,
+              "width": 106.796875,
+              "height": 76,
+              "top": 98,
+              "right": 613,
+              "bottom": 174,
+              "left": 506.203125
+            }
+          },
+          {
+            "id": "",
+            "label": "Vorige bewerkingskeuzes",
+            "rect": {
+              "x": 395.421875,
+              "y": 178,
+              "width": 44,
+              "height": 44,
+              "top": 178,
+              "right": 439.421875,
+              "bottom": 222,
+              "left": 395.421875
+            }
+          },
+          {
+            "id": "",
+            "label": "Volgende bewerkingskeuzes",
+            "rect": {
+              "x": 569,
+              "y": 178,
+              "width": 44,
+              "height": 44,
+              "top": 178,
+              "right": 613,
+              "bottom": 222,
+              "left": 569
+            }
+          },
+          {
+            "id": "undoBtn",
+            "label": "Laatste stap ongedaan maken",
+            "rect": {
+              "x": 8,
+              "y": 192.5,
+              "width": 44,
+              "height": 47,
+              "top": 192.5,
+              "right": 52,
+              "bottom": 239.5,
+              "left": 8
+            }
+          },
+          {
+            "id": "watchDemoBtn",
+            "label": "Hulp: bekijk een live voorbeeld met andere getallen",
+            "rect": {
+              "x": 58,
+              "y": 194,
+              "width": 61.40625,
+              "height": 44,
+              "top": 194,
+              "right": 119.40625,
+              "bottom": 238,
+              "left": 58
+            }
+          },
+          {
+            "id": "historyBtn",
+            "label": "Bekijk volledige uitwerking",
+            "rect": {
+              "x": 125.40625,
+              "y": 194,
+              "width": 63.25,
+              "height": 44,
+              "top": 194,
+              "right": 188.65625,
+              "bottom": 238,
+              "left": 125.40625
+            }
+          },
+          {
+            "id": "checkBtn",
+            "label": "Controleer →",
+            "rect": {
+              "x": 538.78125,
+              "y": 194,
+              "width": 93.21875,
+              "height": 44,
+              "top": 194,
+              "right": 632,
+              "bottom": 238,
+              "left": 538.78125
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "rechten-home-1366",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 58,
+          "top": 0,
+          "right": 1366,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 1366,
+          "height": 51,
+          "top": 58,
+          "right": 1366,
+          "bottom": 109,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 109,
+          "width": 1366,
+          "height": 591,
+          "top": 109,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/rechten/rechtenwereld/?returnTo=%2FLeraarBob%2Fos%2F#wereld",
+        "viewport": {
+          "width": 1366,
+          "height": 591
+        },
+        "topbars": [
+          {
+            "selector": "header.atlas-header",
+            "text": "leraarBobTRAINERWereldkaart0 XP · 0/28 levels afgerondRechtenarcadeOefenbladenSamen leren · duo of trioOnline duelDuo · op dit toestelKlasbattleSpelvoortgangProfiel",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 64,
+              "top": 0,
+              "right": 1366,
+              "bottom": 64,
+              "left": 0
+            }
+          },
+          {
+            "selector": "nav.breadcrumbs",
+            "text": "Wereldkaart",
+            "rect": {
+              "x": 169.203125,
+              "y": 10,
+              "width": 1014.796875,
+              "height": 44,
+              "top": 10,
+              "right": 1184,
+              "bottom": 54,
+              "left": 169.203125
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "",
+            "label": "leraarBob, naar het hoofdmenu van de website",
+            "rect": {
+              "x": 24,
+              "y": 8,
+              "width": 125.203125,
+              "height": 48,
+              "top": 8,
+              "right": 149.203125,
+              "bottom": 56,
+              "left": 24
+            }
+          },
+          {
+            "id": "",
+            "label": "Wereldkaart",
+            "rect": {
+              "x": 169.203125,
+              "y": 10,
+              "width": 91.625,
+              "height": 44,
+              "top": 10,
+              "right": 260.828125,
+              "bottom": 54,
+              "left": 169.203125
+            }
+          },
+          {
+            "id": "",
+            "label": "Volledig scherm",
+            "rect": {
+              "x": 1204,
+              "y": 8,
+              "width": 44,
+              "height": 48,
+              "top": 8,
+              "right": 1248,
+              "bottom": 56,
+              "left": 1204
+            }
+          },
+          {
+            "id": "",
+            "label": "Profiel",
+            "rect": {
+              "x": 1251,
+              "y": 8,
+              "width": 44,
+              "height": 48,
+              "top": 8,
+              "right": 1295,
+              "bottom": 56,
+              "left": 1251
+            }
+          },
+          {
+            "id": "menu",
+            "label": "Menu",
+            "rect": {
+              "x": 1298,
+              "y": 8,
+              "width": 44,
+              "height": 48,
+              "top": 8,
+              "right": 1342,
+              "bottom": 56,
+              "left": 1298
+            }
+          },
+          {
+            "id": "",
+            "label": "Hellingrug. Verder · 0 / 5 afgerond. Openen",
+            "rect": {
+              "x": 472.109375,
+              "y": 115.859375,
+              "width": 175.875,
+              "height": 175.875,
+              "top": 115.859375,
+              "right": 647.984375,
+              "bottom": 291.734375,
+              "left": 472.109375
+            }
+          },
+          {
+            "id": "",
+            "label": "Signaalstad. Vergrendeld · eerst Formulewerf afronden.",
+            "rect": {
+              "x": 1073.15625,
+              "y": 93.3125,
+              "width": 175.875,
+              "height": 175.875,
+              "top": 93.3125,
+              "right": 1249.03125,
+              "bottom": 269.1875,
+              "left": 1073.15625
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "rechten-play-1366-expanded",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 58,
+          "top": 0,
+          "right": 1366,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 1366,
+          "height": 51,
+          "top": 58,
+          "right": 1366,
+          "bottom": 109,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 109,
+          "width": 1366,
+          "height": 591,
+          "top": 109,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/rechten/rechtenwereld/?returnTo=%2FLeraarBob%2Fos%2F#oefenen",
+        "viewport": {
+          "width": 1366,
+          "height": 591
+        },
+        "topbars": [
+          {
+            "selector": "header.atlas-header",
+            "text": "leraarBobTRAINERRechtenPuntenbaaiCoördinaten lezen0 XP · 0/28 levels afgerondRechtenarcadeOefenbladenSamen leren · duo of trioOnline duelDuo · op dit toestelKlasbattleSpelvoortgangProfiel",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 52,
+              "top": 0,
+              "right": 1366,
+              "bottom": 52,
+              "left": 0
+            }
+          },
+          {
+            "selector": "nav.breadcrumbs",
+            "text": "RechtenPuntenbaaiCoördinaten lezen",
+            "rect": {
+              "x": 141.59375,
+              "y": 3.5,
+              "width": 1056.40625,
+              "height": 44,
+              "top": 3.5,
+              "right": 1198,
+              "bottom": 47.5,
+              "left": 141.59375
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "",
+            "label": "leraarBob, naar het hoofdmenu van de website",
+            "rect": {
+              "x": 16,
+              "y": 1.5,
+              "width": 111.59375,
+              "height": 48,
+              "top": 1.5,
+              "right": 127.59375,
+              "bottom": 49.5,
+              "left": 16
+            }
+          },
+          {
+            "id": "",
+            "label": "Rechten",
+            "rect": {
+              "x": 141.59375,
+              "y": 3.5,
+              "width": 55.375,
+              "height": 44,
+              "top": 3.5,
+              "right": 196.96875,
+              "bottom": 47.5,
+              "left": 141.59375
+            }
+          },
+          {
+            "id": "",
+            "label": "Puntenbaai",
+            "rect": {
+              "x": 223.96875,
+              "y": 3.5,
+              "width": 75.046875,
+              "height": 44,
+              "top": 3.5,
+              "right": 299.015625,
+              "bottom": 47.5,
+              "left": 223.96875
+            }
+          },
+          {
+            "id": "",
+            "label": "Volledig scherm",
+            "rect": {
+              "x": 1212,
+              "y": 1.5,
+              "width": 44,
+              "height": 48,
+              "top": 1.5,
+              "right": 1256,
+              "bottom": 49.5,
+              "left": 1212
+            }
+          },
+          {
+            "id": "",
+            "label": "Profiel",
+            "rect": {
+              "x": 1259,
+              "y": 1.5,
+              "width": 44,
+              "height": 48,
+              "top": 1.5,
+              "right": 1303,
+              "bottom": 49.5,
+              "left": 1259
+            }
+          },
+          {
+            "id": "menu",
+            "label": "Menu",
+            "rect": {
+              "x": 1306,
+              "y": 1.5,
+              "width": 44,
+              "height": 48,
+              "top": 1.5,
+              "right": 1350,
+              "bottom": 49.5,
+              "left": 1306
+            }
+          },
+          {
+            "id": "undo",
+            "label": "Maak laatste bewerking ongedaan",
+            "rect": {
+              "x": 17,
+              "y": 65,
+              "width": 44,
+              "height": 48,
+              "top": 65,
+              "right": 61,
+              "bottom": 113,
+              "left": 17
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "rechten-play-1366-collapsed",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": true,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 51,
+          "top": 0,
+          "right": 1366,
+          "bottom": 51,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 51,
+          "width": 1366,
+          "height": 649,
+          "top": 51,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": {
+          "x": 6,
+          "y": 6,
+          "width": 44,
+          "height": 44,
+          "top": 6,
+          "right": 50,
+          "bottom": 50,
+          "left": 6
+        },
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/rechten/rechtenwereld/?returnTo=%2FLeraarBob%2Fos%2F#oefenen",
+        "viewport": {
+          "width": 1366,
+          "height": 649
+        },
+        "topbars": [
+          {
+            "selector": "header.atlas-header",
+            "text": "leraarBobTRAINERRechtenPuntenbaaiCoördinaten lezen0 XP · 0/28 levels afgerondRechtenarcadeOefenbladenSamen leren · duo of trioOnline duelDuo · op dit toestelKlasbattleSpelvoortgangProfiel",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 52,
+              "top": 0,
+              "right": 1366,
+              "bottom": 52,
+              "left": 0
+            }
+          },
+          {
+            "selector": "nav.breadcrumbs",
+            "text": "RechtenPuntenbaaiCoördinaten lezen",
+            "rect": {
+              "x": 141.59375,
+              "y": 3.5,
+              "width": 1056.40625,
+              "height": 44,
+              "top": 3.5,
+              "right": 1198,
+              "bottom": 47.5,
+              "left": 141.59375
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "",
+            "label": "leraarBob, naar het hoofdmenu van de website",
+            "rect": {
+              "x": 16,
+              "y": 1.5,
+              "width": 111.59375,
+              "height": 48,
+              "top": 1.5,
+              "right": 127.59375,
+              "bottom": 49.5,
+              "left": 16
+            }
+          },
+          {
+            "id": "",
+            "label": "Rechten",
+            "rect": {
+              "x": 141.59375,
+              "y": 3.5,
+              "width": 55.375,
+              "height": 44,
+              "top": 3.5,
+              "right": 196.96875,
+              "bottom": 47.5,
+              "left": 141.59375
+            }
+          },
+          {
+            "id": "",
+            "label": "Puntenbaai",
+            "rect": {
+              "x": 223.96875,
+              "y": 3.5,
+              "width": 75.046875,
+              "height": 44,
+              "top": 3.5,
+              "right": 299.015625,
+              "bottom": 47.5,
+              "left": 223.96875
+            }
+          },
+          {
+            "id": "",
+            "label": "Volledig scherm",
+            "rect": {
+              "x": 1212,
+              "y": 1.5,
+              "width": 44,
+              "height": 48,
+              "top": 1.5,
+              "right": 1256,
+              "bottom": 49.5,
+              "left": 1212
+            }
+          },
+          {
+            "id": "",
+            "label": "Profiel",
+            "rect": {
+              "x": 1259,
+              "y": 1.5,
+              "width": 44,
+              "height": 48,
+              "top": 1.5,
+              "right": 1303,
+              "bottom": 49.5,
+              "left": 1259
+            }
+          },
+          {
+            "id": "menu",
+            "label": "Menu",
+            "rect": {
+              "x": 1306,
+              "y": 1.5,
+              "width": 44,
+              "height": 48,
+              "top": 1.5,
+              "right": 1350,
+              "bottom": 49.5,
+              "left": 1306
+            }
+          },
+          {
+            "id": "undo",
+            "label": "Maak laatste bewerking ongedaan",
+            "rect": {
+              "x": 17,
+              "y": 65,
+              "width": 44,
+              "height": 48,
+              "top": 65,
+              "right": 61,
+              "bottom": 113,
+              "left": 17
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "rechten-play-390-expanded",
+      "shell": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 77,
+          "top": 0,
+          "right": 390,
+          "bottom": 77,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 77,
+          "width": 390,
+          "height": 51,
+          "top": 77,
+          "right": 390,
+          "bottom": 128,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 128,
+          "width": 390,
+          "height": 654,
+          "top": 128,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 782,
+          "width": 390,
+          "height": 62,
+          "top": 782,
+          "right": 390,
+          "bottom": 844,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/rechten/rechtenwereld/?returnTo=%2FLeraarBob%2Fos%2F#oefenen",
+        "viewport": {
+          "width": 390,
+          "height": 654
+        },
+        "topbars": [],
+        "controls": [],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "rechten-play-390-collapsed",
+      "shell": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "zoom": 1,
+        "collapsed": true,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 51,
+          "top": 0,
+          "right": 390,
+          "bottom": 51,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 51,
+          "width": 390,
+          "height": 731,
+          "top": 51,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 782,
+          "width": 390,
+          "height": 62,
+          "top": 782,
+          "right": 390,
+          "bottom": 844,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": {
+          "x": 6,
+          "y": 6,
+          "width": 44,
+          "height": 44,
+          "top": 6,
+          "right": 50,
+          "bottom": 50,
+          "left": 6
+        },
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/rechten/rechtenwereld/?returnTo=%2FLeraarBob%2Fos%2F#oefenen",
+        "viewport": {
+          "width": 390,
+          "height": 731
+        },
+        "topbars": [],
+        "controls": [],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "rechten-play-640-expanded",
+      "shell": {
+        "viewport": {
+          "width": 640,
+          "height": 360
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 640,
+          "height": 58,
+          "top": 0,
+          "right": 640,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 640,
+          "height": 51,
+          "top": 58,
+          "right": 640,
+          "bottom": 109,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 109,
+          "width": 640,
+          "height": 183,
+          "top": 109,
+          "right": 640,
+          "bottom": 292,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 292,
+          "width": 640,
+          "height": 68,
+          "top": 292,
+          "right": 640,
+          "bottom": 360,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/rechten/rechtenwereld/?returnTo=%2FLeraarBob%2Fos%2F#oefenen",
+        "viewport": {
+          "width": 640,
+          "height": 183
+        },
+        "topbars": [],
+        "controls": [
+          {
+            "id": "",
+            "label": "Terug naar Puntenbaai",
+            "rect": {
+              "x": 214.625,
+              "y": 151.25,
+              "width": 210.734375,
+              "height": 48,
+              "top": 151.25,
+              "right": 425.359375,
+              "bottom": 199.25,
+              "left": 214.625
+            }
+          },
+          {
+            "id": "",
+            "label": "Volledig scherm",
+            "rect": {
+              "x": 223.859375,
+              "y": 219.25,
+              "width": 192.265625,
+              "height": 44,
+              "top": 219.25,
+              "right": 416.125,
+              "bottom": 263.25,
+              "left": 223.859375
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "rechten-play-640-collapsed",
+      "shell": {
+        "viewport": {
+          "width": 640,
+          "height": 360
+        },
+        "zoom": 1,
+        "collapsed": true,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 0,
+          "width": 640,
+          "height": 51,
+          "top": 0,
+          "right": 640,
+          "bottom": 51,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 51,
+          "width": 640,
+          "height": 241,
+          "top": 51,
+          "right": 640,
+          "bottom": 292,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 292,
+          "width": 640,
+          "height": 68,
+          "top": 292,
+          "right": 640,
+          "bottom": 360,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": {
+          "x": 6,
+          "y": 6,
+          "width": 44,
+          "height": 44,
+          "top": 6,
+          "right": 50,
+          "bottom": 50,
+          "left": 6
+        },
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/rechten/rechtenwereld/?returnTo=%2FLeraarBob%2Fos%2F#oefenen",
+        "viewport": {
+          "width": 640,
+          "height": 241
+        },
+        "topbars": [],
+        "controls": [
+          {
+            "id": "",
+            "label": "Terug naar Puntenbaai",
+            "rect": {
+              "x": 214.625,
+              "y": 180.25,
+              "width": 210.734375,
+              "height": 48,
+              "top": 180.25,
+              "right": 425.359375,
+              "bottom": 228.25,
+              "left": 214.625
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "rechten-native-menu",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 58,
+          "top": 0,
+          "right": 1366,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 1366,
+          "height": 51,
+          "top": 58,
+          "right": 1366,
+          "bottom": 109,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 109,
+          "width": 1366,
+          "height": 591,
+          "top": 109,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/rechten/rechtenwereld/?returnTo=%2FLeraarBob%2Fos%2F#oefenen",
+        "viewport": {
+          "width": 1366,
+          "height": 591
+        },
+        "topbars": [
+          {
+            "selector": "header.atlas-header",
+            "text": "leraarBobTRAINERRechtenPuntenbaaiCoördinaten lezen0 XP · 0/28 levels afgerondRechtenarcadeOefenbladenSamen leren · duo of trioOnline duelDuo · op dit toestelKlasbattleSpelvoortgangProfiel",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1366,
+              "height": 52,
+              "top": 0,
+              "right": 1366,
+              "bottom": 52,
+              "left": 0
+            }
+          },
+          {
+            "selector": "nav.breadcrumbs",
+            "text": "RechtenPuntenbaaiCoördinaten lezen",
+            "rect": {
+              "x": 141.59375,
+              "y": 3.5,
+              "width": 1056.40625,
+              "height": 44,
+              "top": 3.5,
+              "right": 1198,
+              "bottom": 47.5,
+              "left": 141.59375
+            }
+          },
+          {
+            "selector": "#main-menu",
+            "text": "RechtenarcadeOefenbladenSamen leren · duo of trioOnline duelDuo · op dit toestelKlasbattleSpelvoortgangProfiel",
+            "rect": {
+              "x": 1104,
+              "y": 60,
+              "width": 248,
+              "height": 440,
+              "top": 60,
+              "right": 1352,
+              "bottom": 500,
+              "left": 1104
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "",
+            "label": "leraarBob, naar het hoofdmenu van de website",
+            "rect": {
+              "x": 16,
+              "y": 1.5,
+              "width": 111.59375,
+              "height": 48,
+              "top": 1.5,
+              "right": 127.59375,
+              "bottom": 49.5,
+              "left": 16
+            }
+          },
+          {
+            "id": "",
+            "label": "Rechten",
+            "rect": {
+              "x": 141.59375,
+              "y": 3.5,
+              "width": 55.375,
+              "height": 44,
+              "top": 3.5,
+              "right": 196.96875,
+              "bottom": 47.5,
+              "left": 141.59375
+            }
+          },
+          {
+            "id": "",
+            "label": "Puntenbaai",
+            "rect": {
+              "x": 223.96875,
+              "y": 3.5,
+              "width": 75.046875,
+              "height": 44,
+              "top": 3.5,
+              "right": 299.015625,
+              "bottom": 47.5,
+              "left": 223.96875
+            }
+          },
+          {
+            "id": "",
+            "label": "Volledig scherm",
+            "rect": {
+              "x": 1212,
+              "y": 1.5,
+              "width": 44,
+              "height": 48,
+              "top": 1.5,
+              "right": 1256,
+              "bottom": 49.5,
+              "left": 1212
+            }
+          },
+          {
+            "id": "",
+            "label": "Profiel",
+            "rect": {
+              "x": 1259,
+              "y": 1.5,
+              "width": 44,
+              "height": 48,
+              "top": 1.5,
+              "right": 1303,
+              "bottom": 49.5,
+              "left": 1259
+            }
+          },
+          {
+            "id": "menu",
+            "label": "Menu",
+            "rect": {
+              "x": 1306,
+              "y": 1.5,
+              "width": 44,
+              "height": 48,
+              "top": 1.5,
+              "right": 1350,
+              "bottom": 49.5,
+              "left": 1306
+            }
+          },
+          {
+            "id": "",
+            "label": "Rechtenarcade",
+            "rect": {
+              "x": 1113,
+              "y": 73,
+              "width": 230,
+              "height": 50,
+              "top": 73,
+              "right": 1343,
+              "bottom": 123,
+              "left": 1113
+            }
+          },
+          {
+            "id": "",
+            "label": "Oefenbladen",
+            "rect": {
+              "x": 1113,
+              "y": 127,
+              "width": 230,
+              "height": 50,
+              "top": 127,
+              "right": 1343,
+              "bottom": 177,
+              "left": 1113
+            }
+          },
+          {
+            "id": "",
+            "label": "Samen leren · duo of trio",
+            "rect": {
+              "x": 1113,
+              "y": 181,
+              "width": 230,
+              "height": 50,
+              "top": 181,
+              "right": 1343,
+              "bottom": 231,
+              "left": 1113
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "vector-home-1366",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 58,
+          "top": 0,
+          "right": 1366,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 1366,
+          "height": 51,
+          "top": 58,
+          "right": 1366,
+          "bottom": 109,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 109,
+          "width": 1366,
+          "height": 591,
+          "top": 109,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html?returnTo=%2FLeraarBob%2Fos%2F",
+        "viewport": {
+          "width": 1366,
+          "height": 591
+        },
+        "screen": "home",
+        "topbars": [],
+        "controls": [
+          {
+            "id": "",
+            "label": "Koerscentrum: 0% voortgang. Open station.",
+            "rect": {
+              "x": 316.28125,
+              "y": 188.515625,
+              "width": 245.875,
+              "height": 83,
+              "top": 188.515625,
+              "right": 562.15625,
+              "bottom": 271.515625,
+              "left": 316.28125
+            }
+          },
+          {
+            "id": "",
+            "label": "Stuwkrachtlab: 0% voortgang. Open station.",
+            "rect": {
+              "x": 785.78125,
+              "y": 188.515625,
+              "width": 245.875,
+              "height": 83,
+              "top": 188.515625,
+              "right": 1031.65625,
+              "bottom": 271.515625,
+              "left": 785.78125
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "vector-play-1366-expanded",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 58,
+          "top": 0,
+          "right": 1366,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 1366,
+          "height": 51,
+          "top": 58,
+          "right": 1366,
+          "bottom": 109,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 109,
+          "width": 1366,
+          "height": 591,
+          "top": 109,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html?returnTo=%2FLeraarBob%2Fos%2F",
+        "viewport": {
+          "width": 1366,
+          "height": 591
+        },
+        "screen": "play",
+        "topbars": [
+          {
+            "selector": "div.questionbar",
+            "text": "Oefeningenreeks · met XPNieuw begrip · Lengte, richting en zinVerander alleen de lengte: maak a langer. Teken vanuit P.Start reeks · XP →",
+            "rect": {
+              "x": 31.40625,
+              "y": 82,
+              "width": 1303.1875,
+              "height": 120,
+              "top": 82,
+              "right": 1334.59375,
+              "bottom": 202,
+              "left": 31.40625
+            }
+          }
+        ],
+        "controls": [],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "vector-play-1366-collapsed",
+      "shell": {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "zoom": 1,
+        "collapsed": true,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 51,
+          "top": 0,
+          "right": 1366,
+          "bottom": 51,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 51,
+          "width": 1366,
+          "height": 649,
+          "top": 51,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 700,
+          "width": 1366,
+          "height": 68,
+          "top": 700,
+          "right": 1366,
+          "bottom": 768,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": {
+          "x": 6,
+          "y": 6,
+          "width": 44,
+          "height": 44,
+          "top": 6,
+          "right": 50,
+          "bottom": 50,
+          "left": 6
+        },
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html?returnTo=%2FLeraarBob%2Fos%2F",
+        "viewport": {
+          "width": 1366,
+          "height": 649
+        },
+        "screen": "play",
+        "topbars": [
+          {
+            "selector": "div.questionbar",
+            "text": "Oefeningenreeks · met XPNieuw begrip · Lengte, richting en zinVerander alleen de lengte: maak a langer. Teken vanuit P.Start reeks · XP →",
+            "rect": {
+              "x": 31.40625,
+              "y": 82,
+              "width": 1303.1875,
+              "height": 120,
+              "top": 82,
+              "right": 1334.59375,
+              "bottom": 202,
+              "left": 31.40625
+            }
+          }
+        ],
+        "controls": [],
+        "iframePlatformBars": 0,
+        "rotate": [],
+        "overflow": false
+      }
+    },
+    {
+      "label": "vector-play-390-expanded",
+      "shell": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 77,
+          "top": 0,
+          "right": 390,
+          "bottom": 77,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 77,
+          "width": 390,
+          "height": 51,
+          "top": 77,
+          "right": 390,
+          "bottom": 128,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 128,
+          "width": 390,
+          "height": 654,
+          "top": 128,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 782,
+          "width": 390,
+          "height": 62,
+          "top": 782,
+          "right": 390,
+          "bottom": 844,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html?returnTo=%2FLeraarBob%2Fos%2F",
+        "viewport": {
+          "width": 390,
+          "height": 654
+        },
+        "screen": "play",
+        "topbars": [
+          {
+            "selector": "div.questionbar",
+            "text": "Oefeningenreeks · met XPNieuw begrip · Lengte, richting en zinVerander alleen de lengte: maak a langer. Teken vanuit P.Start reeks · XP →",
+            "rect": {
+              "x": 14,
+              "y": 62,
+              "width": 362,
+              "height": 155.734375,
+              "top": 62,
+              "right": 376,
+              "bottom": 217.734375,
+              "left": 14
+            }
+          }
+        ],
+        "controls": [],
+        "iframePlatformBars": 0,
+        "rotate": [
+          "Een breed werkbord.Draai je toestel om vectoren te tekenen. Je kunt de leerroute ook rechtop bekijken.Naar start"
+        ],
+        "overflow": false
+      }
+    },
+    {
+      "label": "vector-play-390-collapsed",
+      "shell": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "zoom": 1,
+        "collapsed": true,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 51,
+          "top": 0,
+          "right": 390,
+          "bottom": 51,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 51,
+          "width": 390,
+          "height": 731,
+          "top": 51,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 782,
+          "width": 390,
+          "height": 62,
+          "top": 782,
+          "right": 390,
+          "bottom": 844,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": {
+          "x": 6,
+          "y": 6,
+          "width": 44,
+          "height": 44,
+          "top": 6,
+          "right": 50,
+          "bottom": 50,
+          "left": 6
+        },
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html?returnTo=%2FLeraarBob%2Fos%2F",
+        "viewport": {
+          "width": 390,
+          "height": 731
+        },
+        "screen": "play",
+        "topbars": [
+          {
+            "selector": "div.questionbar",
+            "text": "Oefeningenreeks · met XPNieuw begrip · Lengte, richting en zinVerander alleen de lengte: maak a langer. Teken vanuit P.Start reeks · XP →",
+            "rect": {
+              "x": 14,
+              "y": 62,
+              "width": 362,
+              "height": 155.734375,
+              "top": 62,
+              "right": 376,
+              "bottom": 217.734375,
+              "left": 14
+            }
+          }
+        ],
+        "controls": [],
+        "iframePlatformBars": 0,
+        "rotate": [
+          "Een breed werkbord.Draai je toestel om vectoren te tekenen. Je kunt de leerroute ook rechtop bekijken.Naar start"
+        ],
+        "overflow": false
+      }
+    },
+    {
+      "label": "vector-play-640-expanded",
+      "shell": {
+        "viewport": {
+          "width": 640,
+          "height": 360
+        },
+        "zoom": 1,
+        "collapsed": false,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 640,
+          "height": 58,
+          "top": 0,
+          "right": 640,
+          "bottom": 58,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 58,
+          "width": 640,
+          "height": 51,
+          "top": 58,
+          "right": 640,
+          "bottom": 109,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 109,
+          "width": 640,
+          "height": 183,
+          "top": 109,
+          "right": 640,
+          "bottom": 292,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 292,
+          "width": 640,
+          "height": 68,
+          "top": 292,
+          "right": 640,
+          "bottom": 360,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": null,
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html?returnTo=%2FLeraarBob%2Fos%2F",
+        "viewport": {
+          "width": 640,
+          "height": 183
+        },
+        "screen": "play",
+        "topbars": [
+          {
+            "selector": "div.questionbar",
+            "text": "Oefeningenreeks · met XPNieuw begrip · Lengte, richting en zinVerander alleen de lengte: maak a langer. Teken vanuit P.Start reeks · XP →",
+            "rect": {
+              "x": 10,
+              "y": 52,
+              "width": 620,
+              "height": 57.546875,
+              "top": 52,
+              "right": 630,
+              "bottom": 109.546875,
+              "left": 10
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "lessonBack",
+            "label": "← Vorige stap",
+            "rect": {
+              "x": 10,
+              "y": 121.546875,
+              "width": 64,
+              "height": 53.453125,
+              "top": 121.546875,
+              "right": 74,
+              "bottom": 175,
+              "left": 10
+            }
+          },
+          {
+            "id": "commit",
+            "label": "Volgende stap →",
+            "rect": {
+              "x": 391,
+              "y": 128.546875,
+              "width": 230,
+              "height": 44,
+              "top": 128.546875,
+              "right": 621,
+              "bottom": 172.546875,
+              "left": 391
+            }
+          },
+          {
+            "id": "rotateHome",
+            "label": "Naar start",
+            "rect": {
+              "x": 263.734375,
+              "y": 195.1875,
+              "width": 112.53125,
+              "height": 44,
+              "top": 195.1875,
+              "right": 376.265625,
+              "bottom": 239.1875,
+              "left": 263.734375
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [
+          "Een breed werkbord.Draai je toestel om vectoren te tekenen. Je kunt de leerroute ook rechtop bekijken.Naar start"
+        ],
+        "overflow": false
+      }
+    },
+    {
+      "label": "vector-play-640-collapsed",
+      "shell": {
+        "viewport": {
+          "width": 640,
+          "height": 360
+        },
+        "zoom": 1,
+        "collapsed": true,
+        "platform": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "appbar": {
+          "x": 0,
+          "y": 0,
+          "width": 640,
+          "height": 51,
+          "top": 0,
+          "right": 640,
+          "bottom": 51,
+          "left": 0
+        },
+        "iframe": {
+          "x": 0,
+          "y": 51,
+          "width": 640,
+          "height": 241,
+          "top": 51,
+          "right": 640,
+          "bottom": 292,
+          "left": 0
+        },
+        "taskbar": {
+          "x": 0,
+          "y": 292,
+          "width": 640,
+          "height": 68,
+          "top": 292,
+          "right": 640,
+          "bottom": 360,
+          "left": 0
+        },
+        "nativeNavigation": false,
+        "restore": {
+          "x": 6,
+          "y": 6,
+          "width": 44,
+          "height": 44,
+          "top": 6,
+          "right": 50,
+          "bottom": 50,
+          "left": 6
+        },
+        "overflow": false
+      },
+      "native": {
+        "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html?returnTo=%2FLeraarBob%2Fos%2F",
+        "viewport": {
+          "width": 640,
+          "height": 241
+        },
+        "screen": "play",
+        "topbars": [
+          {
+            "selector": "div.questionbar",
+            "text": "Oefeningenreeks · met XPNieuw begrip · Lengte, richting en zinVerander alleen de lengte: maak a langer. Teken vanuit P.Start reeks · XP →",
+            "rect": {
+              "x": 10,
+              "y": 52,
+              "width": 620,
+              "height": 57.546875,
+              "top": 52,
+              "right": 630,
+              "bottom": 109.546875,
+              "left": 10
+            }
+          }
+        ],
+        "controls": [
+          {
+            "id": "lessonBack",
+            "label": "← Vorige stap",
+            "rect": {
+              "x": 10,
+              "y": 121.546875,
+              "width": 64,
+              "height": 67,
+              "top": 121.546875,
+              "right": 74,
+              "bottom": 188.546875,
+              "left": 10
+            }
+          },
+          {
+            "id": "commit",
+            "label": "Volgende stap →",
+            "rect": {
+              "x": 391,
+              "y": 180,
+              "width": 230,
+              "height": 44,
+              "top": 180,
+              "right": 621,
+              "bottom": 224,
+              "left": 391
+            }
+          },
+          {
+            "id": "rotateHome",
+            "label": "Naar start",
+            "rect": {
+              "x": 263.734375,
+              "y": 195.1875,
+              "width": 112.53125,
+              "height": 44,
+              "top": 195.1875,
+              "right": 376.265625,
+              "bottom": 239.1875,
+              "left": 263.734375
+            }
+          }
+        ],
+        "iframePlatformBars": 0,
+        "rotate": [
+          "Een breed werkbord.Draai je toestel om vectoren te tekenen. Je kunt de leerroute ook rechtop bekijken.Naar start"
+        ],
+        "overflow": false
+      }
+    }
+  ],
+  "actions": [
+    {
+      "app": "getallen",
+      "action": "Real clicks home → selection → actual exercise, no answer submitted",
+      "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/?returnTo=%2FLeraarBob%2Fos%2F&game=getallenwereld&world=getallen&topic=machten&level=machten-product&screen=play&activeLevel=machten-product"
+    },
+    {
+      "app": "getallen",
+      "action": "OS menu opened during actual exercise",
+      "entries": [
+        "Bureaublad",
+        "Alle apps",
+        "Mijn taken",
+        "Oefenbladen",
+        "Mijn oefenbladen",
+        "Samen & live",
+        "Mijn profiel",
+        "Instellingen",
+        "UitnodigingenEen leerling uitnodigen of reageren",
+        "Inloggen",
+        "Bovenbalk verbergen"
+      ]
+    },
+    {
+      "app": "getallen",
+      "action": "Native menu opener reachable",
+      "selector": ".workshop-nav [data-action=\"menu-open\"]"
+    },
+    {
+      "app": "getallen",
+      "action": "Actual right click in native document",
+      "events": [
+        {
+          "target": "heading",
+          "prevented": false
+        }
+      ]
+    },
+    {
+      "app": "getallen",
+      "action": "Minimize/resume retains same native document"
+    },
+    {
+      "app": "algebra",
+      "action": "Real clicks home → selection → actual exercise, no answer submitted",
+      "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/algebra-trainer/?returnTo=%2FLeraarBob%2Fos%2F&osEmbed=1&game=algebra-trainer&world=equations&topic=equations&screen=trainer&level=route-inverse&activeLevel=route-inverse"
+    },
+    {
+      "app": "algebra",
+      "action": "OS menu opened during actual exercise",
+      "entries": [
+        "Bureaublad",
+        "Alle apps",
+        "Mijn taken",
+        "Oefenbladen",
+        "Mijn oefenbladen",
+        "Samen & live",
+        "Mijn profiel",
+        "Instellingen",
+        "UitnodigingenEen leerling uitnodigen of reageren",
+        "Inloggen",
+        "Bovenbalk verbergen"
+      ]
+    },
+    {
+      "app": "algebra",
+      "action": "Native destinations projected into OS",
+      "selector": null
+    },
+    {
+      "app": "algebra",
+      "action": "Actual right click in native document",
+      "events": [
+        {
+          "target": "trainerScreen",
+          "prevented": false
+        }
+      ]
+    },
+    {
+      "app": "algebra",
+      "action": "Minimize/resume retains same native document"
+    },
+    {
+      "app": "rechten",
+      "action": "Real clicks home → selection → actual exercise, no answer submitted",
+      "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/rechten/rechtenwereld/?returnTo=%2FLeraarBob%2Fos%2F#oefenen"
+    },
+    {
+      "app": "rechten",
+      "action": "OS menu opened during actual exercise",
+      "entries": [
+        "Bureaublad",
+        "Alle apps",
+        "Mijn taken",
+        "Oefenbladen",
+        "Mijn oefenbladen",
+        "Samen & live",
+        "Mijn profiel",
+        "Instellingen",
+        "UitnodigingenEen leerling uitnodigen of reageren",
+        "Inloggen",
+        "Bovenbalk verbergen"
+      ]
+    },
+    {
+      "app": "rechten",
+      "action": "Native menu opener reachable",
+      "selector": "#menu"
+    },
+    {
+      "app": "rechten",
+      "action": "Actual right click in native document",
+      "events": [
+        {
+          "target": "atlas-header",
+          "prevented": false
+        }
+      ]
+    },
+    {
+      "app": "rechten",
+      "action": "Minimize/resume retains same native document"
+    },
+    {
+      "app": "vector",
+      "action": "Real clicks home → selection → actual exercise, no answer submitted",
+      "url": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/vectoren/Axioma_Vectorentrainer_v0.4_vectormissie.html?returnTo=%2FLeraarBob%2Fos%2F"
+    },
+    {
+      "app": "vector",
+      "action": "OS menu opened during actual exercise",
+      "entries": [
+        "Bureaublad",
+        "Alle apps",
+        "Mijn taken",
+        "Oefenbladen",
+        "Mijn oefenbladen",
+        "Samen & live",
+        "Mijn profiel",
+        "Instellingen",
+        "UitnodigingenEen leerling uitnodigen of reageren",
+        "Inloggen",
+        "Bovenbalk verbergen"
+      ]
+    },
+    {
+      "app": "vector",
+      "action": "Native menu opener not visible",
+      "selector": "#menuBtn"
+    },
+    {
+      "app": "vector",
+      "action": "Actual right click in native document",
+      "events": [
+        {
+          "target": "app",
+          "prevented": false
+        }
+      ]
+    },
+    {
+      "app": "vector",
+      "action": "Minimize/resume retains same native document"
+    }
+  ],
+  "screenshots": [
+    "getallen-home-1366.png",
+    "getallen-play-1366-expanded.png",
+    "getallen-play-1366-collapsed.png",
+    "getallen-play-390-expanded.png",
+    "getallen-play-390-collapsed.png",
+    "getallen-play-640-expanded.png",
+    "getallen-play-640-collapsed.png",
+    "getallen-os-menu.png",
+    "getallen-native-menu.png",
+    "algebra-home-1366.png",
+    "algebra-play-1366-expanded.png",
+    "algebra-play-1366-collapsed.png",
+    "algebra-play-390-expanded.png",
+    "algebra-play-390-collapsed.png",
+    "algebra-play-640-expanded.png",
+    "algebra-play-640-collapsed.png",
+    "algebra-os-menu.png",
+    "rechten-home-1366.png",
+    "rechten-play-1366-expanded.png",
+    "rechten-play-1366-collapsed.png",
+    "rechten-play-390-expanded.png",
+    "rechten-play-390-collapsed.png",
+    "rechten-play-640-expanded.png",
+    "rechten-play-640-collapsed.png",
+    "rechten-os-menu.png",
+    "rechten-native-menu.png",
+    "vector-home-1366.png",
+    "vector-play-1366-expanded.png",
+    "vector-play-1366-collapsed.png",
+    "vector-play-390-expanded.png",
+    "vector-play-390-collapsed.png",
+    "vector-play-640-expanded.png",
+    "vector-play-640-collapsed.png",
+    "vector-os-menu.png"
+  ],
+  "errors": [],
+  "missing": [],
+  "blocked": [],
+  "completed": true,
+  "browser": "154.0.8037.58"
+}

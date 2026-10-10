@@ -1,0 +1,220 @@
+{
+  "release": "296e06b7afb84564f7737ba0f790e27ebf6fa800",
+  "files": [
+    {
+      "file": "docs/os-uniformiteit/qa/README.md",
+      "bytes": 4392,
+      "sha256": "d897fc86198479865fe0fc5eb10c1b4ba058c48a9d0b2a710f70d5916c803a39"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/algebra-home-1366.png",
+      "bytes": 42626,
+      "sha256": "4cd53da81113270834ec72785f1befd7cd35e84280c3aa5d8afe5bb69f9afcba"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/algebra-os-menu.png",
+      "bytes": 122115,
+      "sha256": "cf2ffa3728d69e3bcccfcd1c02062450a53b4092615351512d0b861997c0d54b"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/algebra-play-1366-collapsed.png",
+      "bytes": 232666,
+      "sha256": "0970d8084ce3c861fb6a8a11187197ca0f00f6a7c10436b64e3fde5889761143"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/algebra-play-1366-expanded.png",
+      "bytes": 229794,
+      "sha256": "f06f5b89f66b11834e747fdbcfde647f7bd5be7da14028435433902055ffdf07"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/algebra-play-390-collapsed.png",
+      "bytes": 163401,
+      "sha256": "8f54f77827c6358ef12a4346b8a0a2842565517436fc38ef8a6dc29045377327"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/algebra-play-390-expanded.png",
+      "bytes": 152234,
+      "sha256": "08ccd2a9e80fdd047bacaa87c789e0d0e4f3cc4e5bd1637583dd12e00c6b5e77"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/algebra-play-640-collapsed.png",
+      "bytes": 111740,
+      "sha256": "52eac6ede91a7c3cbb4d170ffaa1a1e3832276f3d7fffe3b8d0e9ad657e3786f"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/algebra-play-640-expanded.png",
+      "bytes": 96962,
+      "sha256": "b059969856b724b81ccd41fd092972a9cdd549ccb4a0cdbc12fa959d944ca5b7"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/audit-browser.cjs",
+      "bytes": 9061,
+      "sha256": "e1aa7aa9b03a6704123c9423bc3a38d681623a07bc034a124afebad849939060"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/getallen-home-1366.png",
+      "bytes": 123113,
+      "sha256": "606d9e8539866a3bfd63e88a2c5bcc6982395b1a424439e24264a4ee521ca69e"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/getallen-native-menu.png",
+      "bytes": 87337,
+      "sha256": "ebb229fe7a3a0cf07f2102049c794a60b1b046e6ff5c4cb8e41d3b759f316da8"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/getallen-os-menu.png",
+      "bytes": 142763,
+      "sha256": "472feca19c66ee1fecea04161e81ba8cfe91fa19adfbf9f69cb75890d5d9a46f"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/getallen-play-1366-collapsed.png",
+      "bytes": 132378,
+      "sha256": "e6f92c1e0ea68984700e295074b41ecb9146cd4faf026f0133c6da59fab2c9e0"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/getallen-play-1366-expanded.png",
+      "bytes": 145350,
+      "sha256": "f82d9d5f128e5d721f35c5fe81ace2bd84ecd11d6dc3a53e5f38be6de5960245"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/getallen-play-390-collapsed.png",
+      "bytes": 47230,
+      "sha256": "c5da142c74888976ceb9effb241cfb2d0b8d8e9f0515d22b96bc3150429eec11"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/getallen-play-390-expanded.png",
+      "bytes": 51513,
+      "sha256": "a1305738b4f520b43531f002298c66e46b86a9e474451f4975aec537595d7cba"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/getallen-play-640-collapsed.png",
+      "bytes": 42281,
+      "sha256": "9dabef0fd0dc72e3598c57b515899a6f601a58b63a283ffee529b13d9acf75b5"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/getallen-play-640-expanded.png",
+      "bytes": 41551,
+      "sha256": "af9335f13a3bd0998ad329d87b0cf60d873c31b58affbad3217529469901391c"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/rechten-home-1366.png",
+      "bytes": 358738,
+      "sha256": "f0783a6289af9f7425bc253ec1eff99191ad46a4ee5b6ee453f0260f868a0bfe"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/rechten-native-menu.png",
+      "bytes": 438697,
+      "sha256": "431eebb351bfcc03ecaa15d1ade881780deab3135ce8ac2ac5bc0340a5fc80f1"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/rechten-os-menu.png",
+      "bytes": 163996,
+      "sha256": "fb9ec433883ae43a455af2b7e64bc6de95aa6ea896f5ba3d0aaee766d443b26e"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/rechten-play-1366-collapsed.png",
+      "bytes": 406162,
+      "sha256": "4585b13011cd4328cea8112b59854343bd421d728f77d8c946452a90c5f22d13"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/rechten-play-1366-expanded.png",
+      "bytes": 385784,
+      "sha256": "a7e16e83f5e98273beb30e449cd35dfdeddd710f6f3f962648ecd854f4414444"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/rechten-play-390-collapsed.png",
+      "bytes": 191743,
+      "sha256": "5f9e0f1019876500fd7959a25d8a181ccedf395193d3727e548077c279631785"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/rechten-play-390-expanded.png",
+      "bytes": 180009,
+      "sha256": "42e241a413a5e48b2d01a4c4f9bc3ddaf8a6134083fcaa38b644216cc5d77a07"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/rechten-play-640-collapsed.png",
+      "bytes": 105967,
+      "sha256": "c4bf12fd194531a371e6d672ac8831101d90551e25ccfef8ceae8482c08042e4"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/rechten-play-640-expanded.png",
+      "bytes": 90980,
+      "sha256": "bb5414a985bee156da2a3e0239e39f7833c2796755ca854f39858f6bf4596d20"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/report.json",
+      "bytes": 116744,
+      "sha256": "5c49f027380a88d88939383b984846bc3af8d84a2cc4ad119f93a6de084c5e88"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/rightclick/compatibility-grenspas-after-rightclick.png",
+      "bytes": 544534,
+      "sha256": "2657b3a13b84bce35b382b4f7d889fd13d6371c984a85ecb3c376da40f8f8be9"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/rightclick/report.json",
+      "bytes": 840,
+      "sha256": "582800ee52d38e052297797aff46973b8013b0078b330cb92a822176632003d0"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/rightclick-browser.cjs",
+      "bytes": 4690,
+      "sha256": "4e5f4940feef13ef9b6d91b9d0b02f5ba33b4ee901b3af19037e590fbe6e4a08"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/vector-header-browser.cjs",
+      "bytes": 3474,
+      "sha256": "d26409e0612f629fa9745894fcaebcae31ea487fef6909c87579ddae27e4389b"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/vector-header-report.json",
+      "bytes": 3518,
+      "sha256": "7e9869f1f51618615c7f8708dd2017c2b9d7bd712fa422d4ccad7d01672e4354"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/vector-home-1366.png",
+      "bytes": 42713,
+      "sha256": "8cc67fef199941bf71d5f7d49f855c9031a05f777d35c9d4ce3864ae388760b8"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/vector-os-menu.png",
+      "bytes": 271419,
+      "sha256": "5f7391dd8132fb3c51363781088a46333b4cf0433ac5b5054859bbbc6f267eb6"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/vector-play-1366-collapsed.png",
+      "bytes": 1023004,
+      "sha256": "5da93b506aab45b9342cf0fa0cc5dc0a158ac8a88b882a6a0f78f7d8298dff62"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/vector-play-1366-expanded.png",
+      "bytes": 942157,
+      "sha256": "9c9fde726f54ee1aaba82a6f61088c3d777bfa083cc84c04447ca58d0e1baa27"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/vector-play-390-collapsed.png",
+      "bytes": 54532,
+      "sha256": "0254b1bdd2698e48265d04500ad2d4444c137be180254ab02b59e6725d7ed264"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/vector-play-390-expanded.png",
+      "bytes": 58714,
+      "sha256": "5f7a336a9c93d543658632c8d84a9b7ebd1dd2d302aa486d8a0ad6ef2074c78a"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/vector-play-640-collapsed.png",
+      "bytes": 72558,
+      "sha256": "148353a86ee44e56734dc6cfdeef5d10840b66b20b296ad7f6f0e01783124487"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/vector-play-640-expanded.png",
+      "bytes": 72220,
+      "sha256": "1f0ab2cd842b4349b109e21b5ef11a9289d0a65f656d0a5e315ff035d495011b"
+    },
+    {
+      "file": "docs/os-uniformiteit/qa/vector-standalone-menu.png",
+      "bytes": 205258,
+      "sha256": "94a9df42e496720d158cd6837cbf94cc08e1ddcd969ddcf3ffe665ce0fd64dc4"
+    }
+  ]
+}

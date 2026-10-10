@@ -1,0 +1,32 @@
+{
+  "scope": "Actual locally served main source with synthetic teacher account; isolated browser local storage; remote requests blocked; compatibility slice and normal current picker",
+  "checks": [
+    {
+      "name": "Compatibility Grenspas actual right pointer click",
+      "before": {
+        "screen": "mission",
+        "active": "grenspas",
+        "phase": "root",
+        "history": 0,
+        "events": 0
+      },
+      "after": {
+        "screen": "mission",
+        "active": "grenspas",
+        "phase": "root",
+        "root": "2",
+        "history": 1,
+        "events": 0
+      },
+      "answerMutated": true
+    },
+    {
+      "name": "Current Puntenbaai point picker actual right pointer click",
+      "answerUnchanged": true,
+      "valuesBefore": {},
+      "valuesAfter": {}
+    }
+  ],
+  "errors": [],
+  "blocked": []
+}
