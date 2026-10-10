@@ -28,6 +28,14 @@ De brede catalogusmatrix controleert telkens het geopende hoofdscherm of de eers
 
 ## Screenshots
 
+### Aanvulling: lokale Rechten-duobattle daadwerkelijk gestart
+
+Bij de gemelde lege duobattle bleken beide werkborden wel geladen, maar viel het hoofdscherm na het verwijderen van de native kopbalk in de oude koprij van 64 px. De OS-stijl geeft deze specifieke battlepagina nu één rij die de beschikbare hoogte vult. De zelfstandige battlepagina en de oefenengine blijven ongewijzigd.
+
+De [gerichte vervolgrun](duo-followup-report.json) start werkelijk een Puntenbaai-battle en controleert beide werkborden en de antwoordknoppen op 1366 × 768, 390 × 844 en 640 × 360, met beide balkstanden. Een juist antwoord levert één punt op, de volgende ronde start en dezelfde wedstrijd/ronde blijft bewaard na minimaliseren en hervatten. Acht interactiegroepen slagen zonder browserexceptions of ontbrekende bronnen; de 35 bestaande unit-/DOM-tests slagen ook. De brede catalogusmatrix is voor deze uitsluitend op Rechten-duo gerichte CSS-wijziging niet herhaald. [Bronhashes van deze aanvulling](duo-followup-hashes.json); de eerdere hashes blijven horen bij de eerdere brede run.
+
+![Rechten lokale Duo Battle met zichtbare werkborden](rechten-local-duo-playing.png)
+
 Selectie uit de definitieve run; de CI bewaart de volledige browseruitvoer als artifact.
 
 ![Data Check: één OS-balk](data-check-desktop.png)

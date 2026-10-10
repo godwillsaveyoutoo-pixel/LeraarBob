@@ -205,3 +205,5 @@ Werkelijk gecontroleerd: 20 werkvormgroepen / 102 aanraakdoelen, de vier pilots,
 - [ ] Echte productieaccounts en externe toestellen; sessiebewijs gebruikt de lokale testproviders.
 
 Zie [testverslag en screenshots](qa/uniform-chrome/README.md) en [de afspraken voor volgende apps](NATIVE_CHROME.md). Eerdere rapporten hierboven blijven bewijs voor hun beschreven versies.
+
+Aanvullende gebruikersmelding gecontroleerd: de lokale Rechten-duobattle startte, maar haar werkborden kregen geen bruikbare hoogte na het verwijderen van de oude kopbalk. Dit is hersteld in de OS-stijl. De browserproef start nu ook werkelijk een battle, controleert beide werkborden en antwoordknoppen op drie schermmaten/in beide balkstanden, beantwoordt een vraag en hervat dezelfde volgende ronde na minimaliseren. Acht gerichte interactiegroepen en 35 unit-/DOM-tests slagen. Zie het [aanvullende bewijs](qa/uniform-chrome/duo-followup-report.json).
