@@ -277,7 +277,7 @@ function watchSocial(){
   socialLoading=true;
   const existing=document.querySelector('script[src*="/axioma-social.js"]');
   if(existing)existing.addEventListener('load',watchSocial,{once:true});
-  else load('shared/axioma-social.js?v=0.6.1').then(watchSocial).catch(()=>{});
+  else load('shared/axioma-social.js?v=0.6.2').then(watchSocial).catch(()=>{});
  }
 }
 function navigateGame(){const node=current.header.querySelector('#crumbWorld,[data-screen="world"],#gameHomeBtn,#brandBtn,#homeBtn:not([data-platform-home]),#home');if(node)node.click();else if(script.dataset.gameHref)location.assign(new URL(script.dataset.gameHref,root));else if(!isHome)location.assign(location.pathname);}
@@ -302,7 +302,7 @@ function syncMobileContext(){
  if(!titleNode||!detailNode)return;
  if(isDesktop){
   const places=[...s.querySelectorAll('.crumbs button,.crumbs>span')].map(n=>n.textContent.trim()).filter(n=>n&&n!=='›');
-  titleNode.textContent=places.at(-1)||title;detailNode.textContent='';detailNode.hidden=true;return;
+  titleNode.textContent=current.header.dataset.platformAppTitle||places.at(-1)||title;detailNode.textContent='';detailNode.hidden=true;return;
  }
  titleNode.textContent=isHome?'leraarBob':title;
  let detail='';
@@ -463,7 +463,7 @@ function mount(header){
  syncCrumbs();syncAccount();syncProgress();syncMobileContext();syncDisplayControls();setCollapsed(collapsed);
 }
 function scan(){queued=false;if(!cssReady)return;const header=document.querySelector(selector);if(header){mount(header);if(header.inert!==collapsed)header.inert=collapsed;syncCrumbs();syncProgress();syncMobileContext();syncDisplayControls();}watchAccount();watchSocial();}
-new MutationObserver(()=>{if(!queued){queued=true;requestAnimationFrame(scan);}}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','inert']});
+new MutationObserver(()=>{if(!queued){queued=true;requestAnimationFrame(scan);}}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','inert','data-platform-app-title']});
 for(const event of ['axioma:game-ready','axioma:game-progress'])window.addEventListener(event,syncProgress);
 window.LeraarBobTopbar=Object.freeze({setCollapsed,openAccount,openMenu:()=>showMenu()});scan();
 })();

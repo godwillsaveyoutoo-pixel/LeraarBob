@@ -9,6 +9,7 @@
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
   <link rel="stylesheet" href="desktop.css?v=20261010-algebra">
   <link rel="stylesheet" href="../shared/leraarbob-topbar.css">
+  <link rel="stylesheet" href="personal.css?v=20261010-focus">
   <script>try{document.documentElement.dataset.mode=localStorage.getItem('axioma-mode')==='dark'?'dark':'light';}catch{}</script>
   <script src="../shared/vendor/supabase.js" defer></script>
   <script src="../shared/supabase-config.js" defer></script>
@@ -18,10 +19,11 @@
   <script src="../js/catalog.js" defer></script>
   <script src="../shared/game-registry.js" defer></script>
   <script src="../js/catalog-progress.js" defer></script>
-  <script src="desktop-model.js" defer></script>
+  <script src="desktop-model.js?v=20261010-focus" defer></script>
   <script src="../shared/worksheet-library.js?v=20261010-folders" defer></script>
-  <script src="desktop.js?v=20261010-algebra" defer></script>
-  <script src="../shared/leraarbob-topbar.js" data-title="Bureaublad" data-home="os/" data-context="none" data-page="desktop" data-theme-mode="site" data-nav-pilot="true" defer></script>
+  <script src="personal-home.js?v=20261010-focus" defer></script>
+  <script src="desktop.js?v=20261010-personal-focus" defer></script>
+  <script src="../shared/leraarbob-topbar.js?v=20261010-focus" data-title="Bureaublad" data-home="os/" data-context="none" data-page="desktop" data-theme-mode="site" data-nav-pilot="true" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#desktop">Naar het bureaublad</a>
@@ -36,6 +38,7 @@
       <button type="button" data-view="profile" data-nav-icon="chart">Mijn profiel</button>
       <button type="button" data-view="settings" data-nav-icon="menu">Instellingen</button>
     </nav>
+    <nav id="activeGameSections" data-platform-sections hidden aria-label="Actieve wereld"></nav>
     <button id="homeBtn" hidden type="button">Bureaublad</button>
     <button id="modeBtn" hidden type="button" aria-pressed="false">Donkere weergave</button>
     <nav class="breadcrumbs" hidden aria-label="Je locatie"><button id="headerFolder" type="button" hidden></button><span id="headerApp" hidden></span></nav>
@@ -44,13 +47,11 @@
 
   <main id="desktop" tabindex="-1">
     <section id="homeView" class="home-view" aria-labelledby="greeting">
-      <div class="desktop-heading"><div><p class="eyebrow">JOUW WERELD VAN WISKUNDE</p><h1 id="greeting">Welkom op je bureaublad.</h1><p id="greetingSub">Ontdek, oefen, speel. Jij kiest waar je begint.</p></div><button class="search-launch glass" data-action="start"><span data-icon="search"></span><span>Waar wil je naartoe?</span><kbd>Ctrl K</kbd></button></div>
-      <div class="desktop-layout">
-        <section class="themes-zone" aria-labelledby="themesTitle"><div class="zone-title"><h2 id="themesTitle">Mijn thema’s</h2><span>8 mappen · één wereld</span></div><div id="themeFolders" class="theme-folders"></div><div class="desktop-shortcuts"><button data-view="saved"><span data-icon="folder"></span>Mijn taken<span class="sub">Bewaarde activiteiten</span></button><button data-view="worksheets"><span data-icon="paper"></span>Oefenbladen<span class="sub">Maak en print een reeks</span></button><button data-view="live"><span data-icon="people"></span>Samen & live<span class="sub">Duo of deelnemen met code</span></button></div></section>
-        <aside class="today glass" aria-labelledby="todayTitle"><div class="today-heading"><span class="small-orbit" aria-hidden="true">✦</span><p class="eyebrow">JE EIGEN LEERWERELD</p></div><h2 id="todayTitle">Klaar voor een ontdekking?</h2><p id="todayCopy">Een les om te begrijpen. Een trainer om te groeien. Een spel om uit te proberen.</p><div id="continueList" class="continue-list"></div><button class="quiet-link" data-view="profile">Bekijk mijn profiel <span aria-hidden="true">↗</span></button></aside>
-      </div>
-      <section class="pinned-zone" aria-labelledby="pinnedTitle"><div class="zone-title"><h2 id="pinnedTitle">Binnen één klik</h2><button class="quiet-link" data-view="all">Alle apps <span aria-hidden="true">→</span></button></div><div id="pinnedApps" class="pinned-apps"></div></section>
-      <div class="desktop-footnote"><span class="status-dot"></span><span id="accountStatus">Bureaublad laden…</span><span>Leer. Speel. Begrijp.</span></div>
+      <div class="personal-heading"><div><p class="eyebrow">MIJN LERAARBOB</p><h1 id="greeting">Mijn bureaublad</h1><p id="greetingSub">Jouw apps. Jouw tempo.</p></div><div class="personal-heading-actions"><button id="personalInbox" type="button" aria-label="Uitnodigingen"><span data-icon="people"></span><span>Uitnodigingen</span><span id="invitationCount" class="personal-count" hidden>0</span></button><button data-view="profile" class="personal-profile" aria-label="Mijn profiel"><span data-icon="account"></span><span>Mijn profiel</span></button></div></div>
+      <div id="personalSession" class="personal-session" hidden></div>
+      <div class="personal-layout"><section class="personal-games" aria-labelledby="pinnedTitle"><div class="personal-section-heading"><h2 id="pinnedTitle">Mijn apps</h2><span>Een klik, en je bent vertrokken.</span></div><div id="pinnedApps" class="personal-grid"></div></section>
+        <aside class="personal-side" aria-label="Mijn klas"><section class="personal-panel"><div class="personal-section-heading"><h2>Mijn klas</h2><span id="personalConnection" class="personal-connection">Verbinden…</span></div><p id="personalClass" class="personal-muted"></p><div id="personalPeople"></div><button id="personalClassCode" type="button" class="personal-wide">Deelnemen met klascode <span aria-hidden="true">↗</span></button></section><section class="personal-panel"><div class="personal-section-heading"><h2>Ranglijsten</h2><span class="personal-ranking-mark" aria-hidden="true">✦</span></div><p class="personal-muted">Afgeronde klasbattles · per wereld</p><div id="personalRankingPreview"></div><button id="personalRankings" type="button" class="personal-wide">Bekijk ranglijsten <span aria-hidden="true">→</span></button></section></aside></div>
+      <div class="desktop-footnote"><span class="status-dot"></span><span id="accountStatus">Bureaublad laden…</span><span>Maak ruimte voor wat jij leert.</span></div>
     </section>
 
     <section id="libraryWindow" class="library-window" aria-labelledby="windowTitle" hidden>
@@ -60,7 +61,7 @@
     </section>
 
     <section id="appWorkspace" class="app-workspace" aria-label="Geopende app" hidden>
-      <div class="app-toolbar"><button id="appBack" class="app-back" aria-label="Terug naar mijn map" title="Naar je map; de app blijft geopend"><span data-icon="back"></span><span>Terug naar mijn map</span></button><div class="active-app-copy"><span id="activeAppType" class="type-badge"></span><strong id="activeAppTitle"></strong><span id="activeAppMode"></span></div><nav id="nativeAppNavigation" aria-label="Algebrawereld" hidden></nav><div class="app-actions"><button id="saveActivity" aria-label="Bewaren" title="Bewaar deze ingang in Mijn taken"><span data-icon="bookmark"></span><span>Bewaren</span></button><a id="openOriginal" target="_blank" rel="noopener" aria-label="Apart openen" title="Open de oorspronkelijke app in een nieuw tabblad"><span data-icon="external"></span><span>Apart openen</span></a><button id="minimizeApp" aria-label="App minimaliseren" title="App blijft geopend"><span data-icon="minus"></span></button><button id="closeApp" aria-label="App afsluiten" title="App afsluiten"><span data-icon="close"></span></button></div></div>
+      <div class="app-toolbar"><button id="appBack" class="app-back" aria-label="Terug naar mijn map" title="Naar je map; de app blijft geopend"><span data-icon="back"></span><span>Terug naar mijn map</span></button><div class="active-app-copy"><span id="activeAppType" class="type-badge"></span><strong id="activeAppTitle"></strong><span id="activeAppMode"></span></div><nav id="nativeAppNavigation" aria-label="Algebrawereld" hidden></nav><button id="windowActionsToggle" type="button" aria-label="Appvenster: bewaren en sluiten" aria-expanded="false" aria-controls="windowActions" hidden><span data-icon="more"></span></button><div class="app-actions" id="windowActions" aria-label="Appvenster"><button id="saveActivity" aria-label="Bewaren" title="Bewaar deze ingang in Mijn taken"><span data-icon="bookmark"></span><span>Bewaren</span></button><a id="openOriginal" target="_blank" rel="noopener" aria-label="Apart openen" title="Open de oorspronkelijke app in een nieuw tabblad"><span data-icon="external"></span><span>Apart openen</span></a><button id="minimizeApp" aria-label="App minimaliseren" title="App blijft geopend"><span data-icon="minus"></span></button><button id="closeApp" aria-label="App afsluiten" title="App afsluiten"><span data-icon="close"></span></button></div></div>
       <div id="appFrames" class="app-frames"></div>
     </section>
   </main>
@@ -70,10 +71,11 @@
     <div class="start-search"><span data-icon="search"></span><input id="startSearch" type="search" placeholder="Zoek een thema, les, trainer of spel…" aria-label="Zoek in leraarBob" maxlength="120" autocomplete="off"><kbd>Esc</kbd></div><div class="start-section-title"><strong id="startResultsTitle">Ga meteen naar</strong><span id="startResultCount"></span></div><div id="startResults" class="start-results"></div><div class="start-footer"><button data-view="profile"><span data-icon="account"></span><span id="startAccountLabel">Mijn profiel</span></button><button data-view="settings"><span data-icon="settings"></span>Instellingen</button></div>
   </section>
 
-  <footer class="taskbar" aria-label="Bureaubladbediening"><button id="startButton" class="start-button" aria-controls="startPanel" aria-expanded="false"><span class="bob-mark" aria-hidden="true">b<span>•</span></span><strong>Start</strong></button><button class="desktop-button" data-action="desktop" title="Bureaublad" aria-label="Toon het bureaublad"><span data-icon="desktop"></span></button><div class="taskbar-divider"></div><div id="runningApps" class="running-apps" role="group" aria-label="Geopende apps"></div><div class="taskbar-right"><button data-view="profile" title="Mijn profiel" aria-label="Mijn profiel"><span data-icon="account"></span></button><button data-view="settings" title="Instellingen" aria-label="Instellingen"><span data-icon="settings"></span></button><time id="clock"></time></div></footer>
+  <footer id="taskbar" class="taskbar" aria-label="Bureaubladbediening"><button id="startButton" class="start-button" aria-controls="startPanel" aria-expanded="false"><span class="bob-mark" aria-hidden="true">b<span>•</span></span><strong>Start</strong></button><button class="desktop-button" data-action="desktop" title="Bureaublad" aria-label="Toon het bureaublad"><span data-icon="desktop"></span></button><div class="taskbar-divider"></div><div id="runningApps" class="running-apps" role="group" aria-label="Geopende apps"></div><button id="focusWorkspace" type="button" aria-label="Balken verbergen" title="Focusstand: alleen de oefening" aria-controls="desktopHeader taskbar" aria-expanded="true" hidden><span data-icon="target"></span><span>Focus</span></button><div id="compactWindowControls" class="compact-window-controls" hidden></div><div class="taskbar-right"><button data-view="profile" title="Mijn profiel" aria-label="Mijn profiel"><span data-icon="account"></span></button><button data-view="settings" title="Instellingen" aria-label="Instellingen"><span data-icon="settings"></span></button><time id="clock"></time></div></footer>
 
   <dialog id="modeDialog" class="mode-dialog" aria-labelledby="modeTitle"><div class="dialog-heading"><div><p id="modeTheme" class="eyebrow"></p><h2 id="modeTitle"></h2></div><button data-close-dialog aria-label="Sluiten"><span data-icon="close"></span></button></div><p id="modeDescription"></p><div id="modeOptions"></div><div id="modeWorksheets"></div></dialog>
   <dialog id="confirmClose" class="confirm-dialog" aria-labelledby="confirmTitle"><div class="dialog-heading"><h2 id="confirmTitle">Deze app afsluiten?</h2><button data-close-dialog aria-label="Sluiten"><span data-icon="close"></span></button></div><p>Je sluit het geopende scherm. Wat de app zelf bewaart, blijft bewaard. Met minimaliseren kun je precies op dit scherm verdergaan.</p><div class="confirm-actions"><button id="cancelClose">Geopend houden</button><button id="acceptClose" class="primary">App afsluiten</button></div></dialog>
+  <button id="focusRestore" type="button" aria-label="Bediening tonen" aria-controls="desktopHeader taskbar" aria-expanded="false" hidden><span data-icon="desktop"></span><span>Bediening tonen</span></button>
   <div id="toast" class="toast" role="status" hidden></div>
   <noscript><p class="noscript">Dit bureaublad gebruikt JavaScript. <a href="../index.html?view=catalog">Open de eerdere startpagina.</a></p></noscript>
 </body>

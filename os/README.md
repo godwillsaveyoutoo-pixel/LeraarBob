@@ -2,9 +2,21 @@
 
 Het bureaublad op `/os/` is de standaardstartpagina: gewone bezoeken aan `/` en `/index.html` openen het OS. De eerdere catalogus blijft beschikbaar via [`/index.html?view=catalog`](../index.html?view=catalog) en OS Instellingen. Bestaande accountlinks voor aanmelden, terugkeer en verificatie blijven via de oorspronkelijke accountingang lopen. De oorspronkelijke pilot is geïntegreerd op `codex/os-pilot-20261009`, vanaf de GitHub-basis `6056ac4e7445f6bb15fa1b15dce43df32a6e17e6`.
 
+## Persoonlijk bureaublad · nieuwe ontwikkelpilot
+
+De pilot op `codex/os-personal-pilot-20261010` bouwt voort op de Rechtenwereld-ingangen van PR #12. Het beginscherm toont je eigen appkaarten met geïntegreerde afbeelding en beschikbare werkvormen, plus Toevoegen. Nieuwe gebruikers beginnen met Rechtenwereld; bestaande pins blijven behouden. Start geeft toegang tot alle apps, profiel, instellingen, taken, ranglijsten en de volledige oefenbladcollectie. De oefenbladknop op een kaart opent de bestaande onderwerpmapjes. Rechterklik, Shift+F10 en Meer opties geven hetzelfde menu.
+
+Rechtenwereld gebruikt binnen het OS één gedeelde bovenbalk van 58 px. De oorspronkelijke spelkop neemt geen ruimte meer in; haar nodes en handlers blijven bestaan. Wereldkaart, spelvoortgang, spelprofiel en werkvormen blijven via de gedeelde navigatie bereikbaar. Bewaren en vensterbediening staan in de onderste taakbalk, op kleine schermen in één venstermenu. De andere apps worden afzonderlijk aangesloten en behouden voorlopig hun bestaande navigatie.
+
+**Focus** in de taakbalk verbergt bij een geopende app de bovenste en onderste OS-balk. **Bediening tonen** blijft minstens 44 × 44 px en krijgt een eigen strook van 52 px buiten het werkbord. De focuskeuze wordt per account op dit toestel onthouden, los van de bestaande inklapkeuze van de bovenbalk. Wisselen tussen beide standen hergebruikt de geopende iframe en invoer. Op het bureaublad blijft de navigatie zichtbaar. Herladen herstelt de voorkeur; het hervatten van inhoud blijft de verantwoordelijkheid van de oorspronkelijke app.
+
+Online klasgenoten en uitnodigingen gebruiken de bestaande sociale service. Voor Rechtenwereld opent Samen leren direct de eigen inrichting; de centrale inbox ondersteunt deelnemen, weigeren en intrekken. Leraren starten een Rechten-klasbattle direct in de eigen inrichting; leerlingen gaan via de OS-klascode naar de wachtkamer. Een al gestarte of eerder bezochte klasbattle krijgt een hervatknop op het bureaublad. De uitnodigingslink uit deze klasflow opent dezelfde OS-code-ingang. Ranglijsten tonen bestaande punten uit afgeronde klasbattles, per wereld en klas, zonder omzetting naar XP.
+
+De lokale [previewserver](../scripts/serve-personal-os-preview.cjs) biedt fictieve leerling- en leraaraccounts op `http://127.0.0.1:8793/`. [Uitgevoerde controles, screenshots en grenzen](qa/personal/README.md). Dit is nog geen productie-uitrol. Het visuele Getallenwereld-herontwerp, een universele uitnodigingscoördinator en nieuwe klasuitnodigingen voor alle leerlingen volgen afzonderlijk.
+
 ## Werking
 
-Acht themamappen en 24 bestaande bouwsels, met lessen, trainers, spellen en ateliers, Start en Ctrl/Cmd K, zoeken, pins, persoonlijke bewaarde ingangen en oefenbladgeneratoren. Iedere app blijft in haar oorspronkelijke wereld met dezelfde vragen, antwoordbediening, voortgangsidentiteit en leerflow.
+De bibliotheek bevat acht themamappen en 24 bestaande bouwsels, met lessen, trainers, spellen en ateliers. Start en Ctrl/Cmd K bieden zoeken, persoonlijke bewaarde ingangen en oefenbladgeneratoren. Iedere app blijft in haar oorspronkelijke wereld met dezelfde vragen, antwoordbediening, voortgangsidentiteit en leerflow.
 
 Maximaal zes apps blijven tegelijk geopend op dezelfde origin. Terug, minimaliseren, Start, profiel en instellingen hergebruiken de oorspronkelijke iframe en DOM. Iedere app onthoudt haar eigen map, filter en zoekwoord. Hervatten herstelt de vorige antwoordfocus, ook wanneer je eerst Bewaren gebruikte. Ctrl/Cmd K en Escape werken ook in geneste Battle-werkborden. Andere toetsen blijven bij de app.
 

@@ -23,7 +23,7 @@
     render();
     for (const fn of listeners) { try { fn(state()); } catch (error) { console.error(error); } }
   }
-  function state() { return { ...snapshot, account, connected, matchId, tabId }; }
+  function state() { return { ...snapshot, account, connected, matchId, tabId, pending, note }; }
   const invitationLabel = i => i.game==='rechten-learn'?'Samen leren in Rechtenwereld':i.game==='rechten-duo'?'een online duel in Rechtenwereld':'Rechten Zeeslag';
   function invitationURL(invite) {
     const learn=invite.game==='rechten-learn';
@@ -154,6 +154,8 @@
   async function open(opener) {
     await ready;
     if (!account) return;
+    const request=new CustomEvent('leraarbob:social-open',{cancelable:true,detail:{opener}});
+    document.dispatchEvent(request);if(request.defaultPrevented){refresh();return;}
     returnFocus = opener || document.querySelector('leraarbob-topbar')?.shadowRoot?.querySelector('.menu') || document.activeElement;
     panel.showPopover();
     panel.querySelector('.close').focus();
@@ -302,7 +304,7 @@
   window.AxiomaSocial = Object.freeze({
     ready: () => ready, state, refresh, open,
     async answerInvitation(id, action) {
-      await ready;if(!['accept','decline'].includes(action))return null;
+      await ready;if(!['accept','decline','cancel'].includes(action))return null;
       return act(action,{p_invite_id:id});
     },
     onChange(fn) { listeners.add(fn); return () => listeners.delete(fn); },

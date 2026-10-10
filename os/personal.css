@@ -1,0 +1,113 @@
+/* The personal desktop uses the same quiet paper and ink in both appearances. */
+:root{--personal-paper:#f4f3eb;--personal-card:#fffef9;--personal-ink:#25473f;--personal-muted:#68796f;--personal-line:#d9e1d5;--personal-accent:#285a48;--personal-soft:#e9eee2}
+html[data-mode=dark]{--personal-paper:#182c30;--personal-card:#21393c;--personal-ink:#f1f1e6;--personal-muted:#b3c7bf;--personal-line:#395350;--personal-accent:#b4d3bb;--personal-soft:#304b45}
+.home-view{max-width:none;padding:30px clamp(20px,4vw,64px) 16px;color:var(--personal-ink);background:var(--personal-paper);background-image:radial-gradient(ellipse at 65% 0%,#b5d6b21a,transparent 60%)}
+.personal-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:1440px;margin:0 auto 30px}
+.personal-heading .eyebrow{color:var(--personal-muted);margin-bottom:6px;font-size:10px;letter-spacing:.22em}
+.personal-heading h1{font-family:Georgia,serif;font-size:clamp(28px,3vw,38px);font-weight:400;line-height:1.15;letter-spacing:-.6px;margin-bottom:8px}
+.personal-heading p:last-child{margin:0;color:var(--personal-muted);font-size:14px}
+.personal-heading-actions{display:flex;align-items:center;gap:8px}
+.personal-heading-actions button{display:flex;align-items:center;gap:9px;background:var(--personal-card);border:1px solid var(--personal-line);padding:8px 14px;min-height:44px;border-radius:24px;color:inherit}
+#personalInbox[data-unread=true]{background:var(--personal-soft);border-color:var(--personal-accent)}
+.personal-count{display:grid;place-items:center;border-radius:50%;min-width:22px;height:22px;background:var(--personal-accent);color:var(--personal-paper);font-weight:700;font-size:12px}
+.personal-layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:clamp(25px,4vw,60px);max-width:1440px;margin:auto;align-items:start}
+.personal-section-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:16px}
+.personal-section-heading h2{font-size:15px;letter-spacing:.015em;margin:0;font-weight:650}
+.personal-section-heading>span{font-size:11px;color:var(--personal-muted)}
+.personal-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 20px}
+.personal-app{position:relative;display:flex;flex-direction:column;align-items:center;padding:16px 6px 12px;border-radius:20px;min-width:0;transition:background .15s}
+.personal-app:hover,.personal-app:focus-within{background:var(--personal-card)}
+.personal-app-open{background:none;color:inherit;display:flex;flex-direction:column;align-items:center;gap:14px;padding:0 16px}
+.personal-app-icon{width:96px;height:96px;object-fit:cover;border-radius:24px;box-shadow:0 8px 20px #12392d20;border:1px solid #ffffff70}
+.personal-app h3{font-size:17px;font-weight:600;margin:0;line-height:1.25}
+.personal-app-status{font-size:11px;color:var(--personal-muted);margin:7px 0 12px;min-height:17px;text-align:center}
+.personal-app-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;max-width:240px}
+.personal-app-actions button{font-size:11px;background:var(--personal-card);border:1px solid var(--personal-line);border-radius:10px;padding:6px 10px;min-width:44px;min-height:44px;color:inherit}
+.personal-app-actions button:hover{border-color:var(--personal-accent);background:var(--personal-soft)}
+.personal-app-actions button[data-mode=solo]{background:var(--personal-soft);font-weight:650}
+.personal-app-more{position:absolute;right:0;top:10px;min-width:44px;min-height:44px;background:none;border-radius:50%;font-size:15px;letter-spacing:1px;color:var(--personal-muted)}
+.personal-add{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:12px;background:none;border:1px dashed var(--personal-line);border-radius:20px;padding:16px 15px 20px;min-height:220px;color:inherit;align-self:stretch}
+.personal-add:hover{background:var(--personal-card);border-color:var(--personal-accent)}
+.personal-add-symbol{display:grid;place-items:center;width:96px;height:96px;border:1px dashed var(--personal-line);background:var(--personal-card);border-radius:24px;font-size:36px;font-weight:300;color:var(--personal-accent)}
+.personal-add strong{font-size:17px;font-weight:600}.personal-add small{font-size:11px;color:var(--personal-muted);max-width:150px;line-height:1.6}
+.personal-side{display:grid;gap:18px}.personal-panel{padding:21px 20px;background:var(--personal-card);border:1px solid var(--personal-line);border-radius:18px}
+.personal-panel .personal-section-heading{margin-bottom:9px}.personal-muted{font-size:12px;line-height:1.6;color:var(--personal-muted);margin:0 0 14px}.personal-panel .personal-muted{font-size:11px}
+.personal-connection{display:flex;align-items:center;gap:5px}.personal-connection::before{content:'';width:6px;height:6px;border-radius:50%;background:#ad9770}.personal-connection[data-online=true]::before{background:#6c9d70}
+.personal-person{display:flex;align-items:center;gap:10px;padding:7px 0}.personal-initial{display:grid;place-items:center;flex-shrink:0;width:36px;height:36px;border-radius:50%;color:var(--personal-accent);background:var(--personal-soft);font-size:13px;font-weight:600}.personal-person strong{display:block;font-size:12px;font-weight:600}.personal-person small{display:block;font-size:10px;color:var(--personal-muted)}.personal-presence{width:6px;height:6px;background:#6c9d70;border-radius:50%;margin-left:auto}.personal-presence.occupied{background:#ba924e}
+.personal-wide{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:44px;margin-top:9px;padding:9px 0;background:none;border-top:1px solid var(--personal-line);font-size:12px;font-weight:600;color:inherit;text-align:left}
+.personal-ranking-mark{font-size:24px!important;color:#b88e46!important}.personal-ranking-world{font-size:12px;font-weight:650;margin:8px 0 5px}.personal-ranking{list-style:none;margin:0;padding:0;display:grid;gap:5px}.personal-ranking li{display:flex;align-items:center;gap:10px;min-height:44px;padding:5px 8px;border-radius:8px;font-size:12px}.personal-ranking li.is-mine{background:var(--personal-soft)}.personal-ranking strong{font-weight:550}.personal-place{font-size:12px;color:var(--personal-muted);min-width:14px;font-variant-numeric:tabular-nums}.personal-points{margin-left:auto;white-space:nowrap;color:var(--personal-muted);font-size:11px}
+.personal-session{display:flex;align-items:center;gap:14px;max-width:1440px;margin:0 auto 24px;padding:14px 20px;background:var(--personal-soft);border:1px solid var(--personal-line);border-radius:14px}.personal-session>div{flex:1}.personal-session strong,.personal-session span{display:block}.personal-session strong{font-size:14px}.personal-session span{font-size:12px;color:var(--personal-muted)}.personal-session-dot{width:10px;height:10px;border-radius:50%;background:#6c9d70;flex-shrink:0}
+.home-view .desktop-footnote{max-width:1440px;margin:24px auto 0;color:var(--personal-muted)}.home-view .desktop-footnote>span:last-child{letter-spacing:0}
+.personal-dialog{width:min(540px,calc(100vw - 24px));max-height:calc(100dvh - 32px);padding:0;border:1px solid var(--personal-line);border-radius:20px;background:var(--personal-card);color:var(--personal-ink);box-shadow:0 24px 90px #102c3855;overflow:auto}.personal-dialog::backdrop{background:#152e3866;backdrop-filter:blur(5px)}
+.personal-dialog-heading{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid var(--personal-line);background:var(--personal-card);z-index:1}.personal-dialog-heading h2{font-family:Georgia,serif;font-size:25px;font-weight:400;margin:0}.personal-close{background:var(--personal-soft);color:inherit;min-width:44px;min-height:44px;border-radius:50%;font-size:25px}
+.personal-dialog-body{padding:22px}.personal-dialog button{min-height:44px;min-width:44px}.personal-inline-actions{display:flex;gap:8px;flex-wrap:wrap}.personal-inline-actions button{border-radius:9px;padding:9px 16px;background:var(--personal-soft);color:inherit}.personal-primary{background:var(--personal-accent)!important;color:var(--personal-paper)!important;border:0;border-radius:10px;padding:10px 16px;min-height:44px;font-weight:600;font-size:12px}
+.personal-invitation{padding:16px 0;border-bottom:1px solid var(--personal-line)}.personal-invitation strong{font-size:15px}.personal-invitation .personal-muted{margin:5px 0 12px}.personal-empty{padding:24px 12px;border:1px dashed var(--personal-line);border-radius:12px;font-size:13px;text-align:center}
+.personal-menu-action{display:block;width:100%;text-align:left;background:none;border-bottom:1px solid var(--personal-line);padding:12px 8px;color:inherit;font-size:14px}.personal-menu-action:hover{background:var(--personal-soft)}.personal-remove{margin-top:16px;font-size:12px;color:var(--personal-muted)}
+.personal-ranking-filters{display:flex;gap:12px;margin:16px 0}.personal-ranking-filters label{flex:1;font-size:12px;min-width:0}.personal-ranking-filters select,.personal-code input{display:block;min-height:44px;width:100%;margin-top:6px;padding:9px 12px;border:1px solid var(--personal-line);border-radius:9px;color:inherit;background:var(--personal-paper)}.personal-code label{display:block;font-size:13px}.personal-code input{font-size:24px;letter-spacing:5px;text-transform:uppercase}.personal-code button{margin:16px 0 8px}
+@media(min-width:1600px){.personal-app-icon,.personal-add-symbol{width:112px;height:112px}.personal-grid{gap:26px}.personal-app{padding:24px 12px}.personal-add{padding-top:24px}.personal-heading{margin-bottom:42px}}
+@media(max-width:1100px){.personal-layout{grid-template-columns:minmax(0,1fr) 255px;gap:25px}.personal-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.personal-heading-actions button{padding:8px 11px}.personal-profile>span{display:none}}
+@media(max-width:750px){.home-view{padding:22px 16px 18px}.personal-layout{display:flex;flex-direction:column;gap:24px}.personal-games,.personal-side{width:100%}.personal-side{grid-template-columns:1fr 1fr;gap:12px}.personal-panel{padding:16px}.personal-heading{align-items:flex-start;margin-bottom:22px;gap:8px}.personal-heading h1{font-size:27px}.personal-heading p:last-child{font-size:12px}.personal-heading-actions{gap:5px}.personal-heading-actions button{min-width:44px;padding:9px}.personal-heading-actions button>span:not(.personal-count){display:none}.personal-count{position:absolute;transform:translate(16px,-14px);font-size:10px;min-width:20px;height:20px}.personal-section-heading>span{font-size:10px}.personal-app{padding-top:12px}.personal-app h3{font-size:15px}.personal-app-icon,.personal-add-symbol{width:84px;height:84px;border-radius:21px}.personal-app-open{padding:0 10px}.personal-app-more{top:0;right:-4px;font-size:13px}.personal-app-actions{gap:4px}.personal-app-actions button{padding:6px 8px;font-size:10px}.personal-add{min-height:215px;padding-top:12px}.personal-add strong{font-size:15px}.personal-session{padding:12px;flex-wrap:wrap}.personal-session .personal-primary{width:100%}.home-view .desktop-footnote>span:last-child{display:none}}
+@media(max-width:420px){.personal-side{grid-template-columns:1fr}.personal-heading-actions .personal-profile{display:none}.personal-grid{gap:12px 8px}.personal-app-status{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.personal-app{transition:none}}
+/* World cards: artwork, identity and entry actions share one tactile frame. */
+.personal-grid{gap:22px;align-items:stretch}
+.personal-app{--world-tint:#dcb56b;background:var(--personal-card);border:1px solid var(--personal-line);border-radius:20px;padding:7px;box-shadow:0 3px 0 #25473f0c,0 10px 24px #25473f06;gap:0;align-items:stretch;overflow:hidden}
+.personal-app::before{content:'';position:absolute;inset:4px;border:1px solid color-mix(in srgb,var(--world-tint) 42%,var(--personal-line));border-radius:16px;pointer-events:none}
+.personal-app:hover,.personal-app:focus-within{background:var(--personal-card);box-shadow:0 4px 0 #25473f0c,0 14px 28px #25473f13}
+.personal-app-open{display:flex;align-items:stretch;gap:10px;padding:9px 9px 0;color:inherit;text-align:left;border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--world-tint) 17%,var(--personal-card)),var(--personal-card));position:relative}
+.personal-card-heading{padding:0 38px 0 3px;min-height:48px;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.personal-card-kind{text-transform:uppercase;font-size:8px;font-weight:700;letter-spacing:.17em;color:var(--personal-muted)}
+.personal-app h3{font-family:Georgia,serif;font-size:22px;line-height:1.15;font-weight:600;letter-spacing:-.35px}
+.personal-app-icon{display:block;width:100%;height:auto;aspect-ratio:1.9;object-fit:cover;border-radius:9px;border:1px solid color-mix(in srgb,var(--world-tint) 50%,var(--personal-line));box-shadow:inset 0 0 0 3px #ffffff33}
+.personal-app-status{font-size:10px;text-align:center;margin:0 10px;padding:10px 3px 9px;line-height:1.4;min-height:35px;color:var(--personal-muted);border-bottom:1px solid color-mix(in srgb,var(--world-tint) 35%,var(--personal-line))}
+.personal-app-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;max-width:none;padding:10px 9px 8px;flex:1;align-content:start}
+.personal-app-actions button{display:flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:7px 3px;border-radius:8px;font-size:10px;line-height:1.3;background:var(--personal-paper);border:1px solid var(--personal-line);position:relative}
+.personal-app-actions button[data-mode=solo]{background:var(--personal-accent);border-color:var(--personal-accent);color:var(--personal-paper);font-weight:650}
+.personal-app-actions button[data-worksheets]{grid-column:1/-1;background:color-mix(in srgb,var(--world-tint) 13%,var(--personal-card));border-color:color-mix(in srgb,var(--world-tint) 36%,var(--personal-line));font-size:11px}
+.personal-app-actions button:only-child{grid-column:1/-1}
+.personal-app-more{z-index:1;right:9px;top:15px;border-radius:9px;background:transparent;min-width:44px;min-height:44px;color:var(--personal-muted)}
+.personal-app-more:hover{background:var(--personal-soft)}
+.personal-add{min-height:0;padding:30px 16px;border-radius:20px;justify-content:center}
+.personal-add-symbol{width:84px;height:84px;border-radius:21px}.personal-add small{max-width:150px}
+@media(min-width:1600px){.personal-app{padding:9px}.personal-app-icon{width:100%;height:auto}.personal-app-actions button{font-size:12px}.personal-app-actions{gap:7px;padding:12px}.personal-card-heading{min-height:52px}.personal-app h3{font-size:25px}}
+@media(max-width:1100px){.personal-grid{gap:16px}.personal-app h3{font-size:21px}}
+@media(max-width:750px){.personal-app{padding:5px;border-radius:16px}.personal-app::before{inset:3px;border-radius:13px}.personal-app-open{padding:8px 5px 0;gap:8px}.personal-card-heading{padding:0 32px 0 2px;min-height:42px}.personal-app h3{font-size:17px;overflow-wrap:anywhere}.personal-card-kind{font-size:7px;letter-spacing:.1em}.personal-app-icon{width:100%;height:auto;aspect-ratio:1.4;border-radius:7px}.personal-app-more{top:10px;right:2px;min-width:44px;width:44px;letter-spacing:0;font-size:12px}.personal-app-actions{padding:8px 5px 5px;gap:4px;grid-template-columns:repeat(2,minmax(0,1fr))}.personal-app-actions button{font-size:10px;padding:6px 3px}.personal-app-actions button[data-mode=solo]{grid-column:1/-1}.personal-app-status{font-size:9px;margin:0 5px;padding:8px 2px;min-height:30px}.personal-grid{gap:12px}.personal-add{padding:22px 12px}.personal-add-symbol{width:70px;height:70px}.personal-add strong{font-size:15px}}
+.personal-add{align-self:start;min-height:200px;height:200px}
+@media(max-height:500px){.personal-add{min-height:160px;height:160px;padding:10px}.personal-add-symbol{width:55px;height:55px;font-size:28px}}
+.personal-app-actions[data-single-mode=true] button[data-mode]{grid-column:1/-1}
+/* Rechtenwereld pilot: one platform header. Retain and move the actual window
+   controls to the taskbar, with a compact action popover on narrow screens. */
+.compact-window-controls{display:flex;align-items:center;gap:4px;flex-shrink:0;margin-left:auto}
+body[data-os-chrome=single] .taskbar-right{display:none}
+.compact-window-controls .app-toolbar{border:0;background:none;color:inherit;padding:0!important;min-height:44px!important;gap:4px;flex-wrap:nowrap;display:flex!important}
+.compact-window-controls .active-app-copy,.compact-window-controls #nativeAppNavigation{display:none!important}
+.compact-window-controls .app-toolbar .app-back{border:0;padding:0;min-width:44px;width:44px;height:44px;flex-shrink:0}
+.compact-window-controls .app-toolbar button>span,.compact-window-controls .app-toolbar a>span{display:none}
+.compact-window-controls .app-actions{gap:2px;margin:0;display:flex;align-items:center}
+.compact-window-controls .app-actions button,.compact-window-controls .app-actions a{width:44px;height:44px;min-width:44px;display:inline-flex;justify-content:center;align-items:center;border-radius:9px;padding:0;color:inherit}
+.compact-window-controls .lb-restore{position:static;inset:auto;transform:none;box-shadow:none;width:44px;height:44px;min-width:44px;margin:0;flex-shrink:0;background:#f2dcb121;color:#f2dcb1;z-index:auto}
+.compact-window-controls #windowActionsToggle{display:inline-flex;justify-content:center;align-items:center;min-width:44px;width:44px;height:44px;padding:0}
+body[data-os-chrome=single] #runningApps{min-width:0;flex:1}
+@media(max-width:700px){
+ body[data-os-chrome=single] .taskbar{padding-inline:8px;gap:3px}
+ body[data-os-chrome=single] .taskbar-divider{display:none}
+ body[data-os-chrome=single] .desktop-button{display:none}
+ body[data-os-chrome=single] .running-app{min-width:44px;padding:4px}
+ body[data-os-chrome=single] .running-app>span{display:none}
+ .compact-window-controls .app-actions[popover]:not(:popover-open){display:none}
+ .compact-window-controls .app-actions[popover]:popover-open{position:fixed;inset:auto 12px calc(var(--taskbar-height) + 10px) auto;width:215px;max-width:calc(100vw - 24px);max-height:calc(100dvh - var(--taskbar-height) - 24px);overflow:auto;display:flex;flex-direction:column;align-items:stretch;padding:8px;border:1px solid var(--personal-line);border-radius:14px;color:var(--personal-ink);background:var(--personal-card);box-shadow:0 12px 50px #102b3855}
+ .compact-window-controls .app-actions[popover] button,.compact-window-controls .app-actions[popover] a{width:100%;display:flex;justify-content:flex-start;gap:10px;padding:8px 12px;font-size:13px;background:none}
+ .compact-window-controls .app-actions[popover] button>span,.compact-window-controls .app-actions[popover] a>span{display:inline}
+ .compact-window-controls #minimizeApp::after{content:'Minimaliseren'}.compact-window-controls #closeApp::after{content:'App afsluiten'}
+}
+.personal-app-actions[data-mode-count="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:750px){.personal-app-actions[data-mode-count="2"] button[data-mode=solo]{grid-column:auto}}
+#focusWorkspace{flex-shrink:0}
+/* The shared topbar marks grid bodies with !important row templates. */
+body.os-focus{grid-template-rows:minmax(0,1fr)!important;background:var(--personal-paper)}
+body.os-focus #desktopHeader,body.os-focus .taskbar,body.os-focus .lb-restore{display:none!important}
+body.os-focus #desktop{padding-bottom:52px}
+#focusRestore{position:fixed;bottom:4px;right:12px;z-index:80;min-height:44px;min-width:44px;display:inline-flex;align-items:center;gap:9px;padding:7px 13px;border-radius:12px;background:var(--personal-card);color:var(--personal-ink);border:1px solid var(--personal-line);font-size:12px;box-shadow:0 2px 12px #0c273b22}
+@media(max-width:700px){body[data-os-chrome=single] #focusWorkspace{min-width:44px;width:44px;padding:0}}
+body.os-focus .app-toolbar{display:none!important}
+@media(max-width:700px){#focusWorkspace>span{display:none}}

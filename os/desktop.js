@@ -46,21 +46,10 @@
     $('greetingSub').textContent=role()==='teacher'?'Jouw lessen, werelden en klasactiviteiten op één plek.':'Ontdek, oefen, speel. Jij kiest waar je begint.';
     $('accountStatus').textContent=authPending?'Account controleren…':account?`${account.role==='teacher'?'Leraar':account.role==='student'?'Leerling':'Accountcontrole nodig'} · ${name||account.email||'aangemeld'}`:'Gast · je bureaubladkeuzes worden op dit toestel bewaard';
     $('startAccountLabel').textContent=name||'Mijn profiel';
-    $('themeFolders').replaceChildren(...M.themes.map(t=>{
-      const b=button('','theme-folder',()=>showView({kind:'theme',themeId:t.id}));b.append(folderArt(t),el('strong','',t.title));
-      const count=M.find({themeId:t.id}).length;b.append(el('small','',`${count} ${count===1?'bouwsel':'bouwsels'}`));b.setAttribute('aria-label',`${t.title}, ${count} bouwsels`);return b;
-    }));
-    const pinned=prefs.pins.map(M.app).filter(Boolean);
-    $('pinnedApps').replaceChildren(...pinned.map(g=>{
-      const b=button('','pinned-app',()=>openApp(g.id));const copy=el('span');copy.append(typeBadge(g.type),el('strong','',g.title),el('small','',M.theme(g.desktopTheme).title));b.append(imageFor(g),copy);return b;
-    }));
-    if(!pinned.length)$('pinnedApps').append(el('p','', 'Pin een app via de punaise in je themamap.'));
-    const recent=prefs.recent.filter(r=>M.modes(r.id,role()).some(m=>m.id===r.mode)).slice(0,3);
-    $('todayTitle').textContent=recent.length?'Waar gaan we verder?':'Klaar voor een ontdekking?';
-    $('todayCopy').textContent=recent.length?'Je laatst geopende bouwsels staan hier voor je klaar.':'Een les om te begrijpen. Een trainer om te groeien. Een spel om uit te proberen.';
-    const items=recent.length?recent:[{id:'rechtenwereld',mode:'solo'},{id:'pythagoras',mode:'solo'}];
-    $('continueList').replaceChildren(...items.map(r=>{const g=M.app(r.id),b=button('','continue-item',()=>openApp(g.id,r.mode)),s=summary(g),copy=el('span');copy.append(el('strong','',g.title),el('small','',isOpen(g)?'Nog geopend · precies verdergaan':s?.status==='started'?s.label:recent.length?'Opnieuw openen':`${M.types[g.type].label} · ontdek deze app`));b.append(imageFor(g),copy,icon('arrow'));return b;}));
+    window.LeraarBobPersonalHome?.render({account,authPending,pins:prefs.pins,summary,isOpen,model:M,base,
+      openApp:openPersonalApp,openModes,showView,togglePin,openAccount,toast,joinClass:openPersonalClass});
   }
+
   const viewNames={all:'Alle apps',saved:'Mijn taken',worksheets:'Oefenbladen','worksheet-saved':'Mijn oefenbladen',live:'Samen & live',profile:'Mijn profiel',settings:'Instellingen'};
   const viewIcons={all:'desktop',saved:'folder',worksheets:'paper','worksheet-saved':'folder',live:'people',profile:'account',settings:'settings'};
   function renderSidebar(){
@@ -80,7 +69,7 @@
     renderSidebar();
     const browse=['all','theme'].includes(view.kind);$('viewToolbar').hidden=!browse;$('librarySearch').value=view.query||'';
     $('typeFilters').replaceChildren(...['all',...Object.keys(M.types)].map(type=>{const b=button('','type-filter',()=>{view.type=type;renderLibrary();});b.append(...(type==='all'?[]:[icon(M.types[type].icon)]),document.createTextNode(type==='all'?'Alles':M.types[type].label));b.setAttribute('aria-pressed',String(view.type===type));return b;}));
-    const descriptions={all:'Alle bestaande bouwsels, geordend per werkvorm. Elk behoudt zijn eigen wereld en bediening.',saved:'Je eigen bewaarde ingangen. Bewaar een les of app met de knop Bewaren terwijl het geopend is.',worksheets:'Kies een themamap en onderwerp. Nieuwe reeksen met verbetersleutel komen in Mijn oefenbladen op dit toestel.','worksheet-saved':'Jouw gemaakte reeksen, met dezelfde opgaven en verbetersleutel. Per account bewaard op dit toestel; download een kopie om ze ook buiten deze browser te bewaren.',live:role()==='teacher'?'Start een gezamenlijke activiteit of open je klassen. Leerlingen sluiten aan met een code of uitnodiging.':'Samen leren, een duel spelen of aansluiten bij een sessie van je leraar.',profile:'Je account en de voortgang die je bestaande bouwsels bewaren.',settings:'Maak dit bureaublad van jou.'};
+    const descriptions={all:'Kies een app. Met de punaise voeg je haar toe aan je eigen bureaublad; je kunt meerdere apps kiezen.',saved:'Je eigen bewaarde ingangen. Bewaar een les of app met de knop Bewaren terwijl het geopend is.',worksheets:'Kies een themamap en onderwerp. Nieuwe reeksen met verbetersleutel komen in Mijn oefenbladen op dit toestel.','worksheet-saved':'Jouw gemaakte reeksen, met dezelfde opgaven en verbetersleutel. Per account bewaard op dit toestel; download een kopie om ze ook buiten deze browser te bewaren.',live:role()==='teacher'?'Start een gezamenlijke activiteit of open je klassen. Leerlingen sluiten aan met een code of uitnodiging.':'Samen leren, een duel spelen of aansluiten bij een sessie van je leraar.',profile:'Je account en de voortgang die je bestaande bouwsels bewaren.',settings:'Maak dit bureaublad van jou.'};
     $('viewDescription').textContent=view.kind==='theme'?t.description:descriptions[view.kind];
     $('viewContent').replaceChildren();$('windowHint').textContent=browse?'Open direct, of kies een andere manier via ⋯.':'leraarBob · jouw bureaublad';
     if(browse)renderApps();else ({saved:renderSaved,worksheets:renderWorksheets,'worksheet-saved':renderWorksheetSaved,live:renderLive,profile:renderProfile,settings:renderSettings})[view.kind]?.();
@@ -101,7 +90,7 @@
     });$('viewContent').append(grid);
   }
   function empty(title,copy,action,callback){const n=el('div','empty-state');n.append(icon('folder'),el('h2','',title),el('p','',copy));if(action)n.append(button(action,'primary',callback));$('viewContent').append(n);}
-  function togglePin(id){if(prefs.pins.includes(id))prefs.pins=prefs.pins.filter(x=>x!==id);else{if(prefs.pins.length>=12){toast('Je kunt maximaal twaalf apps vastpinnen.');return;}prefs.pins.push(id);}persist();renderHome();renderLibrary();}
+  function togglePin(id){if(prefs.pins.includes(id))prefs.pins=prefs.pins.filter(x=>x!==id);else{if(prefs.pins.length>=12){toast('Je kunt maximaal twaalf apps vastpinnen.');return;}prefs.pins.push(id);}persist();renderHome();if(view.kind!=='desktop'&&!activeKey)renderLibrary();}
   function renderWorksheets(){
     const topics=M.worksheetTopics(),theme=M.theme(view.themeId),topic=topics.find(s=>s.themeId===view.themeId&&s.topicId===view.topicId);
     worksheetPath(theme,topic);
@@ -178,7 +167,7 @@
     ]);
     liveCard('people','Met twee of een groepje','Kies een bestaande wereld en bekijk de beschikbare Learn- en Battle-modi.',[{title:'Rechtenwereld',run:()=>openModes('rechtenwereld')},{title:'Getallenwereld',run:()=>openModes('getallenwereld')},{title:'Rechten Zeeslag',run:()=>openModes('rechten-zeeslag')}]);
     if(role()==='teacher'){
-      liveCard('class','Een klasactiviteit starten','Alleen jouw leraarsaccount kan een klasactiviteit aanmaken.',[{title:'Klas Learn · getallen',run:()=>openApp('getallenwereld','classlearn')},{title:'Klas Battle · getallen',run:()=>openApp('getallenwereld','classroom')},{title:'Klas Battle · rechten',run:()=>openApp('rechtenwereld','classroom')},{title:'Mijn klassen',run:()=>openUtility('teacher','Mijn klassen','teacher/','class',true)}],true);
+      liveCard('class','Een klasactiviteit starten','Alleen jouw leraarsaccount kan een klasactiviteit aanmaken.',[{title:'Klas Learn · getallen',run:()=>openApp('getallenwereld','classlearn')},{title:'Klas Battle · getallen',run:()=>openApp('getallenwereld','classroom')},{title:'Klas Battle · rechten',run:()=>openPersonalApp('rechtenwereld','classroom')},{title:'Mijn klassen',run:()=>openUtility('teacher','Mijn klassen','teacher/','class',true)}],true);
       liveCard('book','Een live les geven','Open de les Rechten & arbeid en gebruik de bestaande sessiebediening.',[{title:'Live les openen',run:()=>openApp('rechten-arbeid-les','live')}],true);
     }else if(!account){const note=el('p','section-note','Log in met je leraarBob-account om samen te spelen en deel te nemen.');$('viewContent').append(note);}
     $('viewContent').prepend(grid);
@@ -208,13 +197,17 @@
     const bg=el('select');bg.setAttribute('aria-label','Achtergrond');[['coast','Kust bij avond'],['quiet','Rustig blauw']].forEach(([v,t])=>{const o=el('option','',t);o.value=v;bg.append(o);});bg.value=prefs.wallpaper;bg.onchange=()=>{prefs.wallpaper=bg.value;persist();applyPrefs();};setting('Achtergrond','Kies het uitzicht van je bureaublad.',bg);
     const display=button(document.documentElement.dataset.mode==='dark'?'Lichte vensters':'Donkere vensters','',()=>{setSiteTheme(document.documentElement.dataset.mode!=='dark');renderLibrary();});setting('Weergave','Kies lichte of donkere bureaubladvensters.',display);
     const label=el('label'),motion=el('input');motion.type='checkbox';motion.checked=prefs.reducedMotion;motion.setAttribute('aria-label','Minder beweging');motion.onchange=()=>{prefs.reducedMotion=motion.checked;persist();applyPrefs();};label.append(motion);setting('Minder beweging','Laat mappen en apps zonder animaties openen.',label);
-    setting('Vastgepinde apps','Zet de vier eerste snelkoppelingen terug op je bureaublad.',button('Herstel pins','',()=>{prefs.pins=M.defaults.pins.slice();persist();renderHome();toast('De vier snelkoppelingen staan terug op je bureaublad.');}));
+    setting('Vastgepinde apps','Zet Rechtenwereld terug als eerste wereld op je bureaublad.',button('Herstel pins','',()=>{prefs.pins=M.defaults.pins.slice();persist();renderHome();toast('Rechtenwereld staat terug op je bureaublad.');}));
+    setting('Focusstand','Verberg tijdens oefenen beide OS-balken. Een herstelknop blijft bereikbaar.',button(prefs.focusMode?'Focusstand uitzetten':'Focusstand aanzetten','',()=>{prefs.focusMode=!prefs.focusMode;persist();syncFocusMode();renderLibrary();}));
     setting('Bovenbalk','Toon of verberg de gedeelde platformbediening.',button(document.body.classList.contains('topbar-collapsed')?'Bovenbalk tonen':'Bovenbalk inklappen','',()=>{window.LeraarBobTopbar?.setCollapsed(!document.body.classList.contains('topbar-collapsed'),true);renderLibrary();}));
     const catalog=el('a','quiet-link catalog-link','Open eerdere startpagina');catalog.href=new URL('index.html?view=catalog',base).href;catalog.target='_blank';catalog.rel='noopener';
     setting('Eerdere startpagina','Bekijk de oude spellenpagina in een apart tabblad.',catalog);
     $('viewContent').append(list,el('p','section-note','Bureaubladvoorkeuren wijzigen je antwoorden, levels en spelvoortgang niet.'));
   }
-  function applyPrefs(){document.body.dataset.wallpaper=prefs.wallpaper;document.body.dataset.reducedMotion=String(prefs.reducedMotion);}
+  function applyPrefs(){document.body.dataset.wallpaper=prefs.wallpaper;document.body.dataset.reducedMotion=String(prefs.reducedMotion);syncFocusMode();}
+  function syncFocusMode(){const focus=!!activeKey&&prefs.focusMode;document.body.classList.toggle('os-focus',focus);$('focusRestore').hidden=!focus;$('focusWorkspace').hidden=!activeKey;$('focusWorkspace').setAttribute('aria-expanded',String(!focus));}
+  function setFocusMode(value){prefs.focusMode=!!value;persist();syncFocusMode();if(value)$('focusRestore').focus({preventScroll:true});else{const input=frames.get(activeKey)?.lastFocus;if(input?.isConnected)input.focus({preventScroll:true});else $('focusWorkspace').focus({preventScroll:true});}}
+  $('focusWorkspace').onclick=()=>setFocusMode(true);$('focusRestore').onclick=()=>setFocusMode(false);
   function setSiteTheme(dark){
     const mode=dark?'dark':'light';document.documentElement.dataset.mode=mode;
     try{localStorage.setItem('axioma-mode',mode);}catch{}
@@ -232,7 +225,7 @@
   function showView(next,{route=true}={}){
     rememberFocus(frames.get(activeKey));
     closeStart();if(typeof next==='string')next={kind:next};if(!['desktop','theme',...Object.keys(viewNames)].includes(next.kind)||next.kind==='theme'&&!M.theme(next.themeId))next={kind:'desktop'};
-    view={kind:next.kind,themeId:next.themeId||'',type:next.type||'all',query:next.query||''};if(next.topicId&&['worksheets','worksheet-saved'].includes(next.kind))view.topicId=next.topicId;activeKey=null;syncNativeNavigation();
+    view={kind:next.kind,themeId:next.themeId||'',type:next.type||'all',query:next.query||''};if(next.topicId&&['worksheets','worksheet-saved'].includes(next.kind))view.topicId=next.topicId;activeKey=null;syncNativeNavigation();syncWindowControls();
     $('homeView').hidden=view.kind!=='desktop';$('libraryWindow').hidden=view.kind==='desktop';$('appWorkspace').hidden=true;
     frames.forEach(f=>{f.wrapper.hidden=true;f.wrapper.inert=true;});
     if(view.kind==='desktop')renderHome();else renderLibrary();updateCrumbs();renderRunning();syncThemeControl();syncProgressBadge();
@@ -256,6 +249,41 @@
     }
     return false;
   }
+  const compactControls=window.matchMedia?.('(max-width:700px)');
+  function windowActionsOpen(){try{return $('windowActions').matches(':popover-open');}catch{return false;}}
+  function syncWindowControls(){
+    syncFocusMode();
+    const current=frames.get(activeKey),compact=current?.app.id==='rechtenwereld'&&!current.archive;
+    const toolbar=$('appBack').parentElement,host=$('compactWindowControls'),actions=$('windowActions'),toggle=$('windowActionsToggle'),restore=document.querySelector('.lb-restore');
+    if(windowActionsOpen())actions.hidePopover();
+    if(compact){
+      document.body.dataset.osChrome='single';host.hidden=false;
+      if(restore&&restore.parentElement!==host)host.append(restore);
+      if(toolbar.parentElement!==host)host.append(toolbar);
+    }else{
+      delete document.body.dataset.osChrome;host.hidden=true;
+      if(toolbar.parentElement!==$('appWorkspace'))$('appWorkspace').prepend(toolbar);
+      if(restore&&restore.parentElement===host)document.body.append(restore);
+    }
+    const popover=compact&&compactControls?.matches;
+    if(popover)actions.setAttribute('popover','auto');else actions.removeAttribute('popover');
+    toggle.hidden=!popover;toggle.setAttribute('aria-expanded','false');
+    const menu=$('activeGameSections');menu.replaceChildren();
+    if(compact){
+      const doc=current.frame.contentDocument;
+      if(doc?.querySelector('.atlas-header')){
+        const native=(label,selector)=>menu.append(button(label,'',()=>{const active=frames.get(activeKey);active?.frame.contentDocument?.querySelector(selector)?.click();}));
+        native('Rechtenwereld · Wereldkaart','.atlas-header [data-screen="world"]');
+        native('Rechtenwereld · Spelvoortgang','.atlas-header [data-screen="book"]');
+        native('Rechtenwereld · Spelprofiel','.atlas-header [data-screen="profile"]');
+      }
+      menu.append(button('Rechtenwereld · Werkvormen','',()=>openModes('rechtenwereld')));
+    }
+  }
+  compactControls?.addEventListener('change',syncWindowControls);
+  $('windowActionsToggle').onclick=()=>{const actions=$('windowActions');actions.togglePopover();if(windowActionsOpen())actions.querySelector('button:not([hidden]),a')?.focus();};
+  $('windowActions').addEventListener('toggle',e=>$('windowActionsToggle').setAttribute('aria-expanded',String(e.newState==='open')));
+  $('windowActions').addEventListener('click',e=>{if(e.target.closest('button,a')&&windowActionsOpen())$('windowActions').hidePopover();});
   function syncNativeNavigation(){
     const current=frames.get(activeKey),context=current?.algebraContext,host=$('nativeAppNavigation'),enabled=!!context;
     host.hidden=!enabled;if(!enabled){host.replaceChildren();delete host.dataset.signature;delete document.body.dataset.nativeNavigation;return;}
@@ -266,6 +294,7 @@
   }
   function updateCrumbs(){
     const folder=$('headerFolder'),app=$('headerApp'),current=frames.get(activeKey);
+    $('desktopHeader').dataset.platformAppTitle=current?.app.title||'';
     const worksheet=current?.archive||current?.mode?.startsWith('worksheet:');
     const place=worksheet?current.origin:current?.app.desktopTheme&&view.themeId!==current.app.desktopTheme?{kind:'theme',themeId:current.app.desktopTheme}:view;
     folder.hidden=place.kind==='desktop';folder.textContent=place.kind==='theme'?M.theme(place.themeId).title:viewNames[place.kind]||'';
@@ -278,15 +307,21 @@
       else{const topic=doc?.querySelector('#spaceCrumb');if(topic?.textContent.trim())nodes=[topic];}
       $('openOriginal').href=M.safeURL(current.frame.contentWindow.location.href)||current.href;
     }catch{}
+    if(current?.app.id==='rechtenwereld')try{
+      doc=current.frame.contentDocument;
+      const crumbs=doc?.querySelector('.atlas-header .breadcrumbs');
+      if(crumbs)nodes=[...crumbs.children].filter(n=>n.matches('a,button,span')&&n.textContent.trim());
+      $('openOriginal').href=M.safeURL(current.frame.contentWindow.location.href)||current.href;
+    }catch{}
     const algebra=current?.algebraContext;
     if(algebra){doc=current.frame.contentDocument;$('openOriginal').href=originalURL(current.frame.contentWindow.location.href)||current.href;}
-    app.hidden=!current||!!algebra||nodes.some(n=>n.id==='gameHomeBtn');
+    app.hidden=!current||!!algebra||nodes.some(n=>n.id==='gameHomeBtn')||current?.app.id==='rechtenwereld'&&!!doc?.querySelector('.atlas-header');
     const signature=algebra?JSON.stringify([algebra.world,algebra.screen,algebra.level,algebra.levelTitle]):nodes.map(n=>n.tagName+':'+n.textContent.trim()).join('|');
     if(doc!==crumbDocument||signature!==crumbSignature){
       app.parentElement.querySelectorAll('[data-native-crumb]').forEach(n=>n.remove());
       nodes.forEach(source=>{
-        const node=el(source.matches('button,a')?'button':'span','',source.textContent.trim());node.dataset.nativeCrumb='true';
-        if(node.tagName==='BUTTON'){node.type='button';node.onclick=()=>{source.click();const target=doc.querySelector('#app');if(target){if(!target.hasAttribute('tabindex'))target.tabIndex=-1;target.focus({preventScroll:true});}};}
+        const node=el(source.matches('button,a')?'button':'span','',current?.app.id==='rechtenwereld'&&source.dataset.screen==='world'?'Rechtenwereld':source.textContent.trim());node.dataset.nativeCrumb='true';
+        if(node.tagName==='BUTTON'){node.type='button';node.onclick=()=>{const live=source.dataset.screen?doc.querySelector('.atlas-header [data-screen="'+source.dataset.screen+'"]'+(source.dataset.area?'[data-area="'+source.dataset.area+'"]':'')):source;live?.click();const target=doc.querySelector('#app');if(target){if(!target.hasAttribute('tabindex'))target.tabIndex=-1;target.focus({preventScroll:true});}};}
         app.parentElement.append(node);
       });
       if(algebra){
@@ -301,15 +336,41 @@
   function openModes(id){
     const g=M.app(id);if(!g)return;closeStart();$('modeTheme').textContent=M.theme(g.desktopTheme).title;$('modeTitle').textContent=g.title;$('modeDescription').textContent=g.subtitle;
     const options=M.modes(id,role()),sheets=M.worksheets(id);
-    $('modeOptions').replaceChildren(...options.map(m=>{const b=button('','mode-option',()=>{if(openApp(id,m.id))$('modeDialog').close();}),copy=el('span');copy.append(el('strong','',M.modeLabel(m)),el('small','',m.devices||m.description||(m.id==='solo'?'Open de bestaande app op je eigen tempo.':'')));b.append(icon(['classroom','classlearn','teacher','live'].includes(m.id)?'class':m.purpose==='battle'?'battle':m.participation==='solo'?'book':'people'),copy,icon('arrow'));b.dataset.mode=m.id;return b;}));
+    $('modeOptions').replaceChildren(...options.map(m=>{const b=button('','mode-option',()=>{if(openPersonalApp(id,m.id))$('modeDialog').close();}),copy=el('span');copy.append(el('strong','',M.modeLabel(m)),el('small','',m.devices||m.description||(m.id==='solo'?'Open de bestaande app op je eigen tempo.':'')));b.append(icon(['classroom','classlearn','teacher','live'].includes(m.id)?'class':m.purpose==='battle'?'battle':m.participation==='solo'?'book':'people'),copy,icon('arrow'));b.dataset.mode=m.id;return b;}));
     if(!options.length)$('modeOptions').append(button('Inloggen om te openen','mode-option',openAccount));
-    if(role()!=='teacher'&&account)$('modeOptions').append(button('Deelnemen aan een sessie van mijn leraar','mode-join',()=>{$('modeDialog').close();showView({kind:'live'});}));
+    if(role()!=='teacher'&&account)$('modeOptions').append(button('Deelnemen aan een sessie van mijn leraar','mode-join',()=>{$('modeDialog').close();if(id==='rechtenwereld')window.LeraarBobPersonalHome?.openClassCode();else showView({kind:'live'});}));
     $('modeWorksheets').replaceChildren();if(sheets.length){$('modeWorksheets').append(el('p','mode-group-title','Op papier'));sheets.forEach(s=>{const b=button('','mode-option',()=>{$('modeDialog').close();openWorksheet(id,s.id);}),copy=el('span');copy.append(el('strong','',s.title),el('small','',s.description||'Stel je oefenblad samen en print het.'));b.append(icon('paper'),copy,icon('arrow'));$('modeWorksheets').append(b);});}
     $('modeDialog').showModal();
   }
+  // The personal desktop goes straight to the native room. Legacy hub links
+  // remain available elsewhere until each provider has its own OS adapter.
+  function openPersonalApp(id,mode){
+    if(id!=='rechtenwereld'||mode!=='classroom')return openApp(id,mode);
+    if(authPending||role()!=='teacher'){toast('Gebruik je leraarsaccount om een klasbattle te starten.');return false;}
+    return openPersonalClass({game:'rechten',owner:true});
+  }
+  function openPersonalClass(room){
+    if(authPending||!account||!['student','teacher'].includes(role()))return false;
+    if(room.owner&&role()!=='teacher'||!room.owner&&role()!=='student')return false;
+    if(room.game!=='rechten')return openUtility('battle-join','Deelnemen aan Klas Battle','klasbattle/','people');
+    const url=new URL('games/rechten/rechtenwereld/classroom.html',base);
+    url.searchParams.set('classFlow','1');url.searchParams.set('hub','1');url.searchParams.set('osEntry','1');url.searchParams.set('returnTo',new URL(home).pathname);
+    if(room.code)url.searchParams.set('code',room.code);
+    if(room.id)url.searchParams.set('session',room.id);
+    if(!room.owner)url.searchParams.set('join','1');
+    const key=room.owner?(room.id?`rechtenwereld|classroom|session:${room.id}`:'rechtenwereld|classroom|personal'):`rechtenwereld|classroom|join:${room.id||room.code}`;
+    // A known room can also be the room just created in the retained teacher frame.
+    const existing=[...frames.values()].find(f=>f.owner===M.key(account)&&f.personalClass&&(room.id&&f.classSessionId===room.id));
+    return openFrame(existing||{key,app:M.app('rechtenwereld'),mode:'classroom',label:'Klasbattle',href:url.href,personalClass:true});
+  }
+  window.addEventListener('message',event=>{
+    if(event.origin!==location.origin||event.data?.type!=='leraarbob-class-status')return;
+    const item=[...frames.values()].find(f=>f.personalClass&&f.frame.contentWindow===event.source&&f.owner===M.key(account));
+    if(item){const id=event.data.sessionId||'';if(item.classSessionId!==id||item.classPhase!==event.data.phase){item.classSessionId=id;item.classPhase=event.data.phase;window.LeraarBobPersonalHome?.refreshClasses();}}
+  });
   function openApp(id,mode,options={}){
     const g=M.app(id);if(!g)return false;
-    if(!mode){const existing=[...frames.values()].reverse().find(f=>f.app.id===id&&!f.mode.startsWith('worksheet:')&&M.modes(id,role()).some(m=>m.id===f.mode));if(existing)return openFrame(existing);mode='solo';}
+    if(!mode){const existing=[...frames.values()].reverse().find(f=>f.app.id===id&&!f.mode.startsWith('worksheet:')&&(M.modes(id,role()).some(m=>m.id===f.mode)||f.personalClass&&f.owner===M.key(account)));if(existing)return openFrame(existing);mode='solo';}
     const m=M.modes(id,role(),options.topicId).find(m=>m.id===mode);
     if(!m){toast(['classroom','classlearn','teacher','live'].includes(mode)?'Een klas starten kan alleen met een leraarsaccount.':'Log in voor deze manier van spelen.');return false;}
     const href=M.destination(id,mode,{role:role(),topicId:options.topicId,returnTo:new URL(home).pathname});if(!href){toast('Deze ingang is niet beschikbaar.');return false;}
@@ -342,7 +403,7 @@
       const fallback=el('a','', 'Open de oorspronkelijke app apart');fallback.href=config.href;fallback.target='_blank';fallback.rel='noopener';loading.append(fallback);wrapper.append(frame,loading);$('appFrames').append(wrapper);
       const origin=config.origin?{...config.origin}:activeKey?{kind:config.utility?'live':'theme',themeId:config.app.desktopTheme||'',type:'all',query:''}:{...view};
       const item={...config,origin,frame,wrapper,owner:M.key(account),cleanup:null};frames.set(config.key,item);
-      frame.addEventListener('load',()=>{if(!frames.has(config.key)||item.owner!==M.key(account))return;loading.hidden=true;connectNative(item);if(activeKey===item.key){syncNativeNavigation();updateCrumbs();syncThemeControl();syncProgressBadge();}});
+      frame.addEventListener('load',()=>{if(!frames.has(config.key)||item.owner!==M.key(account))return;loading.hidden=true;connectNative(item);if(activeKey===item.key){syncNativeNavigation();syncWindowControls();updateCrumbs();syncThemeControl();syncProgressBadge();}});
     }
     if(!activeKey&&frames.get(config.key)!==config)frames.get(config.key).origin={...view};activateFrame(config.key);return true;
   }
@@ -365,7 +426,7 @@
     $('saveActivity').hidden=current.utility===true||current.archive===true;
     const place=current.origin.kind==='theme'?M.theme(current.origin.themeId).title:viewNames[current.origin.kind]||'bureaublad';
     $('appBack').querySelector('span').textContent=`Terug naar ${place}`;$('appBack').title=`Terug naar ${place}; de app blijft geopend`;$('appBack').setAttribute('aria-label',`Terug naar ${place}`);
-    syncNativeNavigation();updateCrumbs();updateRoute();renderRunning();syncThemeControl();syncProgressBadge();
+    syncNativeNavigation();syncWindowControls();updateCrumbs();updateRoute();renderRunning();syncThemeControl();syncProgressBadge();
     const target=current.lastFocus;
     if(target?.isConnected&&!target.closest('[hidden],[inert]'))target.focus();else current.frame.focus();
   }
@@ -388,6 +449,7 @@
     // This atelier header contains only controls already provided by the desktop.
     // Keep its original theme handler and progress node alive in the hidden header.
     const embedStyle=doc.createElement('style');embedStyle.textContent='#atelier-header{display:none!important}';
+    if(item.app.id==='rechtenwereld')embedStyle.textContent+=':root{--header-height:0px!important}.atlas-page{--header-height:0px!important;grid-template-rows:0 minmax(0,1fr) auto!important}.atlas-header{height:0!important;min-height:0!important;padding:0!important;border:0!important;overflow:hidden!important;visibility:hidden!important}.atlas-header::after{display:none!important}body>header[data-collapsible-topbar]{display:none!important}';
     if(new URL(doc.URL).pathname.startsWith(new URL('lessons/rechten-arbeid/',base).pathname))embedStyle.textContent+='body>header[data-collapsible-topbar]{display:none!important}';
     doc.head.append(embedStyle);
     // Native sign-in buttons use the desktop account panel without mounting another bar.
@@ -407,8 +469,9 @@
     doc.addEventListener('click',click,true);doc.addEventListener('keydown',keydown,true);doc.addEventListener('focusin',focus);item.frame.contentWindow.addEventListener('axioma:game-progress',progress);doc.addEventListener('click',theme);
     const observer=new MutationObserver(()=>{if(activeKey===item.key)syncProgressBadge();});
     const progressNode=doc.querySelector('[data-platform-progress],#xpLabel,#xp,#completedCount');if(progressNode)observer.observe(progressNode,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['data-value','data-total','data-unit']});
-    const contextObserver=new MutationObserver(()=>{attachAlgebra();if(activeKey===item.key)updateCrumbs();});
+    const contextObserver=new MutationObserver(()=>{attachAlgebra();if(activeKey===item.key){updateCrumbs();if(item.app.id==='rechtenwereld'){const signature=Boolean(doc.querySelector('.atlas-header'));if(item.hasAtlas!==signature){item.hasAtlas=signature;syncWindowControls();}}}});
     const contextNode=item.app.id==='getallenwereld'&&doc.querySelector('header .breadcrumbs,#spaceCrumb');
+    if(item.app.id==='rechtenwereld'&&doc.querySelector('#app'))contextObserver.observe(doc.querySelector('#app'),{childList:true,subtree:true});
     if(contextNode)contextObserver.observe(contextNode,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']});
     if(item.app.id==='algebra-trainer'&&algebraModule(doc.URL))contextObserver.observe(doc.body,{childList:true,subtree:true,attributes:true,attributeFilter:['data-screen']});
     // Keyboard events do not bubble out of a native battle's inner workboard.
@@ -490,10 +553,12 @@
   }
   function renderStart(){
     const query=$('startSearch').value.trim();$('startResultsTitle').textContent=query?'Zoekresultaten':'Ga meteen naar';const nodes=[];
-    if(!query){M.themes.forEach(t=>{const b=button('','start-result',()=>showView({kind:'theme',themeId:t.id})),copy=el('span');copy.append(el('strong','',t.title),el('small','',`${M.find({themeId:t.id}).length} bouwsels · themamap`));const symbol=icon(t.icon);symbol.style.color=t.color==='#dcb56b'?'#97764a':'#5b7b72';b.append(symbol,copy);nodes.push(b);});}
+    const places=[['all','Alle apps','Kies wat je op je bureaublad zet','desktop'],['worksheet-saved','Mijn oefenbladen','Je volledige collectie, per onderwerp','folder'],['worksheets','Oefenblad maken','Een nieuwe reeks in je eigen wereld','paper'],['saved','Mijn taken','Je bewaarde activiteiten','bookmark'],['rankings','Ranglijsten','Afgeronde klasbattles van je klas','chart'],['live','Samen & live','Alle beschikbare gezamenlijke activiteiten','people']];
+    for(const [kind,title,description,glyph] of places){if(query&&!`${title} ${description}`.toLowerCase().includes(query.toLowerCase()))continue;const b=button('','start-result',()=>{closeStart();if(kind==='rankings')window.LeraarBobPersonalHome?.openRankings();else showView({kind});}),copy=el('span');copy.append(el('strong','',title),el('small','',description));b.append(icon(glyph),copy);nodes.push(b);}
+
     const apps=query?M.find({query}):prefs.pins.map(M.app).filter(Boolean);
     apps.forEach(g=>{const b=button('','start-result',()=>openApp(g.id)),copy=el('span');copy.append(el('strong','',g.title),el('small','',`${M.types[g.type].label} · ${M.theme(g.desktopTheme).short}`));b.append(imageFor(g),copy);nodes.push(b);});
-    $('startResultCount').textContent=query?`${apps.length} gevonden`:'';$('startResults').replaceChildren(...nodes);if(!nodes.length)$('startResults').append(el('p','start-empty','Geen bouwsels gevonden. Probeer een thema of een andere naam.'));
+    $('startResultCount').textContent=query?`${nodes.length} gevonden`:'';$('startResults').replaceChildren(...nodes);if(!nodes.length)$('startResults').append(el('p','start-empty','Geen bouwsels gevonden. Probeer een thema of een andere naam.'));
   }
   function readRoute(){const p=new URLSearchParams(location.search),theme=p.get('theme'),place=p.get('place');if(M.theme(theme))return {kind:'theme',themeId:theme};if(viewNames[place])return {kind:place,themeId:M.theme(p.get('worksheetTheme'))?p.get('worksheetTheme'):p.get('worksheetTheme')==='all'?'all':'',topicId:p.get('worksheetTopic')||''};return {kind:'desktop'};}
   function updateClock(){const date=new Date();$('clock').dateTime=date.toISOString();$('clock').replaceChildren(document.createTextNode(date.toLocaleTimeString('nl-BE',{hour:'2-digit',minute:'2-digit'})),el('small','',date.toLocaleDateString('nl-BE',{day:'numeric',month:'short'})));}

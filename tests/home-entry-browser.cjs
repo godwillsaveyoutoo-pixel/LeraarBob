@@ -9,7 +9,7 @@ const auth=`window.AxiomaAuth={CLASSES:['TEST'],ready:async()=>({session:null,ac
 const report={scope:'Actual local Chromium navigation and UI with guest auth fixture; no real production accounts',checks:[],errors:[],missing:[],passed:false};
 let browser,context,server,base;
 const check=name=>{report.checks.push({name,passed:true});console.log('PASS '+name);};
-async function desktop(page){await page.waitForFunction(()=>window.LeraarBobDesktop&&document.querySelectorAll('#themeFolders .theme-folder').length===8);assert.equal(new URL(page.url()).pathname,'/LeraarBob/os/');}
+async function desktop(page){await page.waitForFunction(()=>window.LeraarBobDesktop&&document.querySelectorAll('#pinnedApps .personal-app').length===1&&document.querySelector('.personal-add'));assert.equal(new URL(page.url()).pathname,'/LeraarBob/os/');}
 async function catalog(page){await page.waitForSelector('#featuredGrid [data-game-id]');assert.equal(new URL(page.url()).pathname,'/LeraarBob/index.html');}
 async function fit(page){assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'No horizontal overflow');}
 (async()=>{

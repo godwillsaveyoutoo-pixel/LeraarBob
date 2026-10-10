@@ -2,6 +2,24 @@
 
 Doel: overgang tussen bureaublad, themamap, werkvorm en app, met behoud van oorspronkelijke vragen, antwoordbediening, stijl en leerflow. Gewone bezoeken aan `/` en `/index.html` openen het bureaublad op `/os/`. De eerdere catalogus blijft beschikbaar via [`/index.html?view=catalog`](../index.html?view=catalog) en OS Instellingen; bestaande accountlinks behouden de oorspronkelijke accountingang.
 
+## Persoonlijk bureaublad en focus · 10 oktober 2026
+
+De actuele eerste pilot sluit Rechtenwereld aan op persoonlijke appkaarten, centrale uitnodigingen en een directe klasflow. Binnen deze app is één gedeelde bovenbalk overgebleven. De taakbalk bevat de vensteracties en Focus; de herstelknop blijft buiten de oefening. Andere apps worden stapsgewijs aangesloten.
+
+- [x] Echte Rechten-opgave: antwoord kiezen; beide balken verbergen en herstellen; hetzelfde antwoord en dezelfde iframe blijven behouden.
+- [x] 1366 × 768 bij 100% zoom, 390 × 844 en 640 × 360: herstelknoppen minstens 44 × 44 px, bereikbaar en niet over het werkbord; voorkeur na herladen behouden.
+- [x] Bovenbalk afzonderlijk inklappen, focusstand in beide standen gebruiken, heropenen; de twee voorkeuren blijven onafhankelijk.
+- [x] Wereldkaart, spelvoortgang en spelprofiel via de gedeelde navigatie; compacte titel blijft de actieve app noemen.
+- [x] Kaarten met beschikbare werkvormen, Toevoegen, pins/herladen, rechterklik/Meer/Shift+F10, onderwerpmapjes en volledige oefenbladcollectie via Start.
+- [x] Samen leren: echte lokale provider voor maken, uitnodigen, weigeren, intrekken, accepteren en starten. Native invoer blijft behouden bij Start, bewaren en hervatten.
+- [x] Klasbattle: directe leraarinrichting, code/link voor leerling, oorspronkelijke wachtkamer/start en hervatten zonder dubbele sessie-iframe.
+- [x] Ranglijst uit echt beoordeelde lokale klasvragen; eigen klas voor leerling, klaskeuze voor leraar. Accountwisseling sluit oude privévensters en frames.
+- [ ] Echte productieaanmelding en sessies tussen externe toestellen: geen bruikbare ingelogde testaccounts beschikbaar.
+- [ ] Nieuwe klasuitnodigingen automatisch uitzenden en meerdere gelijktijdige/kruisende duo-uitnodigingen uniform afhandelen: vereist een afzonderlijke providerwijziging.
+- [ ] Getallenwereld visueel ombouwen naar wereld/subwerelden, daarna de overige trainers op dezelfde compacte navigatie aansluiten.
+
+De [bewijsmap](qa/personal/README.md) bevat de actuele browserrapporten, screenshots en herhaalcommando’s. Onderstaande oudere rapporten blijven historisch bewijs voor hun beschreven versies.
+
 ## Algebrawereld-navigatie · 10 oktober 2026
 
 De [definitieve browserrun](qa/algebra-navigation/report.json) telt **18 interactiegroepen, 252 doelmetingen en 39 screenshots**, zonder browserexceptions of ontbrekende bronnen. Gecontroleerd op **1366 × 768 bij 100% zoom**, 390 × 844 en 640 × 360, `deviceScaleFactor: 1`, met de bovenbalk uitgeklapt en ingeklapt. Alle zestien bronhashes kloppen met de definitieve implementatie.

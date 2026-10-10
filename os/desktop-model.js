@@ -35,7 +35,7 @@
     const g=app(id);if(!g)return [];
     const entries=extra.some(e=>e.id===id)?g.capabilities.modes.filter(e=>e.roles.includes(role)):registry.modes(id,{role,topicId});
     // Participation in a class is not permission to host one.
-    return entries.filter(e=>!['classroom','classlearn','teacher','live'].includes(e.id)||role==='teacher');
+    return entries.filter(e=>(!['classroom','classlearn','teacher','live'].includes(e.id)||role==='teacher')&&!(id==='rechtenwereld'&&e.id==='learn'&&role==='teacher'));
   }
   function modeLabel(m){
     if(m.title)return m.title;
@@ -69,11 +69,11 @@
     const words=normalize(query).split(/\s+/).filter(Boolean);
     return apps().filter(g=>(!themeId||g.desktopTheme===themeId)&&(type==='all'||g.type===type)&&words.every(w=>normalize([g.title,g.subtitle,g.theme,theme(g.desktopTheme)?.title,types[g.type].label].join(' ')).includes(w)));
   }
-  const defaults={pins:['rechtenwereld','pythagoras','rechten-zeeslag','glasraam'],recent:[],saved:[],wallpaper:'coast',reducedMotion:false};
+  const defaults={pins:['rechtenwereld'],recent:[],saved:[],wallpaper:'coast',reducedMotion:false,focusMode:false};
   const key=account=>'leraarbob-desktop:v1:'+encodeURIComponent(account?.id||'guest');
   function sanitize(value){
     const v=value&&typeof value==='object'?value:{};
-    return {pins:Array.isArray(v.pins)?[...new Set(v.pins)].filter(id=>app(id)).slice(0,12):defaults.pins.slice(),recent:Array.isArray(v.recent)?v.recent.filter(r=>app(r?.id)&&typeof r.mode==='string').slice(0,10):[],saved:Array.isArray(v.saved)?v.saved.filter(r=>app(r?.id)&&safeURL(r.href)).slice(0,50):[],wallpaper:['coast','quiet'].includes(v.wallpaper)?v.wallpaper:'coast',reducedMotion:v.reducedMotion===true};
+    return {pins:Array.isArray(v.pins)?[...new Set(v.pins)].filter(id=>app(id)).slice(0,12):defaults.pins.slice(),recent:Array.isArray(v.recent)?v.recent.filter(r=>app(r?.id)&&typeof r.mode==='string').slice(0,10):[],saved:Array.isArray(v.saved)?v.saved.filter(r=>app(r?.id)&&safeURL(r.href)).slice(0,50):[],wallpaper:['coast','quiet'].includes(v.wallpaper)?v.wallpaper:'coast',reducedMotion:v.reducedMotion===true,focusMode:v.focusMode===true};
   }
   function read(storage,account){try{return sanitize(JSON.parse(storage.getItem(key(account))||'null'));}catch{return sanitize(null);}}
   function write(storage,account,prefs){const clean=sanitize(prefs);storage.setItem(key(account),JSON.stringify(clean));return clean;}
