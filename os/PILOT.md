@@ -2,6 +2,30 @@
 
 Doel: overgang tussen bureaublad, themamap, werkvorm en app, met behoud van oorspronkelijke vragen, antwoordbediening, stijl en leerflow. Gewone bezoeken aan `/` en `/index.html` openen het bureaublad op `/os/`. De eerdere catalogus blijft beschikbaar via [`/index.html?view=catalog`](../index.html?view=catalog) en OS Instellingen; bestaande accountlinks behouden de oorspronkelijke accountingang.
 
+## Oefenbladmappen · 10 oktober 2026
+
+- [x] Alle zeven bestaande generators werkelijk bediend in negen onderwerpen: vier Rechten-onderdelen, Vergelijkingen, Stelsels, Machten, Vierkantswortels en Wetenschappelijke notatie.
+- [x] Automatisch bewaren na succesvolle generatie; exact oorspronkelijke opgaven en gepaarde verbetersleutel gecontroleerd met hashes, ook na volledig OS-herladen.
+- [x] Opnieuw bewaren en de OS-knop Bewaren maken geen duplicaat of onjuiste snelkoppeling in Mijn taken. Terug naar de eigen onderwerpmap, minimaliseren, hervatten en Start/focus blijven werken.
+- [x] Library/helper: 15 unitcontroles voor zeven bronnen, gast/accountisolatie, accountwisseling tijdens bewaren, volle/geblokkeerde opslag, de 200-reeksgrens, veilig HTML/MathML/SVG/JPEG en geldig/ongeldig backupherstel.
+- [x] Definitieve browsermatrix op 1366 × 768 en 390 × 844, 100% zoom: 22 interactiegroepen, 47 layoutmetingen en 18 screenshots. Beide balkstanden, volledige A4-voorbeelden, herstelbediening ≥44 px, accountisolatie, echte download/herstel en zichtbare fouten bij geblokkeerde opslag slagen zonder browserfouten of 404.
+- [x] Negen echte bewaarde opgaven-/sleuteldocumenten als A4-PDF; alle 62 pagina’s via Poppler gerenderd en zes contactvellen plus een volledige wortelpagina visueel gecontroleerd. Geen afgesneden inhoud, overlap of lege pagina’s; native schrijfruimte kan een opgave over twee bladen verdelen.
+
+De nieuwe documentmap bewaart lokaal per account op dit toestel. JSON-kopieën kunnen in de eigen map worden teruggezet. Cloudsync, productie-login en echte externe testaccounts maken geen deel uit van dit bewijs.
+
+Het [worksheetrapport](qa/worksheets/report.json) bewaart de controles, document- en bronhashes en screenshots; [PDF-review](qa/worksheets/pdf-review.json) legt het render- en visuele bewijs vast. De laatste regressierun op deze bronnen slaagt voor de vier oorspronkelijke pilots (32 groepen / 23 layouts), Getallenwereld (146 groepen / 1076 layouts) en wetenschappelijke schrijfwijze (67 groepen / 190 layouts). De [regressierapporten](qa/worksheets/regressions/) hebben geen browserfouten of ontbrekende bronnen. Rechtenwereld behoudt op 390 px de oorspronkelijke draaihulp; volledige opgavebediening is op 1366 px doorlopen. Deze runs gebruiken lokale fixtures, geen productieauthenticatie.
+
+## Gemeenschappelijke Klasbattle-start · 10 oktober 2026
+
+- [x] Rechtenwereld en Getallenwereld volgen dezelfde instelling- en wachtkamerstappen, met dezelfde plaats voor code, deelnemers, kopiëren, starten en afsluiten.
+- [x] Leraaracties en leerlingdeelname blijven gescheiden. De originele velden, handlers, vraagborden, antwoordbediening, providers en XP blijven behouden.
+- [x] 32 daadwerkelijke browsercontroles, 78 interactieve doelen en 22 screenshots op 1366 × 768 bij 100% zoom en 390 × 844; beide bovenbalkstanden, herstelknop ≥44 px en drie noodzakelijke interne scrollacties. Geen browserfouten of 404.
+- [x] Herladen vóór aanmaken; eigen Home en Hervatten met dezelfde vraag, invoer en deadline; eenmalig deelnemen; simulatie en echte klas als aparte levende frames; Rechten Mixed; lege en ongeldige selecties.
+- [x] Volledige bestaande live-browser: 12 groepen, Klas Learn met 45 XP, Getallen Battle met 50 XP, vijf native Rechten-vragen en live les met stemmen, afsluiten en verslag.
+- [x] Vijf schermmaten van de centrale hub en 38 DOM/route/simulatiecontroles geslaagd.
+
+Het [browserrapport](qa/uniform-class-flow/report.json) bevat de bronhashes en screenshots. Vragen en beoordeling gebruiken de bestaande Edge-/SQL-providers in een lokale testdatabase; accounts zijn fictief en extern netwerk is geblokkeerd. Dit bewijst geen productieaanmelding of twee externe multiplayeraccounts. Duo en overige wereldprocedures behouden hun bestaande opstart.
+
 ## Vier pilots
 
 | Bouwsel | Werkvorm | Behouden |
@@ -11,7 +35,7 @@ Doel: overgang tussen bureaublad, themamap, werkvorm en app, met behoud van oors
 | Rechten Zeeslag | Spel | Bord, regels, animaties, solo/online-bediening en beurtstatus |
 | Glasraam | Atelier | Werkvlak, kleur, rechten, ontwerpbediening en afgeronde ramen |
 
-Terug, minimaliseren, Start, bewaren, account, weergave en sluiten zijn bureaubladbediening. Minimaliseren houdt het oorspronkelijke scherm levend en pauzeert geen timer of online sessie. Bewaren maakt een snelkoppeling. Na browserherladen geldt de oorspronkelijke apphervatting.
+Terug, minimaliseren, Start, bewaren, account, weergave en sluiten zijn bureaubladbediening. Minimaliseren houdt het oorspronkelijke scherm levend en pauzeert geen timer of online sessie. In gewone apps maakt Bewaren een snelkoppeling; in een oefenbladgenerator bewaart die knop de gemaakte reeks in Mijn oefenbladen. Na browserherladen geldt voor gewone apps de oorspronkelijke apphervatting.
 
 ## Automatische integratiecontrole
 
@@ -79,7 +103,7 @@ Productieaanmelding, cloudhervatting en externe multiplayer met **twee daadwerke
 
 De gerichte wetenschappelijke migratie is toegepast en `numbers-session` is actief als versie 2 met `verify_jwt=true`. De gedeployde `index.ts`, `handler.js` en `core.js` zijn bytegelijk aan de reviewbranch. Het catalogustotaal is 19. De oorspronkelijke sessiefunctie heeft dezelfde bronhash en de RPC blijft uitsluitend toegankelijk voor de service-role. Een anonieme HTTP-aanroep geeft 401.
 
-Hashes vóór en na uitrol bevestigen behoud van alle 41 bestaande voortgangsrijen en de bestaande sessiegegevens: één ruimte, twee deelnemers, nul antwoorden en nul requests. Deze controle heeft geen leerlingwerk of nieuwe sessie gemaakt. De frontend wordt via GitHub Pages vanaf `main` gepubliceerd; publieke ingangen zijn [het bureaublad](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/) en [Getallenwereld](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/). Actuele releasecontroles staan in [PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7) en [het verificatierapport](qa/verification.json). De eerdere ontwikkelpilot stond als draft ter review.
+Hashes vóór en na uitrol bevestigen behoud van alle 41 bestaande voortgangsrijen en de bestaande sessiegegevens: één ruimte, twee deelnemers, nul antwoorden en nul requests. Deze controle heeft geen leerlingwerk of nieuwe sessie gemaakt. De frontend wordt via GitHub Pages vanaf `main` gepubliceerd; publieke ingangen zijn [het bureaublad](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/) en [Getallenwereld](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/). De historische Getallenwereld-releasecontroles staan in de inmiddels samengevoegde [PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7) en [het verificatierapport](qa/verification.json). [PR #8](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/8) maakt `/` de OS-hoofdingang. De huidige mappen-/klasstartwijziging staat op `codex/os-folders-classflow-20261010`; haar pull request en publicatie volgen na de definitieve branchcontrole.
 
 ## Nog open voor productiecontrole
 

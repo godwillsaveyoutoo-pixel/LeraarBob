@@ -21,3 +21,8 @@ button{min-width:44px}body.topbar-collapsed .space-heading{padding-left:50px}bod
 @media(max-height:500px) and (orientation:landscape){.session-work{gap:3px}}
 
 .discussion-answers{display:flex;gap:14px;justify-content:center;min-height:0}.discussion-answers>div{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;padding:12px;border:1px solid var(--line);border-radius:8px}.discussion-answers>div>span{font-size:26px;max-width:100%;overflow:auto}.discussion-answers small{font-size:12px}
+
+/* A nested classroom uses the hub/OS platform bar and the shared setup/lobby. */
+.numbers-embedded>header[data-collapsible-topbar]{display:none!important}.numbers-embedded .space-heading>div,.numbers-embedded #spaceBack{display:none}.numbers-embedded .space-heading:has(#resumeSession[hidden]){display:none}.numbers-embedded .space-heading{justify-content:flex-end}.numbers-embedded #space{padding:8px;overflow:auto}.numbers-embedded[data-class-flow] #spaceContent{overflow:auto;flex:1;min-height:0;display:block}.numbers-embedded[data-class-flow] #createSpace{display:block}.numbers-embedded[data-class-flow=lobby] #sessionWork.waiting-card{background:none;border:0;padding:0;display:block}.numbers-embedded[data-class-flow] .lb-class-options .selection-options label:has(#sessionAudience){display:none}.numbers-embedded[data-class-flow] .lb-class-options .selection-options{gap:8px}.numbers-embedded[data-class-flow] #scientificSessionLevelHint{font-size:12px;margin-top:8px;display:block}.numbers-embedded[data-class-flow] #scientificSessionLevelHint[hidden]{display:none}
+
+.numbers-embedded[data-view=selection] .space-heading,.numbers-embedded[data-view=session] .space-heading{display:none}

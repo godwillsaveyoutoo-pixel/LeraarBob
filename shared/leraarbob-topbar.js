@@ -234,7 +234,7 @@ async function showMenu(){
    const hub=new URL('klasbattle/',root);hub.searchParams.set('returnTo',window.LeraarBobRoutes.safeReturn(location.href));location.assign(hub);
   },{glyph:'classroom',description:'Battles en ranglijsten voor alle spellen',source:classroomEntry?.node});
   add(platform,'Samen leren',()=>location.assign(window.LeraarBobPlayModes.hubDestination('learn')),{glyph:'classroom',description:'Duo Learn, Klaslearn en borduitleg'});
-  add(platform,'Alle oefenbladen',()=>location.assign(new URL('oefenbladen.html',root)),{glyph:'pencil'});
+  add(platform,'Alle oefenbladen',()=>location.assign(new URL('os/?place=worksheets',root)),{glyph:'pencil'});
   add(platform,'Alle ranglijsten',()=>location.assign(window.LeraarBobPlayModes.hubDestination('rankings')),{glyph:'chart',description:'Resultaten per klas en wereld'});
   add(platform,'Mijn leerpad',()=>goPlatformSection('homeProgress','#playerProgress'),{glyph:'chart'});
   if(account?.role==='teacher'&&script.dataset.page!=='teacher')add(platform,'Mijn klassen',()=>location.assign(new URL('teacher/',root)),{glyph:'classroom'});

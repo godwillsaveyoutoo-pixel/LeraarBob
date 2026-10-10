@@ -1,6 +1,41 @@
-# Review · OS-ontwikkelpilot · 9 oktober 2026
+# Review · OS-mappen en gezamenlijke klasstart · 10 oktober 2026
 
-De ontwikkelpilot staat op `/os/`, naast de bestaande startpagina. Preview: <http://127.0.0.1:8787/os/>; zelfstandig <http://127.0.0.1:8787/games/getallenwereld/>. Branch: `codex/os-pilot-20261009`. [Draft PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7).
+De reviewbranch is `codex/os-folders-classflow-20261010`, vanaf main `f9f235428a407a9eaabc9b0e9db7bcc852887e28`. De eerdere OS-integratie en Getallenwereld-uitbreiding uit [PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7) en de nieuwe hoofdingang uit [PR #8](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/8) zijn behouden. `/` opent het OS; de vroegere spellenpagina blijft beschikbaar via `index.html?view=catalog`. Lokale preview: <http://127.0.0.1:8787/os/>.
+
+De oorspronkelijke lokale werkmap is opnieuw gecontroleerd: alle 1517 vastgelegde bestandshashes zijn identiek, met nul wijzigingen door deze integratie. De ontwikkelwijzigingen en QA staan alleen in de aparte reviewcheckout.
+
+## Oefenbladen en klasstart
+
+De vroegere vlakke lijst van oefenbladgeneratoren is vervangen door drie themamappen en negen onderwerpmapjes. De zeven bestaande generators houden hun oorspronkelijke vragen, keuzes, opmaak en afdrukbediening. Een daadwerkelijk gemaakte reeks komt automatisch in Mijn oefenbladen, eveneens per thema en onderwerp. De bewaarde opgaven én verbetersleutel blijven exact dezelfde na terugkeren of herladen. Nieuwe reeksen komen naast bestaande reeksen te staan; nogmaals bewaren maakt geen duplicaat. De OS-knop Bewaren gebruikt in een generator de eigen documentbewaring.
+
+De documentmap is lokale, accountgebonden IndexedDB-opslag. Zij verandert geen accountopslag, voortgangsidentiteit, XP of online sessieprovider. Gast, leerling en leraar krijgen ieder hun eigen documentmap. Accountwisseling verwijdert geopende frames en wist ook een apart geopende documentweergave; een nog lopende download kan niet voor de volgende gebruiker doorgaan. HTML wordt als passieve documentinhoud behandeld, met sanitisering, een iframe zonder scripts en een beperkende CSP. Native MathML, SVG-grafieken en de oorspronkelijke Stelsels-pagina-afbeeldingen blijven bruikbaar.
+
+Download kopie en Kopie terugzetten vormen een volledige JSON-backup en herstelroute voor dezelfde vragen en sleutel. Download oefenblad sluit de lokale documentopmaak in een HTML-bestand in; Afdrukken / PDF gebruikt de echte bewaarde pagina’s. Deze opslag synchroniseert niet naar andere toestellen. Bij volle of geblokkeerde opslag wordt geen succesvolle bewaring gemeld en wordt niets automatisch verwijderd; afdrukken vanuit de generator blijft mogelijk. De grenzen zijn 200 reeksen en 16 MiB per reeks.
+
+Getallenwereld en Rechtenwereld delen nu de klasbattle-opstart en wachtkamer. De oorspronkelijke providers, leerstofmogelijkheden en latere antwoordschermen blijven intact. De gedeelde component verplaatst bestaande bedieningselementen zodat hun waarden, focus en handlers blijven behouden. De verdere leer- en duowerkvormen krijgen hiermee nog geen algemene uniforme opstart.
+
+| Bestanden | Wijziging |
+| --- | --- |
+| `os/desktop-model.js`, `os/desktop.js`, `os/desktop.css`, `os/index.html` | Thema- en onderwerpmapjes, Mijn oefenbladen, gerichte Bewaren-knop, backup/herstel en betrouwbare terugkeerplek |
+| `shared/worksheet-library.js`, `shared/worksheet-save.js`, `shared/worksheet-save.css` | Lokale opslag van exact gegenereerde documenten; accountisolatie, sanitisering, automatische bewaring en zichtbare fouten |
+| `os/worksheet.html`, `os/worksheet.js`, `os/worksheet.css` | Veilige documentweergave, sleutel, afdrukken, download en accountwisseling |
+| `games/rechten/rechtenwereld/worksheets/*`, `games/bewerkingen-trainer/app.js`, `games/algebra-trainer/trainer.js`, `games/algebra-trainer/stelsels/*` | Snapshots van oorspronkelijke opgaven en sleutels, gekoppeld aan succesvolle generatie |
+| `shared/multiplayer/class-activity-flow.*`, `klasbattle/*`, beide native klasinterfaces | Gemeenschappelijke klasbattle-instellingen en wachtkamer met oorspronkelijke sessiebediening |
+| `tests/worksheet-library.test.cjs`, `tests/worksheet-save.test.cjs`, `tests/desktop-worksheets-browser.cjs` | Echte opslaggrenzen, account-/veiligheidsproeven en browserinteracties in alle negen onderwerpen |
+
+De definitieve oefenbladbrowser slaagt met **22 interactiegroepen, 47 layoutmetingen, negen daadwerkelijke native documenten en 18 screenshots**, op 1366 × 768 en 390 × 844 bij 100% zoom. Beide balkstanden, volledige A4-voorbeelden, herstelbediening ≥44 px, dezelfde vragen/sleutel na herladen, Start/focus/minimaliseren, accountisolatie, daadwerkelijk JSON-herstel en volledige HTML-export zijn gecontroleerd. Geblokkeerde opslag geeft een zichtbare fout terwijl native afdrukken beschikbaar blijft. Er zijn geen browserfouten, ontbrekende bronnen of externe verzoeken. De library/helper slagen met **15 unitcontroles**, inclusief de opslaggrenzen, volle opslag en accountwisseling tijdens een nog lopende bewaring.
+
+Alle negen opgeslagen opgaven-/sleuteldocumenten zijn daadwerkelijk als A4-PDF gemaakt. Alle **62 pagina’s** zijn via Poppler gerenderd; zes contactvellen en een volledige wortelpagina zijn visueel bekeken. Geen afsnijding, overlap of lege pagina’s gevonden. De oorspronkelijke schrijfruimte in Getallenbladen kan een opgave op het volgende blad laten doorgaan; de inhoud blijft intact. [Browserrapport en screenshots](qa/worksheets/report.json) en [PDF-review](qa/worksheets/pdf-review.json) bewaren het bewijs en bronhashes. Productie-login en twee echte externe sessies blijven open omdat bruikbare testaccounts niet beschikbaar zijn.
+
+De laatste bredere regressierun slaagt op de huidige bronnen: de vier oorspronkelijke pilots **32 groepen / 23 layouts**, Getallenwereld **146 groepen / 1076 layouts** en wetenschappelijke schrijfwijze **67 groepen / 190 layouts**. De [drie regressierapporten](qa/worksheets/regressions/) bevatten geen browserfouten of ontbrekende bronnen. Rechtenwereld behoudt op 390 px zijn native draaihulp; de volledige opgavebediening is op 1366 px getest. Auth en externe sessiegrenzen blijven expliciete lokale fixtures.
+
+## Uitgevoerde Klasbattle-controle
+
+De gedeelde start slaagt met **32 browsercontroles, 78 gemeten interactieve doelen en 22 screenshots**, op 1366 × 768 bij 100% zoom en 390 × 844. Beide bovenbalkstanden en herstelknoppen van minimaal 44 px zijn gecontroleerd. Drie interne scrollacties zijn nodig; er zijn geen browserfouten of ontbrekende bronnen. Het [rapport](qa/uniform-class-flow/report.json) bewaart de hashes van alle elf betreffende frontendbestanden.
+
+De proeven gebruiken de bestaande Numbers/Rechten Edge-handlers en echte lokale SQL-migraties, met gescheiden fictieve accounts en geblokkeerd extern netwerk. Gecontroleerd: herladen vóór aanmaken, precies eenmaal deelnemen, vraag/invoer/deadline behouden via eigen Home en Hervatten, echte 10 XP in de zelfstandige bovenbalk, eigen leerling-/leraaracties, beide simulatieproviders, afzonderlijke levende simulatie- en klasframes, Rechten Mixed en lege/ongeldige selecties. Nieuwe Numbers-codes van acht tekens blijven in de centrale hub; bestaande codes van zes tekens blijven bij hun oorspronkelijke provider.
+
+De bestaande live-browser slaagt met **12 interactiegroepen**: volledige Klas Learn met 45 XP, Getallen Battle met 50 XP, vijf native Rechten-vragen en de live les met stemmen, afsluiten en bewaard verslag. Ook Start/focus, minimaliseren/hervatten en herladen slagen. De centrale hub slaagt op vijf schermmaten. Daarnaast slagen 38 DOM/route/simulatiecontroles en de afzonderlijke bestaande Numbers SQL/Edge-proeven. Voor deze gedeelde opstart zijn geen backend, authopslag, native XP-core of SQL-bron gewijzigd.
 
 ## Getallenwereld-uitbreiding
 
@@ -20,9 +55,9 @@ Actuele controles en screenshots staan in [qa/scientific/](qa/scientific/), [qa/
 
 De oorspronkelijke ZIP `leraarbob-bureaublad (1).zip` heeft SHA-256 `6d65e33249ee1376bd708ce1d2fbf19a0a32e4828472e541b8ece48baf442a02`; alle 21 bestandshashes zijn geverifieerd. Alleen de nieuwe module is geïntegreerd; oudere meegeleverde OS-/topbarbestanden hebben de latere pilotfixes niet vervangen.
 
-Open: twee echte ingelogde testaccounts ontbreken. De productiecontrole bevestigt het actieve Supabase-project, de bestaande leerlingalias `bob`, Edge-versie 2 en het behoud van de oorspronkelijke private sessiefunctie; dit bewijst geen productie-login of spelverbinding. De frontend wordt via GitHub Pages vanaf `main` gepubliceerd, na geslaagde controles. Publieke ingangen: [OS](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/) en [Getallenwereld](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/). De actuele releasecontrole staat in PR #7. Duo Learn behoudt eigen antwoorden en gezamenlijke bespreking. De twee hieronder vastgelegde historische unitfouten en de oudere Kleiduif-lobbyoverflow blijven afzonderlijk bekend.
+Open: twee echte ingelogde testaccounts ontbreken. De productiecontrole bevestigt het actieve Supabase-project, de bestaande leerlingalias `bob`, Edge-versie 2 en het behoud van de oorspronkelijke private sessiefunctie; dit bewijst geen productie-login of spelverbinding. De frontend wordt via GitHub Pages vanaf `main` gepubliceerd, na geslaagde controles. Publieke ingangen: [OS](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/) en [Getallenwereld](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/games/getallenwereld/). De historische Getallenwereld-releasecontrole staat in de samengevoegde PR #7. Duo Learn behoudt eigen antwoorden en gezamenlijke bespreking. De twee hieronder vastgelegde historische unitfouten en de oudere Kleiduif-lobbyoverflow blijven afzonderlijk bekend.
 
-## Basis en behoud van huidig werk
+## Historische basis en behoud van lokaal werk · 9 oktober 2026
 
 De zip is eerst geïnspecteerd: `LEESMIJ.md`, `verificatie.json`, `os/README.md` en `os/PILOT.md`. Alle 13 geleverde SHA-256-bestandshashes kloppen. Instructies uit de zip zijn als pakketdocumentatie beoordeeld; de gebruikersopdracht en AGENTS.md blijven leidend.
 
@@ -32,7 +67,7 @@ De oorspronkelijke lokale werkmap is ongewijzigd en alle 93 bestandshashes zijn 
 
 Bestaande accountopslag, voortgangsidentiteiten, XP-regels en sessieproviders zijn behouden. De eerste pilot wijzigde native alleen Zeeslag-CSS. De Getallenwereld-uitbreiding voegt presentatie, hervatting en vier nieuwe onderdelen toe; nieuwe wetenschappelijke generatie en online versiecontrole zijn hierboven expliciet beschreven. De oorspronkelijke auth- en voortgangsservices blijven gelijk aan main.
 
-## Gewijzigde bestanden en gedrag
+## Historische OS-integratiebestanden en gedrag
 
 | Bestanden | Gedrag |
 | --- | --- |
@@ -67,6 +102,6 @@ De map `qa/` bevat uitgeklapte/ingeklapte pilots, compacte layouts, het centrale
 
 Productieaanmelding en twee echte externe auth-/WebSocket-sessies blijven open. Er zijn geen bruikbare testlogins of reeds aangemelde browserprofielen beschikbaar gesteld; alleen de naam `bob` en het getoonde leraarlabel `Leerkracht`. De browserauth, social/groups-grenzen en voortgangstransporten gebruiken expliciete fixtures; klasvragen en lesverslagen gebruiken de echte bestaande serverlogica op een lokale database.
 
-De GitHub-connector weigerde branchcreatie met HTTP 403 `Resource not accessible by integration`. Met netwerktoegang werkte de bestaande Git/CLI-aanmelding wel: `codex/os-pilot-20261009` staat remote en [draft PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7) is aangemaakt. Beide catalogusworkflows voor de oorspronkelijke OS-basis zijn geslaagd: [push-run](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/actions/runs/37970415172) en [PR-run](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/actions/runs/37970421658), voor codecommit `324dc33`. Zij voeren ook beide oorspronkelijke browserpilots uit. De actuele Getallenwereld-controles staan bij [de PR-checks](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7/checks). De complete reviewpatch is op toepasbaarheid tegen main gecontroleerd. De oorspronkelijke productiestartpagina blijft beschikbaar; het OS blijft een aparte ingang naast de bestaande startpagina.
+Tijdens de eerste integratie weigerde de GitHub-connector branchcreatie met HTTP 403 `Resource not accessible by integration`. De bestaande Git/CLI-aanmelding werkte wel: de toenmalige branch `codex/os-pilot-20261009` en aanvankelijk draft [PR #7](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7) zijn gepubliceerd en later samengevoegd. Beide catalogusworkflows voor die oorspronkelijke OS-basis slaagden: [push-run](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/actions/runs/37970415172) en [PR-run](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/actions/runs/37970421658), voor codecommit `324dc33`. De latere Getallenwereld-controles staan bij [de historische PR-checks](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/7/checks). Het OS was toen een aparte ingang naast de startpagina; sinds de samengevoegde [PR #8](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/8) opent `/` het OS. De catalogus blijft bereikbaar via `index.html?view=catalog`.
 
-De gebruiker heeft op 10 oktober publicatie gevraagd. De backend is uitgerold; de websitepublicatie loopt via main na groene GitHub-controles. Daarna blijven twee echte testaccounts nodig voor de nog open productiechecks. De twee bestaande unitfouten en Kleiduif-lobby worden afzonderlijk opgevolgd voordat de hoofdstartpagina wordt vervangen. Centrale leraaropdrachten en nieuwe appvormen volgen na acceptatie van deze pilot.
+De huidige reviewbranch `codex/os-folders-classflow-20261010` is gebaseerd op main `f9f2354` en bevat de nieuwe mappen, documentbewaring en gedeelde klasstart. Haar pull request en publicatie volgen na de definitieve branchcontrole; de bestaande productiebackend wordt door deze wijziging niet aangepast. Twee echte testaccounts blijven nodig voor de open productiechecks. De historische unitfouten en Kleiduif-lobby worden afzonderlijk opgevolgd. Centrale leraaropdrachten, cloudsynchronisatie van documenten en verdere uniforme werkvormen zijn vervolgstappen.

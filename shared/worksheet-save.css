@@ -1,0 +1,6 @@
+.worksheet-save-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;min-width:0;margin:10px 0;font:14px/1.5 system-ui,sans-serif}
+.worksheet-save-controls [data-worksheet-save]{min-width:44px;min-height:44px;padding:10px 16px;font:inherit;cursor:pointer}
+.worksheet-save-controls [data-worksheet-save]:focus-visible{outline:3px solid #d0a04e;outline-offset:3px}
+.worksheet-save-controls [data-worksheet-save-status]{margin:0;flex:1;min-width:min(240px,100%);overflow-wrap:anywhere}
+@media(max-width:480px){.worksheet-save-controls{align-items:stretch;gap:8px}.worksheet-save-controls [data-worksheet-save]{width:100%}.worksheet-save-controls [data-worksheet-save-status]{flex-basis:100%}}
+@media print{.worksheet-save-controls{display:none!important}}
