@@ -516,7 +516,8 @@ function renderBuilding(){
   clear(layers.building);
   const u=M.unit;
   const left=P(level.targetX-.50,0).x;
-  const top=P(0,Math.min(10.55,M.yMax-.7)).y;
+  const roofHeight=Math.min(10.55,M.yMax-.7);
+  const top=P(0,roofHeight).y;
   const bottom=P(0,.16).y;
   const width=2.82*u;
   const h=bottom-top;
@@ -528,7 +529,7 @@ function renderBuilding(){
     // Main flat: calm white marker fill with a genuinely sketchy outline.
     rRect(layers.building,left,top,width,h,{
       seed:baseSeed,stroke:'#251e19',strokeWidth:2.7,roughness:.78,bowing:.55,
-      fill:'#8c8069',fillStyle:'solid'
+      fill:'#8c8069',fillStyle:'solid',className:'buildingFacade'
     });
     // Side wall hatching gives a hand-drawn marker/shadow cue.
     rPolygon(layers.building,[
@@ -548,7 +549,7 @@ function renderBuilding(){
     });
 
     // Small hand-drawn floor hints, deliberately lighter than the graph grid.
-    for(let y=1;y<10;y+=2){
+    for(let y=1;y+.48<roofHeight;y+=2){
       const a=P(level.targetX-.46,y+.48),b=P(level.targetX+2.24,y+.48);
       rLine(layers.building,a.x,a.y,b.x,b.y,{
         seed:baseSeed+20+y,stroke:'#9cb1bd',strokeWidth:1.2,roughness:.8,bowing:.6,className:'sketchFaint'
@@ -556,12 +557,14 @@ function renderBuilding(){
     }
   }
 
-  // Window anchors remain exact world coordinates even though the frames are rough.
-  for(let floor=1;floor<=10;floor++){
+  // Keep the whole window below the roof, including its upper half.
+  // Anchors remain exact world coordinates even though the frames are rough.
+  const windowHeight=.60;
+  for(let floor=1;floor+windowHeight/2<roofHeight;floor++){
     for(let col=0;col<3;col++){
       const p=P(level.targetX+col*.9,floor);
       const target=col===0&&floor===level.targetY;
-      const ww=.64*u, wh=.60*u, seed=baseSeed+100+floor*10+col;
+      const ww=.64*u, wh=windowHeight*u, seed=baseSeed+100+floor*10+col;
       if(target && !asset(layers.building,'light',p.x-ww*.78,p.y-wh*.82,ww*1.56,wh*1.64)){
         rEllipse(layers.building,p.x,p.y,ww*1.52,wh*1.48,{
           seed:seed+1,stroke:'#ffd64a',strokeWidth:1.2,roughness:.85,
@@ -571,7 +574,7 @@ function renderBuilding(){
       if(!asset(layers.building,'window',p.x-ww/2,p.y-wh/2,ww,wh)){
         rRect(layers.building,p.x-ww/2,p.y-wh/2,ww,wh,{
           seed,stroke:target?'#e3a000':'#251e19',strokeWidth:target?3.3:2.0,roughness:target?.88:.68,bowing:.55,
-          fill:target?'#ffe0a0':'#405853',fillStyle:'solid'
+          fill:target?'#ffe0a0':'#405853',fillStyle:'solid',className:target?'buildingWindow targetWindow':'buildingWindow'
         });
         // Two calm marker panes.
         rLine(layers.building,p.x,p.y-wh*.46,p.x,p.y+wh*.46,{

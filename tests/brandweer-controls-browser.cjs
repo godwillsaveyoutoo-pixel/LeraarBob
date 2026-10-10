@@ -43,6 +43,26 @@ let browser, preview;
       await frame.locator('#settingsApply').click();
       assert.equal((await snapshot()).level, number);
     }
+    // Inspect the actual SVG outlines: window frames must stay on the facade,
+    // including the tallest rescue and the small landscape layout.
+    for (const size of [{ width: 1366, height: 768 }, { width: 640, height: 360 }]) {
+      await page.setViewportSize(size);
+      for (let number = 1; number <= 8; number++) {
+        await level(number);
+        const building = await frame.evaluate(() => {
+          const box = el => { const r = el.getBBox(); return { x: r.x, y: r.y, width: r.width, height: r.height }; };
+          return { facade: box(document.querySelector('.buildingFacade')), windows: [...document.querySelectorAll('.buildingWindow')].map(box), targets: document.querySelectorAll('.targetWindow').length };
+        });
+        assert.equal(building.targets, 1, 'Every street keeps its target window');
+        assert(building.windows.length > 0);
+        for (const w of building.windows) {
+          const f = building.facade, tolerance = 3; // Hand-drawn outline jitter.
+          assert(w.x >= f.x - tolerance && w.y >= f.y - tolerance && w.x + w.width <= f.x + f.width + tolerance && w.y + w.height <= f.y + f.height + tolerance, JSON.stringify({ number, size, w, f }));
+        }
+      }
+    }
+    await page.setViewportSize({ width: 1366, height: 768 }); await level(1);
+    check('All eight street buildings at 1366/640px keep every window on the facade and exactly one target window');
     assert.equal(await equation(), 'y = ax + b');
     assert.equal(await frame.locator('.rescueEquation button').count(), 0);
     assert.equal(await frame.locator('leraarbob-topbar').count(), 0);

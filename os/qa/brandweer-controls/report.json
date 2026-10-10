@@ -1,6 +1,7 @@
 {
   "scope": "Chromium, 100% zoom; local accounts and original solo engine.",
   "checks": [
+    "All eight street buildings at 1366/640px keep every window on the facade and exactly one target window",
     "Equation has no buttons; keyboard arrows, Enter and Space change the native plan, including focus fallback at a bound",
     "Positive/negative bounds, fractions and decimal levels, signed b, wheel and drag preserve the original value steps without executing a rescue",
     "Minimize/resume keeps the same native frame, rescue and chosen coefficients",

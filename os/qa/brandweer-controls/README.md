@@ -4,9 +4,11 @@ Gecontroleerd op 10 oktober 2026 in Chromium/Brave, bij 100% zoom en met geïsol
 
 De formule `y = ax + b` staat apart van twee compacte regelaars: **Helling a** en **Starthoogte b**. De bediening volgt Zeeslag. De breuk- of decimaalweergave van iedere redding blijft behouden; in de b-regelaar staat ook bij negatieve waarden het juiste teken. De bestaande gedelegeerde klik-, veeg-, wiel- en toetsenbordhandlers blijven actief. Oefeningen, toegestane waarden, accountopslag en voortgangsidentiteiten zijn niet gewijzigd.
 
+De gevel tekende nog altijd tien rijen ramen, ook als het dak lager stond. Ramen en verdiepingslijnen stoppen nu bij de werkelijk getekende dakrand; het doelraam blijft op zijn oorspronkelijke coördinaten.
+
 ## Uitgevoerd
 
-- [Gerichte browsertest](report.json): zes geslaagde groepen en twaalf schermmetingen. Echte klikken, Enter/Spatie/pijltjestoetsen, wiel en slepen; grenswaarden en focusherstel; positieve/negatieve waarden, breuken en decimalen; minimaliseren/hervatten in dezelfde iframe.
+- [Gerichte browsertest](report.json): zeven geslaagde groepen en twaalf schermmetingen. Alle acht straatgebouwen zijn op 1366 en 640 px gecontroleerd: de daadwerkelijke SVG-raamcontouren liggen binnen de gevel, met precies één doelraam. Verder echte klikken, Enter/Spatie/pijltjestoetsen, wiel en slepen; grenswaarden en focusherstel; positieve/negatieve waarden, breuken en decimalen; minimaliseren/hervatten in dezelfde iframe.
 - 1366 × 768, 844 × 390, 640 × 360 en 568 × 320: bovenbalk open, ingeklapt en beide OS-balken verborgen. Alle formuleknoppen en Uitvoeren zijn minstens 44 × 44 px, bereikbaar en buiten de formuleweergave. De onderste bediening staat buiten het speelveld.
 - Werkelijke redding met `a = −0,5`, `b = −6`: juiste eindhoogte −9, uitleg openen, volgende redding en resultaatregistratie.
 - Zelfstandige Brandweer met lokaal leraartestaccount: formule bedienen, bovenbalk inklappen zonder gewijzigd plan, herladen en weer uitklappen. De bestaande inklapvoorkeur blijft behouden. Dit controleert geen hervatten van een gedeeltelijk plan na documentherladen.

@@ -1,6 +1,6 @@
 {
-  "games/rechten/brandweer/index.html": "36dcfb83f32d8f5fb7adec701ff64b3c9ff6a419784fef42615ac0e4db7274f2",
+  "games/rechten/brandweer/index.html": "f16b268ec751bfc25df3208dce5581c9278a5586bc9cf6181e63a17c337cbfcd",
   "games/rechten/arcade/theme.css": "61168b9ee55d5051ef11e1e01f50e1a73f22496c4b2c6c250e715dec62a949c1",
-  "tests/brandweer-controls-browser.cjs": "ce2f1a0023c8baa1105efcdba6e2cb280db5448c76ca536f1c975bf33b2f09a2",
+  "tests/brandweer-controls-browser.cjs": "1a8fd393f0caeb0cfeb05c560f2c4eba997d638378d24424203b7302a81c0bc2",
   ".github/workflows/catalog.yml": "448ed2edc0465f6d284a0e5f8829dbe457d3579088460334117960348265c978"
 }
