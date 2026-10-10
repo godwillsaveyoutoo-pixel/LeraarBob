@@ -25,11 +25,13 @@ Chromium/Brave met afzonderlijke testprofielen, extern netwerk geblokkeerd. Desk
 | [Bestaande Rechten-ingangen](regressions/rechten-entry.json) | 11 groepen / 64 metingen: echte lokale Learn-provider met voorstellen, beide goedkeuringen en beoordeling; native klasaanmaken/deelnemen/starten; herladen en beide balkstanden |
 | [Startpagina en accountlinks](regressions/home-entry.json) | 16 groepen: standaard OS, oude catalogus, oorspronkelijke aanmelding/terugkeer/herstel en fallback |
 | [Algebrawereld](regressions/algebra.json) | 18 groepen / 252 doelen: Vergelijkingen/Stelsels, echte bewerkingen en 30 native XP, onafgemaakte invoer, oefenbladen, klasroutes, beide balkstanden en herladen |
+| [Getallenwereld](regressions/getallen.json) | 146 groepen / 1076 layouts: oorspronkelijke machten/wortels/wetenschappelijke ingangen, echte antwoorden, compacte bediening, historische invoer, herladen en providerlobby's; geen gewijzigde engine |
+| [Wetenschappelijke notatie](regressions/scientific.json) | 67 groepen / 190 layouts: vier begeleide onderdelen, echte antwoorden en providerselectie; oudere sessiegeneratie blijft intact |
 | [Catalogus- en DOM-units](regressions/catalog-and-dom-units.txt) | 76 catalogus/engine-units en 124 DOM/opslag/rolcontroles geslaagd; daarnaast [zeven gerichte testsuites](regressions/focused-units.txt) |
 
 De nieuwe persoonlijke OS-test maakt daadwerkelijk Learn- en klasactiviteiten met de bestaande Edge-handlers en SQL-schema's in tijdelijke PGlite-databases. De vijf klasvragen voor de ranglijst zijn door de test via de echte handler ingediend en beoordeeld met onafhankelijk berekende antwoorden; dit zijn **geen vijf handmatige browserantwoorden**. De afzonderlijke Rechten-entrytest bedient wel de echte Learn-antwoordknoppen, voorstellen, goedkeuring en controle in de browser.
 
-Alle genoemde browserrapporten melden nul browserexceptions en nul ontbrekende bronnen (voor zover het rapport ontbrekende bronnen meet). `build-catalog --check`, de packagecontrole en `git diff --check` slagen.
+De negen gewijzigde frontendbronnen zijn vastgelegd in [source-hashes.json](source-hashes.json). Alle genoemde browserrapporten melden nul browserexceptions en nul ontbrekende bronnen (voor zover het rapport ontbrekende bronnen meet). `build-catalog --check`, de packagecontrole en `git diff --check` slagen.
 
 ## Screenshots
 
