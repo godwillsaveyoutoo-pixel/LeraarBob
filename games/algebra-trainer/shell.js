@@ -17,14 +17,14 @@ function mount(api){
  const standaloneContext=()=>({...route?.read(location.href),gameId:'algebra-trainer',world:originWorld==='systems'?'systems':'equations',topic:originWorld==='systems'?'systems':'equations'});
  const standaloneHref=target=>route?route.href(target==='battle'?'klasbattle/':target==='world'?'games/algebra-trainer/index.html':'games/algebra-trainer/'+base,{...standaloneContext(),screen:target==='battle'?'':target}):target==='battle'?'../../klasbattle/?game=algebra':target==='world'?'index.html?screen=world':base+'?screen='+target;
  const destinations=classroom?[['world','Werelden'],['menu','Levels'],['battle','Klasbattle']]:[['world','Werelden'],['menu','Levels'],['tools','Werkvormen']];
- const nav=document.createElement('nav');nav.className='algebraSectionNav';nav.setAttribute('aria-label','Algebrawereld');
+ const nav=document.createElement('nav');nav.className='algebraSectionNav';nav.setAttribute('aria-label','Algebra');
  const href=id=>api?(id==='world'?'index.html?screen=world':id==='battle'?'../../klasbattle/?game=algebra':base+'?screen='+id):standaloneHref(id);
  function act(id){if(window.AxiomaGame?.active===false&&api)return;if(api&&id!=='battle')api.navigate(id);else location.assign(standaloneHref(id));}
  function link(id,label){const a=document.createElement('a');a.href=href(id);a.dataset.section=id;if(id==='battle'&&route)a.setAttribute('data-platform-route','');a.textContent=label;if(api&&id!=='battle')a.onclick=e=>{e.preventDefault();act(id);};return a;}
  for(const [id,label] of destinations)nav.append(link(id,label));
  document.querySelector('main').before(nav);
  const header=document.querySelector('.algebraChrome'),crumbs=document.createElement('nav');crumbs.className='breadcrumbs';crumbs.hidden=true;
- const gameLink=document.createElement('button');gameLink.type='button';gameLink.textContent='Algebrawereld';gameLink.onclick=()=>act('world');crumbs.append(gameLink);
+ const gameLink=document.createElement('button');gameLink.type='button';gameLink.textContent='Algebra';gameLink.onclick=()=>act('world');crumbs.append(gameLink);
  const worldLink=document.createElement('button');worldLink.type='button';worldLink.textContent=world;worldLink.onclick=()=>act('menu');
  const section=document.createElement('span');crumbs.append(worldLink,section);(header.querySelector('.lb-gamebar')||header).append(crumbs);
  // Original menu/progress nodes retain their native listeners in embedded mode.

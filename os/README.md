@@ -16,6 +16,12 @@ Online klasgenoten en uitnodigingen gebruiken de bestaande sociale service. Voor
 
 De lokale [previewserver](../scripts/serve-personal-os-preview.cjs) biedt fictieve leerling- en leraaraccounts op `http://127.0.0.1:8793/`. [Uitgevoerde controles, screenshots en grenzen](qa/personal/README.md). Dit is nog geen productie-uitrol. Het visuele Getallenwereld-herontwerp, een universele uitnodigingscoördinator en nieuwe klasuitnodigingen voor alle leerlingen volgen afzonderlijk.
 
+## Geopende mappen en ranglijsten
+
+Mijn oefenbladen, Oefenbladen, themamappen en andere OS-vensters krijgen net als apps een eigen taakbalkicoon. Ranglijsten gebruikt hetzelfde venster met minimaliseren en sluiten. Minimaliseren bewaart de gekozen onderwerpmap en ranglijstfilters; via het icoon keer je terug. Herhaald openen maakt geen tweede venster. Sluiten verwijdert alleen het venster, nooit de opgeslagen reeksen. Bij accountwisseling worden geopende vensters en hun context gewist. De lijst met geopende vensters geldt voor de huidige browsersessie.
+
+De trainer heet **Vergelijkingen** in de catalogus, op de kaart en in de OS-bediening. **Stelsels** blijft herkenbaar als eigen onderdeel; het gezamenlijke overzicht heet **Algebra**. Historische opslag- en provideridentiteiten (`algebra-trainer` en `algebra`) blijven gelijk.
+
 ## Werking
 
 De bibliotheek bevat acht themamappen en 24 bestaande bouwsels, met lessen, trainers, spellen en ateliers. Start en Ctrl/Cmd K bieden zoeken, persoonlijke bewaarde ingangen en oefenbladgeneratoren. Iedere app blijft in haar oorspronkelijke wereld met dezelfde vragen, antwoordbediening, voortgangsidentiteit en leerflow.

@@ -223,3 +223,14 @@ De nieuwe `tests/stelsels-expert-substitution-browser.cjs` faalt op de oorspronk
 - [x] Catalogus opnieuw gecontroleerd: 24 beschikbare solo-ingangen, 144 layouts, 412 aanraakdoelen, acht interactiegroepen; 37 unit-/DOM-tests en catalogus/pakketcontrole geslaagd.
 
 [Actuele screenshots, rapporten en testgrenzen](qa/edge-bars/README.md). Historische focusrapporten hierboven beschrijven de inmiddels verwijderde onderstrook.
+
+
+## Geopende mappen en de naam Vergelijkingen · 10 oktober 2026
+
+- [x] Vergelijkingen herkenbaar in Toevoegen, appkaart, OS-kop en taakbalk; dezelfde oorspronkelijke opslagidentiteit.
+- [x] Mijn oefenbladen en Ranglijsten hebben elk één actief/minimaal taakbalkicoon. Thema- en andere OS-vensters gebruiken hetzelfde gedrag.
+- [x] Echte oefenbladreeks gegenereerd en teruggevonden; map en onderwerp behouden bij wisselen, minimaliseren en hervatten. Sluiten wist geen reeksen of andere apps.
+- [x] 1366 × 768 bij 100% zoom, 390 × 844 en 640 × 360; beide balkstanden en bediening van minstens 44 × 44 px.
+- [x] Ranglijst met echte lokale klasbattlepunten en leraarklaskeuze; vensters en privécontext worden gewist bij accountwisseling.
+
+[Rapporten en screenshots](qa/place-windows/README.md).

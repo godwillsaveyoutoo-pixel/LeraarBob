@@ -159,3 +159,13 @@ body:not(.os-bottom-collapsed) #taskbarToggle::before{box-shadow:none}
 body:not(.os-bottom-collapsed) #taskbarToggle:hover,body:not(.os-bottom-collapsed) #taskbarToggle:focus-visible{background:#ffffff15}
 body:has(dialog[open])>.os-edge-handle{visibility:hidden}
 body.os-bottom-collapsed .start-panel{bottom:52px;max-height:calc(100dvh - 70px)}
+
+/* Internal folders and rankings are resumable OS windows too. */
+.running-window>.icon{width:30px;height:30px;flex:none;color:#e7c47f}
+.running-window[data-window="place:rankings"]>.icon{color:#a7cec2}
+body[data-os-window] .taskbar-right{display:none}
+.window-controls button{min-width:44px!important;min-height:44px}
+#rankingWindowBody{max-width:850px;margin-inline:auto}
+#rankingWindowBody .personal-ranking-filters select{min-height:44px}
+body:not(.os-bottom-collapsed) .toast{bottom:calc(var(--taskbar-height) + 16px)}
+body.os-bottom-collapsed .toast{bottom:52px}

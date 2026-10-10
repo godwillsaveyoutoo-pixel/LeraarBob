@@ -136,9 +136,9 @@ test('Algebra routes keep separate live modules, one projected navigation, exact
   const route=new eqFrame.contentWindow.CustomEvent('leraarbob:algebra-route',{detail:{href:systems},cancelable:true});eq.doc.dispatchEvent(route);assert(route.defaultPrevented);
   const sysFrame=f.$('appFrames').querySelectorAll('iframe')[1],sys=algebraFixture(f,sysFrame,'systems');sys.input.value='1/';
   assert.equal(eqFrame.contentDocument,eq.doc);assert.equal(eq.input.value,'tussenstap');assert.equal(D.state().openApps.length,2);
-  assert.deepEqual([...f.$('runningApps').children].map(n=>n.getAttribute('aria-label')),['Terug naar Vergelijkingen','Terug naar Stelsels']);
+  assert.deepEqual([...f.$('runningApps').children].map(n=>n.getAttribute('aria-label')),['Terug naar Vergelijkingen','Terug naar Stelsels','Terug naar Algebra']);
   f.$('saveActivity').click();const preferences=Object.values(f.w.localStorage).map(value=>{try{return JSON.parse(value);}catch{return null;}}).find(value=>value?.saved?.length);
-  assert.equal(new URL(preferences.saved[0].href).pathname,'/LeraarBob/games/algebra-trainer/stelsels.html');assert.equal(new URL(preferences.saved[0].href).searchParams.has('osEmbed'),false);
+  assert.equal(preferences.saved[0].title,'Stelsels');assert.equal(new URL(preferences.saved[0].href).pathname,'/LeraarBob/games/algebra-trainer/stelsels.html');assert.equal(new URL(preferences.saved[0].href).searchParams.has('osEmbed'),false);
   for(const alias of ['algebra','algebra-trainer']){
     const battle=sys.doc.createElement('a');battle.href='https://school.example/LeraarBob/klasbattle/?game='+alias+'&world=systems';sys.doc.body.append(battle);
     const click=new sysFrame.contentWindow.MouseEvent('click',{bubbles:true,cancelable:true});battle.dispatchEvent(click);assert(click.defaultPrevented);
@@ -304,4 +304,21 @@ test('Each bar folds independently; hidden taskbar is inert, current input and n
   assert.equal(f.$('focusControls'),null);assert.equal(f.$('focusWorkspace'),null);assert.equal(f.$('openOriginal'),null);
   f.emit({account:{id:'b',role:'student'}});await tick();assert.equal(f.$('taskbar').inert,false);
   f.emit({account:{id:'a',role:'student'}});await tick();assert.equal(f.$('taskbar').inert,true);assert.equal(f.errors.length,0);
+});
+test('Folders and rankings have one resumable taskbar entry each; closing removes only the window and switching accounts clears their state',async t=>{
+  const f=await setup({account:{id:'a',role:'student'}});t.after(()=>f.w.close());f.w.LeraarBobWorksheetLibrary={list:async()=>[]};const D=f.w.LeraarBobDesktop;
+  D.showView({kind:'worksheet-saved',themeId:'rechten',topicId:'hellingrug'});await tick();
+  const folder=D.state().view;assert.equal(f.$('runningApps').querySelector('[data-window="place:worksheet-saved"]').getAttribute('aria-pressed'),'true');
+  D.showView({kind:'rankings'});await tick();assert.equal(D.state().openWindows.length,2);assert.equal(f.$('windowTitle').textContent,'Ranglijsten');
+  D.showView('desktop');f.$('runningApps').querySelector('[data-window="place:worksheet-saved"]').click();await tick();assert.deepEqual(D.state().view,folder);
+  D.openApp('pythagoras');const frame=f.$('appFrames').querySelector('iframe');
+  f.$('runningApps').querySelector('[data-window="place:rankings"]').click();await tick();assert.equal(D.state().openWindows.length,2);assert.equal(f.$('appFrames').querySelector('iframe'),frame);
+  f.$('closeLibrary').click();assert.equal(f.$('runningApps').querySelector('[data-window="place:rankings"]'),null);assert.equal(D.state().openWindows.length,1);assert(frame.isConnected);
+  f.$('runningApps').querySelector('[data-window="place:worksheet-saved"]').click();f.$('closeLibrary').click();assert.equal(D.state().openWindows.length,0);assert(frame.isConnected);
+  D.showView({kind:'worksheet-saved',themeId:'algebra',topicId:'equations'});f.emit({account:{id:'b',role:'student'}});await tick();assert.equal(D.state().openWindows.length,0);assert.equal(D.state().openApps.length,0);assert.equal(f.errors.length,0);
+});
+test('Historical Algebra shortcuts display their module names while keeping their original identity and exact destination',async t=>{
+  const saved=[{id:'algebra-trainer',key:'equations',mode:'solo',title:'Algebrawereld · Vergelijkingen',href:'https://school.example/LeraarBob/games/algebra-trainer/?level=route-two'},{id:'algebra-trainer',key:'systems',mode:'solo',title:'Algebrawereld · Stelsels',href:'https://school.example/LeraarBob/games/algebra-trainer/stelsels.html?level=sys-substitution'}];
+  const f=await setup({storage:{'leraarbob-desktop:v1:guest':JSON.stringify({saved})}});t.after(()=>f.w.close());f.w.LeraarBobDesktop.showView('saved');
+  assert.deepEqual([...f.$('viewContent').querySelectorAll('h3')].map(n=>n.textContent),['Vergelijkingen','Stelsels']);assert.deepEqual(JSON.parse(f.w.localStorage.getItem('leraarbob-desktop:v1:guest')).saved,saved);
 });
