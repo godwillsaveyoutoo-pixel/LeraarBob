@@ -33,6 +33,15 @@
   function rememberRoute(id) {
     routed.add(id);try { sessionStorage.setItem(`axioma-social-opened:${id}`, '1'); } catch {}
   }
+  function openInvitation(invite) {
+    const url = invitationURL(invite);
+    const navigation=new CustomEvent('leraarbob:social-route',{cancelable:true,detail:{href:url.href,game:invite.game,invitationId:invite.id,handled:false}});
+    document.dispatchEvent(navigation);
+    if(navigation.defaultPrevented){if(navigation.detail.handled)rememberRoute(invite.id);return;}
+    rememberRoute(invite.id);
+    navigating = true;
+    location.assign(url.href);
+  }
   function route(invite) {
     // The creator already owns a lobby; another pupil accepting must never pull
     // them out of solo work or a different screen.
@@ -42,10 +51,8 @@
     if ((mine(invite) ? invite.sender_tab : invite.recipient_tab) !== tabId) return;
     // The game consumes the URL itself after validating membership server-side.
     if (location.pathname===invitationURL(invite).pathname && new URLSearchParams(location.search).get(invite.game==='rechten-learn'?'session':'match') === (invite.game==='rechten-learn'?invite.learn_room_id:invite.id)) {rememberRoute(invite.id);return;}
-    rememberRoute(invite.id);
-    navigating = true;
-    const url = invitationURL(invite);
-    location.assign(url.href);
+    // An OS host can open the invitation in a native window without leaving it.
+    openInvitation(invite);
   }
   function request(action, args = {}) {
     const version = epoch, id = account?.id;
@@ -128,7 +135,7 @@
         if(version!==epoch)return null;
         let detail;if(error)try{detail=await error.context?.json();}catch{}
         if(error||data?.error)throw Error(detail?.error||data?.error||'Antwoorden op de uitnodiging lukte niet. Probeer opnieuw.');
-        if(action==='accept'){rememberRoute(invitation.id);location.assign(invitationURL(invitation));}
+        if(action==='accept')openInvitation(invitation);
         else await request('sync');
         return data;
       }catch(error){if(version===epoch)note=error.message;}finally{if(version===epoch){pending=false;render();}}

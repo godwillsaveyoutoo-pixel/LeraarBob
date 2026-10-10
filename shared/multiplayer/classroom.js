@@ -7,7 +7,7 @@ const BattlePresentation=window.LeraarBobBattlePresentation;
 if(BattlePresentation){document.body.classList.add('battle-stage');const host=document.createElement('div');host.id='battleStandings';$('ranking').before(host);host.append($('ranking'));}
 const boardQuestions=new WeakMap();
 const moduleURL=new URL('.',document.currentScript.src),parameters=new URLSearchParams(location.search),embedded=parameters.get('hub')==='1'&&window.parent!==window;
-const classFlow=Game.id==='rechten'&&parameters.get('classFlow')==='1',Flow=window.LeraarBobClassActivityFlow;
+const classFlow=Game.id==='rechten'&&(parameters.get('classFlow')==='1'||document.body.classList.contains('rechten-start')),Flow=window.LeraarBobClassActivityFlow;
 const simulationRequested=()=>new URLSearchParams(location.search).get('simulation')==='1';
 let simulator=null,simulationLoading=null;
 const simulationKey=()=>`leraarbob-class-simulation:${Game.id}:${account.id}`;
