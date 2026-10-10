@@ -113,7 +113,7 @@ function launch(id,simulation=false,code='',context={}){
   if((provider==='numbers'?/^[A-Fa-f0-9]{8}$/:/^[A-Fa-f0-9]{6}$/).test(code)){src.searchParams.set('code',code);if(account.role==='student'&&!context.sessionId)src.searchParams.set('join','1');}
   frame.src=src.href;frame.className='battleModule';frame.title=(simulation?'Simulatie · ':'Klasbattle · ')+g.title;module={game:g,provider,simulation,code,frame,phase:'setup',playing:false,settings:!!context.create,sessionId:context.sessionId||'',world:topic||'',level:level||''};for(const name of ['skills','count','seconds','participate','moduleView','activity','audience'])module[name]=contextValue(name);modules.set(key,module);$('moduleHost').append(frame);frame.addEventListener('load',()=>syncFrameTheme(frame));
  }
- for(const m of modules.values())m.frame.hidden=m!==module;currentModule=module;progress.dataset.value=Number.isFinite(module.xp)?String(module.xp):'NaN';
+ for(const m of modules.values())m.frame.hidden=m!==module;currentModule=module;document.body.dataset.sessionGame=g.id;progress.dataset.value=Number.isFinite(module.xp)?String(module.xp):'NaN';
  $('originGame').hidden=false;$('originGame').href=Routes.safeReturn(launchContext.returnTo,new URL(g.solo,root).href);$('originGame').textContent='Terug naar '+(Registry.current(new URL($('originGame').href,root).href)?.title||g.title)+' →';
  $('sessionWorld').textContent=g.title;$('sessionKind').textContent=module.simulation?'Leerkrachtsimulatie':'Klasbattle';$('simulationNote').hidden=!module.simulation;$('sessionPhase').textContent=phases[module.phase]||'Instellen';show('session',context.replace===true);
 }

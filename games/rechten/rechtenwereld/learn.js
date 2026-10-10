@@ -1,5 +1,13 @@
 (()=>{'use strict';
  const $=id=>document.getElementById(id),frame=$('learnBoard'),origin=location.origin;
+ // The desktop owns one presence service; this native window consumes it.
+ if(!window.AxiomaSocial)try{
+  const parent=window.parent;if(parent!==window&&parent.location.origin===origin&&parent.LeraarBobDesktop&&parent.AxiomaSocial){
+   const social=parent.AxiomaSocial,subscriptions=new Set();
+   window.AxiomaSocial=Object.freeze({state:()=>social.state(),refresh:()=>social.refresh(),open:()=>social.open(),answerInvitation:(...args)=>social.answerInvitation(...args),onChange:listener=>{const off=social.onChange(listener);subscriptions.add(off);return()=>{subscriptions.delete(off);off();};}});
+   addEventListener('pagehide',()=>{for(const off of subscriptions)off();subscriptions.clear();},{once:true});
+  }
+ }catch{}
  let initialized=false,account=null,state=null,busy=false,epoch=0,timer,ready=false,frameKey='',drawn='',pending=null,draft=null,draftTimer,forceSync=false,preview=null;
  let inviteBusy=false,incomingBusy=false;
  const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -9,6 +17,17 @@
  const labels=Object.fromEntries(catalog.skills.map(s=>[s.id,s.label]));
  $('learnSkill').innerHTML=catalog.worlds.map(w=>`<optgroup label="${escape(w.name)}">${w.skills.map(id=>`<option value="${id}">${escape(labels[id])}</option>`).join('')}</optgroup>`).join('');
  const requestedSkill=catalog.worlds.find(w=>w.id===requestedWorld)?.skills[0];if(requestedSkill)$('learnSkill').value=requestedSkill;
+ $('learnWorld').replaceChildren(...catalog.worlds.map(w=>new Option(w.name,w.id)));
+ const worldForSkill=id=>catalog.worlds.find(w=>w.skills.includes(id));
+ const requested=new URLSearchParams(location.search).get('skill');
+ if(catalog.skills.some(s=>s.id===requested)&&(!requestedWorld||worldForSkill(requested)?.id===requestedWorld))$('learnSkill').value=requested;
+ function syncWorld(){
+  const world=worldForSkill($('learnSkill').value);if(!world)return;
+  $('learnWorld').value=world.id;
+  for(const group of $('learnSkill').querySelectorAll('optgroup'))group.hidden=group.label!==world.name;
+ }
+ syncWorld();
+ function entry(){window.RechtenEntry?.update({phase:state?.phase||'setup',world:worldForSkill(state?.skill||$('learnSkill').value)?.id,role:account?.role});}
  function availability(){
   for(const option of $('learnSkill').options)option.disabled=availableSkills!==null&&!availableSkills.has(option.value);
   const allowed=availableSkills?.has($('learnSkill').value);
@@ -16,7 +35,9 @@
   $('learnAvailability').textContent=availableSkills===null?'Je beschikbare werelden worden opgehaald…':allowed?'Nodig een klasgenoot uit die deze wereld ook heeft geopend.':'Open eerst deze wereld in je eigen leerroute en synchroniseer je voortgang, of kies een beschikbaar onderdeel.';
   if(!state){$('learnSolo').href='index.html?practice='+encodeURIComponent($('learnSkill').value);}
  }
- $('learnSkill').onchange=availability;
+ function saveSelection(){if(state)return;const url=new URL(location.href);url.searchParams.set('world',$('learnWorld').value);url.searchParams.set('skill',$('learnSkill').value);history.replaceState(history.state,'',url);}
+ $('learnSkill').onchange=()=>{syncWorld();availability();saveSelection();entry();};
+ $('learnWorld').onchange=()=>{const world=catalog.worlds.find(w=>w.id===$('learnWorld').value);if(world){$('learnSkill').value=world.skills[0];syncWorld();availability();saveSelection();entry();}};
  async function loadCatalog(){const turn=epoch;$('learnCatalogRetry').hidden=true;try{const {data,error}=await AxiomaAuth.client().functions.invoke('rechten-learn',{body:{action:'catalog',data:{}}});if(turn!==epoch)return;if(error||data?.error)throw Error(data?.error||'De beschikbare werelden konden niet worden opgehaald. Probeer opnieuw of leer alleen verder.');availableSkills=new Set(data.skills.filter(s=>s.available).map(s=>s.skill));availability();note('');}catch(error){if(turn===epoch){$('learnAvailability').textContent='Je beschikbare onderdelen konden niet worden opgehaald.';$('learnCatalogRetry').hidden=false;note(error.message);}}}
  $('learnCatalogRetry').onclick=loadCatalog;
  const cache=()=>`rechten-learn:${account?.id}`,safeRead=key=>{try{return JSON.parse(localStorage.getItem(key)||'null');}catch{return null;}},save=(key,value)=>{try{value===null?localStorage.removeItem(key):localStorage.setItem(key,JSON.stringify(value));}catch{}};
@@ -80,7 +101,7 @@
  $('learnPhase').tabIndex=-1;
  function render(){
   document.querySelectorAll('#learnForms button').forEach(b=>b.disabled=busy);availability();
-  const s=state;$('learnSetup').hidden=!!s;$('learnSession').hidden=!s;renderIncoming();if(!s)return;renderInvites();
+  const s=state;$('learnSetup').hidden=!!s;$('learnSession').hidden=!s;renderIncoming();entry();if(!s)return;renderInvites();
   const me=account.id,builder=s.builder===me,members=s.members,allApproved=members.every(m=>m.approved);
   $('learnRoomCode').textContent=s.code;$('learnRound').textContent=s.phase==='lobby'?'Groepje vormen':s.round<6?`${labels[s.skill]} · ${s.round+1}/6`:'Eigen eindcheck';
   const phaseNames={lobby:'Wie doet er mee?',idea:'Eerst jouw idee',build:builder?'Jij bouwt':'Jij controleert',result:s.correct?'Samen opgelost!':'Bekijk het nog eens',individual:'Nu zelf proberen',finished:'Reeks afgerond',paused:'Je partner is vertrokken'};
@@ -150,4 +171,10 @@
   $('learnSignIn').hidden=a?.role==='teacher';$('learnAccountHint').hidden=a?.role!=='teacher';$('learnAccountHint').textContent='Je bent aangemeld als leerkracht. Samen leren werkt tussen leerlingaccounts uit dezelfde klas. Je kunt alle oefeningen bekijken via Alleen verder leren.';if(a?.role==='student'){loadCatalog();room=room||safeRead(cache());pending=safeRead(cache()+':pending');draft=safeRead(cache()+':draft');if(pending?.data.id!==room)pending=null;poll();}render();
  }
  AxiomaAuth.onChange(identity);AxiomaAuth.ready().then(identity);addEventListener('online',()=>{if(account?.role==='student'&&!availableSkills)loadCatalog();poll();});
+ window.LeraarBobLearn=Object.freeze({snapshot:()=>({accountId:account?.id||null,id:state?.id||null,phase:state?.phase||'setup',busy}),openSession:async id=>{
+  if(account?.role!=='student'||!/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(id||'')||(state?.participating&&state.id!==id))return false;
+  if(state?.id===id)return true;
+  if(busy)return false;
+  room=id;preview=null;const result=await call('state');poll();return result?.id===id;
+ }});
 })();

@@ -33,3 +33,7 @@ body[data-view=learn] main{display:flex;flex:1;min-height:0;width:100%;padding-b
 
 /* Embedded hubs use the OS bar; standalone retains its platform/account bar. */
 .hub-embedded>.hubTopbar{display:none!important}
+/* The OS already names Rechtenwereld; keep only the native session navigation. */
+.hub-embedded[data-session-game=rechten] .sessionHeading{min-height:44px;padding:0 12px;gap:12px}
+.hub-embedded[data-session-game=rechten] .sessionHeading>div{display:none}
+.hub-embedded[data-session-game=rechten] .sessionHeading>span{flex:1;text-align:right}

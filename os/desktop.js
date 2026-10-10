@@ -318,6 +318,20 @@
     if(!openFrame({key,app:g,mode,label:M.modeLabel(m),href,context:options.topicId||''}))return false;
     prefs.recent=[{id,mode},...prefs.recent.filter(r=>r.id!==id||r.mode!==mode)].slice(0,10);persist();return true;
   }
+  // Accepting Learn stays in the desktop and reuses an idle native Learn page.
+  document.addEventListener('leraarbob:social-route',event=>{
+    if(event.detail?.game!=='rechten-learn'||authPending||role()!=='student')return;
+    const href=M.safeURL(event.detail.href);if(!href)return;const url=new URL(href),room=url.searchParams.get('session');
+    if(url.pathname!==new URL('games/rechten/rechtenwereld/learn.html',base).pathname||!/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(room||''))return;
+    url.searchParams.set('returnTo',new URL(home).pathname);
+    event.preventDefault();
+    const g=M.app('rechtenwereld'),mode=M.modes(g.id,role()).find(m=>m.id==='learn');if(!mode)return;
+    const existing=[...frames.values()].find(f=>{try{const native=f.frame.contentWindow.LeraarBobLearn,context=native?.snapshot();return f.owner===M.key(account)&&f.app.id===g.id&&f.mode==='learn'&&context?.accountId===account.id&&(context.id===room||(!context.id&&!context.busy));}catch{return false;}});
+    if(existing){
+      event.detail.handled=true;openFrame(existing);
+      existing.frame.contentWindow.LeraarBobLearn.openSession(room).then(ok=>{if(!ok&&existing.owner===M.key(account))toast('Open je uitnodiging opnieuw zodra de vorige actie klaar is.');}).catch(()=>toast('De Learn-sessie kon niet worden geopend. Probeer opnieuw.'));
+    }else event.detail.handled=openFrame({key:`rechtenwereld|learn|session:${room}`,app:g,mode:'learn',label:M.modeLabel(mode),href:url.href});
+  });
   function openWorksheet(id,sheetId){const g=M.app(id),s=M.worksheets(id).find(s=>s.id===sheetId);if(!g||!s)return false;const href=M.safeURL(s.href);return href?openFrame({key:`${id}|worksheet:${sheetId}`,app:g,mode:`worksheet:${sheetId}`,label:`Oefenblad · ${s.title}`,href}):false;}
   function openUtility(id,title,path,glyph,teacher=false){if(teacher&&role()!=='teacher'){toast('Gebruik je leraarsaccount om je klassen te openen.');return false;}const href=M.safeURL(path);if(!href)return false;return openFrame({key:`utility:${id}`,app:{id:`utility:${id}`,title,type:'learn',cover:'assets/covers/graph.svg'},mode:'utility',label:'leraarBob',href,utility:true});}
   function openFrame(config){
