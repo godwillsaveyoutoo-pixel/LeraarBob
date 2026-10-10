@@ -40,7 +40,7 @@ const shots=new Set(['data-check','kubusbouw','algebra-smederij','gravity-maze',
   // Opening Start and minimizing may not replace a workboard or its entered controls.
   await page.locator('#minimizeApp').click();await page.locator('#runningApps button').first().click();assert(await f.evaluate(()=>window.__chromeProofBody===document.body));
   assert.deepEqual(await f.evaluate(()=>[...document.querySelectorAll('input,select,textarea')].map(n=>({id:n.id,value:n.value}))),before.inputs,phase+' input after collapse/minimize');
-  await page.locator('#focusWorkspace').click();await measure('#focusRestore');await measure('#closeApp');const board=await page.locator('.frame-wrapper:not([hidden])>iframe').boundingBox(),restore=await page.locator('#focusRestore').boundingBox();assert(board.y+board.height<=restore.y+1,phase+' escape row outside workboard');await page.locator('#focusRestore').click();
+  await page.evaluate(()=>LeraarBobTopbar.setCollapsed(true,true));await page.locator('#taskbarToggle').click();await measure('.lb-restore:not([hidden])');await measure('#taskbarToggle');assert.equal(await page.locator('#taskbar').isVisible(),false);assert.equal(await page.locator('#focusControls').count(),0);await page.locator('#taskbarToggle').click();await page.locator('.lb-restore:not([hidden])').click();
   // Every projected native command appears in the same OS game menu.
   await page.locator('leraarbob-topbar .menu').click();for(const label of commands)assert.equal(await page.getByRole('button',{name:label,exact:true}).count(),1,phase+' projected command '+label);await page.locator('leraarbob-topbar .close').click();
   report.apps.push({...app,commands,layouts:6,retainedDOM:true});console.log('PASS layout/state',app.id);await page.close();

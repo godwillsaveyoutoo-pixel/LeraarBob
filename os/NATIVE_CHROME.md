@@ -1,6 +1,6 @@
 # Eén OS-navigatiebalk per app
 
-Binnen `/os/` levert het bureaublad de navigatie, accountknop, echte spelvoortgang, volledig scherm, weergavekeuze en het menu. De vensterknoppen staan in de taakbalk. Inklappen en Focus gebruiken de bestaande presentatievoorkeuren; de iframe wordt daarbij niet vervangen.
+Binnen `/os/` levert het bureaublad de navigatie, accountknop, echte spelvoortgang, volledig scherm, weergavekeuze en het menu. De vensterknoppen staan in de taakbalk. Boven- en onderbalk klappen onafhankelijk in. Kleine herstelhandvatten vervangen de vroegere focusstrook; de iframe wordt daarbij niet vervangen. `edge-bars.js` zoekt vrije ruimte naast tekst en bediening. Gebruik `data-os-protect` voor andere belangrijke randelementen die het handvat moet ontwijken. Alleen bij een volledig bezette rand wordt veiligheidsruimte vrijgehouden.
 
 `native-chrome.js` beschrijft per app welke oorspronkelijke kop bij navigatie hoort. `native-chrome.css` wordt uitsluitend in een door het OS beheerde iframe geladen. Bestaande adapters voor Rechtenwereld, Algebrawereld, Getallenwereld, Logicawereld en Glasraam blijven verantwoordelijk voor hun eigen aansluiting.
 
@@ -20,6 +20,6 @@ Binnen `/os/` levert het bureaublad de navigatie, accountknop, echte spelvoortga
 3. Declareer `crumbs` en `actions` met stabiele selectors. Controleer alle acties na het verbergen van de kop. Menuacties worden uitgevoerd op de actuele originele node, nooit op een gekloonde handler.
 4. Gebruik `tools` uitsluitend voor directe oefenbediening. Verberg geen formule, aanname, timer of antwoordactie om een lege kop te krijgen. De aanraakdoelen zijn minstens 44 × 44 px.
 5. Controleer vaste gridrijen en absolute offsets. De iframehoogte is de beschikbare werkruimte; een oude schermhoogte voor de platformbalk mag daar niet nogmaals van afgaan.
-6. Doorloop de native start, een echte antwoordhandeling, menu, terugkeer, minimaliseren, Focus, beide inklapstanden en herladen. Controleer desktop, telefoon en laag landschap. Bekijk apart eventuele lokale duo-, online- en klasroutes; geïsoleerde werkborden krijgen geen tweede platformbalk.
+6. Doorloop de native start, een echte antwoordhandeling, menu, terugkeer, minimaliseren, alle vier combinaties van ingeklapte balken en herladen. Controleer desktop, telefoon en laag landschap. Bekijk apart eventuele lokale duo-, online- en klasroutes; geïsoleerde werkborden krijgen geen tweede platformbalk.
 
 De browsermatrix controleert de beschikbare solo-ingangen. Bestaande tests voor piloten, Algebra en werkvormen vullen dat aan met echte oefeningen en lokale sessies. Zie [uitgevoerde controles en grenzen](qa/uniform-chrome/README.md).

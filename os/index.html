@@ -7,9 +7,9 @@
   <meta name="description" content="Jouw leraarBob-bureaublad. Lessen, trainers, spellen en ateliers, geordend per thema.">
   <title>leraarBob · Mijn bureaublad</title>
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="stylesheet" href="desktop.css?v=20261010-algebra">
+  <link rel="stylesheet" href="desktop.css?v=20261010-edge-bars">
   <link rel="stylesheet" href="../shared/leraarbob-topbar.css">
-  <link rel="stylesheet" href="personal.css?v=20261010-workforms">
+  <link rel="stylesheet" href="personal.css?v=20261010-edge-bars">
   <script>try{document.documentElement.dataset.mode=localStorage.getItem('axioma-mode')==='dark'?'dark':'light';}catch{}</script>
   <script src="../shared/vendor/supabase.js" defer></script>
   <script src="../shared/supabase-config.js" defer></script>
@@ -19,13 +19,14 @@
   <script src="../js/catalog.js?v=20261010-central-paper" defer></script>
   <script src="../shared/game-registry.js" defer></script>
   <script src="../js/catalog-progress.js" defer></script>
-  <script src="desktop-model.js?v=20261010-workforms" defer></script>
+  <script src="desktop-model.js?v=20261010-edge-bars" defer></script>
   <script src="../shared/worksheet-library.js?v=20261010-central-paper" defer></script>
   <script src="personal-home.js?v=20261010-workforms" defer></script>
   <script src="activity-entry.js?v=20261010-workforms" defer></script>
+  <script src="edge-bars.js?v=20261010-edge-bars" defer></script>
   <script src="native-chrome.js?v=20261010-uniform" defer></script>
-  <script src="desktop.js?v=20261010-uniform" defer></script>
-  <script src="../shared/leraarbob-topbar.js?v=20261010-uniform" data-title="Bureaublad" data-home="os/" data-context="none" data-page="desktop" data-theme-mode="site" data-nav-pilot="true" defer></script>
+  <script src="desktop.js?v=20261010-edge-bars" defer></script>
+  <script src="../shared/leraarbob-topbar.js?v=20261010-edge-bars" data-title="Bureaublad" data-home="os/" data-context="none" data-page="desktop" data-theme-mode="site" data-nav-pilot="true" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#desktop">Naar het bureaublad</a>
@@ -65,7 +66,7 @@
     </section>
 
     <section id="appWorkspace" class="app-workspace" aria-label="Geopende app" hidden>
-      <div class="app-toolbar"><button id="appBack" class="app-back" aria-label="Terug naar mijn map" title="Naar je map; de app blijft geopend"><span data-icon="back"></span><span>Terug naar mijn map</span></button><div class="active-app-copy"><span id="activeAppType" class="type-badge"></span><strong id="activeAppTitle"></strong><span id="activeAppMode"></span></div><button id="windowActionsToggle" type="button" aria-label="Meer vensteracties" aria-expanded="false" aria-controls="windowActions" hidden><span data-icon="more"></span></button><div class="app-actions" id="windowActions" aria-label="Appvenster"><button id="saveActivity" aria-label="Bewaren" title="Bewaar deze ingang in Mijn taken"><span data-icon="bookmark"></span><span>Bewaren</span></button><a id="openOriginal" target="_blank" rel="noopener" aria-label="Apart openen" title="Open de oorspronkelijke app in een nieuw tabblad"><span data-icon="external"></span><span>Apart openen</span></a><button id="minimizeApp" aria-label="App minimaliseren" title="App blijft geopend"><span data-icon="minus"></span></button><button id="closeApp" aria-label="App afsluiten" title="App afsluiten"><span data-icon="close"></span><span class="window-close-label">Sluiten</span></button></div></div>
+      <div class="app-toolbar"><button id="appBack" class="app-back" aria-label="Terug naar mijn map" title="Naar je map; de app blijft geopend"><span data-icon="back"></span><span>Terug naar mijn map</span></button><div class="active-app-copy"><span id="activeAppType" class="type-badge"></span><strong id="activeAppTitle"></strong><span id="activeAppMode"></span></div><button id="windowActionsToggle" type="button" aria-label="Meer vensteracties" aria-expanded="false" aria-controls="windowActions" hidden><span data-icon="more"></span></button><div class="app-actions" id="windowActions" aria-label="Appvenster"><button id="saveActivity" aria-label="Bewaren" title="Bewaar deze ingang in Mijn taken"><span data-icon="bookmark"></span><span>Bewaren</span></button><button id="minimizeApp" aria-label="App minimaliseren" title="App blijft geopend"><span data-icon="minus"></span></button><button id="closeApp" aria-label="App afsluiten" title="App afsluiten"><span data-icon="close"></span><span class="window-close-label">Sluiten</span></button></div></div>
       <div id="appFrames" class="app-frames"></div>
     </section>
   </main>
@@ -75,11 +76,11 @@
     <div class="start-search"><span data-icon="search"></span><input id="startSearch" type="search" placeholder="Zoek een thema, les, trainer of spel…" aria-label="Zoek in leraarBob" maxlength="120" autocomplete="off"><kbd>Esc</kbd></div><div class="start-section-title"><strong id="startResultsTitle">Ga meteen naar</strong><span id="startResultCount"></span></div><div id="startResults" class="start-results"></div><div class="start-footer"><button data-view="profile"><span data-icon="account"></span><span id="startAccountLabel">Mijn profiel</span></button><button data-view="settings"><span data-icon="settings"></span>Instellingen</button></div>
   </section>
 
-  <footer id="taskbar" class="taskbar" aria-label="Bureaubladbediening"><button id="startButton" class="start-button" aria-controls="startPanel" aria-expanded="false"><span class="bob-mark" aria-hidden="true">b<span>•</span></span><strong>Start</strong></button><button class="desktop-button" data-action="desktop" title="Bureaublad" aria-label="Toon het bureaublad"><span data-icon="desktop"></span></button><div class="taskbar-divider"></div><div id="runningApps" class="running-apps" role="group" aria-label="Geopende apps"></div><button id="focusWorkspace" type="button" aria-label="Balken verbergen" title="Focusstand: alleen de oefening" aria-controls="desktopHeader taskbar" aria-expanded="true" hidden><span data-icon="target"></span><span>Balken verbergen</span></button><div id="compactWindowControls" class="compact-window-controls" hidden></div><div class="taskbar-right"><button data-view="profile" title="Mijn profiel" aria-label="Mijn profiel"><span data-icon="account"></span></button><button data-view="settings" title="Instellingen" aria-label="Instellingen"><span data-icon="settings"></span></button><time id="clock"></time></div></footer>
+  <footer id="taskbar" class="taskbar" aria-label="Bureaubladbediening"><button id="startButton" class="start-button" aria-controls="startPanel" aria-expanded="false"><span class="bob-mark" aria-hidden="true">b<span>•</span></span><strong>Start</strong></button><button class="desktop-button" data-action="desktop" title="Bureaublad" aria-label="Toon het bureaublad"><span data-icon="desktop"></span></button><div class="taskbar-divider"></div><div id="runningApps" class="running-apps" role="group" aria-label="Geopende apps"></div><div id="compactWindowControls" class="compact-window-controls" hidden></div><div class="taskbar-right"><button data-view="profile" title="Mijn profiel" aria-label="Mijn profiel"><span data-icon="account"></span></button><button data-view="settings" title="Instellingen" aria-label="Instellingen"><span data-icon="settings"></span></button><time id="clock"></time></div></footer>
 
   <dialog id="modeDialog" class="mode-dialog" aria-labelledby="modeTitle"><div class="dialog-heading"><div><p id="modeTheme" class="eyebrow"></p><h2 id="modeTitle"></h2></div><button data-close-dialog aria-label="Sluiten"><span data-icon="close"></span></button></div><p id="modeDescription"></p><div id="modeOptions"></div><div id="modeWorksheets"></div><div id="modeExtra"></div></dialog>
   <dialog id="confirmClose" class="confirm-dialog" aria-labelledby="confirmTitle"><div class="dialog-heading"><h2 id="confirmTitle">Deze app afsluiten?</h2><button data-close-dialog aria-label="Sluiten"><span data-icon="close"></span></button></div><p>Je sluit het geopende scherm. Wat de app zelf bewaart, blijft bewaard. Met minimaliseren kun je precies op dit scherm verdergaan.</p><div class="confirm-actions"><button id="cancelClose">Geopend houden</button><button id="acceptClose" class="primary">App afsluiten</button></div></dialog>
-  <nav id="focusControls" aria-label="Vensterbediening in focusstand" hidden><button id="focusRestore" type="button" aria-label="Balken tonen" aria-controls="desktopHeader taskbar" aria-expanded="false" hidden><span data-icon="desktop"></span><span>Balken tonen</span></button></nav>
+  <button id="taskbarToggle" class="os-edge-handle" type="button" aria-label="Onderbalk inklappen" title="Onderbalk inklappen" aria-controls="taskbar" aria-expanded="true"><span aria-hidden="true"></span></button>
   <div id="toast" class="toast" role="status" hidden></div>
   <noscript><p class="noscript">Dit bureaublad gebruikt JavaScript. <a href="../index.html?view=catalog">Open de eerdere startpagina.</a></p></noscript>
 </body>

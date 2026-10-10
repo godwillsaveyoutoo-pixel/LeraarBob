@@ -4,11 +4,11 @@ Doel: overgang tussen bureaublad, themamap, werkvorm en app, met behoud van oors
 
 ## Persoonlijk bureaublad en focus · 10 oktober 2026
 
-De actuele eerste pilot sluit Rechtenwereld aan op persoonlijke appkaarten, centrale uitnodigingen en een directe klasflow. Binnen deze app is één gedeelde bovenbalk overgebleven. De taakbalk bevat de vensteracties en Focus; de herstelknop blijft buiten de oefening. Andere apps worden stapsgewijs aangesloten.
+De actuele eerste pilot sluit Rechtenwereld aan op persoonlijke appkaarten, centrale uitnodigingen en een directe klasflow. Binnen deze app is één gedeelde bovenbalk overgebleven. De taakbalk bevat de vensteracties. Beide balken klappen onafhankelijk in; kleine herstelhandvatten blijven bereikbaar zonder extra onderstrook. Andere apps worden stapsgewijs aangesloten.
 
 - [x] Echte Rechten-opgave: antwoord kiezen; beide balken verbergen en herstellen; hetzelfde antwoord en dezelfde iframe blijven behouden.
 - [x] 1366 × 768 bij 100% zoom, 390 × 844 en 640 × 360: herstelknoppen minstens 44 × 44 px, bereikbaar en niet over het werkbord; voorkeur na herladen behouden.
-- [x] Bovenbalk afzonderlijk inklappen, focusstand in beide standen gebruiken, heropenen; de twee voorkeuren blijven onafhankelijk.
+- [x] Boven- en onderbalk afzonderlijk inklappen en heropenen; de twee voorkeuren blijven onafhankelijk.
 - [x] Wereldkaart, spelvoortgang en spelprofiel via de gedeelde navigatie; compacte titel blijft de actieve app noemen.
 - [x] Echte Rechten-eilandlink en ‘Andere spelvorm kiezen’ in Duo Battle openen de OS-werkvormkeuze, zonder `play.html` te laden. Hellingrug wordt meegenomen naar Learn en de leraarklasstart; terugkeren behoudt het oorspronkelijke scherm, de selectie en focus. Getest op 1366/390/640 px in beide balkstanden.
 - [x] Werkvormen vanuit een echte Puntenbaai-opgave behouden het antwoord en bieden geen onbeschikbare papiergenerator. Vanuit Hellingrug is een oefenblad daadwerkelijk gemaakt, bewaard en teruggevonden in dezelfde OS-onderwerpmap.
@@ -178,13 +178,13 @@ De gekozen rechte staat volledig leesbaar naast twee afzonderlijke regelaars voo
 
 ## Brandweer · formulebediening
 
-Brandweer gebruikt nu dezelfde scheiding als Zeeslag: een leesbare functie naast regelaars voor helling a en starthoogte b. Breuken, decimalen, negatieve waarden en alle oorspronkelijke invoerhandlers blijven behouden. De gerichte browsercontrole slaagt voor toetsenbord, wiel/slepen, grenzen, focus, minimaliseren/hervatten, een echte redding en twaalf metingen op vier liggende schermmaten. De bestaande arcadetest slaagt voor alle zestien reddingen en beide duo-flows. Op 568 × 320 is Balken verbergen nodig om de volledige instructie te zien; de bestaande portretbeperking blijft behouden. [Rapport, screenshots en testgrenzen](qa/brandweer-controls/README.md).
+Brandweer gebruikt nu dezelfde scheiding als Zeeslag: een leesbare functie naast regelaars voor helling a en starthoogte b. Breuken, decimalen, negatieve waarden en alle oorspronkelijke invoerhandlers blijven behouden. De gerichte browsercontrole slaagt voor toetsenbord, wiel/slepen, grenzen, focus, minimaliseren/hervatten, een echte redding en twaalf metingen op vier liggende schermmaten. De bestaande arcadetest slaagt voor alle zestien reddingen en beide duo-flows. Op 568 × 320 is beide balken inklappen nodig om de volledige instructie te zien; de bestaande portretbeperking blijft behouden. [Rapport, screenshots en testgrenzen](qa/brandweer-controls/README.md).
 
 De ramen en verdiepingslijnen van Brandweer blijven nu onder het dak; de oude vaste tien rijen tekenden bij lagere gevels boven het gebouw door. De werkelijke SVG-contouren en het behoud van precies één doelraam zijn voor alle acht straten gecontroleerd op 1366 en 640 px.
 
 ## Vensterbediening · terug en sluiten zonder grote balken
 
-Zeeslag heeft nu net als Rechtenwereld één OS-bovenbalk. Terug en Sluiten staan direct in de taakbalk. **Balken verbergen** verbergt boven- en onderbalk; Terug, Balken tonen en Sluiten blijven in een gereserveerde strook buiten de oefening bereikbaar. Werkelijk sluiten, annuleren, terugkeren en hervatten zijn met echte native schermen gecontroleerd op laptop en compacte schermen, inclusief behoud van een tweede geopende app. De eerdere eigen inklap- en focusvoorkeur blijven behouden. [Rapporten en screenshots](qa/window-controls/README.md): Rechtenwereld 5 groepen / 39 metingen, Zeeslag 6 / 21, vier pilots 32 / 23 en centrale papierwerkruimte 8 / 39; alle geslaagd met lokale testaccounts.
+Zeeslag heeft net als Rechtenwereld één OS-bovenbalk. De oude focusstand met een permanente onderstrook is vervangen door afzonderlijk inklapbare boven- en onderbalken. In ingeklapte toestand blijven alleen twee kleine herstelhandvatten staan. Terug, minimaliseren en sluiten verschijnen pas wanneer de gebruiker de onderbalk weer opent. De vorige focusvoorkeur wordt overgenomen als voorkeur voor de onderbalk. Zie de [nieuwe controle en screenshots](qa/edge-bars/README.md); [qa/window-controls](qa/window-controls/README.md) bevat uitsluitend historisch bewijs van de vervangen onderstrook.
 
 
 ## Centrale werkvormen · ontwikkelpreview 10 oktober 2026
@@ -213,3 +213,13 @@ Aanvullende gebruikersmelding gecontroleerd: de lokale Rechten-duobattle startte
 De gebruikersmelding betrof oefening 7 in de oorspronkelijke Stelsels-trainer: `x − 3y = −5`, `2x + y = 4`, met de vrijgemaakte vorm `y = 4 − 2x`. De HTML-generator sloeg het vervangdoel over zolang de uitdrukking nog niet geplaatst was. Daardoor bestond het doel niet en kon iedere sleepactie uitsluitend de foutmelding opleveren. De conditie is hersteld; het doel heeft een duidelijke groene stippelrand, een toegankelijke naam en een aanraakvlak van minstens 44 × 44 px. De plaatsingsstap gebruikt de lege toetsenbordruimte; op een kort liggend scherm staan bron en doel naast elkaar. Na een correcte plaatsing verdwijnt een eerdere foutmelding.
 
 De nieuwe `tests/stelsels-expert-substitution-browser.cjs` faalt op de oorspronkelijke code wegens nul vervangdoelen en slaagt met de herstelling. Tien controles: echte muisdrag (ook fout loslaten), klikken, toetsenbord, touch, ongedaan maken, oefening 7 volledig oplossen tot `(1, 2)` inclusief oorspronkelijke voortgangsregistratie, `x` vervangen met gehele/breukcoëfficiënt, 1366 × 768 en 640 × 360 bij 100% zoom met beide bovenbalkstanden, en invoer behouden bij minimaliseren/hervatten. Geen browserexceptions of ontbrekende bronnen. [Rapport](qa/stelsels-expert/report.json), [bronhashes](qa/stelsels-expert/source-hashes.json), [zichtbaar doel](qa/stelsels-expert/expert-substitution-target.png), [geplaatste uitdrukking](qa/stelsels-expert/expert-substitution-inserted.png). Deze controle bewijst niet alle andere oefeningen of methodes, noch synchronisatie met productieaccounts.
+
+
+## Onafhankelijk inklappen zonder vervangende balk · 10 oktober 2026
+
+- [x] Boven- en onderbalk hebben elk een inklapbediening; ingeklapt zijn beide balken daadwerkelijk 0 px hoog. Kleine handvatten (64 × 44 px) brengen ze terug. Geen Focusknop, Apart openen of permanente strook met Terug/Sluiten.
+- [x] Rechtenwereld: vier schermmaten × alle vier balkcombinaties, toetsenbord/touch, herladen, annuleren/sluiten, minimaliseren/hervatten en ongewijzigd antwoord.
+- [x] Zeeslag: vijf schermmaten, 63 coëfficiëntcombinaties en een echt schot. Brandweer: vier liggende schermmaten, oorspronkelijke invoerhandlers en een echte redding. Herstelhandvatten bedekken hun antwoordknoppen niet.
+- [x] Catalogus opnieuw gecontroleerd: 24 beschikbare solo-ingangen, 144 layouts, 412 aanraakdoelen, acht interactiegroepen; 37 unit-/DOM-tests en catalogus/pakketcontrole geslaagd.
+
+[Actuele screenshots, rapporten en testgrenzen](qa/edge-bars/README.md). Historische focusrapporten hierboven beschrijven de inmiddels verwijderde onderstrook.

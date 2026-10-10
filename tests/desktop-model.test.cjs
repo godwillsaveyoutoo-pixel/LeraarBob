@@ -43,3 +43,11 @@ test('Desktop preferences are per account and never overwrite a learning progres
   const invalid=M.sanitize({pins:['missing','pythagoras','pythagoras'],saved:[{id:'pythagoras',href:'https://evil.example/'}]});assert.deepEqual(invalid.pins,['pythagoras']);assert.equal(invalid.saved.length,0);
   for(const bad of ['https://evil.example/','javascript:alert(1)','/outside/','https://user:secret@school.example/LeraarBob/'])assert.equal(M.safeURL(bad),null);
 });
+test('Independent bottom collapse migrates the old focus preference without changing progress or another account',()=>{
+  const map=new Map([['axioma_game_progress','same-answer']]),storage={getItem:k=>map.get(k),setItem:(k,v)=>map.set(k,v)},a={id:'a'},b={id:'b'};
+  map.set(M.key(a),JSON.stringify({focusMode:true}));assert.equal(M.read(storage,a).bottomCollapsed,true);
+  assert.equal(M.read(storage,b).bottomCollapsed,false);assert.equal(M.read(storage,null).bottomCollapsed,false);
+  M.write(storage,a,{...M.read(storage,a),bottomCollapsed:false});assert.equal(M.read(storage,a).bottomCollapsed,false);
+  assert.equal(M.sanitize({bottomCollapsed:false,focusMode:true}).bottomCollapsed,false);
+  assert.equal(map.get('axioma_game_progress'),'same-answer');assert.equal(map.has('leraarbob-topbar-collapsed'),false);
+});

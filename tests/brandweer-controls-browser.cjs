@@ -148,13 +148,15 @@ let browser, preview;
       const restore = page.locator('.lb-restore:not([hidden])');
       assert.equal(await restore.getAttribute('aria-expanded'), 'false');
       const r = await restore.boundingBox(); assert(r.width >= 44 && r.height >= 44);
-      await page.locator('#focusWorkspace').click(); await layout('os-' + size.width + '-focus');
+      await page.locator('#taskbarToggle').click(); await layout('os-' + size.width + '-focus');
       assert(!await page.locator('#desktopHeader').isVisible()); assert(!await page.locator('#taskbar').isVisible());
-      assert(await page.locator('#closeApp').isVisible());
-      await page.locator('#focusRestore').click(); await restore.click();
+      assert(!await page.locator('#closeApp').isVisible());
+      const handle=await page.locator('#taskbarToggle').boundingBox(),game=await node.boundingBox();
+      for(const t of report.layouts.at(-1).targets) assert(!(t.left+game.x<handle.x+handle.width && t.right+game.x>handle.x && t.top+game.y<handle.y+handle.height && t.bottom+game.y>handle.y), 'Restore does not cover '+t.label);
+      await page.locator('#taskbarToggle').click(); await restore.click();
       assert.deepEqual((await snapshot()).plan, plan);
     }
-    check('1366/844/640/568px at 100%: equation separate, controls visible and >=44px; collapse/focus/restore preserve input');
+    check('1366/844/640/568px at 100%: equation separate, controls visible and >=44px; independent collapse/restore preserve input; edge handles do not cover answer controls');
 
     await page.setViewportSize({ width: 1366, height: 768 });
     await frame.locator('#executeBtn').click(); await frame.waitForFunction(() => Axioma.snapshot().state === 'debrief');

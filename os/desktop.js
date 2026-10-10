@@ -211,25 +211,27 @@
     const display=button(document.documentElement.dataset.mode==='dark'?'Lichte vensters':'Donkere vensters','',()=>{setSiteTheme(document.documentElement.dataset.mode!=='dark');renderLibrary();});setting('Weergave','Kies lichte of donkere bureaubladvensters.',display);
     const label=el('label'),motion=el('input');motion.type='checkbox';motion.checked=prefs.reducedMotion;motion.setAttribute('aria-label','Minder beweging');motion.onchange=()=>{prefs.reducedMotion=motion.checked;persist();applyPrefs();};label.append(motion);setting('Minder beweging','Laat mappen en apps zonder animaties openen.',label);
     setting('Vastgepinde apps','Zet Rechtenwereld terug als eerste wereld op je bureaublad.',button('Herstel pins','',()=>{prefs.pins=M.defaults.pins.slice();persist();renderHome();toast('Rechtenwereld staat terug op je bureaublad.');}));
-    setting('Focusstand','Verberg tijdens oefenen beide OS-balken. Een herstelknop blijft bereikbaar.',button(prefs.focusMode?'Focusstand uitzetten':'Focusstand aanzetten','',()=>{prefs.focusMode=!prefs.focusMode;persist();syncFocusMode();renderLibrary();}));
+    setting('Onderbalk','Klap de taakbalk in met het handvat; hetzelfde handvat brengt hem terug.',button(prefs.bottomCollapsed?'Onderbalk tonen':'Onderbalk inklappen','',()=>{setBottomCollapsed(!prefs.bottomCollapsed);renderLibrary();}));
     setting('Bovenbalk','Toon of verberg de gedeelde platformbediening.',button(document.body.classList.contains('topbar-collapsed')?'Bovenbalk tonen':'Bovenbalk inklappen','',()=>{window.LeraarBobTopbar?.setCollapsed(!document.body.classList.contains('topbar-collapsed'),true);renderLibrary();}));
     const catalog=el('a','quiet-link catalog-link','Open eerdere startpagina');catalog.href=new URL('index.html?view=catalog',base).href;catalog.target='_blank';catalog.rel='noopener';
     setting('Eerdere startpagina','Bekijk de oude spellenpagina in een apart tabblad.',catalog);
     $('viewContent').append(list,el('p','section-note','Bureaubladvoorkeuren wijzigen je antwoorden, levels en spelvoortgang niet.'));
   }
-  function applyPrefs(){document.body.dataset.wallpaper=prefs.wallpaper;document.body.dataset.reducedMotion=String(prefs.reducedMotion);syncFocusMode();}
-  function syncFocusMode(){
-    const focus=!!activeKey&&prefs.focusMode,toolbar=document.querySelector('.app-toolbar'),escape=$('focusControls');
-    document.body.classList.toggle('os-focus',focus);escape.hidden=!focus;$('focusRestore').hidden=!focus;
-    $('focusWorkspace').hidden=!activeKey;$('focusWorkspace').setAttribute('aria-expanded',String(!focus));
-    // Move the existing window buttons, retaining their handlers and accessible
-    // names. Leaving focus never creates a second copy of a close/back action.
-    const backHost=focus?escape:toolbar,closeHost=focus?escape:document.body.dataset.osChrome==='single'?toolbar:$('windowActions');
-    if($('appBack').parentElement!==backHost)backHost.prepend($('appBack'));
-    if($('closeApp').parentElement!==closeHost)closeHost.append($('closeApp'));
+  function applyPrefs(){document.body.dataset.wallpaper=prefs.wallpaper;document.body.dataset.reducedMotion=String(prefs.reducedMotion);syncBars();}
+  function syncBars(){
+    const folded=prefs.bottomCollapsed;
+    document.body.classList.toggle('os-bottom-collapsed',folded);
+    $('taskbar').inert=folded;$('taskbar').setAttribute('aria-hidden',String(folded));
+    const toggle=$('taskbarToggle'),label=folded?'Onderbalk uitklappen':'Onderbalk inklappen';
+    toggle.setAttribute('aria-expanded',String(!folded));toggle.setAttribute('aria-label',label);toggle.title=label;
+    window.LeraarBobEdgeBars?.refresh();
   }
-  function setFocusMode(value){rememberFocus(frames.get(activeKey));closeStart();if(windowActionsOpen())$('windowActions').hidePopover();prefs.focusMode=!!value;persist();syncFocusMode();if(value)$('focusRestore').focus({preventScroll:true});else{const input=frames.get(activeKey)?.lastFocus;if(input?.isConnected)input.focus({preventScroll:true});else $('focusWorkspace').focus({preventScroll:true});}}
-  $('focusWorkspace').onclick=()=>setFocusMode(true);$('focusRestore').onclick=()=>setFocusMode(false);
+  function setBottomCollapsed(value){
+    rememberFocus(frames.get(activeKey));closeStart();if(windowActionsOpen())$('windowActions').hidePopover();
+    prefs.bottomCollapsed=!!value;persist();syncBars();$('taskbarToggle').focus({preventScroll:true});
+  }
+  $('taskbarToggle').onclick=()=>setBottomCollapsed(!prefs.bottomCollapsed);
+  document.addEventListener('topbar:change',()=>window.LeraarBobEdgeBars?.refresh());
   function setSiteTheme(dark){
     const mode=dark?'dark':'light';document.documentElement.dataset.mode=mode;
     try{localStorage.setItem('axioma-mode',mode);}catch{}
@@ -275,17 +277,15 @@
   const compactControls=window.matchMedia?.('(max-width:700px)');
   function windowActionsOpen(){try{return $('windowActions').matches(':popover-open');}catch{return false;}}
   function syncWindowControls(){
-    const current=frames.get(activeKey),paper=current?.archive||current?.mode.startsWith('worksheet:'),compact=paper||!!current&&!current.utility;
-    const toolbar=document.querySelector('.app-toolbar'),host=$('compactWindowControls'),actions=$('windowActions'),toggle=$('windowActionsToggle'),restore=document.querySelector('.lb-restore');
+    const current=frames.get(activeKey),paper=current?.archive||current?.mode.startsWith('worksheet:'),compact=!!current;
+    const toolbar=document.querySelector('.app-toolbar'),host=$('compactWindowControls'),actions=$('windowActions'),toggle=$('windowActionsToggle');
     if(windowActionsOpen())actions.hidePopover();
     if(compact){
       document.body.dataset.osChrome='single';host.hidden=false;
-      if(restore&&restore.parentElement!==host)host.append(restore);
       if(toolbar.parentElement!==host)host.append(toolbar);
     }else{
       delete document.body.dataset.osChrome;host.hidden=true;
       if(toolbar.parentElement!==$('appWorkspace'))$('appWorkspace').prepend(toolbar);
-      if(restore&&restore.parentElement===host)document.body.append(restore);
     }
     const popover=compact&&compactControls?.matches;
     if(popover)actions.setAttribute('popover','auto');else actions.removeAttribute('popover');
@@ -302,7 +302,8 @@
       if(current.app.id==='logicawereld'){for(const [label,screen] of [['Leerroute','world'],['Spelvoortgang','progress'],['Spelmenu','menu']])menu.append(button('Logicawereld · '+label,'',()=>frames.get(activeKey)?.frame.contentWindow.Logicawereld?.navigate(screen)));}
       menu.append(button(current.app.title+' · Werkvormen','',()=>openModes(current.app.id)));
     }
-    syncNativeCommands();syncFocusMode();
+    const closeHost=compact?toolbar:actions;if($('closeApp').parentElement!==closeHost)closeHost.append($('closeApp'));
+    syncNativeCommands();syncBars();
   }
   compactControls?.addEventListener('change',syncWindowControls);
   $('windowActionsToggle').onclick=()=>{const actions=$('windowActions');actions.togglePopover();if(windowActionsOpen())actions.querySelector('button:not([hidden]),a')?.focus();};
@@ -344,18 +345,16 @@
       const crumbs=doc?.querySelector('header .breadcrumbs');
       if(crumbs)nodes=[...crumbs.children].filter(n=>!n.hidden&&n.matches('button,a,span')&&n.textContent.trim());
       else{const topic=doc?.querySelector('#spaceCrumb');if(topic?.textContent.trim())nodes=[topic];}
-      $('openOriginal').href=M.safeURL(current.frame.contentWindow.location.href)||current.href;
     }catch{}
     if(current?.app.id==='rechtenwereld')try{
       doc=current.frame.contentDocument;
       const crumbs=doc?.querySelector('.atlas-header .breadcrumbs');
       if(crumbs)nodes=[...crumbs.children].filter(n=>n.matches('a,button,span')&&n.textContent.trim());
-      $('openOriginal').href=M.safeURL(current.frame.contentWindow.location.href)||current.href;
     }catch{}
-    if(current?.app.id==='logicawereld')try{doc=current.frame.contentDocument;nodes=[...doc.querySelectorAll('header .breadcrumbs>*')].filter(n=>!n.hidden&&n.textContent.trim());$('openOriginal').href=M.safeURL(current.frame.contentWindow.location.href)||current.href;}catch{}
+    if(current?.app.id==='logicawereld')try{doc=current.frame.contentDocument;nodes=[...doc.querySelectorAll('header .breadcrumbs>*')].filter(n=>!n.hidden&&n.textContent.trim());}catch{}
     if(current?.nativeChrome&&!['rechtenwereld','getallenwereld','logicawereld'].includes(current.app.id)){doc=current.frame.contentDocument;nodes=current.nativeChrome.crumbs().filter(n=>n.matches('button,a')||n.textContent.trim()!==current.app.title);}
     const algebra=current?.algebraContext;
-    if(algebra){doc=current.frame.contentDocument;$('openOriginal').href=originalURL(current.frame.contentWindow.location.href)||current.href;}
+    if(algebra)doc=current.frame.contentDocument;
     app.hidden=!current||!!algebra||nodes.some(n=>['gameHomeBtn','worldLink','gameMenuCrumb','crumbWorld'].includes(n.id)||n.matches('button,a')&&n.textContent.trim()===current?.app.title)||current?.app.id==='rechtenwereld'&&!!doc?.querySelector('.atlas-header');
     const signature=algebra?JSON.stringify([algebra.world,algebra.screen,algebra.level,algebra.levelTitle]):nodes.map(n=>n.tagName+':'+n.textContent.trim()).join('|');
     if(doc!==crumbDocument||signature!==crumbSignature){
@@ -490,7 +489,6 @@
     $('activeAppTitle').textContent=current.app.title;$('activeAppMode').textContent=current.label;
     const badge=current.utility?el('span','type-badge',current.app.id==='utility:teacher'?'Leraaromgeving':'Sessie'):typeBadge(current.app.type);
     $('activeAppType').replaceWith(Object.assign(badge,{id:'activeAppType'}));
-    let original=current.href;try{original=originalURL(current.frame.contentWindow.location.href)||original;}catch{}$('openOriginal').href=original;
     $('saveActivity').hidden=current.utility===true||current.archive===true;
     const place=current.origin.kind==='theme'?M.theme(current.origin.themeId).title:viewNames[current.origin.kind]||'bureaublad';
     $('appBack').querySelector('span').textContent=`Terug naar ${place}`;$('appBack').title=`Terug naar ${place}; de app blijft geopend`;$('appBack').setAttribute('aria-label',`Terug naar ${place}`);
@@ -566,7 +564,7 @@
         if(frames.get(activeKey)!==item)return;const focus=doc.activeElement;
         if(focus&&focus!==doc.body&&focus.getClientRects().length&&win.getComputedStyle(focus).visibility!=='hidden')return;
         const restore=document.querySelector('.lb-restore:not([hidden])'),shell=document.querySelector('leraarbob-topbar')?.shadowRoot;
-        const target=$('focusRestore').getClientRects().length?$('focusRestore'):restore||[...shell?.querySelectorAll('.menu,.mobile-menu')||[]].find(n=>n.getClientRects().length);
+        const target=prefs.bottomCollapsed&&document.body.classList.contains('topbar-collapsed')?$('taskbarToggle'):restore||[...shell?.querySelectorAll('.menu,.mobile-menu')||[]].find(n=>n.getClientRects().length);
         target?.focus({preventScroll:true});
       });
     };

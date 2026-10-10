@@ -1,0 +1,6018 @@
+{
+  "scope": "Real Chromium, local fixture accounts, 100% zoom; native app controllers; no external multiplayer sessions",
+  "apps": [
+    {
+      "id": "rechtenwereld",
+      "title": "Rechtenwereld",
+      "commands": [],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "wortelbouw",
+      "title": "Wortelbouw",
+      "commands": [
+        "Wortelbouw · Opgaven kiezen"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "vectoren-trainer",
+      "title": "Vectormissie",
+      "commands": [
+        "Vectormissie · Oefeningenreeks",
+        "Vectormissie · Vrij oefenen",
+        "Vectormissie · Vrij kanvas",
+        "Vectormissie · Uitleg",
+        "Vectormissie · Mijn voortgang"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "gravity-maze",
+      "title": "Gravity Maze",
+      "commands": [
+        "Gravity Maze · Kamers kiezen",
+        "Gravity Maze · Kamer opnieuw",
+        "Gravity Maze · Laatste zet ongedaan maken",
+        "Gravity Maze · Animatiesnelheid",
+        "Gravity Maze · Spelregels"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "algebra-trainer",
+      "title": "Algebrawereld",
+      "commands": [],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "getallenwereld",
+      "title": "Getallenwereld",
+      "commands": [
+        "Getallenwereld · Machten",
+        "Getallenwereld · Vierkantswortels",
+        "Getallenwereld · Wetenschappelijke notatie",
+        "Getallenwereld · Oefening hervatten",
+        "Getallenwereld · Hulp bij mijn opgave"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "logicawereld",
+      "title": "Logicawereld",
+      "commands": [],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "rechten-arcade",
+      "title": "Rechtenarcade",
+      "skipped": "No registered solo route (catalog grouping only)"
+    },
+    {
+      "id": "rechten-trainer",
+      "title": "Rechtentrainer",
+      "commands": [
+        "Rechtentrainer · Kaart",
+        "Rechtentrainer · Voortgang",
+        "Rechtentrainer · Oefening pauzeren of stoppen",
+        "Rechtentrainer · Instellingen"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "functies-rechten",
+      "title": "Functies & rechten",
+      "commands": [
+        "Functies & rechten · Lesroute",
+        "Functies & rechten · Onderdeel opnieuw"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "brandweer",
+      "title": "Brandweer",
+      "commands": [
+        "Brandweer · Spelinstellingen"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "kleiduifschieten",
+      "title": "Kleiduifschieten",
+      "commands": [],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "rechten-zeeslag",
+      "title": "Rechten Zeeslag",
+      "commands": [],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "pythagoras",
+      "title": "Pythagoras",
+      "commands": [],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "reele-getallen-trainer",
+      "title": "Reële getallen",
+      "commands": [
+        "Reële getallen · Oefenen",
+        "Reële getallen · Onderwerpen",
+        "Reële getallen · Uitleg",
+        "Reële getallen · Voortgang"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "stelsels",
+      "title": "Stelsels",
+      "commands": [],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "algebra-smederij",
+      "title": "Algebra Smederij",
+      "commands": [
+        "Algebra Smederij · Speloverzicht",
+        "Algebra Smederij · Proeven kiezen"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "taartenwinkel",
+      "title": "Taartenwinkel",
+      "commands": [
+        "Taartenwinkel · Speloverzicht",
+        "Taartenwinkel · Vragen en diensten",
+        "Taartenwinkel · Ongedaan maken",
+        "Taartenwinkel · Geluid aan/uit"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "kubusbouw",
+      "title": "Kubusbouw",
+      "commands": [
+        "Kubusbouw · Bouwwerken kiezen",
+        "Kubusbouw · Bouwwerk opnieuw"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "verfwinkel",
+      "title": "Verfwinkel",
+      "commands": [
+        "Verfwinkel · Speloverzicht",
+        "Verfwinkel · Levels kiezen",
+        "Verfwinkel · Geluid aan/uit"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "data-check",
+      "title": "Data Check",
+      "commands": [
+        "Data Check · Speloverzicht",
+        "Data Check · Levels kiezen",
+        "Data Check · Uitleg",
+        "Data Check · Opgave opnieuw"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "signal-lab",
+      "title": "Signal Lab",
+      "commands": [
+        "Signal Lab · Proeven kiezen",
+        "Signal Lab · Proef opnieuw"
+      ],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "glasraam",
+      "title": "Glasraam",
+      "commands": [],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "rechten-arbeid-les",
+      "title": "Rechten & arbeid",
+      "commands": [],
+      "layouts": 6,
+      "retainedDOM": true
+    },
+    {
+      "id": "vectoren-canvas",
+      "title": "Vectoratelier",
+      "commands": [],
+      "layouts": 6,
+      "retainedDOM": true
+    }
+  ],
+  "interactions": [
+    "Data Check: native start stays in OS; shared menu opens real level chooser",
+    "Gravity Maze: real movement, restart, room chooser and rules through shared menu",
+    "Wortelbouw: shared menu invokes original level dialog",
+    "Stelsels: exercise/method choices survive minimize and resume; explicit collapse survives full OS reload",
+    "wortelbouw: local duo entry has no duplicate navigation; player score/round UI retained",
+    "vectoren-trainer: local duo entry has no duplicate navigation; player score/round UI retained",
+    "rechtenwereld: local duo entry has no duplicate navigation; player score/round UI retained",
+    "Rechten local duo: actual start, both workboards and answer buttons at three sizes and both bar states; correct answer scores once; next round survives minimize/resume"
+  ],
+  "measurements": [
+    {
+      "phase": "rechtenwereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 360,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "gravity-maze",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1092,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1092,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1298,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 170,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 170,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 322,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 412,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 412,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1298,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-trainer",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1227,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 307,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 572,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1227,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "getallenwereld",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 235,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "logicawereld",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 307,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-trainer",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 579,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 235,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 216,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 579,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "functies-rechten",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 291,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "brandweer",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 939,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 579,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 91,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 216,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 579,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kleiduifschieten",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-zeeslag",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "pythagoras",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 435,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 795,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 504,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 795,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "reele-getallen-trainer",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 216,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "algebra-smederij",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 144,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "taartenwinkel",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 216,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "kubusbouw",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "verfwinkel",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 795,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "data-check",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 144,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "signal-lab",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "glasraam",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 291,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 163,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 288,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 291,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechten-arbeid-les",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1104,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 867,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 174,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 270,
+        "y": 791.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 322,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 424,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 520,
+        "y": 304.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "rect": {
+        "x": 572,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 867,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-canvas",
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 724,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "stelsels-input",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 651,
+        "y": 0,
+        "width": 64,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw-duo",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer-duo",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld-duo",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1246,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    }
+  ],
+  "errors": [],
+  "missing": []
+}

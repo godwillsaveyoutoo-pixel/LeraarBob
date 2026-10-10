@@ -24,7 +24,7 @@ async function setup({account=null,overview,storage={},topbar=false}={}){
   w.LeraarBobAvatar={create:()=>{const s=w.document.createElement('span');s.textContent='avatar';return s;}};
   w.eval(read('js/catalog.js'));
   Object.defineProperty(w.document,'currentScript',{configurable:true,value:{src:'https://school.example/LeraarBob/shared/game-registry.js'}});
-  w.eval(read('shared/game-registry.js'));w.eval(read('js/catalog-progress.js'));w.eval(read('os/desktop-model.js'));w.eval(read('os/personal-home.js'));w.eval(read('os/activity-entry.js'));w.eval(read('os/desktop.js'));
+  w.eval(read('shared/game-registry.js'));w.eval(read('js/catalog-progress.js'));w.eval(read('os/desktop-model.js'));w.eval(read('os/personal-home.js'));w.eval(read('os/activity-entry.js'));w.eval(read('os/edge-bars.js'));w.eval(read('os/desktop.js'));
   await tick();await tick();
   if(topbar){
     w.LeraarBobPlayModes={ready:()=>Promise.resolve(),current:()=>null};
@@ -286,10 +286,22 @@ test('The actual powers workbench keeps its clickable answer, seed and native do
   f.$('modeBtn').click();assert.equal(doc.documentElement.dataset.mode,'dark');assert.equal(doc.querySelector('[data-slot]'),slot);assert.equal(JSON.stringify(w.GetallenWorld.snapshot().mission),before);assert.equal(f.w.localStorage.getItem('axioma-mode'),'dark');
   f.$('modeBtn').click();assert.equal(doc.documentElement.dataset.mode,'light');
   f.$('saveActivity').click();
-  const prefs=f.w.LeraarBobDesktopModel.read(f.w.localStorage,{id:'learner-a'});assert.equal(prefs.saved.length,1);assert.match(prefs.saved[0].title,/Machten vermenigvuldigen/);assert.match(prefs.saved[0].label,/Machten/);assert.equal(new URL(prefs.saved[0].href).searchParams.get('level'),'machten-product');assert.equal(f.$('openOriginal').href,prefs.saved[0].href);
+  const prefs=f.w.LeraarBobDesktopModel.read(f.w.localStorage,{id:'learner-a'});assert.equal(prefs.saved.length,1);assert.match(prefs.saved[0].title,/Machten vermenigvuldigen/);assert.match(prefs.saved[0].label,/Machten/);assert.equal(new URL(prefs.saved[0].href).searchParams.get('level'),'machten-product');assert.equal(f.$('openOriginal'),null);
   f.$('minimizeApp').click();f.$('runningApps').firstElementChild.click();assert.equal(frame.contentDocument,doc);assert.equal(doc.querySelector('[data-slot]'),slot);assert.equal(JSON.stringify(w.GetallenWorld.snapshot().mission),before);
   f.$('appBack').click();assert.equal(D.state().view.themeId,'getallen');D.openApp('getallenwereld');f.$('startButton').click();f.w.document.dispatchEvent(new f.w.KeyboardEvent('keydown',{key:'Escape'}));
   assert.equal(frame.contentDocument,doc);assert.equal(doc.querySelector('[data-slot]'),slot);assert.equal(JSON.stringify(w.GetallenWorld.snapshot().mission),before);
   doc.querySelector('[data-action="check"]').click();assert.equal(w.GetallenWorld.snapshot().mission.done,true);assert.equal(w.GetallenWorld.snapshot().entries['machten-product'].done.length,1);await tick();assert.equal(doc.querySelectorAll('leraarbob-topbar').length,0);
   [...f.$('headerApp').parentElement.querySelectorAll('button[data-native-crumb]')].find(n=>n.textContent==='Machten').click();await tick();assert.equal(w.GetallenWorld.snapshot().screen,'chapter');assert.equal(doc.activeElement,doc.getElementById('app'));assert.equal(w.GetallenWorld.snapshot().mission.done,true);doc.querySelector('[data-action=start]').click();await tick();assert.equal(w.GetallenWorld.snapshot().screen,'play');assert.equal(w.GetallenWorld.snapshot().mission.done,true);assert.equal(crumbs().length,3);assert.equal(f.errors.length,0);
+});
+test('Each bar folds independently; hidden taskbar is inert, current input and native handler survive, and account preferences remain separate',async t=>{
+  const f=await setup({topbar:true,account:{id:'a',role:'student'}});t.after(()=>f.w.close());const D=f.w.LeraarBobDesktop;D.openApp('pythagoras');
+  const frame=f.$('appFrames').querySelector('iframe'),doc=frame.contentDocument;doc.open();doc.write('<!doctype html><html><body><input id="draft"><button id="answer">Answer</button></body></html>');doc.close();frame.dispatchEvent(new f.w.Event('load'));
+  doc.querySelector('input').value='same draft';let answers=0;doc.querySelector('button').onclick=()=>answers++;
+  f.$('taskbarToggle').click();assert.equal(f.$('taskbar').inert,true);assert.equal(f.$('taskbarToggle').getAttribute('aria-expanded'),'false');assert.equal(f.$('desktopHeader').inert,false);
+  f.w.LeraarBobTopbar.setCollapsed(true,true);f.$('taskbarToggle').click();assert.equal(f.$('taskbar').inert,false);assert.equal(f.$('desktopHeader').inert,true);
+  f.$('taskbarToggle').click();f.w.document.querySelector('.lb-restore').click();assert.equal(f.$('taskbar').inert,true);assert.equal(f.$('desktopHeader').inert,false);
+  assert.equal(f.$('appFrames').querySelector('iframe'),frame);assert.equal(doc.querySelector('input').value,'same draft');doc.querySelector('button').click();assert.equal(answers,1);
+  assert.equal(f.$('focusControls'),null);assert.equal(f.$('focusWorkspace'),null);assert.equal(f.$('openOriginal'),null);
+  f.emit({account:{id:'b',role:'student'}});await tick();assert.equal(f.$('taskbar').inert,false);
+  f.emit({account:{id:'a',role:'student'}});await tick();assert.equal(f.$('taskbar').inert,true);assert.equal(f.errors.length,0);
 });
