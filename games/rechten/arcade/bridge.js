@@ -30,7 +30,7 @@ function mount(){
  }
  if(game==='redding')document.getElementById('stage').append(document.getElementById('missionText'));
  if(game==='zeeslag'){
-  const composer=document.getElementById('aimComposer');if(composer)document.getElementById('bottomBar').append(composer);for(const id of ['aUpBtn','bUpBtn'])document.getElementById(id).textContent='+';for(const id of ['aDownBtn','bDownBtn'])document.getElementById(id).textContent='−';
+  const composer=document.getElementById('aimComposer');if(composer)document.getElementById('bottomBar').append(composer);
   const turn=document.getElementById('turnPill'),status=()=>packet('status',{status:turn.textContent});new MutationObserver(status).observe(turn,{childList:true,subtree:true,characterData:true});status();
  }
  if(game==='kleiduiven'){

@@ -171,3 +171,7 @@ Hashes vóór en na uitrol bevestigen behoud van alle 41 bestaande voortgangsrij
 - Afzonderlijke bestaande fouten opvolgen: verouderde voortgangshash in de Rechten-regressietest, Signaalstad-oefenbladdekking en de Kleiduif-lobby op 320 × 568. Zij zijn ook op de oorspronkelijke main gereproduceerd. De vier OS-pilots en hun volledige klasruns slagen.
 
 Na acceptatie kunnen de overige bouwsels op dezelfde aansluiting aansluiten. Centrale door leraren uitgedeelde taken en nieuwe profiel-/werkvormfuncties zijn vervolgstappen.
+
+## Zeeslag · formulebediening
+
+De gekozen rechte staat volledig leesbaar naast twee afzonderlijke regelaars voor helling a en startwaarde b; op een smal scherm komen de regelaars eronder. Native knoppen/handlers, waarden, beurtvergrendeling en schotberekening blijven behouden. Werkelijk gecontroleerd: alle 63 combinaties, echte plaatsing en schot, toetsenbord, minimaliseren/hervatten, beide balkstanden en herstel op vijf schermmaten (1366 × 768 bij 100%, 844 × 390, 640 × 360, 390 × 844, 320 × 568). Bestaande vierpilottest en arcade-browser slagen eveneens. [Details, grenzen, screenshots en rapporten](qa/zeeslag-controls/README.md).

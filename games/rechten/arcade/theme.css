@@ -72,11 +72,32 @@ body[data-arcade=zeeslag] .bottom{display:flex;align-items:center;padding:6px 12
 body[data-arcade=zeeslag] .bottom>div:empty{display:none}body[data-arcade=zeeslag] .placementBar{flex-wrap:nowrap;width:100%;max-width:none;gap:10px}body[data-arcade=zeeslag] .placementInfo{min-width:0}body[data-arcade=zeeslag] .placementInfo span{font-size:12px;line-height:1.2}
 body[data-arcade=zeeslag] .fleetCount{font-size:22px;color:#4c6150}body[data-arcade=zeeslag] .fleetCount small{font-size:9px;color:#655c4a}
 body[data-arcade=zeeslag] .aimComposer{position:static;inset:auto;width:100%;height:auto;min-height:0;display:block;transform:none;z-index:auto;aspect-ratio:auto;padding:0;border:0;border-radius:0;background:none;overflow:visible}body[data-arcade=zeeslag] .aimComposer:before{display:none}
-body[data-arcade=zeeslag] .aimCard{width:100%;max-width:none;display:flex;justify-content:center;align-items:center;gap:18px;padding:0;background:none;border:0;box-shadow:none;color:#342b20}
-body[data-arcade=zeeslag] :is(.aimEyebrow,.concealHint,.chartLegend,.paramCaption){display:none}body[data-arcade=zeeslag] .equationBuilder{display:flex;align-items:center;gap:8px;font-size:28px;background:none;padding:0;border:0;margin:0}
-body[data-arcade=zeeslag] .paramControl{display:flex;flex-direction:row;align-items:center;gap:4px;min-width:0}body[data-arcade=zeeslag] .paramBtn{width:44px;height:44px;background:#dfc5a0;color:#392c1d;border:1px solid #9d774e;border-radius:6px;font-size:25px}
-body[data-arcade=zeeslag] .paramValue{font-size:28px;min-width:44px;min-height:44px;background:none;border:0;padding:0;color:#342b20}body[data-arcade=zeeslag] .paramBtn[id$=DownBtn]{order:-1}body[data-arcade=zeeslag] .paramBtn[id$=UpBtn]{order:1}
-body[data-arcade=zeeslag] .fireBtn{width:auto;min-width:100px;min-height:48px;font-size:20px;margin:0;padding:6px 20px}
+/* The complete equation is a readout; coefficient controls never interrupt it. */
+body[data-arcade=zeeslag] .aimCard{width:100%;max-width:none;display:flex;justify-content:center;align-items:center;gap:24px;padding:0;background:none;border:0;box-shadow:none;color:#342b20}
+body[data-arcade=zeeslag] :is(.aimEyebrow,.concealHint,.chartLegend,.paramCaption){display:none}
+body[data-arcade=zeeslag] .equationBuilder{display:flex;align-items:center;justify-content:center;min-width:190px;font-size:36px;background:none;padding:0;border:0;margin:0}
+body[data-arcade=zeeslag] .equationVisual{display:flex;align-items:center;gap:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+body[data-arcade=zeeslag] .equationVisual #aValue{margin-right:-6px}
+body[data-arcade=zeeslag] .aimAccessible{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+body[data-arcade=zeeslag] .aimSlope{color:#794528}
+body[data-arcade=zeeslag] .aimIntercept{color:#235b57}
+body[data-arcade=zeeslag] .aimAdjustments{display:flex;gap:16px;border-left:1px solid #b79c75;padding-left:24px}
+body[data-arcade=zeeslag] .aimParameter{display:grid;gap:3px;min-width:0}
+body[data-arcade=zeeslag] .aimLabel{font:600 11px/1.2 system-ui,sans-serif;letter-spacing:.03em;text-align:center}
+body[data-arcade=zeeslag] .aimLabel i{font:italic 15px/1 Georgia,serif;margin-left:2px}
+body[data-arcade=zeeslag] .paramControl{display:flex;align-items:center;gap:0;min-width:0;overflow:visible;border:1px solid #b59a75;border-radius:9px;background:#f8ecd6;box-shadow:0 1px 1px #76552c14}
+body[data-arcade=zeeslag] .paramBtn{width:44px;height:44px;min-width:44px;min-height:44px;padding:0;flex:none;background:transparent;color:#655239;border:0;border-radius:8px;font:400 22px/1 system-ui,sans-serif}
+body[data-arcade=zeeslag] .paramBtn:hover:not(:disabled){background:#e6d3b3;color:#342b20}
+body[data-arcade=zeeslag] .paramBtn:disabled{opacity:.35}
+body[data-arcade=zeeslag] .paramValue{display:flex;align-items:center;justify-content:center;font:24px/1 Cambria,Georgia,serif;font-variant-numeric:tabular-nums;min-width:38px;min-height:44px;background:none;border:0;padding:0 2px}
+body[data-arcade=zeeslag] .bottom button:focus-visible{outline:3px solid #285e62;outline-offset:2px}
+body[data-arcade=zeeslag] .fireBtn{width:auto;min-width:112px;min-height:48px;font-size:20px;margin:0;padding:6px 20px;border-radius:10px}
+@media(min-width:601px) and (max-width:800px){
+ body[data-arcade=zeeslag] .aimCard{gap:12px}
+ body[data-arcade=zeeslag] .equationBuilder{min-width:140px;font-size:29px}
+ body[data-arcade=zeeslag] .aimAdjustments{gap:8px;padding-left:12px}
+ body[data-arcade=zeeslag] .fireBtn{min-width:88px;padding-inline:12px}
+}
 body[data-arcade=zeeslag] .turnPill{background:#365349;color:#f3e6c8;padding:4px 8px;font-size:12px}body[data-arcade=zeeslag] .turnPill.mine{background:#722f30;color:#f6d095}
 body[data-arcade=zeeslag] .axisLabel{fill:#ebddbf;stroke:#132b31}body[data-arcade=zeeslag] .axisName{fill:#ebddbf}body[data-arcade=zeeslag] .gridPoint{fill:#a7c6be;opacity:.4}body[data-arcade=zeeslag] .shipNode{fill:#ffebba;stroke:#412c1c;stroke-width:1.5}body[data-arcade=zeeslag] .shotLine{stroke:#eec78b}
 body[data-arcade=zeeslag] .history{width:100%;min-height:0;max-width:none;font-size:11px;padding:0;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
@@ -89,10 +110,10 @@ body[data-arcade=zeeslag] .matchResult{inset:32px 0 0;background:#10242af0}body[
  body[data-arcade=zeeslag] .boards{gap:6px;padding-inline:6px}
  body[data-arcade=zeeslag] .boardTitle span{display:none}
  body[data-arcade=zeeslag] .boardTitle strong{font-size:12px}
- body[data-arcade=zeeslag] .aimCard{flex-wrap:wrap;gap:6px}
- body[data-arcade=zeeslag] .equationBuilder{font-size:23px;gap:4px}
- body[data-arcade=zeeslag] .paramControl{gap:2px}
- body[data-arcade=zeeslag] .paramValue{font-size:23px;min-width:28px}
+ body[data-arcade=zeeslag] .aimCard{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 12px;max-width:400px;margin-inline:auto}
+ body[data-arcade=zeeslag] .equationBuilder{grid-column:1;grid-row:1;min-width:0;font-size:30px}
+ body[data-arcade=zeeslag] .aimAdjustments{grid-column:1/-1;grid-row:2;justify-content:center;gap:16px;padding:0;border:0}
+ body[data-arcade=zeeslag] .fireBtn{grid-column:2;grid-row:1}
  body[data-arcade=zeeslag] .fireBtn{min-width:100px;min-height:44px;font-size:17px;padding:4px 16px}
  body[data-arcade=zeeslag] .placementBar{flex-wrap:wrap;gap:6px}
  body[data-arcade=zeeslag] .placementInfo{flex:1 1 100%;min-width:0}

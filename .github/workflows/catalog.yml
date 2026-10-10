@@ -34,6 +34,7 @@ jobs:
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/personal" node tests/personal-chrome-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_NAV_SCREENSHOTS="$RUNNER_TEMP/os-qa/native-navigation" node tests/rechten-os-navigation-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" OS_SCREENSHOTS="$RUNNER_TEMP/os-qa/pilots" node tests/desktop-pilot-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" ZEESLAG_SCREENSHOTS="$RUNNER_TEMP/os-qa/zeeslag-controls" node tests/zeeslag-controls-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/live" node tests/desktop-live-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" GETALLEN_SCREENSHOTS="$RUNNER_TEMP/os-qa/getallen" node tests/getallen-os-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" SCIENTIFIC_SCREENSHOTS="$RUNNER_TEMP/os-qa/scientific" node tests/getallen-scientific-browser.cjs

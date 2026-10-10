@@ -120,6 +120,11 @@ function refreshAimUI(){
   if(aVal)aVal.innerHTML=fracHtml(S.aimA);
   if(bVal)bVal.textContent=String(Math.abs(S.aimB.n));
   if(bSign)bSign.textContent=S.aimB.n<0?'−':'+';
+  const aSetting=$('#aSettingValue'),bSetting=$('#bSettingValue'),equationText=$('#aimEquationText');
+  if(aSetting)aSetting.innerHTML=fracHtml(S.aimA);
+  if(bSetting)bSetting.textContent=fracStr(S.aimB);
+  const equation=`y = ${fracStr(S.aimA)}x ${S.aimB.n<0?'−':'+'} ${Math.abs(S.aimB.n)}`;
+  if(equationText&&equationText.textContent!==equation)equationText.textContent=equation;
   if($('#aUpBtn'))$('#aUpBtn').disabled=off||slopeIndex()===ALLOWED_SLOPES.length-1;
   if($('#aDownBtn'))$('#aDownBtn').disabled=off||slopeIndex()===0;
   if($('#bUpBtn'))$('#bUpBtn').disabled=off||S.aimB.n>=4;
