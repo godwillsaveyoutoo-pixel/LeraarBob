@@ -31,7 +31,7 @@ jobs:
       - name: Bureaubladbediening controleren
         run: |
           npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-desktop-tests" jsdom@26.1.0 fake-indexeddb@6.2.4
-          NODE_PATH="$RUNNER_TEMP/leraarbob-desktop-tests/node_modules" node --test --test-isolation=none tests/desktop-dom.test.cjs tests/topbar-desktop.test.cjs tests/os-native-chrome.test.cjs tests/getallen-workshop-dom.test.cjs tests/getallen-world-integration.test.cjs tests/class-activity-flow.test.cjs tests/worksheet-library.test.cjs tests/worksheet-save.test.cjs tests/practice-rewards.test.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-desktop-tests/node_modules" node --test --test-isolation=none tests/task-account.test.cjs tests/desktop-dom.test.cjs tests/topbar-desktop.test.cjs tests/os-native-chrome.test.cjs tests/getallen-workshop-dom.test.cjs tests/getallen-world-integration.test.cjs tests/class-activity-flow.test.cjs tests/worksheet-library.test.cjs tests/worksheet-save.test.cjs tests/practice-rewards.test.cjs
       - name: Pilotapps en bestaande klasproviders in Chromium controleren
         run: |
           npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-browser-tests" playwright@1.64.0 @electric-sql/pglite@0.5.8 jsdom@26.1.0 fake-indexeddb@6.2.4
