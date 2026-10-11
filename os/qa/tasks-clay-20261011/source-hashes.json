@@ -36,5 +36,6 @@
   "tests/helpers/rechten-entry-fixture.cjs": "84a811378bccd2fd928d1b6b9376016fd77f0d9948cdbc4a40b7e9dbcb6c0fd2",
   "tests/os-tasks-browser.cjs": "184428a4d26741442f24ad55586881a6d7eaf322f33c47a73b44306483fe9f07",
   "tests/os-tasks.test.cjs": "659e37716106bb35e1aaa6ae929c59223d61326c800be378ff808b45f35ca2ff",
-  "tests/os-workforms-browser.cjs": "180d52195ae8e055e89006c1285e1cbe5540b5b33c61eeff8c42822858111586"
+  "tests/os-workforms-browser.cjs": "180d52195ae8e055e89006c1285e1cbe5540b5b33c61eeff8c42822858111586",
+  "tests/personal-os-browser.cjs": "e296cf50bea477e2ddf525c28cb53680a00ebd87abf57eb6dc6302ecfb77d6d5"
 }

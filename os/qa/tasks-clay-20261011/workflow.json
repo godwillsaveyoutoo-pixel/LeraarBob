@@ -14,7 +14,8 @@
     "Getallen and scientific first failed before browser launch; rerun with explicit LB_CHROMIUM.",
     "Expanded Kleiduif solo/menu coverage found polling reopening solo and a hidden old session menu; both corrected. The native summary selector was then corrected; final full browser suite passes.",
     "Final task pass includes native teacher review, second-browser draft, CSV export, both OS bars collapsed and reachable 44px actions.",
-    "GitHub CI 38142332607 found a random-solo test assumption: the first timed target need not offer slope 1. The browser test now clicks an actually displayed answer; the full Kleiduif suite was rerun successfully. No game logic changed for this correction."
+    "GitHub CI 38142332607 found a random-solo test assumption: the first timed target need not offer slope 1. The browser test now clicks an actually displayed answer; the full Kleiduif suite was rerun successfully. No game logic changed for this correction.",
+    "GitHub PR run 38142620919 exposed an existing clipboard timing race in personal-os-browser: the test read before the async write had completed. It now waits for the actual copied-link confirmation before checking and opening the clipboard URL. The complete personal OS suite passes locally."
   ],
   "commands": [
     {
@@ -83,7 +84,7 @@
     {
       "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" LB_SCREENSHOT_DIR=\"/tmp/lb-checklist-tasks/os-qa/personal\" node tests/personal-os-browser.cjs",
       "exit": 0,
-      "seconds": 34.13,
+      "seconds": 40.26,
       "log": "logs/10.log",
       "initial_exit": 0
     },
