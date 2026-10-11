@@ -1,0 +1,262 @@
+{
+  "sourceCommit": "d5caed0acf249b31a3e880e8d256161ae9cce82c",
+  "mainCommit": "de5febcf6af05482261e9924dd71e5d998008a33",
+  "tree": "52c24aa6f099fef707567e6e26698783a455426b",
+  "site": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/",
+  "pullRequest": 15,
+  "pagesRun": 38161078305,
+  "migrations": [
+    {
+      "version": "20261011174434",
+      "name": "os_worksheet_cloud_archive"
+    },
+    {
+      "version": "20261011174444",
+      "name": "os_composite_tasks"
+    },
+    {
+      "version": "20261011174452",
+      "name": "os_clay_modes"
+    },
+    {
+      "version": "20261011174500",
+      "name": "os_task_unit_scores_and_partial_submission"
+    },
+    {
+      "version": "20261011174506",
+      "name": "logica_class_battle"
+    },
+    {
+      "version": "20261011174511",
+      "name": "logica_duo_battle"
+    },
+    {
+      "version": "20261011174523",
+      "name": "class_battle_personal_report"
+    }
+  ],
+  "functions": [
+    {
+      "id": "009292c8-8e4a-416b-b2e9-4a30f9341372",
+      "slug": "task-activity",
+      "name": "task-activity",
+      "status": "ACTIVE",
+      "version": 1,
+      "created_at": 1791740733844,
+      "updated_at": 1791740733844,
+      "verify_jwt": true,
+      "import_map": false,
+      "entrypoint_path": "file:///tmp/user_fn_lgfxgtyxwijqozjyaogh_009292c8-8e4a-416b-b2e9-4a30f9341372_1/source/task-activity/index.ts",
+      "ezbr_sha256": "e9a532793d5d34c38c4a7481907ceb0f25ff9d75a034d8c6290667270a12af36"
+    },
+    {
+      "id": "d72cc512-79a8-410b-86cf-d4d0a85ba0b5",
+      "slug": "logica-class",
+      "name": "logica-class",
+      "status": "ACTIVE",
+      "version": 1,
+      "created_at": 1791740742218,
+      "updated_at": 1791740742218,
+      "verify_jwt": false,
+      "import_map": false,
+      "entrypoint_path": "file:///tmp/user_fn_lgfxgtyxwijqozjyaogh_d72cc512-79a8-410b-86cf-d4d0a85ba0b5_1/source/logica-class/index.ts",
+      "ezbr_sha256": "ddb4ecf5490762a6716c083964769fafc65be31ae8ff1d4cd8211cdd136f3ccf"
+    },
+    {
+      "id": "2248b73e-8957-4755-be5e-19755bae1077",
+      "slug": "logica-duo",
+      "name": "logica-duo",
+      "status": "ACTIVE",
+      "version": 1,
+      "created_at": 1791740751001,
+      "updated_at": 1791740751001,
+      "verify_jwt": false,
+      "import_map": false,
+      "entrypoint_path": "file:///tmp/user_fn_lgfxgtyxwijqozjyaogh_2248b73e-8957-4755-be5e-19755bae1077_1/source/logica-duo/index.ts",
+      "ezbr_sha256": "6b2ea9dea7e1056fa019398d21f24e29d9df5940a77b1841adc52a11cbc527b1"
+    }
+  ],
+  "realAccountEndToEnd": "User opened teacher site, but browser connector lists no browsers/tabs. No real signed-in session accessible. Not performed.",
+  "securityAdvisors": "No new WARN or ERROR. Six new INFO entries describe RPC-only tables with deny-by-default RLS and no direct table grants. Five existing definer API warnings and existing leaked-password-protection warning unchanged.",
+  "publicBrowser": {
+    "scope": "Published GitHub Pages; isolated guest browser; no fixture accounts, no production account mutations; 100% zoom",
+    "checks": [
+      "Public root opens OS at 1366 x 768, 100% zoom",
+      "Public Stelsels worksheet generator saves exact series in guest local folder",
+      "Saved guest series remains available after page reload",
+      "390 x 844: both bars collapse and restore through reachable 44px handles"
+    ],
+    "apps": [
+      {
+        "id": "rechtenwereld",
+        "sameFrame": true,
+        "onePlatformBar": true,
+        "foldAndRestore": true
+      },
+      {
+        "id": "getallenwereld",
+        "sameFrame": true,
+        "onePlatformBar": true,
+        "foldAndRestore": true
+      },
+      {
+        "id": "algebra-trainer",
+        "sameFrame": true,
+        "onePlatformBar": true,
+        "foldAndRestore": true
+      },
+      {
+        "id": "stelsels",
+        "sameFrame": true,
+        "onePlatformBar": true,
+        "foldAndRestore": true
+      },
+      {
+        "id": "rechten-zeeslag",
+        "sameFrame": true,
+        "onePlatformBar": true,
+        "foldAndRestore": true
+      },
+      {
+        "id": "glasraam",
+        "sameFrame": true,
+        "onePlatformBar": true,
+        "foldAndRestore": true
+      },
+      {
+        "id": "pythagoras",
+        "sameFrame": true,
+        "onePlatformBar": true,
+        "foldAndRestore": true
+      },
+      {
+        "id": "logicawereld",
+        "sameFrame": true,
+        "onePlatformBar": true,
+        "foldAndRestore": true
+      },
+      {
+        "id": "brandweer",
+        "sameFrame": true,
+        "onePlatformBar": true,
+        "foldAndRestore": true
+      },
+      {
+        "id": "kleiduifschieten",
+        "sameFrame": true,
+        "onePlatformBar": true,
+        "foldAndRestore": true
+      }
+    ],
+    "errors": [],
+    "missing": [],
+    "ok": true
+  },
+  "sourceChecks": [
+    {
+      "file": "os/index.html",
+      "status": 200,
+      "exactMatch": true,
+      "sha256": "ee62fe5e2ab442cf1fc33f63e2b52b4b0fda77b6433cd974ef704f2aade7a624"
+    },
+    {
+      "file": "os/desktop.js",
+      "status": 200,
+      "exactMatch": true,
+      "sha256": "6548449e910656e157afb67dfbe0cd472ed3bbfed6b49fc5a642cfb131859623"
+    },
+    {
+      "file": "os/personal-home.js",
+      "status": 200,
+      "exactMatch": true,
+      "sha256": "a257fcc73f3191ab51204eea57ac2d612b3be63aa6126a33e64d0b3b7fff8a25"
+    },
+    {
+      "file": "os/edge-bars.js",
+      "status": 200,
+      "exactMatch": true,
+      "sha256": "eb629ab16bd112360575963ce0d5b88cb49d2d271b6535b5aff08ab9cc2e6e86"
+    },
+    {
+      "file": "os/native-chrome.js",
+      "status": 200,
+      "exactMatch": true,
+      "sha256": "4e4f1073086110996fe224e7082050d89be4058f0a19c2e3ec4bbc3668669805"
+    },
+    {
+      "file": "shared/leraarbob-topbar.js",
+      "status": 200,
+      "exactMatch": true,
+      "sha256": "ba3918574c51f72f19e105e2aa460284055fc85f5eb1653c9ce24e33d9493ba2"
+    },
+    {
+      "file": "oefenbladen/maken.html",
+      "status": 200,
+      "exactMatch": true,
+      "sha256": "69d4eda4f282cb857aec50867f32a0414b6d96c5d1abd288ef569d4afad93832"
+    },
+    {
+      "file": "shared/multiplayer/result-report.js",
+      "status": 200,
+      "exactMatch": true,
+      "sha256": "5ceb1df1b6598d5c895ff5babefb9ebfa30e02d662f96d1d32c04b34331024f9"
+    },
+    {
+      "file": "shared/proof-pdf.js",
+      "status": 200,
+      "exactMatch": true,
+      "sha256": "de9c247ee02920f93456cb748db2aa27a3c6664fea502f05955b63e47c182df9"
+    },
+    {
+      "file": "js/catalog.js",
+      "status": 200,
+      "exactMatch": true,
+      "sha256": "20c6545ec46faf89640c762c1e22ed05a4f6c8c05d3ee92f878f0c1ad8ecc971"
+    },
+    {
+      "file": "index.html",
+      "status": 200,
+      "exactMatch": true,
+      "sha256": "56405a55f75101a5b9ccf98fafcf7fcfbc9a1d08ced4caec8a9fe0d6b28e4884"
+    }
+  ],
+  "authChecks": [
+    {
+      "function": "task-activity",
+      "invalidBearer": false,
+      "status": 401,
+      "body": "{\"code\":\"UNAUTHORIZED_NO_AUTH_HEADER\",\"message\":\"Missing authorization header\"}"
+    },
+    {
+      "function": "task-activity",
+      "invalidBearer": true,
+      "status": 401,
+      "body": "{\"code\":\"UNAUTHORIZED_INVALID_JWT_FORMAT\",\"message\":\"Invalid JWT\"}"
+    },
+    {
+      "function": "logica-class",
+      "invalidBearer": false,
+      "status": 401,
+      "body": "{\"error\":\"Log eerst in.\"}"
+    },
+    {
+      "function": "logica-class",
+      "invalidBearer": true,
+      "status": 401,
+      "body": "{\"error\":\"Log opnieuw in.\"}"
+    },
+    {
+      "function": "logica-duo",
+      "invalidBearer": false,
+      "status": 401,
+      "body": "{\"error\":\"Log eerst in.\"}"
+    },
+    {
+      "function": "logica-duo",
+      "invalidBearer": true,
+      "status": 401,
+      "body": "{\"error\":\"Log opnieuw in.\"}"
+    }
+  ],
+  "pagesConclusion": "success"
+}

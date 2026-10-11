@@ -1,3 +1,5 @@
+> Uitrolstatus 11 oktober 2026: de pilot staat [publiek op /os/](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/), inclusief zeven database-updates en drie Edge Functions. [Publicatiebewijs](qa/publication-20261011/README.md). Verwijzingen naar nog niet uitgerolde onderdelen hieronder beschrijven eerdere controles; echte productieaccounts blijven E2.
+
 # Pilot: oorspronkelijke bouwsels in het bureaublad
 
 ## Actieve afwerkchecklist · 11 oktober 2026
@@ -34,18 +36,18 @@ Actuele aanvulling: [uniforme sessievensters en persoonlijke battle-PDF](qa/clas
 - [ ] C2. Meerdere en kruisende uitnodigingen, dubbel accepteren, verlopen/intrekken, bezette speler, account/tabwissel en verbroken verbinding controleren. Servertoestand bepaalt deelname; geen dubbele partij of score.
 - [x] C3. Kleiduifschieten: directe duo-, groeps- en klasroutes; volledige partijen met twee/drie leerlingen en een observerende leerkracht lokaal gecontroleerd. Productieuitrol en echte accounts vallen onder E2/E3. [Bewijs](qa/tasks-clay-20261011/README.md).
 - [x] C4. Brandweer en oorspronkelijke Stelsels: echte, eenmalige XP-beloning toevoegen zonder fictieve omrekening van oude levels; Brandweer krijgt geen ranglijst.
-- [x] C5. Kleiduif-battleresultaten met eigen serveradministratie van XP, centrale OS-ranglijst en leraarsresultaten. Herhaalde antwoorden leveren geen tweede beloning; gewone voortgang blijft behouden. Lokaal bewezen, migratie nog uit te rollen. [Bewijs](qa/tasks-clay-20261011/README.md).
+- [x] C5. Kleiduif-battleresultaten met eigen serveradministratie van XP, centrale OS-ranglijst en leraarsresultaten. Herhaalde antwoorden leveren geen tweede beloning; gewone voortgang blijft behouden. Lokaal bewezen, migratie inmiddels uitgerold. [Bewijs](qa/tasks-clay-20261011/README.md).
 - [ ] C6. Leraarklasuitnodiging zichtbaar op het bureaublad, leerling rechtstreeks naar juiste wachtkamer; rechten en rollen door backend afdwingen.
-- [ ] C7. [Huidige modi per app vastgelegd](APP-MODES.md); volledige providercontrole nog open; ontbrekende providers niet aanbieden als werkend. Logicawereld heeft nu lokaal gecontroleerde online Duo Battle en Klasbattle; productie-uitrol en echte accounts blijven open. Samen leren staat niet meer bij de startopties.
+- [ ] C7. [Huidige modi per app vastgelegd](APP-MODES.md); volledige providercontrole nog open; ontbrekende providers niet aanbieden als werkend. Logicawereld heeft nu lokaal gecontroleerde online Duo Battle en Klasbattle; productie-uitrol is uitgevoerd; echte accounts blijven open. Samen leren staat niet meer bij de startopties.
 
-- [x] C8. Vergelijkingen: zichtbare Mix van alle 17 eigen vraagvormen, 20 rondes, eigen selectie en herladen. Logicawereld: online aliasduel en leraarklasbattle met gebied/mix, oorspronkelijke antwoordbediening en serverbeoordeling. [Lokale SQL- en browsercontrole](qa/logica-battles-20261011/README.md); productie staat nog open.
+- [x] C8. Vergelijkingen: zichtbare Mix van alle 17 eigen vraagvormen, 20 rondes, eigen selectie en herladen. Logicawereld: online aliasduel en leraarklasbattle met gebied/mix, oorspronkelijke antwoordbediening en serverbeoordeling. [Lokale SQL- en browsercontrole](qa/logica-battles-20261011/README.md); backend en frontend zijn gepubliceerd, de proef met echte accounts blijft open.
 
 - [x] C9. Persoonlijke PDF na elke bestaande OS-klasbattle, ook bij vroegtijdig stoppen; herdownload bij Ranglijsten. Alle zeven apps en acht technische routes lokaal gecontroleerd; eigen gegevens afgedwongen door de server. Oude centrale hubroutes leiden binnen het OS naar de eigen vensters. [Bewijs en productiegrenzen](qa/class-battle-reports-20261011/README.md). A7 blijft open voor andere interne appmenu’s.
 
 ### D. Oefenbladen en samengestelde toets
 
 - [x] D1. Centrale maker, onderwerpmapjes, huidige en eerdere reeksen, exacte vragen/sleutel bewaren, PDF/HTML en backup/herstel. [Bewijs](qa/central-paper/README.md).
-- [ ] D2. Bewaarde reeksen veilig tussen toestellen kunnen hervatten. Online archief en lokale cache geïmplementeerd en getest met twee geïsoleerde browsers en lokale SQL; migratie nog niet uitgerold op productie. Exacte documenten, offline opnieuw proberen, verwijdermarkeringen en accountisolatie getest. Productieproef blijft open.
+- [ ] D2. Bewaarde reeksen veilig tussen toestellen kunnen hervatten. Online archief en lokale cache geïmplementeerd en getest met twee geïsoleerde browsers en lokale SQL; migratie inmiddels uitgerold op productie. Exacte documenten, offline opnieuw proberen, verwijdermarkeringen en accountisolatie getest. Productieproef blijft open.
 - [x] D3. Centrale maker voor **Glasraam + Kleiduifschieten + tien Rechtenwereldvragen**, met instructies, aantallen, tempo en vraagtypes. Eén punt per geldige verschillende lijn, juist geraakt doel of juist antwoord. Bereikbaar via Start → Mijn taken → Opdrachten en toetsen. [Lokale end-to-endcontrole](qa/tasks-clay-20261011/README.md).
 - [x] D4. Leerlingtoewijzing, onveranderlijke uitgedeelde versie, opgeslagen ontwerp/antwoorden, ook gedeeltelijk definitief indienen, serverbeoordeling per item, onmiddellijk een leerling-PDF, nakijken en CSV-export. Andere leerlingen en client-scores worden geweigerd. Lokale SQL/Edge- en browserproeven inclusief het volledige Zonneroos-raam, gelijktijdig bewaren en een weggevallen bevestiging; productieaanmelding blijft E2. [Herstelbewijs](qa/task-submission-fixes-20261011/README.md).
 - [x] D5. Versie 1 van de onderdelenstructuur: 1–12 onderdelen in eigen volgorde, getypeerde configuratie en antwoordadministratie, originele engines via aparte koppelingen. Drie adapters werken; andere trainers aansluiten vereist hun eigen configuratie, renderer en servervalidator. [Uitbreidingsafspraak](qa/tasks-clay-20261011/README.md).
@@ -54,7 +56,7 @@ Actuele aanvulling: [uniforme sessievensters en persoonlijke battle-PDF](qa/clas
 
 - [ ] E1. Elke prioriteitsapp werkelijk bedienen op 1366 × 768 bij 100% zoom en compacte schermen; beide balkstanden, Start, terugplek, bewaren, rollen en focus controleren.
 - [ ] E2. Twee werkelijk ingelogde productieaccounts op aparte toestellen: uitnodigen, klasdeelnemen, reconnect, cloudhervatten en resultaat. Lokale fixtures gelden niet als dit bewijs.
-- [ ] E3. Reviewbranch/PR met actuele checklist en screenshots; pas publiceren na geslaagde vereiste controles. De publieke versie en lokale preview duidelijk onderscheiden.
+- [x] E3. [PR #15](https://github.com/godwillsaveyoutoo-pixel/LeraarBob/pull/15) is na twee geslaagde volledige controles samengevoegd. Zeven migraties en drie functies zijn uitgerold, Pages-publicatie geslaagd, publieke gastproef op tien apps uitgevoerd. [Publicatiebewijs](qa/publication-20261011/README.md). Echte productieaccounts blijven E2.
 
 
 Doel: overgang tussen bureaublad, themamap, werkvorm en app, met behoud van oorspronkelijke vragen, antwoordbediening, stijl en leerflow. Gewone bezoeken aan `/` en `/index.html` openen het bureaublad op `/os/`. De eerdere catalogus blijft beschikbaar via [`/index.html?view=catalog`](../index.html?view=catalog) en OS Instellingen; bestaande accountlinks behouden de oorspronkelijke accountingang.

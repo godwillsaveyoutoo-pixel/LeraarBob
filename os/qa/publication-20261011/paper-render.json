@@ -1,0 +1,14 @@
+{
+  "scope": "Published GitHub Pages; isolated guest browser; no fixture accounts, no production account mutations; 100% zoom",
+  "checks": [
+    "Public root opens OS at 1366 x 768, 100% zoom",
+    "Generated worksheet preview finishes rendering its questions and graphs",
+    "Public Stelsels worksheet generator saves exact series in guest local folder",
+    "Saved guest series remains available after page reload",
+    "390 x 844: both bars collapse and restore through reachable 44px handles"
+  ],
+  "apps": [],
+  "errors": [],
+  "missing": [],
+  "ok": true
+}
