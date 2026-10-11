@@ -1,0 +1,74 @@
+{
+  "scope": "Published GitHub Pages; isolated guest browser; no fixture accounts, no production account mutations; 100% zoom",
+  "checks": [
+    "Public root opens OS at 1366 x 768, 100% zoom",
+    "Public Stelsels worksheet generator saves exact series in guest local folder",
+    "Saved guest series remains available after page reload",
+    "390 x 844: both bars collapse and restore through reachable 44px handles"
+  ],
+  "apps": [
+    {
+      "id": "rechtenwereld",
+      "sameFrame": true,
+      "onePlatformBar": true,
+      "foldAndRestore": true
+    },
+    {
+      "id": "getallenwereld",
+      "sameFrame": true,
+      "onePlatformBar": true,
+      "foldAndRestore": true
+    },
+    {
+      "id": "algebra-trainer",
+      "sameFrame": true,
+      "onePlatformBar": true,
+      "foldAndRestore": true
+    },
+    {
+      "id": "stelsels",
+      "sameFrame": true,
+      "onePlatformBar": true,
+      "foldAndRestore": true
+    },
+    {
+      "id": "rechten-zeeslag",
+      "sameFrame": true,
+      "onePlatformBar": true,
+      "foldAndRestore": true
+    },
+    {
+      "id": "glasraam",
+      "sameFrame": true,
+      "onePlatformBar": true,
+      "foldAndRestore": true
+    },
+    {
+      "id": "pythagoras",
+      "sameFrame": true,
+      "onePlatformBar": true,
+      "foldAndRestore": true
+    },
+    {
+      "id": "logicawereld",
+      "sameFrame": true,
+      "onePlatformBar": true,
+      "foldAndRestore": true
+    },
+    {
+      "id": "brandweer",
+      "sameFrame": true,
+      "onePlatformBar": true,
+      "foldAndRestore": true
+    },
+    {
+      "id": "kleiduifschieten",
+      "sameFrame": true,
+      "onePlatformBar": true,
+      "foldAndRestore": true
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "ok": true
+}

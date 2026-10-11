@@ -1,4 +1,4 @@
-> Actuele aanvulling (11 oktober): [centrale sessievensters en persoonlijke klasbattle-PDF](qa/class-battle-reports-20261011/README.md). De ontwikkelversie koppelt alle huidige battleproviders aan eigen verslagen; productie-uitrol is nog niet uitgevoerd. Oudere secties hieronder beschrijven eerdere versies.
+> Publiek sinds 11 oktober 2026: [open het bureaublad](https://godwillsaveyoutoo-pixel.github.io/LeraarBob/os/). Backend en frontend zijn uitgerold; [publicatieverslag en uitgevoerde controles](qa/publication-20261011/README.md). Echte sessies met twee ingelogde productieaccounts blijven te controleren. Oudere secties hieronder zijn historisch bewijs.
 
 # leraarBob-bureaublad · ontwikkelpilot
 
