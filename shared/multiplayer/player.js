@@ -14,7 +14,7 @@
  addEventListener('message',e=>{if(e.source!==parent||e.origin!==origin||!hooks)return;const d=e.data;if(!d||typeof d!=='object')return;
  if(d.type==='vector-battle-ping'){send({type:'vector-battle-ready'});return;}
  if(d.type==='vector-battle-question'&&typeof d.match==='string'&&Number.isInteger(d.index)&&Number.isInteger(d.seed)&&Number.isInteger(d.variant)&&BattleGame.skills.some(s=>s.id===d.skill)){clearTimeout(timer);if(api.online&&round?.match===d.match&&round.index===d.index)return;round=d;locked=false;hooks.start(d);}
- if((api.cooperative||api.assessment)&&d.type==='rechten-learn-sync'&&round&&d.match===round.match&&d.index===round.index){locked=!!d.readOnly;hooks.sync?.(d.answer,locked);if(api.review){const app=document.getElementById('app');app.inert=false;app.querySelectorAll('button,input,select,textarea').forEach(n=>n.disabled=true);app.querySelectorAll('footer button,#undo').forEach(n=>n.hidden=true);}return;}
+ if((api.cooperative||api.assessment)&&d.type==='rechten-learn-sync'&&round&&d.match===round.match&&d.index===round.index){locked=!!d.readOnly;hooks.sync?.(d.answer,locked);if(api.review){const app=document.getElementById('app')||document.body;app.inert=false;app.querySelectorAll('button,input,select,textarea').forEach(n=>n.disabled=true);app.querySelectorAll('footer button,#undo').forEach(n=>n.hidden=true);}return;}
  if(d.type==='vector-battle-resolved'&&round&&d.match===round.match&&d.index===round.index){clearTimeout(timer);locked=true;hooks.freeze(String(d.message||'Ronde afgerond.'));}
  });
 })();

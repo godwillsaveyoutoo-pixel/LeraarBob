@@ -4,7 +4,8 @@ let task,spec,states=[],operations=[],selected=null,locked=true,view='answer',op
 const math=tex=>`<span data-tex="${C.escapeHTML(tex)}"></span>`,eq=value=>math(C.latexEq(value,task.policy)),current=()=>states.at(-1),system=()=>task.topic==='systems';
 const key=()=>`algebra-class-work:${spec.learner||'guest'}:${spec.match}:${spec.index}`;
 function readDraft(){for(const id of system()?['answerX','answerY']:['answer']){const input=document.getElementById(id);if(input)draft[id]=input.value;}}
-function save(){if(spec.projector)return;readDraft();try{localStorage.setItem(key(),JSON.stringify({operations,value:draft.answer||'',x:draft.answerX||'',y:draft.answerY||'',view}));}catch{}}
+function snapshot(){readDraft();return {operations,value:draft.answer||'',x:draft.answerX||'',y:draft.answerY||'',view};}
+function save(){if(spec.projector)return;const d=snapshot();try{localStorage.setItem(key(),JSON.stringify(d));}catch{}B.changed(d);}
 function solvedValue(){const e=current();if(!C.solvedEquation(e))return '';const q=e.l.t==='var'?e.r.q:e.l.q;return q.d===1?String(q.n):q.n+'/'+q.d;}
 function fitMath(){requestAnimationFrame(()=>{for(const el of host.querySelectorAll('.given,.working-equation,.history-equation')){el.style.fontSize='';const base=parseFloat(getComputedStyle(el).fontSize),k=el.querySelector('.katex');if(!k)continue;const range=document.createRange();range.selectNodeContents(k.querySelector('.katex-html')||k);const width=Math.max(k.getBoundingClientRect().width,k.scrollWidth,range.getBoundingClientRect().width),available=el.clientWidth-8;if(available>0&&width>available)el.style.fontSize=Math.max(18,base*available/width)+'px';}});}
 function setView(next){readDraft();view=next;selected=null;render();save();}
@@ -27,7 +28,7 @@ function render(){
  host.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>setView(b.dataset.view));
  if(view==='answer'||system()){
   document.getElementById('steps')?.addEventListener('click',()=>setView('steps'));
-  document.getElementById('answerForm').onsubmit=e=>{e.preventDefault();if(locked)return;readDraft();const answer=system()?{x:draft.answerX,y:draft.answerY}:{value:draft.answer};if(system()?!G.parse(answer.x)||!G.parse(answer.y):!G.parse(answer.value)){document.getElementById('inputError').textContent=system()?'Vul x en y in als getal of breuk.':'Vul een getal of breuk in.';fitMath();return;}save();B.submit(answer);};return;
+  document.getElementById('answerForm').onsubmit=e=>{e.preventDefault();if(locked)return;readDraft();const answer=system()?{x:draft.answerX,y:draft.answerY}:{value:draft.answer};if(system()?!G.parse(answer.x)||!G.parse(answer.y):!G.parse(answer.value)){document.getElementById('inputError').textContent=system()?'Vul x en y in als getal of breuk.':'Vul een getal of breuk in.';fitMath();return;}save();B.submit({...snapshot(),...answer});};return;
  }
  if(view==='history'){
   document.getElementById('historyPrev').onclick=()=>{historyIndex--;render();};document.getElementById('historyNext').onclick=()=>{historyIndex++;render();};return;
@@ -41,14 +42,14 @@ function render(){
   document.getElementById('undo').onclick=()=>{operations.pop();states.pop();draft.answer=solvedValue();render();save();};document.getElementById('history').onclick=()=>{historyIndex=states.length-1;setView('history');};
  }
 }
-function start(value){
+function start(value,override){
  spec=value;task=G.generate(spec);operations=[];states=system()?[]:[C.cloneEq(task.start)];selected=null;view='answer';locked=false;status.textContent='';draft={};
- if(!spec.projector)try{const stored=JSON.parse(localStorage.getItem(key())||'null');if(stored){if(!system()&&Array.isArray(stored.operations)&&stored.operations.length<=30){for(const op of stored.operations){if(!['+','-','*','/'].includes(op.op))throw Error();const operand=C.cloneExpr(op.operand),next=C.applyEquation(current(),op.op,operand);if(C.exprNodeCount(next.l)+C.exprNodeCount(next.r)>160)throw Error();states.push(next);operations.push({op:op.op,operand});}}
+ if(!spec.projector)try{const stored=override===undefined?JSON.parse(localStorage.getItem(key())||'null'):override;if(stored){if(!system()&&Array.isArray(stored.operations)&&stored.operations.length<=30){for(const op of stored.operations){if(!['+','-','*','/'].includes(op.op))throw Error();const operand=C.cloneExpr(op.operand),next=C.applyEquation(current(),op.op,operand);if(C.exprNodeCount(next.l)+C.exprNodeCount(next.r)>160)throw Error();states.push(next);operations.push({op:op.op,operand});}}
   draft={answer:typeof stored.value==='string'?stored.value.slice(0,40):'',answerX:typeof stored.x==='string'?stored.x.slice(0,40):'',answerY:typeof stored.y==='string'?stored.y.slice(0,40):''};if(!system()&&['answer','steps','history'].includes(stored.view))view=stored.view;historyIndex=states.length-1;
  }}catch{states=system()?[]:[C.cloneEq(task.start)];operations=[];draft={};view='answer';}
  render();
 }
-B.connect({start,freeze(message){locked=true;document.getElementById('controls')?.setAttribute('disabled','');status.textContent=message;fitMath();},retry(){start(spec);}});
+B.connect({start,sync(value,readOnly){start(spec,value);locked=readOnly;if(readOnly){document.getElementById('controls')?.setAttribute('disabled','');status.textContent='Jouw ingeleverde antwoord';}},freeze(message){locked=true;document.getElementById('controls')?.setAttribute('disabled','');status.textContent=message;fitMath();},retry(){start(spec);}});
 addEventListener('resize',fitMath);
 addEventListener('message',event=>{const d=event.data;if(event.source!==parent||event.origin!==location.origin||d?.type!=='vector-class-review'||d.match!==spec?.match||d.index!==spec?.index)return;locked=true;status.textContent='';host.className=system()?'system-review':'review';host.innerHTML=system()?`<section class="paper"><h1>Oplossing</h1><div class="given">${math(S.systemTex(task.start))}</div><div class="system-solution">${math('x='+S.text(task.solution.x)+'\\qquad y='+S.text(task.solution.y))}</div></section>`:`<section class="paper"><h1>Een mogelijke uitwerking</h1><ol class="review-steps"><li>${eq(task.start)}</li>${task.steps.map((step,i)=>`<li><small>${math(C.operationLatex(step.op,step.operand,task.policy))}</small>${eq(task.states[i+1])}</li>`).join('')}</ol></section>`;C.renderMathNodes(host);fitMath();});
 })();

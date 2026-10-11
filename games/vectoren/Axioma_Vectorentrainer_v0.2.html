@@ -1721,7 +1721,7 @@ function returnToCurrent(){
  screen('play');updateUI(false);save();
 }
 $('previousQuestion').onclick=()=>reviewQuestion(reviewIndex===null?questionHistory.length-1:reviewIndex-1);
-function save(){try{const draft=snapshot();window.AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:'dark',draft,suspendedSeries,practiceDays,coachCollapsed:coachPreference}));window.AxiomaGame.report(Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').map(s=>s.id),Generator.skills.length);}catch{storageError()}}
+function save(){if(battle){battle.changed?.(structuredClone(answer));return;}try{const draft=snapshot();window.AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:'dark',draft,suspendedSeries,practiceDays,coachCollapsed:coachPreference}));window.AxiomaGame.report(Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').map(s=>s.id),Generator.skills.length);}catch{storageError()}}
 function screen(name){
  cancelGesture();closeMenu();if(name!=='play')flight.clear();document.body.dataset.screen=name;
  AxiomaPlatform.trainerScreen(({play:'play',helpScreen:'help',progressScreen:'progress'})[name]||'');
@@ -2283,6 +2283,7 @@ window.addEventListener('pagehide',save);
 window.AxiomaVectorTrainer=Object.freeze({inspect:()=>structuredClone({task,answer,intro,done,dirty,stage,free,session,progress,view,lessonStep}),project:p=>project(p)});
 if(battle){
  battle.connect({
+  sync(saved,readOnly){if(!saved||typeof saved!=='object')return;answer={strokes:Array.isArray(saved.strokes)?saved.strokes.slice(0,24).map(s=>M.stroke(s.start,s.end,s.role)):[],values:Array.isArray(saved.values)?saved.values.slice(0,2):['',''],point:saved.point||null,choice:Number.isInteger(saved.choice)?saved.choice:null};done=readOnly;cancelGesture();feedbackState=null;updateUI(false);},
   start(spec){document.body.classList.remove('class-review');document.body.classList.toggle('class-projector',!!spec.projector);task=Generator.generate(spec.skill,{seed:spec.seed,variant:spec.variant,level:1});free=true;session=null;intro=false;coachCollapsed=true;resetAnswer();screen('play');updateUI();},
   freeze(text){done=true;cancelGesture();feedbackState=battle.singleAttempt?null:{kind:'good',title:'Ronde afgelopen',text};updateUI(false);},
   review(){
@@ -2313,10 +2314,12 @@ function indexed(key,total,field='lastLevel'){
  return {keys:[key],hydrate(state){const done=numbers(state,0,total);put(state,key,{completed:done,[field]:next(done,0,total)})}};
 }
 const adapters={
- 'algebra-trainer':{keys:['leraarbob.algebra.v1']},
+ 'bewerkingen-trainer':{keys:['leraarbob.bewerkingen.v1']},
+ 'getallenwereld':{keys:['leraarbob.getallenwereld.v1']},
+ 'algebra-trainer':{keys:['leraarbob.algebra.v1','leraarbob.stelsels.workshop.v1']},
  'wortelbouw':{keys:['axioma.wortelbouw.progress.v1']},
  'pythagoras':{keys:['axioma.pythagoras.completed.v1','axioma.pythagoras.current.v1'],hydrate(state){const done=numbers(state,1,10);put(state,this.keys[0],done);put(state,this.keys[1],next(done,1,10))}},
- 'stelsels':{keys:['axioma.stelsels.completed.v1','axioma.stelsels.current.v1'],hydrate(state){const done=numbers(state,0,14);put(state,this.keys[0],done);put(state,this.keys[1],next(done,0,14))}},
+ 'stelsels':{reward:{first:0,total:14,xp:10},keys:['axioma.stelsels.completed.v1','axioma.stelsels.current.v1'],hydrate(state){const done=numbers(state,0,14);put(state,this.keys[0],done);put(state,this.keys[1],next(done,0,14))}},
  'algebra-smederij':{keys:['rf22_done','rf21_last','rf21_theme'],hydrate(state){put(state,'rf22_done',(state.completed||[]).map(String))}},
  'taartenwinkel':indexed('axioma.taartenwinkel.v05.progress',7,'lastService'),
  'kubusbouw':indexed('axioma.scaleAssembly.v0.5.progress',22),
@@ -2326,7 +2329,7 @@ const adapters={
  'gravity-maze':{keys:['gravity-maze-human-v1-blind','gravity-maze-human-v1-assisted']},
  'vectoren-trainer':{keys:['axioma-vectorentrainer-v020']},
  'reele-getallen-trainer':{keys:['axioma-real-numbers-v1']},
- 'brandweer':{keys:['axioma.brandweer.current.v1'],hydrate(state){const done=numbers(state,1,16);put(state,this.keys[0],next(done,1,16)-1)}},
+ 'brandweer':{reward:{first:1,total:16,xp:10},keys:['axioma.brandweer.current.v1'],hydrate(state){const done=numbers(state,1,16);put(state,this.keys[0],next(done,1,16)-1)}},
  'kleiduifschieten':{keys:['axioma.rechten.kleiduiven.standalone.v12']},
  'rechten-trainer':{tracking:false,external:true},
  'functies-rechten':{tracking:false},
@@ -2403,7 +2406,8 @@ function mount(){
  root.innerHTML='<style>:host{display:inline-flex;flex:0 0 165px;width:165px;min-width:165px;vertical-align:middle;z-index:10000;font:12px/1.4 system-ui;color:#132d34}:host([data-floating]){position:fixed;top:6px;left:6px}button{font:inherit;cursor:pointer;border:1px solid #80989e;border-radius:7px;padding:7px 10px;background:#f5f8f9;color:#132d34;min-height:32px}button:focus-visible{outline:3px solid #cd9930;outline-offset:2px}.dock{box-sizing:border-box;width:165px;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 1px 5px #0003}.panel{position:fixed;inset:0;background:#102028a6;display:grid;place-items:center;padding:16px}.panel[hidden]{display:none}.box{background:#f5f8f9;color:#132d34;padding:20px;border-radius:12px;width:min(420px,calc(100vw - 48px));box-shadow:0 8px 36px #0005}p{margin:0 0 16px}.actions{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:1100px){:host{flex-basis:34px;width:34px;min-width:34px}.dock{font-size:0;width:34px;padding:4px;min-height:34px}.dock:before{content:"◉";font-size:20px}.dock[data-status="saved"]{color:#277457}.dock[data-status="offline"],.dock[data-status="conflict"],.dock[data-status="pending"]{color:#936615}}@media(prefers-color-scheme:dark){button,.box{background:#17343d;color:#e9f2f5}}</style><button class="dock" aria-label="Account en opslagstatus"></button><section class="panel" hidden role="dialog" aria-modal="true" aria-label="Account en voortgang"><div class="box"><p role="status"></p><div class="actions"></div></div></section>';
  document.body.append(host);dock=root.querySelector('.dock');panel=root.querySelector('.panel');message=root.querySelector('p');actions=root.querySelector('.actions');dock.onclick=details;setStatus('loading');
  // A trainer with its own profile keeps the account dialog, but needs no second header button.
- if(document.querySelector('script[src$="leraarbob-topbar.js"]') || (script.dataset.profileButton && document.getElementById(script.dataset.profileButton))){
+ const hasPlatformBar=[...document.scripts].some(node=>node.src&&new URL(node.src,location.href).pathname.endsWith('/leraarbob-topbar.js'));
+ if(hasPlatformBar || (script.dataset.profileButton && document.getElementById(script.dataset.profileButton))){
   dock.hidden=true;host.style.cssText='position:absolute;width:0;min-width:0;flex-basis:0';
  }
 
@@ -2426,7 +2430,7 @@ function mount(){
  },true);
 }
 function placeDock(){
- if(!host)return;
+ if(!host||!document?.body)return;
  const header=[...document.querySelectorAll('.header-actions'),...document.querySelectorAll('header')].find(el=>{const r=el.getBoundingClientRect();return r.width&&r.height&&r.top>=-5&&r.bottom<=innerHeight&&!el.closest('[inert]')&&getComputedStyle(el).visibility!=='hidden'});
  const parent=header||document.body;if(host.parentNode!==parent)parent.append(host);
  if(host.hasAttribute('data-floating')===!!header)host.toggleAttribute('data-floating',!header);
@@ -2470,6 +2474,20 @@ function report(completed,total,current){
  if(current!=null)next.current=current;
  if(Object.entries(next).some(([key,v])=>JSON.stringify(record.state[key])!==JSON.stringify(v))){Object.assign(record.state,next);dirty()}
 }
+function practiceXP(){
+ const policy=config.reward,ledger=record.state.practiceRewards;if(!policy)return null;
+ if(ledger?.version!==1)return 0;
+ return Object.entries(ledger.awards||{}).reduce((total,[unit,xp])=>{const n=Number(unit);return total+(String(n)===unit&&Number.isInteger(n)&&n>=policy.first&&n<policy.first+policy.total&&xp===policy.xp?xp:0);},0);
+}
+function rewardUnit(unit){
+ if(!active||account?.role==='teacher'||!config.reward)return 0;
+ const n=Number(unit),policy=config.reward;
+ if(String(unit)!==String(n)||!Number.isInteger(n)||n<policy.first||n>=policy.first+policy.total||!(record.state.completed||[]).map(String).includes(String(n)))return 0;
+ const ledger=record.state.practiceRewards?.version===1?record.state.practiceRewards:{version:1,awards:{}};
+ ledger.awards=ledger.awards&&typeof ledger.awards==='object'&&!Array.isArray(ledger.awards)?ledger.awards:{};
+ if(ledger.awards[String(n)]===policy.xp)return 0;
+ ledger.awards[String(n)]=policy.xp;record.state.practiceRewards=ledger;dirty();emit(record.state.completed,record.state.total);return policy.xp;
+}
 function emit(completed,total,current){
  window.dispatchEvent(new CustomEvent('axioma:game-progress',{detail:{gameId,accountId:account?.id||null,completed,total,current}}));
 }
@@ -2479,6 +2497,13 @@ function snapshot(){
  state.storage=Object.fromEntries(Object.entries(state.storage).filter(([key])=>(config.keys||[]).includes(key)));
  state.schemaVersion=2;
  return state;
+}
+function sameJSON(a,b){
+ if(a===b)return true;
+ if(!a||!b||typeof a!=='object'||typeof b!=='object'||Array.isArray(a)!==Array.isArray(b))return false;
+ if(Array.isArray(a)&&a.length!==b.length)return false;
+ const keys=Object.keys(a);
+ return keys.length===Object.keys(b).length&&keys.every(key=>Object.hasOwn(b,key)&&sameJSON(a[key],b[key]));
 }
 function conflict(){
  active=false;setStatus('conflict');
@@ -2533,8 +2558,14 @@ async function boot(){
     setStatus('offline');
    }
    if(remote){
-    if(record.dirty&&record.revision!==remote.revision){conflict();return}
-    if(!record.dirty){record={state:remote.state||{storage:{}},revision:remote.revision,dirty:false};record.state.storage ||= {}}
+    let acknowledged=false;
+    if(record.dirty&&record.revision!==remote.revision){
+     // A save can commit before reload aborts its reply. Acknowledge only an
+     // identical account-bound persisted payload; retain local-only engine keys.
+     if(sameJSON(snapshot(),remote.state)){record.revision=remote.revision;record.dirty=false;acknowledged=true}
+     else{conflict();return}
+    }
+    if(!record.dirty&&!acknowledged){record={state:remote.state||{storage:{}},revision:remote.revision,dirty:false};record.state.storage ||= {}}
     setStatus(record.dirty?'pending':'saved');
    }
   }else setStatus(config.external?(account?.role==='student'?'loading':account?'teacher':'guest'):config.tracking===false?(config.multiplayer?'multiplayer':'untracked'):account?'teacher':'guest');
@@ -2550,8 +2581,8 @@ async function boot(){
   notice('Je account of opgeslagen voortgang kon niet worden geladen. Probeer opnieuw; je bestaande voortgang blijft behouden.',[['Opnieuw proberen',()=>{if(started)location.reload();else boot()}],['Naar startpagina',()=>location.href=home()]],true);
  }finally{booting=false}
 }
-window.AxiomaGame=Object.freeze({ready,storage:Object.freeze({getItem,setItem,removeItem}),report,emit,flush,
- get state(){return clone(record.state)},get account(){return account},get active(){return active},get status(){return status}
+window.AxiomaGame=Object.freeze({ready,storage:Object.freeze({getItem,setItem,removeItem}),report,emit,flush,rewardUnit,
+ get practiceXP(){return practiceXP()},get state(){return clone(record.state)},get account(){return account},get active(){return active},get status(){return status}
 });
 window.addEventListener('pagehide',()=>{if(active){persist();flush()}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)flush()});
