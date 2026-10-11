@@ -503,7 +503,7 @@
       const fallback=el('a','', 'Open de oorspronkelijke app apart');fallback.href=config.href;fallback.target='_blank';fallback.rel='noopener';loading.append(fallback);wrapper.append(frame,loading);$('appFrames').append(wrapper);
       const origin=config.origin?{...config.origin}:activeKey?{kind:config.utility?'live':'theme',themeId:config.app.desktopTheme||'',type:'all',query:''}:{...view};
       const item={...config,origin,frame,wrapper,owner:M.key(account),cleanup:null};frames.set(config.key,item);
-      frame.addEventListener('load',()=>{if(!frames.has(config.key)||item.owner!==M.key(account))return;loading.hidden=true;connectNative(item);if(activeKey===item.key){syncNativeNavigation();syncWindowControls();updateCrumbs();syncThemeControl();syncProgressBadge();}});
+      frame.addEventListener('load',()=>{if(frames.get(config.key)!==item||item.owner!==M.key(account))return;loading.hidden=true;connectNative(item);if(activeKey===item.key){syncNativeNavigation();syncWindowControls();updateCrumbs();syncThemeControl();syncProgressBadge();}});
     }
     if(!activeKey&&frames.get(config.key)!==config)frames.get(config.key).origin={...view};activateFrame(config.key);return true;
   }
@@ -538,14 +538,18 @@
     const topicId=entryTopic(item),existing=[...frames.values()].reverse().find(f=>f.owner===item.owner&&f.app.id===item.app.id&&f.mode===mode&&entryTopic(f)===topicId);
     return existing?openFrame(existing):openPersonalApp(item.app.id,mode,{topicId,level:item.algebraContext?.level,origin:item.origin,setupHref});
   }
-  function openCentralSessionRoute(href){
+  function openCentralSessionRoute(href,source,replaceLoaded=false){
     const u=new URL(href),hub=new URL('klasbattle/',base),numbers=new URL('games/bewerkingen-trainer/start.html',base);
-    if(u.pathname===numbers.pathname&&u.searchParams.get('view')==='rankings'){window.LeraarBobPersonalHome.openRankings('bewerkingen');return true;}
-    if(u.pathname.replace(/index\.html$/,'')!==hub.pathname)return false;
+    const numbersRankings=u.pathname===numbers.pathname&&u.searchParams.get('view')==='rankings';
+    if(!numbersRankings&&u.pathname.replace(/index\.html$/,'')!==hub.pathname)return false;
     const game=({'algebra-trainer':'algebra','getallenwereld':'bewerkingen','vectoren-trainer':'vectoren','rechtenwereld':'rechten'})[u.searchParams.get('game')]||u.searchParams.get('game');
-    if(u.searchParams.get('view')==='rankings'){window.LeraarBobPersonalHome.openRankings(game);return true;}
     const app=({'rechten':'rechtenwereld','algebra':'algebra-trainer','bewerkingen':'getallenwereld','vectoren':'vectoren-trainer','wortelbouw':'wortelbouw','logicawereld':'logicawereld','kleiduifschieten':'kleiduifschieten'})[game];
-    if(app){if(role()==='teacher')openPersonalApp(app,'classroom',{topicId:u.searchParams.get('world'),level:u.searchParams.get('level')});else openClassJoin(app,{code:u.searchParams.get('code')});return true;}
+    const options={topicId:u.searchParams.get('world')||u.searchParams.get('topic')||(source?.app.id===app?entryTopic(source):undefined),level:u.searchParams.get('level')||(source?.app.id===app?source.algebraContext?.level:undefined),origin:source?.origin};
+    // A loaded legacy bookmark has already left its native document. Remove that
+    // obsolete window before opening its replacement, which may use the same key.
+    if(replaceLoaded&&source&&frames.get(source.key)===source){source.cleanup?.();source.cleanup=null;frames.delete(source.key);source.wrapper.remove();if(activeKey===source.key)showView(source.origin);}
+    if(u.searchParams.get('view')==='rankings'){window.LeraarBobPersonalHome.openRankings(numbersRankings?'bewerkingen':game);return true;}
+    if(app){if(role()==='teacher')openPersonalApp(app,'classroom',options);else openClassJoin(app,{...options,code:u.searchParams.get('code')});return true;}
     if(role()==='teacher')showView({kind:'live'});else window.LeraarBobPersonalHome.openClassCode(u.searchParams.get('code')||'');return true;
   }
   function workformRoute(item,href){
@@ -564,7 +568,7 @@
     item.cleanup?.();let doc;try{doc=item.frame.contentDocument;if(!doc||!M.safeURL(doc.URL))return;}catch{return;}
     // Old bookmarks or a native location.assign can bypass the anchor listener.
     // Resolve these entry pages before embedding any legacy hub navigation.
-    if(openCentralSessionRoute(doc.URL)){item.wrapper.remove();frames.delete(item.key);renderRunning();return;}
+    if(openCentralSessionRoute(doc.URL,item,true)){renderRunning();return;}
     const win=item.frame.contentWindow;
     item.algebraContext=null;item.algebraShell=null;let algebraUnsubscribe=null;
     function attachAlgebra(){
@@ -598,7 +602,7 @@
       if(e.target.closest?.('[data-axioma-login]')){e.preventDefault();e.stopImmediatePropagation();openAccount();return;}
       const a=e.target.closest?.('a[href]');if(!a||a.target==='_blank'||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;const target=M.safeURL(a.href);if(!target)return;
       if(new URL(target).pathname===new URL('tasks/',base).pathname){e.preventDefault();e.stopImmediatePropagation();openUtility('tasks','Opdrachten en toetsen','tasks/','folder');return;}
-      if(openCentralSessionRoute(target)){e.preventDefault();e.stopImmediatePropagation();return;}
+      if(openCentralSessionRoute(target,item)){e.preventDefault();e.stopImmediatePropagation();return;}
       if(openWorksheetRoute(item,target)){e.preventDefault();e.stopImmediatePropagation();return;}
       if(item.app.id==='rechtenwereld'&&new URL(target).pathname===new URL('games/rechten/rechtenwereld/play.html',base).pathname){e.preventDefault();e.stopImmediatePropagation();openModes(item.app.id,{topicId:new URL(target).searchParams.get('world'),opener:a});return;}
       if(item.algebraShell&&a.hasAttribute('data-section')&&!['battle'].includes(a.dataset.section))return;

@@ -20,9 +20,25 @@
       "checks": 32,
       "errors": [],
       "missing": []
+    },
+    "final_desktop": {
+      "passed": 143,
+      "failed": 0
+    },
+    "final_algebra_browser": {
+      "checks": 13,
+      "targetMeasurements": 103,
+      "screenshots": 21,
+      "errors": [],
+      "missing": [],
+      "passed": true
+    },
+    "final_battle_report_browser": {
+      "checks": 11,
+      "errors": []
     }
   },
-  "github": "New final full workflow required after this commit. Earlier failed DOM expectations and obsolete live entry selectors were updated; no tests skipped.",
+  "github": "Full GitHub workflow required for the resulting commit; current outcome is recorded on PR #15. f14aed0 exposed the Algebra route context regression fixed here.",
   "production": {
     "changed": false,
     "publicUrl": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/",
@@ -56,13 +72,24 @@
       "duel_deadline_ready": true,
       "social_migration_ready": true
     },
-    "migrationNote": "numbers_scientific_generator_versions is already deployed as 20261010064750; local source is 20261009202541. Do not reapply it due to timestamp alone."
+    "migrationNote": "numbers_scientific_generator_versions is already deployed as 20261010064750; local source is 20261009202541. Do not reapply it due to timestamp alone.",
+    "releasePR": {
+      "number": 15,
+      "base": "main",
+      "merged": false
+    }
   },
   "sourceSha256": {
     "games/bewerkingen-trainer/numbers-space.js": "72fa1bab3ce3440cb2b1a73de24c47e007166adc105dd0764623d5a07fce45ae",
-    "tests/desktop-dom.test.cjs": "c154d9afb3055fe5361f7798f1d5318e3f229ff5f0c2b2254ab80fef5eeed0a9",
+    "tests/desktop-dom.test.cjs": "5525f6050191d54c85d0f7066d2209994208ef59321ec9824400bfe53d6483c0",
     "tests/class-battle-report-browser.cjs": "c906062eb161a9eec24c243895da2fa65e8288117c976086bdc1c13114bde691",
     "tests/desktop-live-browser.cjs": "5d93f6039cbd050ec6d53e7cc41a22b6ee74a59dbeef40e74630badb4111c646",
-    "tests/uniform-class-flow-browser.cjs": "93eca7502d50a7e25803a2d3b135831b7875da66bae1ab8cb757ce4663ae70fc"
-  }
+    "tests/uniform-class-flow-browser.cjs": "93eca7502d50a7e25803a2d3b135831b7875da66bae1ab8cb757ce4663ae70fc",
+    "os/desktop.js": "6548449e910656e157afb67dfbe0cd472ed3bbfed6b49fc5a642cfb131859623",
+    "tests/algebra-os-browser.cjs": "be787f2a6c57aceebcd6055a12e4b3d9beb117e029370e6c01763f4fcd8f22e6"
+  },
+  "additionalFixes": [
+    "Central class routes retain world, level and originating folder for guest/student/teacher without altering unfinished native work.",
+    "A loaded legacy class-hub bookmark is removed before opening its native replacement, including when both use the same window key. Stale load callbacks cannot reconnect the removed window."
+  ]
 }

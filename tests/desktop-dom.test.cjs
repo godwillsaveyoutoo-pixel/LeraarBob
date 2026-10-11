@@ -145,6 +145,22 @@ test('Algebra route at the six-window limit keeps the original answer instead of
   const event=new frame.contentWindow.CustomEvent('leraarbob:algebra-route',{detail:{href:'https://school.example/LeraarBob/games/algebra-trainer/stelsels.html?screen=menu'},cancelable:true});algebra.doc.dispatchEvent(event);
   assert(event.defaultPrevented);assert.equal(D.state().openApps.length,6);assert.equal(D.state().activeKey,'algebra-trainer|solo|');assert.equal(frame.contentDocument,algebra.doc);assert.equal(algebra.input.value,'bewaarde invoer');assert.match(f.$('toast').textContent,/zes apps/);assert.equal(f.errors.length,0);
 });
+for(const role of ['guest','student','teacher'])test(`The ${role} central class route retains the selected Algebra level, original folder and unfinished answer`,async t=>{
+  const f=await setup({account:role==='guest'?null:{id:'route-'+role,role}});t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;
+  D.showView({kind:'theme',themeId:'algebra',type:'train',query:'vergelijkingen'});const origin=D.state().view;D.openApp('algebra-trainer');
+  const frame=f.$('appFrames').querySelector('iframe'),algebra=algebraFixture(f,frame,'equations');algebra.input.value='onafgemaakte bewerking';
+  const link=algebra.doc.createElement('a');link.href='https://school.example/LeraarBob/klasbattle/?game=algebra&world=equations&level=route-brackets';algebra.doc.body.append(link);link.click();
+  const target=f.$('appFrames').querySelectorAll('iframe')[1],url=new URL(target.src);assert.equal(url.pathname,'/LeraarBob/games/algebra-trainer/classroom.html');assert.equal(url.searchParams.get('world'),'equations');assert.equal(url.searchParams.get('level'),'route-brackets');assert.equal(url.searchParams.get('join'),role==='teacher'?null:'1');
+  assert.equal(frame.contentDocument,algebra.doc);assert.equal(algebra.input.value,'onafgemaakte bewerking');f.$('appBack').click();assert.deepEqual(D.state().view,origin);assert.equal(f.errors.length,0);
+});
+test('Loading an old saved class-hub URL replaces its window with the native class setup',async t=>{
+  const f=await setup({account:{id:'route-teacher',role:'teacher'}});t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;
+  D.showView({kind:'saved'});D.openApp('algebra-trainer','classroom',{topicId:'equations'});
+  const original=f.$('appFrames').querySelector('iframe'),doc=original.contentDocument;doc.open();doc.write('<!doctype html><html><head></head><body>Legacy hub</body></html>');doc.close();
+  Object.defineProperty(doc,'URL',{value:'https://school.example/LeraarBob/klasbattle/?game=algebra&world=equations&level=route-brackets'});original.dispatchEvent(new f.w.Event('load'));
+  assert.equal(D.state().openApps.length,1);const current=f.$('appFrames').querySelector('iframe');assert(current);assert.notEqual(current,original);assert.equal(original.isConnected,false);assert.equal(new URL(current.src).pathname,'/LeraarBob/games/algebra-trainer/classroom.html');assert.equal(new URL(current.src).searchParams.get('level'),'route-brackets');
+  f.$('appBack').click();assert.equal(D.state().view.kind,'saved');assert.equal(f.errors.length,0);
+});
 test('Each pilot keeps its own folder, filter and search when switching through the taskbar',async t=>{
   const f=await setup();t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;
   const pilots=[['pythagoras','pythagoras','learn','pythagoras'],['rechtenwereld','rechten','train','wereld'],['rechten-zeeslag','rechten','game','zeeslag'],['glasraam','rechten','atelier','glas']];
