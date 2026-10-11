@@ -95,7 +95,7 @@ $('check').onclick=()=>{
  if(painting())return;const d=draft();
  if(free()){const error=addFreeLine(C.fromPoints(d.points));if(error)message(error,'error');return;}
  const result=C.check(pattern().lines[d.count],d.points);if(!result.ok){wrong=result.wrong||[];message(result.text,'error');renderBoard();return;}
- C.remember(d);d.count++;d.points=[null,null];cursor={x:0,y:0};if(complete()){d.done=true;state.light=true;}changed();if(complete())message('Mooi! Geef het glas jouw kleur.','success');
+ C.remember(d);d.accepted||=[];d.accepted=d.accepted.filter(h=>h.count<d.count);d.accepted.push({count:d.count,points:copyPoints(d.points)});d.count++;d.points=[null,null];cursor={x:0,y:0};if(complete()){d.done=true;state.light=true;}changed();if(complete())message('Mooi! Geef het glas jouw kleur.','success');
 };
 $('clear-points').onclick=clearPoints;$('undo').onclick=undo;
 // A touch release activates drawing controls immediately, including just after

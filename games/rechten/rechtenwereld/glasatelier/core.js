@@ -77,19 +77,23 @@ function segment(l,bounds=DEFAULT_BOUNDS){
  return hits.length>=2?[hits[0],hits[1]]:null;
 }
 function fromPoints([p,q]){if(!p||!q||p.x===q.x&&p.y===q.y)return null;if(p.x===q.x)return {type:'vertical',x:p.x};const a=(q.y-p.y)/(q.x-p.x);return {type:'function',a,b:p.y-a*p.x};}
-function blank(){return {count:0,points:[null,null],active:0,coords:{x:0,y:0},history:[],colors:{},done:false};}
+function blank(){return {count:0,points:[null,null],active:0,coords:{x:0,y:0},accepted:[],history:[],colors:{},done:false};}
 function initial(){return {version:1,mode:'restore',pattern:'zonneroos',drafts:Object.fromEntries(PATTERNS.map(p=>[p.id,blank()])),free:{lines:[],points:[null,null],history:[],colors:{},inputs:{type:'function',a:'1/2',b:'-2'}},palette:0,tool:'draw',grid:true,light:false};}
 function cleanColors(raw){const result={};if(raw&&typeof raw==='object')for(const [key,value]of Object.entries(raw).slice(0,500))if(/^r[01]{0,12}$/.test(key)&&/^#[0-9a-f]{6}$/i.test(value))result[key]=value;return result;}
 const cleanPoints=points=>[0,1].map(i=>isPoint(points?.[i])?{x:points[i].x,y:points[i].y}:null);
 const copyLines=lines=>(Array.isArray(lines)?lines:[]).slice(0,MAX_LINES).filter(validLine).map(l=>l.type==='vertical'?{type:l.type,x:l.x}:{type:l.type,a:l.a,b:l.b});
 function cleanHistory(raw,total,design=false){return (Array.isArray(raw)?raw:[]).filter(h=>h&&typeof h==='object').slice(-32).map(h=>design?{lines:copyLines(h.lines),points:cleanPoints(h.points)}:{count:Number.isInteger(h.count)?Math.max(0,Math.min(total,h.count)):0,points:cleanPoints(h.points)});}
+function acceptedLines(d,p,count){
+ const proof=[...(Array.isArray(d.accepted)?d.accepted:[]),...(Array.isArray(d.history)?d.history:[])];
+ return p.lines.slice(0,count).flatMap((l,i)=>{const h=proof.find(h=>h?.count===i&&check(l,h.points).ok);return h?[{count:i,points:cleanPoints(h.points)}]:[];});
+}
 function restore(raw){
  const state=initial();if(!raw||raw.version!==1)return state;
  state.mode=raw.mode==='design'?'design':'restore';state.pattern=PATTERNS.some(p=>p.id===raw.pattern)?raw.pattern:state.pattern;
  state.palette=Number.isInteger(raw.palette)&&raw.palette>=0&&raw.palette<PALETTE.length?raw.palette:0;
  state.grid=raw.grid!==false;state.light=raw.light===true;
  state.tool=raw.tool==='paint'?'paint':'draw';
- for(const p of PATTERNS){const d=raw.drafts?.[p.id];if(!d)continue;const count=Number.isInteger(d.count)?Math.max(0,Math.min(p.lines.length,d.count)):0;state.drafts[p.id]={count,points:cleanPoints(d.points),active:d.active===1?1:0,coords:isPoint(d.coords)?{x:d.coords.x,y:d.coords.y}:{x:0,y:0},history:cleanHistory(d.history,p.lines.length),colors:cleanColors(d.colors),done:d.done===true||count===p.lines.length};}
+ for(const p of PATTERNS){const d=raw.drafts?.[p.id];if(!d)continue;const count=Number.isInteger(d.count)?Math.max(0,Math.min(p.lines.length,d.count)):0;state.drafts[p.id]={count,points:cleanPoints(d.points),active:d.active===1?1:0,coords:isPoint(d.coords)?{x:d.coords.x,y:d.coords.y}:{x:0,y:0},accepted:acceptedLines(d,p,count),history:cleanHistory(d.history,p.lines.length),colors:cleanColors(d.colors),done:d.done===true||count===p.lines.length};}
  const lines=[];for(const l of Array.isArray(raw.free?.lines)?raw.free.lines.slice(0,MAX_LINES):[]){if(validLine(l)&&!lines.some(x=>sameLine(x,l)))lines.push(l.type==='vertical'?{type:l.type,x:l.x}:{type:l.type,a:l.a,b:l.b});}
  const inputs=raw.free?.inputs||{},text=value=>typeof value==='string'?value.slice(0,16):'';
  state.free={lines,points:cleanPoints(raw.free?.points),history:cleanHistory(raw.free?.history,MAX_LINES,true),colors:cleanColors(raw.free?.colors),inputs:{type:inputs.type==='vertical'?'vertical':'function',a:typeof inputs.a==='string'?text(inputs.a):'1/2',b:typeof inputs.b==='string'?text(inputs.b):'-2'}};return state;
@@ -102,7 +106,7 @@ function colorFor(cell,colors,index,preset){
  return preset.colors[((which%6)+6)%6];
 }
 function remember(d,design=false){d.history||=[];d.history.push(design?{lines:copyLines(d.lines),points:cleanPoints(d.points)}:{count:d.count,points:cleanPoints(d.points)});d.history=d.history.slice(-32);}
-function undo(d,design=false){const previous=d.history?.pop();if(previous){d.points=cleanPoints(previous.points);if(design)d.lines=copyLines(previous.lines);else d.count=previous.count;return true;}if(design&&d.lines.length){d.lines.pop();d.points=[null,null];return true;}if(!design&&d.count){d.count--;d.points=[null,null];return true;}return false;}
+function undo(d,design=false){const previous=d.history?.pop();if(previous){d.points=cleanPoints(previous.points);if(design)d.lines=copyLines(previous.lines);else{d.count=previous.count;if(d.accepted)d.accepted=d.accepted.filter(h=>h.count<d.count);}return true;}if(design&&d.lines.length){d.lines.pop();d.points=[null,null];return true;}if(!design&&d.count){d.count--;if(d.accepted)d.accepted=d.accepted.filter(h=>h.count<d.count);d.points=[null,null];return true;}return false;}
 function slot(points,p){const empty=points.findIndex(x=>!x);if(empty>=0)return empty;return Math.hypot(points[0].x-p.x,points[0].y-p.y)<Math.hypot(points[1].x-p.x,points[1].y-p.y)?0:1;}
 return Object.freeze({LIMIT,MAX_COORD,DEFAULT_BOUNDS,MAX_LINES,PALETTE,PATTERNS,parseNumber,isPoint,validLine,signed,sameLine,check,numberText,formula,area,cells,segment,fromPoints,initial,restore,colorFor,remember,undo,slot});
 });

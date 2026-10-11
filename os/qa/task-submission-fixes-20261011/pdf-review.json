@@ -1,0 +1,21 @@
+{
+  "renderer": "Poppler pdftoppm",
+  "review": "All six rendered pages visually inspected; no clipping or overlap. Long text wraps at word boundaries.",
+  "files": [
+    {
+      "file": "student-scores.pdf",
+      "pages": 1
+    },
+    {
+      "file": "partial-scores.pdf",
+      "pages": 1
+    },
+    {
+      "file": "pagination-scores.pdf",
+      "pages": 4,
+      "scope": "Synthetic pagination/Unicode/long-feedback test; not a pupil grade."
+    }
+  ],
+  "repeatDownload": "Partial-submission PDF byte-identical when downloaded again.",
+  "format": "A4 raster PDF using shared/proof-pdf.js; accessible HTML summary retained."
+}

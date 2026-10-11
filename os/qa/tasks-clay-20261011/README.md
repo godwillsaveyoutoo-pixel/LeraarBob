@@ -1,5 +1,7 @@
 # Toetsopbouw en Kleiduifschieten · 11 oktober 2026
 
+**Historisch verslag.** De opslag van getekende patronen, eindmelding, puntentoekenning, gedeeltelijk indienen en leerling-PDF zijn daarna hersteld/uitgebreid. Zie de [aanvullende controles](../task-submission-fixes-20261011/README.md) voor het huidige toetsgedrag. De oorspronkelijke doorloop hieronder testte alleen een vrij ontworpen raam.
+
 Deze afwerkronde levert de eerste samengestelde opdracht en de ontbrekende Kleiduifroutes. De lokale preview gebruikt fictieve accounts en een tijdelijke PostgreSQL-database. Dit is geen bewijs van productieaanmelding, externe toestellen of een publieke uitrol.
 
 ## Wat werkt

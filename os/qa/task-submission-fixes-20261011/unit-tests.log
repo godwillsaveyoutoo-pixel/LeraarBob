@@ -1,0 +1,82 @@
+TAP version 13
+# Subtest: Assignments: publication, fixed content, enrollment, native answers, resume, final submission, review and permissions
+ok 1 - Assignments: publication, fixed content, enrollment, native answers, resume, final submission, review and permissions
+  ---
+  duration_ms: 2056.203634
+  type: 'test'
+  ...
+# Subtest: Task retries, competing answers, drafts and invalid configuration cannot overwrite durable work
+ok 2 - Task retries, competing answers, drafts and invalid configuration cannot overwrite durable work
+  ---
+  duration_ms: 1603.898153
+  type: 'test'
+  ...
+# Subtest: Guided glass evidence, duplicate lines, save retries and partial submission use one point per correct item
+ok 3 - Guided glass evidence, duplicate lines, save retries and partial submission use one point per correct item
+  ---
+  duration_ms: 1526.161599
+  type: 'test'
+  ...
+# Subtest: A partly played series counts hits and native correct answers, never misses, late shots or unfinished drafts
+ok 4 - A partly played series counts hits and native correct answers, never misses, late shots or unfinished drafts
+  ---
+  duration_ms: 1539.514751
+  type: 'test'
+  ...
+# Subtest: given patterns have drawable integer points and validate every pair, including verticals
+ok 5 - given patterns have drawable integer points and validate every pair, including verticals
+  ---
+  duration_ms: 13.779423
+  type: 'test'
+  ...
+# Subtest: glass partitions cover the window exactly and never cross a lead line
+ok 6 - glass partitions cover the window exactly and never cross a lead line
+  ---
+  duration_ms: 36.725708
+  type: 'test'
+  ...
+# Subtest: coincident, boundary and corner-touching lines do not produce empty glass pieces
+ok 7 - coincident, boundary and corner-touching lines do not produce empty glass pieces
+  ---
+  duration_ms: 1.191793
+  type: 'test'
+  ...
+# Subtest: formula entry accepts finite fractions and comma decimals and rejects incomplete or unsafe text
+ok 8 - formula entry accepts finite fractions and comma decimals and rejects incomplete or unsafe text
+  ---
+  duration_ms: 0.486221
+  type: 'test'
+  ...
+# Subtest: draft restoration preserves unfinished work, free inputs, colors and earned completions
+ok 9 - draft restoration preserves unfinished work, free inputs, colors and earned completions
+  ---
+  duration_ms: 1.535583
+  type: 'test'
+  ...
+# Subtest: rectangular phone windows keep exact area and line endpoints for each design
+ok 10 - rectangular phone windows keep exact area and line endpoints for each design
+  ---
+  duration_ms: 3.658839
+  type: 'test'
+  ...
+# Subtest: editing and undo retain accepted work, including after save/reload and final completion
+ok 11 - editing and undo retain accepted work, including after save/reload and final completion
+  ---
+  duration_ms: 0.965473
+  type: 'test'
+  ...
+# Subtest: older three-window drafts migrate without resetting their points, colors or completions
+ok 12 - older three-window drafts migrate without resetting their points, colors or completions
+  ---
+  duration_ms: 0.305911
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6987.831044

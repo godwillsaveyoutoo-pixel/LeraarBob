@@ -1,6 +1,7 @@
 const fs=require('node:fs'),path=require('node:path');
 async function install(db,ids){
  await db.exec(fs.readFileSync(path.resolve(__dirname,'../../supabase/migrations/20261011121227_os_composite_tasks.sql'),'utf8'));
+ await db.exec(fs.readFileSync(path.resolve(__dirname,'../../supabase/migrations/20261011135715_os_task_unit_scores_and_partial_submission.sql'),'utf8'));
  let queue=Promise.resolve();
  function query(user,role,name,action,data){const p=queue.catch(()=>{}).then(()=>db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[ids[user]||'']);await tx.exec('set local role '+role);return(await tx.query('select public.'+name+'($1,$2::jsonb) result',[action,JSON.stringify(data||{})])).rows[0].result;}));queue=p;return p;}
  const rpc=(user,action,data)=>query(user,'authenticated','axioma_os_tasks',action,data);

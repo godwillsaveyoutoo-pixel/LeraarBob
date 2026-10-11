@@ -1,0 +1,18 @@
+{
+  "preview": "http://127.0.0.1:8796/os/?previewUser=alex",
+  "source": "Existing local synthetic preview on port 8795",
+  "verifiedThrough": "Actual OS -> My tasks -> assignment -> original glass board -> Raam klaar",
+  "preserved": {
+    "guidedPattern": "zonneroos",
+    "correctLines": 6,
+    "clayAnswers": 10,
+    "nativeRightsAnswers": 10
+  },
+  "after": {
+    "glassDone": true,
+    "savedLines": 6,
+    "workStatus": "working",
+    "finalSubmissionPerformed": false
+  },
+  "unchanged": "The two existing answer arrays compare exactly equal before/after. Old preview retained."
+}

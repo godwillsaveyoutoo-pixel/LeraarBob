@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "Teacher creates and publishes a fixed three-part assessment to selected students; default ten Rechtenwereld questions retained.",
+    "Finishing while autosave is in flight succeeds. A real line is added in the original Glasraam atelier, marked complete, stored separately from solo practice, and restored after full OS reload.",
+    "Two real shots through the existing Kleiduif renderer are time-checked and durably recorded by SQL, then shown as a completed task component.",
+    "Ten genuine Rechtenwereld answers use the native board and original server validator; one final submission freezes all three components.",
+    "Teacher reopens the original glass design, each native Rechten answer and individual clay shots, checks automatic unit scores and shares feedback; another isolated browser restored unfinished answer input.",
+    "Six real Zonneroos lines, lost save acknowledgement, visible failure and safe retry; partial submission with untouched games, 6 unit points and identical repeat PDF downloads.",
+    "PDF pagination stress: 4 A4 pages, long title/feedback, diacritics and mathematical symbols.",
+    "Desktop, phone and low landscape at 100% zoom, both OS bars expanded and collapsed; reachable 44px actions, no horizontal page overflow, same saved review."
+  ],
+  "errors": [],
+  "missing": [],
+  "scope": "Real native boards, local PostgreSQL and Edge handler, fixture accounts; no production deployment."
+}

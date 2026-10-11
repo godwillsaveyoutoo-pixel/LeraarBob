@@ -6,7 +6,7 @@ Deze lijst bundelt alle gebruikersopmerkingen. Een onderdeel is pas afgewerkt wa
 
 **Vaste keuze na de Stelsels-correctie:** alleen `games/stelsels.html` is de Stelsels-app. De Algebra-module met zes Stelsels-levels is geen vervanging. Oude OS-spelkoppelingen openen de oorspronkelijke trainer; historische opslag en de afzonderlijke papiergenerator blijven intact. Oudere Algebra-verslagen hieronder mogen niet als bewijs voor de oorspronkelijke Stelsels worden gebruikt.
 
-Actuele afwerkronde: [toetsopbouw en Kleiduif — controles en grenzen](qa/tasks-clay-20261011/README.md). Eerdere ronde: [OS-bediening](qa/checklist-20261011/README.md). [Inventaris van huidige werkvormen](APP-MODES.md).
+Actuele herstelronde: [raam afronden, gedeeltelijk indienen en PDF met unitpunten](qa/task-submission-fixes-20261011/README.md). Vorige afwerkronde: [toetsopbouw en Kleiduif — controles en grenzen](qa/tasks-clay-20261011/README.md). Eerdere ronde: [OS-bediening](qa/checklist-20261011/README.md). [Inventaris van huidige werkvormen](APP-MODES.md).
 
 ### A. Betrouwbare basis en bediening
 
@@ -42,8 +42,8 @@ Actuele afwerkronde: [toetsopbouw en Kleiduif — controles en grenzen](qa/tasks
 
 - [x] D1. Centrale maker, onderwerpmapjes, huidige en eerdere reeksen, exacte vragen/sleutel bewaren, PDF/HTML en backup/herstel. [Bewijs](qa/central-paper/README.md).
 - [ ] D2. Bewaarde reeksen veilig tussen toestellen kunnen hervatten. Online archief en lokale cache geïmplementeerd en getest met twee geïsoleerde browsers en lokale SQL; migratie nog niet uitgerold op productie. Exacte documenten, offline opnieuw proberen, verwijdermarkeringen en accountisolatie getest. Productieproef blijft open.
-- [x] D3. Centrale maker voor **Glasraam + Kleiduifschieten + tien Rechtenwereldvragen**, met instructies, punten, aantallen, tempo en vraagtypes. Bereikbaar via Start → Mijn taken → Opdrachten en toetsen. [Lokale end-to-endcontrole](qa/tasks-clay-20261011/README.md).
-- [x] D4. Leerlingtoewijzing, onveranderlijke uitgedeelde versie, opgeslagen ontwerp/antwoorden, definitieve inzending, serverbeoordeling van vragen, nakijken en CSV-export. Andere leerlingen en client-scores worden geweigerd. Lokale SQL/Edge- en browserproeven; productieaanmelding blijft E2. [Bewijs](qa/tasks-clay-20261011/README.md).
+- [x] D3. Centrale maker voor **Glasraam + Kleiduifschieten + tien Rechtenwereldvragen**, met instructies, aantallen, tempo en vraagtypes. Eén punt per geldige verschillende lijn, juist geraakt doel of juist antwoord. Bereikbaar via Start → Mijn taken → Opdrachten en toetsen. [Lokale end-to-endcontrole](qa/tasks-clay-20261011/README.md).
+- [x] D4. Leerlingtoewijzing, onveranderlijke uitgedeelde versie, opgeslagen ontwerp/antwoorden, ook gedeeltelijk definitief indienen, serverbeoordeling per item, onmiddellijk een leerling-PDF, nakijken en CSV-export. Andere leerlingen en client-scores worden geweigerd. Lokale SQL/Edge- en browserproeven inclusief het volledige Zonneroos-raam, gelijktijdig bewaren en een weggevallen bevestiging; productieaanmelding blijft E2. [Herstelbewijs](qa/task-submission-fixes-20261011/README.md).
 - [x] D5. Versie 1 van de onderdelenstructuur: 1–12 onderdelen in eigen volgorde, getypeerde configuratie en antwoordadministratie, originele engines via aparte koppelingen. Drie adapters werken; andere trainers aansluiten vereist hun eigen configuratie, renderer en servervalidator. [Uitbreidingsafspraak](qa/tasks-clay-20261011/README.md).
 
 ### E. Afronding en publicatie
