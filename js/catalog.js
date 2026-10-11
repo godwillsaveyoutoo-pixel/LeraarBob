@@ -364,8 +364,20 @@ window.AXIOMA_CATALOG = [
             "student",
             "teacher"
           ],
-          "href": "games/rechten/kleiduiven/",
+          "href": "games/rechten/kleiduiven/?mode=solo",
           "providerId": "kleiduifschieten"
+        },
+        {
+          "id": "online",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "student"
+          ],
+          "href": "games/rechten/kleiduiven/?mode=online",
+          "providerId": "kleiduifschieten",
+          "title": "Duo Battle",
+          "description": "Nodig één klasgenoot uit; ieder speelt op een eigen toestel."
         },
         {
           "id": "group",
@@ -375,10 +387,22 @@ window.AXIOMA_CATALOG = [
             "student",
             "teacher"
           ],
-          "href": "games/rechten/kleiduiven/",
+          "href": "games/rechten/kleiduiven/?mode=group",
           "providerId": "kleiduifschieten",
-          "title": "Groepssessie Kleiduifschieten",
-          "description": "Open de groepssessie vanuit het spelmenu. Deze sessie gebruikt de eigen Kleiduifschieten-regels."
+          "title": "Groepsbattle",
+          "description": "Nodig meerdere klasgenoten uit of open een groep voor je klas."
+        },
+        {
+          "id": "classroom",
+          "participation": "group",
+          "purpose": "battle",
+          "roles": [
+            "teacher"
+          ],
+          "href": "games/rechten/kleiduiven/?mode=classroom",
+          "providerId": "kleiduifschieten",
+          "title": "Klasbattle",
+          "description": "Kies je klas, start samen en volg de resultaten."
         }
       ],
       "worksheets": []

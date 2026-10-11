@@ -123,3 +123,7 @@ Werkelijk gecontroleerd: 20 werkvormgroepen / 102 aanraakdoelen, de vier pilots,
 ## Logicawereld
 
 Logicawereld v0.2 is toegevoegd als trainer in Logica & puzzels. De kaart heeft directe ingangen voor solo en duo op één toestel; Solo Battle staat in de werkvormkeuze. De achttien haltes houden hun eigen antwoordbediening. Zes oefenbladmappen gebruiken de centrale maker en het bestaande accountgebonden lokale archief. Rondes blijven apart bewaard per account, werkvorm en halte. Online duo en klasproviders zijn nog niet aangesloten. Zie [de aansluitingsafspraken](../games/logicawereld/README.md) en [de browsercontrole](qa/logica/README.md).
+
+## Samengestelde opdrachten en Kleiduifschieten
+
+Start → Mijn taken → Opdrachten en toetsen opent de centrale toetsmaker. Een leerkracht combineert Glasraam, een vaste Kleiduifreeks en Rechtenwereldvragen, deelt de taak aan leerlingen uit en beoordeelt hun inzendingen. De oorspronkelijke werkborden blijven behouden. Kleiduifschieten heeft daarnaast aparte solo-, duo-, groeps- en klasroutes met centrale resultaten. [Uitgevoerde controles, screenshots en uitrolgrenzen](qa/tasks-clay-20261011/README.md). Deze toevoeging werkt in de lokale testpreview; de nieuwe databasefuncties en Edge-functie zijn nog niet op productie uitgerold.

@@ -1,0 +1,6 @@
+const fs=require('node:fs'),path=require('node:path');
+async function install(db,ids){await db.exec(fs.readFileSync(path.resolve(__dirname,'../../supabase/migrations/20261011123451_os_clay_modes.sql'),'utf8'));let queue=Promise.resolve();
+ function rpc(user,input={}){const p=queue.catch(()=>{}).then(()=>db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[ids[user]||'']);await tx.exec('set local role authenticated');return(await tx.query('select public.axioma_clay_os($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) result',[input.p_action,input.p_tab_id||ids[user],input.p_session_id||null,input.p_speed||5,input.p_answer??null,input.p_event_id||null,input.p_version??null,input.p_mode||'group',input.p_targets||null,input.p_class_code||null])).rows[0].result;}));queue=p;return p;}
+ function results(user,cls){const p=queue.catch(()=>{}).then(()=>db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[ids[user]||'']);await tx.exec('set local role authenticated');return(await tx.query('select public.axioma_clay_results($1) result',[cls||null])).rows[0].result;}));queue=p;return p;}
+ return {rpc,results};
+}module.exports={install};

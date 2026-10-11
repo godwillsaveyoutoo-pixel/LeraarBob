@@ -20,3 +20,6 @@ verify_jwt = true
 
 [functions.numbers-session]
 verify_jwt = true
+
+[functions.task-activity]
+verify_jwt = true

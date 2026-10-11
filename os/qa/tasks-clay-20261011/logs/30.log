@@ -1,0 +1,25 @@
+PASS Add lists Logicawereld as Trainer; native map, four-stop area and paper action usable at 1366×768, 780×360, 640×360, 390×844; one platform bar with restore >=44px
+PASS Wrong answer, hint and correction remain distinct; Start/ESC focus, minimize/resume, bookmark and hiding both OS bars preserve the native task and selected answer
+STOP 1
+STOP 2
+STOP 3
+STOP 4
+STOP 5
+STOP 6
+STOP 7
+STOP 8
+STOP 9
+STOP 10
+STOP 11
+STOP 12
+STOP 13
+STOP 14
+STOP 15
+STOP 16
+STOP 17
+STOP 18
+PASS All 18 stops completed via native browser controls; ten answer types and eight-row table measured in both bar states on desktop, short landscape and phone
+PASS OS workform chooser keeps selected stop, exposes exactly four implemented local modes; Duo Learn peer review survives reload; both battle forms finish through their native answers
+PASS Native paper button opens central maker at the selected stop; generated questions/key reopen in the correct OS folder; all six areas generate their complete task set
+PASS Account switch clears open student work without changing saved records; second pupil has separate progress and sheets; teacher receives no nonfunctional Logicawereld class launch
+PASS Standalone uses shared account/menu/fullscreen bar; explicit collapse survives reload and restores without resetting the exercise

@@ -12,7 +12,7 @@
   let dialog, dialogBody, dialogTitle, dialogKind = '', dialogVersion = 0, returnFocus, polling, busy = false;
   const signatures = new Map();
   const identity = account => `${account?.id || 'guest'}:${account?.role || 'guest'}`;
-  const games = { rechten: 'Rechtenwereld', vector: 'Vectormissie', vectoren: 'Vectormissie', equations: 'Vergelijkingen', systems: 'Stelsels' };
+  const games = { kleiduifschieten:'Kleiduifschieten', rechten: 'Rechtenwereld', vector: 'Vectormissie', vectoren: 'Vectormissie', equations: 'Vergelijkingen', systems: 'Stelsels' };
   const safeState = () => snapshot?.account?.id === ctx?.account?.id && ctx?.account && !ctx.authPending ? snapshot : null;
   const invitations = () => (safeState()?.invitations || []).filter(i => i.status === 'pending' && (!i.expires_at || Date.parse(i.expires_at) > Date.now()));
   const incoming = () => invitations().filter(i => i.recipient_id === ctx.account.id);
@@ -171,13 +171,15 @@
       const { data, error } = response;
       if (version !== epoch || turn !== boardRequest) return;
       if (error || !Array.isArray(data?.leaderboards) || !Array.isArray(data?.rooms)) throw Error('Geen ranglijst');
-      board = data; boardState = 'ready';
+      let clay;try{clay=await Promise.race([api.rpc('axioma_clay_results',{p_class_code:selectedClass||null}),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(Error('Geen verbinding')),10000);})]);}catch{clay={error:true};}finally{clearTimeout(timeout);}
+      if(version!==epoch||turn!==boardRequest)return;
+      board = {...data,clayError:!!clay.error,clayResults:clay.data?.results||[],leaderboards:[...data.leaderboards,...(clay.data?.leaderboards||[])]}; boardState = 'ready';
     } catch { if (version !== epoch || turn !== boardRequest) return; board = null; boardState = 'error'; }
     renderBoards(); renderSession();
   }
   function rankingRows(rows) {
     const list = node('ol', 'personal-ranking');
-    rows.forEach(r => { const item = node('li', r.mine ? 'is-mine' : ''); item.append(node('span', 'personal-place', String(r.place)), node('strong', '', r.alias), node('span', 'personal-points', `${r.points} pt`)); if (r.mine) item.setAttribute('aria-label', `${r.place}. ${r.alias}, jij, ${r.points} punten`); list.append(item); }); return list;
+    rows.forEach(r => { const item = node('li', r.mine ? 'is-mine' : ''); item.append(node('span', 'personal-place', String(r.place)), node('strong', '', r.alias), node('span', 'personal-points', `${r.points} ${r.game==='kleiduifschieten'?'XP':'pt'}`)); if (r.mine) item.setAttribute('aria-label', `${r.place}. ${r.alias}, jij, ${r.points} punten`); list.append(item); }); return list;
   }
   function renderBoards() {
     if (!ctx) return;
@@ -191,12 +193,12 @@
     });
     if ($('rankingWindowBody')) renderRankingWindow();
   }
-  function openRankings() { closeDialog(); ctx.showView({kind:'rankings'}); refreshBoards(); }
+  function openRankings(game) { if(typeof game==='string'&&games[game])selectedGame=game;closeDialog(); ctx.showView({kind:'rankings'}); refreshBoards(); }
   function renderRankingWindow() {
     if (!ctx) return;
     const root=$('rankingWindowBody');if(!root)return;if(!root.childElementCount)signatures.delete('rankingWindowBody');
     replace('rankingWindowBody', JSON.stringify([owner, boardState, board, selectedClass, selectedGame]), () => {
-      const nodes = [small('Punten uit afgeronde klasbattles. Werelden hebben elk hun eigen ranglijst; dit is geen XP-omrekening.')];
+      const nodes = [small('Elke wereld heeft haar eigen ranglijst. Kleiduifschieten toont verdiende battle-XP: 10 voor deelname met een verwerkt schot, plus 10 voor de winnaar.')];
       if (!ctx.account) return [...nodes, button('Inloggen', () => { closeDialog(); ctx.openAccount(); }, 'personal-primary')];
       if (boardState === 'loading') return [...nodes, small('Ranglijsten ophalen…')];
       if (boardState === 'error') return [...nodes, small('De ranglijst kon niet laden.'), button('Opnieuw proberen', refreshBoards, 'personal-primary')];
@@ -207,10 +209,12 @@
         select.addEventListener('change', () => { selectedClass = select.value; boardState = 'loading'; board = null; renderBoards(); refreshBoards(); }); label.append(select); filters.append(label);
       } else nodes.push(node('p', 'personal-ranking-world', board.class ? `Klas ${board.class}` : 'Geen klas gekoppeld'));
       const label = node('label', '', 'Wereld'), select = node('select'); select.setAttribute('aria-label', 'Wereld voor ranglijst'); select.dataset.focusKey = 'ranking-game';
-      const ids = [...new Set(['rechten', ...(board.leaderboards || []).map(r => r.game)])]; ids.forEach(id => select.append(new Option(games[id] || id, id))); select.value = selectedGame;
+      const ids = [...new Set(['rechten','kleiduifschieten', ...(board.leaderboards || []).map(r => r.game)])]; ids.forEach(id => select.append(new Option(games[id] || id, id))); select.value = selectedGame;
       select.addEventListener('change', () => { selectedGame = select.value; renderRankingWindow(); }); label.append(select); filters.append(label); nodes.push(filters);
       const rows = (board.leaderboards || []).filter(r => r.game === selectedGame);
       nodes.push(rows.length ? rankingRows(rows) : small(ctx.account.role === 'teacher' && !selectedClass ? 'Kies eerst je klas.' : 'Nog geen afgeronde klasbattles voor deze wereld.'));
+      if(selectedGame==='kleiduifschieten'&&board.clayError)nodes.push(small('Kleiduifresultaten konden niet worden opgehaald.'));
+      if(selectedGame==='kleiduifschieten'&&ctx.account.role==='teacher')for(const room of board.clayResults||[]){const card=node('details','personal-result-room'),title=node('summary','',new Date(room.created_at).toLocaleString('nl-BE')+' · '+({online:'Duo',group:'Groep',classroom:'Klas'})[room.os_mode]+' · '+room.status);card.append(title);for(const m of room.members||[])card.append(node('p','',`${m.alias}: ${m.streak}/7 · ${m.misses} missers · ${m.answers} schoten · ${m.xp} XP${m.winner?' · winnaar':''}`));nodes.push(card);}
       nodes.push(button('Vernieuwen', refreshBoards, 'personal-wide')); return nodes;
     });
   }

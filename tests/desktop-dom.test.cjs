@@ -159,10 +159,10 @@ test('Launching through Start gives the new app its theme while saved shortcuts 
   const f=await setup();t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;
   D.showView({kind:'theme',themeId:'pythagoras'});D.openApp('pythagoras');f.$('startButton').click();f.$('startSearch').value='glasraam';f.$('startSearch').dispatchEvent(new f.w.Event('input'));[...f.$('startResults').querySelectorAll('button')].find(b=>b.querySelector('strong').textContent==='Glasraam').click();
   assert.equal(f.$('startPanel').hidden,true);assert.equal(f.$('headerFolder').textContent,'Rechten & functies');f.$('appBack').click();assert.equal(D.state().view.themeId,'rechten');
-  D.openApp('glasraam');f.$('saveActivity').click();D.showView({kind:'saved'});f.$('viewContent').querySelector('.saved-row button').click();
+  D.openApp('glasraam');f.$('saveActivity').click();D.showView({kind:'saved'});f.$('viewContent').querySelector('.saved-row:not(.assignment-entry) button').click();
   assert.equal(f.$('appBack').textContent,'Terug naar Mijn taken');assert.equal(f.$('headerFolder').textContent,'Rechten & functies');
   f.$('minimizeApp').click();f.$('runningApps').children[1].click();f.$('appBack').click();assert.equal(D.state().view.kind,'saved');
-  f.$('viewContent').querySelector('.saved-row button').click();f.$('closeApp').click();f.$('acceptClose').click();assert.equal(D.state().view.kind,'saved');assert.equal(D.state().openApps.length,1);
+  f.$('viewContent').querySelector('.saved-row:not(.assignment-entry) button').click();f.$('closeApp').click();f.$('acceptClose').click();assert.equal(D.state().view.kind,'saved');assert.equal(D.state().openApps.length,1);
 });
 test('Start works from a native answer field and Escape returns focus without changing native keys or input',async t=>{
   const f=await setup();t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;D.openApp('pythagoras');
@@ -303,5 +303,5 @@ test('Folders and rankings have one resumable taskbar entry each; closing remove
 test('Historical shortcuts keep stored data; an old systems launch resolves to the original trainer',async t=>{
   const saved=[{id:'algebra-trainer',key:'equations',mode:'solo',title:'Algebrawereld · Vergelijkingen',href:'https://school.example/LeraarBob/games/algebra-trainer/?level=route-two'},{id:'algebra-trainer',key:'systems',mode:'solo',title:'Algebrawereld · Stelsels',href:'https://school.example/LeraarBob/games/algebra-trainer/stelsels.html?level=sys-substitution'}];
   const f=await setup({storage:{'leraarbob-desktop:v1:guest':JSON.stringify({saved})}});t.after(()=>f.w.close());f.w.LeraarBobDesktop.showView('saved');
-  assert.deepEqual([...f.$('viewContent').querySelectorAll('h3')].map(n=>n.textContent),['Vergelijkingen','Stelsels']);assert.deepEqual(JSON.parse(f.w.localStorage.getItem('leraarbob-desktop:v1:guest')).saved,saved);f.$('viewContent').querySelectorAll('.saved-row')[1].querySelector('button').click();assert.equal(new URL(f.$('appFrames').querySelector('iframe').src).pathname,'/LeraarBob/games/stelsels.html');
+  assert.deepEqual([...f.$('viewContent').querySelectorAll('.saved-row:not(.assignment-entry) h3')].map(n=>n.textContent),['Vergelijkingen','Stelsels']);assert.deepEqual(JSON.parse(f.w.localStorage.getItem('leraarbob-desktop:v1:guest')).saved,saved);f.$('viewContent').querySelectorAll('.saved-row:not(.assignment-entry)')[1].querySelector('button').click();assert.equal(new URL(f.$('appFrames').querySelector('iframe').src).pathname,'/LeraarBob/games/stelsels.html');
 });

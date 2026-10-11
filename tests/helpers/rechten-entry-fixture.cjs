@@ -9,6 +9,8 @@ async function createFixture(){
  await classroom.db.exec(fs.readFileSync(path.join(root,'supabase/migrations/20261005132202_central_class_battle_hub.sql'),'utf8'));await classroom.db.exec("update public.axioma_profiles set class_code='TEST'");
  for(const user of ['alex','sam','outsider'])await learn.progress(user,engine.skills);
  await learn.db.exec(fs.readFileSync(path.join(root,'supabase/migrations/20261011070545_os_worksheet_cloud_archive.sql'),'utf8'));
+ const tasks=await require('./os-tasks-db.cjs').install(classroom.db,classroom.ids);
+ const clay=await require('./clay-os-db.cjs').install(classroom.db,classroom.ids);
  let queue=Promise.resolve();const calls=[],gameProgress=new Map();
  function as(user,role,sql,args){const work=queue.catch(()=>{}).then(()=>learn.db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[learn.ids[user]||'']);await tx.exec('set local role '+role);return(await tx.query(sql,args)).rows[0]?.result;}));queue=work;return work;}
  const {createHandler}=await import('../../supabase/functions/rechten-learn/handler.js');
@@ -23,11 +25,15 @@ async function createFixture(){
    let data;
    if(provider==='rechten-learn'){const response=await handler(new Request('https://entry.test',{method:'POST',headers:{Authorization:'Bearer '+user},body:JSON.stringify(input)}));data=await response.json();if(!response.ok)throw Error(data.error);}
    else if(provider==='rechten-duo'){const work=queue.catch(()=>{}).then(()=>learn.rpc(user,input.action,input.data||{}));queue=work;data=await work;}
+   else if(provider==='axioma_os_tasks')data=await tasks.rpc(user,input.p_action,input.p_data);
+   else if(provider==='task-activity')data=await tasks.activity(user,input.action,input.data);
    else if(provider==='numbers-session')data=await numbers.call(user,input.action,input.data||{});
    else if(provider==='rechten-class')data=await classroom.battle(user,input.action,input.data);
    else if(provider==='axioma_social')data=await as(user,'authenticated','select public.axioma_social($1,$2,$3,$4,$5) result',[input.p_action,input.p_tab_id,input.p_target_id||null,input.p_invite_id||null,input.p_match_id||null]);
    else if(provider==='axioma_class_battle_hub')data=await classroom.db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[classroom.ids[user]]);await tx.exec('set local role authenticated');return(await tx.query('select public.axioma_class_battle_hub($1,$2) result',[input.p_action,JSON.stringify(input.p_data||{})])).rows[0].result;});
    else if(provider==='axioma_worksheet_archive')data=await as(user,'authenticated','select public.axioma_worksheet_archive($1,$2::jsonb) result',[input.p_action,JSON.stringify(input.p_data||{})]);
+   else if(provider==='axioma_clay_os')data=await clay.rpc(user,input);
+   else if(provider==='axioma_clay_results')data=await clay.results(user,input.p_class_code);
    else if(provider==='axioma_clay_v2')data={sessions:[],current:null,member:null,members:[],server_time:new Date().toISOString()};
    else if(provider==='axioma_save_game_progress_for_account'){
     if(input.p_user_id!==learn.ids[user])throw Error('Account mismatch');

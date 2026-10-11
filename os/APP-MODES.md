@@ -16,7 +16,7 @@ Stelsels betekent uitsluitend `games/stelsels.html`: de oorspronkelijke trainer 
 | Rechtenarcade | Geen; oude verzamelpagina | — | — |
 | Functies & rechten | Solo | — | — |
 | Brandweer | Solo | — | — |
-| Kleiduifschieten | Solo, Groepsbattle | — | — |
+| Kleiduifschieten | Solo, Duo Battle, Groepsbattle | Klasbattle | — |
 | Rechten Zeeslag | Solo, Duo online | — | — |
 | Pythagoras | Solo | — | — |
 | Reële getallen | Solo | — | — |
@@ -36,7 +36,7 @@ Leerlingen sluiten bij ondersteunde klasproviders aan via de centrale deelname-i
 ## Nog af te werken
 
 - Rechtenarcade is nog een oude verzamelpagina zonder eigen startvorm; vervangen door de afzonderlijke spellen in Toevoegen.
-- Kleiduifschieten heeft een groepsprovider. De volledige groepspartij, duurzame beloning en centrale ranglijst zijn nog niet als geheel geverifieerd. Geen afzonderlijke afgewerkte Duo Learn- of klasprovider claimen.
+- Kleiduifschieten heeft directe solo-, duo-, groeps- en klasroutes. Volledige lokale partijen, serverbeloning en centrale ranglijst zijn gecontroleerd; de nieuwe migratie is nog niet op productie uitgerold. Samen leren (Duo Learn) is geen aangeboden werkvorm. Zie [toets- en Kleiduifcontrole](qa/tasks-clay-20261011/README.md).
 - Stelsels heeft geen online duo- of klasprovider; de oude Algebra-provider mag niet als vervanging worden aangeboden.
 - Logicawereld heeft lokale duo- en battlevormen. Online uitnodigingen en leraarklasactiviteiten vereisen een eigen provider.
 - Getallen, Rechten, Zeeslag en Kleiduif gebruiken nog verschillende uitnodigingsafspraken. De gemeenschappelijke race- en bezetheidsafhandeling blijft open.

@@ -130,7 +130,9 @@ async function loadOverview({signal}={}){
   requests.push(sb.functions?.invoke
     ? sb.functions.invoke('numbers-session',{body:{action:'summary',data:{}},signal})
     : Promise.resolve({data:null,error:null}));
-  const [games,trainer,numbers]=await Promise.allSettled(requests);
+  const clayRequest=sb.rpc?sb.rpc('axioma_clay_results',{}):Promise.resolve({data:null,error:null});
+  requests.push(signal&&clayRequest.abortSignal?clayRequest.abortSignal(signal):clayRequest);
+  const [games,trainer,numbers,clay]=await Promise.allSettled(requests);
   if((await window.AxiomaAuth.getAccount())?.id!==account.id) throw new Error('Leerlingaccount gewijzigd.');
   const failed=result=>result.status==='rejected'||!!result.value.error;
   return {
@@ -138,7 +140,8 @@ async function loadOverview({signal}={}){
     games:failed(games)?[]:games.value.data||[],
     trainer:failed(trainer)?null:trainer.value.data,
     numbers:failed(numbers)?null:numbers.value.data,
-    errors:{games:failed(games),trainer:failed(trainer),numbers:failed(numbers)||!!numbers.value?.data?.error}
+    clay:failed(clay)?null:clay.value.data,
+    errors:{clay:failed(clay),games:failed(games),trainer:failed(trainer),numbers:failed(numbers)||!!numbers.value?.data?.error}
   };
 }
 

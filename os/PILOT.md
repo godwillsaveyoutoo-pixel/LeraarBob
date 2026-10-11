@@ -6,16 +6,16 @@ Deze lijst bundelt alle gebruikersopmerkingen. Een onderdeel is pas afgewerkt wa
 
 **Vaste keuze na de Stelsels-correctie:** alleen `games/stelsels.html` is de Stelsels-app. De Algebra-module met zes Stelsels-levels is geen vervanging. Oude OS-spelkoppelingen openen de oorspronkelijke trainer; historische opslag en de afzonderlijke papiergenerator blijven intact. Oudere Algebra-verslagen hieronder mogen niet als bewijs voor de oorspronkelijke Stelsels worden gebruikt.
 
-Voortgang van deze afwerkronde: [uitgevoerde controles en grenzen](qa/checklist-20261011/README.md). [Inventaris van huidige werkvormen](APP-MODES.md).
+Actuele afwerkronde: [toetsopbouw en Kleiduif — controles en grenzen](qa/tasks-clay-20261011/README.md). Eerdere ronde: [OS-bediening](qa/checklist-20261011/README.md). [Inventaris van huidige werkvormen](APP-MODES.md).
 
 ### A. Betrouwbare basis en bediening
 
-- [ ] A1. Volledige CI groen op de uiteindelijke branch. Alle 27 lokale workflowcommando’s slagen, inclusief een herhaalde pilotproef na correctie van de native Pythagoras-testverwachting. De appkiezer controleert werkelijke app-ID’s. GitHub CI op de uiteindelijke commit blijft afzonderlijk te bevestigen. [Bewijs](qa/checklist-20261011/local-workflow.json).
+- [ ] A1. Volledige CI groen op de uiteindelijke branch. Alle **30 lokale workflowcommando’s** slagen, inclusief de nieuwe toets-/Kleiduifproeven, oorspronkelijke pilots, volledige Getallen- en wetenschappelijke regressies. Herhaalde controles en hun aanleiding zijn vastgelegd. GitHub CI op de nieuwe commit blijft afzonderlijk te bevestigen. [Actueel bewijs](qa/tasks-clay-20261011/workflow.json).
 - [x] A2. Oude Rechtentrainer uit Toevoegen/zoeken halen en bestaande pins naar Rechtenwereld brengen, zonder de gedeelde voortgangsidentiteit of historische routes te verwijderen.
 - [x] A3. Persoonlijke appkaarten, typen in Toevoegen, themagroepen, directe ondersteunde werkvormen en hetzelfde rechterklik/toetsenbordmenu. [Bewijs](qa/personal/README.md).
 - [x] A4. Eén OS-navigatie; boven- en onderbalk onafhankelijk inklappen met klikken/tikken/slepen, herstelhandvatten ≥44 px, voorkeur bewaren, geen permanente vervangstrook of apart-openenknop. Exacte inhoudsranden getest op vijf schermmaten; centrale fullscreen verbergt beide balken tijdelijk en herstelt de vorige stand. Brandweers lege a/b-regelaars, formule en Uitvoeren blijven vrij van de handvatten op vier schermmaten. [Actueel bewijs](qa/drag-bars-20261011/README.md).
 - [x] A5. Geopende oefenbladmappen en ranglijsten in de taakbalk, map/filters hervatten en sluiten zonder documenten te wissen. [Bewijs](qa/place-windows/README.md).
-- [ ] A6. Eén actieve werkvorm per app duidelijk bewaken: geen tweede onbedoelde sessie, wisselen zonder gegevensverlies, expliciet verlaten bij een actieve online partij.
+- [ ] A6. Kleiduifschieten bewaakt nu de actieve sessie bij werkvormwissel. Voor de overige apps nog open: één actieve werkvorm per app duidelijk bewaken: geen tweede onbedoelde sessie, wisselen zonder gegevensverlies, expliciet verlaten bij een actieve online partij.
 - [ ] A7. Per app de interne routes nalopen op oude overzichtsmenu's en dubbele navigatie. De bestaande brede matrix dekt eerste scherm/eerste oefening, niet ieder intern level.
 
 ### B. Vergelijkingen, Stelsels en vormgeving
@@ -32,9 +32,9 @@ Voortgang van deze afwerkronde: [uitgevoerde controles en grenzen](qa/checklist-
 
 - [ ] C1. Eén centrale afspraak voor voorbereiden, klasgenoten kiezen, uitnodigen, ontvangen, starten en verlaten. Getallen gebruikt nu codes; Rechten en Zeeslag gebruiken aliases.
 - [ ] C2. Meerdere en kruisende uitnodigingen, dubbel accepteren, verlopen/intrekken, bezette speler, account/tabwissel en verbroken verbinding controleren. Servertoestand bepaalt deelname; geen dubbele partij of score.
-- [ ] C3. Kleiduifschieten: ondersteunde duo/groeps/klasvormen rechtstreeks bereikbaar en volledige partij gecontroleerd; leerlingen mogen groepen spelen, leraar ontvangt resultaten.
+- [x] C3. Kleiduifschieten: directe duo-, groeps- en klasroutes; volledige partijen met twee/drie leerlingen en een observerende leerkracht lokaal gecontroleerd. Productieuitrol en echte accounts vallen onder E2/E3. [Bewijs](qa/tasks-clay-20261011/README.md).
 - [x] C4. Brandweer en oorspronkelijke Stelsels: echte, eenmalige XP-beloning toevoegen zonder fictieve omrekening van oude levels; Brandweer krijgt geen ranglijst.
-- [ ] C5. Kleiduif-battleresultaten met blijvende eigen punten/XP en centrale OS-ranglijst; alleen competitieve activiteiten krijgen een toplijst.
+- [x] C5. Kleiduif-battleresultaten met eigen serveradministratie van XP, centrale OS-ranglijst en leraarsresultaten. Herhaalde antwoorden leveren geen tweede beloning; gewone voortgang blijft behouden. Lokaal bewezen, migratie nog uit te rollen. [Bewijs](qa/tasks-clay-20261011/README.md).
 - [ ] C6. Leraarklasuitnodiging zichtbaar op het bureaublad, leerling rechtstreeks naar juiste wachtkamer; rechten en rollen door backend afdwingen.
 - [ ] C7. [Huidige modi per app vastgelegd](APP-MODES.md); volledige providercontrole nog open; ontbrekende providers niet aanbieden als werkend. Logicawereld lokaal aangesloten; online duo en klas vragen afzonderlijke providers.
 
@@ -42,9 +42,9 @@ Voortgang van deze afwerkronde: [uitgevoerde controles en grenzen](qa/checklist-
 
 - [x] D1. Centrale maker, onderwerpmapjes, huidige en eerdere reeksen, exacte vragen/sleutel bewaren, PDF/HTML en backup/herstel. [Bewijs](qa/central-paper/README.md).
 - [ ] D2. Bewaarde reeksen veilig tussen toestellen kunnen hervatten. Online archief en lokale cache geïmplementeerd en getest met twee geïsoleerde browsers en lokale SQL; migratie nog niet uitgerold op productie. Exacte documenten, offline opnieuw proberen, verwijdermarkeringen en accountisolatie getest. Productieproef blijft open.
-- [ ] D3. Leraar kan één toets samenstellen met **Glasraam-ontwerp + Kleiduifschieten-sessie + tien Rechtenwereldvragen**; per onderdeel instructies, punten en afronding.
-- [ ] D4. Leerlingtoewijzing, vaste taakversie, hervatten, één definitieve inzending, leraarsbeoordeling en overzicht/export van alle onderdelen. Lokale oefenvoortgang is geen beveiligd toetscijfer.
-- [ ] D5. Dezelfde taakopbouw uitbreidbaar maken naar andere trainers, vraagreeksen en spellen; oorspronkelijke leerflows en engines behouden.
+- [x] D3. Centrale maker voor **Glasraam + Kleiduifschieten + tien Rechtenwereldvragen**, met instructies, punten, aantallen, tempo en vraagtypes. Bereikbaar via Start → Mijn taken → Opdrachten en toetsen. [Lokale end-to-endcontrole](qa/tasks-clay-20261011/README.md).
+- [x] D4. Leerlingtoewijzing, onveranderlijke uitgedeelde versie, opgeslagen ontwerp/antwoorden, definitieve inzending, serverbeoordeling van vragen, nakijken en CSV-export. Andere leerlingen en client-scores worden geweigerd. Lokale SQL/Edge- en browserproeven; productieaanmelding blijft E2. [Bewijs](qa/tasks-clay-20261011/README.md).
+- [x] D5. Versie 1 van de onderdelenstructuur: 1–12 onderdelen in eigen volgorde, getypeerde configuratie en antwoordadministratie, originele engines via aparte koppelingen. Drie adapters werken; andere trainers aansluiten vereist hun eigen configuratie, renderer en servervalidator. [Uitbreidingsafspraak](qa/tasks-clay-20261011/README.md).
 
 ### E. Afronding en publicatie
 

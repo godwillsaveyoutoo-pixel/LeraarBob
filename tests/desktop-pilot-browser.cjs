@@ -228,7 +228,7 @@ async function nativeNavigationUI(){
  // Switching to each still-open iframe must restore its own original folder.
  for(const p of pilots){await page.getByRole('button',{name:'Terug naar '+p.title,exact:true}).click();await page.locator('#appBack').click();assert.deepEqual((await desktopState()).view,p.origin);}
  check('Four independent return locations survive cross-app taskbar switches');
- await page.locator('.desktop-button').click();await page.locator('#startButton').click();await page.getByRole('button',{name:'Mijn taken Je bewaarde activiteiten'}).click();assert.equal(await page.locator('.saved-row').count(),4);
+ await page.locator('.desktop-button').click();await page.locator('#startButton').click();await page.locator('#startResults').getByRole('button',{name:/^Mijn taken/}).click();assert.equal(await page.locator('.saved-row:not(.assignment-entry)').count(),4);
  await page.locator('.saved-row').filter({hasText:'Pythagoras'}).getByRole('button',{name:'Openen',exact:true}).click();await page.locator('#appBack').click();assert.equal((await desktopState()).view.kind,'saved');check('Saved entry opens real app and returns to Mijn taken');
  for(const p of pilots){await page.getByRole('button',{name:'Terug naar '+p.title,exact:true}).click();await page.setViewportSize({width:390,height:844});await page.waitForFunction(title=>document.querySelector('leraarbob-topbar').shadowRoot.querySelector('.mobile-title').textContent===title,p.title);const f=await currentFrame(),selectors=p.id==='glasraam'?['#glass-board','#check','.task']:p.id==='pythagoras'?['[data-formula-slot="0"]','[data-formula-tile="b"]']:p.id==='rechtenwereld'?['#rotateGate']:['#attackBoard','#fireBtn'];await layout(p.id+'-390-expanded',f,selectors);
   if(p.id==='rechtenwereld')report.blocked.push({name:'Native Rechtenwereld compact practice',detail:'The original trainer shows its retained rotate/minimum-workspace guidance at 390 px; the exercise is preserved. Full trainer interaction was performed at 1366×768.'});
@@ -243,7 +243,7 @@ async function nativeNavigationUI(){
  await page.locator('leraarbob-topbar .account').click();await page.locator('#authOverlay').waitFor({state:'visible'});await shot('account-central');await page.keyboard.press('Escape');check('Central account dialog remains accessible from native app');
  await page.locator('leraarbob-topbar .collapse').click();await page.reload();await page.waitForFunction(()=>window.LeraarBobDesktop&&document.querySelector('.lb-restore')&&!document.querySelector('.lb-restore').hidden);await layout('desktop-collapsed-after-reload',null,[]);await page.locator('.lb-restore').click();
  check('Explicit collapsed preference survives desktop reload and restore');
- await page.locator('.desktop-button').click();await page.locator('#startButton').click();await page.getByRole('button',{name:'Mijn taken Je bewaarde activiteiten'}).click();assert.equal(await page.locator('.saved-row').count(),4);check('Four saved native shortcuts persist after browser reload');
+ await page.locator('.desktop-button').click();await page.locator('#startButton').click();await page.locator('#startResults').getByRole('button',{name:/^Mijn taken/}).click();assert.equal(await page.locator('.saved-row:not(.assignment-entry)').count(),4);check('Four saved native shortcuts persist after browser reload');
  await onlineEntryFixture();
  await shellUI();
  await nativeNavigationUI();

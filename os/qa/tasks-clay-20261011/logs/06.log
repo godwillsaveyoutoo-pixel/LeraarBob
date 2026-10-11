@@ -1,0 +1,16 @@
+PASS / opens the desktop on the Pages prefix
+PASS /index.html opens the desktop on the Pages prefix
+PASS Desktop 1366 expanded/collapsed, 44px restore and persisted reload choice
+PASS Desktop 390 expanded/collapsed, 44px restore and persisted reload choice
+PASS Existing #ontdek opens OS app picker
+PASS Existing #reserve opens OS app picker
+PASS Existing #playerProgress opens OS profile
+PASS Unrecognized query/hash and theme bookmark remain intact
+PASS Explicit old catalog and genuine Home/Back navigation without redirect loop
+PASS Settings opens the earlier catalog in another tab with reachable 44px link
+PASS Native standalone app Home reaches the new desktop
+PASS Existing login dialog and teacher/ return stay on original account entry
+PASS Existing login dialog and games/rechten/rechtenwereld/ return stay on original account entry
+PASS Original auth and recovery callback queries/hashes remain exact
+PASS JavaScript-disabled desktop fallback reaches usable old catalog
+PASS No JavaScript errors or missing frontend files

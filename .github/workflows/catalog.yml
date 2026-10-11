@@ -18,7 +18,7 @@ jobs:
           package-manager-cache: false
       - run: node scripts/build-catalog.cjs --check
       - run: node --test --test-isolation=none tests/catalog.test.cjs tests/catalog-progress.test.cjs tests/desktop-model.test.cjs tests/getallenwereld.test.cjs tests/getallen-guided-choices.test.cjs tests/getallen-scientific-lessons.test.cjs tests/scientific-provider.test.cjs tests/algebra-class.test.cjs tests/algebra-learning.test.cjs tests/algebra-trainer.test.cjs tests/algebra-v04-choices.test.cjs tests/algebra-v04-journey.test.cjs tests/algebra-v04-motion.test.cjs tests/algebra-v045-fractions.test.cjs tests/algebra-v050-flow.test.cjs tests/algebra-world.test.cjs tests/stelsels-workshop.test.cjs tests/logicawereld-logic.test.cjs tests/logicawereld-flow.test.cjs tests/logicawereld-integration.test.cjs
-      - run: node --check os/desktop.js && node --check os/personal-home.js && node --check os/activity-entry.js && node --check os/native-chrome.js && node --check os/edge-bars.js
+      - run: node --check os/desktop.js && node --check os/personal-home.js && node --check os/activity-entry.js && node --check os/native-chrome.js && node --check os/edge-bars.js && node --check os/clay-entry.js && node --check tasks/tasks.js && node --check tasks/clay-bridge.js
       - run: node tests/desktop-package-check.cjs
       - name: Bureaubladbediening controleren
         run: |
@@ -29,7 +29,9 @@ jobs:
           npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-browser-tests" playwright@1.64.0 @electric-sql/pglite@0.5.8 jsdom@26.1.0 fake-indexeddb@6.2.4
           "$RUNNER_TEMP/leraarbob-browser-tests/node_modules/.bin/playwright" install --with-deps chromium
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" HOME_SCREENSHOTS="$RUNNER_TEMP/os-qa/home-entry" node tests/home-entry-browser.cjs
-          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs tests/worksheet-cloud.test.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs tests/worksheet-cloud.test.cjs tests/os-tasks.test.cjs tests/clay-os.test.cjs tests/clay-service.test.cjs tests/clay-game.test.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" TASKS_PROOF="$RUNNER_TEMP/os-qa/tasks" node tests/os-tasks-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CLAY_OS_PROOF="$RUNNER_TEMP/os-qa/clay" node tests/clay-os-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/personal" node tests/personal-os-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/personal" node tests/personal-chrome-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" BAR_GESTURES_PROOF="$RUNNER_TEMP/os-qa/bar-gestures" node tests/os-bar-gestures-browser.cjs

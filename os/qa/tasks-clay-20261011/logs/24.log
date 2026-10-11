@@ -1,0 +1,8 @@
+PASS Central Stelsels form has no game menus; 1366×768 at 100%, 390×844, 640×360, both bar states and unobscured controls >=44px
+PASS All six Stelsels topics generate five native systems and paired worked keys with independently solved solution kinds
+PASS Generated series appear in the correct OS folder; minimize/resume retains both edited form and exact previous document
+PASS All seven equation topics retain six native prompts, mathematical notation and the original answer renderer
+PASS Generating all thirteen Algebra levels does not create or change learner progress storage
+PASS Changing subject opens the matching central window and returns to its own topic folder
+PASS Old standalone paper URLs redirect to the central composer with topic and requested level
+PASS Account switch during native asynchronous generation clears the old document and never archives it under the next learner

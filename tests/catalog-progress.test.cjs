@@ -214,3 +214,9 @@ test('Practice XP reads actual new awards, never converts Brandweer or Stelsels 
   assert.equal(api.earnedXP(game,{state:{practiceRewards:{version:1,awards:{[unit]:10,'99':10,'2':999,'03':10}}}}),10);
  }
 });
+
+test('Kleiduif server battle XP adds once to existing solo XP without converting finished levels',()=>{
+ const api=context.window.LeraarBobCatalogProgress,catalog=[{id:'kleiduifschieten',progressType:'levels'},{id:'old-clay',progressId:'kleiduifschieten',progressType:'levels'}];
+ const overview={errors:{},clay:{xp:30},games:[{game_id:'kleiduifschieten',state:{xp:15,completed:['one']}}]};
+ const before=JSON.stringify(overview);assert.equal(api.aggregate(catalog,overview).xp,45);assert.equal(JSON.stringify(overview),before);assert.equal(api.aggregate(catalog,{...overview,errors:{clay:true}}),null);
+});

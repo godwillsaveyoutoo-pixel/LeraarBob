@@ -116,7 +116,7 @@
     return state && Object.hasOwn(state, 'platformXp') ? count(state.platformXp) : null;
   }
   function aggregate(catalog, overview) {
-    if (!overview || overview.errors?.games || overview.errors?.trainer || overview.errors?.numbers) return null;
+    if (!overview || overview.errors?.games || overview.errors?.trainer || overview.errors?.numbers || overview.errors?.clay) return null;
     const seen = new Set(), entries = [];
     for (const game of catalog) {
       if (['none','local','multiplayer'].includes(game.progressType)) continue;
@@ -127,7 +127,7 @@
       const saved = savedFor(game, overview), progress = summarize(game, saved);
       const parent=game.parentId&&catalog.find(g=>g.id===game.parentId);
       // Component histories remain separate units; their real XP remains part of the platform total.
-      const soloXP=earnedXP(game,saved),onlineXP=game.id==='bewerkingen-trainer'?count(overview.numbers?.online_xp):0;
+      const soloXP=earnedXP(game,saved),onlineXP=game.id==='bewerkingen-trainer'?count(overview.numbers?.online_xp):game.id==='kleiduifschieten'?count(overview.clay?.xp):0;
       entries.push({ id: game.id, title: parent?parent.title+' · '+game.componentTitle:game.title, href: game.href, xp: onlineXP?(soloXP||0)+onlineXP:soloXP, completed: progress.completed || 0, label: progress.label });
     }
     return { xp: entries.reduce((sum, e) => sum + (e.xp || 0), 0), completed: entries.reduce((sum, e) => sum + e.completed, 0), entries };

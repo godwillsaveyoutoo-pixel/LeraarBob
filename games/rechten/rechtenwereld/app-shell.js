@@ -23,7 +23,7 @@ const store=battle?{writable:true,legacy:null,account:null,commit:async()=>{},sy
  else {const el=document.getElementById('save-status');if(el)el.textContent=statusText[storeStatus]||storeStatus;}
 }});
 function save(){if(!store.writable)return;store.commit(state).catch(()=>{storeStatus='storage-error';render()})}
-function apply(next,{paint=true,focus=null}={}){state=withWorldXP(next);save();if(battle?.cooperative)battle.changed({steps:[...battleSteps,{phase:R.active(state).phase,values:copy(R.active(state).values)}]});if(paint){render();if(focus)document.querySelector(focus)?.focus()}}
+function apply(next,{paint=true,focus=null}={}){state=withWorldXP(next);save();if(battle?.cooperative||battle?.assessment)battle.changed({steps:[...battleSteps,{phase:R.active(state).phase,values:copy(R.active(state).values)}]});if(paint){render();if(focus)document.querySelector(focus)?.focus()}}
 function icon(kind){const paths={menu:'M4 6h16M4 12h16M4 18h16',profile:'M8 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M4 22c0-9 16-9 16 0',pause:'M8 5v14M16 5v14',undo:'M8 7H3V2M3 7c8-9 22 6 11 13'};return `<svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${paths[kind]}"/></svg>`}
 function viewOptions(mission=false){return {menuOpen,legacy:store.legacy,mission,account:store.account,status:statusText[storeStatus]||storeStatus}}
 function header(){return S.header(state,viewOptions())}

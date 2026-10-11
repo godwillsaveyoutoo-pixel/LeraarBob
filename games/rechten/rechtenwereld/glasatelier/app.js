@@ -3,8 +3,9 @@
 'use strict';
 const C=window.GlasatelierCore,KEY='leraarbob-glasatelier-draft-v1',NS='http://www.w3.org/2000/svg';
 const $=id=>document.getElementById(id),board=$('glass-board'),stage=document.querySelector('.glass-stage');
+const taskMode=new URLSearchParams(location.search).has('task');
 let state=C.initial(),cursor={x:0,y:0},wrong=[],gesture=null,geometry=null,serial=0;
-try{state=C.restore(JSON.parse(localStorage.getItem(KEY)));document.documentElement.dataset.mode=localStorage.getItem('axioma-mode')==='dark'?'dark':'light';}catch{}
+try{if(!taskMode)state=C.restore(JSON.parse(localStorage.getItem(KEY)));document.documentElement.dataset.mode=localStorage.getItem('axioma-mode')==='dark'?'dark':'light';}catch{}
 const pattern=()=>C.PATTERNS.find(p=>p.id===state.pattern),free=()=>state.mode==='design',draft=()=>free()?state.free:state.drafts[state.pattern];
 const complete=()=>!free()&&draft().count===pattern().lines.length;
 const lines=()=>free()?draft().lines:pattern().lines.slice(0,draft().count);
@@ -12,7 +13,7 @@ const painting=()=>complete()||state.tool==='paint';
 const preset=()=>free()?{...pattern(),scheme:'mosaic',colors:C.PALETTE.map(c=>c.hex)}:pattern();
 const copyPoints=points=>points.map(p=>p?{...p}:null);
 function node(tag,attrs={},text){const n=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;return n;}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));$('save-status').textContent='Automatisch bewaard op dit toestel.';}catch{$('save-status').textContent='Bewaren lukt hier niet. Download je raam vóór je afsluit.';}}
+function save(){if(taskMode){window.dispatchEvent(new Event('glasatelier:change'));return;}try{localStorage.setItem(KEY,JSON.stringify(state));$('save-status').textContent='Automatisch bewaard op dit toestel.';}catch{$('save-status').textContent='Bewaren lukt hier niet. Download je raam vóór je afsluit.';}}
 function message(text='',kind=''){const e=$('feedback');e.textContent=text;e.dataset.kind=kind;}
 function progress(){const count=C.PATTERNS.filter(p=>state.drafts[p.id].done).length,e=$('atelier-progress');e.dataset.value=count;e.dataset.total=C.PATTERNS.length;e.textContent=count+'/'+C.PATTERNS.length+' ramen';window.dispatchEvent(new CustomEvent('axioma:game-progress'));}
 function boundsFor(w,h){
@@ -155,5 +156,6 @@ $('line-form').onsubmit=e=>{e.preventDefault();const l=currentDesign();if(!l){$(
 $('themeBtn').onclick=()=>{const dark=document.documentElement.dataset.mode!=='dark';document.documentElement.dataset.mode=dark?'dark':'light';$('themeBtn').setAttribute('aria-pressed',String(dark));try{localStorage.setItem('axioma-mode',dark?'dark':'light');}catch{}};$('themeBtn').setAttribute('aria-pressed',String(document.documentElement.dataset.mode==='dark'));
 $('download').onclick=()=>{const output=node('svg',{xmlns:NS,width:Math.round(geometry.w*2),height:Math.round(geometry.h*2)});renderGlass(output,preset(),lines(),{w:geometry.w,h:geometry.h,bounds:geometry.bounds,lit:true,colors:draft().colors});output.prepend(node('title',{},(free()?'Mijn glasraam':pattern().name)+' · leraarBob'),node('desc',{},lines().map(C.formula).join('; ')));const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(output)],{type:'image/svg+xml'})),a=document.createElement('a');a.href=url;a.download='glasatelier-'+(free()?'eigen-ontwerp':state.pattern)+'.svg';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 let resizeQueued=false;new ResizeObserver(()=>{if(!resizeQueued){resizeQueued=true;requestAnimationFrame(()=>{resizeQueued=false;fitFormula();renderBoard();});}}).observe(board);
+window.GlasatelierTask=Object.freeze({snapshot:()=>structuredClone(state),load(value,readonly=false){state=C.restore(value);if(!value)state.mode='design';$('line-type').value=state.free.inputs.type;$('slope').value=state.free.inputs.a;$('intercept').value=state.free.inputs.b;render();document.body.inert=readonly;}});
 render();
 })();
