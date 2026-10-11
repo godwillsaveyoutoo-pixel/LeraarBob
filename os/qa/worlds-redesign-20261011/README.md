@@ -17,14 +17,14 @@
 | Integratie, catalogus/model, originele Getallenreeksen en nieuwe SQL/Edge-dueltests | 95 geslaagd; `integration-tests.txt` |
 | Gedeelde OS-balken, desktopbediening, klasflow, Logicabattle en rapportdatabase | 45 geslaagd; `regression-tests.txt` |
 | Getallen guided layout | 106 uitwerkingsstappen werkelijk aangeklikt; ook 390 × 844 en 640 × 360 |
-| Nieuwe visuele/contrastcontrole | 30 schermen; tekst minimaal 4,5:1, grote tekst 3:1; licht/donker, hulp, instellingen, wortels en wetenschappelijke schrijfwijze |
+| Nieuwe visuele/contrastcontrole | 36 schermen; tekst minimaal 4,5:1, grote tekst 3:1; licht/donker, hulp, instellingen, wortels en wetenschappelijke schrijfwijze |
 | Vergelijkingen navigatie | 13 groepen, 103 gemeten bedieningsdoelen; drie schermformaten, beide balkstanden, herstel, bewaren, focus, 6 echte antwoorden en eigen 30 XP, gast/leerling/leraar |
 | Vergelijkingen expert | Eigen bewerkingen en getypte antwoorden, foutcontrole, hervatten en herladen; drie schermformaten |
 | Duo tussen twee browsers | Uitnodiging via de centrale inbox, gekozen onderdeel, beide-klaar-barrière, 5 echte rondes en uitslag 5–0; dark mode, mobiel, invoer behouden bij minimaliseren/herladen |
 | Bestaande klasbattle-PDF | Eindscherm, download en herladen voor alle 8 aangesloten rapportproviders |
 | Catalogus, lokale bestanden en diff | Gelijk, routes aanwezig, geen whitespacefouten |
 
-Desktopcontrole: 1366 × 768, deviceScaleFactor 1, 100% zoom. Compact: 390 × 844 en 640 × 360. De contrastmeting betreft de werkelijk geopende schermen en actieve tekst/knoppen, niet elke denkbare toekomstige toestand. Screenshots zijn bovendien visueel bekeken; zo werd afgesneden voortgangstekst ontdekt en hersteld.
+Desktopcontrole: 1366 × 768, deviceScaleFactor 1, 100% zoom. Compact: 390 × 844 en 640 × 360. Ook de hoofdstukstart is op compacte schermen binnen en buiten de OS gecontroleerd. De startknop van Eigen reeks blijft in beeld; selectievakjes overlappen geen formule. De contrastmeting betreft de werkelijk geopende schermen en actieve tekst/knoppen, niet elke denkbare toekomstige toestand. Screenshots zijn bovendien visueel bekeken; zo werd afgesneden voortgangstekst ontdekt en hersteld.
 
 ## Backend en publicatie
 
@@ -41,3 +41,5 @@ De complete partijen zijn uitgevoerd met synthetische lokale accounts en de echt
 - [Duo: uitnodigen](duo-invite.png), [ronde](duo-work.png), [uitslag](duo-result.png).
 
 Tests: `tests/worlds-visual-browser.cjs`, `tests/algebra-duo-browser.cjs`, `tests/algebra-duo.test.cjs`, bestaande Algebra/Getallen- en klasrapportcontroles. De nieuwe controles draaien ook in GitHub Actions. Bouw de exact dezelfde beoordelaar met `scripts/build-algebra-duo-worker.cjs` en esbuild 0.28.2.
+
+Compacte voorbeelden: [hoofdstukken op telefoon](getallen-phone.png), [liggende oefening](getallen-landscape.png), [Eigen reeks in donker](eigen-reeks-dark.png).

@@ -2,6 +2,12 @@
   "screens": [
     "getallenwereld-home-light",
     "getallenwereld-home-dark",
+    "getallen-home-390-false",
+    "getallen-home-390-true",
+    "getallen-home-844-false",
+    "getallen-home-844-true",
+    "getallen-home-640-false",
+    "getallen-home-640-true",
     "getallen-pad-dark",
     "getallenwereld-work-dark",
     "getallenwereld-work-light",
@@ -41,6 +47,36 @@
     {
       "name": "getallenwereld-home-dark",
       "tested": 26,
+      "fails": []
+    },
+    {
+      "name": "getallen-home-390-false",
+      "tested": 16,
+      "fails": []
+    },
+    {
+      "name": "getallen-home-390-true",
+      "tested": 16,
+      "fails": []
+    },
+    {
+      "name": "getallen-home-844-false",
+      "tested": 15,
+      "fails": []
+    },
+    {
+      "name": "getallen-home-844-true",
+      "tested": 15,
+      "fails": []
+    },
+    {
+      "name": "getallen-home-640-false",
+      "tested": 15,
+      "fails": []
+    },
+    {
+      "name": "getallen-home-640-true",
+      "tested": 15,
       "fails": []
     },
     {
@@ -105,12 +141,12 @@
     },
     {
       "name": "getallenwereld-640-expanded",
-      "tested": 24,
+      "tested": 22,
       "fails": []
     },
     {
       "name": "getallenwereld-640-collapsed",
-      "tested": 24,
+      "tested": 22,
       "fails": []
     },
     {
@@ -160,7 +196,7 @@
     },
     {
       "name": "vergelijkingen-reeks-dark",
-      "tested": 48,
+      "tested": 54,
       "fails": []
     },
     {
@@ -198,5 +234,35 @@
       "height": 360
     }
   ],
-  "passed": true
+  "passed": true,
+  "standaloneHome": [
+    {
+      "vp": {
+        "width": 390,
+        "height": 844
+      },
+      "fold": false
+    },
+    {
+      "vp": {
+        "width": 390,
+        "height": 844
+      },
+      "fold": true
+    },
+    {
+      "vp": {
+        "width": 844,
+        "height": 390
+      },
+      "fold": false
+    },
+    {
+      "vp": {
+        "width": 844,
+        "height": 390
+      },
+      "fold": true
+    }
+  ]
 }

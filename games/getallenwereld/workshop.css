@@ -33,7 +33,7 @@ body.topbar-collapsed .workshop-nav{padding-left:60px}
 .powers-play .playhead{padding:12px max(20px,calc((100% - 1160px)/2));background:transparent;border:0;min-height:0;gap:12px}.powers-play .playhead>button{display:none}.powers-play .playhead h1{font-size:28px;line-height:1.1}.powers-play .playhead .eyebrow{font-size:10px}.powers-play .counter{font-size:12px;color:var(--muted)}.powers-play .progress{gap:6px;margin-top:6px}.powers-play .progress i{width:9px;height:9px;border-radius:50%;background:var(--line)}.powers-play .progress .done{background:var(--green)}.powers-play .progress .current{background:var(--amber)}
 .workshop-body{width:min(1160px,calc(100% - 40px));margin:0 auto 12px;min-height:0;display:flex;flex-direction:column;gap:10px;overflow:hidden}
 .workshop-main{display:grid;grid-template-columns:minmax(200px,.85fr) minmax(0,1.3fr);grid-template-rows:auto minmax(0,1fr);gap:10px 20px;min-height:0;flex:1;overflow:hidden}
-.powers-play .guided-question{grid-row:1/3;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-width:0;min-height:0;overflow:auto;text-align:center}
+.powers-play .guided-question{grid-row:1/3;width:100%;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-width:0;min-height:0;overflow:auto;text-align:center}
 .powers-play .guided-question>.eyebrow{display:block;font-size:11px}.powers-play .guided-question .question{font-size:clamp(28px,4vw,46px);min-height:62px;padding:6px;justify-content:center;max-width:100%;overflow-x:auto}.powers-play .condition,.powers-play .note{font-size:14px;line-height:1.4;text-align:center;color:var(--muted)}
 .powers-play .guided-work{grid-column:2;grid-row:1/3;align-self:center;width:100%;max-height:100%;max-width:none;margin:0;min-height:0;overflow:auto;gap:12px;padding:3px}
 .powers-play .guided-work>.prompt{font-size:18px;text-align:left;font-weight:650;margin-bottom:3px}
@@ -57,4 +57,32 @@ body.topbar-collapsed .workshop-nav{padding-left:60px}
  .workshop-home .heading{padding-top:12px}.workshop-home .heading h1{font-size:29px}.workshop-home .themes{grid-template-columns:repeat(3,minmax(0,1fr))!important}.workshop-home .theme{min-height:260px;padding-inline:12px}.world-art{height:115px;min-height:115px;margin-inline:-12px}.workshop-home .theme-title{font-size:22px}.workshop-home .theme p{font-size:12px}
  .path-layout{padding:8px 12px;gap:10px}.path-main{gap:8px}.path-heading h1{font-size:24px}.path-heading .eyebrow,.path-heading p,.path-legend{display:none}.path-detail{padding:10px;gap:6px}.path-detail>.eyebrow{font-size:9px}.path-detail h2{font-size:21px}.path-detail>.primary{order:-1}.path-detail>.path-example{font-size:20px;padding:6px 0}.phase-heading h2{font-size:19px}.path-group{padding:10px}
  .powers-play{grid-template-rows:44px 40px minmax(0,1fr) 52px}.powers-play .playhead{padding:2px 12px}.powers-play .playhead h1{font-size:19px}.powers-play .playhead .eyebrow{display:none}.workshop-body{width:calc(100% - 24px);margin-bottom:5px;gap:0}.workshop-main{grid-template-columns:minmax(150px,.7fr) minmax(0,1.3fr);gap:10px}.powers-play .guided-question{padding:8px;gap:6px}.powers-play .guided-question>.eyebrow{display:none}.powers-play .guided-question .question{font-size:24px;min-height:44px;padding:2px}.powers-play .condition,.powers-play .note{font-size:10px}.powers-play .guided-work{gap:5px}.powers-play .guided-work>.prompt{font-size:12px;margin:0}.powers-play .rule-options{gap:4px}.powers-play .rule-choice{grid-template-columns:minmax(0,1fr) auto;min-height:48px;padding:4px 6px;gap:6px}.powers-play .rule-choice>span:first-child{font-size:11px}.powers-play .rule-choice .rule-math{font-size:15px;padding:2px}.powers-play .guided-answer{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(144px,.8fr);grid-template-rows:auto minmax(0,1fr);gap:3px 8px}.powers-play .guided-answer .smart-formula{grid-column:1;grid-row:1/3;font-size:23px;min-height:116px;padding:2px;gap:2px;align-self:center}.powers-play .smart-choice-label{grid-column:2;font-size:10px}.powers-play .guided-answer .smart-choices{grid-column:2;grid-template-columns:repeat(3,minmax(44px,1fr));gap:3px;overflow:auto;max-height:100%}.powers-play .guided-answer .smart-choices button{font-size:20px;min-height:44px;padding:3px}.workshop-steps{display:none}.powers-play .workfoot{min-height:52px;padding:4px 12px;gap:5px}.powers-play .workfoot .feedback{font-size:10px}.powers-play .workfoot button{font-size:12px}.powers-play .guided-result{padding:12px;gap:7px}.powers-play .guided-result .formula{font-size:25px}.powers-play .guided-result>p:last-child{font-size:12px}.powers-help .help-working{padding:12px}.powers-help .help-working .formula{font-size:23px;min-height:72px}.workshop-summary{padding:10px;gap:6px}.workshop-summary h1{font-size:26px}.workshop-summary h2{font-size:21px}.workshop-summary .summary-seal,.summary-rule{display:none}.workshop-summary p{font-size:12px}.summary-actions{margin-top:0}.summary-actions button{font-size:12px;padding:8px}
+}
+
+/* Low landscape: the back action and question heading share one content row. */
+@media(min-width:600px) and (max-height:300px){
+ .powers-play{grid-template-rows:44px minmax(0,1fr) 52px}
+ .powers-play>.workshop-nav{grid-column:1;grid-row:1;padding-inline:8px}
+ .powers-play>.workshop-nav>span,.powers-play>.workshop-nav>button:last-child{display:none}
+ .powers-play>.workshop-nav>button:first-child{max-width:190px;font-size:11px}
+ .powers-play>.playhead{grid-column:1;grid-row:1;margin-left:202px;padding:2px 12px 2px 0;min-height:0;pointer-events:none}
+ .powers-play>.playhead h1{font-size:17px}.powers-play>.playhead .counter{font-size:10px}
+ .powers-play>.workshop-body{grid-column:1;grid-row:2}.powers-play>.workfoot{grid-column:1;grid-row:3}
+}
+/* Compact chapter chooser: three recognizable cards, with the actions in view. */
+@media(max-width:599px){
+ .workshop-home .themes{grid-template-rows:repeat(3,minmax(0,1fr));gap:8px;padding:0}
+ .workshop-home .theme{display:grid;grid-template-columns:86px minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);gap:4px 12px;min-height:0;padding:12px}
+ .workshop-home .world-art{grid-column:1;grid-row:1/4;height:auto;min-height:0;align-self:stretch;margin:-12px 0 -12px -12px;width:98px}
+ .workshop-home .theme>.eyebrow{grid-column:2;font-size:9px}.workshop-home .theme-title{grid-column:2;font-size:22px}
+ .workshop-home .theme p{display:none}.workshop-home .theme-bottom{grid-column:2;align-self:end;padding-top:5px;font-size:11px}.workshop-home .theme-bottom strong{display:none}
+ .workshop-home .world-actions{flex-wrap:nowrap;gap:5px}.workshop-home .world-actions a{padding:6px;font-size:11px;min-width:0;flex:1}
+ .workshop-home .dock{min-height:0;padding:6px 0}.workshop-home .dock p{font-size:13px}.workshop-home .dock small{font-size:11px}
+}
+@media(min-width:600px) and (max-height:500px){
+ .workshop-home{grid-template-rows:auto minmax(0,1fr) 44px 52px!important;gap:4px;padding-inline:12px}
+ .workshop-home .heading{padding:4px 0;gap:10px}.workshop-home .heading h1{font-size:26px}.workshop-home .heading p{font-size:11px;margin-top:3px}.workshop-home .meta{padding:5px 8px;font-size:15px}.workshop-home .meta small{font-size:9px}
+ .workshop-home .themes{padding:0;gap:8px;grid-template-rows:minmax(0,1fr)}.workshop-home .theme{min-height:0;padding:8px 10px;gap:3px}.workshop-home .world-art,.workshop-home .theme p,.workshop-home .theme>.eyebrow{display:none}.workshop-home .theme-title{font-size:20px}.workshop-home .theme-bottom{font-size:10px;padding-top:4px}.workshop-home .theme-bottom strong{display:none}
+ .workshop-home .world-actions{gap:8px}.workshop-home .world-actions a{padding:6px 10px;font-size:11px}
+ .workshop-home .dock{min-height:0;padding:4px 0;gap:8px}.workshop-home .dock p{font-size:12px}.workshop-home .dock small{display:none}.workshop-home .dock .primary{min-height:44px;font-size:12px}
 }

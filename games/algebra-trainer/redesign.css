@@ -51,3 +51,13 @@
 .learningWorld :is(.railLabel,.railHint,.summarySeal){color:var(--muted)}
 .learningWorld .trainer .feedback{background:transparent}
 .learningWorld .typeRow:has(:checked){background:var(--blueSoft)}
+/* Keep Start in view while the optional settings/selection columns scroll. */
+@media(min-width:601px){
+ .learningWorld[data-screen=setup] .setup{display:grid;grid-template-rows:auto minmax(0,1fr) 60px;height:100%;overflow:hidden;gap:12px;padding:16px 24px 0}
+ .learningWorld[data-screen=setup] .builderHead{margin:0;padding:14px;min-height:0}.learningWorld[data-screen=setup] .builderHead h1{font-size:30px}.learningWorld[data-screen=setup] .builderHead p{font-size:13px}
+ .learningWorld[data-screen=setup] .builderBody{min-height:0;overflow:hidden;align-items:stretch}.learningWorld[data-screen=setup] .typePanel{display:flex;flex-direction:column;min-height:0}.learningWorld[data-screen=setup] .levelTypeHost{min-height:0;overflow:auto}
+ .learningWorld[data-screen=setup] .settingsPanel{overflow:auto;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+ .learningWorld[data-screen=setup] .actionDock{margin:0;padding:8px 0;min-height:0;flex-wrap:nowrap;border-top:1px solid var(--line)}
+}
+@media(min-width:601px) and (max-width:1000px){.learningWorld .builderBody{grid-template-columns:minmax(0,1fr) 220px;gap:12px}.learningWorld .typeGrid{grid-template-columns:1fr}.learningWorld .builderHead .levelTab{min-width:70px;padding:6px;font-size:12px}}
+@media(min-width:601px) and (max-height:500px){.learningWorld[data-screen=setup] .setup{padding:6px 12px 0;gap:6px}.learningWorld[data-screen=setup] .builderHead{padding:4px;gap:6px}.learningWorld[data-screen=setup] .builderHead h1{font-size:22px}.learningWorld[data-screen=setup] .builderHead p,.learningWorld[data-screen=setup] .builderHead .kicker{display:none}.learningWorld[data-screen=setup] .levelTab{min-height:44px}}
