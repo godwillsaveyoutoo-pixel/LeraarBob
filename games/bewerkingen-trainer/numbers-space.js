@@ -71,10 +71,11 @@ async function rpc(action,data={}){
  }finally{clearTimeout(timer);}
 }
 function accept(next){if(next.spec&&![1,2].includes(next.spec.generatorVersion??1))throw Error('Vernieuw Getallenwereld om deze sessie te openen.');state=next;offset=Date.parse(next.server_time)-Date.now();if(simulation){save(simulationKey(),simulation);}else save(key(),{id:state.id});if(pending&&(state.round!==pending.round||state.phase!=='question'||(state.mine&&state.mine.attempts>=pending.expectedAttempts))){pending=null;save(key()+':pending',null);}if(view==='session')session();$('resumeSession').hidden=view==='session';portalStatus();schedule();}
+function clearJoinedCode(){q.delete('code');q.delete('join');const u=new URL(location.href);u.searchParams.delete('code');u.searchParams.delete('join');history.replaceState(null,'',u);}
 async function action(name,data={}){
  if(busy)return;busy=true;const serial=++requestSerial;clearTimeout(poll);notice();
  document.querySelectorAll('#createSpace button,#hostStart,#hostNext,#hostEnd,#submitAnswer').forEach(b=>b.disabled=true);
- try{const next=simulation?simulate(name,data):await rpc(name,{id:state?.id,...data});if(serial!==requestSerial)return;if(name==='leave'&&!next.owner){state=null;pending=null;sessionStorage.removeItem(key());sessionStorage.removeItem(key()+':pending');setView('home');return;}accept(next);if(name==='submit'&&!simulation)loadXP();if(view!=='session')setView('session');}
+ try{const next=simulation?simulate(name,data):await rpc(name,{id:state?.id,...data});if(serial!==requestSerial)return;if(name==='leave'&&!next.owner){state=null;pending=null;sessionStorage.removeItem(key());sessionStorage.removeItem(key()+':pending');setView('home');return;}accept(next);if(name==='join'&&next.id)clearJoinedCode();if(name==='submit'&&!simulation)loadXP();if(view!=='session')setView('session');}
  catch(e){notice(e.message);if(view==='selection')selection();else if(view==='session')session();}finally{busy=false;document.querySelectorAll('[data-busy-disabled]').forEach(b=>b.disabled=false);if(view==='session')session();schedule();}
 }
 function schedule(){clearTimeout(poll);if(!state||!account||['finished','closed'].includes(state.phase))return;const captured=epoch;
@@ -197,7 +198,7 @@ async function identity(next){if(account!==undefined&&account?.id===next?.id&&ac
  if(account){const sim=read(simulationKey()),saved=read(key());if(new URLSearchParams(location.search).get('simulation')==='1'&&sim){simulation=sim;accept(simulate('state'));}else if((q.get('session')||saved?.id)&&!q.get('code'))try{state=await rpc('state',{id:q.get('session')||saved.id});pending=read(key()+':pending');accept(state);}catch{if(identityEpoch!==epoch)return;notice('Een vorige sessie kon nog niet worden geladen.');}}
  if(identityEpoch!==epoch)return;
  if(!simulation)loadXP();else $('numbersXP').dataset.value='NaN';
- if(embedded&&q.get('join')==='1'&&/^[A-Fa-f0-9]{8}$/.test(q.get('code')||'')&&account?.role==='student'&&!state){await action('join',{code:q.get('code')});if(identityEpoch!==epoch)return;if(state){const u=new URL(location.href);u.searchParams.delete('code');u.searchParams.delete('join');history.replaceState(null,'',u);return;}}
+ if(embedded&&q.get('join')==='1'&&/^[A-Fa-f0-9]{8}$/.test(q.get('code')||'')&&account?.role==='student'&&!state){await action('join',{code:q.get('code')});if(identityEpoch!==epoch)return;if(state)return;}
  const requested=q.get('moduleView')||q.get('view')||(q.get('session')?'session':null);if(requested==='students'&&account?.role!=='teacher'){setView('home');return;}if(['rankings','students'].includes(requested))setView(requested);else if(requested==='session'&&state)setView('session');else if(requested==='selection'&&account){setView('selection');}else if(['learn','battle'].includes(requested)&&account){activity=requested;audience=q.get('audience')==='duo'?'duo':account.role==='teacher'?'class':'duo';setView('selection');}else setView('home');
 }
 AxiomaAuth.ready().then(()=>AxiomaAuth.getAccount()).then(identity).catch(e=>{setView('home');notice(joinOnly?'Je account kon niet laden. Meld je opnieuw aan om deel te nemen.':'Je account kon niet laden. Solo en oefenbladen blijven bereikbaar.');});AxiomaAuth.onChange(()=>AxiomaAuth.getAccount().then(identity));

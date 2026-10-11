@@ -32,3 +32,9 @@ De aanvullende migratie is `20261011145622_class_battle_personal_report.sql`. Ze
 Nog niet uitgevoerd: deze migratie op productie, productieaanmelding met echte leerling-/leraarsaccounts en downloads tegen die omgeving. De Supabase security-advisor kon lokaal niet verbinden met poort 54322; hier draait PGlite, geen lokale Supabase/Docker-stack. De toegangscontroles zijn wel met de daadwerkelijke SQL in PGlite uitgevoerd. De eerdere branch/PR-CI op `7f42ac5` was groen; een nieuwe push krijgt een eigen controle en is niet automatisch door die eerdere uitslag gedekt.
 
 De oudere previews blijven intact. De bijgewerkte preview gebruikt poort 8798, met een kopie van het bestaande samengestelde toetswerk. Bestaande tijdelijke battles op eerdere previewpoorten worden niet gewist of als gemigreerd voorgesteld.
+
+## Controle voor publieke uitrol
+
+De [aanvullende publicatiecontrole](../release-readiness-20261011/verification.json) herstelt verouderde CI-ingangen en gebruikt de op GitHub geïnstalleerde Chromium. De nieuwe OS-appkaarten en centrale code-ingang zijn doorgelopen met echte lokale Learn-, Getallen- en Rechten-battles en een live les. Oude zelfstandige hubroutes hebben een afzonderlijke compatibiliteitsproef; het OS opent ze niet opnieuw.
+
+Hierbij is een hervatfout opgelost: na een verkeerde code handmatig corrigeren bleef de oude code in het adres staan. De succesvolle deelname verbruikt nu de code, zodat herladen de bestaande sessie en exacte invoer herstelt. De aanvullende lokale controles slagen (31 DOM/database-tests, 14 live-interactiegroepen, 32 zelfstandige compatibiliteitscontroles). De productie-inventaris is uitsluitend gelezen: zeven migraties en drie nieuwe Edge Functions ontbreken nog. Een nieuwe volledige GitHub-controle hoort bij de definitieve commit.

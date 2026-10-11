@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-11",
+  "scope": "Local release checks and read-only production inventory. No production changes or production login test.",
+  "fixed": "A successful Numbers join consumes the invitation code. Correcting an invalid code, answering, then reloading resumes the actual session and exact draft.",
+  "tests": {
+    "desktop_before_code_fix": {
+      "passed": 139,
+      "failed": 0
+    },
+    "desktop_and_numbers_after_code_fix": {
+      "passed": 31,
+      "failed": 0
+    },
+    "live_browser_after_code_fix": {
+      "checks": 13,
+      "errors": [],
+      "missing": []
+    },
+    "legacy_standalone_hub_after_code_fix": {
+      "checks": 32,
+      "errors": [],
+      "missing": []
+    }
+  },
+  "github": "New final full workflow required after this commit. Earlier failed DOM expectations and obsolete live entry selectors were updated; no tests skipped.",
+  "production": {
+    "changed": false,
+    "publicUrl": "https://godwillsaveyoutoo-pixel.github.io/LeraarBob/",
+    "source": "main:/",
+    "mainCommit": "296e06b7afb84564f7737ba0f790e27ebf6fa800",
+    "openStack": [
+      12,
+      13,
+      14,
+      15
+    ],
+    "pendingMigrations": [
+      "20261011070545_os_worksheet_cloud_archive.sql",
+      "20261011121227_os_composite_tasks.sql",
+      "20261011123451_os_clay_modes.sql",
+      "20261011135715_os_task_unit_scores_and_partial_submission.sql",
+      "20261011142721_logica_class_battle.sql",
+      "20261011142724_logica_duo_battle.sql",
+      "20261011145622_class_battle_personal_report.sql"
+    ],
+    "pendingEdgeFunctions": [
+      "task-activity",
+      "logica-class",
+      "logica-duo"
+    ],
+    "migrationPreconditions": {
+      "class_legacy_case_ready": true,
+      "class_legacy_grade_ready": true,
+      "class_grading_ready": true,
+      "invitation_lock_ready": true,
+      "duel_deadline_ready": true,
+      "social_migration_ready": true
+    },
+    "migrationNote": "numbers_scientific_generator_versions is already deployed as 20261010064750; local source is 20261009202541. Do not reapply it due to timestamp alone."
+  },
+  "sourceSha256": {
+    "games/bewerkingen-trainer/numbers-space.js": "72fa1bab3ce3440cb2b1a73de24c47e007166adc105dd0764623d5a07fce45ae",
+    "tests/desktop-dom.test.cjs": "c154d9afb3055fe5361f7798f1d5318e3f229ff5f0c2b2254ab80fef5eeed0a9",
+    "tests/class-battle-report-browser.cjs": "c906062eb161a9eec24c243895da2fa65e8288117c976086bdc1c13114bde691",
+    "tests/desktop-live-browser.cjs": "5d93f6039cbd050ec6d53e7cc41a22b6ee74a59dbeef40e74630badb4111c646",
+    "tests/uniform-class-flow-browser.cjs": "93eca7502d50a7e25803a2d3b135831b7875da66bae1ab8cb757ce4663ae70fc"
+  }
+}
