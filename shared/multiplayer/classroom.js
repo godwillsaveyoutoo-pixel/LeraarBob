@@ -116,6 +116,7 @@ function render(){
  $('resultTitle').textContent=phase==='finished'?'Eindranglijst':phase==='closed'?'Sessie gestopt':'Uitslag van deze ronde';
  $('resultSummary').textContent=state.round>=0?`${activeMembers.filter(p=>p.correct).length} van de ${activeMembers.length} leerlingen beantwoordden deze ronde juist.`:'De sessie is gesloten voordat een ronde begon.';
  $('ownResult').textContent=state.owner||late?'':state.mine?.submitted?(state.mine.correct?`Juist! +${state.mine.points} punten.`:'Deze ronde was je antwoord niet juist.'):state.round>=0?'Geen antwoord ingediend in deze ronde.':'';
+ if(ended&&!state.owner&&!simulator)window.LeraarBobBattleReport?.mount($('results'),{provider:'class',id:state.id,labels:Object.fromEntries(Game.skills.map(s=>[s.id,s.label||s.name||s.id]))});else $('results').querySelector('.lb-battle-report')?.remove();
  $('next').hidden=!state.owner||phase!=='results';$('next').textContent=state.round+1===state.total?'Bekijk eindranglijst →':'Volgende ronde →';$('newSession').hidden=!ended;
  if($('endRound')){$('endRound').hidden=!state.owner||phase!=='question';$('endRound').disabled=actionBusy;}
  if($('reviewToggle')){

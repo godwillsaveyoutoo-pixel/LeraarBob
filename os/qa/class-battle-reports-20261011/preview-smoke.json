@@ -1,0 +1,10 @@
+{
+  "url": "http://127.0.0.1:8798/os/",
+  "checks": [
+    "Consistent one-device / two-device duo labels",
+    "Seven teacher-only class starts",
+    "Eight-character class code prefilled",
+    "All three report providers available"
+  ],
+  "errors": []
+}

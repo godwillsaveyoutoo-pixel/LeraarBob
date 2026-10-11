@@ -1,3 +1,5 @@
+> Actuele aanvulling (11 oktober): [centrale sessievensters en persoonlijke klasbattle-PDF](qa/class-battle-reports-20261011/README.md). De ontwikkelversie koppelt alle huidige battleproviders aan eigen verslagen; productie-uitrol is nog niet uitgevoerd. Oudere secties hieronder beschrijven eerdere versies.
+
 # leraarBob-bureaublad · ontwikkelpilot
 
 Het bureaublad op `/os/` is de standaardstartpagina: gewone bezoeken aan `/` en `/index.html` openen het OS. De eerdere catalogus blijft beschikbaar via [`/index.html?view=catalog`](../index.html?view=catalog) en OS Instellingen. Bestaande accountlinks voor aanmelden, terugkeer en verificatie blijven via de oorspronkelijke accountingang lopen. De oorspronkelijke pilot is geïntegreerd op `codex/os-pilot-20261009`, vanaf de GitHub-basis `6056ac4e7445f6bb15fa1b15dce43df32a6e17e6`.

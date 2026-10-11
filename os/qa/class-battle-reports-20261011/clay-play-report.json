@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "Solo keeps the original practice and timed controls; background session polling does not reopen the lobby.",
+    "Duo invitation, join, synchronized start, seven real correct answers, non-winner participation, durable 20/10 XP.",
+    "Leaving a finished room returns to the chooser and stays there on polling.",
+    "A group of three independent students finishes the original seven-in-a-row engine.",
+    "Teacher starts a class session as spectator; pupil completes seven shots and teacher receives results without student XP.",
+    "Central OS ranking and teacher results show persisted Kleiduif sessions.",
+    "Class entry controls reachable at 1366×768, 390×844 and 640×360; expanded and collapsed OS bars at 100% zoom."
+  ],
+  "errors": [],
+  "missing": [],
+  "scope": "Real native game and PostgreSQL; synthetic accounts on isolated browsers; no production accounts."
+}

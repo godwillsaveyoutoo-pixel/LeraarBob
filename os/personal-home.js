@@ -12,7 +12,7 @@
   let dialog, dialogBody, dialogTitle, dialogKind = '', dialogVersion = 0, returnFocus, polling, busy = false;
   const signatures = new Map();
   const identity = account => `${account?.id || 'guest'}:${account?.role || 'guest'}`;
-  const games = { kleiduifschieten:'Kleiduifschieten', rechten: 'Rechtenwereld', vector: 'Vectormissie', vectoren: 'Vectormissie', equations: 'Vergelijkingen', systems: 'Stelsels' };
+  const games = {algebra:'Vergelijkingen',bewerkingen:'Getallenwereld',wortelbouw:'Wortelbouw',logicawereld:'Logicawereld', kleiduifschieten:'Kleiduifschieten', rechten: 'Rechtenwereld', vector: 'Vectormissie', vectoren: 'Vectormissie', equations: 'Vergelijkingen', systems: 'Stelsels' };
   const safeState = () => snapshot?.account?.id === ctx?.account?.id && ctx?.account && !ctx.authPending ? snapshot : null;
   const invitations = () => (safeState()?.invitations || []).filter(i => i.status === 'pending' && (!i.expires_at || Date.parse(i.expires_at) > Date.now()));
   const incoming = () => invitations().filter(i => i.recipient_id === ctx.account.id);
@@ -208,14 +208,27 @@
         select.addEventListener('change', () => { selectedClass = select.value; boardState = 'loading'; board = null; renderBoards(); refreshBoards(); }); label.append(select); filters.append(label);
       } else nodes.push(node('p', 'personal-ranking-world', board.class ? `Klas ${board.class}` : 'Geen klas gekoppeld'));
       const label = node('label', '', 'Wereld'), select = node('select'); select.setAttribute('aria-label', 'Wereld voor ranglijst'); select.dataset.focusKey = 'ranking-game';
-      const ids = [...new Set(['rechten','kleiduifschieten', ...(board.leaderboards || []).map(r => r.game)])]; ids.forEach(id => select.append(new Option(games[id] || id, id))); select.value = selectedGame;
+      const ids = ['rechten','algebra','vectoren','wortelbouw','bewerkingen','logicawereld','kleiduifschieten']; ids.forEach(id => select.append(new Option(games[id] || id, id))); select.value = selectedGame;
       select.addEventListener('change', () => { selectedGame = select.value; renderRankingWindow(); }); label.append(select); filters.append(label); nodes.push(filters);
       const rows = (board.leaderboards || []).filter(r => r.game === selectedGame);
       nodes.push(rows.length ? rankingRows(rows) : small(ctx.account.role === 'teacher' && !selectedClass ? 'Kies eerst je klas.' : 'Nog geen afgeronde klasbattles voor deze wereld.'));
       if(selectedGame==='kleiduifschieten'&&board.clayError)nodes.push(small('Kleiduifresultaten konden niet worden opgehaald.'));
       if(selectedGame==='kleiduifschieten'&&ctx.account.role==='teacher')for(const room of board.clayResults||[]){const card=node('details','personal-result-room'),title=node('summary','',new Date(room.created_at).toLocaleString('nl-BE')+' · '+({online:'Duo',group:'Groep',classroom:'Klas'})[room.os_mode]+' · '+room.status);card.append(title);for(const m of room.members||[])card.append(node('p','',`${m.alias}: ${m.streak}/7 · ${m.misses} missers · ${m.answers} schoten · ${m.xp} XP${m.winner?' · winnaar':''}`));nodes.push(card);}
+      if(ctx.account.role==='student')nodes.push(battleReports());
       nodes.push(button('Vernieuwen', refreshBoards, 'personal-wide')); return nodes;
     });
+  }
+  function battleReports(){
+    const section=node('section','personal-battle-reports'),provider=selectedGame==='kleiduifschieten'?'clay':'class',version=epoch,game=selectedGame;
+    section.append(node('h3','','Mijn battleverslagen'));
+    const status=small('Verslagen ophalen…');section.append(status);
+    const providers=game==='bewerkingen'?['class','numbers']:[provider];
+    Promise.allSettled(providers.map(async p=>(await LeraarBobBattleReport.read(p)).map(r=>({...r,provider:p})))).then(results=>{
+      if(version!==epoch)return;
+      const rows=results.flatMap(r=>r.status==='fulfilled'?r.value:[]).filter(r=>r.game===game).sort((a,b)=>b.created_at.localeCompare(a.created_at));
+      status.textContent=results.some(r=>r.status==='rejected')?'Niet alle verslagen konden laden. Gebruik Vernieuwen om opnieuw te proberen.':rows.length?'Je eigen opgeslagen resultaten. Je kunt ze opnieuw downloaden.':'Nog geen eigen afgeronde battle in deze wereld.';
+      for(const room of rows){const row=node('article','personal-result-room');row.append(node('strong','',new Date(room.created_at).toLocaleString('nl-BE')+(room.code?' · '+room.code:'')));LeraarBobBattleReport.mount(row,{provider:room.provider,id:room.id});section.append(row);}
+    });return section;
   }
   function renderSession() {
     const room = board?.rooms?.find(r => r.active && r.game === 'rechten');
@@ -229,9 +242,9 @@
   function openCode(code = '') {
     openDialog('code', 'Deelnemen met klascode');
     if (!ctx.account) { dialogBody.append(small('Meld je aan met je leerlingaccount om deel te nemen.'), button('Inloggen', () => { closeDialog(); ctx.openAccount(); }, 'personal-primary')); return; }
-    if (ctx.account.role === 'teacher') { dialogBody.append(small('Een klasbattle starten doe je bij Rechtenwereld. Leerlingen gebruiken de klascode om deel te nemen.'), button('Klasbattle starten', () => { closeDialog(); ctx.openApp('rechtenwereld', 'classroom'); }, 'personal-primary')); return; }
+    if (ctx.account.role === 'teacher') { closeDialog();ctx.showView({kind:'live'});return; }
     dialogBody.append(small('Vul de code van je sessie in. Je gaat rechtstreeks naar de juiste wereld.'));
-    const form = node('form', 'personal-code'), label = node('label', '', 'Klascode'), input = node('input'); input.name = 'code'; input.autocomplete = 'off'; input.maxLength = 8; input.required = true; input.pattern = '([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})'; input.placeholder = 'A1B2C3'; input.value = typeof code === 'string' && /^[a-f0-9]{6}$/i.test(code) ? code : ''; input.setAttribute('aria-label', 'Klascode'); label.append(input);
+    const form = node('form', 'personal-code'), label = node('label', '', 'Klascode'), input = node('input'); input.name = 'code'; input.autocomplete = 'off'; input.maxLength = 8; input.required = true; input.pattern = '([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})'; input.placeholder = 'A1B2C3'; input.value = typeof code === 'string' && /^(?:[a-f0-9]{6}|[a-f0-9]{8})$/i.test(code) ? code : ''; input.setAttribute('aria-label', 'Klascode'); label.append(input);
     const submit = node('button', 'personal-primary', 'Deelnemen'); submit.type = 'submit'; const status = node('p', 'personal-muted'); status.setAttribute('role', 'status'); form.append(label, submit, status); dialogBody.append(form);
     form.addEventListener('submit', async e => {
       e.preventDefault(); if (submit.disabled) return; const version = epoch, opened = dialogVersion; submit.disabled = true; status.textContent = 'Code controleren…';
@@ -257,7 +270,7 @@
     $('personalInbox').onclick = () => openInbox($('personalInbox'));
     $('personalRankings').onclick = openRankings; $('personalClassCode').onclick = () => openCode(); $('personalClassCode').hidden = ctx.account?.role === 'teacher';
     if (!ctx.authPending && initialAppPicker) { initialAppPicker = false; openAppPicker(); }
-    if (!ctx.authPending && /^[a-f0-9]{6}$/i.test(initialClassCode || '')) { const code = initialClassCode; initialClassCode = null; openCode(code); }
+    if (!ctx.authPending && /^(?:[a-f0-9]{6}|[a-f0-9]{8})$/i.test(initialClassCode || '')) { const code = initialClassCode; initialClassCode = null; openCode(code); }
     if (!polling) polling = setInterval(() => { bindSocial(); if (!document.hidden && (!$('homeView').hidden || !!$('rankingWindowBody') && !$('libraryWindow').hidden)) refreshBoards(); }, 30000);
   }
   // Topbar, native Learn and the desktop all open this same invitation surface.
@@ -266,5 +279,5 @@
   window.addEventListener('focus', () => { bindSocial(); if (ctx && !$('homeView').hidden) refreshBoards(); });
   window.addEventListener('pageshow', e => { if (e.persisted && ctx) render(ctx); });
   window.addEventListener('pagehide', () => { clearInterval(polling); polling = null; socialStop?.(); social = null; });
-  window.LeraarBobPersonalHome = Object.freeze({ render, openAppPicker, openRankings, renderRankingWindow, openClassCode: openCode, refreshClasses: refreshBoards });
+  window.LeraarBobPersonalHome = Object.freeze({ render, openInbox, openAppPicker, openRankings, renderRankingWindow, openClassCode: openCode, refreshClasses: refreshBoards });
 })();

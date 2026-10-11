@@ -29,8 +29,9 @@ jobs:
           npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-browser-tests" playwright@1.64.0 @electric-sql/pglite@0.5.8 jsdom@26.1.0 fake-indexeddb@6.2.4
           "$RUNNER_TEMP/leraarbob-browser-tests/node_modules/.bin/playwright" install --with-deps chromium
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" HOME_SCREENSHOTS="$RUNNER_TEMP/os-qa/home-entry" node tests/home-entry-browser.cjs
-          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs tests/worksheet-cloud.test.cjs tests/os-tasks.test.cjs tests/clay-os.test.cjs tests/clay-service.test.cjs tests/clay-game.test.cjs tests/logica-battle-database.test.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs tests/worksheet-cloud.test.cjs tests/os-tasks.test.cjs tests/clay-os.test.cjs tests/clay-service.test.cjs tests/clay-game.test.cjs tests/logica-battle-database.test.cjs tests/class-battle-report-db.test.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" TASKS_PROOF="$RUNNER_TEMP/os-qa/tasks" node tests/os-tasks-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" BATTLE_REPORT_PROOF="$RUNNER_TEMP/os-qa/battle-reports" node tests/class-battle-report-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CLAY_OS_PROOF="$RUNNER_TEMP/os-qa/clay" node tests/clay-os-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/personal" node tests/personal-os-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/personal" node tests/personal-chrome-browser.cjs

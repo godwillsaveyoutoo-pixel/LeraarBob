@@ -1,0 +1,27 @@
+{
+  "checks": [
+    "Vergelijkingen has visible Mix, 17 original equation types, 20 rounds, no obsolete systems; selection survives reload",
+    "Online duo requires alias invitation, acceptance and two ready players; native answer entry, minimize/resume, collapse/restore and round result work",
+    "Teacher creates a class mix; central class code opens Logicawereld for two pupils; three real native rounds end with a class result",
+    "Standalone class setup, 44px controls and collapse preference survive reload at 390×844"
+  ],
+  "errors": [],
+  "screenshots": [
+    "vergelijkingen-mix.png",
+    "duo-uitnodiging.png",
+    "duo-wachtkamer.png",
+    "duo-opgave-false.png",
+    "duo-opgave-true.png",
+    "duo-uitslag.png",
+    "klas-mix.png",
+    "klas-wachtkamer.png",
+    "tabel-1366-false.png",
+    "tabel-1366-true.png",
+    "tabel-390-false.png",
+    "tabel-390-true.png",
+    "klas-rondeuitslag.png",
+    "klas-eindstand.png",
+    "klas-mobiel.png"
+  ],
+  "scope": "Local real SQL/Edge handlers; synthetic teacher, Alex and Sam; Chromium 1366×768 at 100% plus 390×844. No production authentication claimed."
+}

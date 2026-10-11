@@ -1,0 +1,19 @@
+✔ central overview restricts peers to own class, ranks ties, resolves codes and reads only graded finished results (1974.165242ms)
+✔ All battle stores provide durable own-only results and safe terminal reports (4775.769075ms)
+✔ OS clay: private duo, group/class roles, original server questions, idempotent XP and teacher results (1675.422051ms)
+✔ Old clay URLs cannot expose private invitations or bypass the classroom spectator role (1553.848533ms)
+✔ Klaslearn: identity, own drafts, retry, once-only XP, late join, teacher pacing, reports (1504.607827ms)
+✔ online duo: capacity, trusted battle answers, hidden correctness, server deadline, finish (1514.810383ms)
+✔ Duo Learn requires both own solutions and a separate discussion confirmation (1498.05265ms)
+✔ period reports include recorded solo evidence; other classes remain private (1441.944937ms)
+✔ a pupil hosting a duo cannot inspect the opponent answer during a battle (1479.589161ms)
+✔ a departed duo member cannot reclaim an occupied second seat (1502.92911ms)
+✔ central overview lists only owned or joined sessions and never leaks live grading (1482.730368ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20466.071237
