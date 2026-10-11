@@ -11,7 +11,7 @@
   "games/algebra-trainer/redesign.css": "53b89b0b18b9264436014b33816ff24890f8d6e77969aeab2fbfcf542897da0c",
   "games/getallenwereld/app.js": "1912f99c2e05addc2f301e29b55e3ef8583a80a11696ad177241f2f0c3ed263a",
   "games/getallenwereld/index.html": "3582d8c951f1b992c8879f6f35c8ddba7dd8eb32cd6924f1be7f65c7c589597f",
-  "games/getallenwereld/workshop.css": "9b40e35ec42f00032d1f94f849f581274af9246749451bd0f6b53e2a6d2cb242",
+  "games/getallenwereld/workshop.css": "782677c3d7d6074eb0908849edf8ce79c24e1a0c6439b16b7652fef47e12ed7f",
   "js/catalog.js": "4058c3c1ac85b50c49c5cffdece48b51558d5644ba30cb54b4f5b514a9614b9a",
   "os/APP-MODES.md": "92372b76b0109af27e572e0723f5f373694c55af27b8f8beda2fce1de96707f5",
   "os/activity-entry.js": "73c6902f63941db571a5ec51095608327c37ae6083be63eddae18804e417a5b2",
@@ -34,5 +34,5 @@
   "tests/algebra-os-browser.cjs": "4b59e6b32f5982886f5ef42d66e5f45f9c09bb17e955d0270b0b508fd63cf7ed",
   "tests/helpers/algebra-duo-db.cjs": "ef126cfd02edc997952abe6fc80283e3cc2abc8665d17c5a85d29c2da332c62c",
   "tests/helpers/rechten-entry-fixture.cjs": "9139bb053fefc4be03a489295bb8c701edf55f17a2d30db2395d90ce94a1b9f1",
-  "tests/worlds-visual-browser.cjs": "e227481e79636f5aebfea34fc54651fa339754f8c73d156569f24e59260452a9"
+  "tests/worlds-visual-browser.cjs": "cb21ea2cca2eab5b36a5d19ceaf64a881f0c169decb723bb2beb120a6621d96e"
 }

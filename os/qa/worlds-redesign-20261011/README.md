@@ -42,4 +42,4 @@ De complete partijen zijn uitgevoerd met synthetische lokale accounts en de echt
 
 Tests: `tests/worlds-visual-browser.cjs`, `tests/algebra-duo-browser.cjs`, `tests/algebra-duo.test.cjs`, bestaande Algebra/Getallen- en klasrapportcontroles. De nieuwe controles draaien ook in GitHub Actions. Bouw de exact dezelfde beoordelaar met `scripts/build-algebra-duo-worker.cjs` en esbuild 0.28.2.
 
-Compacte voorbeelden: [hoofdstukken op telefoon](getallen-phone.png), [liggende oefening](getallen-landscape.png), [Eigen reeks in donker](eigen-reeks-dark.png).
+Compacte voorbeelden: [hoofdstukken op telefoon](getallen-phone.png), [zelfstandig met ingeklapte balk](getallen-standalone-folded.png), [liggende oefening](getallen-landscape.png), [Eigen reeks in donker](eigen-reeks-dark.png).

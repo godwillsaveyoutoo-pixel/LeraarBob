@@ -2,7 +2,7 @@
    Colours inherit shared/learning-world.css, including all dark-mode surfaces. */
 .workshop-home,.powers-path,.powers-play,.powers-summary{background:var(--paper);color:var(--ink)}
 :is(.workshop-home,.powers-path,.powers-play,.powers-summary) .primary{background:var(--action);color:var(--action-ink);border-color:var(--action);border-radius:10px;min-height:48px;font-size:15px;font-weight:650}
-.workshop-home{padding:0 max(16px,calc((100% - 1200px)/2));grid-template-rows:auto minmax(280px,1fr) auto auto!important;gap:12px}
+.workshop-home{padding:0 max(16px,calc((100% - 1200px)/2));grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(280px,1fr) auto auto!important;gap:12px}
 .workshop-home .heading{padding:22px 0 4px;min-height:0;background:none;border:0;align-items:center}
 .workshop-home .heading h1{font-size:38px}.workshop-home .heading p{font-size:15px;color:var(--muted);margin-top:6px}.workshop-home .meta{font-size:20px;color:var(--ink);border:1px solid var(--line);border-radius:12px;background:var(--card);padding:12px 16px}.workshop-home .meta small{font-size:11px;color:var(--muted)}
 .workshop-home .themes{padding:8px 0;gap:18px;align-items:stretch}
@@ -71,6 +71,7 @@ body.topbar-collapsed .workshop-nav{padding-left:60px}
 }
 /* Compact chapter chooser: three recognizable cards, with the actions in view. */
 @media(max-width:599px){
+ body.topbar-collapsed:not([data-os-native-app]) .workshop-home .heading{padding-left:0;padding-top:54px}
  .workshop-home .themes{grid-template-rows:repeat(3,minmax(0,1fr));gap:8px;padding:0}
  .workshop-home .theme{display:grid;grid-template-columns:86px minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);gap:4px 12px;min-height:0;padding:12px}
  .workshop-home .world-art{grid-column:1;grid-row:1/4;height:auto;min-height:0;align-self:stretch;margin:-12px 0 -12px -12px;width:98px}
