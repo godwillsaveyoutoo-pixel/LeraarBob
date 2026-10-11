@@ -1,4 +1,6 @@
-# Beide OS-balken echt inklappen
+# Beide OS-balken inklappen · historisch verslag
+
+**Correctie 11 oktober:** de hieronder genoemde veiligheidsruimte bleek toch een overblijvende strook van 44 px te veroorzaken. De oude test mat alleen de balkhoogte en miste de padding. De reservering is verwijderd; [actuele controles meten de werkelijk vrijgekomen inhoudsruimte](../full-space-20261011/README.md).
 
 De oude focusstand verborg twee balken maar voegde een vaste onderstrook toe. Die strook, de Focusknop en ‘Apart openen’ zijn verwijderd. Elke balk klapt nu onafhankelijk in. Alleen een klein herstelhandvat blijft aan de betreffende schermrand staan. De vensteracties worden pas zichtbaar na het openen van de onderbalk.
 

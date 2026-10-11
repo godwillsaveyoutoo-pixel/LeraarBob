@@ -144,16 +144,17 @@ body[data-os-chrome=single] #runningApps{min-width:0;flex:1}
 
 /* Each OS bar collapses independently. No replacement focus/navigation strip. */
 #desktopHeader{grid-row:1}
-#desktop{grid-row:2;padding-top:var(--os-top-reserve,0px);padding-bottom:var(--os-bottom-reserve,0px)}
+#desktop{grid-row:2;padding:0}
 #taskbar{grid-row:3;padding-right:76px!important}
 body.os-bottom-collapsed{grid-template-rows:auto minmax(0,1fr) 0}
 body.os-bottom-collapsed #taskbar{height:0!important;min-height:0!important;padding-block:0!important;border:0!important;visibility:hidden;overflow:hidden}
-.os-edge-handle,.lb-restore.os-edge-handle{position:fixed;z-index:65;left:calc(50% - 32px);right:auto;width:64px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:12px;background:transparent;box-shadow:none;backdrop-filter:none;cursor:pointer;display:grid;place-items:center;color:#345851}
-.os-edge-handle::before{content:'';width:36px;height:6px;border-radius:9px;background:currentColor;box-shadow:0 0 0 2px #fffdf8c9,0 2px 5px #10253630}
+.os-edge-handle,.lb-restore.os-edge-handle{position:fixed;z-index:65;left:calc(50% - 22px);right:auto;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:8px;background:transparent;box-shadow:none;backdrop-filter:none;cursor:pointer;display:grid;place-items:center;color:#345851}
+.os-edge-handle::before{content:'';width:26px;height:5px;border-radius:9px;background:currentColor;box-shadow:0 0 0 2px #fffdf8c9,0 2px 5px #10253630}
 .os-edge-handle>span,.lb-restore.os-edge-handle svg{display:none}
-.os-edge-handle:hover,.os-edge-handle:focus-visible{background:#fffdf8e8;outline:2px solid #65866f;outline-offset:-2px}
-.lb-restore.os-edge-handle{top:0;bottom:auto}
-#taskbarToggle{bottom:0;top:auto}
+.os-edge-handle:hover::before{box-shadow:0 0 0 3px #fffdf8,0 2px 6px #10253655}
+.os-edge-handle:focus-visible,.lb-restore.os-edge-handle:focus-visible{outline:2px solid #65866f;outline-offset:-2px}
+.lb-restore.os-edge-handle{top:var(--os-handle-offset,0px);bottom:auto}
+#taskbarToggle{bottom:var(--os-handle-offset,0px);top:auto}
 body:not(.os-bottom-collapsed) #taskbarToggle{left:auto!important;right:8px;bottom:calc((var(--taskbar-height) - 44px)/2);z-index:75;color:#eeeede}
 body:not(.os-bottom-collapsed) #taskbarToggle::before{box-shadow:none}
 body:not(.os-bottom-collapsed) #taskbarToggle:hover,body:not(.os-bottom-collapsed) #taskbarToggle:focus-visible{background:#ffffff15}

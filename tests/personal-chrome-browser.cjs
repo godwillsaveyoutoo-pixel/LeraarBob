@@ -6,12 +6,30 @@ const out=process.env.LB_SCREENSHOT_DIR||'/tmp/leraarbob-edge-bars';fs.mkdirSync
  browser=await chromium.launch({executablePath:process.env.LB_CHROMIUM||(fs.existsSync('/opt/brave.com/brave/brave')?'/opt/brave.com/brave/brave':undefined),headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
  const context=await browser.newContext({viewport:{width:1366,height:768},deviceScaleFactor:1,hasTouch:true});await context.route('**/*',r=>new URL(r.request().url()).origin!==preview.base?r.abort():r.continue());
  page=await context.newPage();page.setDefaultTimeout(18000);page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());
- await page.goto(preview.base+'/os/?previewUser=alex');await page.locator('.personal-app [data-mode=solo]').click();let frame=await(await page.locator('.native-app').elementHandle()).contentFrame();await frame.locator('#app[data-ready=true]').waitFor();
+ await page.goto(preview.base+'/os/?previewUser=alex');await page.waitForFunction(()=>LeraarBobDesktop?.state().accountId);
  async function settle(){await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>requestAnimationFrame(r)))));}
  async function shot(name){await settle();await page.screenshot({path:path.join(out,name+'.png')});}
  async function visible(selector){const e=page.locator(selector),r=await e.boundingBox();assert(r&&r.width>=44&&r.height>=44,selector+' size');assert(await e.evaluate(e=>{const r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return r.x>=0&&r.right<=innerWidth+1&&r.y>=0&&r.bottom<=innerHeight+1&&(e===hit||e.contains(hit));}),selector+' occluded');measurements.push({selector,viewport:page.viewportSize(),...r});}
  async function bottom(closed){if((await page.locator('#taskbarToggle').getAttribute('aria-expanded'))===String(closed))await page.locator('#taskbarToggle').click();await settle();}
  async function top(closed){await page.evaluate(c=>LeraarBobTopbar.setCollapsed(c,true),closed);await settle();}
+ async function fullSpace(selector){
+  const bounds=await page.locator(selector).boundingBox(),layout=await page.evaluate(()=>({height:innerHeight,top:document.getElementById('desktopHeader').getBoundingClientRect().height,bottom:document.getElementById('taskbar').getBoundingClientRect().height,padding:getComputedStyle(document.getElementById('desktop')).padding}));
+  assert.equal(layout.padding,'0px','A collapsed bar must never leave a reserved replacement strip');
+  assert(Math.abs(bounds.y-layout.top)<1&&Math.abs(bounds.y+bounds.height-(layout.height-layout.bottom))<1,selector+' must occupy every pixel released by the bars: '+JSON.stringify({bounds,layout}));
+ }
+ await page.locator('.personal-add').click();for(const id of ['getallenwereld','stelsels'])await page.locator('[data-pick-app='+id+']').click();await page.getByRole('button',{name:'Klaar',exact:true}).click();
+ for(const size of [{width:1366,height:768},{width:1024,height:600},{width:390,height:844},{width:640,height:360},{width:320,height:568}]){
+  await page.setViewportSize(size);
+  for(const up of [false,true])for(const down of [false,true]){
+   await top(up);await bottom(down);await fullSpace('#homeView');await visible('#taskbarToggle');if(up)await visible('.lb-restore:not([hidden])');
+   await page.locator('#homeView').evaluate(n=>n.scrollTop=n.scrollHeight);await settle();await fullSpace('#homeView');
+   await page.locator('#homeView').evaluate(n=>n.scrollTop=0);await settle();
+   if(size.width===1366&&up&&down)await shot('desktop-all-space');
+  }
+ }
+ checks.push('Populated desktop at five sizes × four bar states and after scrolling: zero reserved padding, content meets the actual screen edges, restoration remains reachable');
+ await page.setViewportSize({width:1366,height:768});await top(false);await bottom(false);
+ await page.locator('.personal-app[data-app-id=rechtenwereld] [data-mode=solo]').click();let frame=await(await page.locator('.native-app').elementHandle()).contentFrame();await frame.locator('#app[data-ready=true]').waitFor();
  assert.equal((await frame.locator('.atlas-header').boundingBox()).height,0);assert.equal(await page.locator('#focusControls,#focusWorkspace,#openOriginal').count(),0);
  await frame.locator('[data-world-node=puntenbaai]').click();await frame.locator('[data-node=point]').click();await frame.locator('[data-choice=answer]').first().click();const before=await frame.evaluate(()=>RechtenV2App.snapshot());
  for(const size of [{width:1366,height:768},{width:390,height:844},{width:640,height:360},{width:320,height:568}]){
@@ -20,7 +38,7 @@ const out=process.env.LB_SCREENSHOT_DIR||'/tmp/leraarbob-edge-bars';fs.mkdirSync
    await top(up);await bottom(down);await visible('#taskbarToggle');if(up)await visible('.lb-restore:not([hidden])');
    assert.equal(await page.locator('#desktopHeader').isVisible(),!up);assert.equal(await page.locator('#taskbar').isVisible(),!down);assert.equal(await page.locator('#closeApp').isVisible(),!down);
    assert.deepEqual(await frame.evaluate(()=>RechtenV2App.snapshot()),before);
-   const bounds=await page.locator('.native-app').boundingBox();if(up&&down)assert(bounds.height>expanded.height+40,'Both hidden must reclaim actual game space');
+   await fullSpace('.native-app');const bounds=await page.locator('.native-app').boundingBox();if(up&&down)assert(bounds.height>expanded.height+40,'Both hidden must reclaim actual game space');
    if(up&&down){const bars=await page.evaluate(()=>({top:document.getElementById('desktopHeader').getBoundingClientRect().height,bottom:document.getElementById('taskbar').getBoundingClientRect().height}));assert.deepEqual(bars,{top:0,bottom:0});}
    for(const selector of ['#taskbarToggle',...(up?['.lb-restore:not([hidden])']:[])]){
     if(selector==='#taskbarToggle'&&!down)continue;
@@ -39,7 +57,7 @@ const out=process.env.LB_SCREENSHOT_DIR||'/tmp/leraarbob-edge-bars';fs.mkdirSync
  checks.push('Keyboard and touch open/close handles; expanding either bar preserves the answer; cancel-close retains the same game');
  await page.locator('leraarbob-topbar .crumbs button').filter({hasText:'Rechtenwereld'}).click();await frame.locator('[data-world-node=puntenbaai]').waitFor();await frame.locator('[data-world-node=puntenbaai]').click();await page.locator('leraarbob-topbar .menu').click();await page.getByRole('button',{name:'Rechtenwereld · Spelvoortgang',exact:true}).click();await frame.waitForFunction(()=>RechtenV2App.snapshot().screen==='book');
  checks.push('World breadcrumb and native game progress remain available through the expanded OS bar');
- await top(true);await bottom(true);await page.reload();await page.locator('.personal-app [data-mode=solo]').click();await settle();assert.equal(await page.locator('#taskbarToggle').getAttribute('aria-expanded'),'false');await visible('.lb-restore:not([hidden])');assert(!await page.locator('#taskbar').isVisible());
+ await top(true);await bottom(true);await page.reload();await page.locator('.personal-app[data-app-id=rechtenwereld] [data-mode=solo]').click();await settle();await fullSpace('.native-app');assert.equal(await page.locator('#taskbarToggle').getAttribute('aria-expanded'),'false');await visible('.lb-restore:not([hidden])');assert(!await page.locator('#taskbar').isVisible());
  await bottom(false);await page.locator('.lb-restore:not([hidden])').click();await page.locator('#minimizeApp').click();await page.getByRole('button',{name:'Terug naar Rechtenwereld',exact:true}).click();
  frame=await(await page.locator('.native-app').elementHandle()).contentFrame();const retained=await frame.evaluate(()=>RechtenV2App.snapshot());await bottom(true);await bottom(false);assert.deepEqual(await frame.evaluate(()=>RechtenV2App.snapshot()),retained);
  await page.locator('#closeApp').click();await page.locator('#acceptClose').click();assert.equal(await page.locator('.native-app').count(),0);assert(await page.locator('#homeView').isVisible());
