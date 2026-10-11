@@ -26,7 +26,7 @@
   "tasks/tasks.js": "26a45ad01a67b155531890749cd1fc25835abf846b781b6cf44284ec6c43e7e9",
   "teacher/teacher.js": "77089d60b51c6379a8f7c8b3583ec6ae86b8db939072e4d4ff54c36276e023f0",
   "tests/catalog-progress.test.cjs": "974b27bce4869d3b74873dda4ff268feba9c700d0415b6836f2c7fa0098b4c36",
-  "tests/clay-os-browser.cjs": "a723afdd72a67f83da6159a9ceac7060a66dfa6ae023b3b688311a7e3de90cf1",
+  "tests/clay-os-browser.cjs": "0671bb9ce7cde4cd0348b1eac5dcdac6bfa212e4d138a4803d319d050f5daa23",
   "tests/clay-os.test.cjs": "375d4e6dfa8ac7a6c0effb0b07aa30e94586e5ad80fe265d34f2e28912a09abb",
   "tests/clay-service.test.cjs": "5dac1de8fa8752081e20d923419e2db0b9ca24d8165b841f68e4831757e1cb64",
   "tests/desktop-dom.test.cjs": "06608b0b1e6e97e23b3c8f33974b41a5240333f2783a19a72611bae92dc9bea3",

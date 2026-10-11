@@ -13,7 +13,8 @@
     "Pilot: changed Start label and counted only saved shortcuts, excluding the assignments entry.",
     "Getallen and scientific first failed before browser launch; rerun with explicit LB_CHROMIUM.",
     "Expanded Kleiduif solo/menu coverage found polling reopening solo and a hidden old session menu; both corrected. The native summary selector was then corrected; final full browser suite passes.",
-    "Final task pass includes native teacher review, second-browser draft, CSV export, both OS bars collapsed and reachable 44px actions."
+    "Final task pass includes native teacher review, second-browser draft, CSV export, both OS bars collapsed and reachable 44px actions.",
+    "GitHub CI 38142332607 found a random-solo test assumption: the first timed target need not offer slope 1. The browser test now clicks an actually displayed answer; the full Kleiduif suite was rerun successfully. No game logic changed for this correction."
   ],
   "commands": [
     {
@@ -75,7 +76,7 @@
     {
       "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" CLAY_OS_PROOF=\"/tmp/lb-checklist-tasks/os-qa/clay\" node tests/clay-os-browser.cjs",
       "exit": 0,
-      "seconds": 66.47,
+      "seconds": 56.65,
       "log": "logs/09.log",
       "initial_exit": 0
     },
