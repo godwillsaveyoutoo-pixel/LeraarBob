@@ -29,3 +29,6 @@ verify_jwt = false
 
 [functions.logica-duo]
 verify_jwt = false
+
+[functions.algebra-duo]
+verify_jwt = false

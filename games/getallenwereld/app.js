@@ -24,7 +24,7 @@ function worldLinks(){
  const reportPath=view=>{const u=new URL(series,R.root);u.searchParams.set('view',view);return u.href;};
  const teacher=AxiomaGame.account?.role==='teacher';
  const actions=[
-  ['series','Oefenen & samen',teacher?'Solo · duo · klas':'Solo · duo · meedoen',series],
+  ['series','Werkvormen',teacher?'Solo · duo · klas':'Solo · duo · meedoen',series],
   ['worksheet','Oefenblad','Met verbetersleutel',paper],
   ['rankings','Ranglijsten','XP en battlepunten',reportPath('rankings')],
   ...(teacher?[['students','Leerlingen','Resultaten per alias',reportPath('students')]]:[])
@@ -80,7 +80,7 @@ function go(screen){resetMessage();state.screen=screen;render();persist();sync()
 function heading(title,copy,meta){return `<div class="heading"><div><h1>${esc(title)}</h1><p>${esc(copy)}</p></div><div class="meta">${meta}</div></div>`;}
 function footer(){return `<footer class="foot"><span>Rekenregels herkennen · uitwerkingen bouwen</span><span>Je werk wordt bewaard</span></footer>`;}
 function home(){return `<section class="screen home workshop-home">${heading('Getallenwereld','Machten, wortels en wetenschappelijke schrijfwijze.',completed()+'/'+L.STOPS.length+' onderdelen<small>Rekenregels afgerond</small>')}
- <div class="themes">${L.THEMES.map((t,i)=>`<button class="theme" data-theme="${t.id}" data-topic="${t.id}"><span class="eyebrow">Hoofdstuk 0${i+1} · ${t.stops.length} onderdelen</span><span class="theme-title">${esc(t.title)} <span aria-hidden="true">↗</span></span><p>${esc(t.intro)}</p><span class="example">${math(t.example)}</span><span class="theme-bottom"><span>${completed(t.id)}/${t.stops.length} afgerond</span><strong>Bekijk de onderdelen →</strong></span></button>`).join('')}
+ <div class="themes">${L.THEMES.map((t,i)=>`<button class="theme" data-theme="${t.id}" data-topic="${t.id}"><span class="world-art" data-art="${[0,2,3][i]}" aria-hidden="true"></span><span class="eyebrow">Hoofdstuk 0${i+1} · ${t.stops.length} onderdelen</span><span class="theme-title">${esc(t.title)} <span aria-hidden="true">↗</span></span><p>${esc(t.intro)}</p><span class="example">${math(t.example)}</span><span class="theme-bottom"><span>${completed(t.id)}/${t.stops.length} afgerond</span><strong>Bekijk de onderdelen →</strong></span></button>`).join('')}
 </div>
  ${worldActions()}<div class="dock"><div><p>${state.mission?'Je oefening staat klaar.':'Kies een hoofdstuk en daarna je onderdeel.'}</p><small>${state.mission?esc(L.stop(state.mission.id).title)+' · opgave '+(state.mission.index+1)+'/6':'Start wanneer je klaar bent.'}</small></div>${state.mission?'<button class="primary" data-action="resume">Oefening hervatten →</button>':'<button class="primary" data-theme="machten">Naar machten →</button>'}</div>${footer()}</section>`;}
 function chapter(){

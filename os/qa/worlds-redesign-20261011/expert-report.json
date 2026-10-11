@@ -1,0 +1,182 @@
+{
+  "checks": [
+    "Switching approach keeps the exact questions and existing equation",
+    "Invalid division is rejected by the original equation engine",
+    "An equation solved with independently calculated own operations",
+    "Incomplete typed rule survives approach switching/minimizing; exact native validation accepts the correct full rule",
+    "Approach and answered question survive reload; three viewports and both bar states retain work"
+  ],
+  "errors": [],
+  "layouts": [
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "folded": false,
+      "selector": "#trainerScreen [data-practice-mode]",
+      "rect": {
+        "x": 1082.984375,
+        "y": 68,
+        "width": 180,
+        "height": 44
+      }
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "folded": false,
+      "selector": "#nextExerciseBtn",
+      "rect": {
+        "x": 1096.3125,
+        "y": 644.5,
+        "width": 166.671875,
+        "height": 44
+      }
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "folded": true,
+      "selector": "#trainerScreen [data-practice-mode]",
+      "rect": {
+        "x": 1082.984375,
+        "y": 10,
+        "width": 180,
+        "height": 44
+      }
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "folded": true,
+      "selector": "#nextExerciseBtn",
+      "rect": {
+        "x": 1096.3125,
+        "y": 644.5,
+        "width": 166.671875,
+        "height": 44
+      }
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "folded": false,
+      "selector": "#trainerScreen [data-practice-mode]",
+      "rect": {
+        "x": 220,
+        "y": 94.484375,
+        "width": 160,
+        "height": 44
+      }
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "folded": false,
+      "selector": "#nextExerciseBtn",
+      "rect": {
+        "x": 234.5625,
+        "y": 728,
+        "width": 145.4375,
+        "height": 44
+      }
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "folded": true,
+      "selector": "#trainerScreen [data-practice-mode]",
+      "rect": {
+        "x": 220,
+        "y": 17.484375,
+        "width": 160,
+        "height": 44
+      }
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "folded": true,
+      "selector": "#nextExerciseBtn",
+      "rect": {
+        "x": 234.5625,
+        "y": 727.984375,
+        "width": 145.4375,
+        "height": 44
+      }
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "folded": false,
+      "selector": "#trainerScreen [data-practice-mode]",
+      "rect": {
+        "x": 469.984375,
+        "y": 60,
+        "width": 160,
+        "height": 44
+      }
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "folded": false,
+      "selector": "#nextExerciseBtn",
+      "rect": {
+        "x": 486.546875,
+        "y": 242.5,
+        "width": 143.4375,
+        "height": 44
+      }
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "folded": true,
+      "selector": "#trainerScreen [data-practice-mode]",
+      "rect": {
+        "x": 469.984375,
+        "y": 2,
+        "width": 160,
+        "height": 44
+      }
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "folded": true,
+      "selector": "#nextExerciseBtn",
+      "rect": {
+        "x": 486.546875,
+        "y": 242.5,
+        "width": 143.4375,
+        "height": 44
+      }
+    }
+  ],
+  "scope": "Native browser interactions; local fixture authentication, no production writes",
+  "passed": true
+}

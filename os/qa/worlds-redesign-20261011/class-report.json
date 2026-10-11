@@ -1,0 +1,17 @@
+{
+  "checks": [
+    "Native final view, download and reload: class/rechten",
+    "Native final view, download and reload: class/vectoren",
+    "Native final view, download and reload: class/algebra",
+    "Native final view, download and reload: class/wortelbouw",
+    "Native final view, download and reload: class/bewerkingen",
+    "Native final view, download and reload: class/logicawereld",
+    "Native final view, download and reload: numbers/bewerkingen",
+    "Native final view, download and reload: clay/kleiduifschieten",
+    "Thirty-round report paginates and supports accented aliases and logic symbols",
+    "Compact OS live picker, central code dialog, native rankings, retained taskbar folder, legacy link routing, all report downloads at 1366×768 and 390×844 with both bars expanded/collapsed",
+    "Download failure is visible and retryable"
+  ],
+  "errors": [],
+  "scope": "Synthetic accounts and seeded persisted terminal results, actual UI, PostgreSQL RPC and browser PDF downloads."
+}

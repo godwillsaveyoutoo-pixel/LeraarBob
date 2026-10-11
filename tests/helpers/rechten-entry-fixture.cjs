@@ -12,6 +12,7 @@ async function createFixture(){
  const tasks=await require('./os-tasks-db.cjs').install(classroom.db,classroom.ids);
  const clay=await require('./clay-os-db.cjs').install(classroom.db,classroom.ids);
  const logicaClass=await require('./logica-battle-db.cjs').provider(classroom.db,classroom.ids,'class'),logicaDuo=await require('./logica-battle-db.cjs').provider(learn.db,learn.ids,'duo');
+ const algebraDuo=await require('./algebra-duo-db.cjs').install(learn.db,learn.ids);
  for(const db of [classroom.db,numbers.db])await db.exec(fs.readFileSync(path.join(root,'supabase/migrations/20261011145622_class_battle_personal_report.sql'),'utf8'));
  const extraClass=await require('./extra-class-providers.cjs').create(classroom.db,classroom.ids);
  let queue=Promise.resolve();const calls=[],gameProgress=new Map();
@@ -34,6 +35,7 @@ async function createFixture(){
    else if(['axioma_game_class','vector-class','bewerkingen-class'].includes(provider))data=await extraClass.call(user,provider,input);
    else if(provider==='algebra-class')data=await logicaClass.algebraCall(user,input.action,input.data);
    else if(provider==='logica-class')data=await logicaClass.call(user,input.action,input.data);
+   else if(provider==='algebra-duo')data=await algebraDuo.call(user,input.action,input.data);
    else if(provider==='logica-duo')data=await logicaDuo.call(user,input.action,input.data);
    else if(provider==='rechten-class')data=await classroom.battle(user,input.action,input.data);
    else if(provider==='axioma_social')data=await as(user,'authenticated','select public.axioma_social($1,$2,$3,$4,$5) result',[input.p_action,input.p_tab_id,input.p_target_id||null,input.p_invite_id||null,input.p_match_id||null]);

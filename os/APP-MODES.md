@@ -10,7 +10,7 @@ Stelsels betekent uitsluitend `games/stelsels.html`: de oorspronkelijke trainer 
 | Wortelbouw | Solo, Duo op één toestel | Klasbattle | — |
 | Vectormissie | Solo, Duo op één toestel | Klasbattle | — |
 | Gravity Maze | Solo | — | — |
-| Vergelijkingen | Solo | Klasbattle | Centrale maker |
+| Vergelijkingen | Solo, Duo online (onderdeel of mix) | Klasbattle | Centrale maker |
 | Getallenwereld | Solo, Eigen reeks, Duo op één toestel, Samen leren, Duo online | Klasbattle, Borduitleg, Klas Learn | Centrale maker |
 | Logicawereld | Solo, Solo battle, Duo op één toestel, Duo online | Klasbattle met gebied/mix | Centrale maker |
 | Rechtenarcade | Geen; oude verzamelpagina | — | — |
@@ -44,3 +44,5 @@ Leerlingen sluiten bij ondersteunde klasproviders aan via de centrale deelname-i
 Rechten & arbeid is op verzoek uit het actieve OS-aanbod verwijderd. Bestaande zelfstandige lesadressen en opgeslagen sessies blijven behouden; het OS biedt geen nieuwe start- of deelnamelink naar deze les meer.
 
 De samengestelde taakbouwer ondersteunt momenteel uitsluitend Glasraam, Kleiduifschieten en Rechtenwereld. Andere beschikbare apps zijn nog geen taakonderdelen: daarvoor zijn eigen configuratie, oefenselectie, hervatbare inzendingen en serverbeoordeling nodig. Een reeds aanwezige duo- of klasbattleprovider maakt een app niet automatisch geschikt voor een individuele toets.
+
+Vergelijkingen: Duo online met onderdeel/mix is toegevoegd met eigen servercontrole en de bestaande OS-uitnodigingen. Zie [herontwerp en testbewijs](qa/worlds-redesign-20261011/README.md). De volledige partij is lokaal met synthetische accounts gecontroleerd; de provider is op productie uitgerold.

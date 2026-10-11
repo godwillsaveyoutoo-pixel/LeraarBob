@@ -1,0 +1,268 @@
+{
+  "screens": [
+    "getallenwereld-home-light",
+    "getallenwereld-home-dark",
+    "getallen-home-390-false",
+    "getallen-home-390-true",
+    "getallen-home-844-false",
+    "getallen-home-844-true",
+    "getallen-home-640-false",
+    "getallen-home-640-true",
+    "getallen-pad-dark",
+    "getallenwereld-work-dark",
+    "getallenwereld-work-light",
+    "getallen-hulp-dark",
+    "wortels-pad-dark",
+    "wortels-regel-dark",
+    "wortels-antwoord-dark",
+    "wetenschappelijk-pad-dark",
+    "wetenschappelijk-regel-dark",
+    "wetenschappelijk-antwoord-dark",
+    "getallenwereld-390-expanded",
+    "getallenwereld-390-collapsed",
+    "getallenwereld-640-expanded",
+    "getallenwereld-640-collapsed",
+    "algebra-trainer-home-light",
+    "algebra-trainer-home-dark",
+    "algebra-trainer-work-dark",
+    "algebra-trainer-work-light",
+    "vergelijkingen-eigen-bewerking-dark",
+    "vergelijkingen-getallenkeuze-dark",
+    "vergelijkingen-hulp-dark",
+    "vergelijkingen-stappen-dark",
+    "vergelijkingen-werkvormen-dark",
+    "vergelijkingen-reeks-dark",
+    "algebra-trainer-390-expanded",
+    "algebra-trainer-390-collapsed",
+    "algebra-trainer-640-expanded",
+    "algebra-trainer-640-collapsed"
+  ],
+  "errors": [],
+  "contrast": [
+    {
+      "name": "getallenwereld-home-light",
+      "tested": 26,
+      "fails": []
+    },
+    {
+      "name": "getallenwereld-home-dark",
+      "tested": 26,
+      "fails": []
+    },
+    {
+      "name": "getallen-home-390-false",
+      "tested": 19,
+      "fails": []
+    },
+    {
+      "name": "getallen-home-390-true",
+      "tested": 19,
+      "fails": []
+    },
+    {
+      "name": "getallen-home-844-false",
+      "tested": 15,
+      "fails": []
+    },
+    {
+      "name": "getallen-home-844-true",
+      "tested": 15,
+      "fails": []
+    },
+    {
+      "name": "getallen-home-640-false",
+      "tested": 15,
+      "fails": []
+    },
+    {
+      "name": "getallen-home-640-true",
+      "tested": 15,
+      "fails": []
+    },
+    {
+      "name": "getallen-pad-dark",
+      "tested": 90,
+      "fails": []
+    },
+    {
+      "name": "getallenwereld-work-dark",
+      "tested": 57,
+      "fails": []
+    },
+    {
+      "name": "getallenwereld-work-light",
+      "tested": 57,
+      "fails": []
+    },
+    {
+      "name": "getallen-hulp-dark",
+      "tested": 30,
+      "fails": []
+    },
+    {
+      "name": "wortels-pad-dark",
+      "tested": 77,
+      "fails": []
+    },
+    {
+      "name": "wortels-regel-dark",
+      "tested": 61,
+      "fails": []
+    },
+    {
+      "name": "wortels-antwoord-dark",
+      "tested": 31,
+      "fails": []
+    },
+    {
+      "name": "wetenschappelijk-pad-dark",
+      "tested": 75,
+      "fails": []
+    },
+    {
+      "name": "wetenschappelijk-regel-dark",
+      "tested": 59,
+      "fails": []
+    },
+    {
+      "name": "wetenschappelijk-antwoord-dark",
+      "tested": 33,
+      "fails": []
+    },
+    {
+      "name": "getallenwereld-390-expanded",
+      "tested": 24,
+      "fails": []
+    },
+    {
+      "name": "getallenwereld-390-collapsed",
+      "tested": 24,
+      "fails": []
+    },
+    {
+      "name": "getallenwereld-640-expanded",
+      "tested": 22,
+      "fails": []
+    },
+    {
+      "name": "getallenwereld-640-collapsed",
+      "tested": 22,
+      "fails": []
+    },
+    {
+      "name": "algebra-trainer-home-light",
+      "tested": 84,
+      "fails": []
+    },
+    {
+      "name": "algebra-trainer-home-dark",
+      "tested": 84,
+      "fails": []
+    },
+    {
+      "name": "algebra-trainer-work-dark",
+      "tested": 48,
+      "fails": []
+    },
+    {
+      "name": "algebra-trainer-work-light",
+      "tested": 48,
+      "fails": []
+    },
+    {
+      "name": "vergelijkingen-eigen-bewerking-dark",
+      "tested": 42,
+      "fails": []
+    },
+    {
+      "name": "vergelijkingen-getallenkeuze-dark",
+      "tested": 55,
+      "fails": []
+    },
+    {
+      "name": "vergelijkingen-hulp-dark",
+      "tested": 25,
+      "fails": []
+    },
+    {
+      "name": "vergelijkingen-stappen-dark",
+      "tested": 12,
+      "fails": []
+    },
+    {
+      "name": "vergelijkingen-werkvormen-dark",
+      "tested": 15,
+      "fails": []
+    },
+    {
+      "name": "vergelijkingen-reeks-dark",
+      "tested": 54,
+      "fails": []
+    },
+    {
+      "name": "algebra-trainer-390-expanded",
+      "tested": 82,
+      "fails": []
+    },
+    {
+      "name": "algebra-trainer-390-collapsed",
+      "tested": 82,
+      "fails": []
+    },
+    {
+      "name": "algebra-trainer-640-expanded",
+      "tested": 32,
+      "fails": []
+    },
+    {
+      "name": "algebra-trainer-640-collapsed",
+      "tested": 47,
+      "fails": []
+    }
+  ],
+  "viewports": [
+    {
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 640,
+      "height": 360
+    }
+  ],
+  "passed": true,
+  "standaloneHome": [
+    {
+      "vp": {
+        "width": 390,
+        "height": 844
+      },
+      "fold": false
+    },
+    {
+      "vp": {
+        "width": 390,
+        "height": 844
+      },
+      "fold": true
+    },
+    {
+      "vp": {
+        "width": 844,
+        "height": 390
+      },
+      "fold": false
+    },
+    {
+      "vp": {
+        "width": 844,
+        "height": 390
+      },
+      "fold": true
+    }
+  ]
+}
