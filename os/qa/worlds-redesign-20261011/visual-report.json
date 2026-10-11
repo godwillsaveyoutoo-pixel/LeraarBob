@@ -51,12 +51,12 @@
     },
     {
       "name": "getallen-home-390-false",
-      "tested": 16,
+      "tested": 19,
       "fails": []
     },
     {
       "name": "getallen-home-390-true",
-      "tested": 16,
+      "tested": 19,
       "fails": []
     },
     {
