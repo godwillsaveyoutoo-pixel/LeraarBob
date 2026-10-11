@@ -161,6 +161,7 @@ let browser, preview;
     await page.setViewportSize({ width: 1366, height: 768 });
     await frame.locator('#executeBtn').click(); await frame.waitForFunction(() => Axioma.snapshot().state === 'debrief');
     assert.deepEqual((await snapshot()).lastCommand, { a: -.5, b: -6, y: -9, ok: true });
+    assert.equal(await frame.evaluate(()=>AxiomaGame.practiceXP),10);assert.equal(await frame.evaluate(()=>AxiomaGame.rewardUnit(14)),0);
     await page.screenshot({ path: path.join(out, 'os-rescue-complete.png') });
     await frame.locator('#explainBtn').click(); await frame.locator('#nextBtn').click();
     assert.equal((await snapshot()).level, 15);

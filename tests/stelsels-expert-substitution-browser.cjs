@@ -10,8 +10,9 @@ const report={scope:'Original Stelsels trainer in the OS; local fixture account;
   const ctx=await browser.newContext({viewport:{width:1366,height:768},deviceScaleFactor:1,hasTouch:true,reducedMotion:'reduce'});
   await ctx.route('**/*',r=>new URL(r.request().url()).origin===server.base?r.continue():r.abort());
   page=await ctx.newPage();page.setDefaultTimeout(20000);page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()===404)report.missing.push(r.url());});page.on('dialog',d=>d.accept());
-  await page.goto(server.base+'/os/?previewUser=alex');await page.waitForFunction(()=>LeraarBobDesktop?.state().accountId);await page.evaluate(()=>LeraarBobDesktop.openApp('stelsels'));
-  frame=await(await page.locator('.frame-wrapper:not([hidden])>iframe').elementHandle()).contentFrame();
+  await page.goto(server.base+'/os/?previewUser=alex');await page.waitForFunction(()=>LeraarBobDesktop?.state().accountId);await page.locator('.personal-add').click();await page.locator('[data-pick-app=stelsels]').click();await page.getByRole('button',{name:'Klaar',exact:true}).click();await page.locator('.personal-app[data-app-id=stelsels] [data-mode=solo]').click();
+  frame=await(await page.locator('.frame-wrapper:not([hidden])>iframe').elementHandle()).contentFrame();assert.equal(new URL(frame.url()).pathname,'/games/stelsels.html');await frame.waitForFunction(()=>window.AxiomaGame?.active);assert.equal(await frame.locator('script[data-game-id]').getAttribute('data-game-id'),'stelsels');
+  report.checks.push('Apps toevoegen → Stelsels → Solo opens games/stelsels.html with the independent stelsels progress identity');
   await frame.locator('button[data-method=substitution]').click();await frame.locator('button[data-study-mode=expert]').click();
   async function field(id,value){await frame.locator('[data-editor="'+id+'"]').click();await frame.locator('[data-ekey=C]').click();for(const key of value)await frame.locator('[data-ekey="'+key+'"]').click();}
   async function setup(index,variable,value){await frame.locator('#exerciseSelect').selectOption({value:String(index)});await frame.locator('[data-isovar='+variable+']').click();await field('isoRhs',value);await frame.locator('#expertCheck').click();await frame.locator('#expertSubSource').waitFor();}
@@ -32,6 +33,7 @@ const report={scope:'Original Stelsels trainer in the OS; local fixture account;
   report.checks.push('Undo restores the expression/target; click-click and keyboard Enter/Space both substitute correctly');
   await field('subL','7x-12');await field('subR','-5');await frame.locator('#expertCheck').click();await field('solveVal','1');await frame.locator('#expertCheck').click();await field('otherVal','2');await frame.locator('#expertCheck').click();
   assert.match(await frame.locator('.expert-final').innerText(),/1,\s*2/);assert((await frame.evaluate(()=>AxiomaGame.state.completed)).map(String).includes('6'));
+  assert.equal(await frame.evaluate(()=>AxiomaGame.practiceXP),10);assert.equal(await frame.evaluate(()=>AxiomaGame.rewardUnit(6)),0);
   report.checks.push('Exercise 7 completes through simplification, x = 1, y = 2 and native completed-unit registration');
   for(const test of [{index:6,variable:'x',expression:'3y-5',term:'2'},{index:4,variable:'x',expression:'1+y',term:'fraction'}]){
    await setup(test.index,test.variable,test.expression);await measure();assert.equal(await frame.locator('#expertSubTarget').innerText(),test.variable);if(test.term==='fraction')assert.equal(await frame.locator('.expert-sub-equation .frac').count(),1);await drag('#expertSubSource','#expertSubTarget');assert.equal(await inserted().count(),1);

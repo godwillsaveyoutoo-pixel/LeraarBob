@@ -1575,7 +1575,7 @@ const b=document.querySelector('.brand');if(b){b.textContent='leraarBob';wire(b)
 
 const K='axioma.stelsels.completed.v1';let set=new Set();try{set=new Set(JSON.parse(window.AxiomaGame.storage.getItem(K)||'[]').filter(Number.isInteger))}catch(_){}
 function sync(){const units=[...set].sort((a,b)=>a-b);try{window.AxiomaGame.storage.setItem(K,JSON.stringify(units))}catch(_){} emit(set.size,14,null);cloudSync(units,14)}
-addEventListener('axioma:stelsels-solved',e=>{set.add(Number(e.detail?.exerciseIndex));sync()});sync();
+addEventListener('axioma:stelsels-solved',e=>{set.add(Number(e.detail?.exerciseIndex));sync();window.AxiomaGame.rewardUnit?.(Number(e.detail?.exerciseIndex))});sync();
 
 })();
 </script>

@@ -39,7 +39,7 @@ const host=require('../scripts/serve-os-preview.cjs').createServer();
   }
   await page.locator('.lb-restore:not([hidden])').click();checks.push(label+' expanded/collapsed and restore');
  }
- async function retain(page,frame,label){const before=frame;await page.click('#minimizeApp');await page.locator('#runningApps button').last().click();assert.equal(await frameFor(page,new URL(frame.url()).pathname),before,'same native browsing context '+label);checks.push(label+' minimize/resume');}
+ async function retain(page,frame,label){const before=frame,key=await page.evaluate(()=>LeraarBobDesktop.state().activeKey);await page.click('#minimizeApp');await page.locator('#runningApps button[data-key='+JSON.stringify(key)+']').click();assert.equal(await frameFor(page,new URL(frame.url()).pathname),before,'same native browsing context '+label);checks.push(label+' minimize/resume');}
  try{
   browser=await chromium.launch({headless:true,executablePath:process.env.LB_CHROMIUM||(fs.existsSync('/opt/brave.com/brave/brave')?'/opt/brave.com/brave/brave':undefined),args:['--no-sandbox','--disable-dev-shm-usage']});
   const teacher=await open('teacher'),student=await open('alex');await liveView(student);assert.equal(await student.locator('.teacher-card').count(),0);assert.equal(await student.evaluate(()=>LeraarBobDesktop.openApp('getallenwereld','classlearn')),false);checks.push('Student cannot create classroom activities');

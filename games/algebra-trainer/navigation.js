@@ -30,7 +30,7 @@ function mount(api){
   const chosen=stops.find(s=>s.id===selected),started=chosen?.status==='Bezig';
   $('#navigationTitle').textContent=api.world();$('#navigationBreadcrumb').textContent='Algebra › '+api.world();$('#navigationRouteTitle').textContent=stops.length+' levels';
   $('#navigationContext').innerHTML=chosen?'<strong>'+esc(chosen.title)+'</strong><span> · '+(started&&chosen.current?'opdracht '+esc(api.position()):started?'bewaarde reeks':/geoefend|gelukt/i.test(chosen.status)?'opnieuw oefenen':String(chosen.total||6)+' opdrachten')+'</span>':'Kies een level.';
-  $('#navigationActions').innerHTML=[['world','Werelden'],['menu','Levels']].map(([id,title])=>'<button type="button" data-menu-nav="'+id+'">'+icon(id)+'<span>'+title+'</span></button>').join('')+(window.AXIOMA_STANDALONE?'<button type="button" data-menu-nav="battle" disabled title="Klasbattle is beschikbaar in de platformversie">'+icon('battle')+'<span>Klasbattle<small>Online</small></span></button>':'<a data-menu-nav="battle" data-platform-route href="'+esc(R?R.href('klasbattle/',externalContext()):api.battleHref||'../../klasbattle/?game=algebra')+'" title="Naar het klasbattleoverzicht van leraarBob">'+icon('battle')+'<span>Klasbattle</span></a>');
+  $('#navigationActions').innerHTML=(api.world()==='Vergelijkingen'?[['menu','Levels']]:[['world','Werelden'],['menu','Levels']]).map(([id,title])=>'<button type="button" data-menu-nav="'+id+'">'+icon(id)+'<span>'+title+'</span></button>').join('')+(window.AXIOMA_STANDALONE?'<button type="button" data-menu-nav="battle" disabled title="Klasbattle is beschikbaar in de platformversie">'+icon('battle')+'<span>Klasbattle<small>Online</small></span></button>':'<a data-menu-nav="battle" data-platform-route href="'+esc(R?R.href('klasbattle/',externalContext()):api.battleHref||'../../klasbattle/?game=algebra')+'" title="Naar het klasbattleoverzicht van leraarBob">'+icon('battle')+'<span>Klasbattle</span></a>');
   $('#navigationStops').dataset.count=stops.length;
   $('#navigationStops').innerHTML=stops.map(s=>{
    const tex=s.exampleTex||examples[s.id];
@@ -46,7 +46,7 @@ function mount(api){
  function close(){if(window.AxiomaGame?.active===false)return;api.show(previous==='menu'?(api.homeScreen||'world'):previous);origin?.focus({preventScroll:true});}
  document.querySelectorAll('[data-trainer-menu]').forEach(b=>b.onclick=()=>open(b));
  $('#navigationClose').onclick=close;
- $('.menuBrand').onclick=()=>api.navigate('world');
+ $('.menuBrand').onclick=()=>api.navigate(api.world()==='Vergelijkingen'?'menu':'world');
  $('#navigationScreen').addEventListener('click',e=>{const b=e.target.closest('[data-menu-nav]');if(b&&!b.disabled&&b.dataset.menuNav!=='battle')b.dataset.menuNav==='menu'?open(b):api.navigate(b.dataset.menuNav);});
  $('#navigationResumeFree').onclick=()=>api.resumeFree?.();
  $('#navigationWorksheet').onclick=()=>{if(selected)api.worksheet?.(selected);};

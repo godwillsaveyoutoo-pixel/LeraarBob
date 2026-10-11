@@ -8,7 +8,8 @@ async function createFixture(){
  for(const file of ['20260929235628_rechten_samen_leren.sql','20260929235633_rechten_learn_invitations.sql','20260930161209_rechten_learn_full_route.sql'])await learn.db.exec(fs.readFileSync(path.join(root,'supabase/migrations',file),'utf8'));
  await classroom.db.exec(fs.readFileSync(path.join(root,'supabase/migrations/20261005132202_central_class_battle_hub.sql'),'utf8'));await classroom.db.exec("update public.axioma_profiles set class_code='TEST'");
  for(const user of ['alex','sam','outsider'])await learn.progress(user,engine.skills);
- let queue=Promise.resolve();const calls=[];
+ await learn.db.exec(fs.readFileSync(path.join(root,'supabase/migrations/20261011070545_os_worksheet_cloud_archive.sql'),'utf8'));
+ let queue=Promise.resolve();const calls=[],gameProgress=new Map();
  function as(user,role,sql,args){const work=queue.catch(()=>{}).then(()=>learn.db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[learn.ids[user]||'']);await tx.exec('set local role '+role);return(await tx.query(sql,args)).rows[0]?.result;}));queue=work;return work;}
  const {createHandler}=await import('../../supabase/functions/rechten-learn/handler.js');
  const handler=createHandler({url:'https://entry.test',anonKey:'fake-anon',serviceKey:'fake-service',engine,fetcher:async(url,options)=>{
@@ -26,7 +27,18 @@ async function createFixture(){
    else if(provider==='rechten-class')data=await classroom.battle(user,input.action,input.data);
    else if(provider==='axioma_social')data=await as(user,'authenticated','select public.axioma_social($1,$2,$3,$4,$5) result',[input.p_action,input.p_tab_id,input.p_target_id||null,input.p_invite_id||null,input.p_match_id||null]);
    else if(provider==='axioma_class_battle_hub')data=await classroom.db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[classroom.ids[user]]);await tx.exec('set local role authenticated');return(await tx.query('select public.axioma_class_battle_hub($1,$2) result',[input.p_action,JSON.stringify(input.p_data||{})])).rows[0].result;});
+   else if(provider==='axioma_worksheet_archive')data=await as(user,'authenticated','select public.axioma_worksheet_archive($1,$2::jsonb) result',[input.p_action,JSON.stringify(input.p_data||{})]);
    else if(provider==='axioma_clay_v2')data={sessions:[],current:null,member:null,members:[],server_time:new Date().toISOString()};
+   else if(provider==='axioma_save_game_progress_for_account'){
+    if(input.p_user_id!==learn.ids[user])throw Error('Account mismatch');
+    const key=user+':'+input.p_game_id,previous=gameProgress.get(key);
+    if((previous?.revision||0)!==input.p_revision)data={status:'conflict',revision:previous?.revision||0,state:previous?.state||{}};
+    else{const row={user_id:learn.ids[user],game_id:input.p_game_id,revision:(previous?.revision||0)+1,state:structuredClone(input.p_state),updated_at:new Date().toISOString()};gameProgress.set(key,row);data={status:'saved',...row};}
+   }
+   else if(provider==='fixture-progress-read'){
+    if(input.user_id&&input.user_id!==learn.ids[user])throw Error('Account mismatch');
+    const rows=[...gameProgress.values()].filter(r=>r.user_id===learn.ids[user]&&(!input.game_id||r.game_id===input.game_id));data=input.single?rows[0]||null:rows;
+   }
    else if(provider.includes('progress'))data={status:'saved',revision:1,state:input.p_state||{}};
    else data=[];
    return {data,error:null};
@@ -38,7 +50,7 @@ async function createFixture(){
   let user=${launcher?'sessionStorage.getItem("rechten-entry-preview-user")||'+JSON.stringify(defaultUser):JSON.stringify(defaultUser)};
   const ids=${JSON.stringify(learn.ids)},listeners=new Set(),makeAccount=user=>({id:ids[user],role:user==='teacher'?'teacher':'student',alias:user==='teacher'?'Proefleerkracht':'Proef '+user,class_code:'TEST'});let account=makeAccount(user);
   const api=(name,input)=>fetch('/entry-fixture-api/'+name,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user,input})}).then(r=>r.json());
-  const empty=()=>({select(){return this},eq(){return this},order(){return this},maybeSingle:async()=>({data:null,error:null}),then(resolve){return Promise.resolve(resolve({data:[],error:null}));}});
+  const empty=table=>{const filters={};return {select(){return this},eq(k,v){filters[k]=v;return this},order(){return this},abortSignal(){return this},maybeSingle:()=>table==='axioma_game_progress'?api('fixture-progress-read',{...filters,single:true}):Promise.resolve({data:null,error:null}),then(resolve,reject){return (table==='axioma_game_progress'?api('fixture-progress-read',filters):Promise.resolve({data:[],error:null})).then(resolve,reject);}};};
   // Local browser transport only. Native naval messages stay intact, with no
   // production Realtime endpoint; shared-context tabs exchange over BroadcastChannel.
   function previewChannel(topic){const bus=new BroadcastChannel('entry-fixture:'+topic),handlers=[],peers={};let value=null,beat;
@@ -47,7 +59,7 @@ async function createFixture(){
     bus.onmessage=({data})=>{if(data.kind==='presence'){peers[data.id]=[data.value];fire('presence','sync',{});}else fire('broadcast',data.event,{payload:data.payload});};return ch;
   }
   window.AxiomaAuth={CLASSES:['TEST'],ready:async()=>({account,pending:false}),getAccount:async()=>account,getSnapshot:()=>({account,pending:false}),getSession:async()=>account?{user:{id:account.id}}:null,onChange:fn=>{listeners.add(fn);return()=>listeners.delete(fn);},_previewSwitch:next=>{if(!valid.includes(next))throw Error("Unknown fixture user");user=next;account=makeAccount(user);sessionStorage.setItem("rechten-entry-preview-user",user);listeners.forEach(fn=>fn({account,pending:false}));},configured:()=>true,client:()=>({from:empty,channel:previewChannel,removeChannel:async ch=>ch.close(),functions:{invoke:(name,{body})=>api(name,body)},rpc:(name,input)=>{const request=api(name,input||{});request.abortSignal=()=>request;return request;}})};
-  ${launcher?`if(location.pathname.endsWith('/os/')&&q.has('entry')){const mode=q.get('entry');let attempts=0;const launch=()=>{if(window.LeraarBobDesktop?.state().accountId===account.id){if(mode==='classroom'&&account.role==='student'){LeraarBobDesktop.showView({kind:'live'});[...document.querySelectorAll('button')].find(b=>b.textContent.trim()==='Klas Battle')?.click();}else LeraarBobDesktop.openApp('rechtenwereld',mode);}else if(attempts++<200)setTimeout(launch,50);};setTimeout(launch,0);}`:''}
+  ${launcher?`if(location.pathname.endsWith('/os/')&&q.has('entry')){const mode=q.get('entry'),appId=q.get('app')||'rechtenwereld';let attempts=0;const launch=()=>{if(window.LeraarBobDesktop?.state().accountId===account.id){if(appId==='rechtenwereld'&&mode==='classroom'&&account.role==='student'){LeraarBobDesktop.showView({kind:'live'});[...document.querySelectorAll('button')].find(b=>b.textContent.trim()==='Klas Battle')?.click();}else LeraarBobDesktop.openApp(appId,mode);}else if(attempts++<200)setTimeout(launch,50);};setTimeout(launch,0);}`:''}
  })();`;}
  return {learn,classroom,numbers,ids:learn.ids,calls,invoke,authScript,close:async()=>{await learn.db.close();await classroom.db.close();await numbers.db.close();}};
 }

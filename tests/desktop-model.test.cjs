@@ -3,7 +3,7 @@ const {test}=require('node:test'),assert=require('node:assert/strict'),fs=requir
 const catalog=require('../games.json'),createRegistry=require('../shared/game-registry.js'),createDesktop=require('../os/desktop-model.js');
 const registry=createRegistry(catalog,{baseURL:'https://school.example/LeraarBob/'}),M=createDesktop(registry),root=path.resolve(__dirname,'..');
 test('Every public build has a theme and its own work form; historical identities stay intact',()=>{
-  assert.equal(M.apps().length,25);assert.equal(M.themes.length,8);
+  assert.equal(M.apps().length,24);assert.equal(M.themes.length,8);
   for(const g of M.apps()){assert(M.theme(g.desktopTheme),g.id);assert(M.types[g.type],g.id);}
   assert.equal(M.app('pythagoras').type,'learn');assert.equal(M.app('rechtenwereld').type,'train');assert.equal(M.app('rechten-zeeslag').type,'game');assert.equal(M.app('glasraam').type,'atelier');
   assert.equal(M.app('rechtenwereld').progressId,'rechten-trainer');assert.equal(M.app('getallenwereld').progressId,'getallenwereld');
@@ -50,4 +50,20 @@ test('Independent bottom collapse migrates the old focus preference without chan
   M.write(storage,a,{...M.read(storage,a),bottomCollapsed:false});assert.equal(M.read(storage,a).bottomCollapsed,false);
   assert.equal(M.sanitize({bottomCollapsed:false,focusMode:true}).bottomCollapsed,false);
   assert.equal(map.get('axioma_game_progress'),'same-answer');assert.equal(map.has('leraarbob-topbar-collapsed'),false);
+});
+
+test('Retired trainer leaves discovery while historical progress and bookmarks remain readable',()=>{
+ assert(!M.apps().some(g=>g.id==='rechten-trainer'));
+ assert(!M.find({query:'Rechtentrainer'}).some(g=>g.id==='rechten-trainer'));
+ assert(M.app('rechten-trainer'),'Historical routes remain readable');
+ assert.equal(M.app('rechtenwereld').progressId,'rechten-trainer');
+ assert.deepEqual(M.sanitize({pins:['rechten-trainer','rechtenwereld','stelsels']}).pins,['rechtenwereld','stelsels']);
+});
+
+test('Stelsels is exclusively the original trainer; Vergelijkingen offers no second systems world',()=>{
+ assert.equal(new URL(M.destination('stelsels','solo')).pathname,'/LeraarBob/games/stelsels.html');
+ assert.deepEqual(M.app('algebra-trainer').topics.map(t=>t.id),['equations']);
+ assert.equal(M.worksheets('algebra-trainer').some(s=>s.id==='systems'),false);
+ assert.equal(M.worksheetTopics().find(s=>s.topicId==='systems').appId,'stelsels');
+ assert.equal(M.modes('stelsels','teacher').some(m=>m.id==='classroom'),false,'An unrelated Algebra class provider is not exposed as original Stelsels');
 });

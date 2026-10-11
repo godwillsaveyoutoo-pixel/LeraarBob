@@ -72,7 +72,7 @@ function mount(){
  },true);
 }
 function placeDock(){
- if(!host)return;
+ if(!host||!document?.body)return;
  const header=[...document.querySelectorAll('.header-actions'),...document.querySelectorAll('header')].find(el=>{const r=el.getBoundingClientRect();return r.width&&r.height&&r.top>=-5&&r.bottom<=innerHeight&&!el.closest('[inert]')&&getComputedStyle(el).visibility!=='hidden'});
  const parent=header||document.body;if(host.parentNode!==parent)parent.append(host);
  if(host.hasAttribute('data-floating')===!!header)host.toggleAttribute('data-floating',!header);
@@ -115,6 +115,20 @@ function report(completed,total,current){
  const next={completed:units,total:Math.max(0,Number(total)||0),finished:!!total&&units.length>=total};
  if(current!=null)next.current=current;
  if(Object.entries(next).some(([key,v])=>JSON.stringify(record.state[key])!==JSON.stringify(v))){Object.assign(record.state,next);dirty()}
+}
+function practiceXP(){
+ const policy=config.reward,ledger=record.state.practiceRewards;if(!policy)return null;
+ if(ledger?.version!==1)return 0;
+ return Object.entries(ledger.awards||{}).reduce((total,[unit,xp])=>{const n=Number(unit);return total+(String(n)===unit&&Number.isInteger(n)&&n>=policy.first&&n<policy.first+policy.total&&xp===policy.xp?xp:0);},0);
+}
+function rewardUnit(unit){
+ if(!active||account?.role==='teacher'||!config.reward)return 0;
+ const n=Number(unit),policy=config.reward;
+ if(String(unit)!==String(n)||!Number.isInteger(n)||n<policy.first||n>=policy.first+policy.total||!(record.state.completed||[]).map(String).includes(String(n)))return 0;
+ const ledger=record.state.practiceRewards?.version===1?record.state.practiceRewards:{version:1,awards:{}};
+ ledger.awards=ledger.awards&&typeof ledger.awards==='object'&&!Array.isArray(ledger.awards)?ledger.awards:{};
+ if(ledger.awards[String(n)]===policy.xp)return 0;
+ ledger.awards[String(n)]=policy.xp;record.state.practiceRewards=ledger;dirty();emit(record.state.completed,record.state.total);return policy.xp;
 }
 function emit(completed,total,current){
  window.dispatchEvent(new CustomEvent('axioma:game-progress',{detail:{gameId,accountId:account?.id||null,completed,total,current}}));
@@ -209,8 +223,8 @@ async function boot(){
   notice('Je account of opgeslagen voortgang kon niet worden geladen. Probeer opnieuw; je bestaande voortgang blijft behouden.',[['Opnieuw proberen',()=>{if(started)location.reload();else boot()}],['Naar startpagina',()=>location.href=home()]],true);
  }finally{booting=false}
 }
-window.AxiomaGame=Object.freeze({ready,storage:Object.freeze({getItem,setItem,removeItem}),report,emit,flush,
- get state(){return clone(record.state)},get account(){return account},get active(){return active},get status(){return status}
+window.AxiomaGame=Object.freeze({ready,storage:Object.freeze({getItem,setItem,removeItem}),report,emit,flush,rewardUnit,
+ get practiceXP(){return practiceXP()},get state(){return clone(record.state)},get account(){return account},get active(){return active},get status(){return status}
 });
 window.addEventListener('pagehide',()=>{if(active){persist();flush()}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)flush()});

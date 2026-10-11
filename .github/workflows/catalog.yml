@@ -23,13 +23,13 @@ jobs:
       - name: Bureaubladbediening controleren
         run: |
           npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-desktop-tests" jsdom@26.1.0 fake-indexeddb@6.2.4
-          NODE_PATH="$RUNNER_TEMP/leraarbob-desktop-tests/node_modules" node --test --test-isolation=none tests/desktop-dom.test.cjs tests/topbar-desktop.test.cjs tests/os-native-chrome.test.cjs tests/getallen-workshop-dom.test.cjs tests/getallen-world-integration.test.cjs tests/class-activity-flow.test.cjs tests/worksheet-library.test.cjs tests/worksheet-save.test.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-desktop-tests/node_modules" node --test --test-isolation=none tests/desktop-dom.test.cjs tests/topbar-desktop.test.cjs tests/os-native-chrome.test.cjs tests/getallen-workshop-dom.test.cjs tests/getallen-world-integration.test.cjs tests/class-activity-flow.test.cjs tests/worksheet-library.test.cjs tests/worksheet-save.test.cjs tests/practice-rewards.test.cjs
       - name: Pilotapps en bestaande klasproviders in Chromium controleren
         run: |
-          npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-browser-tests" playwright@1.64.0 @electric-sql/pglite@0.5.8
+          npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-browser-tests" playwright@1.64.0 @electric-sql/pglite@0.5.8 jsdom@26.1.0 fake-indexeddb@6.2.4
           "$RUNNER_TEMP/leraarbob-browser-tests/node_modules/.bin/playwright" install --with-deps chromium
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" HOME_SCREENSHOTS="$RUNNER_TEMP/os-qa/home-entry" node tests/home-entry-browser.cjs
-          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs tests/worksheet-cloud.test.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/personal" node tests/personal-os-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/personal" node tests/personal-chrome-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" PLACE_PROOF="$RUNNER_TEMP/os-qa/places" node tests/os-place-windows-browser.cjs
@@ -44,6 +44,8 @@ jobs:
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CLASS_FLOW_SCREENSHOTS="$RUNNER_TEMP/os-qa/class-flow" node tests/uniform-class-flow-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" WORKSHEETS_SCREENSHOTS="$RUNNER_TEMP/os-qa/worksheets" node tests/desktop-worksheets-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CENTRAL_PAPER_SCREENSHOTS="$RUNNER_TEMP/os-qa/central-paper" node tests/central-worksheet-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CLOUD_PAPER_PROOF="$RUNNER_TEMP/os-qa/worksheet-cloud" node tests/worksheet-cloud-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" EXPERT_PROOF="$RUNNER_TEMP/os-qa/equations-expert" node tests/algebra-expert-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" ALGEBRA_OS_SCREENSHOTS="$RUNNER_TEMP/os-qa/algebra" node tests/algebra-os-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CHROME_PROOF="$RUNNER_TEMP/os-qa/uniform-chrome" node tests/os-native-chrome-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" STELSELS_EXPERT_PROOF="$RUNNER_TEMP/os-qa/stelsels-expert" node tests/stelsels-expert-substitution-browser.cjs

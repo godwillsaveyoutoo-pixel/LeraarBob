@@ -5,7 +5,7 @@ const {contextOperations,checkProgress}=window.AlgebraWorkbench;
 const L=AlgebraLearning,J=AlgebraJourney;let chapterJourney=J.normalize(null);let paperSelection=null;let routeContext={};let runs={},learningRun=null,freeSession=null,historyIndex=0;
 const selection={};
 TYPES.forEach(t=>selection[t.id]={checked:t.level==='beginner',count:t.level==='beginner'?2:1});
-let activeLevel='beginner';
+let activeLevel='beginner',practiceMode='beginner';
 let activeSet=[];
 let trainerIndex=0;
 let trainerStates=[];
@@ -134,6 +134,7 @@ function makeSet(){
    9. NAVIGATIE
    ============================================================ */
 function showScreen(name){
+ if(name==='world')name='menu';
  if(name==='preview'&&window.LeraarBobWorksheetEntry)return LeraarBobWorksheetEntry.open(navigation?.selected());
   if(lesson||motionPlayer.active){stopPresentation();if(trainerStates.length)renderTrainer();}
   screen=name;document.body.dataset.screen=name;
@@ -285,6 +286,7 @@ function renderTouchAnswer(){
  const t=task(),r=result(),host=$('#touchAnswer');host.hidden=false;
  if(t.kind==='fractions'){fractionView.renderAnswer(t,r);fitMath();return;}
  if(t.kind==='verify'){renderVerification();return;}
+ if(practiceMode==='expert'&&['predict','repair','expand','build'].includes(t.kind)&&!(t.kind==='repair'&&r.location!=='group')){host.innerHTML='<p class="touchPrompt">Jouw regel</p><output class="expertPreview"></output>';host.querySelector('output').textContent=r.expertDraft||r.input||'Schrijf je volgende stap met eigen invoer.';return;}
  const names=touchNames(t),blocks=touchBlocks();if(!names.includes(touchField))touchField=names[0];
  if(t.kind==='repair'&&r.location!=='group'&&!r.done){host.innerHTML='<div class="verifyCandidate"><small>Foute regel</small>'+texHTML(latexEq(t.fault,t.ex.policy))+'</div><p class="touchPrompt">Vergelijk met de haakjes bovenaan.</p>';return;}
  const labels={lhs:'Links',rhs:'Rechts',input:'Ontbrekend getal'};
@@ -338,8 +340,21 @@ function productionMessage(t,r,checked){
  if(!checked.ok&&t.kind==='predict'&&r.input){try{const a=L.parseEquation(r.input);if(L.sameExpr(a.l,t.expected.l)&&L.sameExpr(a.r,t.ex.start.r)&&!L.sameExpr(t.expected.r,t.ex.start.r))return 'Je hebt links veranderd. Voer dezelfde bewerking ook rechts uit.';const own=L.affine(a.l),expected=L.affine(t.expected.l);if(!expected.a.isZero()&&own.a.eq(expected.a.neg()))return 'Behoud het minteken van de x-term.';}catch{}}
  return checked.message;
 }
+function renderExpertProduction(t,r,form){
+ if(!['predict','repair','expand','build'].includes(t.kind)||r.done||t.kind==='repair'&&r.location!=='group')return false;
+ form.classList.remove('touchProduction');
+ const label=t.kind==='build'?'Ontbrekend getal':'Jouw volledige nieuwe regel';
+ form.innerHTML='<label>'+label+'<input id="expertAnswer" autocomplete="off" spellcheck="false" aria-label="'+label+'" placeholder="'+(t.kind==='build'?'bv. −3/2':'bv. 2x + 6 = 14')+'"></label><p class="expertNotation">Gebruik x, +, −, *, / en haakjes. Breuken en kommagetallen zijn toegestaan.</p><button type="submit" class="primarybtn" hidden>Controleer →</button>';
+ const input=form.querySelector('input');input.value=r.expertDraft??r.input??'';
+ input.oninput=()=>{r.expertDraft=input.value;renderTouchAnswer();persist();};
+ form.onsubmit=e=>{e.preventDefault();if(r.done)return;rememberBuild();r.input=input.value;
+  try{const checked=L.validate(t,r);feedback.className='feedback '+(checked.ok?'good':'bad');feedback.textContent=productionMessage(t,r,checked);if(checked.ok){r.done=true;currentSolved=true;renderTrainer();$('#nextExerciseBtn').focus({preventScroll:true});}else{r.errors++;persist();}}catch(error){r.errors++;feedback.className='feedback bad';feedback.textContent=error.message;persist();}
+ };
+ return true;
+}
 function renderProduction(){
  const t=task(),r=result(),form=$('#production');if(!t||t.kind==='solve'){form.classList.add('hidden');return;}form.classList.remove('hidden');
+ if(practiceMode==='expert'&&renderExpertProduction(t,r,form))return;
  form.classList.toggle('fractionProduction',t.kind==='fractions');
  if(t.kind==='fractions'){fractionView.renderControls(t,r);pageProduction();return;}
  const touch=touchKinds.includes(t.kind);form.classList.toggle('touchProduction',touch);let fields='';
@@ -375,9 +390,13 @@ function renderProduction(){
  }catch(err){r.errors++;feedback.className='feedback bad';feedback.textContent=err.message;persist();}};
 }
 function renderTrainer(animateNew=false){
+  document.body.dataset.practiceMode=practiceMode;
+  document.querySelectorAll('[data-practice-mode]').forEach(el=>el.value=practiceMode);
+
   if(lesson){renderLesson();return;}
   $('#watchDemoBtn').disabled=!!motionFrame;
   const ex=currentExercise();if(!ex)return;
+  if(practiceMode==='expert'&&(!task()||task().kind==='solve'))manualOpen=true;
   const eq=currentEquation(),t=task(),r=result(),production=!!t&&t.kind!=='solve';if(production)currentSolved=!!r.done;
   document.body.classList.toggle('touch-writing',!!t&&touchKinds.includes(t.kind));
   document.body.classList.toggle('fraction-writing',t?.kind==='fractions');
@@ -388,7 +407,7 @@ function renderTrainer(animateNew=false){
   trainProgress.title=TYPES.find(t=>t.id===ex.type)?.label||ex.type;
   $('#operationTitle').textContent=currentSolved?'Afgerond':production?({predict:'Nieuwe regel',repair:'Herstel de regel',expand:'Werk de haakjes uit',build:'Vul aan',verify:'Controleer x',routes:'Kies je bewerking',fractions:'Breuken'})[t.kind]:manualOpen?'Eigen bewerking':'Op beide leden';
   $('#moreOperationsBtn').textContent=manualOpen?'Bij deze regel':'Eigen keuze';
-  $('#moreOperationsBtn').hidden=currentSolved||production;
+  $('#moreOperationsBtn').hidden=currentSolved||production||practiceMode==='expert';
   $('#moreOperationsBtn').setAttribute('aria-expanded',String(manualOpen));
   $('#solvedNote').classList.toggle('hidden',!currentSolved);
   $('#manualOperations').classList.toggle('hidden',!manualOpen||currentSolved||production);
@@ -414,6 +433,10 @@ function renderTrainer(animateNew=false){
     $('#valuePageLabel').textContent=`Keuzes ${valuePage*VALUE_PAGE_SIZE+1}–${Math.min((valuePage+1)*VALUE_PAGE_SIZE,vals.length)} / ${vals.length}`;
     $('#prevValuesBtn').disabled=valuePage===0;$('#nextValuesBtn').disabled=valuePage>=pages-1;
   }else valueZone.classList.add('hidden');
+  const expertOperand=$('#expertOperand'),ownOperation=practiceMode==='expert'&&selectedOp&&!currentSolved&&!production;
+  expertOperand.hidden=!ownOperation;
+  if(ownOperation){valueZone.classList.add('hidden');$('#expertOperandInput').value=perExercise[trainerIndex]?.expertOperand||'';}
+
 
   nextBox.classList.toggle('hidden',!currentSolved);
   $('#checkBtn').hidden=currentSolved||t?.kind==='fractions'&&r.fraction?.phase!=='build'||t?.kind==='verify'||t?.kind==='repair'&&r.location!=='group'||(production&&!touchKinds.includes(t.kind)&&!(compactControls()&&t.kind==='routes'));$('#production').classList.toggle('hidden',!production);if(production)renderProduction();
@@ -442,6 +465,13 @@ document.querySelectorAll('.opBtn').forEach(b=>{b.dataset.opKind=operationKinds[
   feedback.textContent='';
   renderTrainer();
 };});
+document.querySelectorAll('[data-practice-mode]').forEach(select=>select.onchange=()=>{
+ practiceMode=select.value==='expert'?'expert':'beginner';stopPresentation();manualOpen=practiceMode==='expert';selectedOp=null;
+ document.body.dataset.practiceMode=practiceMode;document.querySelectorAll('[data-practice-mode]').forEach(el=>el.value=practiceMode);
+ if(activeSet.length)renderTrainer();persist();
+});
+$('#expertOperandInput').oninput=e=>{rememberExercise();perExercise[trainerIndex].expertOperand=e.target.value;persist();};
+$('#expertOperand').onsubmit=e=>{e.preventDefault();if(!selectedOp||currentSolved)return;try{const operand=L.parseExpression($('#expertOperandInput').value);performOperation(selectedOp,operand);}catch(error){feedback.className='feedback bad';feedback.textContent=error.message;}};
 $('#moreOperationsBtn').onclick=()=>{manualOpen=!manualOpen;selectedOp=null;valuePage=0;renderTrainer()};
 $('#prevValuesBtn').onclick=()=>{valuePage--;renderTrainer()};
 $('#nextValuesBtn').onclick=()=>{valuePage++;renderTrainer()};
@@ -614,11 +644,11 @@ $('#makeSheetBtn').onclick=()=>{
 /* ============================================================
    13. INIT
    ============================================================ */
-function rememberExercise(){if(learningRun){learningRun.index=trainerIndex;learningRun.work=perExercise;}if(activeSet[trainerIndex]&&trainerStates.length)perExercise[trainerIndex]={states:trainerStates.map(cloneEq),log:trainerStepLog.map(s=>({op:s.op,operand:cloneExpr(s.operand)}))};}
+function rememberExercise(){if(learningRun){learningRun.index=trainerIndex;learningRun.work=perExercise;}if(activeSet[trainerIndex]&&trainerStates.length)perExercise[trainerIndex]={...perExercise[trainerIndex],states:trainerStates.map(cloneEq),log:trainerStepLog.map(s=>({op:s.op,operand:cloneExpr(s.operand)}))};}
 function persist(){
  if(restoring||!window.AxiomaGame?.active)return;
  rememberExercise();
- const save={version:1,routeContext,chapterJourney,paperSelection,runs,freeSession,journey,worldLegacy,mission,mapLocation,activeLevel,selection,settings:currentSettings(),includeKey:$('#includeKey').checked,shuffle:$('#shuffleQuestions').checked,activeSet,trainerIndex,perExercise,solvedTypes:[...solvedTypes],screen,settingsDirty};
+ const save={version:1,practiceMode,routeContext,chapterJourney,paperSelection,runs,freeSession,journey,worldLegacy,mission,mapLocation,activeLevel,selection,settings:currentSettings(),includeKey:$('#includeKey').checked,shuffle:$('#shuffleQuestions').checked,activeSet,trainerIndex,perExercise,solvedTypes:[...solvedTypes],screen,settingsDirty};
  AxiomaGame.storage.setItem(SAVE_KEY,JSON.stringify(save));let systems=null;try{systems=JSON.parse(AxiomaGame.storage.getItem('leraarbob.stelsels.workshop.v1')||'null')}catch{}const routeProgress=J.platform(chapterJourney,journey,systems?.journey);AxiomaGame.report(routeProgress.completed,routeProgress.total);
  const badge=$('#algebraProgress');badge.dataset.platformProgress='xp';badge.dataset.value=String(AlgebraWorld.xp(worldView?.progress()||journey)+J.xp(chapterJourney)+J.xp(systems?.roundJourney));badge.textContent=badge.dataset.value+' XP';
  AxiomaGame.emit(routeProgress.completed,routeProgress.total);
@@ -628,7 +658,7 @@ function restore(){
  try{
   const raw=AxiomaGame.storage.getItem(SAVE_KEY);if(!raw)return;
   const saved=JSON.parse(raw,(k,v)=>v&&typeof v==='object'&&Object.keys(v).length===2&&Number.isSafeInteger(v.n)&&Number.isSafeInteger(v.d)?new Rat(v.n,v.d):v);
-  if(saved.version!==1)return;routeContext=saved.routeContext||{};
+  if(saved.version!==1)return;practiceMode=saved.practiceMode==='expert'?'expert':'beginner';routeContext=saved.routeContext||{};
   runs=saved.runs&&typeof saved.runs==='object'?saved.runs:{};freeSession=saved.freeSession||null;
   chapterJourney=J.normalize(saved.chapterJourney);paperSelection=J.stop(saved.paperSelection?.id)&&saved.paperSelection?.run?.tasks?.length===6?saved.paperSelection:null;mapLocation=J.worldFor(saved.mapLocation);journey=AlgebraWorld.normalize(saved.journey);worldLegacy=(Array.isArray(saved.worldLegacy)?saved.worldLegacy:saved.solvedTypes||[]).filter(id=>TYPES.some(t=>t.id===id));mission=J.stop(saved.mission)||AlgebraWorld.topic(saved.mission)?.engine==='equations'?saved.mission:null;
   learningRun=mission&&runs[mission]?.version===2?runs[mission]:null;
@@ -668,12 +698,12 @@ function renderSummary(){
  const clean=learningRun.results.filter(r=>!r.supported&&!r.hints&&!r.errors),aided=learningRun.results.filter(r=>r.supported||r.hints),corrected=learningRun.results.filter(r=>r.errors),practice=learningRun.results.filter(r=>r.supported||r.hints||r.errors);
  const title=J.stop(mission)?.title||AlgebraWorld.topic(mission)?.title||'Vergelijkingen';
  const independent=J.independently(learningRun.results),next=recommended();
- $('#summaryContent').innerHTML=`<div class="summaryTitle"><h1><span class="summarySeal" aria-hidden="true">${independent?'★':'✓'}</span>${independent?'Zelfstandig gelukt':'Halte geoefend'}</h1><p>${escapeHTML(title)} · ${learningRun.tasks.length} opdrachten</p></div><p class="summaryFacts">${clean.length} zonder hulp of verbetering · ${aided.length} met hulp · ${corrected.length} antwoord${corrected.length===1?'':'en'} verbeterd${learningRun.lastReward?' · +'+learningRun.lastReward+' XP':''}</p><div class="summaryEvidence"><section><h2>Zelfstandig gelukt</h2>${clean.map(r=>`<p>✓ ${escapeHTML(r.goal)}</p>`).join('')||'<p>Herhaal om met minder hulp te oefenen.</p>'}</section><section><h2>Verder oefenen</h2>${practice.map(r=>`<p>${escapeHTML(r.goal)}${r.supported||r.hints?' · met hulp':''}${r.errors?' · na verbetering':''}</p>`).join('')||'<p>Alle opdrachten lukten zelfstandig.</p>'}</section></div><p class="summaryRecommendation">${!independent?'Je mag verder. Herhalen met minder hulp blijft beschikbaar.':next?'Volgende halte: '+escapeHTML(next.title):'Alle haltes voor vergelijkingen zijn geoefend. Ontdek Stelsels.'}</p>`;
- $('#summaryNextBtn').textContent=next?'Volgende halte →':'Naar Stelsels →';
+ $('#summaryContent').innerHTML=`<div class="summaryTitle"><h1><span class="summarySeal" aria-hidden="true">${independent?'★':'✓'}</span>${independent?'Zelfstandig gelukt':'Halte geoefend'}</h1><p>${escapeHTML(title)} · ${learningRun.tasks.length} opdrachten</p></div><p class="summaryFacts">${clean.length} zonder hulp of verbetering · ${aided.length} met hulp · ${corrected.length} antwoord${corrected.length===1?'':'en'} verbeterd${learningRun.lastReward?' · +'+learningRun.lastReward+' XP':''}</p><div class="summaryEvidence"><section><h2>Zelfstandig gelukt</h2>${clean.map(r=>`<p>✓ ${escapeHTML(r.goal)}</p>`).join('')||'<p>Herhaal om met minder hulp te oefenen.</p>'}</section><section><h2>Verder oefenen</h2>${practice.map(r=>`<p>${escapeHTML(r.goal)}${r.supported||r.hints?' · met hulp':''}${r.errors?' · na verbetering':''}</p>`).join('')||'<p>Alle opdrachten lukten zelfstandig.</p>'}</section></div><p class="summaryRecommendation">${!independent?'Je mag verder. Herhalen met minder hulp blijft beschikbaar.':next?'Volgende halte: '+escapeHTML(next.title):'Alle levels voor vergelijkingen zijn geoefend. Je kunt elk level opnieuw oefenen.'}</p>`;
+ $('#summaryNextBtn').textContent=next?'Volgende halte →':'Naar levels →';
 }
 $('#summaryReplayBtn').onclick=()=>startTopic(mission);
 $('#summaryWorldBtn').onclick=()=>navigation.open();
-$('#summaryNextBtn').onclick=()=>{const t=recommended();if(t)startTopic(t.id);else{worldView.open('systems');showScreen('world')}};
+$('#summaryNextBtn').onclick=()=>{const t=recommended();if(t)startTopic(t.id);else navigation.open()};
 function historyEntries(){const t=task(),ex=currentExercise();return t?.kind==='fractions'?fractionView.history(t,result()):t&&touchKinds.includes(t.kind)?AlgebraTouch.history(t,result()):trainerStates.map((eq,i)=>({tex:latexEq(eq,ex.policy),caption:i?stepText(trainerStepLog[i-1].op,trainerStepLog[i-1].operand,ex.policy):'Oorspronkelijke opgave'}));}
 function renderHistory(){const entries=historyEntries();historyIndex=Math.max(0,Math.min(entries.length-1,historyIndex));$('#historyPosition').textContent=`${historyIndex+1} / ${entries.length}`;$('#historyEquation').dataset.mathTex=entries[historyIndex].tex;$('#historyEquation').innerHTML=motionHTML(entries[historyIndex].tex);$('#historyAction').textContent=entries[historyIndex].caption;$('#historyPrevBtn').disabled=historyIndex===0;$('#historyNextBtn').disabled=historyIndex===entries.length-1;fitMath();}
 $('#historyBtn').onclick=()=>{historyIndex=historyEntries().length-1;renderHistory();showScreen('history')};$('#closeHistoryBtn').onclick=()=>showScreen('trainer');$('#historyPrevBtn').onclick=()=>{historyIndex--;renderHistory()};$('#historyNextBtn').onclick=()=>{historyIndex++;renderHistory()};
@@ -682,8 +712,10 @@ window.addEventListener('resize',fitMath);
 compactQuery.addEventListener('change',()=>{if(screen==='trainer'&&!lesson&&!motionPlayer.active)renderTrainer();});
 function init(){
   restore();
+  document.body.dataset.practiceMode=practiceMode;document.querySelectorAll('[data-practice-mode]').forEach(el=>el.value=practiceMode);
   worldView=AlgebraWorldView.mount({progress:()=>journey,chapter:()=>chapterJourney,runs:()=>runs,current:()=>mission,solved:()=>worldLegacy,location:()=>mapLocation,remember:id=>{mapLocation=id;persist();if(screen==='world')navigation?.sync();},run:id=>runs[id],canResume:()=>activeSet.length>0&&(!learningRun||!learningRun.completed),openWorld:id=>{if(id==='systems')AlgebraShell.openRoute(LeraarBobRoutes.href('games/algebra-trainer/stelsels.html',{gameId:'algebra-trainer',world:'systems',topic:'systems',level:'',screen:'menu'}));else navigation.open();},start:startTopic,resume:()=>{if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer')}});
   navigation=AlgebraNavigation.mount({
+   homeScreen:'menu',
    activeLevel:()=>mission||'',routeResume:resumeRoute,routeApply:c=>{if(c.screen==='world'){if(c.world==='overview')worldView.open(null);else if(J.world(c.world)||AlgebraWorld.world(c.world))worldView.open(c.world);}},routeRead:()=>routeContext,routeSave:c=>{routeContext=c;persist();},routeWorld:()=>screen==='world'?(mapLocation||'overview'):'equations',screen:()=>screen,show:showScreen,canResume:()=>!!activeSet.length,canResumeFree:()=>mission?!!freeSession:!!activeSet.length,resumeFree:()=>mission?$('#resumeFreeBtn').click():showScreen('trainer'),
    navigate:name=>{if(name==='world'){if(mission)worldView.open(J.worldFor(mission));showScreen('world');}else if(name==='trainer'){if(activeSet.length){if(!trainerStates.length)startExercise(trainerIndex);showScreen('trainer');}}else if(name==='preview')levelWorksheet(navigation.selected());else showScreen(name);},
    title:()=>J.stop(mission)?.title||AlgebraWorld.topic(mission)?.title||'Bewaard werk',position:()=>activeSet.length?(trainerIndex+1)+' / '+activeSet.length:'',
@@ -692,7 +724,7 @@ function init(){
   // A fresh open lands on the designed menu; reloading keeps the current work screen.
   const navigationType=performance.getEntriesByType('navigation')[0]?.type;
   if(navigationType&&navigationType!=='reload')screen='menu';
-  const params=new URLSearchParams(location.search),requestedWorld=params.get('world');if(J.world(requestedWorld)||AlgebraWorld.world(requestedWorld)){worldView.open(requestedWorld);if(performance.getEntriesByType('navigation')[0]?.type!=='reload')screen='world';}
+  const params=new URLSearchParams(location.search),requestedWorld=params.get('world');if(J.world(requestedWorld)||AlgebraWorld.world(requestedWorld)){worldView.open(requestedWorld);if(performance.getEntriesByType('navigation')[0]?.type!=='reload')screen='menu';}
   const requestedTopic=J.stop(params.get('topic'))||AlgebraWorld.topic(params.get('topic'));if((J.stop(requestedTopic?.id)||requestedTopic?.engine==='equations')&&!params.has('level')&&performance.getEntriesByType('navigation')[0]?.type!=='reload'){startTopic(requestedTopic.id);navigation.select(J.stop(requestedTopic.id)?.id||J.stops.find(st=>st.skills.includes(requestedTopic.skill))?.id);screen='trainer';}
   if(['setup','preview','tools','menu','world'].includes(params.get('screen')))screen=params.get('screen');
   if(J.stop(params.get('level')))navigation.select(params.get('level'));
@@ -709,6 +741,6 @@ function init(){
   },500);
 }
 init();
-window.AlgebraTrainer=Object.freeze({animationSnapshot:()=>({active:motionPlayer.active,paused:motionPlayer.paused,index:motionPlayer.index||0,demo:!!lesson,finished:!!lesson?.finished,tex:motionFrame?.tex||null,example:lesson?{start:latexEq(lesson.ex.start,lesson.ex.policy),type:lesson.ex.type,steps:lesson.total||lesson.ex.steps.length}:null}),snapshot:()=>JSON.parse(JSON.stringify({screen,trainerIndex,activeSet,trainerStates,solvedTypes:[...solvedTypes],journey,chapterJourney,mission,runs,learningRun})),worksheetSnapshot});
+window.AlgebraTrainer=Object.freeze({animationSnapshot:()=>({active:motionPlayer.active,paused:motionPlayer.paused,index:motionPlayer.index||0,demo:!!lesson,finished:!!lesson?.finished,tex:motionFrame?.tex||null,example:lesson?{start:latexEq(lesson.ex.start,lesson.ex.policy),type:lesson.ex.type,steps:lesson.total||lesson.ex.steps.length}:null}),snapshot:()=>JSON.parse(JSON.stringify({screen,practiceMode,trainerIndex,activeSet,trainerStates,solvedTypes:[...solvedTypes],journey,chapterJourney,mission,runs,learningRun})),worksheetSnapshot});
 
 })();

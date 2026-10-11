@@ -94,6 +94,7 @@ function progressSummary(){
  if(window.AxiomaGame&&!window.AxiomaGame.active)return null;
  const source=current?.header.querySelector('[data-platform-progress]');
  if(source)return {kind:source.dataset.platformProgress,value:Number(source.dataset.value),total:Number(source.dataset.total),unit:source.dataset.unit,title:source.dataset.title};
+ if(window.AxiomaGame?.active&&Number.isFinite(window.AxiomaGame.practiceXP))return {kind:'xp',value:window.AxiomaGame.practiceXP};
  if(isHome){const value=document.getElementById('totalXP')?.textContent.trim();return {kind:'xp',value:value&&value!=='—'?Number(value.replace(/[^0-9]/g,'')):null,home:true};}
  const xp=document.getElementById('xpLabel')||document.getElementById('xp');
  if(xp){xp.closest('.xp-chip')?.classList.add('lb-progress-source');return {kind:'xp',value:Number(xp.textContent.replace(/[^0-9]/g,''))};}

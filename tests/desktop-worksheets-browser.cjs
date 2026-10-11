@@ -121,7 +121,7 @@ async function folderLayouts(){
    await setCollapsed(collapsed);await worksheetsView();assert(!await page.locator('#folderSidebar').isVisible());assert(!await page.locator('#viewToolbar').isVisible());assert.equal(await page.locator('#libraryWindow .sidebar-link').count(),0);
    await shot('worksheet-folders-'+viewport.width+'-'+(collapsed?'collapsed':'expanded'));
    const folders=await page.locator('[data-worksheet-theme]').evaluateAll(elements=>elements.map(element=>element.dataset.worksheetTheme));
-   assert.deepEqual(new Set(folders),new Set(['rechten','getallen','algebra']),'Only themes with actual generators are offered');
+   assert.deepEqual(new Set(folders),new Set(['rechten','getallen','algebra','logica']),'Only themes with actual generators are offered');
    for(const theme of['rechten','getallen','algebra']){
     await layout('Worksheet '+theme+' folder '+viewport.width+' collapsed='+collapsed,'[data-worksheet-theme='+JSON.stringify(theme)+']');
     await page.locator('[data-worksheet-theme='+JSON.stringify(theme)+']').click();

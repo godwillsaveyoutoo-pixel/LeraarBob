@@ -27,8 +27,9 @@
   ];
   const normalize=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
   const base=registry.baseURL;
-  function apps(){return [...registry.list(),...extra].map(g=>({...g,type:types[g.kind]?g.kind:'game',desktopTheme:g.desktopTheme||membership[g.id]||'logica',legacy:['rechten-trainer','functies-rechten'].includes(g.id)}));}
-  function app(id){return apps().find(g=>g.id===id)||null;}
+  function allApps(){return [...registry.list(),...extra].map(g=>({...g,type:types[g.kind]?g.kind:'game',desktopTheme:g.desktopTheme||membership[g.id]||'logica',legacy:['rechten-trainer','functies-rechten'].includes(g.id)}));}
+  function apps(){return allApps().filter(g=>g.id!=='rechten-trainer');}
+  function app(id){return allApps().find(g=>g.id===id)||null;}
   function theme(id){return themes.find(t=>t.id===id)||null;}
   function safeURL(href){try{const u=new URL(href,base);const b=new URL(base);return u.origin===b.origin&&u.pathname.startsWith(b.pathname)&&!u.username&&!u.password&&['https:','http:','file:'].includes(u.protocol)?u.href:null;}catch{return null;}}
   function modes(id,role='guest',topicId){
@@ -75,7 +76,7 @@
   const key=account=>'leraarbob-desktop:v1:'+encodeURIComponent(account?.id||'guest');
   function sanitize(value){
     const v=value&&typeof value==='object'?value:{};
-    return {pins:Array.isArray(v.pins)?[...new Set(v.pins)].filter(id=>app(id)).slice(0,12):defaults.pins.slice(),recent:Array.isArray(v.recent)?v.recent.filter(r=>app(r?.id)&&typeof r.mode==='string').slice(0,10):[],saved:Array.isArray(v.saved)?v.saved.filter(r=>app(r?.id)&&safeURL(r.href)).slice(0,50):[],wallpaper:['coast','quiet'].includes(v.wallpaper)?v.wallpaper:'coast',reducedMotion:v.reducedMotion===true,bottomCollapsed:typeof v.bottomCollapsed==='boolean'?v.bottomCollapsed:v.focusMode===true};
+    return {pins:Array.isArray(v.pins)?[...new Set(v.pins.map(id=>id==='rechten-trainer'?'rechtenwereld':id))].filter(id=>app(id)).slice(0,12):defaults.pins.slice(),recent:Array.isArray(v.recent)?v.recent.filter(r=>app(r?.id)&&typeof r.mode==='string').slice(0,10):[],saved:Array.isArray(v.saved)?v.saved.filter(r=>app(r?.id)&&safeURL(r.href)).slice(0,50):[],wallpaper:['coast','quiet'].includes(v.wallpaper)?v.wallpaper:'coast',reducedMotion:v.reducedMotion===true,bottomCollapsed:typeof v.bottomCollapsed==='boolean'?v.bottomCollapsed:v.focusMode===true};
   }
   function read(storage,account){try{return sanitize(JSON.parse(storage.getItem(key(account))||'null'));}catch{return sanitize(null);}}
   function write(storage,account,prefs){const clean=sanitize(prefs);storage.setItem(key(account),JSON.stringify(clean));return clean;}

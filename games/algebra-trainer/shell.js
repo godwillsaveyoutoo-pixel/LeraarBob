@@ -16,7 +16,7 @@ function mount(api){
  const params=new URLSearchParams(location.search),route=window.LeraarBobRoutes;let originWorld=params.get('world')||params.get('topic');const world=api?.world||(originWorld==='systems'?'Stelsels':'Vergelijkingen'),systems=world==='Stelsels',base=systems?'stelsels.html':'index.html';
  const standaloneContext=()=>({...route?.read(location.href),gameId:'algebra-trainer',world:originWorld==='systems'?'systems':'equations',topic:originWorld==='systems'?'systems':'equations'});
  const standaloneHref=target=>route?route.href(target==='battle'?'klasbattle/':target==='world'?'games/algebra-trainer/index.html':'games/algebra-trainer/'+base,{...standaloneContext(),screen:target==='battle'?'':target}):target==='battle'?'../../klasbattle/?game=algebra':target==='world'?'index.html?screen=world':base+'?screen='+target;
- const destinations=classroom?[['world','Werelden'],['menu','Levels'],['battle','Klasbattle']]:[['world','Werelden'],['menu','Levels'],['tools','Werkvormen']];
+ const destinations=!systems&&!classroom?[['menu','Levels'],['tools','Werkvormen']]:classroom?[['world','Werelden'],['menu','Levels'],['battle','Klasbattle']]:[['world','Werelden'],['menu','Levels'],['tools','Werkvormen']];
  const nav=document.createElement('nav');nav.className='algebraSectionNav';nav.setAttribute('aria-label','Algebra');
  const href=id=>api?(id==='world'?'index.html?screen=world':id==='battle'?'../../klasbattle/?game=algebra':base+'?screen='+id):standaloneHref(id);
  function act(id){if(window.AxiomaGame?.active===false&&api)return;if(api&&id!=='battle')api.navigate(id);else location.assign(standaloneHref(id));}

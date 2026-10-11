@@ -255,9 +255,10 @@ const AXIOMA_GAME_ID='brandweer';
 const axiomaTrackedLevels=new Set(window.AxiomaGame.state.completed||[]);
 function trackAxiomaLevel(){
   const unit=String(level?.id ?? (levelIndex+1));
-  if(axiomaTrackedLevels.has(unit))return;
+  if(axiomaTrackedLevels.has(unit)){window.AxiomaGame.rewardUnit?.(unit);return;}
   axiomaTrackedLevels.add(unit);
   window.AxiomaGame.report([...axiomaTrackedLevels],LEVELS.length,levelIndex+1);
+  window.AxiomaGame.rewardUnit?.(unit);
 }
 
 let state='planning', plan={a:null,b:0}, mech={...level.start}, lastCommand=null;

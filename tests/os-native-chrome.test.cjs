@@ -24,3 +24,10 @@ test('Every registered app and OS atelier has an explicit chrome adapter',t=>{
  const ids=[...require('../games.json').filter(g=>g.active!==false).map(g=>g.id),'glasraam','rechten-arbeid-les','vectoren-canvas'];
  for(const id of ids)assert(f.dom.window.LeraarBobNativeChrome.ids.includes(id),'Missing OS chrome adapter: '+id);
 });
+
+test('Hidden native Pythagoras level selector remains operable through the shared menu',t=>{
+ const f=setup('pythagoras','<div id="level3"><header><select class="levelJump"><option value="3">3 · Verkennen</option><option value="5">5 · Formule</option></select></header></div>');t.after(()=>f.close());
+ const select=f.doc.querySelector('select');let changed=0;select.onchange=()=>changed++;
+ const choice=f.api.actions().find(a=>a.label==='Level kiezen · 5 · Formule');assert(choice);choice.run();assert.equal(select.value,'5');assert.equal(changed,1);
+ f.doc.querySelector('#level3').hidden=true;assert.equal(f.api.actions().length,0);
+});

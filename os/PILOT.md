@@ -1,5 +1,58 @@
 # Pilot: oorspronkelijke bouwsels in het bureaublad
 
+## Actieve afwerkchecklist · 11 oktober 2026
+
+Deze lijst bundelt alle gebruikersopmerkingen. Een onderdeel is pas afgewerkt wanneer de werking én de genoemde controle klaar zijn. Oudere verslagen hieronder zijn versiegebonden bewijs; een geslaagde eerdere proef betekent niet dat elke latere wijziging is gecontroleerd. Productieproeven blijven afzonderlijk van lokale fixtureproeven.
+
+**Vaste keuze na de Stelsels-correctie:** alleen `games/stelsels.html` is de Stelsels-app. De Algebra-module met zes Stelsels-levels is geen vervanging. Oude OS-spelkoppelingen openen de oorspronkelijke trainer; historische opslag en de afzonderlijke papiergenerator blijven intact. Oudere Algebra-verslagen hieronder mogen niet als bewijs voor de oorspronkelijke Stelsels worden gebruikt.
+
+Voortgang van deze afwerkronde: [uitgevoerde controles en grenzen](qa/checklist-20261011/README.md). [Inventaris van huidige werkvormen](APP-MODES.md).
+
+### A. Betrouwbare basis en bediening
+
+- [ ] A1. Volledige CI groen op de uiteindelijke branch. De achterhaalde telling van de appkiezer vervangen door controle van de werkelijke app-ID's; alle opvolgende browserproeven uitvoeren.
+- [x] A2. Oude Rechtentrainer uit Toevoegen/zoeken halen en bestaande pins naar Rechtenwereld brengen, zonder de gedeelde voortgangsidentiteit of historische routes te verwijderen.
+- [x] A3. Persoonlijke appkaarten, typen in Toevoegen, themagroepen, directe ondersteunde werkvormen en hetzelfde rechterklik/toetsenbordmenu. [Bewijs](qa/personal/README.md).
+- [x] A4. Eén OS-navigatie; boven- en onderbalk onafhankelijk inklappen, herstelhandvatten ≥44 px, voorkeur bewaren, geen permanente vervangstrook of apart-openenknop. [Bewijs](qa/edge-bars/README.md).
+- [x] A5. Geopende oefenbladmappen en ranglijsten in de taakbalk, map/filters hervatten en sluiten zonder documenten te wissen. [Bewijs](qa/place-windows/README.md).
+- [ ] A6. Eén actieve werkvorm per app duidelijk bewaken: geen tweede onbedoelde sessie, wisselen zonder gegevensverlies, expliciet verlaten bij een actieve online partij.
+- [ ] A7. Per app de interne routes nalopen op oude overzichtsmenu's en dubbele navigatie. De bestaande brede matrix dekt eerste scherm/eerste oefening, niet ieder intern level.
+
+### B. Vergelijkingen, Stelsels en vormgeving
+
+- [x] B1. Zichtbare naam Vergelijkingen, eigen naam Stelsels, oorspronkelijke opslag-ID's behouden. [Bewijs](qa/place-windows/README.md).
+- [x] B2. Vergelijkingen als eigen trainer starten zonder Algebra-wereldkeuze; beginner en expert met dezelfde wiskundige engine en blijvende voorkeur. De bestaande moeilijkheidsniveaus zijn geen vervanging van die bedieningskeuze.
+- [x] B3. Vergelijkingen: grote leesbare opgave en compacte antwoordbediening, geen scrollzoektocht naar hoofdacties op 1366 × 768; compact scherm, beide balkstanden en onafgemaakte invoer controleren.
+- [x] B4. Oorspronkelijke Stelsels-trainer behouden met drie methodes; groen expert-substitutiedoel, slepen/tikken/toetsenbord, volledige voorbeeldoplossing. [Bewijs](qa/stelsels-expert/report.json).
+- [x] B5. Brandweer- en Zeeslagformule los van regelaars; Brandweerramen binnen gevel. [Bewijs](qa/brandweer-controls/README.md).
+- [ ] B6. Getallenwereld: herkenbare wereld/subwereldpresentatie voor machten, wortels en wetenschappelijke notatie, met behoud van alle negentien onderdelen en eigen antwoorden.
+- [ ] B7. Signal Lab visueel verzorgen; geen aanpassing van de goede solo-leerflow van Taartenwereld.
+
+### C. Samen spelen, uitnodigingen en resultaten
+
+- [ ] C1. Eén centrale afspraak voor voorbereiden, klasgenoten kiezen, uitnodigen, ontvangen, starten en verlaten. Getallen gebruikt nu codes; Rechten en Zeeslag gebruiken aliases.
+- [ ] C2. Meerdere en kruisende uitnodigingen, dubbel accepteren, verlopen/intrekken, bezette speler, account/tabwissel en verbroken verbinding controleren. Servertoestand bepaalt deelname; geen dubbele partij of score.
+- [ ] C3. Kleiduifschieten: ondersteunde duo/groeps/klasvormen rechtstreeks bereikbaar en volledige partij gecontroleerd; leerlingen mogen groepen spelen, leraar ontvangt resultaten.
+- [x] C4. Brandweer en oorspronkelijke Stelsels: echte, eenmalige XP-beloning toevoegen zonder fictieve omrekening van oude levels; Brandweer krijgt geen ranglijst.
+- [ ] C5. Kleiduif-battleresultaten met blijvende eigen punten/XP en centrale OS-ranglijst; alleen competitieve activiteiten krijgen een toplijst.
+- [ ] C6. Leraarklasuitnodiging zichtbaar op het bureaublad, leerling rechtstreeks naar juiste wachtkamer; rechten en rollen door backend afdwingen.
+- [ ] C7. [Huidige modi per app vastgelegd](APP-MODES.md); volledige providercontrole nog open; ontbrekende providers niet aanbieden als werkend. Logicawereld lokaal aangesloten; online duo en klas vragen afzonderlijke providers.
+
+### D. Oefenbladen en samengestelde toets
+
+- [x] D1. Centrale maker, onderwerpmapjes, huidige en eerdere reeksen, exacte vragen/sleutel bewaren, PDF/HTML en backup/herstel. [Bewijs](qa/central-paper/README.md).
+- [ ] D2. Bewaarde reeksen veilig tussen toestellen kunnen hervatten. Online archief en lokale cache geïmplementeerd en getest met twee geïsoleerde browsers en lokale SQL; migratie nog niet uitgerold op productie. Exacte documenten, offline opnieuw proberen, verwijdermarkeringen en accountisolatie getest. Productieproef blijft open.
+- [ ] D3. Leraar kan één toets samenstellen met **Glasraam-ontwerp + Kleiduifschieten-sessie + tien Rechtenwereldvragen**; per onderdeel instructies, punten en afronding.
+- [ ] D4. Leerlingtoewijzing, vaste taakversie, hervatten, één definitieve inzending, leraarsbeoordeling en overzicht/export van alle onderdelen. Lokale oefenvoortgang is geen beveiligd toetscijfer.
+- [ ] D5. Dezelfde taakopbouw uitbreidbaar maken naar andere trainers, vraagreeksen en spellen; oorspronkelijke leerflows en engines behouden.
+
+### E. Afronding en publicatie
+
+- [ ] E1. Elke prioriteitsapp werkelijk bedienen op 1366 × 768 bij 100% zoom en compacte schermen; beide balkstanden, Start, terugplek, bewaren, rollen en focus controleren.
+- [ ] E2. Twee werkelijk ingelogde productieaccounts op aparte toestellen: uitnodigen, klasdeelnemen, reconnect, cloudhervatten en resultaat. Lokale fixtures gelden niet als dit bewijs.
+- [ ] E3. Reviewbranch/PR met actuele checklist en screenshots; pas publiceren na geslaagde vereiste controles. De publieke versie en lokale preview duidelijk onderscheiden.
+
+
 Doel: overgang tussen bureaublad, themamap, werkvorm en app, met behoud van oorspronkelijke vragen, antwoordbediening, stijl en leerflow. Gewone bezoeken aan `/` en `/index.html` openen het bureaublad op `/os/`. De eerdere catalogus blijft beschikbaar via [`/index.html?view=catalog`](../index.html?view=catalog) en OS Instellingen; bestaande accountlinks behouden de oorspronkelijke accountingang.
 
 ## Persoonlijk bureaublad en focus · 10 oktober 2026

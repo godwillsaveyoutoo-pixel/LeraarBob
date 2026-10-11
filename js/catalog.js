@@ -851,8 +851,24 @@ window.AXIOMA_CATALOG = [
           "providerId": "stelsels"
         }
       ],
-      "worksheets": []
-    }
+      "worksheets": [
+        {
+          "id": "systems",
+          "title": "Stelsels",
+          "href": "oefenbladen/maken.html?source=algebra-trainer:systems&topic=systems",
+          "providerId": "algebra-trainer",
+          "topicId": "systems",
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
+        }
+      ]
+    },
+    "topics": [
+      {
+        "id": "systems",
+        "title": "Stelsels",
+        "href": "games/stelsels.html?v=20260920-2"
+      }
+    ]
   },
   {
     "title": "Algebra Smederij",
@@ -1170,8 +1186,8 @@ window.AXIOMA_CATALOG = [
     "art": "algebra",
     "cover": "assets/covers/modern/algebra-trainer.webp",
     "coverSmall": "assets/covers/modern/algebra-trainer-small.webp",
-    "detail": "7 vergelijkingenlevels · 6 stelsellevels · oefenbladen en XP",
-    "subject": "Algebra · machten · stelsels",
+    "detail": "7 vergelijkingenlevels · beginner en expert · oefenbladen en XP",
+    "subject": "Algebra · vergelijkingen",
     "presentation": "algebra",
     "featured": true,
     "featureOrder": 5,
@@ -1214,8 +1230,7 @@ window.AXIOMA_CATALOG = [
           "providerId": "algebra",
           "classFunction": "algebra-class",
           "topics": [
-            "equations",
-            "systems"
+            "equations"
           ],
           "topicParam": "world",
           "rpc": "axioma_game_class"
@@ -1228,14 +1243,6 @@ window.AXIOMA_CATALOG = [
           "href": "oefenbladen/maken.html?source=algebra-trainer:equations&topic=equations",
           "providerId": "algebra-trainer",
           "topicId": "equations",
-          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
-        },
-        {
-          "id": "systems",
-          "title": "Stelsels",
-          "href": "oefenbladen/maken.html?source=algebra-trainer:systems&topic=systems",
-          "providerId": "algebra-trainer",
-          "topicId": "systems",
           "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         }
       ]
@@ -1256,19 +1263,6 @@ window.AXIOMA_CATALOG = [
           "route-brackets",
           "route-fractions",
           "route-check"
-        ]
-      },
-      {
-        "id": "systems",
-        "title": "Stelsels",
-        "href": "games/algebra-trainer/stelsels.html?world=systems&screen=menu",
-        "levelIds": [
-          "sys-graphic",
-          "sys-substitution",
-          "sys-combination",
-          "sys-unique",
-          "sys-none",
-          "sys-infinite"
         ]
       }
     ],

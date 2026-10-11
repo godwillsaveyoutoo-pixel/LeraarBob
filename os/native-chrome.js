@@ -17,7 +17,7 @@ const specs={
  'taartenwinkel':{header:'#game>header',crumbs:'#serviceName',actions:[action('#homeBtn','Speloverzicht'),action('#questionsBtn','Vragen en diensten'),action('#undo','Ongedaan maken'),action('#sound','Geluid aan/uit')]},
  'verfwinkel':{header:'#app>.topbar',crumbs:'#levelTitle',tools:'#orderBox',actions:[action('#homeBtn','Speloverzicht'),action('#menuBtn','Levels kiezen'),action('#soundBtn','Geluid aan/uit')]},
  'gravity-maze':{header:'#top-menu',crumbs:'#level-name',actions:[action('#level-menu','Kamers kiezen'),action('#reset','Kamer opnieuw'),action('#undo','Laatste zet ongedaan maken'),action('#pace','Animatiesnelheid'),action('#help','Spelregels')],css:'.play{--play-top:0px!important}#gravity-tools,#menu-handle,#menu-close{display:none!important}.field{inset:0 var(--rail) 0!important;padding:0!important}'},
- 'pythagoras':{header:'#app>header,body>[id^=level]>header',crumbs:'header .title',actions:[menu('header button')]},
+ 'pythagoras':{header:'#app>header,body>[id^=level]>header',crumbs:'header .title',selects:'.levelJump',actions:[menu('header button')]},
  'vectoren-canvas':{header:'body>header',actions:[],css:'body.canvas-app{grid-template-rows:0 auto minmax(0,1fr) auto!important}'},
  'getallenwereld':{header:'body>header',actions:[action('#trainerMenu [data-theme=machten]','Machten'),action('#trainerMenu [data-theme=wortels]','Vierkantswortels'),action('#trainerMenu [data-theme=wetenschappelijk]','Wetenschappelijke notatie'),action('#resumeMenu','Oefening hervatten'),action('#helpMenu','Hulp bij mijn opgave'),action('#trainerMenu [data-screen=setup]','Reeks kiezen'),action('#trainerMenu [data-screen=play]','Oefening hervatten')]},
  'bewerkingen-trainer':{header:'body>header',crumbs:'.breadcrumbs>span',actions:[action('#trainerMenu [data-screen=setup]','Reeks kiezen'),action('#trainerMenu [data-screen=play]','Oefening hervatten')]},
@@ -72,7 +72,14 @@ function mount(doc,{id,base,onChange=()=>{}}){
   const copy=node.cloneNode(true);copy.querySelectorAll('small,svg,[aria-hidden=true],.menu-icon').forEach(n=>n.remove());
   const label=entry.label||node.getAttribute('aria-label')||node.title||copy.textContent.trim().replace(/\s+/g,' ');if(!label)continue;
   result.push({node,label,disabled:node.disabled||node.getAttribute('aria-disabled')==='true',pressed:node.getAttribute('aria-pressed'),current:node.getAttribute('aria-current')});
- }}return result;}
+ }}
+ if(spec.selects)for(const select of doc.querySelectorAll(spec.selects)){
+  if(!active(select))continue;
+  for(const option of select.options){if(option.hidden)continue;const value=option.value;
+   result.push({node:select,label:'Level kiezen · '+option.textContent.trim(),disabled:select.disabled||option.disabled,pressed:null,current:select.value===value?'true':null,run(){if(!select.isConnected||select.disabled||option.disabled)return;select.value=value;select.dispatchEvent(new win.Event('change',{bubbles:true}));}});
+  }
+ }
+ return result;}
  function crumbs(){return spec.crumbs?[...doc.querySelectorAll(spec.crumbs)].filter(n=>active(n)&&n.textContent.trim()):[];}
  function changed(){if(raf||disposed)return;raf=win.requestAnimationFrame(()=>{raf=0;scan();onChange();});}
  doc.addEventListener('click',changed);doc.addEventListener('change',changed);

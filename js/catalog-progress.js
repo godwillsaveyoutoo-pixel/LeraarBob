@@ -75,6 +75,10 @@
   function earnedXP(game, saved) {
     if (['local','none','multiplayer'].includes(game.progressType)) return null;
     const state = saved?.state;
+    if(['brandweer','stelsels'].includes(game.id)){
+      const first=game.id==='brandweer'?1:0,total=game.id==='brandweer'?16:14;
+      return state?.practiceRewards?.version===1?Object.entries(state.practiceRewards.awards||{}).reduce((sum,[id,xp])=>sum+(String(Number(id))===id&&Number.isInteger(Number(id))&&Number(id)>=first&&Number(id)<first+total&&xp===10?10:0),0):0;
+    }
     if (game.progressType === 'trainer') return count(state?.xp);
     if (['algebra-trainer','bewerkingen-trainer'].includes(game.id)) {
       // Read actual topic awards. Older solved-form counts are never converted to XP.
