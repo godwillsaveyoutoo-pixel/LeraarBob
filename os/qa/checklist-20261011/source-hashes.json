@@ -19,9 +19,9 @@
   "shared/axioma-game-adapters.js": "07eda6de2f59ed095282b2b122c9ad1af59e1473ad1d8aa9d66423992e1edc82",
   "shared/axioma-game.js": "a8ff7733d4dbf98320ab6c10a9d3026aa7badeb99e7401950ea4564e1954d3b0",
   "shared/leraarbob-topbar.js": "31270ef56f5873d1710380b614ab8d78150a6057fc4b777b6340c78823d2e7be",
-  "shared/worksheet-library.js": "0cba36e097556cc285bf1004b757c72b127e44655428db5d4fbda0bd68c12894",
+  "shared/worksheet-library.js": "e7359316a3feb11af0bd20aa152fbf721c9fe235661827c7a98e69ad7845c6d3",
   "shared/worksheet-save.js": "bfed0e35189ca70551b373db81066b62265ab31b4f542464077c7d7e974edb88",
-  "supabase/migrations/20261011070545_os_worksheet_cloud_archive.sql": "73977970864422e7f980377a6d524d727007d203676ef9acbebe68badcba2b43",
+  "supabase/migrations/20261011070545_os_worksheet_cloud_archive.sql": "2753e223552dd242f951a3263954aa6e779cb81b23af9395bd8a653fc747d83a",
   "tests/algebra-class.test.cjs": "617daf0faea1c0b61b287790b6f7572e76a9f3e627bdcefab9972f1ad4d21156",
   "tests/algebra-expert-browser.cjs": "8a83360cc7ec8c1d611e9174754802a3d8b4c5d7e67d2d381187991ca7b44e5a",
   "tests/algebra-os-browser.cjs": "0bdaac1b1feb6528d87bb57324c5b401568850bcf60cb1d78133b90aee169c4b",
@@ -40,5 +40,5 @@
   "tests/practice-rewards.test.cjs": "dd32e7d99b1ab729ce51b6ac504d12559a9419b182713298c725e1d3147e6425",
   "tests/stelsels-expert-substitution-browser.cjs": "eeae0c40124aabbcc70d140df8c5594997133ec580f69c92614a94c21545d63b",
   "tests/worksheet-cloud-browser.cjs": "6eb729e8eff48f31c05d87591e9d2ab444dd5ee82695d8fb2d2e67b16a83d782",
-  "tests/worksheet-cloud.test.cjs": "477bcef94961152896747dbeabb17c317822074046e09054e089c070d83d78e5"
+  "tests/worksheet-cloud.test.cjs": "8abf500c5c6ba05ac87a89c26295f72c242d2a7b50bc75c1c0024addfa52460d"
 }

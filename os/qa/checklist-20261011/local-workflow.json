@@ -1,0 +1,380 @@
+{
+  "environment": {
+    "browser": "Brave/Chromium 154.0.8037.58",
+    "accounts": "Synthetic local fixtures; no production writes",
+    "repositoryCommitAtStart": "5c211a9a853c922326e45c54c52c58006904fb73"
+  },
+  "commands": [
+    {
+      "command": "node scripts/build-catalog.cjs --check",
+      "code": 0,
+      "seconds": 0.0,
+      "log": "01.log"
+    },
+    {
+      "command": "node --test --test-isolation=none tests/catalog.test.cjs tests/catalog-progress.test.cjs tests/desktop-model.test.cjs tests/getallenwereld.test.cjs tests/getallen-guided-choices.test.cjs tests/getallen-scientific-lessons.test.cjs tests/scientific-provider.test.cjs tests/algebra-class.test.cjs tests/algebra-learning.test.cjs tests/algebra-trainer.test.cjs tests/algebra-v04-choices.test.cjs tests/algebra-v04-journey.test.cjs tests/algebra-v04-motion.test.cjs tests/algebra-v045-fractions.test.cjs tests/algebra-v050-flow.test.cjs tests/algebra-world.test.cjs tests/stelsels-workshop.test.cjs tests/logicawereld-logic.test.cjs tests/logicawereld-flow.test.cjs tests/logicawereld-integration.test.cjs",
+      "code": 0,
+      "seconds": 9.4,
+      "log": "02.log"
+    },
+    {
+      "command": "node --check os/desktop.js && node --check os/personal-home.js && node --check os/activity-entry.js && node --check os/native-chrome.js && node --check os/edge-bars.js",
+      "code": 0,
+      "seconds": 0.1,
+      "log": "03.log"
+    },
+    {
+      "command": "node tests/desktop-package-check.cjs",
+      "code": 0,
+      "seconds": 0.0,
+      "log": "04.log"
+    },
+    {
+      "command": "node --test --test-isolation=none tests/desktop-dom.test.cjs tests/topbar-desktop.test.cjs tests/os-native-chrome.test.cjs tests/getallen-workshop-dom.test.cjs tests/getallen-world-integration.test.cjs tests/class-activity-flow.test.cjs tests/worksheet-library.test.cjs tests/worksheet-save.test.cjs tests/practice-rewards.test.cjs",
+      "code": 0,
+      "seconds": 51.0,
+      "log": "05.log"
+    },
+    {
+      "command": "HOME_SCREENSHOTS=\"$RUNNER_TEMP/os-qa/home-entry\" node tests/home-entry-browser.cjs",
+      "code": 0,
+      "seconds": 36.2,
+      "log": "06.log"
+    },
+    {
+      "command": "node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs tests/worksheet-cloud.test.cjs",
+      "code": 0,
+      "seconds": 24.5,
+      "log": "07.log"
+    },
+    {
+      "command": "LB_SCREENSHOT_DIR=\"$RUNNER_TEMP/os-qa/personal\" node tests/personal-os-browser.cjs",
+      "code": 0,
+      "seconds": 35.1,
+      "log": "08.log"
+    },
+    {
+      "command": "LB_SCREENSHOT_DIR=\"$RUNNER_TEMP/os-qa/personal\" node tests/personal-chrome-browser.cjs",
+      "code": 0,
+      "seconds": 12.9,
+      "log": "09.log"
+    },
+    {
+      "command": "PLACE_PROOF=\"$RUNNER_TEMP/os-qa/places\" node tests/os-place-windows-browser.cjs",
+      "code": 0,
+      "seconds": 15.5,
+      "log": "10.log"
+    },
+    {
+      "command": "WORKFORMS_PROOF=\"$RUNNER_TEMP/os-qa/workforms\" node tests/os-workforms-browser.cjs",
+      "code": 0,
+      "seconds": 114.7,
+      "log": "11.log"
+    },
+    {
+      "command": "LB_NAV_SCREENSHOTS=\"$RUNNER_TEMP/os-qa/native-navigation\" node tests/rechten-os-navigation-browser.cjs",
+      "code": 0,
+      "seconds": 13.8,
+      "log": "12.log"
+    },
+    {
+      "command": "OS_SCREENSHOTS=\"$RUNNER_TEMP/os-qa/pilots\" node tests/desktop-pilot-browser.cjs",
+      "code": 1,
+      "seconds": 45.2,
+      "log": "13.log"
+    },
+    {
+      "command": "ZEESLAG_SCREENSHOTS=\"$RUNNER_TEMP/os-qa/zeeslag-controls\" node tests/zeeslag-controls-browser.cjs",
+      "code": 0,
+      "seconds": 20.2,
+      "log": "14.log"
+    },
+    {
+      "command": "BRANDWEER_SCREENSHOTS=\"$RUNNER_TEMP/os-qa/brandweer-controls\" node tests/brandweer-controls-browser.cjs",
+      "code": 0,
+      "seconds": 16.5,
+      "log": "15.log"
+    },
+    {
+      "command": "LB_SCREENSHOT_DIR=\"$RUNNER_TEMP/os-qa/live\" node tests/desktop-live-browser.cjs",
+      "code": 0,
+      "seconds": 52.3,
+      "log": "16.log"
+    },
+    {
+      "command": "GETALLEN_SCREENSHOTS=\"$RUNNER_TEMP/os-qa/getallen\" node tests/getallen-os-browser.cjs",
+      "code": 0,
+      "seconds": 269.2,
+      "log": "17.log"
+    },
+    {
+      "command": "SCIENTIFIC_SCREENSHOTS=\"$RUNNER_TEMP/os-qa/scientific\" node tests/getallen-scientific-browser.cjs",
+      "code": 0,
+      "seconds": 92.5,
+      "log": "18.log"
+    },
+    {
+      "command": "CLASS_FLOW_SCREENSHOTS=\"$RUNNER_TEMP/os-qa/class-flow\" node tests/uniform-class-flow-browser.cjs",
+      "code": 0,
+      "seconds": 18.0,
+      "log": "19.log"
+    },
+    {
+      "command": "WORKSHEETS_SCREENSHOTS=\"$RUNNER_TEMP/os-qa/worksheets\" node tests/desktop-worksheets-browser.cjs",
+      "code": 0,
+      "seconds": 31.3,
+      "log": "20.log"
+    },
+    {
+      "command": "CENTRAL_PAPER_SCREENSHOTS=\"$RUNNER_TEMP/os-qa/central-paper\" node tests/central-worksheet-browser.cjs",
+      "code": 0,
+      "seconds": 19.1,
+      "log": "21.log"
+    },
+    {
+      "command": "CLOUD_PAPER_PROOF=\"$RUNNER_TEMP/os-qa/worksheet-cloud\" node tests/worksheet-cloud-browser.cjs",
+      "code": 0,
+      "seconds": 8.0,
+      "log": "22.log"
+    },
+    {
+      "command": "EXPERT_PROOF=\"$RUNNER_TEMP/os-qa/equations-expert\" node tests/algebra-expert-browser.cjs",
+      "code": 0,
+      "seconds": 12.4,
+      "log": "23.log"
+    },
+    {
+      "command": "ALGEBRA_OS_SCREENSHOTS=\"$RUNNER_TEMP/os-qa/algebra\" node tests/algebra-os-browser.cjs",
+      "code": 0,
+      "seconds": 32.3,
+      "log": "24.log"
+    },
+    {
+      "command": "CHROME_PROOF=\"$RUNNER_TEMP/os-qa/uniform-chrome\" node tests/os-native-chrome-browser.cjs",
+      "code": 0,
+      "seconds": 50.2,
+      "log": "25.log"
+    },
+    {
+      "command": "STELSELS_EXPERT_PROOF=\"$RUNNER_TEMP/os-qa/stelsels-expert\" node tests/stelsels-expert-substitution-browser.cjs",
+      "code": 0,
+      "seconds": 12.6,
+      "log": "26.log"
+    },
+    {
+      "command": "LOGICA_PROOF=\"$RUNNER_TEMP/os-qa/logica\" node tests/logicawereld-os-browser.cjs",
+      "code": 0,
+      "seconds": 49.8,
+      "log": "27.log"
+    }
+  ],
+  "pilotRetry": {
+    "command": "OS_SCREENSHOTS=/tmp/lb-checklist-final/os-qa/pilots node tests/desktop-pilot-browser.cjs",
+    "passed": true,
+    "checks": 32,
+    "reason": "The native Pythagoras option says L5. The test now accepts its real label; the change handler and selected level are still asserted."
+  },
+  "browserReports": [
+    {
+      "report": "os-qa/algebra/report.json",
+      "sha256": "904c382b8086cc03e6c62fd31fb0ea743871efaf6e92ebaf8e3a4cc1cd2614e6",
+      "scope": "Real native Algebra browser interactions with isolated guest/teacher/student auth and local progress fixtures; no production account, progress or session writes",
+      "checks": 13,
+      "layout": 103,
+      "errors": 0,
+      "missing": 0,
+      "passed": true
+    },
+    {
+      "report": "os-qa/brandweer-controls/report.json",
+      "sha256": "9a2e10e6cdfe1fccea456467b9f4a9348b17bdfa31162cb9eb5a34d9d688c6a1",
+      "scope": "Chromium, 100% zoom; local accounts and original solo engine.",
+      "checks": 7,
+      "layouts": 12,
+      "errors": 0,
+      "missing": 0,
+      "passed": true
+    },
+    {
+      "report": "os-qa/central-paper/report.json",
+      "sha256": "096024cf18f081f3c8870c2ece938e71e6d07f71a0f32a29e855ebab6ab259ad",
+      "scope": "Real Chromium, isolated local accounts, native mathematical generators, no production login or cloud writes.",
+      "checks": 8,
+      "targets": 39,
+      "errors": 0,
+      "missing": 0,
+      "passed": true
+    },
+    {
+      "report": "os-qa/class-flow/report.json",
+      "sha256": "c13d5099deb361cb1b45c94c4944fdada45816a901ab1de6b44716d779aa9104",
+      "auth": "Fictional isolated teacher/student identities; production accounts not tested",
+      "backend": "Existing Edge handlers and SQL migrations in local PostgreSQL/PGlite; external network blocked",
+      "checks": 32,
+      "errors": 0,
+      "missing": 0
+    },
+    {
+      "report": "os-qa/equations-expert/report.json",
+      "sha256": "88984a7c98548b5aa9eaa6ec93ac4ac733d5c07d05a3a9471bdfa2de6bd821ab",
+      "scope": "Native browser interactions; local fixture authentication, no production writes",
+      "checks": 5,
+      "layouts": 12,
+      "errors": 0,
+      "passed": true
+    },
+    {
+      "report": "os-qa/getallen/report.json",
+      "sha256": "aef21a9661a1b57b8cd9833d847e922788eb32875e12acd2105958792370c761",
+      "scope": "Real Chromium UI, 100% zoom and scale 1; fictitious accounts, in-memory progress and local lobby response fixtures. No production authentication, cloud writes or external multiplayer.",
+      "checks": 146,
+      "layout": 1076,
+      "errors": 0,
+      "missing": 0,
+      "passed": true
+    },
+    {
+      "report": "os-qa/home-entry/report.json",
+      "sha256": "447897d9180edd475c5db53745487b07d2f9caba1d6618d652e32f8177cdee5b",
+      "scope": "Actual local Chromium navigation and UI with guest auth fixture; no real production accounts",
+      "checks": 16,
+      "errors": 0,
+      "missing": 0,
+      "passed": true
+    },
+    {
+      "report": "os-qa/live/results.json",
+      "sha256": "b5f070027dc3ca94f8a3668eada1610cd74857b3598d16274f1ed0cb281f1821",
+      "auth": "isolated fictional teacher/student accounts; production accounts not tested",
+      "backend": "existing numbers-session/rechten-class Edge handlers and lesson/hub migrations in local PostgreSQL/PGlite",
+      "checks": 13,
+      "errors": 0,
+      "missing": 0
+    },
+    {
+      "report": "os-qa/logica/report.json",
+      "sha256": "b2b95542c45bbc39c38011e378106496906ca86912e1d4e15f4dee09faddf2e8",
+      "scope": "Real Chromium at 100%, native Logicawereld tasks, synthetic accounts, account-local saves and IndexedDB sheets. No online/class provider or production login claimed.",
+      "checks": 7,
+      "targets": 166,
+      "errors": 0,
+      "missing": 0
+    },
+    {
+      "report": "os-qa/native-navigation/results.json",
+      "sha256": "809f0e1c36445c4c5427a498424924baa905a416af0083848fe55554cb0a2ef0",
+      "scope": "Actual native links and controls in Chromium at 100% zoom; synthetic isolated accounts with existing local providers. Production login not tested.",
+      "checks": 7,
+      "measurements": 33,
+      "errors": 0,
+      "missing": 0
+    },
+    {
+      "report": "os-qa/personal/chrome-results.json",
+      "sha256": "855f859b8063ed5451aabaad79304839edc7ca17b655e0a610d9068358cf5186",
+      "scope": "Actual Chromium at 100% zoom; synthetic local account; original Rechtenwereld exercise and DOM",
+      "checks": 4,
+      "measurements": 38,
+      "errors": 0
+    },
+    {
+      "report": "os-qa/personal/results.json",
+      "sha256": "d43e9e51e02c43701e8823f327bb9e5009c7c747de881dd53d4b1c8f32261a3c",
+      "auth": "Synthetic accounts, real local Learn/class handlers + PGlite. Production login/transport not tested.",
+      "checks": 9,
+      "measurements": 75,
+      "errors": 0,
+      "missing": 0
+    },
+    {
+      "report": "os-qa/pilots/pilot-browser-report.json",
+      "sha256": "bf68029ce2cb8d515e3f30a4050be5d03b7bea64c669e23b2fb6048c25187387",
+      "scope": "Real Chromium UI in localhost /os/ with guest auth fixture; no production account or remote session writes",
+      "checks": 32,
+      "layout": 23,
+      "errors": 0,
+      "missing": 0,
+      "passed": true
+    },
+    {
+      "report": "os-qa/places/report.json",
+      "sha256": "3b4938e8699eab86b6aefd6e8aa9d1f7f8d2226c4975f270fa9c0014e70fed28",
+      "scope": "Real Chromium, 100% zoom, local synthetic accounts, native Algebra and central worksheet generator.",
+      "checks": 4,
+      "targets": 51,
+      "errors": 0
+    },
+    {
+      "report": "os-qa/scientific/report.json",
+      "sha256": "8157166248147111c720b9e4f803ecdf0bc1b8294001e9e0910e8b39a9af119d",
+      "scope": "Real Chromium UI, 100% zoom and scale 1; fictitious accounts, in-memory progress and local lobby response fixtures. No production authentication, cloud writes or external multiplayer.",
+      "checks": 67,
+      "layout": 190,
+      "errors": 0,
+      "missing": 0,
+      "passed": true
+    },
+    {
+      "report": "os-qa/stelsels-expert/report.json",
+      "sha256": "a58a3ddf2cf4cca152b613685adedbf034cb2c20793133f43a77ae46d600d54d",
+      "scope": "Original Stelsels trainer in the OS; local fixture account; actual keypad and pointer/keyboard/touch interactions",
+      "checks": 11,
+      "errors": 0,
+      "missing": 0
+    },
+    {
+      "report": "os-qa/uniform-chrome/report.json",
+      "sha256": "6be275dda85b0c0874ccd29b95223ce55a37c85413db01f24c29465c36b8574e",
+      "scope": "Real Chromium, local fixture accounts, 100% zoom; native app controllers; no external multiplayer sessions",
+      "apps": 24,
+      "interactions": 8,
+      "measurements": 395,
+      "errors": 0,
+      "missing": 0
+    },
+    {
+      "report": "os-qa/workforms/report.json",
+      "sha256": "79579f646e41249639b9e77f83bc37a9b338dbc21fff547123f2de8c605e7ff0",
+      "scope": "Synthetic local accounts; real PostgreSQL invitation/session rules and numbers/learn handlers. Naval Realtime uses local BroadcastChannel transport; production login/Realtime not tested.",
+      "checks": 20,
+      "layouts": 102,
+      "errors": 0,
+      "missing": 0
+    },
+    {
+      "report": "os-qa/worksheet-cloud/report.json",
+      "sha256": "0f9e638863ff57a96a01e71573fcf873e8d4c4804ef8aa5deebf9b6cfbc240dc",
+      "scope": "Two isolated Chromium contexts; real local SQL archive and original worksheet generator; synthetic identities, no production writes.",
+      "checks": 5,
+      "errors": 0,
+      "passed": true
+    },
+    {
+      "report": "os-qa/worksheets/report.json",
+      "sha256": "91a26da5b5f99e739f089e42b645033ab4328889a710fc087fb2cc76feaf2d68",
+      "scope": "Actual localhost Chromium native generators and IndexedDB archive, 100% zoom. Fictitious isolated account identities; all external requests blocked. No production login, cloud storage or progress writes.",
+      "checks": 22,
+      "layout": 47,
+      "errors": 0,
+      "missing": 0,
+      "passed": true
+    },
+    {
+      "report": "os-qa/zeeslag-controls/report.json",
+      "sha256": "d6ef7e987414d2a3c83b84400bd3418162c30307ddc419bb438ab50fbe53690c",
+      "scope": "Chromium at 100% zoom, local test account, original solo engine; no production multiplayer claim.",
+      "checks": 6,
+      "layouts": 21,
+      "errors": 0,
+      "missing": 0,
+      "passed": true
+    }
+  ],
+  "supplementalCloud": {
+    "command": "node --test --test-isolation=none tests/worksheet-cloud.test.cjs tests/worksheet-library.test.cjs tests/worksheet-save.test.cjs",
+    "tests": 20,
+    "passed": 20,
+    "reason": "Adds server-restore reconciliation and archive history quota checks after the full run."
+  },
+  "summary": "Every workflow command passed, including the corrected pilot retry. These are local checks; GitHub CI and production verification are separate."
+}

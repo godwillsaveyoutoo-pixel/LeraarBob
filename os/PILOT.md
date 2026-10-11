@@ -10,7 +10,7 @@ Voortgang van deze afwerkronde: [uitgevoerde controles en grenzen](qa/checklist-
 
 ### A. Betrouwbare basis en bediening
 
-- [ ] A1. Volledige CI groen op de uiteindelijke branch. De achterhaalde telling van de appkiezer vervangen door controle van de werkelijke app-ID's; alle opvolgende browserproeven uitvoeren.
+- [ ] A1. Volledige CI groen op de uiteindelijke branch. Alle 27 lokale workflowcommando’s slagen, inclusief een herhaalde pilotproef na correctie van de native Pythagoras-testverwachting. De appkiezer controleert werkelijke app-ID’s. GitHub CI op de uiteindelijke commit blijft afzonderlijk te bevestigen. [Bewijs](qa/checklist-20261011/local-workflow.json).
 - [x] A2. Oude Rechtentrainer uit Toevoegen/zoeken halen en bestaande pins naar Rechtenwereld brengen, zonder de gedeelde voortgangsidentiteit of historische routes te verwijderen.
 - [x] A3. Persoonlijke appkaarten, typen in Toevoegen, themagroepen, directe ondersteunde werkvormen en hetzelfde rechterklik/toetsenbordmenu. [Bewijs](qa/personal/README.md).
 - [x] A4. Eén OS-navigatie; boven- en onderbalk onafhankelijk inklappen, herstelhandvatten ≥44 px, voorkeur bewaren, geen permanente vervangstrook of apart-openenknop. [Bewijs](qa/edge-bars/README.md).

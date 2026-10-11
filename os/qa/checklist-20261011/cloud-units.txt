@@ -1,0 +1,28 @@
+✔ Cloud archive permissions, account binding, immutable snapshots and permanent deletion (1988.696729ms)
+✔ Archive history is bounded while existing documents remain readable and removable (1666.78876ms)
+✔ Two isolated devices restore exact questions and key; offline additions/deletions retry and never resurrect (1577.670654ms)
+✔ Account change during online request cannot attach the document to the next account (1552.662512ms)
+✔ Archived numbered pages preserve their next question number and strip invalid starts (12.244726ms)
+✔ The seven supported native source snapshots round-trip exact questions, paired key, config and tasks (142.84687ms)
+✔ New series coexist and account, guest and pending identity boundaries reject stale ownership (11.625777ms)
+✔ A complete JSON backup preserves the saved exact series without carrying private account identity (14.123416ms)
+✔ Archive documents preserve native MathML, safe SVG and embedded page images while stripping active content (28.544112ms)
+✔ Unknown generators, missing question payload and oversized snapshots cannot silently create entries (6.594639ms)
+✔ Unavailable IndexedDB is reported instead of claiming successful local storage (7.201998ms)
+✔ Portable backup import validates version and complete payload, deduplicates and restores the exact pair after deletion (12.234026ms)
+✔ Quota failure keeps older entries and reports a failed save without false archive success (11.029567ms)
+✔ The entry cap rejects the next new series without deleting any earlier document (432.404728ms)
+✔ An initially unresolved account cannot create a guest archive before identity resolves (6.136718ms)
+✔ Changing accounts while a snapshot is being fingerprinted never attaches that document to the new owner (6.018618ms)
+✔ two generated series capture their own exact documents before asynchronous saving (7.219918ms)
+✔ a delayed snapshot cannot be archived for a replacement account (5.891449ms)
+✔ storage failure is visible while native preview and print remain usable (5.517788ms)
+✔ changed invalid settings require a successful native generation before save (14.951386ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7803.658468

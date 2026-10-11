@@ -26,9 +26,22 @@ test('Cloud archive permissions, account binding, immutable snapshots and perman
  await assert.rejects(s.call('alice','save',{ownerId:ids.alice,document:doc}),/verwijderd/);
  await assert.rejects(s.db.transaction(async tx=>{await tx.exec('set local role authenticated');await tx.query('select * from public.axioma_worksheet_archive');}),/permission denied/);
 });
+test('Archive history is bounded while existing documents remain readable and removable',async t=>{
+ const s=await server();t.after(()=>s.db.close());const doc={...input(3),version:1,id:'kept',createdAt:new Date().toISOString()};
+ await s.call('alice','save',{ownerId:ids.alice,document:doc});
+ await s.db.query("insert into public.axioma_worksheet_archive(user_id,id,deleted_at) select $1,'deleted-'||n,now() from generate_series(1,9999) n",[ids.alice]);
+ await assert.rejects(s.call('alice','delete',{ownerId:ids.alice,id:'extra'}),/archieflimiet/);
+ await assert.rejects(s.call('alice','save',{ownerId:ids.alice,document:{...doc,id:'extra'}}),/archieflimiet/);
+ assert.equal((await s.call('alice','save',{ownerId:ids.alice,document:doc})).saved,true);
+ assert.deepEqual((await s.call('alice','get',{ownerId:ids.alice,id:'kept'})).document,doc);
+ assert.equal((await s.call('alice','delete',{ownerId:ids.alice,id:'kept'})).deleted,true);
+ assert.equal((await s.call('bob','save',{ownerId:ids.bob,document:doc})).saved,true,'The limit belongs only to its account');
+});
 test('Two isolated devices restore exact questions and key; offline additions/deletions retry and never resurrect',async t=>{
  const s=await server();t.after(()=>s.db.close());const a=await device(s),b=await device(s);t.after(()=>{a.close();b.close();});
  const saved=await a.library.save(input(7));assert.equal(saved.online,true);assert.equal((await b.library.list()).length,1);
+ await s.db.query('delete from public.axioma_worksheet_archive where user_id=$1 and id=$2',[ids.alice,saved.id]);
+ await a.library.sync();assert.equal((await s.call('alice','get',{ownerId:ids.alice,id:saved.id})).document.questionsHTML,input(7).questionsHTML,'A server restore cannot leave a false online cache flag');
  const restored=await b.library.get(saved.id);assert.equal(restored.questionsHTML,input(7).questionsHTML);assert.equal(restored.keyHTML,input(7).keyHTML);assert.deepEqual(restored.data,input(7).data);
  b.offline(true);assert.equal((await b.library.get(saved.id)).questionsHTML,restored.questionsHTML,'Downloaded copy works offline');
  await b.library.remove(saved.id);const pending=await b.library.save(input(9));assert.equal(pending.online,false);assert.equal((await b.library.list()).length,1);

@@ -35,6 +35,9 @@ begin
   if p_action not in ('save','delete') then raise exception 'Onbekende archiefactie.'; end if;
   perform pg_advisory_xact_lock(hashtextextended(actor::text,261011));
   select * into old from public.axioma_worksheet_archive where user_id=actor and id=wanted for update;
+  if old.id is null and (select count(*) from public.axioma_worksheet_archive where user_id=actor)>=10000 then
+    raise exception 'Je archieflimiet is bereikt. Bestaande documenten blijven beschikbaar.';
+  end if;
   if p_action='delete' then
     insert into public.axioma_worksheet_archive(user_id,id,deleted_at) values(actor,wanted,now())
       on conflict(user_id,id) do update set document=null,deleted_at=now(),updated_at=now();

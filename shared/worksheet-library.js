@@ -127,6 +127,12 @@
     const work=(async()=>{
       try{
         const response=await remote(owner,'list');if(!Array.isArray(response.entries))throw Error('Online bewaren is nog niet beschikbaar.');
+        const remoteIds=new Set(response.entries.map(entry=>entry.id));
+        // Reconcile a restored/reset server too: a cache flag is not proof that
+        // the remote document still exists. Explicit tombstones remain decisive.
+        for(const row of await localRows(owner))if(row.synced&&!remoteIds.has((row.doc||row.meta)?.id)){
+          await transaction(owner,'readwrite',(store,done)=>{if(row.doc){row.synced=false;store.put(row);}else store.delete(row.key);done(true);});
+        }
         for(const entry of response.entries){
           if(!entry.id||(!entry.deleted&&!sources[entry.sourceId]))continue;
           await transaction(owner,'readwrite',(store,done)=>{const req=store.get(owner+'|'+entry.id);req.onsuccess=()=>{
