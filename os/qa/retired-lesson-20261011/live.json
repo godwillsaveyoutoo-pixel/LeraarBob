@@ -1,0 +1,52 @@
+{
+  "viewport": {
+    "width": 1366,
+    "height": 768,
+    "zoom": "100%",
+    "deviceScaleFactor": 1
+  },
+  "auth": "isolated fictional teacher/student accounts; production accounts not tested",
+  "backend": "existing numbers-session/rechten-class Edge handlers and lesson/hub migrations in local PostgreSQL/PGlite",
+  "boundaryFixtures": [
+    "Authentication identity and empty profile reads",
+    "Empty social presence and clay lobby sync responses; group games were not exercised"
+  ],
+  "checks": [
+    "Student cannot create classroom activities",
+    "Learn entrance is code-only at 1366/390/640 in both bar states; central OS Back and taskbar resume retain partial code and same document",
+    "Klas Learn input expanded/collapsed and restore",
+    "Learn draft minimize/resume",
+    "Full 5-question Klas Learn: wrong/correct, 45 genuine XP, teacher review/pacing, finish/report, draft/focus/reload",
+    "Klas Battle answer expanded/collapsed and restore",
+    "Battle timer minimize/resume",
+    "Full 5-question Klas Battle: central code join, real input, timer retained, graded rankings and finish",
+    "Nested Rechten Battle minimize/resume",
+    "Full 5-question Rechten Klas Battle: central code join, original choices, nested Start/focus, results and finish",
+    "Retired Rechten & arbeid lesson is absent from teacher/student OS launch and join options",
+    "OS collapse preference survives full browser reload"
+  ],
+  "calls": {
+    "axioma_class_battle_hub:overview": 51,
+    "axioma_clay_results:undefined": 47,
+    "axioma_social:sync": 21,
+    "axioma_clay_os:sync": 33,
+    "numbers-session:summary": 16,
+    "numbers-session:create": 2,
+    "numbers-session:join": 3,
+    "numbers-session:start": 2,
+    "numbers-session:pulse": 4,
+    "numbers-session:state": 26,
+    "numbers-session:submit": 11,
+    "numbers-session:end": 5,
+    "numbers-session:next": 10,
+    "rechten-class:create": 1,
+    "axioma_class_battle_hub:code": 1,
+    "rechten-class:join": 1,
+    "rechten-class:state": 12,
+    "rechten-class:start": 1,
+    "rechten-class:submit": 5,
+    "rechten-class:next": 5
+  },
+  "errors": [],
+  "missing": []
+}

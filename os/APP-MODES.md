@@ -28,7 +28,6 @@ Stelsels betekent uitsluitend `games/stelsels.html`: de oorspronkelijke trainer 
 | Data Check | Solo | — | — |
 | Signal Lab | Solo | — | — |
 | Glasraam | Solo | — | — |
-| Rechten & arbeid | Solo | Live les | — |
 | Vectoratelier | Solo | — | — |
 
 Leerlingen sluiten bij ondersteunde klasproviders aan via de centrale deelname-ingang. Een leerling krijgt daardoor geen bevoegdheid om een klasactiviteit te maken.
@@ -41,3 +40,7 @@ Leerlingen sluiten bij ondersteunde klasproviders aan via de centrale deelname-i
 - Logicawereld: online Duo Battle en Klasbattle lokaal volledig aangesloten, met eigen serverbeoordeling en de bestaande uitnodigings-/klasbediening. Samen leren is op verzoek uit de keuzes gehaald. Productie-uitrol en echte accounts blijven open. [Bewijs](qa/logica-battles-20261011/README.md).
 - Getallen, Rechten, Zeeslag en Kleiduif gebruiken nog verschillende uitnodigingsafspraken. De gemeenschappelijke race- en bezetheidsafhandeling blijft open.
 - Voor solo-apps eerst bepalen of samen leren inhoudelijk zinvol is. Voeg geen knoppen toe voordat de provider en volledige deelnameflow bestaan.
+
+Rechten & arbeid is op verzoek uit het actieve OS-aanbod verwijderd. Bestaande zelfstandige lesadressen en opgeslagen sessies blijven behouden; het OS biedt geen nieuwe start- of deelnamelink naar deze les meer.
+
+De samengestelde taakbouwer ondersteunt momenteel uitsluitend Glasraam, Kleiduifschieten en Rechtenwereld. Andere beschikbare apps zijn nog geen taakonderdelen: daarvoor zijn eigen configuratie, oefenselectie, hervatbare inzendingen en serverbeoordeling nodig. Een reeds aanwezige duo- of klasbattleprovider maakt een app niet automatisch geschikt voor een individuele toets.

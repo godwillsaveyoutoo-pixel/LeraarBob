@@ -183,7 +183,6 @@
     $('windowCount').textContent='Kies je app en start rechtstreeks';
     const actions=el('div','live-shortcuts');
     if(role()!=='teacher')actions.append(button('Deelnemen met klascode','primary',()=>window.LeraarBobPersonalHome.openClassCode()));
-    if(role()!=='teacher')actions.append(button('Live les','',()=>openUtility('lesson-join','Deelnemen aan een live les','lessons/rechten-arbeid/join.html','people')));
     actions.append(button('Uitnodigingen','',()=>window.LeraarBobPersonalHome.openInbox()),button('Ranglijsten','',()=>window.LeraarBobPersonalHome.openRankings()));
     $('viewContent').append(actions);
     if(!account)$('viewContent').append(el('p','section-note','Meld je aan om samen te spelen of een uitnodiging te ontvangen.'));
@@ -755,7 +754,6 @@
     const link=e.composedPath().find(n=>n?.matches?.('a[data-platform-home],a.teacher-link,a.live-entry'));if(!link)return;
     e.preventDefault();
     if(link.matches('.teacher-link'))openUtility('teacher','Mijn klassen','teacher/','class',true);
-    else if(link.matches('.live-entry')){if(role()==='teacher')openApp('rechten-arbeid-les','live');else openUtility('lesson-join','Deelnemen aan een live les','lessons/rechten-arbeid/join.html','people');}
     else showView({kind:'desktop'});
   },true);
   document.addEventListener('keydown',desktopShortcut);

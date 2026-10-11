@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-11",
+  "removedFromActiveOS": "rechten-arbeid-les",
+  "remainingApps": 23,
+  "taskKindsAvailable": [
+    "glass",
+    "clay",
+    "rights"
+  ],
+  "otherTaskAdaptersImplemented": false,
+  "preserved": "Standalone historical lesson URLs, stored sessions, account/progress data; no database changes",
+  "browserReports": {
+    "personal": {
+      "checks": 9,
+      "errors": [],
+      "missing": []
+    },
+    "pilots": {
+      "checks": 32,
+      "errors": [],
+      "missing": []
+    },
+    "live": {
+      "checks": 12,
+      "errors": [],
+      "missing": []
+    }
+  }
+}

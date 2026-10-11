@@ -22,7 +22,6 @@
   };
   const extra=[
     {id:'glasraam',title:'Glasraam',subtitle:'Ontwerp je eigen glasraam met rechten en kleur.',kind:'atelier',desktopTheme:'rechten',href:'games/rechten/rechtenwereld/glasatelier.html',cover:'os/assets/glasraam.svg',progressType:'none',capabilities:{modes:[{id:'solo',participation:'solo',purpose:'learn',roles:['guest','student','teacher'],href:'games/rechten/rechtenwereld/glasatelier.html'}],worksheets:[]}},
-    {id:'rechten-arbeid-les',title:'Rechten & arbeid',subtitle:'Onderzoek helling en betekenis in een interactieve les.',kind:'learn',desktopTheme:'rechten',href:'lessons/rechten-arbeid/',cover:'assets/covers/graph.svg',progressType:'none',capabilities:{modes:[{id:'solo',title:'Les bekijken',participation:'solo',purpose:'learn',roles:['guest','student','teacher'],href:'lessons/rechten-arbeid/'},{id:'live',title:'Live les geven',participation:'class',purpose:'learn',roles:['teacher'],href:'lessons/rechten-arbeid/index.html#lessessie'}],worksheets:[]}},
     {id:'vectoren-canvas',title:'Vectoratelier',subtitle:'Een vrij werkblad voor vectoren en constructies.',kind:'atelier',desktopTheme:'vectoren',href:'games/vectoren/canvas.html',cover:'assets/covers/vectoren.svg',progressType:'none',capabilities:{modes:[{id:'solo',participation:'solo',purpose:'learn',roles:['guest','student','teacher'],href:'games/vectoren/canvas.html'}],worksheets:[]}}
   ];
   const normalize=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
