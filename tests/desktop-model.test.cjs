@@ -3,11 +3,11 @@ const {test}=require('node:test'),assert=require('node:assert/strict'),fs=requir
 const catalog=require('../games.json'),createRegistry=require('../shared/game-registry.js'),createDesktop=require('../os/desktop-model.js');
 const registry=createRegistry(catalog,{baseURL:'https://school.example/LeraarBob/'}),M=createDesktop(registry),root=path.resolve(__dirname,'..');
 test('Every public build has a theme and its own work form; historical identities stay intact',()=>{
-  assert.equal(M.apps().length,24);assert.equal(M.themes.length,8);
+  assert.equal(M.apps().length,23);assert.equal(M.themes.length,8);
   for(const g of M.apps()){assert(M.theme(g.desktopTheme),g.id);assert(M.types[g.type],g.id);}
   assert.equal(M.app('pythagoras').type,'learn');assert.equal(M.app('rechtenwereld').type,'train');assert.equal(M.app('rechten-zeeslag').type,'game');assert.equal(M.app('glasraam').type,'atelier');
   assert.equal(M.app('rechtenwereld').progressId,'rechten-trainer');assert.equal(M.app('getallenwereld').progressId,'getallenwereld');
-  assert.equal(M.app('bewerkingen-trainer'),null);assert(M.find({themeId:'rechten',type:'learn'}).length>=2);
+  assert.equal(M.app('bewerkingen-trainer'),null);assert(M.find({themeId:'rechten',type:'learn'}).length>=1);
 });
 test('All app, mode, worksheet and artwork routes exist, including project subdirectory deployment',()=>{
   for(const g of M.apps())for(const href of [g.href,g.cover,...M.modes(g.id,'teacher').map(m=>m.href),...M.worksheets(g.id).map(s=>s.href)]){
@@ -58,6 +58,17 @@ test('Retired trainer leaves discovery while historical progress and bookmarks r
  assert(M.app('rechten-trainer'),'Historical routes remain readable');
  assert.equal(M.app('rechtenwereld').progressId,'rechten-trainer');
  assert.deepEqual(M.sanitize({pins:['rechten-trainer','rechtenwereld','stelsels']}).pins,['rechtenwereld','stelsels']);
+});
+
+test('Removed lesson cannot return through discovery, old pins or saved desktop shortcuts',()=>{
+ const retired='rechten-arbeid-les',saved={id:retired,mode:'solo',href:'lessons/rechten-arbeid/'};
+ assert.equal(M.app(retired),null);
+ assert.equal(M.find({query:'Rechten arbeid'}).length,0);
+ for(const role of ['guest','student','teacher'])for(const mode of ['solo','live'])assert.equal(M.destination(retired,mode,{role}),null);
+ const prefs=M.sanitize({pins:[retired,'rechtenwereld'],recent:[saved,{id:'pythagoras',mode:'solo'}],saved:[saved,{id:'glasraam',mode:'solo',href:'games/rechten/rechtenwereld/glasatelier.html'}]});
+ assert.deepEqual(prefs.pins,['rechtenwereld']);
+ assert.deepEqual(prefs.recent.map(x=>x.id),['pythagoras']);
+ assert.deepEqual(prefs.saved.map(x=>x.id),['glasraam']);
 });
 
 test('Stelsels is exclusively the original trainer; Vergelijkingen offers no second systems world',()=>{

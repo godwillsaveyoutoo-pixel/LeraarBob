@@ -2,9 +2,9 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {JSDOM,VirtualConsole}=require('jsdom');
 const root=path.resolve(__dirname,'..'),tick=()=>new Promise(resolve=>setImmediate(resolve));
-async function setup({home,page='game'}={}){
+async function setup({home,page='game',url='https://school.example/LeraarBob/games/example.html'}={}){
   const errors=[],vc=new VirtualConsole();vc.on('jsdomError',error=>errors.push(error));
-  const dom=new JSDOM('<!doctype html><html><head></head><body><header><button id="answerAction">Controleren</button></header><input id="answer"></body></html>',{url:'https://school.example/LeraarBob/games/example.html',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:vc});
+  const dom=new JSDOM('<!doctype html><html><head></head><body><header><button id="answerAction">Controleren</button></header><input id="answer"></body></html>',{url,runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:vc});
   const w=dom.window,observers=[],NativeObserver=w.MutationObserver;
   w.MutationObserver=class extends NativeObserver{constructor(callback){super(callback);observers.push(this);}};
   w.ResizeObserver=class{observe(){}disconnect(){}};
@@ -30,8 +30,8 @@ test('Desktop home is optional and remains inside the platform origin and path',
   }
 });
 
-test('Standalone live lesson roles and membership keep their existing behavior',async t=>{
-  const f=await setup();t.after(()=>f.close());
+test('Archived direct lesson URLs retain roles and membership',async t=>{
+  const f=await setup({url:'https://school.example/LeraarBob/lessons/rechten-arbeid/'});t.after(()=>f.close());
   const live=f.shadow.querySelector('.live-entry'),teacher=f.shadow.querySelector('.teacher-link');
   assert.equal(live.hidden,true);
   const login=account=>f.w.dispatchEvent(new f.w.CustomEvent('axioma:login-complete',{detail:{account}}));
@@ -58,8 +58,9 @@ test('Compact desktop title identifies the app even when native breadcrumbs show
   assert.equal(f.errors.length,0);
 });
 
-test('OS has no redundant Live link after teacher/student login or lesson membership changes',async t=>{
-  const f=await setup({home:'os/',page:'desktop'});t.after(()=>f.close());
+test('OS and active games do not promote the retired lesson after login or membership changes',async t=>{
+  for(const options of [{home:'os/',page:'desktop'},{}]){
+  const f=await setup(options);t.after(()=>f.close());
   for(const role of ['teacher','student']){
     const account={id:'test-'+role,role,alias:role};
     f.w.dispatchEvent(new f.w.CustomEvent('axioma:login-complete',{detail:{account}}));
@@ -69,4 +70,5 @@ test('OS has no redundant Live link after teacher/student login or lesson member
     assert.equal(f.shadow.querySelector('.teacher-link').hidden,role!=='teacher');
   }
   assert.equal(f.errors.length,0);
+  }
 });
