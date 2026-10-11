@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "Original native equation series automatically archived online and locally",
+    "A clean second browser restores identical questions, key, seed and task data through the OS folder",
+    "Downloaded document remains readable offline; offline deletion is visibly pending",
+    "Retry propagates removal to both devices; no deleted copy is resurrected",
+    "Switching account exposes no previous account documents"
+  ],
+  "errors": [],
+  "scope": "Two isolated Chromium contexts; real local SQL archive and original worksheet generator; synthetic identities, no production writes.",
+  "passed": true
+}

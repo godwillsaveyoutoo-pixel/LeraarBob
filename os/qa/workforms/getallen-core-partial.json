@@ -1,0 +1,547 @@
+{
+  "scope": "Real Chromium UI, 100% zoom and scale 1; fictitious accounts, in-memory progress and local lobby response fixtures. No production authentication, cloud writes or external multiplayer.",
+  "checks": [
+    {
+      "name": "OS Start / Escape restores exact native answer focus",
+      "passed": true
+    },
+    {
+      "name": "OS central account opens/closes without resetting native input",
+      "passed": true
+    },
+    {
+      "name": "OS save keeps actual selected lesson URL and descriptive title",
+      "passed": true
+    },
+    {
+      "name": "OS #appBack keeps same iframe, input, mission, focus and return place",
+      "passed": true
+    },
+    {
+      "name": "OS #minimizeApp keeps same iframe, input, mission, focus and return place",
+      "passed": true
+    },
+    {
+      "name": "OS pinned resume keeps original filtered theme return",
+      "passed": true
+    },
+    {
+      "name": "OS native chapter breadcrumb and resume preserve current mission and focus",
+      "passed": true
+    },
+    {
+      "name": "OS display updates native palette, preserves input/DOM and reload preference",
+      "passed": true
+    },
+    {
+      "name": "OS collapsed preference and native input survive full desktop reload",
+      "passed": true
+    },
+    {
+      "name": "retention completed question actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Solved pending Next resumes unchanged from native chapter",
+      "passed": true
+    },
+    {
+      "name": "OS machten free original 8 chapter routes",
+      "passed": true
+    },
+    {
+      "name": "OS wortels free original 7 chapter routes",
+      "passed": true
+    },
+    {
+      "name": "OS wetenschappelijk free original 4 chapter routes",
+      "passed": true
+    },
+    {
+      "name": "OS machten-betekenis actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS machten-quotient actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS machten-macht actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS machten-factoren actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS machten-haakjes actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS machten-negatief actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS machten-mix actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS wortels-factor actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS wortels-product actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS wortels-quotient actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS wortels-macht actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS wortels-vereenvoudigen actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS wortels-som actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS wortels-regels actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS wetenschappelijk-groot actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS wetenschappelijk-klein actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS wetenschappelijk-terug actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS wetenschappelijk-normaliseren actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS help exact distinct help example, help step, menu/reload and original input",
+      "passed": true
+    },
+    {
+      "name": "OS product basis question 2 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS product basis question 3 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS product basis question 4 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS product basis question 5 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS product basis question 6 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS product basis complete six original questions and result",
+      "passed": true
+    },
+    {
+      "name": "OS roots question 2 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS roots question 3 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS roots question 4 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS roots question 5 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS roots question 6 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "OS roots complete six original questions and result",
+      "passed": true
+    },
+    {
+      "name": "OS actual 2/19 guided completions with own unchanged storage and no invented XP",
+      "passed": true
+    },
+    {
+      "name": "Standalone machten free original 8 chapter routes",
+      "passed": true
+    },
+    {
+      "name": "Standalone wortels free original 7 chapter routes",
+      "passed": true
+    },
+    {
+      "name": "Standalone wetenschappelijk free original 4 chapter routes",
+      "passed": true
+    },
+    {
+      "name": "Standalone machten-betekenis actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone machten-product actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone machten-quotient actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone machten-macht actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone machten-factoren actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone machten-haakjes actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone machten-negatief actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone machten-mix actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone wortels-factor actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone wortels-product actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone wortels-quotient actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone wortels-macht actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone wortels-vereenvoudigen actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone wortels-som actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone wortels-regels actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone wetenschappelijk-groot actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone wetenschappelijk-klein actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone wetenschappelijk-terug actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone wetenschappelijk-normaliseren actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "standalone help exact distinct help example, help step, menu/reload and original input",
+      "passed": true
+    },
+    {
+      "name": "Standalone product basis question 2 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone product basis question 3 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone product basis question 4 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone product basis question 5 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone product basis question 6 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone product basis complete six original questions and result",
+      "passed": true
+    },
+    {
+      "name": "Standalone roots question 2 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone roots question 3 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone roots question 4 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone roots question 5 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone roots question 6 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Standalone roots complete six original questions and result",
+      "passed": true
+    },
+    {
+      "name": "Standalone actual 2/19 guided completions with own unchanged storage and no invented XP",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS machten-betekenis actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS machten-product actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS machten-quotient actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS machten-macht actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS machten-factoren actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS machten-haakjes actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS machten-negatief actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS machten-mix actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS wortels-factor actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS wortels-product actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS wortels-quotient actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS wortels-macht actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS wortels-vereenvoudigen actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS wortels-som actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS wortels-regels actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS wetenschappelijk-groot actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS wetenschappelijk-klein actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS wetenschappelijk-terug actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 390 OS wetenschappelijk-normaliseren actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "All nineteen native answers actually clicked at 390×844 with 44px targets, hit testing and legitimate internal scrolling",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS machten-betekenis actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS machten-product actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS machten-quotient actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS machten-macht actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS machten-factoren actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS machten-haakjes actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS machten-negatief actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS machten-mix actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS wortels-factor actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS wortels-product actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS wortels-quotient actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS wortels-macht actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS wortels-vereenvoudigen actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS wortels-som actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS wortels-regels actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS wetenschappelijk-groot actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS wetenschappelijk-klein actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS wetenschappelijk-terug actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual 844 OS wetenschappelijk-normaliseren actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "All nineteen native answers actually clicked at 844×390 with 44px targets, hit testing and legitimate internal scrolling",
+      "passed": true
+    },
+    {
+      "name": "Historical edition 1 exact preserved question actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Historical edition 1 seed/index/answer/help/attempts and original edition transition",
+      "passed": true
+    },
+    {
+      "name": "Historical edition 2 exact preserved question actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Historical edition 2 seed/index/answer/help/attempts and original edition transition",
+      "passed": true
+    },
+    {
+      "name": "Historical last pending question actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Advanced product question 1 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Advanced product question 2 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Advanced product question 3 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Advanced product question 4 actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Advanced negative product question actual rule, every answer part and original Check",
+      "passed": true
+    },
+    {
+      "name": "Actual verdieping retains original negative product variants",
+      "passed": true
+    }
+  ],
+  "measuredTargets": 1076,
+  "failedTargets": 0,
+  "errors": [],
+  "missing": [],
+  "originalFailure": {
+    "phase": "provider modes in OS",
+    "message": "frame.waitForFunction: Timeout 30000ms exceeded.",
+    "stack": "frame.waitForFunction: Timeout 30000ms exceeded.\n    at providerHome (/tmp/leraarbob-os-personal/tests/getallen-os-browser.cjs:112:14)\n    at async providers (/tmp/leraarbob-os-personal/tests/getallen-os-browser.cjs:115:252)\n    at async main (/tmp/leraarbob-os-personal/tests/getallen-os-browser.cjs:136:468)"
+  },
+  "resolution": "Old providerHome expected the removed native mode overview. Replaced with central OS workform selection and re-run separately: getallen-providers.json (13 groups). The 133 unchanged exercise groups were not repeated after this test-only correction."
+}

@@ -27,15 +27,16 @@
   ];
   const normalize=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
   const base=registry.baseURL;
-  function apps(){return [...registry.list(),...extra].map(g=>({...g,type:types[g.kind]?g.kind:'game',desktopTheme:g.desktopTheme||membership[g.id]||'logica',legacy:['rechten-trainer','functies-rechten'].includes(g.id)}));}
-  function app(id){return apps().find(g=>g.id===id)||null;}
+  function allApps(){return [...registry.list(),...extra].map(g=>({...g,type:types[g.kind]?g.kind:'game',desktopTheme:g.desktopTheme||membership[g.id]||'logica',legacy:['rechten-trainer','functies-rechten'].includes(g.id)}));}
+  function apps(){return allApps().filter(g=>g.id!=='rechten-trainer');}
+  function app(id){return allApps().find(g=>g.id===id)||null;}
   function theme(id){return themes.find(t=>t.id===id)||null;}
   function safeURL(href){try{const u=new URL(href,base);const b=new URL(base);return u.origin===b.origin&&u.pathname.startsWith(b.pathname)&&!u.username&&!u.password&&['https:','http:','file:'].includes(u.protocol)?u.href:null;}catch{return null;}}
   function modes(id,role='guest',topicId){
     const g=app(id);if(!g)return [];
     const entries=extra.some(e=>e.id===id)?g.capabilities.modes.filter(e=>e.roles.includes(role)):registry.modes(id,{role,topicId});
     // Participation in a class is not permission to host one.
-    return entries.filter(e=>!['classroom','classlearn','teacher','live'].includes(e.id)||role==='teacher');
+    return entries.filter(e=>(!['classroom','classlearn','teacher','live'].includes(e.id)||role==='teacher')&&!(id==='rechtenwereld'&&e.id==='learn'&&role==='teacher'));
   }
   function modeLabel(m){
     if(m.title)return m.title;
@@ -45,7 +46,9 @@
   function destination(id,mode='solo',{role='guest',topicId,returnTo}={}){
     const g=app(id),m=modes(id,role,topicId).find(e=>e.id===mode);if(!m)return null;
     if(registry.game(id)){
-      const destination=registry.destination(id,mode,{topicId,returnTo,hub:mode==='classroom'});
+      const destination=registry.destination(id,mode,{topicId,returnTo,hub:false});
+      if(mode==='classroom'&&destination){const url=new URL(id==='getallenwereld'?'games/bewerkingen-trainer/start.html':destination,base);if(id==='getallenwereld'){url.search=new URL(destination).search;url.searchParams.set('view','battle');url.searchParams.set('audience','class');}url.searchParams.set('hub','1');url.searchParams.set('classFlow','1');url.searchParams.set('osEntry','1');url.searchParams.set('create','1');return url.href;}
+      if(id==='getallenwereld'&&mode==='series'&&destination){const url=new URL('games/bewerkingen-trainer/',base);url.search=new URL(destination).search;url.searchParams.set('mode','solo');url.searchParams.set('screen','setup');return url.href;}
       if(id==='rechten-zeeslag'&&mode==='solo'&&destination){const url=new URL(destination);url.searchParams.set('solo','1');return url.href;}
       return destination;
     }
@@ -69,11 +72,11 @@
     const words=normalize(query).split(/\s+/).filter(Boolean);
     return apps().filter(g=>(!themeId||g.desktopTheme===themeId)&&(type==='all'||g.type===type)&&words.every(w=>normalize([g.title,g.subtitle,g.theme,theme(g.desktopTheme)?.title,types[g.type].label].join(' ')).includes(w)));
   }
-  const defaults={pins:['rechtenwereld','pythagoras','rechten-zeeslag','glasraam'],recent:[],saved:[],wallpaper:'coast',reducedMotion:false};
+  const defaults={pins:['rechtenwereld'],recent:[],saved:[],wallpaper:'coast',reducedMotion:false,bottomCollapsed:false};
   const key=account=>'leraarbob-desktop:v1:'+encodeURIComponent(account?.id||'guest');
   function sanitize(value){
     const v=value&&typeof value==='object'?value:{};
-    return {pins:Array.isArray(v.pins)?[...new Set(v.pins)].filter(id=>app(id)).slice(0,12):defaults.pins.slice(),recent:Array.isArray(v.recent)?v.recent.filter(r=>app(r?.id)&&typeof r.mode==='string').slice(0,10):[],saved:Array.isArray(v.saved)?v.saved.filter(r=>app(r?.id)&&safeURL(r.href)).slice(0,50):[],wallpaper:['coast','quiet'].includes(v.wallpaper)?v.wallpaper:'coast',reducedMotion:v.reducedMotion===true};
+    return {pins:Array.isArray(v.pins)?[...new Set(v.pins.map(id=>id==='rechten-trainer'?'rechtenwereld':id))].filter(id=>app(id)).slice(0,12):defaults.pins.slice(),recent:Array.isArray(v.recent)?v.recent.filter(r=>app(r?.id)&&typeof r.mode==='string').slice(0,10):[],saved:Array.isArray(v.saved)?v.saved.filter(r=>app(r?.id)&&safeURL(r.href)).slice(0,50):[],wallpaper:['coast','quiet'].includes(v.wallpaper)?v.wallpaper:'coast',reducedMotion:v.reducedMotion===true,bottomCollapsed:typeof v.bottomCollapsed==='boolean'?v.bottomCollapsed:v.focusMode===true};
   }
   function read(storage,account){try{return sanitize(JSON.parse(storage.getItem(key(account))||'null'));}catch{return sanitize(null);}}
   function write(storage,account,prefs){const clean=sanitize(prefs);storage.setItem(key(account),JSON.stringify(clean));return clean;}

@@ -106,34 +106,34 @@ window.AXIOMA_CATALOG = [
         {
           "id": "hellingrug",
           "title": "Hellingrug",
-          "href": "games/rechten/rechtenwereld/worksheets.html?world=hellingrug",
+          "href": "oefenbladen/maken.html?source=rechtenwereld:hellingrug&topic=hellingrug",
           "providerId": "rechtenwereld",
           "topicId": "hellingrug",
-          "description": "Verschillen, richtingscoëfficiënt en bijzondere rechten."
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         },
         {
           "id": "grenspas",
           "title": "Grenspas",
-          "href": "games/rechten/rechtenwereld/worksheets.html?world=grenspas",
+          "href": "oefenbladen/maken.html?source=rechtenwereld:grenspas&topic=grenspas",
           "providerId": "rechtenwereld",
           "topicId": "grenspas",
-          "description": "Nulwaarden, tekenschema’s en positieve of negatieve gebieden."
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         },
         {
           "id": "formulewerf",
           "title": "Formulewerf",
-          "href": "games/rechten/rechtenwereld/worksheets.html?world=formulewerf",
+          "href": "oefenbladen/maken.html?source=rechtenwereld:formulewerf&topic=formulewerf",
           "providerId": "rechtenwereld",
           "topicId": "formulewerf",
-          "description": "Rechten tekenen, vergelijkingen herschrijven en voorschriften bepalen."
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         },
         {
           "id": "signaalstad",
           "title": "Signaalstad",
-          "href": "games/rechten/rechtenwereld/worksheets.html?world=signaalstad",
+          "href": "oefenbladen/maken.html?source=rechtenwereld:signaalstad&topic=signaalstad",
           "providerId": "rechtenwereld",
           "topicId": "signaalstad",
-          "description": "Punten aflezen uit een tabel en de bijbehorende rechte tekenen."
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         }
       ]
     },
@@ -364,8 +364,20 @@ window.AXIOMA_CATALOG = [
             "student",
             "teacher"
           ],
-          "href": "games/rechten/kleiduiven/",
+          "href": "games/rechten/kleiduiven/?mode=solo",
           "providerId": "kleiduifschieten"
+        },
+        {
+          "id": "online",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "student"
+          ],
+          "href": "games/rechten/kleiduiven/?mode=online",
+          "providerId": "kleiduifschieten",
+          "title": "Duo Battle",
+          "description": "Nodig één klasgenoot uit; ieder speelt op een eigen toestel."
         },
         {
           "id": "group",
@@ -375,10 +387,22 @@ window.AXIOMA_CATALOG = [
             "student",
             "teacher"
           ],
-          "href": "games/rechten/kleiduiven/",
+          "href": "games/rechten/kleiduiven/?mode=group",
           "providerId": "kleiduifschieten",
-          "title": "Groepssessie Kleiduifschieten",
-          "description": "Open de groepssessie vanuit het spelmenu. Deze sessie gebruikt de eigen Kleiduifschieten-regels."
+          "title": "Groepsbattle",
+          "description": "Nodig meerdere klasgenoten uit of open een groep voor je klas."
+        },
+        {
+          "id": "classroom",
+          "participation": "group",
+          "purpose": "battle",
+          "roles": [
+            "teacher"
+          ],
+          "href": "games/rechten/kleiduiven/?mode=classroom",
+          "providerId": "kleiduifschieten",
+          "title": "Klasbattle",
+          "description": "Kies je klas, start samen en volg de resultaten."
         }
       ],
       "worksheets": []
@@ -851,8 +875,24 @@ window.AXIOMA_CATALOG = [
           "providerId": "stelsels"
         }
       ],
-      "worksheets": []
-    }
+      "worksheets": [
+        {
+          "id": "systems",
+          "title": "Stelsels",
+          "href": "oefenbladen/maken.html?source=algebra-trainer:systems&topic=systems",
+          "providerId": "algebra-trainer",
+          "topicId": "systems",
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
+        }
+      ]
+    },
+    "topics": [
+      {
+        "id": "systems",
+        "title": "Stelsels",
+        "href": "games/stelsels.html?v=20260920-2"
+      }
+    ]
   },
   {
     "title": "Algebra Smederij",
@@ -1160,7 +1200,7 @@ window.AXIOMA_CATALOG = [
   },
   {
     "id": "algebra-trainer",
-    "title": "Algebrawereld",
+    "title": "Vergelijkingen",
     "subtitle": "Los vergelijkingen op, bouw tussenstappen en test je oplossingen.",
     "href": "games/algebra-trainer/",
     "category": "Vergelijkingen",
@@ -1170,8 +1210,8 @@ window.AXIOMA_CATALOG = [
     "art": "algebra",
     "cover": "assets/covers/modern/algebra-trainer.webp",
     "coverSmall": "assets/covers/modern/algebra-trainer-small.webp",
-    "detail": "7 vergelijkingenlevels · 6 stelsellevels · oefenbladen en XP",
-    "subject": "Algebra · machten · stelsels",
+    "detail": "7 vergelijkingenlevels · beginner en expert · oefenbladen en XP",
+    "subject": "Algebra · vergelijkingen",
     "presentation": "algebra",
     "featured": true,
     "featureOrder": 5,
@@ -1214,8 +1254,7 @@ window.AXIOMA_CATALOG = [
           "providerId": "algebra",
           "classFunction": "algebra-class",
           "topics": [
-            "equations",
-            "systems"
+            "equations"
           ],
           "topicParam": "world",
           "rpc": "axioma_game_class"
@@ -1225,18 +1264,10 @@ window.AXIOMA_CATALOG = [
         {
           "id": "equations",
           "title": "Vergelijkingen",
-          "href": "games/algebra-trainer/?world=equations&screen=menu",
+          "href": "oefenbladen/maken.html?source=algebra-trainer:equations&topic=equations",
           "providerId": "algebra-trainer",
           "topicId": "equations",
-          "description": "Kies een level en maak het bijbehorende oefenblad met verbetersleutel."
-        },
-        {
-          "id": "systems",
-          "title": "Stelsels",
-          "href": "games/algebra-trainer/stelsels.html?world=systems&screen=menu",
-          "providerId": "algebra-trainer",
-          "topicId": "systems",
-          "description": "Kies een level en maak het bijbehorende oefenblad met verbetersleutel."
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         }
       ]
     },
@@ -1256,19 +1287,6 @@ window.AXIOMA_CATALOG = [
           "route-brackets",
           "route-fractions",
           "route-check"
-        ]
-      },
-      {
-        "id": "systems",
-        "title": "Stelsels",
-        "href": "games/algebra-trainer/stelsels.html?world=systems&screen=menu",
-        "levelIds": [
-          "sys-graphic",
-          "sys-substitution",
-          "sys-combination",
-          "sys-unique",
-          "sys-none",
-          "sys-infinite"
         ]
       }
     ],
@@ -1473,15 +1491,15 @@ window.AXIOMA_CATALOG = [
         {
           "id": "operations",
           "title": "Machten, schrijfwijze en wortels",
-          "href": "games/bewerkingen-trainer/?intent=worksheet&screen=setup",
+          "href": "oefenbladen/maken.html?source=bewerkingen-trainer:operations",
           "providerId": "bewerkingen-trainer",
-          "description": "Kies opgaven en print met een verbetersleutel.",
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap.",
           "topics": [
             "machten",
             "wetenschappelijk",
             "wortels"
           ],
-          "topicParam": "world"
+          "topicParam": "topic"
         }
       ]
     },
@@ -1636,9 +1654,9 @@ window.AXIOMA_CATALOG = [
         {
           "id": "operations",
           "title": "Machten, schrijfwijze en wortels",
-          "href": "games/bewerkingen-trainer/?intent=worksheet&screen=setup",
+          "href": "oefenbladen/maken.html?source=bewerkingen-trainer:operations",
           "providerId": "bewerkingen-trainer",
-          "description": "Kies opgaven en print met een verbetersleutel."
+          "description": "Stel een reeks samen en bewaar de opgaven met verbetersleutel in je onderwerpmap."
         }
       ]
     },
@@ -1703,5 +1721,385 @@ window.AXIOMA_CATALOG = [
     ],
     "parentId": "getallenwereld",
     "componentTitle": "Reeksen"
+  },
+  {
+    "id": "logicawereld",
+    "title": "Logicawereld",
+    "subtitle": "Propositielogica: uitspraken, connectieven en geldige redeneringen.",
+    "href": "games/logicawereld/",
+    "category": "Propositielogica",
+    "kind": "train",
+    "theme": "Logica",
+    "desktopTheme": "logica",
+    "art": "logicawereld",
+    "cover": "games/logicawereld/assets/regelstad-small.webp",
+    "coverSmall": "games/logicawereld/assets/regelstad-small.webp",
+    "detail": "18 haltes · propositielogica · solo, duo- en klasbattle",
+    "subject": "Logica",
+    "active": true,
+    "featured": false,
+    "featureOrder": 12,
+    "teacherVisible": true,
+    "gameType": "train",
+    "tracking": "none",
+    "progressType": "levels",
+    "progressTotal": 18,
+    "progressUnitSingular": "halte",
+    "progressUnitPlural": "haltes",
+    "progressId": "logicawereld",
+    "route": {
+      "entry": "games/logicawereld/",
+      "prefix": "games/logicawereld/"
+    },
+    "capabilities": {
+      "modes": [
+        {
+          "id": "solo",
+          "title": "Solo oefenen",
+          "participation": "solo",
+          "purpose": "learn",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/logicawereld/?mode=solo",
+          "providerId": "logicawereld",
+          "topicParam": "stop",
+          "devices": "Op je eigen tempo"
+        },
+        {
+          "id": "solo-battle",
+          "title": "Solo Battle",
+          "participation": "solo",
+          "purpose": "battle",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/logicawereld/?mode=solo-battle",
+          "providerId": "logicawereld",
+          "topicParam": "stop",
+          "devices": "Op je eigen tempo"
+        },
+        {
+          "id": "local",
+          "title": "Duo Battle · één toestel",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "guest",
+            "student",
+            "teacher"
+          ],
+          "href": "games/logicawereld/?mode=local",
+          "providerId": "logicawereld",
+          "topicParam": "stop",
+          "devices": "Eén toestel"
+        },
+        {
+          "id": "online",
+          "title": "Duo Battle · elk een toestel",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "student"
+          ],
+          "href": "games/logicawereld/duo.html",
+          "providerId": "logica-duo",
+          "devices": "Elk een toestel"
+        },
+        {
+          "id": "classroom",
+          "title": "Klasbattle",
+          "participation": "group",
+          "purpose": "battle",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "href": "games/logicawereld/classroom.html",
+          "providerId": "logicawereld",
+          "devices": "Elk een toestel"
+        }
+      ],
+      "worksheets": [
+        {
+          "id": "gebied-1",
+          "title": "Uitspraken en negatie",
+          "href": "oefenbladen/maken.html?source=logicawereld:gebied-1&topic=gebied-1",
+          "providerId": "logicawereld",
+          "topicId": "gebied-1",
+          "description": "Kies haltes, maak een reeks en bewaar opgaven met verbetersleutel."
+        },
+        {
+          "id": "gebied-2",
+          "title": "Logische connectieven",
+          "href": "oefenbladen/maken.html?source=logicawereld:gebied-2&topic=gebied-2",
+          "providerId": "logicawereld",
+          "topicId": "gebied-2",
+          "description": "Kies haltes, maak een reeks en bewaar opgaven met verbetersleutel."
+        },
+        {
+          "id": "gebied-3",
+          "title": "Waarheidstabellen",
+          "href": "oefenbladen/maken.html?source=logicawereld:gebied-3&topic=gebied-3",
+          "providerId": "logicawereld",
+          "topicId": "gebied-3",
+          "description": "Kies haltes, maak een reeks en bewaar opgaven met verbetersleutel."
+        },
+        {
+          "id": "gebied-4",
+          "title": "Logische wetten en equivalenties",
+          "href": "oefenbladen/maken.html?source=logicawereld:gebied-4&topic=gebied-4",
+          "providerId": "logicawereld",
+          "topicId": "gebied-4",
+          "description": "Kies haltes, maak een reeks en bewaar opgaven met verbetersleutel."
+        },
+        {
+          "id": "gebied-5",
+          "title": "Implicatie en voorwaarden",
+          "href": "oefenbladen/maken.html?source=logicawereld:gebied-5&topic=gebied-5",
+          "providerId": "logicawereld",
+          "topicId": "gebied-5",
+          "description": "Kies haltes, maak een reeks en bewaar opgaven met verbetersleutel."
+        },
+        {
+          "id": "gebied-6",
+          "title": "Geldige redeneringen",
+          "href": "oefenbladen/maken.html?source=logicawereld:gebied-6&topic=gebied-6",
+          "providerId": "logicawereld",
+          "topicId": "gebied-6",
+          "description": "Kies haltes, maak een reeks en bewaar opgaven met verbetersleutel."
+        }
+      ]
+    },
+    "topics": [
+      {
+        "id": "halte-1",
+        "title": "Uitspraken herkennen",
+        "href": "games/logicawereld/?stop=1&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-1"
+      },
+      {
+        "id": "halte-2",
+        "title": "Negatie",
+        "href": "games/logicawereld/?stop=2&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-1"
+      },
+      {
+        "id": "halte-3",
+        "title": "Negaties formuleren",
+        "href": "games/logicawereld/?stop=3&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-1"
+      },
+      {
+        "id": "halte-4",
+        "title": "Conjunctie (EN)",
+        "href": "games/logicawereld/?stop=4&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-2"
+      },
+      {
+        "id": "halte-5",
+        "title": "Disjunctie (OF)",
+        "href": "games/logicawereld/?stop=5&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-2"
+      },
+      {
+        "id": "halte-6",
+        "title": "Formules en schakelingen",
+        "href": "games/logicawereld/?stop=6&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-2"
+      },
+      {
+        "id": "halte-7",
+        "title": "Waarheidstabellen invullen",
+        "href": "games/logicawereld/?stop=7&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-3"
+      },
+      {
+        "id": "halte-8",
+        "title": "Samengestelde formules",
+        "href": "games/logicawereld/?stop=8&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-3"
+      },
+      {
+        "id": "halte-9",
+        "title": "Logische gelijkwaardigheid",
+        "href": "games/logicawereld/?stop=9&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-4"
+      },
+      {
+        "id": "halte-10",
+        "title": "Wetten van De Morgan",
+        "href": "games/logicawereld/?stop=10&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-4"
+      },
+      {
+        "id": "halte-11",
+        "title": "Tautologie en contradictie",
+        "href": "games/logicawereld/?stop=11&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-4"
+      },
+      {
+        "id": "halte-12",
+        "title": "Implicatie",
+        "href": "games/logicawereld/?stop=12&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-5"
+      },
+      {
+        "id": "halte-13",
+        "title": "Tegenvoorbeelden",
+        "href": "games/logicawereld/?stop=13&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-5"
+      },
+      {
+        "id": "halte-14",
+        "title": "Omgekeerde en contrapositie",
+        "href": "games/logicawereld/?stop=14&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-5"
+      },
+      {
+        "id": "halte-15",
+        "title": "Nodige en voldoende voorwaarden",
+        "href": "games/logicawereld/?stop=15&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-5"
+      },
+      {
+        "id": "halte-16",
+        "title": "Equivalentie",
+        "href": "games/logicawereld/?stop=16&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-6"
+      },
+      {
+        "id": "halte-17",
+        "title": "Wiskundige redeneringen",
+        "href": "games/logicawereld/?stop=17&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-6"
+      },
+      {
+        "id": "halte-18",
+        "title": "Redeneringen toetsen",
+        "href": "games/logicawereld/?stop=18&mode=solo",
+        "routeModes": [
+          "solo"
+        ],
+        "worksheetTopicId": "gebied-6"
+      },
+      {
+        "id": "gebied-1",
+        "title": "Uitspraken en negatie",
+        "href": "games/logicawereld/?stop=1&mode=solo",
+        "routeModes": [
+          "solo"
+        ]
+      },
+      {
+        "id": "gebied-2",
+        "title": "Logische connectieven",
+        "href": "games/logicawereld/?stop=4&mode=solo",
+        "routeModes": [
+          "solo"
+        ]
+      },
+      {
+        "id": "gebied-3",
+        "title": "Waarheidstabellen",
+        "href": "games/logicawereld/?stop=7&mode=solo",
+        "routeModes": [
+          "solo"
+        ]
+      },
+      {
+        "id": "gebied-4",
+        "title": "Logische wetten en equivalenties",
+        "href": "games/logicawereld/?stop=9&mode=solo",
+        "routeModes": [
+          "solo"
+        ]
+      },
+      {
+        "id": "gebied-5",
+        "title": "Implicatie en voorwaarden",
+        "href": "games/logicawereld/?stop=12&mode=solo",
+        "routeModes": [
+          "solo"
+        ]
+      },
+      {
+        "id": "gebied-6",
+        "title": "Geldige redeneringen",
+        "href": "games/logicawereld/?stop=16&mode=solo",
+        "routeModes": [
+          "solo"
+        ]
+      }
+    ],
+    "engine": {
+      "release": "0.2.0",
+      "modules": [
+        "games/logicawereld/logic.js",
+        "games/logicawereld/content.js",
+        "games/logicawereld/worksheet.js"
+      ],
+      "storageSchema": 1
+    },
+    "quickModes": [
+      "solo",
+      "online",
+      "classroom"
+    ]
   }
 ];

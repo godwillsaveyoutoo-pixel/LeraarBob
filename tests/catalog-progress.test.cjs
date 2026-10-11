@@ -206,3 +206,17 @@ test('Scientific learning adds four real units while preserving all fifteen exis
  const complete=api.summarize(game,saved);assert.equal(complete.completed,19);assert.equal(complete.max,19);assert.equal(complete.status,'complete');assert.match(complete.detail,/19 zelfstandig/);assert.equal(api.earnedXP(game,saved),null);
  const legacy=api.summarize(game,{state:{completed:['machten-product','wortels-factor'],total:15}});assert.equal(legacy.completed,2);assert.equal(legacy.max,19);
 });
+
+test('Practice XP reads actual new awards, never converts Brandweer or Stelsels level counts',()=>{
+ const api=context.window.LeraarBobCatalogProgress;
+ for(const [id,unit] of [['brandweer','1'],['stelsels','0']]){
+  const game={id,progressType:'levels'};assert.equal(api.earnedXP(game,{state:{completed:[unit],xp:999}}),0);
+  assert.equal(api.earnedXP(game,{state:{practiceRewards:{version:1,awards:{[unit]:10,'99':10,'2':999,'03':10}}}}),10);
+ }
+});
+
+test('Kleiduif server battle XP adds once to existing solo XP without converting finished levels',()=>{
+ const api=context.window.LeraarBobCatalogProgress,catalog=[{id:'kleiduifschieten',progressType:'levels'},{id:'old-clay',progressId:'kleiduifschieten',progressType:'levels'}];
+ const overview={errors:{},clay:{xp:30},games:[{game_id:'kleiduifschieten',state:{xp:15,completed:['one']}}]};
+ const before=JSON.stringify(overview);assert.equal(api.aggregate(catalog,overview).xp,45);assert.equal(JSON.stringify(overview),before);assert.equal(api.aggregate(catalog,{...overview,errors:{clay:true}}),null);
+});

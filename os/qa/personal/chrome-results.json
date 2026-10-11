@@ -1,0 +1,155 @@
+{
+  "checks": [
+    "Rechten solo has one 58px OS header; original header has zero height, window controls remain original DOM in taskbar; focus hides both bars and preserves input and independent collapse choice",
+    "World breadcrumb and game progress in shared Menu invoke the live native navigation after multiple rerenders",
+    "Phone and short landscape: native window actions accessible in one popover, 44px collapse restore sits in taskbar, focus restore occupies reserved space outside game",
+    "Explicit focus preference survives reload and applies on reopening an app; home always keeps its navigation"
+  ],
+  "measurements": [
+    {
+      "selector": "#focusRestore",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1202.5625,
+      "y": 720,
+      "width": 151.4375,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1063,
+      "y": 712.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#focusRestore",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1202.5625,
+      "y": 720,
+      "width": 151.4375,
+      "height": 44
+    },
+    {
+      "selector": "#saveActivity",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 172,
+      "y": 578,
+      "width": 197,
+      "height": 44
+    },
+    {
+      "selector": "#minimizeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 172,
+      "y": 670,
+      "width": 197,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 172,
+      "y": 716,
+      "width": 197,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 242,
+      "y": 791.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#focusRestore",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 226.5625,
+      "y": 796,
+      "width": 151.4375,
+      "height": 44
+    },
+    {
+      "selector": "#saveActivity",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 422,
+      "y": 87,
+      "width": 197,
+      "height": 44
+    },
+    {
+      "selector": "#minimizeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 422,
+      "y": 179,
+      "width": 197,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 422,
+      "y": 225,
+      "width": 197,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 492,
+      "y": 304.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#focusRestore",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 476.5625,
+      "y": 312,
+      "width": 151.4375,
+      "height": 44
+    }
+  ],
+  "errors": [],
+  "scope": "Actual Chromium; synthetic local account; native Rechtenwereld DOM and exercises"
+}

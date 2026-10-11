@@ -1,0 +1,22 @@
+/* The equation owns the workspace; the tools have a bounded, compact width. */
+.practiceChoice{display:flex;align-items:center;gap:6px;font:13px/1.2 system-ui;color:var(--muted);flex:none}
+.practiceChoice select{min-height:44px;max-width:210px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);padding:5px 8px;font:14px system-ui}
+.algebraPlatform .trainer{grid-template-columns:minmax(0,1fr) minmax(280px,360px)}
+.algebraPlatform .trainer .opRail{padding:8px;gap:8px}
+.algebraPlatform .trainer #givenEquation{font-size:clamp(28px,3vw,40px)}
+.algebraPlatform .trainer .derivationMath{font-size:clamp(32px,3.8vw,50px)}
+.algebraPlatform .trainer .contextOp{min-height:54px;height:64px}
+.algebraPlatform .trainer .termTile{height:56px;min-height:44px}
+.algebraPlatform .trainer .termTile .choiceMath{font-size:23px}
+#expertOperand[hidden]{display:none!important}
+#expertOperand{display:grid;gap:12px}
+#expertOperand label{display:grid;gap:6px;font:14px system-ui}
+#expertOperand input,#expertAnswer{min-height:48px;width:100%;min-width:0;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);font:21px system-ui}
+#expertOperand button{min-height:44px;white-space:normal}
+.expertNotation{font:13px/1.45 system-ui;color:var(--muted);margin:0}
+@media(min-width:901px){.algebraPlatform .trainer .termPalette{grid-template-columns:repeat(3,minmax(0,1fr))}.algebraPlatform .trainHead{grid-template-columns:auto minmax(0,1fr) auto auto}}
+@media(max-width:900px){.practiceChoice{font-size:0}.practiceChoice select{font-size:13px;max-width:165px}.algebraPlatform .trainer{grid-template-columns:minmax(0,1fr) minmax(230px,38%)}}
+@media(max-width:600px){.algebraPlatform .trainer{grid-template-columns:minmax(0,1fr)}.algebraPlatform .trainHead{display:flex;flex-wrap:wrap;gap:6px}.algebraPlatform .trainHead h1{flex:1}.practiceChoice{margin-left:auto}.algebraMenuResume{flex-wrap:wrap}}
+@media(max-height:500px) and (min-width:601px){.algebraPlatform .trainer .contextOp{min-height:44px;height:60px}.algebraPlatform .trainer .termTile{height:60px;min-height:44px}.algebraPlatform .trainer .derivationMath{font-size:30px}.algebraPlatform .trainer #givenEquation{font-size:25px}.expertNotation{font-size:12px}}
+
+.expertPreview{display:block;text-align:center;overflow-wrap:anywhere;font:clamp(24px,3vw,40px)/1.5 Georgia,serif;color:var(--ink);padding:16px}

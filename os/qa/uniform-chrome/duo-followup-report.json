@@ -1,0 +1,74 @@
+{
+  "scope": "Real Chromium, local fixture accounts, 100% zoom; native app controllers; no external multiplayer sessions",
+  "apps": [],
+  "interactions": [
+    "Data Check: native start stays in OS; shared menu opens real level chooser",
+    "Gravity Maze: real movement, restart, room chooser and rules through shared menu",
+    "Wortelbouw: shared menu invokes original level dialog",
+    "Stelsels: exercise/method choices survive minimize and resume; explicit collapse survives full OS reload",
+    "wortelbouw: local duo entry has no duplicate navigation; player score/round UI retained",
+    "vectoren-trainer: local duo entry has no duplicate navigation; player score/round UI retained",
+    "rechtenwereld: local duo entry has no duplicate navigation; player score/round UI retained",
+    "Rechten local duo: actual start, both workboards and answer buttons at three sizes and both bar states; correct answer scores once; next round survives minimize/resume"
+  ],
+  "measurements": [
+    {
+      "phase": "stelsels-input",
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1061,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "wortelbouw-duo",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1297,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "vectoren-trainer-duo",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1297,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "phase": "rechtenwereld-duo",
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "rect": {
+        "x": 1297,
+        "y": 712.5,
+        "width": 44,
+        "height": 44
+      }
+    }
+  ],
+  "errors": [],
+  "missing": []
+}

@@ -26,7 +26,7 @@ test('Learners participate in classes but cannot create them through startup opt
   }
   assert(M.modes('getallenwereld','teacher').some(m=>m.id==='classlearn'));
   assert(M.modes('rechtenwereld','teacher').some(m=>m.id==='classroom'));
-  assert.equal(new URL(M.destination('rechtenwereld','classroom',{role:'teacher'})).searchParams.get('view'),'create');
+  assert.equal(new URL(M.destination('rechtenwereld','classroom',{role:'teacher'})).searchParams.get('create'),'1');
   assert.equal(M.modes('pythagoras','teacher').length,1,'Do not invent future Battle or paper providers');
   assert.equal(M.worksheets('rechten-zeeslag').length,0);
 });
@@ -42,4 +42,28 @@ test('Desktop preferences are per account and never overwrite a learning progres
   assert.deepEqual(M.read(storage,a).pins,['pythagoras']);assert.equal(M.read(storage,b).saved.length,0);assert.deepEqual(M.read(storage,null).pins,M.defaults.pins);assert.equal(map.get('axioma_game_progress'),'untouched');
   const invalid=M.sanitize({pins:['missing','pythagoras','pythagoras'],saved:[{id:'pythagoras',href:'https://evil.example/'}]});assert.deepEqual(invalid.pins,['pythagoras']);assert.equal(invalid.saved.length,0);
   for(const bad of ['https://evil.example/','javascript:alert(1)','/outside/','https://user:secret@school.example/LeraarBob/'])assert.equal(M.safeURL(bad),null);
+});
+test('Independent bottom collapse migrates the old focus preference without changing progress or another account',()=>{
+  const map=new Map([['axioma_game_progress','same-answer']]),storage={getItem:k=>map.get(k),setItem:(k,v)=>map.set(k,v)},a={id:'a'},b={id:'b'};
+  map.set(M.key(a),JSON.stringify({focusMode:true}));assert.equal(M.read(storage,a).bottomCollapsed,true);
+  assert.equal(M.read(storage,b).bottomCollapsed,false);assert.equal(M.read(storage,null).bottomCollapsed,false);
+  M.write(storage,a,{...M.read(storage,a),bottomCollapsed:false});assert.equal(M.read(storage,a).bottomCollapsed,false);
+  assert.equal(M.sanitize({bottomCollapsed:false,focusMode:true}).bottomCollapsed,false);
+  assert.equal(map.get('axioma_game_progress'),'same-answer');assert.equal(map.has('leraarbob-topbar-collapsed'),false);
+});
+
+test('Retired trainer leaves discovery while historical progress and bookmarks remain readable',()=>{
+ assert(!M.apps().some(g=>g.id==='rechten-trainer'));
+ assert(!M.find({query:'Rechtentrainer'}).some(g=>g.id==='rechten-trainer'));
+ assert(M.app('rechten-trainer'),'Historical routes remain readable');
+ assert.equal(M.app('rechtenwereld').progressId,'rechten-trainer');
+ assert.deepEqual(M.sanitize({pins:['rechten-trainer','rechtenwereld','stelsels']}).pins,['rechtenwereld','stelsels']);
+});
+
+test('Stelsels is exclusively the original trainer; Vergelijkingen offers no second systems world',()=>{
+ assert.equal(new URL(M.destination('stelsels','solo')).pathname,'/LeraarBob/games/stelsels.html');
+ assert.deepEqual(M.app('algebra-trainer').topics.map(t=>t.id),['equations']);
+ assert.equal(M.worksheets('algebra-trainer').some(s=>s.id==='systems'),false);
+ assert.equal(M.worksheetTopics().find(s=>s.topicId==='systems').appId,'stelsels');
+ assert.equal(M.modes('stelsels','teacher').some(m=>m.id==='classroom'),false,'An unrelated Algebra class provider is not exposed as original Stelsels');
 });

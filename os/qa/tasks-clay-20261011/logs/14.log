@@ -1,0 +1,20 @@
+PASS Shared workform buttons retain the exact online and local forms; 1366×768, phone, short landscape, expanded/collapsed bars and reachable 44px targets
+PASS Real Rechten invitation → OS inbox acceptance → retained session → both ready → native question and input; no old menu and no navigation out of OS
+PASS Zeeslag uses the same entry; invite/cancel/reinvite/OS inbox accept opens both existing fleet boards, one frame each; closing and reopening resumes the same match
+PASS Getallen Samen leren: native create/code join/start/question/close/new setup without returning to the old mode overview
+PASS Central desktop code accepts the 8-character Numbers class code and joins its native lobby directly with student-only controls
+PASS rechtenwereld / learn: native controls inside common entry, direct route, desktop/phone
+PASS rechtenwereld / classroom: native controls inside common entry, direct route, desktop/phone
+PASS vectoren-trainer / local: native controls inside common entry, direct route, desktop/phone
+PASS vectoren-trainer / classroom: native controls inside common entry, direct route, desktop/phone
+PASS algebra-trainer / classroom: native controls inside common entry, direct route, desktop/phone
+PASS getallenwereld / series: native controls inside common entry, direct route, desktop/phone
+PASS getallenwereld / local: native controls inside common entry, direct route, desktop/phone
+PASS getallenwereld / teacher: native controls inside common entry, direct route, desktop/phone
+PASS getallenwereld / learn: native controls inside common entry, direct route, desktop/phone
+PASS getallenwereld / online: native controls inside common entry, direct route, desktop/phone
+PASS getallenwereld / classlearn: native controls inside common entry, direct route, desktop/phone
+PASS getallenwereld / classroom: native controls inside common entry, direct route, desktop/phone
+PASS wortelbouw / local: native controls inside common entry, direct route, desktop/phone
+PASS wortelbouw / classroom: native controls inside common entry, direct route, desktop/phone
+PASS kleiduifschieten / group: native controls inside common entry, direct route, desktop/phone

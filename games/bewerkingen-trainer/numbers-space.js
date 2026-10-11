@@ -1,6 +1,7 @@
 (()=>{
 'use strict';
 const C=BewerkingenCore,$=id=>document.getElementById(id),q=new URLSearchParams(location.search);
+const joinOnly=q.get('view')==='join'||q.get('entry')==='join';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const math=s=>katex.renderToString(s,{throwOnError:false,strict:'ignore'});
 let previewOnly=q.get('simulation')==='1';
@@ -21,10 +22,10 @@ async function loadXP(){if(!account||simulation)return;try{const data=await rpc(
 function notice(s=''){$('spaceNotice').textContent=s;}
 function title(s){$('spaceTitle').textContent=s;$('spaceCrumb').textContent=s;
  const label=view==='session'&&state?.spec?C.SKILLS.find(t=>t.id===state.spec.skill)?.label:selected.length===1?C.SKILLS.find(t=>t.id===selected[0])?.label:C.GROUPS.find(g=>g.id===group)?.label;
- $('spaceEyebrow').textContent=['rankings','students'].includes(view)?'GETALLENWERELD':(label||'GETALLENWERELD')+(view==='home'&&q.get('scope')==='chapter'?' · hoofdstukselectie':'');
+ $('spaceEyebrow').textContent=['join','rankings','students'].includes(view)?'GETALLENWERELD':(label||'GETALLENWERELD')+(view==='home'&&q.get('scope')==='chapter'?' · hoofdstukselectie':'');
 }
 function saveSelection(){const u=new URL(location.href);u.searchParams.set('world',group);u.searchParams.set('skills',selected.join(','));u.searchParams.set('level',level);u.searchParams.set('count',count);u.searchParams.set('activity',activity);u.searchParams.set('audience',audience);u.searchParams.set('seconds',seconds);u.searchParams.set('participate',participate?'1':'0');history.replaceState(null,'',u);portalStatus();}
-function setView(next,{url=true}={}){if(Flow){Flow.restore($('createSpace'));if($('sessionWork'))Flow.restore($('sessionWork'));}delete document.body.dataset.classFlow;view=next;document.body.dataset.view=next;boardKey='';$('spaceContent').replaceChildren();notice();if(url){const u=new URL(location.href);u.searchParams.set('view',next);if(state)u.searchParams.set('session',state.id);else u.searchParams.delete('session');history.replaceState(null,'',u);saveSelection();}render();}
+function setView(next,{url=true}={}){if(next==='home'&&!joinOnly){try{if(window.parent!==window&&window.parent.LeraarBobDesktop)next='selection';}catch{}}if(joinOnly&&next==='home')next='join';if(Flow){Flow.restore($('createSpace'));if($('sessionWork'))Flow.restore($('sessionWork'));}delete document.body.dataset.classFlow;view=next;document.body.dataset.view=next;boardKey='';$('spaceContent').replaceChildren();notice();if(url){const u=new URL(location.href);u.searchParams.set('view',next);if(joinOnly)u.searchParams.set('entry','join');if(state)u.searchParams.set('session',state.id);else u.searchParams.delete('session');history.replaceState(null,'',u);saveSelection();}render();}
 function login(){window.LeraarBobTopbar?.openAccount();}
 const needsAccount=()=>{if(account)return false;notice('Meld je aan om samen te spelen en je klasresultaten te bekijken.');login();return true;};
 function routeNative(intent,mode='solo'){
@@ -32,8 +33,10 @@ function routeNative(intent,mode='solo'){
 }
 function render(){
  $('resumeSession').hidden=!state||view==='session';
- if(view==='home')home();else if(view==='selection')selection();else if(view==='session')session();else if(view==='rankings'||view==='students')reports();portalStatus();
+ if(view==='home')home();else if(view==='join')join();else if(view==='selection')selection();else if(view==='session')session();else if(view==='rankings'||view==='students')reports();portalStatus();
 }
+function joinForm(){return `<form id="joinSpace"><label for="sessionCode">Sessiecode</label><input id="sessionCode" aria-label="Sessiecode" value="${esc(q.get('code')||'')}" maxlength="8" pattern="[A-Fa-f0-9]{8}" placeholder="8 tekens" autocapitalize="characters" spellcheck="false" required><button class="primary">Deelnemen →</button></form>`;}
+function join(){title('Deelnemen met sessiecode');$('spaceContent').innerHTML=`<section class="join-screen"><p>Vul de code van je leraar of medeleerling in om aan te sluiten bij de Getallenwereld-sessie.</p>${joinForm()}</section>`;}
 function home(){
  title('Wat wil je doen?');const teacher=account?.role==='teacher';
  $('spaceContent').innerHTML=`<div class="space-actions ${teacher?'teacher-actions':''}">
@@ -43,7 +46,7 @@ function home(){
  <button class="space-action" data-go="duo-battle"><strong>Duo Battle</strong><span>Tegen elkaar · twee toestellen</span></button>${teacher?'<button class="space-action" data-go="class-learn"><strong>Klaslearn</strong><span>Eigen antwoorden · samen bespreken</span></button><button class="space-action" data-go="class-battle"><strong>Klasbattle</strong><span>De klas speelt tegen de klok</span></button>':''}
  <button class="space-action" data-go="rankings"><strong>Ranglijsten</strong><span>XP en battlepunten per klas</span></button>
  <button class="space-action" data-go="${teacher?'students':'duo'}"><strong>${teacher?'Leerlingen':'Bordduo'}</strong><span>${teacher?'Zoeken, sorteren en opvolgen':'Met twee op één toestel'}</span></button></div>
- <div class="space-bottom"><form id="joinSpace"><label for="sessionCode">Sessiecode</label><input id="sessionCode" aria-label="Sessiecode" value="${esc(q.get('code')||'')}" maxlength="8" pattern="[A-Fa-f0-9]{8}" placeholder="8 tekens" required><button class="primary">Deelnemen →</button></form>${teacher?'<div><button data-go="duo">Bordduo</button> <button data-go="board">Borduitleg</button></div>':'<small>Machten · wortels · wetenschappelijke schrijfwijze</small>'}</div>`;
+ <div class="space-bottom">${joinForm()}${teacher?'<div><button data-go="duo">Bordduo</button> <button data-go="board">Borduitleg</button></div>':'<small>Machten · wortels · wetenschappelijke schrijfwijze</small>'}</div>`;
 }
 function selection(){if($('createSpace'))Flow?.restore($('createSpace'));
  title((previewOnly?'Simulatie · ':'')+(audience==='duo'?'Duo ':'Klas')+(activity==='learn'?'Learn':'Battle'));
@@ -68,10 +71,11 @@ async function rpc(action,data={}){
  }finally{clearTimeout(timer);}
 }
 function accept(next){if(next.spec&&![1,2].includes(next.spec.generatorVersion??1))throw Error('Vernieuw Getallenwereld om deze sessie te openen.');state=next;offset=Date.parse(next.server_time)-Date.now();if(simulation){save(simulationKey(),simulation);}else save(key(),{id:state.id});if(pending&&(state.round!==pending.round||state.phase!=='question'||(state.mine&&state.mine.attempts>=pending.expectedAttempts))){pending=null;save(key()+':pending',null);}if(view==='session')session();$('resumeSession').hidden=view==='session';portalStatus();schedule();}
+function clearJoinedCode(){q.delete('code');q.delete('join');const u=new URL(location.href);u.searchParams.delete('code');u.searchParams.delete('join');history.replaceState(null,'',u);}
 async function action(name,data={}){
  if(busy)return;busy=true;const serial=++requestSerial;clearTimeout(poll);notice();
  document.querySelectorAll('#createSpace button,#hostStart,#hostNext,#hostEnd,#submitAnswer').forEach(b=>b.disabled=true);
- try{const next=simulation?simulate(name,data):await rpc(name,{id:state?.id,...data});if(serial!==requestSerial)return;if(name==='leave'&&!next.owner){state=null;pending=null;sessionStorage.removeItem(key());sessionStorage.removeItem(key()+':pending');setView('home');return;}accept(next);if(name==='submit'&&!simulation)loadXP();if(view!=='session')setView('session');}
+ try{const next=simulation?simulate(name,data):await rpc(name,{id:state?.id,...data});if(serial!==requestSerial)return;if(name==='leave'&&!next.owner){state=null;pending=null;sessionStorage.removeItem(key());sessionStorage.removeItem(key()+':pending');setView('home');return;}accept(next);if(name==='join'&&next.id)clearJoinedCode();if(name==='submit'&&!simulation)loadXP();if(view!=='session')setView('session');}
  catch(e){notice(e.message);if(view==='selection')selection();else if(view==='session')session();}finally{busy=false;document.querySelectorAll('[data-busy-disabled]').forEach(b=>b.disabled=false);if(view==='session')session();schedule();}
 }
 function schedule(){clearTimeout(poll);if(!state||!account||['finished','closed'].includes(state.phase))return;const captured=epoch;
@@ -122,9 +126,11 @@ function panel(titleText,body){$('panelTitle').textContent=titleText;$('panelCon
 function battleResults(){
  const work=$('sessionWork');work.className='waiting-card';
  if(!work.querySelector('.battle-standings')){work.replaceChildren();const title=document.createElement('h2');title.textContent=state.phase==='review'?'Ronde afgerond':state.phase==='closed'?'Sessie gesloten':'Eindresultaat';const summary=document.createElement('p');summary.className='round-result-summary';summary.id='battleRoundSummary';const host=document.createElement('div');host.className='battle-standings';work.append(title,summary,host);}
+ work.querySelector('h2').textContent=state.phase==='review'?'Ronde afgerond':state.phase==='closed'?'Sessie gesloten':'Eindresultaat';
  const eligible=state.members.filter(m=>m.eligible<=state.round);$('battleRoundSummary').textContent=(simulation?'Simulatie · ':'')+(state.round<0?'Geen ronde gespeeld.':`${eligible.filter(m=>m.correct===true).length} / ${eligible.length} juist deze ronde`)+(state.phase==='review'&&state.mine?(state.mine.correct?' · Jouw antwoord is juist.':' · Jouw antwoord is nog niet juist.'):'');
  const mine=state.members.find(m=>m.id===account?.id);if(!simulation&&Number.isFinite(mine?.xp))$('battleRoundSummary').append(document.createTextNode(' · '+mine.xp+' XP deze sessie'));
  LeraarBobBattlePresentation.render(work.querySelector('.battle-standings'),{rows:state.members.map(m=>({id:m.id,alias:m.alias,points:m.points})),ownId:simulation?'preview':account?.id,final:state.phase!=='review',roundKey:state.id+':'+state.round});
+ if(state.phase!=='review'&&!simulation&&mine)window.LeraarBobBattleReport?.mount(work,{provider:'numbers',id:state.id,labels:Object.fromEntries(C.SKILLS.map(s=>[s.id,s.label]))});else work.querySelector('.lb-battle-report')?.remove();
  if(state.phase!=='review'&&!$('backHome')){const back=document.createElement('button');back.id='backHome';back.textContent='Naar overzicht';work.append(back);}
 }
 function roster(){panel('Spelers',`<table><thead><tr><th>Alias</th><th>Deze vraag</th><th>XP</th></tr></thead><tbody>${state.members.map(m=>`<tr><td>${esc(m.alias)}${m.left?' · vertrokken':''}</td><td>${m.correct===true?'Juist':m.answered?'Ingediend':'Bezig'}${m.answer?'<br>'+esc(m.answer):''}${m.reviewed?' · besproken':''}</td><td>${m.xp??'—'}</td></tr>`).join('')}</tbody></table>${simulation?'<p>Voorbeeldleerlingen. Er worden geen resultaten opgeslagen.</p><button id="simulateAnswers">Laat voorbeeldleerlingen antwoorden</button>':''}`);}
@@ -167,7 +173,7 @@ $('space').addEventListener('click',async e=>{
  if(go){if(go==='class-battle'&&classFlow&&(simulation||previewOnly)&&account?.role==='teacher'){window.parent.postMessage({type:'leraarbob-class-launch',game:'bewerkingen',mode:'live'},location.origin);return;}if(go==='solo'||go==='paper'||go==='duo'||go==='board'){routeNative(go==='paper'?'worksheet':'',go==='duo'?'duo':go==='board'?'teacher':'solo');return;}if(needsAccount())return;if(/^(duo|class)-(learn|battle)$/.test(go)){[audience,activity]=go.split('-');previewOnly=false;clearSimulationURL();setView('selection');}else setView(go);return;}
  if(b.dataset.group){group=b.dataset.group;selected=C.SKILLS.filter(s=>s.group===group).map(s=>s.id);saveSelection();selection();return;}
   switch(b.id){
- case'spaceBack':if(view==='home'){location.href=LeraarBobRoutes.safeReturn(q.get('returnTo'),'games/getallenwereld/?screen=home');}else setView('home');break;
+ case'spaceBack':if(view==='home'||view==='join'){location.href=LeraarBobRoutes.safeReturn(q.get('returnTo'),'games/getallenwereld/?screen=home');}else setView('home');break;
  case'sessionBack':
  case'backHome':setView('home');break;
  case'resumeSession':setView('session');break;
@@ -177,7 +183,7 @@ $('space').addEventListener('click',async e=>{
  case'hostNext':await action('next');break;
  case'hostEnd':panel('Vraag afronden?',`<p>${state.members.filter(m=>!m.left&&!m.correct).length} spelers hebben nog geen juist antwoord. Daarna kun je de uitwerking bespreken.</p><div class="panel-actions"><button id="confirmEnd" class="primary">Afronden</button><button data-close-panel>Verder werken</button></div>`);break;
  case'leaveSession':panel(state.owner?'Sessie afsluiten?':'Sessie verlaten?',`<p>${state.owner?'Alle deelnemers stoppen.':'Je eerdere antwoorden blijven bewaard.'}</p><button id="confirmLeave" class="primary">${state.owner?'Afsluiten':'Verlaten'}</button>`);break;
- case'copySession':{const u=new URL(classFlow?'../../klasbattle/':'start.html',location.href);u.searchParams.set('code',state.code);try{await navigator.clipboard.writeText(u.href);notice('Deelnamelink gekopieerd.');}catch{panel('Deelnamelink',`<input aria-label="Deelnamelink" readonly value="${esc(u.href)}">`);}break;}
+ case'copySession':{let os=false;try{os=window.parent!==window&&!!window.parent.LeraarBobDesktop;}catch{}const u=new URL(os?'../../os/':classFlow?'../../klasbattle/':'start.html',location.href);if(os){u.searchParams.set('joinApp','getallenwereld');u.searchParams.set('joinCode',state.code);u.searchParams.set('joinMode',state.audience==='class'?'classroom':state.activity==='learn'?'learn':'online');}else{u.searchParams.set('view','join');u.searchParams.set('code',state.code);}try{await navigator.clipboard.writeText(u.href);notice('Deelnamelink gekopieerd.');}catch{panel('Deelnamelink',`<input aria-label="Deelnamelink" readonly value="${esc(u.href)}">`);}break;}
  case'showMembers':roster();break;
  case'sessionHint':{const t=taskFromSpec(state.spec),d=read(draftKey())||{};save(draftKey(),{...d,assisted:true});panel('Hint',`<p>${esc(t.hint)}</p>`);break;}
  case'showSolution':{const t=taskFromSpec(state.spec);panel('Uitwerking',t.steps.map(s=>'<p>'+math(s)+'</p>').join(''));break;}
@@ -192,11 +198,11 @@ async function identity(next){if(account!==undefined&&account?.id===next?.id&&ac
  if(account){const sim=read(simulationKey()),saved=read(key());if(new URLSearchParams(location.search).get('simulation')==='1'&&sim){simulation=sim;accept(simulate('state'));}else if((q.get('session')||saved?.id)&&!q.get('code'))try{state=await rpc('state',{id:q.get('session')||saved.id});pending=read(key()+':pending');accept(state);}catch{if(identityEpoch!==epoch)return;notice('Een vorige sessie kon nog niet worden geladen.');}}
  if(identityEpoch!==epoch)return;
  if(!simulation)loadXP();else $('numbersXP').dataset.value='NaN';
- if(embedded&&q.get('join')==='1'&&/^[A-Fa-f0-9]{8}$/.test(q.get('code')||'')&&account?.role==='student'&&!state){await action('join',{code:q.get('code')});if(identityEpoch!==epoch)return;if(state){const u=new URL(location.href);u.searchParams.delete('code');u.searchParams.delete('join');history.replaceState(null,'',u);return;}}
- const requested=q.get('moduleView')||q.get('view');if(requested==='students'&&account?.role!=='teacher'){setView('home');return;}if(['rankings','students'].includes(requested))setView(requested);else if(requested==='session'&&state)setView('session');else if(requested==='selection'&&account){setView('selection');}else if(['learn','battle'].includes(requested)&&account){activity=requested;audience=q.get('audience')==='duo'?'duo':account.role==='teacher'?'class':'duo';setView('selection');}else setView('home');
+ if(embedded&&q.get('join')==='1'&&/^[A-Fa-f0-9]{8}$/.test(q.get('code')||'')&&account?.role==='student'&&!state){await action('join',{code:q.get('code')});if(identityEpoch!==epoch)return;if(state)return;}
+ const requested=q.get('moduleView')||q.get('view')||(q.get('session')?'session':null);if(requested==='students'&&account?.role!=='teacher'){setView('home');return;}if(['rankings','students'].includes(requested))setView(requested);else if(requested==='session'&&state)setView('session');else if(requested==='selection'&&account){setView('selection');}else if(['learn','battle'].includes(requested)&&account){activity=requested;audience=q.get('audience')==='duo'?'duo':account.role==='teacher'?'class':'duo';setView('selection');}else setView('home');
 }
-AxiomaAuth.ready().then(()=>AxiomaAuth.getAccount()).then(identity).catch(e=>{home();notice('Je account kon niet laden. Solo en oefenbladen blijven bereikbaar.');});AxiomaAuth.onChange(()=>AxiomaAuth.getAccount().then(identity));
+AxiomaAuth.ready().then(()=>AxiomaAuth.getAccount()).then(identity).catch(e=>{setView('home');notice(joinOnly?'Je account kon niet laden. Meld je opnieuw aan om deel te nemen.':'Je account kon niet laden. Solo en oefenbladen blijven bereikbaar.');});AxiomaAuth.onChange(()=>AxiomaAuth.getAccount().then(identity));
 setInterval(()=>{clock();if(!simulation&&state?.phase==='question'&&account&&!document.hidden&&Date.now()-lastInput<60000&&Date.now()-lastPulse>=15000&&!busy){lastPulse=Date.now();rpc('pulse',{id:state.id}).catch(()=>{});}},1000);
 addEventListener('online',()=>{if(pending)sendAnswer();else schedule();});
-window.NumbersSpace={snapshot:()=>({view,selected,activity,state:structuredClone(state),pending:structuredClone(pending)}),get ready(){return !!$('spaceContent').children.length}};
+window.NumbersSpace={showJoin:()=>{if(!busy)setView('join');},showSetup:()=>{if(!busy)setView('selection');},snapshot:()=>({view,selected,activity,state:structuredClone(state),pending:structuredClone(pending)}),get ready(){return !!$('spaceContent').children.length}};
 })();

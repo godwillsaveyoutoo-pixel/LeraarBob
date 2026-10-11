@@ -17,26 +17,44 @@ jobs:
           node-version: '24'
           package-manager-cache: false
       - run: node scripts/build-catalog.cjs --check
-      - run: node --test --test-isolation=none tests/catalog.test.cjs tests/catalog-progress.test.cjs tests/desktop-model.test.cjs tests/getallenwereld.test.cjs tests/getallen-guided-choices.test.cjs tests/getallen-scientific-lessons.test.cjs tests/scientific-provider.test.cjs tests/algebra-class.test.cjs tests/algebra-learning.test.cjs tests/algebra-trainer.test.cjs tests/algebra-v04-choices.test.cjs tests/algebra-v04-journey.test.cjs tests/algebra-v04-motion.test.cjs tests/algebra-v045-fractions.test.cjs tests/algebra-v050-flow.test.cjs tests/algebra-world.test.cjs tests/stelsels-workshop.test.cjs
-      - run: node --check os/desktop.js
+      - run: node --test --test-isolation=none tests/catalog.test.cjs tests/catalog-progress.test.cjs tests/desktop-model.test.cjs tests/getallenwereld.test.cjs tests/getallen-guided-choices.test.cjs tests/getallen-scientific-lessons.test.cjs tests/scientific-provider.test.cjs tests/algebra-class.test.cjs tests/algebra-learning.test.cjs tests/algebra-trainer.test.cjs tests/algebra-v04-choices.test.cjs tests/algebra-v04-journey.test.cjs tests/algebra-v04-motion.test.cjs tests/algebra-v045-fractions.test.cjs tests/algebra-v050-flow.test.cjs tests/algebra-world.test.cjs tests/stelsels-workshop.test.cjs tests/logicawereld-logic.test.cjs tests/logicawereld-flow.test.cjs tests/logicawereld-integration.test.cjs
+      - run: node --check os/desktop.js && node --check os/personal-home.js && node --check os/activity-entry.js && node --check os/native-chrome.js && node --check os/edge-bars.js && node --check os/clay-entry.js && node --check tasks/tasks.js && node --check tasks/clay-bridge.js && node --check tasks/result-pdf.js
       - run: node tests/desktop-package-check.cjs
       - name: Bureaubladbediening controleren
         run: |
           npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-desktop-tests" jsdom@26.1.0 fake-indexeddb@6.2.4
-          NODE_PATH="$RUNNER_TEMP/leraarbob-desktop-tests/node_modules" node --test --test-isolation=none tests/desktop-dom.test.cjs tests/topbar-desktop.test.cjs tests/getallen-workshop-dom.test.cjs tests/getallen-world-integration.test.cjs tests/class-activity-flow.test.cjs tests/worksheet-library.test.cjs tests/worksheet-save.test.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-desktop-tests/node_modules" node --test --test-isolation=none tests/desktop-dom.test.cjs tests/topbar-desktop.test.cjs tests/os-native-chrome.test.cjs tests/getallen-workshop-dom.test.cjs tests/getallen-world-integration.test.cjs tests/class-activity-flow.test.cjs tests/worksheet-library.test.cjs tests/worksheet-save.test.cjs tests/practice-rewards.test.cjs
       - name: Pilotapps en bestaande klasproviders in Chromium controleren
         run: |
-          npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-browser-tests" playwright@1.64.0 @electric-sql/pglite@0.5.8
+          npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-browser-tests" playwright@1.64.0 @electric-sql/pglite@0.5.8 jsdom@26.1.0 fake-indexeddb@6.2.4
           "$RUNNER_TEMP/leraarbob-browser-tests/node_modules/.bin/playwright" install --with-deps chromium
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" HOME_SCREENSHOTS="$RUNNER_TEMP/os-qa/home-entry" node tests/home-entry-browser.cjs
-          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs tests/worksheet-cloud.test.cjs tests/os-tasks.test.cjs tests/clay-os.test.cjs tests/clay-service.test.cjs tests/clay-game.test.cjs tests/logica-battle-database.test.cjs tests/class-battle-report-db.test.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" TASKS_PROOF="$RUNNER_TEMP/os-qa/tasks" node tests/os-tasks-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" BATTLE_REPORT_PROOF="$RUNNER_TEMP/os-qa/battle-reports" node tests/class-battle-report-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CLAY_OS_PROOF="$RUNNER_TEMP/os-qa/clay" node tests/clay-os-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/personal" node tests/personal-os-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/personal" node tests/personal-chrome-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" BAR_GESTURES_PROOF="$RUNNER_TEMP/os-qa/bar-gestures" node tests/os-bar-gestures-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" PLACE_PROOF="$RUNNER_TEMP/os-qa/places" node tests/os-place-windows-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" WORKFORMS_PROOF="$RUNNER_TEMP/os-qa/workforms" node tests/os-workforms-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_NAV_SCREENSHOTS="$RUNNER_TEMP/os-qa/native-navigation" node tests/rechten-os-navigation-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" OS_SCREENSHOTS="$RUNNER_TEMP/os-qa/pilots" node tests/desktop-pilot-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" ZEESLAG_SCREENSHOTS="$RUNNER_TEMP/os-qa/zeeslag-controls" node tests/zeeslag-controls-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" BRANDWEER_SCREENSHOTS="$RUNNER_TEMP/os-qa/brandweer-controls" node tests/brandweer-controls-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/live" node tests/desktop-live-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" GETALLEN_SCREENSHOTS="$RUNNER_TEMP/os-qa/getallen" node tests/getallen-os-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" SCIENTIFIC_SCREENSHOTS="$RUNNER_TEMP/os-qa/scientific" node tests/getallen-scientific-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CLASS_FLOW_SCREENSHOTS="$RUNNER_TEMP/os-qa/class-flow" node tests/uniform-class-flow-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" WORKSHEETS_SCREENSHOTS="$RUNNER_TEMP/os-qa/worksheets" node tests/desktop-worksheets-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CENTRAL_PAPER_SCREENSHOTS="$RUNNER_TEMP/os-qa/central-paper" node tests/central-worksheet-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CLOUD_PAPER_PROOF="$RUNNER_TEMP/os-qa/worksheet-cloud" node tests/worksheet-cloud-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" EXPERT_PROOF="$RUNNER_TEMP/os-qa/equations-expert" node tests/algebra-expert-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" ALGEBRA_OS_SCREENSHOTS="$RUNNER_TEMP/os-qa/algebra" node tests/algebra-os-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CHROME_PROOF="$RUNNER_TEMP/os-qa/uniform-chrome" node tests/os-native-chrome-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" STELSELS_EXPERT_PROOF="$RUNNER_TEMP/os-qa/stelsels-expert" node tests/stelsels-expert-substitution-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LOGICA_BATTLE_PROOF="$RUNNER_TEMP/os-qa/logica-battles" node tests/logica-battle-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LOGICA_PROOF="$RUNNER_TEMP/os-qa/logica" node tests/logicawereld-os-browser.cjs
       - name: Screenshots en browserrapporten bewaren
         if: always()
         uses: actions/upload-artifact@v4

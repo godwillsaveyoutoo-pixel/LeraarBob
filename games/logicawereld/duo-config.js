@@ -1,0 +1,1 @@
+window.LeraarBobDuoConfig={provider:'logica-duo',title:'Logicawereld',worlds:Object.fromEntries([...BattleGame.worlds.map(w=>[w.id,w.name]),['mixed','Mix · alle gebieden']]),emptyWorld:'Kies een gebied.',readyText:'Jullie spelen vijf rondes in het gekozen gebied. Start zodra jullie allebei klaar zijn.'};

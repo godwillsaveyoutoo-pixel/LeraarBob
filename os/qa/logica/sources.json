@@ -1,0 +1,33 @@
+{
+  "package": "Logicawereld_Propositielogica_v0.2.zip",
+  "packageSHA256": "e4711ca9497d599660cee81c1c18672b21ec21b11ce2cc7dbf459bc17c6929ec",
+  "unchangedNativeModules": [
+    "logic.js",
+    "content.js",
+    "worksheet.js"
+  ],
+  "baseCommit": "5f45694",
+  "finalSourceHashes": {
+    "games/logicawereld/README.md": "072a953925838dc02e69e64ba95958dc121cf0f011824aca506ff6ffceaa421d",
+    "games/logicawereld/app.js": "8dea112e23a5610e7e5dde32f879834f0fe7add7c28288b5194a0dd624657658",
+    "games/logicawereld/assets/regelstad-small.webp": "98c972d705375f60646789efd371d3c4b5d079630235c0b48ebab45bcae08ed2",
+    "games/logicawereld/assets/regelstad.webp": "d1ff757be99dedb491f0d32c6426fc17c730f95181977f010f3be3127a60f0c2",
+    "games/logicawereld/city.svg": "948ab0c660f5d71613fe058f20384242049c3d121270f2e1f33b528aab2f99e3",
+    "games/logicawereld/content.js": "ccd9fe0b1d265958949bff981d036d5bc5c42e8c0f85813c6224580c1c9fc328",
+    "games/logicawereld/cover.svg": "3968c700c58369da37c900b21449b55da2565b6e453acd5472abf40c1d842d50",
+    "games/logicawereld/index.html": "6e7395d68ccba5f001840baa7380e122d1ea16a832ec839d28f096af738be3ac",
+    "games/logicawereld/logic.js": "59db7d62c2125ea41218e9ac6f90bfce53e6ecb38a36bc88fee07792b841878d",
+    "games/logicawereld/os-bridge.js": "6efa4fb5282dfba4cc81e4f0a5b036fced014674d59a8fcd7eaee3d906a75911",
+    "games/logicawereld/os.css": "892bcd498179fc23083d4d29594afa0ccf65a52608a62a2c3ea1568afa26ca70",
+    "games/logicawereld/paper.css": "f2fde7f3087298aadfd51ea17ba3e84774dd5f88e43c69562be3ad1b7443ecd8",
+    "games/logicawereld/redesign.css": "6c378ad55d2be91d824feadaae3c5b3dcf76a2120dedf173e7c9e26cf9380e0d",
+    "games/logicawereld/style.css": "16e52dbe528506cf1e12a53bc80e21d2812543f5ff39718c7f6ee2190fa29305",
+    "games/logicawereld/worksheet.js": "65ba8ab73ebf28bc8c580942aef93bfeca3f57fd5fd51a779c8aebb2c0bbdaaf",
+    "games.json": "ab856d3903cc2f9ce9c99e566238179cc68700d21f6546926c83d02362759375",
+    "js/catalog.js": "8c5ad63d812b203e69153b04346b2693d39b8c5864904ee147475273c38dbb1d",
+    "os/desktop.js": "843da36b17106859a1daf0fb26f80ba1e21fe680866c94b7933f2d3478071990",
+    "os/personal-home.js": "69dfe6a49cde1ae46b247a44376c4f3577230c3561ab4b884232a12d7a4ce282",
+    "oefenbladen/providers.js": "119d8a77056eaa1fb044f9fcfedd3fd78f706038bf00f6fdfe7701996107df0f",
+    "shared/worksheet-library.js": "1978e4bdca64645cd64b43ff3808d54f2e46f8bcbd58cdbe6a707ab074b3329b"
+  }
+}

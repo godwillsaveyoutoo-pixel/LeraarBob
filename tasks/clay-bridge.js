@@ -1,0 +1,11 @@
+/* The existing clay renderer runs a fixed, individually recorded assessment series. */
+(()=>{
+ if(window===parent||!new URLSearchParams(location.search).has('task')||!parent.LeraarBobTasks)return;
+ document.documentElement.classList.add('task-clay');
+ const css=document.createElement('style');css.textContent='.task-clay .topbar,.task-clay #lobby,.task-clay #groupDialog,.task-clay #rankingDialog,.task-clay #groupMenu,.task-clay #restart,.task-clay #groupClose{display:none!important}.task-clay #app{grid-template-rows:0 minmax(0,1fr)}';document.head.append(css);
+ const listeners=new Set(),tabId=crypto.randomUUID();let pending=false,paused=false,record=parent.LeraarBobTasks.clayState(),clockOffset=Date.parse(record.serverTime)-Date.now();
+ function state(){const {account,part,value:v}=record,answers=v.answers||[],done=!!v.done;return {account,tabId,pending,connected:true,clockOffset,sessions:[],members:[],member:{user_id:account.id,tab_id:tabId,version:answers.length,streak:answers.length,misses:0,next_at:v.next_at,last_event_id:answers.at(-1)?.event,last_correct:false,left_at:done?new Date().toISOString():null},current:{id:v.seed_id,question_version:2,status:done?'finished':'running',host_id:account.id,host_alias:account.alias,speed:part.speed,starts_at:v.started_at,winner_id:null},assessment:{count:part.count,done}};}
+ const emit=()=>{if(paused)return;for(const fn of listeners)fn(state());const s=document.getElementById('status');if(s)s.textContent=record.value.done?'Reeks bewaard · terug naar je opdracht.':`${record.value.answers.length} / ${record.part.count} antwoorden bewaard`;};
+ window.AxiomaGroups={assessment:true,pause(){paused=true;window.AxiomaClay?.suspendTask();},resume(next){record=next;clockOffset=Date.parse(record.serverTime)-Date.now();paused=false;emit();},ready:async()=>state(),state,onChange(fn){listeners.add(fn);return()=>listeners.delete(fn)},async refresh(){emit();return state();},async answer(packet){pending=true;try{record=await parent.LeraarBobTasks.clayAnswer(packet);clockOffset=Date.parse(record.serverTime)-Date.now();emit();return state();}finally{pending=false;}},create:async()=>{throw Error('Deze reeks hoort bij je toets.');},join:async()=>{},start:async()=>{},leave:async()=>{},ranking:async()=>({ranking:[]})};
+ // Scores are revealed after final submission, including partial work.
+})();

@@ -1,4 +1,4 @@
-/* Worksheet documents are separate from learner progress. Account-scoped, on this device. */
+/* Worksheet documents are separate from learner progress. Account-scoped local cache and immutable online archive. */
 (function(root,factory){
   if(typeof module==='object'&&module.exports)module.exports=factory;
   else root.LeraarBobWorksheetLibrary=factory({window:root,document:root.document,indexedDB:root.indexedDB,crypto:root.crypto});
@@ -15,8 +15,10 @@
     'algebra-trainer:systems':{theme:'algebra',topic:'systems'},
     'bewerkingen-trainer:operations':{theme:'getallen',topics:['machten','wortels','wetenschappelijk','mixed']}
   };
+  for(let i=1;i<=6;i++)sources['logicawereld:gebied-'+i]={theme:'logica',topic:'gebied-'+i};
   const allowedStyles=new Set([
-    'shared/worksheet-layout.css','shared/worksheet-hub.css','shared/vendor/katex/katex.min.css',
+    'games/logicawereld/paper.css',
+    'oefenbladen/paper.css','shared/worksheet-layout.css','shared/worksheet-hub.css','shared/vendor/katex/katex.min.css',
     'games/rechten/rechtenwereld/worksheets/worksheets.css',
     'games/rechten/rechtenwereld/styles/worksheet-sections.css',
     'games/algebra-trainer/styles.css','games/algebra-trainer/stelsels/styles.css',
@@ -78,7 +80,9 @@
       if(!safeTags.has(tag)){node.replaceWith(...node.childNodes);continue;}
       for(const attribute of [...node.attributes]){
         const name=attribute.name.toLowerCase(),value=attribute.value;
-        if(name==='style'){
+        if(tag==='ol'&&name==='start'){
+          if(!/^[1-9][0-9]{0,4}$/.test(value))node.removeAttribute(attribute.name);
+        }else if(name==='style'){
           if(/url\s*\(|expression\s*\(|@import|javascript|[\\<>]/i.test(value))node.removeAttribute(attribute.name);
         }else if(tag==='img'&&name==='src'){
           if(!/^data:image\/(?:png|jpeg);base64,[a-z0-9+/=\s]+$/i.test(value))node.removeAttribute(attribute.name);
@@ -103,6 +107,52 @@
     return {...value,bytes};
   }
   function metadata(value){const {id,sourceId,title,theme,topic,code,createdAt,updatedAt,bytes}=value;return {id,sourceId,title,theme,topic,code,createdAt,updatedAt,bytes};}
+  const cloudStates=new Map(),syncing=new Map();
+  function syncStatus(){return cloudStates.get(scope)||{online:false,message:scope?.startsWith('account:')?'Op dit toestel · nog niet online bewaard':'Op dit toestel · gast'};}
+  const localRows=owner=>transaction(owner,'readonly',(store,done)=>{const req=store.index('owner').getAll(owner);req.onsuccess=()=>done(req.result);});
+  const localRow=(owner,id)=>transaction(owner,'readonly',(store,done)=>{const req=store.get(owner+'|'+id);req.onsuccess=()=>done(req.result);});
+  async function remote(owner,action,data={}){
+    assertScope(owner);const client=auth()?.client?.();if(!client?.rpc)throw Error('Online bewaren is hier niet beschikbaar.');
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),7000);
+    try{
+      let request=client.rpc('axioma_worksheet_archive',{p_action:action,p_data:{...data,ownerId:owner.slice(8)}});
+      if(request.abortSignal)request=request.abortSignal(controller.signal);
+      const reply=await request;assertScope(owner);if(reply.error)throw Error(reply.error.message||'Verbinding onderbroken.');
+      if(!reply.data||Array.isArray(reply.data))throw Error('Online bewaren is nog niet beschikbaar.');return reply.data;
+    }finally{clearTimeout(timer);}
+  }
+  async function sync(){
+    const owner=await ready();if(!owner.startsWith('account:'))return syncStatus();
+    if(syncing.has(owner))return syncing.get(owner);
+    const work=(async()=>{
+      try{
+        const response=await remote(owner,'list');if(!Array.isArray(response.entries))throw Error('Online bewaren is nog niet beschikbaar.');
+        const remoteIds=new Set(response.entries.map(entry=>entry.id));
+        // Reconcile a restored/reset server too: a cache flag is not proof that
+        // the remote document still exists. Explicit tombstones remain decisive.
+        for(const row of await localRows(owner))if(row.synced&&!remoteIds.has((row.doc||row.meta)?.id)){
+          await transaction(owner,'readwrite',(store,done)=>{if(row.doc){row.synced=false;store.put(row);}else store.delete(row.key);done(true);});
+        }
+        for(const entry of response.entries){
+          if(!entry.id||(!entry.deleted&&!sources[entry.sourceId]))continue;
+          await transaction(owner,'readwrite',(store,done)=>{const req=store.get(owner+'|'+entry.id);req.onsuccess=()=>{
+            const row=req.result;
+            if(entry.deleted)store.delete(owner+'|'+entry.id);
+            else if(!row)store.put({key:owner+'|'+entry.id,owner,meta:metadata(entry),synced:true});
+            else if(!row.deleted){row.synced=true;store.put(row);}
+            done(true);
+          };});
+        }
+        for(const row of await localRows(owner)){
+          if(row.synced&&!row.deleted)continue;
+          if(row.deleted){await remote(owner,'delete',{id:row.id});await transaction(owner,'readwrite',(store,done)=>{store.delete(row.key);done(true);});}
+          else if(row.doc){await remote(owner,'save',{document:row.doc});await transaction(owner,'readwrite',(store,done)=>{const req=store.get(row.key);req.onsuccess=()=>{const current=req.result;if(current&&!current.deleted){current.synced=true;store.put(current);}done(true);};});}
+        }
+        assertScope(owner);const pending=(await localRows(owner)).some(row=>row.deleted||!row.synced);cloudStates.set(owner,pending?{online:false,message:'Op dit toestel · online bijwerken volgt'}:{online:true,message:'Online bewaard · beschikbaar op je andere toestellen'});
+      }catch(error){assertScope(owner);cloudStates.set(owner,{online:false,message:'Op dit toestel · online bijwerken lukt niet',error:error.message});}
+      return syncStatus();
+    })();syncing.set(owner,work);try{return await work;}finally{syncing.delete(owner);}
+  }
   async function fingerprint(value){
     const body=JSON.stringify([value.sourceId,value.topic,value.questionsHTML,value.keyHTML,value.config,value.data]);
     if(options.crypto?.subtle){const digest=await options.crypto.subtle.digest('SHA-256',new TextEncoder().encode(body));return [...new Uint8Array(digest)].map(n=>n.toString(16).padStart(2,'0')).join('');}
@@ -118,17 +168,26 @@
     const value=normalize(input),hash=await fingerprint(value);assertScope(owner);
     const saved=await transaction(owner,'readwrite',(store,done,tx)=>{
       const req=store.index('owner').getAll(owner);req.onsuccess=()=>{
-        const rows=req.result,old=rows.find(row=>row.fingerprint===hash&&JSON.stringify([row.doc.questionsHTML,row.doc.keyHTML,row.doc.config,row.doc.data])===JSON.stringify([value.questionsHTML,value.keyHTML,value.config,value.data]));
+        const rows=req.result,old=rows.find(row=>!row.deleted&&row.doc&&row.fingerprint===hash&&JSON.stringify([row.doc.questionsHTML,row.doc.keyHTML,row.doc.config,row.doc.data])===JSON.stringify([value.questionsHTML,value.keyHTML,value.config,value.data]));
         if(old){done(old.doc);return;}
-        if(rows.length>=MAX_ENTRIES){tx.archiveReason='Je map bevat 200 reeksen. Download en verwijder eerst een oudere reeks; er is niets automatisch verwijderd.';tx.abort();return;}
+        if(rows.filter(row=>!row.deleted).length>=MAX_ENTRIES){tx.archiveReason='Je map bevat 200 reeksen. Download en verwijder eerst een oudere reeks; er is niets automatisch verwijderd.';tx.abort();return;}
         const now=new Date().toISOString(),id=options.crypto?.randomUUID?.()||'sheet-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
         const entry={...value,id,createdAt:now,updatedAt:now};store.add({key:owner+'|'+id,owner,fingerprint:hash,doc:entry});done(entry);
       };
-    });assertScope(owner);changed(owner);return metadata(saved);
+    });assertScope(owner);await sync();assertScope(owner);let cached=await localRow(owner,saved.id);if(cached&&!cached.synced&&syncStatus().online){await sync();cached=await localRow(owner,saved.id);}if(!cached)throw Error('Deze reeks is op een ander toestel verwijderd. Bewaar opnieuw om een nieuwe kopie te maken.');changed(owner);return {...metadata(saved),online:!!cached.synced};
   }
-  async function list(){const owner=await ready(),rows=await transaction(owner,'readonly',(store,done)=>{const req=store.index('owner').getAll(owner);req.onsuccess=()=>done(req.result);});assertScope(owner);return rows.filter(row=>row.doc?.version===VERSION&&sources[row.doc.sourceId]).map(row=>metadata(row.doc)).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));}
-  async function get(id){const owner=await ready(),row=await transaction(owner,'readonly',(store,done)=>{const req=store.get(owner+'|'+id);req.onsuccess=()=>done(req.result);});assertScope(owner);if(!row)return null;if(row.doc?.version!==VERSION)throw Error('Deze bewaarde reeks gebruikt een andere versie. Download je kopie en behoud dit bestand.');return {...normalize(row.doc),...metadata(row.doc)};}
-  async function remove(id){const owner=await ready();await transaction(owner,'readwrite',(store,done)=>{store.delete(owner+'|'+id);done(true);});assertScope(owner);changed(owner);return true;}
+  async function list(){const owner=await ready();await sync();const rows=await localRows(owner);assertScope(owner);return rows.filter(row=>!row.deleted&&(row.doc?.version===VERSION||row.meta)&&sources[(row.doc||row.meta).sourceId]).map(row=>({...metadata(row.doc||row.meta),online:!!row.synced})).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));}
+  async function get(id){
+    const owner=await ready();let row=await localRow(owner,id);assertScope(owner);if(!row){await sync();row=await localRow(owner,id);}if(!row||row.deleted)return null;
+    if(!row.doc){
+      const response=await remote(owner,'get',{id});if(!response.document){await transaction(owner,'readwrite',(store,done)=>{store.delete(row.key);done(true);});return null;}
+      const value=response.document;if(value.version!==VERSION)throw Error('Deze reeks vraagt een nieuwere versie van leraarBob.');
+      row.doc={...normalize(value),...metadata(value)};row.fingerprint=await fingerprint(row.doc);assertScope(owner);
+      await transaction(owner,'readwrite',(store,done)=>{const req=store.get(row.key);req.onsuccess=()=>{if(req.result&&!req.result.deleted)store.put(row);done(true);};});
+    }
+    if(row.doc.version!==VERSION)throw Error('Deze bewaarde reeks gebruikt een andere versie. Download je kopie en behoud dit bestand.');return {...normalize(row.doc),...metadata(row.doc)};
+  }
+  async function remove(id){const owner=await ready();await transaction(owner,'readwrite',(store,done)=>{if(owner.startsWith('account:'))store.put({key:owner+'|'+id,owner,id,deleted:true});else store.delete(owner+'|'+id);done(true);});assertScope(owner);await sync();assertScope(owner);changed(owner);return true;}
   const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const basicStyle='html,body{margin:0;background:#e6e9e7;color:#173238;font-family:Arial,sans-serif;height:auto!important;overflow-x:hidden!important;overflow-y:auto!important}body{padding:16px}.archive-caption{max-width:210mm;margin:0 auto 12px}.archive-caption h1{font-size:18px;margin:0 0 6px}.worksheet-page{margin:0 auto 16px}.archive-fit{margin:0 auto 16px}.archive-fit>*{max-width:none!important}img{max-width:100%;height:auto}.archive-key{break-before:page}@media print{html,body{background:white;padding:0;height:auto!important;overflow:visible!important}.archive-caption{display:none}body>main{display:block!important;height:auto!important;overflow:visible!important;padding:0!important;margin:0!important}.worksheet-page{margin:0;max-width:none}.archive-fit{width:auto!important;height:auto!important;margin:0!important;break-inside:avoid}.archive-fit>*{transform:none!important}.archive-fit>.paper,.archive-fit>.paperPage{width:auto!important}img{break-inside:avoid}}';
   function render(entry,{key=true,baseURL}={}){
@@ -152,5 +211,5 @@
     }
     return html;
   }
-  return Object.freeze({ready,ownerKey:captureScope,captureScope,save,list,get,remove,render,exportJSON,importJSON,exportHTML,sanitizeHTML,sources:Object.freeze(sources),limits:Object.freeze({maxBytes:MAX_BYTES,maxEntries:MAX_ENTRIES})});
+  return Object.freeze({ready,ownerKey:captureScope,captureScope,sync,syncStatus,save,list,get,remove,render,exportJSON,importJSON,exportHTML,sanitizeHTML,sources:Object.freeze(sources),limits:Object.freeze({maxBytes:MAX_BYTES,maxEntries:MAX_ENTRIES})});
 });

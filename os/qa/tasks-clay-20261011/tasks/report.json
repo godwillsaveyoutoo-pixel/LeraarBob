@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "Teacher creates and publishes a fixed three-part assessment to selected students; default ten Rechtenwereld questions retained.",
+    "A real line is added in the original Glasraam atelier, marked complete, stored separately from solo practice, and restored after full OS reload.",
+    "Two real shots through the existing Kleiduif renderer are time-checked and durably recorded by SQL, then shown as a completed task component.",
+    "Ten genuine Rechtenwereld answers use the native board and original server validator; one final submission freezes all three components.",
+    "Teacher reopens the original glass design, each native Rechten answer and individual clay shots, assigns points and shares feedback; another isolated browser restored unfinished answer input.",
+    "Desktop, phone and low landscape at 100% zoom, both OS bars expanded and collapsed; reachable 44px actions, no horizontal page overflow, same saved review."
+  ],
+  "errors": [],
+  "missing": [],
+  "scope": "Real native boards, local PostgreSQL and Edge handler, fixture accounts; no production deployment."
+}

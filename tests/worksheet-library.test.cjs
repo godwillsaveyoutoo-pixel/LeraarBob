@@ -10,6 +10,11 @@ async function fixture({account={id:'alice',role:'teacher'},pending=false,indexe
  const library=require('../shared/worksheet-library.js')({window:w,document:w.document,indexedDB,crypto,auth:w.AxiomaAuth});if(pending)await assert.rejects(()=>library.ready(),/account|control/i);else await library.ready();
  return{w,dom,library,emit:async(next,nextPending=false)=>{account=next;pending=nextPending;listeners.forEach(listener=>listener({account,pending}));await tick();if(!nextPending)return library.ready();}};
 }
+test('Archived numbered pages preserve their next question number and strip invalid starts',async t=>{
+ const f=await fixture();t.after(()=>f.w.close());
+ const safe=f.library.sanitizeHTML('<ol start="5"><li>Vijf</li></ol><ol start="javascript:alert(1)"><li>Zes</li></ol>');
+ const host=f.w.document.createElement('div');host.innerHTML=safe;assert.equal(host.firstElementChild.start,5);assert.equal(host.lastElementChild.hasAttribute('start'),false);
+});
 const sourceStyles={
  'rechtenwereld:hellingrug':['shared/worksheet-layout.css','games/rechten/rechtenwereld/worksheets/worksheets.css'],
  'rechtenwereld:grenspas':['shared/worksheet-layout.css','games/rechten/rechtenwereld/worksheets/worksheets.css'],

@@ -1,0 +1,1842 @@
+{
+  "checks": [
+    "Add lists Logicawereld as Trainer; native map, four-stop area and paper action usable at 1366×768, 780×360, 640×360, 390×844; one platform bar with restore >=44px",
+    "Wrong answer, hint and correction remain distinct; Start/ESC focus, minimize/resume, bookmark and hiding both OS bars preserve the native task and selected answer",
+    "All 18 stops completed via native browser controls; ten answer types and eight-row table measured in both bar states on desktop, short landscape and phone",
+    "OS workform chooser keeps selected stop, exposes exactly four implemented local modes; Duo Learn peer review survives reload; both battle forms finish through their native answers",
+    "Native paper button opens central maker at the selected stop; generated questions/key reopen in the correct OS folder; all six areas generate their complete task set",
+    "Account switch clears open student work without changing saved records; second pupil has separate progress and sheets; teacher receives no nonfunctional Logicawereld class launch",
+    "Standalone uses shared account/menu/fullscreen bar; explicit collapse survives reload and restores without resetting the exercise"
+  ],
+  "targets": [
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=select-stop][data-id=\"14\"]",
+      "width": 362.8125,
+      "height": 53,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=practice]",
+      "width": 176.90625,
+      "height": 46,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=worksheet]",
+      "width": 93.96875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=select-stop][data-id=\"14\"]",
+      "width": 362.8125,
+      "height": 53,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=practice]",
+      "width": 176.90625,
+      "height": 46,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=worksheet]",
+      "width": 93.96875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": ".lb-restore:not([hidden])",
+      "width": 44,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 780,
+        "height": 360
+      },
+      "selector": "[data-action=select-stop][data-id=\"14\"]",
+      "width": 119.046875,
+      "height": 53.390625,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 780,
+        "height": 360
+      },
+      "selector": "[data-action=practice]",
+      "width": 118.546875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 780,
+        "height": 360
+      },
+      "selector": "[data-action=worksheet]",
+      "width": 72.125,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 780,
+        "height": 360
+      },
+      "selector": "[data-action=select-stop][data-id=\"14\"]",
+      "width": 119.046875,
+      "height": 53.390625,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 780,
+        "height": 360
+      },
+      "selector": "[data-action=practice]",
+      "width": 118.546875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 780,
+        "height": 360
+      },
+      "selector": "[data-action=worksheet]",
+      "width": 72.125,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 780,
+        "height": 360
+      },
+      "selector": ".lb-restore:not([hidden])",
+      "width": 44,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=select-stop][data-id=\"14\"]",
+      "width": 104.5,
+      "height": 52,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=practice]",
+      "width": 104,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=worksheet]",
+      "width": 72.125,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=select-stop][data-id=\"14\"]",
+      "width": 104.5,
+      "height": 52,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=practice]",
+      "width": 104,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=worksheet]",
+      "width": 72.125,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": ".lb-restore:not([hidden])",
+      "width": 44,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=select-stop][data-id=\"14\"]",
+      "width": 366,
+      "height": 60.578125,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=practice]",
+      "width": 179,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=worksheet]",
+      "width": 93.96875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=select-stop][data-id=\"14\"]",
+      "width": 366,
+      "height": 60.578125,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=practice]",
+      "width": 179,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=worksheet]",
+      "width": 93.96875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": ".lb-restore:not([hidden])",
+      "width": 44,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#focusRestore",
+      "width": 129.546875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#closeApp",
+      "width": 93.71875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=choice]",
+      "width": 687.453125,
+      "height": 70,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=choice]",
+      "width": 687.453125,
+      "height": 70,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=choice]",
+      "width": 379.96875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=choice]",
+      "width": 379.96875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=choice]",
+      "width": 366,
+      "height": 54,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=choice]",
+      "width": 366,
+      "height": 54,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=truth]",
+      "width": 210,
+      "height": 150,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=truth]",
+      "width": 210,
+      "height": 150,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=truth]",
+      "width": 130,
+      "height": 88.1875,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=truth]",
+      "width": 130,
+      "height": 88.1875,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=truth]",
+      "width": 164.6875,
+      "height": 94,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=truth]",
+      "width": 164.6875,
+      "height": 94,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=build-op]",
+      "width": 49,
+      "height": 50,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=build-op]",
+      "width": 49,
+      "height": 50,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=build-op]",
+      "width": 44,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=build-op]",
+      "width": 44,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=build-op]",
+      "width": 49,
+      "height": 50,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=build-op]",
+      "width": 49,
+      "height": 50,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=choice]",
+      "width": 337.71875,
+      "height": 70,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=choice]",
+      "width": 337.71875,
+      "height": 70,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=choice]",
+      "width": 186.984375,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=choice]",
+      "width": 186.984375,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=choice]",
+      "width": 179,
+      "height": 54,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=choice]",
+      "width": 179,
+      "height": 54,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=gate]",
+      "width": 94.015625,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=gate]",
+      "width": 94.015625,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=gate]",
+      "width": 61.15625,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=gate]",
+      "width": 61.15625,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=gate]",
+      "width": 72.59375,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=gate]",
+      "width": 72.59375,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=cell]",
+      "width": 210,
+      "height": 54,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=cell]",
+      "width": 210,
+      "height": 54,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=cell]",
+      "width": 200.6875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=cell]",
+      "width": 200.6875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=cell]",
+      "width": 44,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=cell]",
+      "width": 44,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=cell]",
+      "width": 176,
+      "height": 54,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=cell]",
+      "width": 176,
+      "height": 54,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=cell]",
+      "width": 118.796875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=cell]",
+      "width": 118.796875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=cell]",
+      "width": 44,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=cell]",
+      "width": 44,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=env]",
+      "width": 90,
+      "height": 110,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=env]",
+      "width": 90,
+      "height": 110,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=env]",
+      "width": 70,
+      "height": 80,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=env]",
+      "width": 70,
+      "height": 80,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=env]",
+      "width": 90,
+      "height": 110,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=env]",
+      "width": 90,
+      "height": 110,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=classify]",
+      "width": 687.453125,
+      "height": 76,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=classify]",
+      "width": 687.453125,
+      "height": 76,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=classify]",
+      "width": 379.96875,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=classify]",
+      "width": 379.96875,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=classify]",
+      "width": 366,
+      "height": 76,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=classify]",
+      "width": 366,
+      "height": 76,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=number]",
+      "width": 85,
+      "height": 90,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=number]",
+      "width": 85,
+      "height": 90,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=number]",
+      "width": 54,
+      "height": 65,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=number]",
+      "width": 54,
+      "height": 65,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=number]",
+      "width": 65,
+      "height": 90,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=number]",
+      "width": 65,
+      "height": 90,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=choice]",
+      "width": 687.453125,
+      "height": 72,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 120,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=choice]",
+      "width": 687.453125,
+      "height": 72,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=choice]",
+      "width": 379.96875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-action=choice]",
+      "width": 379.96875,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=choice]",
+      "width": 366,
+      "height": 72,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-action=choice]",
+      "width": 366,
+      "height": 72,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": ".lb-restore:not([hidden])",
+      "width": 44,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 90,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": ".lb-restore:not([hidden])",
+      "width": 44,
+      "height": 44,
+      "inside": true,
+      "hit": true
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-action=test]",
+      "width": 92,
+      "height": 47,
+      "inside": true,
+      "hit": true
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "scope": "Real Chromium at 100%, native Logicawereld tasks, synthetic accounts, account-local saves and IndexedDB sheets. No online/class provider or production login claimed."
+}

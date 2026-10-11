@@ -1,0 +1,9 @@
+{
+  "os/desktop.js": "55a5fdf9117b32a5ad1210c87d345bdf4f80098777a07b842c024c368968a4f8",
+  "os/index.html": "4e270cb9746a985eb60d9c93374513b793d613d3fce695c97cc89942dca8d801",
+  "os/personal.css": "9bfdb156dacd4e0c2018d0705bbb4b5c17908df723f56aa6a92351e16599ac32",
+  "tests/personal-chrome-browser.cjs": "dd43e8d14cc41e7494a072e02ec462906886566594118514cef6a0f40cda37b4",
+  "tests/zeeslag-controls-browser.cjs": "b665b7c4ef4095fcd41d6aaf940793c2766ac23ea6fc10189cc66e2faca77f4a",
+  "tests/desktop-pilot-browser.cjs": "a242ffb0a0b0a5d85c6ce02ad83aa6893996eb30af59716044a7d7cb9e1abd82",
+  "tests/central-worksheet-browser.cjs": "8f2324154f09eb215bbddc0c79963506bf07339cb8f05e094c8f871c11ba0063"
+}

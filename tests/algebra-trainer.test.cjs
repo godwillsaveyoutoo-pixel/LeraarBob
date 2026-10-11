@@ -15,6 +15,7 @@ test('17 oefenvormen blijven exact equivalent en de afdruksleutel eindigt bij de
  }}finally{Math.random=random;}
 });
 test('breuken blijven exact en delen door nul of onveilige integergroei wordt afgewezen',()=>{
+ assert.equal(Object.is(R(0).neg().n,-0),false);assert.equal(Object.is(R(0,-2).n,-0),false);
  assert(R(1,3).add(R(1,6)).eq(R(1,2)));assert(R(-2,-4).eq(R(1,2)));
  assert.throws(()=>R(1).div(R(0)),/nul/);assert.throws(()=>R(Number.MAX_SAFE_INTEGER+1),/breuk/);
 });

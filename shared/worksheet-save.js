@@ -31,7 +31,7 @@ function mount({host,getSnapshot,isValid=()=>true}){
    if(library().captureScope()!==expectedScope)throw Error('Je account is gewijzigd. Open het oefenblad opnieuw voordat je het bewaart.');
    const entry=await library().save(snapshot,{expectedScope});
    if(run!==serial||library().captureScope()!==expectedScope)return null;
-   status.textContent='Bewaard in Mijn oefenbladen · op dit toestel';status.dataset.savedId=entry.id;
+   status.textContent=entry.online?'Bewaard in Mijn oefenbladen · online en op dit toestel':'Bewaard in Mijn oefenbladen · op dit toestel';if(!entry.online&&library().captureScope()?.startsWith('account:'))status.textContent+=' · online bijwerken volgt zodra je de map opent';status.dataset.savedId=entry.id;
    group.dispatchEvent(new CustomEvent('worksheet:saved',{bubbles:true,detail:{id:entry.id,automatic:!!auto}}));
    return entry;
   }catch(error){if(run===serial){delete status.dataset.savedId;status.textContent='Niet bewaard: '+error.message+' Je kunt de reeks nog afdrukken of als PDF opslaan.';}return null;}

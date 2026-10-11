@@ -1,0 +1,1309 @@
+{
+  "scope": "Real Chromium UI in localhost /os/ with guest auth fixture; no production account or remote session writes",
+  "viewport": {
+    "width": 1366,
+    "height": 768,
+    "deviceScaleFactor": 1,
+    "zoom": 1
+  },
+  "checks": [
+    {
+      "name": "Start Ctrl K / Escape restores native focus: [data-formula-tile=\"b\"]"
+    },
+    {
+      "name": "Pythagoras own map/filter/query; save; same iframe and native state after back/minimize/resume"
+    },
+    {
+      "name": "pythagoras fold/reopen 44 px restore, more app height, native state retained"
+    },
+    {
+      "name": "Pythagoras native reveal, genuine drag, numeric tile, next level, partial formula and real completed level"
+    },
+    {
+      "name": "Rechtenwereld own map/filter/query; save; same iframe and native state after back/minimize/resume"
+    },
+    {
+      "name": "rechtenwereld fold/reopen 44 px restore, more app height, native state retained"
+    },
+    {
+      "name": "Rechtenwereld uses its actual native XP without conversion"
+    },
+    {
+      "name": "Rechtenwereld native world/stop, hint, correct answer, single recorded attempt and explicit next task"
+    },
+    {
+      "name": "Rechten Zeeslag own map/filter/query; save; same iframe and native state after back/minimize/resume"
+    },
+    {
+      "name": "zeeslag fold/reopen 44 px restore, more app height, native state retained"
+    },
+    {
+      "name": "Rechten Zeeslag original fleet placement, aim controls and real fired shot; live timer remains native"
+    },
+    {
+      "name": "Glasraam own map/filter/query; save; same iframe and native state after back/minimize/resume"
+    },
+    {
+      "name": "Shared display button calls original Glasraam theme handler without changing drawing"
+    },
+    {
+      "name": "glasraam fold/reopen 44 px restore, more app height, native state retained"
+    },
+    {
+      "name": "Start Ctrl K / Escape restores native focus: #slope"
+    },
+    {
+      "name": "Glasraam wrong point, repair, complete original window, color via keyboard, native 1/8 ramen and incomplete input focus"
+    },
+    {
+      "name": "Four independent return locations survive cross-app taskbar switches"
+    },
+    {
+      "name": "Saved entry opens real app and returns to Mijn taken"
+    },
+    {
+      "name": "Compact Zeeslag VUUR is actually clickable after More > Save while the save toast is visible"
+    },
+    {
+      "name": "All four native apps inspected expanded/collapsed/reopened at 390×844"
+    },
+    {
+      "name": "Central account dialog remains accessible from native app"
+    },
+    {
+      "name": "Explicit collapsed preference survives desktop reload and restore"
+    },
+    {
+      "name": "Four saved native shortcuts persist after browser reload"
+    },
+    {
+      "name": "Student online option reaches original Zeeslag lobby, native invitation and same pending lobby after resume",
+      "detail": {
+        "provider": "Isolated AxiomaSocial fixture; no remote player or invitation"
+      }
+    },
+    {
+      "name": "Actual Start button, search and result open native Glasraam"
+    },
+    {
+      "name": "Actual profile/settings, wallpaper/display changes and return retain native iframe/drawing"
+    },
+    {
+      "name": "Direct shared fullscreen works and retains native iframe"
+    },
+    {
+      "name": "Actual Start search from an open app opens another app with its own theme"
+    },
+    {
+      "name": "Compact platform title follows actual active app"
+    },
+    {
+      "name": "Original Pythagoras leraarBob brand returns to own map and resumes same formula/iframe"
+    },
+    {
+      "name": "Original Rechtenwereld profile sign-in opens central account and retains native screen/state"
+    },
+    {
+      "name": "Original guest live-lesson sign-in opens only central account and retains code/input/submit handler",
+      "detail": {
+        "provider": "Guest auth fixture; pending code initialized through native ?code=A1B2C3 deep link"
+      }
+    }
+  ],
+  "layout": [
+    {
+      "name": "desktop-expanded",
+      "shell": {
+        "issues": [],
+        "collapsed": false
+      },
+      "native": null
+    },
+    {
+      "name": "pythagoras-expanded",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 109,
+          "width": 1366,
+          "height": 591,
+          "top": 109,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "collapsed": false
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#lfPrompt",
+            "rect": {
+              "x": 841.59375,
+              "y": 194.109375,
+              "width": 393.109375,
+              "height": 23.515625,
+              "top": 194.109375,
+              "right": 1234.703125,
+              "bottom": 217.625,
+              "left": 841.59375
+            }
+          },
+          {
+            "selector": "[data-formula-slot=\"0\"]",
+            "rect": {
+              "x": 887.59375,
+              "y": 233.625,
+              "width": 74,
+              "height": 44,
+              "top": 233.625,
+              "right": 961.59375,
+              "bottom": 277.625,
+              "left": 887.59375
+            }
+          },
+          {
+            "selector": "[data-formula-tile=\"b\"]",
+            "rect": {
+              "x": 1005.140625,
+              "y": 283.625,
+              "width": 66,
+              "height": 44,
+              "top": 283.625,
+              "right": 1071.140625,
+              "bottom": 327.625,
+              "left": 1005.140625
+            }
+          },
+          {
+            "selector": "#lfAction",
+            "rect": {
+              "x": 1200,
+              "y": 526,
+              "width": 150,
+              "height": 48,
+              "top": 526,
+              "right": 1350,
+              "bottom": 574,
+              "left": 1200
+            }
+          }
+        ],
+        "width": 1366,
+        "height": 591,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "pythagoras-collapsed",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 51,
+          "width": 1366,
+          "height": 649,
+          "top": 51,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "collapsed": true
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "[data-formula-slot=\"0\"]",
+            "rect": {
+              "x": 887.59375,
+              "y": 265.484375,
+              "width": 74,
+              "height": 58,
+              "top": 265.484375,
+              "right": 961.59375,
+              "bottom": 323.484375,
+              "left": 887.59375
+            }
+          },
+          {
+            "selector": "[data-formula-tile=\"b\"]",
+            "rect": {
+              "x": 1005.140625,
+              "y": 323.484375,
+              "width": 66,
+              "height": 58,
+              "top": 323.484375,
+              "right": 1071.140625,
+              "bottom": 381.484375,
+              "left": 1005.140625
+            }
+          },
+          {
+            "selector": "#lfAction",
+            "rect": {
+              "x": 1158,
+              "y": 570.5,
+              "width": 180,
+              "height": 51,
+              "top": 570.5,
+              "right": 1338,
+              "bottom": 621.5,
+              "left": 1158
+            }
+          }
+        ],
+        "width": 1366,
+        "height": 649,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "rechtenwereld-expanded",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 58,
+          "width": 1366,
+          "height": 642,
+          "top": 58,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "collapsed": false
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": ".boundary-workspace",
+            "rect": {
+              "x": 0,
+              "y": 52,
+              "width": 1366,
+              "height": 530,
+              "top": 52,
+              "right": 1366,
+              "bottom": 582,
+              "left": 0
+            }
+          },
+          {
+            "selector": "#continue",
+            "rect": {
+              "x": 1218.71875,
+              "y": 585,
+              "width": 131.28125,
+              "height": 48,
+              "top": 585,
+              "right": 1350,
+              "bottom": 633,
+              "left": 1218.71875
+            }
+          },
+          {
+            "selector": "#feedback",
+            "rect": {
+              "x": 567.671875,
+              "y": 594.59375,
+              "width": 198.375,
+              "height": 28.796875,
+              "top": 594.59375,
+              "right": 766.046875,
+              "bottom": 623.390625,
+              "left": 567.671875
+            }
+          }
+        ],
+        "width": 1366,
+        "height": 642,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "rechtenwereld-collapsed",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 700,
+          "top": 0,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "collapsed": true
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#continue",
+            "rect": {
+              "x": 1218.71875,
+              "y": 643,
+              "width": 131.28125,
+              "height": 48,
+              "top": 643,
+              "right": 1350,
+              "bottom": 691,
+              "left": 1218.71875
+            }
+          },
+          {
+            "selector": "#feedback",
+            "rect": {
+              "x": 567.671875,
+              "y": 652.59375,
+              "width": 198.375,
+              "height": 28.796875,
+              "top": 652.59375,
+              "right": 766.046875,
+              "bottom": 681.390625,
+              "left": 567.671875
+            }
+          }
+        ],
+        "width": 1366,
+        "height": 700,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "zeeslag-expanded",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 58,
+          "width": 1366,
+          "height": 642,
+          "top": 58,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "collapsed": false
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#attackBoard",
+            "rect": {
+              "x": 778.59375,
+              "y": 56,
+              "width": 485.8125,
+              "height": 485.8125,
+              "top": 56,
+              "right": 1264.40625,
+              "bottom": 541.8125,
+              "left": 778.59375
+            }
+          },
+          {
+            "selector": "#aUpBtn",
+            "rect": {
+              "x": 681.5,
+              "y": 589,
+              "width": 44,
+              "height": 44,
+              "top": 589,
+              "right": 725.5,
+              "bottom": 633,
+              "left": 681.5
+            }
+          },
+          {
+            "selector": "#fireBtn",
+            "rect": {
+              "x": 894.5,
+              "y": 577.90625,
+              "width": 112,
+              "height": 48,
+              "top": 577.90625,
+              "right": 1006.5,
+              "bottom": 625.90625,
+              "left": 894.5
+            }
+          },
+          {
+            "selector": "#turnPill",
+            "rect": {
+              "x": 1276.640625,
+              "y": 3,
+              "width": 77.359375,
+              "height": 25,
+              "top": 3,
+              "right": 1354,
+              "bottom": 28,
+              "left": 1276.640625
+            }
+          }
+        ],
+        "width": 1366,
+        "height": 642,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "zeeslag-collapsed",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 700,
+          "top": 0,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "collapsed": true
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#attackBoard",
+            "rect": {
+              "x": 749.59375,
+              "y": 56,
+              "width": 543.8125,
+              "height": 543.8125,
+              "top": 56,
+              "right": 1293.40625,
+              "bottom": 599.8125,
+              "left": 749.59375
+            }
+          },
+          {
+            "selector": "#aUpBtn",
+            "rect": {
+              "x": 681.5,
+              "y": 647,
+              "width": 44,
+              "height": 44,
+              "top": 647,
+              "right": 725.5,
+              "bottom": 691,
+              "left": 681.5
+            }
+          },
+          {
+            "selector": "#fireBtn",
+            "rect": {
+              "x": 894.5,
+              "y": 635.90625,
+              "width": 112,
+              "height": 48,
+              "top": 635.90625,
+              "right": 1006.5,
+              "bottom": 683.90625,
+              "left": 894.5
+            }
+          }
+        ],
+        "width": 1366,
+        "height": 700,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "glasraam-expanded",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 109,
+          "width": 1366,
+          "height": 591,
+          "top": 109,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "collapsed": false
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#glass-board",
+            "rect": {
+              "x": 24,
+              "y": 24,
+              "width": 1004,
+              "height": 543,
+              "top": 24,
+              "right": 1028,
+              "bottom": 567,
+              "left": 24
+            }
+          },
+          {
+            "selector": ".palette-panel",
+            "rect": {
+              "x": 1073,
+              "y": 248.796875,
+              "width": 248,
+              "height": 127.390625,
+              "top": 248.796875,
+              "right": 1321,
+              "bottom": 376.1875,
+              "left": 1073
+            }
+          },
+          {
+            "selector": ".work-panel",
+            "rect": {
+              "x": 1052,
+              "y": 124.796875,
+              "width": 290,
+              "height": 341.390625,
+              "top": 124.796875,
+              "right": 1342,
+              "bottom": 466.1875,
+              "left": 1052
+            }
+          }
+        ],
+        "width": 1366,
+        "height": 591,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "glasraam-collapsed",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 51,
+          "width": 1366,
+          "height": 649,
+          "top": 51,
+          "right": 1366,
+          "bottom": 700,
+          "left": 0
+        },
+        "collapsed": true
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#glass-board",
+            "rect": {
+              "x": 24,
+              "y": 24,
+              "width": 1004,
+              "height": 601,
+              "top": 24,
+              "right": 1028,
+              "bottom": 625,
+              "left": 24
+            }
+          },
+          {
+            "selector": ".palette-panel",
+            "rect": {
+              "x": 1073,
+              "y": 277.796875,
+              "width": 248,
+              "height": 127.390625,
+              "top": 277.796875,
+              "right": 1321,
+              "bottom": 405.1875,
+              "left": 1073
+            }
+          }
+        ],
+        "width": 1366,
+        "height": 649,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "pythagoras-390-expanded",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 128,
+          "width": 390,
+          "height": 654,
+          "top": 128,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "collapsed": false
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "[data-formula-slot=\"0\"]",
+            "rect": {
+              "x": 80.78125,
+              "y": 385.125,
+              "width": 74,
+              "height": 50,
+              "top": 385.125,
+              "right": 154.78125,
+              "bottom": 435.125,
+              "left": 80.78125
+            }
+          },
+          {
+            "selector": "[data-formula-tile=\"b\"]",
+            "rect": {
+              "x": 191.515625,
+              "y": 435.125,
+              "width": 66,
+              "height": 50,
+              "top": 435.125,
+              "right": 257.515625,
+              "bottom": 485.125,
+              "left": 191.515625
+            }
+          }
+        ],
+        "width": 390,
+        "height": 654,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "pythagoras-390-collapsed",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 51,
+          "width": 390,
+          "height": 731,
+          "top": 51,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "collapsed": true
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "[data-formula-slot=\"0\"]",
+            "rect": {
+              "x": 80.78125,
+              "y": 443.640625,
+              "width": 74,
+              "height": 50,
+              "top": 443.640625,
+              "right": 154.78125,
+              "bottom": 493.640625,
+              "left": 80.78125
+            }
+          },
+          {
+            "selector": "[data-formula-tile=\"b\"]",
+            "rect": {
+              "x": 191.515625,
+              "y": 493.640625,
+              "width": 66,
+              "height": 50,
+              "top": 493.640625,
+              "right": 257.515625,
+              "bottom": 543.640625,
+              "left": 191.515625
+            }
+          }
+        ],
+        "width": 390,
+        "height": 731,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "rechtenwereld-390-expanded",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 77,
+          "width": 390,
+          "height": 705,
+          "top": 77,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "collapsed": false
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#rotateGate",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 705,
+              "top": 0,
+              "right": 390,
+              "bottom": 705,
+              "left": 0
+            }
+          }
+        ],
+        "width": 390,
+        "height": 705,
+        "rotateGate": true
+      }
+    },
+    {
+      "name": "rechtenwereld-390-collapsed",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 782,
+          "top": 0,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "collapsed": true
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#rotateGate",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 782,
+              "top": 0,
+              "right": 390,
+              "bottom": 782,
+              "left": 0
+            }
+          }
+        ],
+        "width": 390,
+        "height": 782,
+        "rotateGate": true
+      }
+    },
+    {
+      "name": "rechten-zeeslag-390-expanded",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 77,
+          "width": 390,
+          "height": 705,
+          "top": 77,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "collapsed": false
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#attackBoard",
+            "rect": {
+              "x": 198,
+              "y": 210.40625,
+              "width": 186,
+              "height": 186,
+              "top": 210.40625,
+              "right": 384,
+              "bottom": 396.40625,
+              "left": 198
+            }
+          },
+          {
+            "selector": "#fireBtn",
+            "rect": {
+              "x": 276,
+              "y": 578.8125,
+              "width": 100,
+              "height": 44,
+              "top": 578.8125,
+              "right": 376,
+              "bottom": 622.8125,
+              "left": 276
+            }
+          }
+        ],
+        "width": 390,
+        "height": 705,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "rechten-zeeslag-390-collapsed",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 782,
+          "top": 0,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "collapsed": true
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#attackBoard",
+            "rect": {
+              "x": 198,
+              "y": 248.90625,
+              "width": 186,
+              "height": 186,
+              "top": 248.90625,
+              "right": 384,
+              "bottom": 434.90625,
+              "left": 198
+            }
+          },
+          {
+            "selector": "#fireBtn",
+            "rect": {
+              "x": 276,
+              "y": 655.8125,
+              "width": 100,
+              "height": 44,
+              "top": 655.8125,
+              "right": 376,
+              "bottom": 699.8125,
+              "left": 276
+            }
+          }
+        ],
+        "width": 390,
+        "height": 782,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "rechten-zeeslag-844-landscape-expanded",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 58,
+          "width": 844,
+          "height": 264,
+          "top": 58,
+          "right": 844,
+          "bottom": 322,
+          "left": 0
+        },
+        "collapsed": false
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#attackBoard",
+            "rect": {
+              "x": 549.59375,
+              "y": 22,
+              "width": 163.8125,
+              "height": 163.8125,
+              "top": 22,
+              "right": 713.40625,
+              "bottom": 185.8125,
+              "left": 549.59375
+            }
+          },
+          {
+            "selector": "#fireBtn",
+            "rect": {
+              "x": 478,
+              "y": 201.90625,
+              "width": 112,
+              "height": 48,
+              "top": 201.90625,
+              "right": 590,
+              "bottom": 249.90625,
+              "left": 478
+            }
+          }
+        ],
+        "width": 844,
+        "height": 264,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "rechten-zeeslag-844-landscape-collapsed",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 844,
+          "height": 322,
+          "top": 0,
+          "right": 844,
+          "bottom": 322,
+          "left": 0
+        },
+        "collapsed": true
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#attackBoard",
+            "rect": {
+              "x": 520.59375,
+              "y": 22,
+              "width": 221.8125,
+              "height": 221.8125,
+              "top": 22,
+              "right": 742.40625,
+              "bottom": 243.8125,
+              "left": 520.59375
+            }
+          },
+          {
+            "selector": "#fireBtn",
+            "rect": {
+              "x": 478,
+              "y": 259.90625,
+              "width": 112,
+              "height": 48,
+              "top": 259.90625,
+              "right": 590,
+              "bottom": 307.90625,
+              "left": 478
+            }
+          }
+        ],
+        "width": 844,
+        "height": 322,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "glasraam-390-expanded",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 128,
+          "width": 390,
+          "height": 654,
+          "top": 128,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "collapsed": false
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#glass-board",
+            "rect": {
+              "x": 8,
+              "y": 8,
+              "width": 374,
+              "height": 471,
+              "top": 8,
+              "right": 382,
+              "bottom": 479,
+              "left": 8
+            }
+          },
+          {
+            "selector": "#check",
+            "rect": {
+              "x": 213,
+              "y": 561.5,
+              "width": 56,
+              "height": 44,
+              "top": 561.5,
+              "right": 269,
+              "bottom": 605.5,
+              "left": 213
+            }
+          },
+          {
+            "selector": ".task",
+            "rect": {
+              "x": 21,
+              "y": 558,
+              "width": 180,
+              "height": 78,
+              "top": 558,
+              "right": 201,
+              "bottom": 636,
+              "left": 21
+            }
+          }
+        ],
+        "width": 390,
+        "height": 654,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "glasraam-390-collapsed",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 51,
+          "width": 390,
+          "height": 731,
+          "top": 51,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "collapsed": true
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#glass-board",
+            "rect": {
+              "x": 8,
+              "y": 8,
+              "width": 374,
+              "height": 548,
+              "top": 8,
+              "right": 382,
+              "bottom": 556,
+              "left": 8
+            }
+          },
+          {
+            "selector": "#check",
+            "rect": {
+              "x": 213,
+              "y": 638.5,
+              "width": 56,
+              "height": 44,
+              "top": 638.5,
+              "right": 269,
+              "bottom": 682.5,
+              "left": 213
+            }
+          },
+          {
+            "selector": ".task",
+            "rect": {
+              "x": 21,
+              "y": 635,
+              "width": 180,
+              "height": 78,
+              "top": 635,
+              "right": 201,
+              "bottom": 713,
+              "left": 21
+            }
+          }
+        ],
+        "width": 390,
+        "height": 731,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "glasraam-844-landscape-expanded",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 109,
+          "width": 844,
+          "height": 213,
+          "top": 109,
+          "right": 844,
+          "bottom": 322,
+          "left": 0
+        },
+        "collapsed": false
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#glass-board",
+            "rect": {
+              "x": 8,
+              "y": 8,
+              "width": 626,
+              "height": 197,
+              "top": 8,
+              "right": 634,
+              "bottom": 205,
+              "left": 8
+            }
+          },
+          {
+            "selector": "#check",
+            "rect": {
+              "x": 653,
+              "y": 149.59375,
+              "width": 72,
+              "height": 44,
+              "top": 149.59375,
+              "right": 725,
+              "bottom": 193.59375,
+              "left": 653
+            }
+          },
+          {
+            "selector": ".task",
+            "rect": {
+              "x": 653,
+              "y": 80,
+              "width": 172,
+              "height": 63.59375,
+              "top": 80,
+              "right": 825,
+              "bottom": 143.59375,
+              "left": 653
+            }
+          }
+        ],
+        "width": 844,
+        "height": 213,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "glasraam-844-landscape-collapsed",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 51,
+          "width": 844,
+          "height": 271,
+          "top": 51,
+          "right": 844,
+          "bottom": 322,
+          "left": 0
+        },
+        "collapsed": true
+      },
+      "native": {
+        "issues": [],
+        "rects": [
+          {
+            "selector": "#glass-board",
+            "rect": {
+              "x": 8,
+              "y": 8,
+              "width": 626,
+              "height": 255,
+              "top": 8,
+              "right": 634,
+              "bottom": 263,
+              "left": 8
+            }
+          },
+          {
+            "selector": "#check",
+            "rect": {
+              "x": 653,
+              "y": 149.59375,
+              "width": 72,
+              "height": 44,
+              "top": 149.59375,
+              "right": 725,
+              "bottom": 193.59375,
+              "left": 653
+            }
+          },
+          {
+            "selector": ".task",
+            "rect": {
+              "x": 653,
+              "y": 80,
+              "width": 172,
+              "height": 63.59375,
+              "top": 80,
+              "right": 825,
+              "bottom": 143.59375,
+              "left": 653
+            }
+          }
+        ],
+        "width": 844,
+        "height": 271,
+        "rotateGate": false
+      }
+    },
+    {
+      "name": "desktop-collapsed-after-reload",
+      "shell": {
+        "issues": [],
+        "collapsed": true
+      },
+      "native": null
+    },
+    {
+      "name": "desktop-start-390",
+      "shell": {
+        "issues": [],
+        "frame": {
+          "x": 0,
+          "y": 128,
+          "width": 390,
+          "height": 654,
+          "top": 128,
+          "right": 390,
+          "bottom": 782,
+          "left": 0
+        },
+        "collapsed": false
+      },
+      "native": null
+    }
+  ],
+  "integrationIssues": [],
+  "blocked": [
+    {
+      "name": "Native Rechtenwereld compact practice",
+      "detail": "The original trainer shows its retained rotate/minimum-workspace guidance at 390 px; the exercise is preserved. Full trainer interaction was performed at 1366×768."
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "passed": true
+}

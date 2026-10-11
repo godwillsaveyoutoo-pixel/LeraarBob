@@ -1,0 +1,59 @@
+{
+  "report": {
+    "groups": 11,
+    "errors": [],
+    "failure": null
+  },
+  "clay-play-report": {
+    "groups": 7,
+    "errors": [],
+    "failure": null
+  },
+  "logica-play-report": {
+    "groups": 4,
+    "errors": [],
+    "failure": null
+  },
+  "workforms-report": {
+    "groups": 20,
+    "errors": [],
+    "failure": null
+  },
+  "window-regression": {
+    "groups": 4,
+    "errors": [],
+    "failure": null
+  },
+  "database": {
+    "tests": 11,
+    "passed": 11,
+    "failed": 0,
+    "log": "database-tests.txt"
+  },
+  "static": {
+    "catalog": "passed",
+    "desktop-package": "74 controls / 23 dependencies passed",
+    "git-diff-check": "passed"
+  },
+  "pdf": {
+    "documents": 16,
+    "pages": 18,
+    "poppler": "representative reports, real played reports and all three long-report pages rendered and visually inspected"
+  },
+  "limits": [
+    "Synthetic local accounts; production not deployed or tested",
+    "Supabase local advisor unavailable: no Docker PostgreSQL on port 54322",
+    "Earlier CI on 7f42ac5 passed; new push CI is separate"
+  ],
+  "recorded_at": "2026-10-11T15:25:02.504125+00:00",
+  "preview": {
+    "url": "http://127.0.0.1:8798/os/",
+    "checks": [
+      "Consistent one-device / two-device duo labels",
+      "Seven teacher-only class starts",
+      "Eight-character class code prefilled",
+      "All three report providers available"
+    ],
+    "errors": []
+  }
+}

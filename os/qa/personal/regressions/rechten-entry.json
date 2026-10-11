@@ -1,0 +1,1001 @@
+{
+  "auth": "Fictional isolated accounts; production login not tested",
+  "backend": "Existing rights Learn/class Edge handlers and migrations in local PGlite; profile/progress overview fixture boundaries",
+  "checks": [
+    "learn-setup desktop/phone, both topbar states, reachable native controls",
+    "Direct OS light/dark switch reaches the native entry card",
+    "Return to own OS folder and resume keeps the same selected native setup",
+    "learn-lobby desktop/phone, both topbar states, reachable native controls",
+    "Native question and proposal button reachable on desktop/phone with either topbar state",
+    "Real Learn create/invite/accept/start and first hill question via native choices/proposals/approvals/server grading; focus, entered answer and workboard survive OS Start/minimize/save",
+    "class-setup desktop/phone, both topbar states, reachable native controls",
+    "class-lobby desktop/phone, both topbar states, reachable native controls",
+    "class-pupil-lobby desktop/phone, both topbar states, reachable native controls",
+    "Native class setup/create/join/start uses real local Edge handler and database; teacher/student actions distinct; no entry hero on active question",
+    "Standalone Learn/class setup on phone: collapse survives reload, restore is 44px and actionable; chosen Learn skill survives reload"
+  ],
+  "measurements": [
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#learnWorld",
+      "box": {
+        "x": 204,
+        "y": 344.765625,
+        "width": 470,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#learnSkill",
+      "box": {
+        "x": 692,
+        "y": 344.765625,
+        "width": 470,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#learnCapacity",
+      "box": {
+        "x": 204,
+        "y": 429.15625,
+        "width": 470,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#learnCreateButton",
+      "box": {
+        "x": 204,
+        "y": 485.15625,
+        "width": 176.78125,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#learnWorld",
+      "box": {
+        "x": 204,
+        "y": 286.765625,
+        "width": 470,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#learnSkill",
+      "box": {
+        "x": 692,
+        "y": 286.765625,
+        "width": 470,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#learnCapacity",
+      "box": {
+        "x": 204,
+        "y": 371.15625,
+        "width": 470,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#learnCreateButton",
+      "box": {
+        "x": 204,
+        "y": 427.15625,
+        "width": 176.78125,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#learnWorld",
+      "box": {
+        "x": 27,
+        "y": 407.140625,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#learnSkill",
+      "box": {
+        "x": 27,
+        "y": 491.53125,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#learnCapacity",
+      "box": {
+        "x": 27,
+        "y": 575.921875,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#learnCreateButton",
+      "box": {
+        "x": 27,
+        "y": 680.296875,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#learnWorld",
+      "box": {
+        "x": 27,
+        "y": 310.140625,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#learnSkill",
+      "box": {
+        "x": 27,
+        "y": 394.53125,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#learnCapacity",
+      "box": {
+        "x": 27,
+        "y": 478.921875,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#learnCreateButton",
+      "box": {
+        "x": 27,
+        "y": 583.296875,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#learnStart",
+      "box": {
+        "x": 1022.078125,
+        "y": 478.671875,
+        "width": 139.921875,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#learnExit",
+      "box": {
+        "x": 1073.203125,
+        "y": 261,
+        "width": 88.796875,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#learnInviteList [data-action=invite]",
+      "box": {
+        "x": 1053.34375,
+        "y": 398.078125,
+        "width": 108.65625,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#learnStart",
+      "box": {
+        "x": 1022.078125,
+        "y": 420.671875,
+        "width": 139.921875,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#learnExit",
+      "box": {
+        "x": 1073.203125,
+        "y": 203,
+        "width": 88.796875,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#learnInviteList [data-action=invite]",
+      "box": {
+        "x": 1053.34375,
+        "y": 340.078125,
+        "width": 108.65625,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#learnStart",
+      "box": {
+        "x": 27,
+        "y": 648.609375,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#learnExit",
+      "box": {
+        "x": 274.203125,
+        "y": 292.859375,
+        "width": 88.796875,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#learnInviteList [data-action=invite]",
+      "box": {
+        "x": 254.34375,
+        "y": 576.609375,
+        "width": 108.65625,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#learnStart",
+      "box": {
+        "x": 27,
+        "y": 551.609375,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#learnExit",
+      "box": {
+        "x": 274.203125,
+        "y": 195.859375,
+        "width": 88.796875,
+        "height": 44
+      }
+    },
+    {
+      "label": "learn-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#learnInviteList [data-action=invite]",
+      "box": {
+        "x": 254.34375,
+        "y": 479.609375,
+        "width": 108.65625,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#world",
+      "box": {
+        "x": 202,
+        "y": 381.921875,
+        "width": 522.21875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#skill",
+      "box": {
+        "x": 202,
+        "y": 458.46875,
+        "width": 522.21875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#rounds",
+      "box": {
+        "x": 746.21875,
+        "y": 381.921875,
+        "width": 202.890625,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#seconds",
+      "box": {
+        "x": 961.109375,
+        "y": 381.921875,
+        "width": 202.890625,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#hostForm button.primary",
+      "box": {
+        "x": 1013.125,
+        "y": 565.65625,
+        "width": 150.875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#world",
+      "box": {
+        "x": 202,
+        "y": 323.921875,
+        "width": 522.21875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#skill",
+      "box": {
+        "x": 202,
+        "y": 400.46875,
+        "width": 522.21875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#rounds",
+      "box": {
+        "x": 746.21875,
+        "y": 323.921875,
+        "width": 202.890625,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#seconds",
+      "box": {
+        "x": 961.109375,
+        "y": 323.921875,
+        "width": 202.890625,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#hostForm button.primary",
+      "box": {
+        "x": 1013.125,
+        "y": 507.65625,
+        "width": 150.875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#world",
+      "box": {
+        "x": 27,
+        "y": 446.296875,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#skill",
+      "box": {
+        "x": 27,
+        "y": 522.84375,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#rounds",
+      "box": {
+        "x": 27,
+        "y": 657.28125,
+        "width": 162,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#seconds",
+      "box": {
+        "x": 201,
+        "y": 657.28125,
+        "width": 162,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#hostForm button.primary",
+      "box": {
+        "x": 199,
+        "y": 710.65625,
+        "width": 164,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#world",
+      "box": {
+        "x": 27,
+        "y": 349.296875,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#skill",
+      "box": {
+        "x": 27,
+        "y": 425.84375,
+        "width": 336,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#rounds",
+      "box": {
+        "x": 27,
+        "y": 560.28125,
+        "width": 162,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#seconds",
+      "box": {
+        "x": 201,
+        "y": 560.28125,
+        "width": 162,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-setup",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#hostForm button.primary",
+      "box": {
+        "x": 199,
+        "y": 685.65625,
+        "width": 164,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#copyLink",
+      "box": {
+        "x": 152,
+        "y": 312.78125,
+        "width": 183.6875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#start",
+      "box": {
+        "x": 1067.53125,
+        "y": 419.96875,
+        "width": 146.46875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#closeSession",
+      "box": {
+        "x": 921.3125,
+        "y": 419.96875,
+        "width": 138.21875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#copyLink",
+      "box": {
+        "x": 152,
+        "y": 254.78125,
+        "width": 183.6875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#start",
+      "box": {
+        "x": 1067.53125,
+        "y": 361.96875,
+        "width": 146.46875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#closeSession",
+      "box": {
+        "x": 921.3125,
+        "y": 361.96875,
+        "width": 138.21875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#copyLink",
+      "box": {
+        "x": 23,
+        "y": 341.890625,
+        "width": 183.6875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#start",
+      "box": {
+        "x": 199,
+        "y": 580.515625,
+        "width": 168,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#closeSession",
+      "box": {
+        "x": 23,
+        "y": 580.515625,
+        "width": 168,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#copyLink",
+      "box": {
+        "x": 23,
+        "y": 244.890625,
+        "width": 183.6875,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#start",
+      "box": {
+        "x": 199,
+        "y": 483.515625,
+        "width": 168,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#closeSession",
+      "box": {
+        "x": 23,
+        "y": 483.515625,
+        "width": 168,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-pupil-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": false,
+      "target": "#leaveSession",
+      "box": {
+        "x": 1078.984375,
+        "y": 423.515625,
+        "width": 135.015625,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-pupil-lobby",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "collapsed": true,
+      "target": "#leaveSession",
+      "box": {
+        "x": 1078.984375,
+        "y": 365.515625,
+        "width": 135.015625,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-pupil-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": false,
+      "target": "#leaveSession",
+      "box": {
+        "x": 23,
+        "y": 561,
+        "width": 344,
+        "height": 44
+      }
+    },
+    {
+      "label": "class-pupil-lobby",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "collapsed": true,
+      "target": "#leaveSession",
+      "box": {
+        "x": 23,
+        "y": 464,
+        "width": 344,
+        "height": 44
+      }
+    }
+  ],
+  "calls": {
+    "axioma_class_battle_hub:overview": 7,
+    "rechten-learn:catalog": 4,
+    "axioma_social:sync": 23,
+    "axioma_clay_v2:sync": 32,
+    "rechten-learn:create": 1,
+    "rechten-learn:state": 22,
+    "rechten-learn:invite": 1,
+    "rechten-learn:accept": 1,
+    "rechten-learn:start": 1,
+    "rechten-learn:idea": 2,
+    "rechten-learn:approve": 3,
+    "rechten-learn:check": 1,
+    "numbers-session:overview": 2,
+    "rechten-class:create": 1,
+    "axioma_class_battle_hub:code": 1,
+    "rechten-class:join": 1,
+    "rechten-class:state": 8,
+    "rechten-class:start": 1
+  },
+  "errors": [],
+  "missing": []
+}

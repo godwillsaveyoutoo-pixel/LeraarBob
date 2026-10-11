@@ -1,0 +1,14 @@
+{
+  "tasks/tasks.js": "ee11d68b6ef42261f51bf7ab4ebd5cc0b49154e15d65b25e725ddfebd84163bc",
+  "tasks/index.html": "c3f3feeeab0aa4167fd732942e193fa39ff453ffd39661a8b563b647d94396c9",
+  "tasks/tasks.css": "198af440ea9882c16830058ed669c77b4a33c117a6fec83f9943f3ff6ccc2ddc",
+  "tasks/clay-bridge.js": "3039f250a9b369530bcc05aef811d8b3dd2826e570ef6c86d340b8509eb058b2",
+  "tasks/result-pdf.js": "4205406c29f7e84f51950e5d504f633a23ec79b9dbe9f1ac3522a64dcc6fd084",
+  "games/rechten/rechtenwereld/glasatelier/app.js": "8c4c8b39684fffe8f1a23c67865e174f076e40f5d4019bbeeebc6134c094260c",
+  "games/rechten/rechtenwereld/glasatelier/core.js": "8a808cdbb532b2f3230d95f95649b77eda702c1d66a744c43b337d89c12d8938",
+  "supabase/migrations/20261011135715_os_task_unit_scores_and_partial_submission.sql": "ea9f07c2a18e55ccec3465189c30319ae2f61d00a5a11450024358d2e340e81a",
+  "tests/os-tasks.test.cjs": "7ea63b134fa251c83e66144868afc4c4a525bb07b6db548f880c9fa0155ac7a4",
+  "tests/os-tasks-browser.cjs": "33ad6c7217b78bbdb5d1a8ce97fd7883f78d48d2cf502700564b84e116de1d47",
+  "tests/helpers/os-tasks-db.cjs": "515eb2f335f5249d51659e5a35ae9056129ce5873a34e2ef22f1563a27fc9cbc",
+  ".github/workflows/catalog.yml": "c4a32d9ebd3279c521c8bbdd51e6aa29d81372b50f44afd5400af0324376b6e4"
+}

@@ -1,0 +1,39 @@
+✔ Closing a settled desktop fixture cancels pending rendering before jsdom destroys its document (256.637962ms)
+✔ The desktop starts with one app and Add; the catalog retains themes and distinct work forms (96.105765ms)
+✔ Back, Start, global menu and collapsing the platform row retain the exact native DOM and handlers (157.014283ms)
+✔ A second visit restores the explicit topbar preference and has a reachable restore control (60.106878ms)
+✔ Learner startup and direct launches reject class creation; teacher options use the trusted auth result (58.950686ms)
+✔ Saving is a desktop shortcut; closing is explicit; reopening a running online app keeps that mode (70.394871ms)
+✔ Account changes clear live apps and separate pins, shortcuts and stale progress responses (91.96296ms)
+✔ An unrecognized account can discover guest apps without fake learner progress or class controls (34.036214ms)
+✔ The laptop cache limit rejects a seventh app without discarding the six live screens (84.94446ms)
+✔ Vergelijkingen old systems links open the original independent Stelsels without changing either exercise (57.775165ms)
+✔ Algebra route at the six-window limit keeps the original answer instead of navigating its iframe (94.727343ms)
+✔ Each pilot keeps its own folder, filter and search when switching through the taskbar (114.464299ms)
+✔ Launching through Start gives the new app its theme while saved shortcuts return to My tasks (96.709306ms)
+✔ Start works from a native answer field and Escape returns focus without changing native keys or input (31.463461ms)
+✔ Resuming a pinned app retains its own return place and restores the native answer focus (53.209849ms)
+✔ Start and resume retain focus from a nested native workboard without intercepting ordinary answers (38.39875ms)
+✔ Actual atelier progress keeps its native unit and does not leak into another app (51.871598ms)
+✔ Native sign-in actions reach the central account panel and the bridge is removed on close (50.609106ms)
+✔ Guest live lesson sign-in captures the real native account handler and preserves the join screen (47.345241ms)
+✔ The central pupil code entrance joins the native Learn session; teachers reach class setup (103.727535ms)
+✔ The actual powers workbench keeps its clickable answer, seed and native document through desktop navigation (369.775141ms)
+✔ Each bar folds independently; hidden taskbar is inert, current input and native handler survive, and account preferences remain separate (61.19526ms)
+✔ Folders and rankings have one resumable taskbar entry each; closing removes only the window and switching accounts clears their state (71.599013ms)
+✔ Historical shortcuts keep stored data; an old systems launch resolves to the original trainer (29.723939ms)
+✔ Klaslearn: identity, own drafts, retry, once-only XP, late join, teacher pacing, reports (2310.88623ms)
+✔ online duo: capacity, trusted battle answers, hidden correctness, server deadline, finish (1769.29454ms)
+✔ Duo Learn requires both own solutions and a separate discussion confirmation (1578.400104ms)
+✔ period reports include recorded solo evidence; other classes remain private (1555.060688ms)
+✔ a pupil hosting a duo cannot inspect the opponent answer during a battle (1595.175665ms)
+✔ a departed duo member cannot reclaim an occupied second seat (1580.328159ms)
+✔ central overview lists only owned or joined sessions and never leaks live grading (1592.752839ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14472.139609

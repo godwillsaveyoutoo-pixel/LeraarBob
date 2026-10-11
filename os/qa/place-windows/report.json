@@ -1,0 +1,624 @@
+{
+  "checks": [
+    "Vergelijkingen appears in Add, app card, shared header and taskbar; original algebra-trainer identity remains",
+    "Real generated worksheet returns to the same topic; folder and nonmodal rankings minimize/resume beside unchanged native app; reopening Start creates no duplicate",
+    "1366×768, 390×844 and 640×360: recognizable folder/ranking icons, active state, reachable controls >=44px, both bars still collapse and restore",
+    "Closing only removes the chosen window; saved worksheet and native app survive; account switch clears prior folders and rankings"
+  ],
+  "targets": [
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Terug naar Mijn oefenbladen",
+      "x": 646.640625,
+      "y": 711,
+      "w": 146.5,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Terug naar Ranglijsten",
+      "x": 800.140625,
+      "y": 711,
+      "w": 113.34375,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Venster minimaliseren",
+      "x": 1224,
+      "y": 91,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Venster sluiten",
+      "x": 1272,
+      "y": 91,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Terug naar Mijn oefenbladen",
+      "x": 646.640625,
+      "y": 711,
+      "w": 146.5,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Terug naar Ranglijsten",
+      "x": 800.140625,
+      "y": 711,
+      "w": 113.34375,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Venster minimaliseren",
+      "x": 1224,
+      "y": 31,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Venster sluiten",
+      "x": 1272,
+      "y": 31,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Terug naar Mijn oefenbladen",
+      "x": 646.640625,
+      "y": 711,
+      "w": 146.5,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Terug naar Ranglijsten",
+      "x": 800.140625,
+      "y": 711,
+      "w": 113.34375,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Venster minimaliseren",
+      "x": 1224,
+      "y": 91,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Venster sluiten",
+      "x": 1272,
+      "y": 91,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Terug naar Mijn oefenbladen",
+      "x": 646.640625,
+      "y": 711,
+      "w": 146.5,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Terug naar Ranglijsten",
+      "x": 800.140625,
+      "y": 711,
+      "w": 113.34375,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Venster minimaliseren",
+      "x": 1224,
+      "y": 31,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Venster sluiten",
+      "x": 1272,
+      "y": 31,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "label": "Onderbalk uitklappen",
+      "x": 651,
+      "y": 724,
+      "w": 64,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Terug naar Mijn oefenbladen",
+      "x": 268,
+      "y": 790,
+      "w": 44,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Terug naar Ranglijsten",
+      "x": 270,
+      "y": 790,
+      "w": 44,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Venster minimaliseren",
+      "x": 282,
+      "y": 101.390625,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Venster sluiten",
+      "x": 326,
+      "y": 101.390625,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Terug naar Mijn oefenbladen",
+      "x": 219,
+      "y": 790,
+      "w": 44,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Terug naar Ranglijsten",
+      "x": 270,
+      "y": 790,
+      "w": 44,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Venster minimaliseren",
+      "x": 282,
+      "y": 24.390625,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Venster sluiten",
+      "x": 326,
+      "y": 24.390625,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Terug naar Mijn oefenbladen",
+      "x": 219,
+      "y": 790,
+      "w": 44,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Terug naar Ranglijsten",
+      "x": 270,
+      "y": 790,
+      "w": 44,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Venster minimaliseren",
+      "x": 282,
+      "y": 95,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Venster sluiten",
+      "x": 326,
+      "y": 95,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Terug naar Mijn oefenbladen",
+      "x": 219,
+      "y": 790,
+      "w": 44,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Terug naar Ranglijsten",
+      "x": 270,
+      "y": 790,
+      "w": 44,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Venster minimaliseren",
+      "x": 282,
+      "y": 18,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Venster sluiten",
+      "x": 326,
+      "y": 18,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "Onderbalk uitklappen",
+      "x": 163,
+      "y": 800,
+      "w": 64,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Terug naar Mijn oefenbladen",
+      "x": 351.734375,
+      "y": 303,
+      "w": 46,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Terug naar Ranglijsten",
+      "x": 404.734375,
+      "y": 303,
+      "w": 46,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Venster minimaliseren",
+      "x": 515,
+      "y": 87,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Venster sluiten",
+      "x": 563,
+      "y": 87,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Terug naar Mijn oefenbladen",
+      "x": 351.734375,
+      "y": 303,
+      "w": 46,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Terug naar Ranglijsten",
+      "x": 404.734375,
+      "y": 303,
+      "w": 46,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Venster minimaliseren",
+      "x": 515,
+      "y": 26,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Venster sluiten",
+      "x": 563,
+      "y": 26,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Terug naar Mijn oefenbladen",
+      "x": 351.734375,
+      "y": 303,
+      "w": 46,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Terug naar Ranglijsten",
+      "x": 404.734375,
+      "y": 303,
+      "w": 46,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Venster minimaliseren",
+      "x": 515,
+      "y": 87,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Venster sluiten",
+      "x": 563,
+      "y": 87,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Terug naar Mijn oefenbladen",
+      "x": 351.734375,
+      "y": 303,
+      "w": 46,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Terug naar Ranglijsten",
+      "x": 404.734375,
+      "y": 303,
+      "w": 46,
+      "h": 47,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Venster minimaliseren",
+      "x": 515,
+      "y": 26,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Venster sluiten",
+      "x": 563,
+      "y": 26,
+      "w": 44,
+      "h": 44,
+      "hit": true
+    },
+    {
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "label": "Onderbalk uitklappen",
+      "x": 288,
+      "y": 316,
+      "w": 64,
+      "h": 44,
+      "hit": true
+    }
+  ],
+  "errors": [],
+  "scope": "Real Chromium, 100% zoom, local synthetic accounts, native Algebra and central worksheet generator."
+}

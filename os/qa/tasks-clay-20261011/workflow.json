@@ -1,0 +1,232 @@
+{
+  "date": "2026-10-11",
+  "scope": "All 30 local test commands in catalog.yml, installed dependencies; local Chromium via Brave, synthetic accounts, real SQL and Edge handler. No production deployment or external devices.",
+  "passed": 30,
+  "failed": 0,
+  "environment": {
+    "node": "v24.18.1",
+    "browser": "/opt/brave.com/brave/brave",
+    "viewport": "1366x768 at deviceScaleFactor 1, additional compact dimensions per suite"
+  },
+  "rerun_notes": [
+    "Desktop DOM: retained synchronous closing for ordinary apps, awaited pending task writes only; updated saved-shortcut assertions for the new assignments card.",
+    "Pilot: changed Start label and counted only saved shortcuts, excluding the assignments entry.",
+    "Getallen and scientific first failed before browser launch; rerun with explicit LB_CHROMIUM.",
+    "Expanded Kleiduif solo/menu coverage found polling reopening solo and a hidden old session menu; both corrected. The native summary selector was then corrected; final full browser suite passes.",
+    "Final task pass includes native teacher review, second-browser draft, CSV export, both OS bars collapsed and reachable 44px actions.",
+    "GitHub CI 38142332607 found a random-solo test assumption: the first timed target need not offer slope 1. The browser test now clicks an actually displayed answer; the full Kleiduif suite was rerun successfully. No game logic changed for this correction.",
+    "GitHub PR run 38142620919 exposed an existing clipboard timing race in personal-os-browser: the test read before the async write had completed. It now waits for the actual copied-link confirmation before checking and opening the clipboard URL. The complete personal OS suite passes locally."
+  ],
+  "commands": [
+    {
+      "command": "node scripts/build-catalog.cjs --check",
+      "exit": 0,
+      "seconds": 0.06,
+      "log": "logs/01.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "node --test --test-isolation=none tests/catalog.test.cjs tests/catalog-progress.test.cjs tests/desktop-model.test.cjs tests/getallenwereld.test.cjs tests/getallen-guided-choices.test.cjs tests/getallen-scientific-lessons.test.cjs tests/scientific-provider.test.cjs tests/algebra-class.test.cjs tests/algebra-learning.test.cjs tests/algebra-trainer.test.cjs tests/algebra-v04-choices.test.cjs tests/algebra-v04-journey.test.cjs tests/algebra-v04-motion.test.cjs tests/algebra-v045-fractions.test.cjs tests/algebra-v050-flow.test.cjs tests/algebra-world.test.cjs tests/stelsels-workshop.test.cjs tests/logicawereld-logic.test.cjs tests/logicawereld-flow.test.cjs tests/logicawereld-integration.test.cjs",
+      "exit": 0,
+      "seconds": 8.53,
+      "log": "logs/02.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "node --check os/desktop.js && node --check os/personal-home.js && node --check os/activity-entry.js && node --check os/native-chrome.js && node --check os/edge-bars.js && node --check os/clay-entry.js && node --check tasks/tasks.js && node --check tasks/clay-bridge.js",
+      "exit": 0,
+      "seconds": 0.39,
+      "log": "logs/03.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "node tests/desktop-package-check.cjs",
+      "exit": 0,
+      "seconds": 0.03,
+      "log": "logs/04.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" node --test --test-isolation=none tests/desktop-dom.test.cjs tests/topbar-desktop.test.cjs tests/os-native-chrome.test.cjs tests/getallen-workshop-dom.test.cjs tests/getallen-world-integration.test.cjs tests/class-activity-flow.test.cjs tests/worksheet-library.test.cjs tests/worksheet-save.test.cjs tests/practice-rewards.test.cjs",
+      "exit": 0,
+      "seconds": 52.23,
+      "log": "logs/05.log",
+      "initial_exit": 1
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" HOME_SCREENSHOTS=\"/tmp/lb-checklist-tasks/os-qa/home-entry\" node tests/home-entry-browser.cjs",
+      "exit": 0,
+      "seconds": 6.33,
+      "log": "logs/06.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs tests/worksheet-cloud.test.cjs tests/os-tasks.test.cjs tests/clay-os.test.cjs tests/clay-service.test.cjs tests/clay-game.test.cjs",
+      "exit": 0,
+      "seconds": 30.42,
+      "log": "logs/07.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" TASKS_PROOF=\"/tmp/lb-checklist-tasks/os-qa/tasks\" node tests/os-tasks-browser.cjs",
+      "exit": 0,
+      "seconds": 19.88,
+      "log": "logs/08.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" CLAY_OS_PROOF=\"/tmp/lb-checklist-tasks/os-qa/clay\" node tests/clay-os-browser.cjs",
+      "exit": 0,
+      "seconds": 56.65,
+      "log": "logs/09.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" LB_SCREENSHOT_DIR=\"/tmp/lb-checklist-tasks/os-qa/personal\" node tests/personal-os-browser.cjs",
+      "exit": 0,
+      "seconds": 40.26,
+      "log": "logs/10.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" LB_SCREENSHOT_DIR=\"/tmp/lb-checklist-tasks/os-qa/personal\" node tests/personal-chrome-browser.cjs",
+      "exit": 0,
+      "seconds": 18.5,
+      "log": "logs/11.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" BAR_GESTURES_PROOF=\"/tmp/lb-checklist-tasks/os-qa/bar-gestures\" node tests/os-bar-gestures-browser.cjs",
+      "exit": 0,
+      "seconds": 16.15,
+      "log": "logs/12.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" PLACE_PROOF=\"/tmp/lb-checklist-tasks/os-qa/places\" node tests/os-place-windows-browser.cjs",
+      "exit": 0,
+      "seconds": 15.14,
+      "log": "logs/13.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" WORKFORMS_PROOF=\"/tmp/lb-checklist-tasks/os-qa/workforms\" node tests/os-workforms-browser.cjs",
+      "exit": 0,
+      "seconds": 90.67,
+      "log": "logs/14.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" LB_NAV_SCREENSHOTS=\"/tmp/lb-checklist-tasks/os-qa/native-navigation\" node tests/rechten-os-navigation-browser.cjs",
+      "exit": 0,
+      "seconds": 13.49,
+      "log": "logs/15.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" OS_SCREENSHOTS=\"/tmp/lb-checklist-tasks/os-qa/pilots\" node tests/desktop-pilot-browser.cjs",
+      "exit": 0,
+      "seconds": 26.97,
+      "log": "logs/16.log",
+      "initial_exit": 1
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" ZEESLAG_SCREENSHOTS=\"/tmp/lb-checklist-tasks/os-qa/zeeslag-controls\" node tests/zeeslag-controls-browser.cjs",
+      "exit": 0,
+      "seconds": 19.2,
+      "log": "logs/17.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" BRANDWEER_SCREENSHOTS=\"/tmp/lb-checklist-tasks/os-qa/brandweer-controls\" node tests/brandweer-controls-browser.cjs",
+      "exit": 0,
+      "seconds": 17.45,
+      "log": "logs/18.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" LB_SCREENSHOT_DIR=\"/tmp/lb-checklist-tasks/os-qa/live\" node tests/desktop-live-browser.cjs",
+      "exit": 0,
+      "seconds": 52.27,
+      "log": "logs/19.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" GETALLEN_SCREENSHOTS=\"/tmp/lb-checklist-tasks/os-qa/getallen\" node tests/getallen-os-browser.cjs",
+      "exit": 0,
+      "seconds": 267.87,
+      "log": "logs/20.log",
+      "initial_exit": 1
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" SCIENTIFIC_SCREENSHOTS=\"/tmp/lb-checklist-tasks/os-qa/scientific\" node tests/getallen-scientific-browser.cjs",
+      "exit": 0,
+      "seconds": 92.56,
+      "log": "logs/21.log",
+      "initial_exit": 1
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" CLASS_FLOW_SCREENSHOTS=\"/tmp/lb-checklist-tasks/os-qa/class-flow\" node tests/uniform-class-flow-browser.cjs",
+      "exit": 0,
+      "seconds": 18.35,
+      "log": "logs/22.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" WORKSHEETS_SCREENSHOTS=\"/tmp/lb-checklist-tasks/os-qa/worksheets\" node tests/desktop-worksheets-browser.cjs",
+      "exit": 0,
+      "seconds": 31.38,
+      "log": "logs/23.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" CENTRAL_PAPER_SCREENSHOTS=\"/tmp/lb-checklist-tasks/os-qa/central-paper\" node tests/central-worksheet-browser.cjs",
+      "exit": 0,
+      "seconds": 19.51,
+      "log": "logs/24.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" CLOUD_PAPER_PROOF=\"/tmp/lb-checklist-tasks/os-qa/worksheet-cloud\" node tests/worksheet-cloud-browser.cjs",
+      "exit": 0,
+      "seconds": 8.23,
+      "log": "logs/25.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" EXPERT_PROOF=\"/tmp/lb-checklist-tasks/os-qa/equations-expert\" node tests/algebra-expert-browser.cjs",
+      "exit": 0,
+      "seconds": 12.44,
+      "log": "logs/26.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" ALGEBRA_OS_SCREENSHOTS=\"/tmp/lb-checklist-tasks/os-qa/algebra\" node tests/algebra-os-browser.cjs",
+      "exit": 0,
+      "seconds": 32.44,
+      "log": "logs/27.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" CHROME_PROOF=\"/tmp/lb-checklist-tasks/os-qa/uniform-chrome\" node tests/os-native-chrome-browser.cjs",
+      "exit": 0,
+      "seconds": 48.87,
+      "log": "logs/28.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" STELSELS_EXPERT_PROOF=\"/tmp/lb-checklist-tasks/os-qa/stelsels-expert\" node tests/stelsels-expert-substitution-browser.cjs",
+      "exit": 0,
+      "seconds": 11.29,
+      "log": "logs/29.log",
+      "initial_exit": 0
+    },
+    {
+      "command": "NODE_PATH=\"/tmp/leraarbob-os-deps/node_modules\" LOGICA_PROOF=\"/tmp/lb-checklist-tasks/os-qa/logica\" node tests/logicawereld-os-browser.cjs",
+      "exit": 0,
+      "seconds": 50.98,
+      "log": "logs/30.log",
+      "initial_exit": 0
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+✔ tests/class-activity-flow.test.cjs (466.818753ms)
+✔ tests/desktop-dom.test.cjs (2739.011535ms)
+✔ tests/desktop-model.test.cjs (72.183015ms)
+✔ tests/rechten-learn-route.test.cjs (665.06057ms)
+✔ tests/rechten-learn.test.cjs (71.990735ms)
+✔ tests/rechten-xp.test.cjs (63.317466ms)
+✔ tests/topbar-desktop.test.cjs (656.299141ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2752.221524

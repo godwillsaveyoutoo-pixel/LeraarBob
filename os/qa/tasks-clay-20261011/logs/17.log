@@ -1,0 +1,6 @@
+PASS All 63 allowed a/b combinations: readable signed equation, signed settings, exact bounds, no premature shot or fleet reset
+PASS Keyboard Enter/Space and minimize/resume preserve native handler, selected line and the same game frame
+PASS One OS header; five viewports, independent bar states: 44px handles without overlap; restore then back/close; cancel-close keeps the selected line
+PASS VUUR fires the selected fractional slope and negative intercept through the original engine; computer turn completes
+PASS Closing Zeeslag after restoring the taskbar removes only that game; Rechtenwereld remains open, resumable and can return directly to the desktop
+PASS Standalone controls work too; header collapse preserves current aim and collapse preference survives reload

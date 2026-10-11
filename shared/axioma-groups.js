@@ -2,6 +2,7 @@
   'use strict';
   if (!window.AxiomaSocial || window.AxiomaGroups) return;
   const gameURL = new URL('../games/rechten/kleiduiven/', document.currentScript.src);
+  const entryMode=new URLSearchParams(location.search).get('mode'),useOS=['solo','online','group','classroom'].includes(entryMode)||location.pathname.endsWith('/os/');
   let account = null, epoch = 0, timer, queue = Promise.resolve(), pending = false;
   let data = {sessions:[],current:null,member:null,members:[],connected:false};
   const listeners = new Set(), routed = new Set();
@@ -17,6 +18,7 @@
     try { if(sessionStorage.getItem(`axioma-clay-opened:${s.id}`))return;sessionStorage.setItem(`axioma-clay-opened:${s.id}`,'1'); } catch {}
     routed.add(s.id);
     if (location.pathname===gameURL.pathname) return;
+    if (location.pathname.endsWith('/os/')) { window.dispatchEvent(new CustomEvent('axioma:clay-open',{detail:{mode:s.os_mode||'group',sessionId:s.id}}));return; }
     const url=new URL(gameURL);url.searchParams.set('group',s.id);location.assign(url.href);
   }
   function request(action,args={}) {
@@ -25,10 +27,10 @@
       if (!id || version!==epoch) return null;
       const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),10000);
       try {
-        const {data:result,error}=await AxiomaAuth.client().rpc('axioma_clay_v2',{
+        const {data:result,error}=await AxiomaAuth.client().rpc(useOS?'axioma_clay_os':'axioma_clay_v2',{
           p_action:action,p_tab_id:AxiomaSocial.state().tabId,...args
         }).abortSignal(controller.signal);
-        if(error)throw error;if(version!==epoch)return null;
+        if(error)throw error;if(version!==epoch)return null;if(!Array.isArray(result?.sessions)||!Array.isArray(result?.members))throw Error('Groepen zijn nog niet bereikbaar.');
         data={...result,clockOffset:Date.parse(result.server_time)-Date.now(),connected:true};emit();if(action!=='answer')route();return state();
       }catch(error){if(version===epoch){data={...data,connected:false};emit()}throw error}
       finally{clearTimeout(timeout)}
@@ -48,8 +50,8 @@
   async function act(action,args={}){
     if(pending)throw Error('Even wachten: je vorige actie wordt verwerkt.');
     if(!account)throw Error('Log eerst in om in groep te spelen.');
-    pending=true;emit();
-    try{return await request(action,args)}finally{pending=false;emit()}
+    const version=epoch;pending=true;emit();
+    try{return await request(action,args)}finally{if(version===epoch){pending=false;emit()}}
   }
   const ready=(async()=>{
     await AxiomaSocial.ready();AxiomaAuth.onChange(authChanged);
@@ -58,7 +60,8 @@
   window.AxiomaGroups=Object.freeze({
     ready:()=>ready,state,refresh,
     onChange(fn){listeners.add(fn);return()=>listeners.delete(fn)},
-    create:speed=>act('create',{p_speed:speed||5}),
+    osEntry:useOS,
+    create:(speed,options={})=>act('create',{p_speed:speed||5,...(useOS?{p_mode:options.mode||entryMode||'group',p_targets:options.targets||null,p_class_code:options.classCode||null}:{})}),
     join:id=>act('join',{p_session_id:id}),
     start:()=>act('start',{p_session_id:data.current?.id}),
     leave:()=>act('leave',{p_session_id:data.current?.id}),

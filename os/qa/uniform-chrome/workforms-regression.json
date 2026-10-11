@@ -1,0 +1,1253 @@
+{
+  "checks": [
+    "Shared workform buttons retain the exact online and local forms; 1366×768, phone, short landscape, expanded/collapsed bars and reachable 44px targets",
+    "Real Rechten invitation → OS inbox acceptance → retained session → both ready → native question and input; no old menu and no navigation out of OS",
+    "Zeeslag uses the same entry; invite/cancel/reinvite/OS inbox accept opens both existing fleet boards, one frame each; closing and reopening resumes the same match",
+    "Getallen Samen leren: native create/code join/start/question/close/new setup without returning to the old mode overview",
+    "Central desktop code accepts the 8-character Numbers class code and joins its native lobby directly with student-only controls",
+    "rechtenwereld / learn: native controls inside common entry, direct route, desktop/phone",
+    "rechtenwereld / classroom: native controls inside common entry, direct route, desktop/phone",
+    "vectoren-trainer / local: native controls inside common entry, direct route, desktop/phone",
+    "vectoren-trainer / classroom: native controls inside common entry, direct route, desktop/phone",
+    "algebra-trainer / classroom: native controls inside common entry, direct route, desktop/phone",
+    "getallenwereld / series: native controls inside common entry, direct route, desktop/phone",
+    "getallenwereld / local: native controls inside common entry, direct route, desktop/phone",
+    "getallenwereld / teacher: native controls inside common entry, direct route, desktop/phone",
+    "getallenwereld / learn: native controls inside common entry, direct route, desktop/phone",
+    "getallenwereld / online: native controls inside common entry, direct route, desktop/phone",
+    "getallenwereld / classlearn: native controls inside common entry, direct route, desktop/phone",
+    "getallenwereld / classroom: native controls inside common entry, direct route, desktop/phone",
+    "wortelbouw / local: native controls inside common entry, direct route, desktop/phone",
+    "wortelbouw / classroom: native controls inside common entry, direct route, desktop/phone",
+    "kleiduifschieten / group: native controls inside common entry, direct route, desktop/phone"
+  ],
+  "layouts": [
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=online]",
+      "width": 111.375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-worksheets]",
+      "width": 118.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#duelWorld",
+      "width": 680,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#players button",
+      "width": 99.171875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=online]",
+      "width": 111.375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-worksheets]",
+      "width": 118.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#duelWorld",
+      "width": 680,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#players button",
+      "width": 99.171875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=online]",
+      "width": 97.421875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-worksheets]",
+      "width": 103.796875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#duelWorld",
+      "width": 362,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#players button",
+      "width": 99.171875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=online]",
+      "width": 97.421875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-worksheets]",
+      "width": 103.796875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#duelWorld",
+      "width": 362,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#players button",
+      "width": 99.171875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-entry-mode=online]",
+      "width": 97.421875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-entry-worksheets]",
+      "width": 103.796875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#duelWorld",
+      "width": 612,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#players button",
+      "width": 99.171875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-entry-mode=online]",
+      "width": 97.421875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-entry-worksheets]",
+      "width": 103.796875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#duelWorld",
+      "width": 612,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "#players button",
+      "width": 99.171875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=online]",
+      "width": 111.375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-invite=\"00000000-0000-0000-0000-000000000003\"]",
+      "width": 113.890625,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=online]",
+      "width": 111.375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-invite=\"00000000-0000-0000-0000-000000000003\"]",
+      "width": 113.890625,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=online]",
+      "width": 97.421875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-invite=\"00000000-0000-0000-0000-000000000003\"]",
+      "width": 113.890625,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=online]",
+      "width": 97.421875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-invite=\"00000000-0000-0000-0000-000000000003\"]",
+      "width": 113.890625,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-entry-mode=online]",
+      "width": 97.421875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-invite=\"00000000-0000-0000-0000-000000000003\"]",
+      "width": 113.890625,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-entry-mode=online]",
+      "width": 97.421875,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "selector": "[data-invite=\"00000000-0000-0000-0000-000000000003\"]",
+      "width": 113.890625,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#learnCreateButton",
+      "width": 184.78125,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#learnCreateButton",
+      "width": 320,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#hostForm button.primary",
+      "width": 158.875,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#hostForm button.primary",
+      "width": 145,
+      "height": 68,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#startBattle",
+      "width": 458,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#startBattle",
+      "width": 320,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#hostForm button.primary",
+      "width": 970,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#hostForm button.primary",
+      "width": 320,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#hostForm button.primary",
+      "width": 970,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#hostForm button.primary",
+      "width": 320,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#startBtn",
+      "width": 218,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#startBtn",
+      "width": 340,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#startBtn",
+      "width": 218,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#startBtn",
+      "width": 340,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#startBtn",
+      "width": 218,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#startBtn",
+      "width": 340,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#createSpace button.primary",
+      "width": 147.046875,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#createSpace button.primary",
+      "width": 147.046875,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#createSpace button.primary",
+      "width": 147.046875,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#createSpace button.primary",
+      "width": 147.046875,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#createSpace button.primary",
+      "width": 147.046875,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#createSpace button.primary",
+      "width": 147.046875,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#createSpace button.primary",
+      "width": 158.875,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#createSpace button.primary",
+      "width": 152,
+      "height": 68,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#startBattleButton",
+      "width": 142.984375,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#startBattleButton",
+      "width": 142.984375,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#hostForm button.primary",
+      "width": 970,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#hostForm button.primary",
+      "width": 320,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 57.328125,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "selector": "#openGroup",
+      "width": 484,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "[data-entry-mode=solo]",
+      "width": 47.234375,
+      "height": 44,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "selector": "#openGroup",
+      "width": 324,
+      "height": 47,
+      "fits": true,
+      "hit": true,
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "scope": "Synthetic local accounts; real PostgreSQL invitation/session rules and numbers/learn handlers. Naval Realtime uses local BroadcastChannel transport; production login/Realtime not tested."
+}

@@ -25,3 +25,10 @@ test('system specification bounds match client and server generation',()=>{
  for(const seed of [-1,4294967296,1.5,'1',null])assert.throws(()=>G.generate({skill:'S1',seed,variant:0}));
  for(const variant of [-1,4,1.5,'1',null])assert.throws(()=>G.generate({skill:'S1',seed:1,variant}));
 });
+
+test('OS Vergelijkingen class setup excludes the obsolete Stelsels module while historic task grading remains available',()=>{
+ const vm=require('node:vm'),fs=require('node:fs'),context={AlgebraCore:require('../games/algebra-trainer/core.js'),StelselsCore:require('../games/algebra-trainer/stelsels/core.js'),AlgebraJourney:require('../games/algebra-trainer/journey-core.js'),URLSearchParams,location:{search:'?osEntry=1&world=equations'}};
+ vm.runInNewContext(fs.readFileSync('games/algebra-trainer/battle-config.js','utf8'),context);
+ assert.deepEqual(Array.from(context.BattleGame.worlds,w=>w.id),['equations']);assert(!context.BattleGame.mixedSkills.includes('S1'));
+ assert.equal(context.BattleGame.generate({skill:'S1',seed:5,variant:0}).topic,'systems','Historical sessions remain readable');
+});

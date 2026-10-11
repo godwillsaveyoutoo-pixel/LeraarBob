@@ -1,0 +1,47 @@
+{"ok":true,"tasksChecked":4200,"seedsPerStop":100,"checks":["all 17 types","deterministic missions","exact solutions and transitions","correct and incorrect typed answers","empty route rejected","task-specific answer keys","no partial completion","one-time XP","hints and errors distinct","previous progress preserved","13 playable stops","serialized mission revives"]}
+Per-round XP, fresh tasks, idempotent reload, legacy migration, system replay and unique level totals passed
+✔ six areas cover the 17 existing equation forms with explicit learning goals (4.766725ms)
+✔ prediction checks members, not just the solution set (0.896223ms)
+✔ distributivity is produced and errors are located, not inferred from a solution (2.339208ms)
+✔ both routes remain mathematically valid; strategic goals are separate (1.073903ms)
+✔ each production answer validates exactly across varied generated missions (114.50321ms)
+✔ five completed tasks award once; earlier practice is not a new mission (1.056833ms)
+✔ 17 oefenvormen blijven exact equivalent en de afdruksleutel eindigt bij dezelfde oplossing (2245.809493ms)
+✔ breuken blijven exact en delen door nul of onveilige integergroei wordt afgewezen (0.449891ms)
+✔ contextknoppen bieden tegengestelde bewerkingen en eerst delen zonder oplossingsroute af te dwingen (0.945793ms)
+✔ contextkeuzes bewaren voor alle 17 vormen de exacte oplossing en sluiten nul uit (143.691455ms)
+✔ controle beschrijft de actuele vergelijking, ook met x rechts, zonder werk te veranderen (2.006577ms)
+✔ eerst delen blijft oplosbaar met afgeleide breuken, ook bij een gehele-getallenreeks (1.079613ms)
+✔ delen biedt actuele coëfficiënten aan, ook als beide leden meerdere termen hebben (0.288861ms)
+✔ vermenigvuldigen na eerst delen werkt op elke term van beide leden (0.277411ms)
+✔ noodzakelijke actuele termen worden niet afgekapt na acht keuzeknoppen (0.837453ms)
+✔ vergelijkingen met x aan beide kanten blijven oplosbaar na eerst delen en eerst constanten wegwerken (486.948127ms)
+✔ tests/algebra-v04-journey.test.cjs (0.0747ms)
+✔ tests/algebra-v050-flow.test.cjs (0.067181ms)
+✔ generated systems and every key step preserve exact solutions across levels and methods (77.930212ms)
+✔ alternative operations, both retained equations and substitution in either direction (0.382491ms)
+✔ safe exact number input and snapshot recovery (0.570852ms)
+✔ the written operation accepts negative variables and preserves the exact operation on both sides (0.938683ms)
+✔ The seven supported native source snapshots round-trip exact questions, paired key, config and tasks (114.12512ms)
+✔ New series coexist and account, guest and pending identity boundaries reject stale ownership (19.856875ms)
+✔ A complete JSON backup preserves the saved exact series without carrying private account identity (12.526491ms)
+✔ Archive documents preserve native MathML, safe SVG and embedded page images while stripping active content (35.754396ms)
+✔ Unknown generators, missing question payload and oversized snapshots cannot silently create entries (7.986206ms)
+✔ Unavailable IndexedDB is reported instead of claiming successful local storage (6.972362ms)
+✔ Portable backup import validates version and complete payload, deduplicates and restores the exact pair after deletion (16.934365ms)
+✔ Quota failure keeps older entries and reports a failed save without false archive success (12.630261ms)
+✔ The entry cap rejects the next new series without deleting any earlier document (488.12997ms)
+✔ An initially unresolved account cannot create a guest archive before identity resolves (9.632561ms)
+✔ Changing accounts while a snapshot is being fingerprinted never attaches that document to the new owner (7.872175ms)
+✔ two generated series capture their own exact documents before asynchronous saving (11.201566ms)
+✔ a delayed snapshot cannot be archived for a replacement account (7.724345ms)
+✔ storage failure is visible while native preview and print remain usable (6.465341ms)
+✔ changed invalid settings require a successful native generation before save (5.604088ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5402.340563

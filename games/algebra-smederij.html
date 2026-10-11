@@ -2231,6 +2231,7 @@ startLevel(currentIndex);
   window.addEventListener('rf:home-open',()=>{refreshHome();chrome(false)});
 
   async function requestImmersive(){
+    if(window!==window.top)return;
     const mobile=matchMedia('(pointer:coarse)').matches||innerWidth<960||innerHeight<520;
     if(!mobile)return;
     try{if(!document.fullscreenElement&&document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen()}catch(_){ }

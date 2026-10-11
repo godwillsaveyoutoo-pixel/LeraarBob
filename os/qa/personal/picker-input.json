@@ -1,0 +1,13 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "touchScroll": 295,
+  "keyboardScroll": 72,
+  "checks": [
+    "Native touch swipe scrolls the theme/app list",
+    "PageDown scrolls the focused list"
+  ],
+  "passed": true
+}

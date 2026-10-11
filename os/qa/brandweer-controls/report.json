@@ -1,0 +1,1601 @@
+{
+  "scope": "Chromium, 100% zoom; local accounts and original solo engine.",
+  "checks": [
+    "All eight street buildings at 1366/640px keep every window on the facade and exactly one target window",
+    "Equation has no buttons; keyboard arrows, Enter and Space change the native plan, including focus fallback at a bound",
+    "Positive/negative bounds, fractions and decimal levels, signed b, wheel and drag preserve the original value steps without executing a rescue",
+    "Minimize/resume keeps the same native frame, rescue and chosen coefficients",
+    "1366/844/640/568px at 100%: equation separate, controls visible and >=44px; collapse/focus/restore preserve input",
+    "Native execution rescues the target with a negative decimal slope and intercept; explanation/next retain progress",
+    "Standalone formula works; collapse keeps input and the collapse preference survives reload"
+  ],
+  "layouts": [
+    {
+      "name": "os-1366-expanded",
+      "w": 1366,
+      "h": 642,
+      "scroll": 1366,
+      "targets": [
+        {
+          "x": 651.078125,
+          "y": 587,
+          "width": 44,
+          "height": 44,
+          "top": 587,
+          "right": 695.078125,
+          "bottom": 631,
+          "left": 651.078125,
+          "hit": true,
+          "label": "a verlagen"
+        },
+        {
+          "x": 695.078125,
+          "y": 587,
+          "width": 44,
+          "height": 44,
+          "top": 587,
+          "right": 739.078125,
+          "bottom": 631,
+          "left": 695.078125,
+          "hit": true,
+          "label": "Helling a"
+        },
+        {
+          "x": 739.078125,
+          "y": 587,
+          "width": 44,
+          "height": 44,
+          "top": 587,
+          "right": 783.078125,
+          "bottom": 631,
+          "left": 739.078125,
+          "hit": true,
+          "label": "a verhogen"
+        },
+        {
+          "x": 801.078125,
+          "y": 587,
+          "width": 44,
+          "height": 44,
+          "top": 587,
+          "right": 845.078125,
+          "bottom": 631,
+          "left": 801.078125,
+          "hit": true,
+          "label": "b verlagen"
+        },
+        {
+          "x": 845.078125,
+          "y": 587,
+          "width": 44,
+          "height": 44,
+          "top": 587,
+          "right": 889.078125,
+          "bottom": 631,
+          "left": 845.078125,
+          "hit": true,
+          "label": "Starthoogte b"
+        },
+        {
+          "x": 889.078125,
+          "y": 587,
+          "width": 44,
+          "height": 44,
+          "top": 587,
+          "right": 933.078125,
+          "bottom": 631,
+          "left": 889.078125,
+          "hit": true,
+          "label": "b verhogen"
+        },
+        {
+          "x": 1230.75,
+          "y": 575.90625,
+          "width": 121.25,
+          "height": 48,
+          "top": 575.90625,
+          "right": 1352,
+          "bottom": 623.90625,
+          "left": 1230.75,
+          "hit": true,
+          "label": "Uitvoeren →"
+        }
+      ],
+      "equation": {
+        "x": 410.65625,
+        "y": 582.90625,
+        "width": 190.421875,
+        "height": 34,
+        "top": 582.90625,
+        "right": 601.078125,
+        "bottom": 616.90625,
+        "left": 410.65625
+      },
+      "controls": {
+        "x": 625.078125,
+        "y": 567.8125,
+        "width": 309,
+        "height": 64.1875,
+        "top": 567.8125,
+        "right": 934.078125,
+        "bottom": 632,
+        "left": 625.078125
+      },
+      "stage": {
+        "x": 0,
+        "y": 0,
+        "width": 1366,
+        "height": 557.8125,
+        "top": 0,
+        "right": 1366,
+        "bottom": 557.8125,
+        "left": 0
+      },
+      "dock": {
+        "x": 0,
+        "y": 557.8125,
+        "width": 1366,
+        "height": 84.1875,
+        "top": 557.8125,
+        "right": 1366,
+        "bottom": 642,
+        "left": 0
+      }
+    },
+    {
+      "name": "os-1366-collapsed",
+      "w": 1366,
+      "h": 700,
+      "scroll": 1366,
+      "targets": [
+        {
+          "x": 651.078125,
+          "y": 645,
+          "width": 44,
+          "height": 44,
+          "top": 645,
+          "right": 695.078125,
+          "bottom": 689,
+          "left": 651.078125,
+          "hit": true,
+          "label": "a verlagen"
+        },
+        {
+          "x": 695.078125,
+          "y": 645,
+          "width": 44,
+          "height": 44,
+          "top": 645,
+          "right": 739.078125,
+          "bottom": 689,
+          "left": 695.078125,
+          "hit": true,
+          "label": "Helling a"
+        },
+        {
+          "x": 739.078125,
+          "y": 645,
+          "width": 44,
+          "height": 44,
+          "top": 645,
+          "right": 783.078125,
+          "bottom": 689,
+          "left": 739.078125,
+          "hit": true,
+          "label": "a verhogen"
+        },
+        {
+          "x": 801.078125,
+          "y": 645,
+          "width": 44,
+          "height": 44,
+          "top": 645,
+          "right": 845.078125,
+          "bottom": 689,
+          "left": 801.078125,
+          "hit": true,
+          "label": "b verlagen"
+        },
+        {
+          "x": 845.078125,
+          "y": 645,
+          "width": 44,
+          "height": 44,
+          "top": 645,
+          "right": 889.078125,
+          "bottom": 689,
+          "left": 845.078125,
+          "hit": true,
+          "label": "Starthoogte b"
+        },
+        {
+          "x": 889.078125,
+          "y": 645,
+          "width": 44,
+          "height": 44,
+          "top": 645,
+          "right": 933.078125,
+          "bottom": 689,
+          "left": 889.078125,
+          "hit": true,
+          "label": "b verhogen"
+        },
+        {
+          "x": 1230.75,
+          "y": 633.90625,
+          "width": 121.25,
+          "height": 48,
+          "top": 633.90625,
+          "right": 1352,
+          "bottom": 681.90625,
+          "left": 1230.75,
+          "hit": true,
+          "label": "Uitvoeren →"
+        }
+      ],
+      "equation": {
+        "x": 410.65625,
+        "y": 640.90625,
+        "width": 190.421875,
+        "height": 34,
+        "top": 640.90625,
+        "right": 601.078125,
+        "bottom": 674.90625,
+        "left": 410.65625
+      },
+      "controls": {
+        "x": 625.078125,
+        "y": 625.8125,
+        "width": 309,
+        "height": 64.1875,
+        "top": 625.8125,
+        "right": 934.078125,
+        "bottom": 690,
+        "left": 625.078125
+      },
+      "stage": {
+        "x": 0,
+        "y": 0,
+        "width": 1366,
+        "height": 615.8125,
+        "top": 0,
+        "right": 1366,
+        "bottom": 615.8125,
+        "left": 0
+      },
+      "dock": {
+        "x": 0,
+        "y": 615.8125,
+        "width": 1366,
+        "height": 84.1875,
+        "top": 615.8125,
+        "right": 1366,
+        "bottom": 700,
+        "left": 0
+      }
+    },
+    {
+      "name": "os-1366-focus",
+      "w": 1366,
+      "h": 716,
+      "scroll": 1366,
+      "targets": [
+        {
+          "x": 651.078125,
+          "y": 661,
+          "width": 44,
+          "height": 44,
+          "top": 661,
+          "right": 695.078125,
+          "bottom": 705,
+          "left": 651.078125,
+          "hit": true,
+          "label": "a verlagen"
+        },
+        {
+          "x": 695.078125,
+          "y": 661,
+          "width": 44,
+          "height": 44,
+          "top": 661,
+          "right": 739.078125,
+          "bottom": 705,
+          "left": 695.078125,
+          "hit": true,
+          "label": "Helling a"
+        },
+        {
+          "x": 739.078125,
+          "y": 661,
+          "width": 44,
+          "height": 44,
+          "top": 661,
+          "right": 783.078125,
+          "bottom": 705,
+          "left": 739.078125,
+          "hit": true,
+          "label": "a verhogen"
+        },
+        {
+          "x": 801.078125,
+          "y": 661,
+          "width": 44,
+          "height": 44,
+          "top": 661,
+          "right": 845.078125,
+          "bottom": 705,
+          "left": 801.078125,
+          "hit": true,
+          "label": "b verlagen"
+        },
+        {
+          "x": 845.078125,
+          "y": 661,
+          "width": 44,
+          "height": 44,
+          "top": 661,
+          "right": 889.078125,
+          "bottom": 705,
+          "left": 845.078125,
+          "hit": true,
+          "label": "Starthoogte b"
+        },
+        {
+          "x": 889.078125,
+          "y": 661,
+          "width": 44,
+          "height": 44,
+          "top": 661,
+          "right": 933.078125,
+          "bottom": 705,
+          "left": 889.078125,
+          "hit": true,
+          "label": "b verhogen"
+        },
+        {
+          "x": 1230.75,
+          "y": 649.90625,
+          "width": 121.25,
+          "height": 48,
+          "top": 649.90625,
+          "right": 1352,
+          "bottom": 697.90625,
+          "left": 1230.75,
+          "hit": true,
+          "label": "Uitvoeren →"
+        }
+      ],
+      "equation": {
+        "x": 410.65625,
+        "y": 656.90625,
+        "width": 190.421875,
+        "height": 34,
+        "top": 656.90625,
+        "right": 601.078125,
+        "bottom": 690.90625,
+        "left": 410.65625
+      },
+      "controls": {
+        "x": 625.078125,
+        "y": 641.8125,
+        "width": 309,
+        "height": 64.1875,
+        "top": 641.8125,
+        "right": 934.078125,
+        "bottom": 706,
+        "left": 625.078125
+      },
+      "stage": {
+        "x": 0,
+        "y": 0,
+        "width": 1366,
+        "height": 631.8125,
+        "top": 0,
+        "right": 1366,
+        "bottom": 631.8125,
+        "left": 0
+      },
+      "dock": {
+        "x": 0,
+        "y": 631.8125,
+        "width": 1366,
+        "height": 84.1875,
+        "top": 631.8125,
+        "right": 1366,
+        "bottom": 716,
+        "left": 0
+      }
+    },
+    {
+      "name": "os-844-expanded",
+      "w": 844,
+      "h": 264,
+      "scroll": 844,
+      "targets": [
+        {
+          "x": 347.890625,
+          "y": 211,
+          "width": 44,
+          "height": 44,
+          "top": 211,
+          "right": 391.890625,
+          "bottom": 255,
+          "left": 347.890625,
+          "hit": true,
+          "label": "a verlagen"
+        },
+        {
+          "x": 391.890625,
+          "y": 211,
+          "width": 44,
+          "height": 44,
+          "top": 211,
+          "right": 435.890625,
+          "bottom": 255,
+          "left": 391.890625,
+          "hit": true,
+          "label": "Helling a"
+        },
+        {
+          "x": 435.890625,
+          "y": 211,
+          "width": 44,
+          "height": 44,
+          "top": 211,
+          "right": 479.890625,
+          "bottom": 255,
+          "left": 435.890625,
+          "hit": true,
+          "label": "a verhogen"
+        },
+        {
+          "x": 489.890625,
+          "y": 211,
+          "width": 44,
+          "height": 44,
+          "top": 211,
+          "right": 533.890625,
+          "bottom": 255,
+          "left": 489.890625,
+          "hit": true,
+          "label": "b verlagen"
+        },
+        {
+          "x": 533.890625,
+          "y": 211,
+          "width": 44,
+          "height": 44,
+          "top": 211,
+          "right": 577.890625,
+          "bottom": 255,
+          "left": 533.890625,
+          "hit": true,
+          "label": "Starthoogte b"
+        },
+        {
+          "x": 577.890625,
+          "y": 211,
+          "width": 44,
+          "height": 44,
+          "top": 211,
+          "right": 621.890625,
+          "bottom": 255,
+          "left": 577.890625,
+          "hit": true,
+          "label": "b verhogen"
+        },
+        {
+          "x": 733.1875,
+          "y": 199.90625,
+          "width": 100.8125,
+          "height": 48,
+          "top": 199.90625,
+          "right": 834,
+          "bottom": 247.90625,
+          "left": 733.1875,
+          "hit": true,
+          "label": "Uitvoeren →"
+        }
+      ],
+      "equation": {
+        "x": 180.28125,
+        "y": 210.90625,
+        "width": 145.609375,
+        "height": 26,
+        "top": 210.90625,
+        "right": 325.890625,
+        "bottom": 236.90625,
+        "left": 180.28125
+      },
+      "controls": {
+        "x": 335.890625,
+        "y": 191.8125,
+        "width": 287,
+        "height": 64.1875,
+        "top": 191.8125,
+        "right": 622.890625,
+        "bottom": 256,
+        "left": 335.890625
+      },
+      "stage": {
+        "x": 0,
+        "y": 0,
+        "width": 844,
+        "height": 183.8125,
+        "top": 0,
+        "right": 844,
+        "bottom": 183.8125,
+        "left": 0
+      },
+      "dock": {
+        "x": 0,
+        "y": 183.8125,
+        "width": 844,
+        "height": 80.1875,
+        "top": 183.8125,
+        "right": 844,
+        "bottom": 264,
+        "left": 0
+      }
+    },
+    {
+      "name": "os-844-collapsed",
+      "w": 844,
+      "h": 322,
+      "scroll": 844,
+      "targets": [
+        {
+          "x": 347.890625,
+          "y": 269,
+          "width": 44,
+          "height": 44,
+          "top": 269,
+          "right": 391.890625,
+          "bottom": 313,
+          "left": 347.890625,
+          "hit": true,
+          "label": "a verlagen"
+        },
+        {
+          "x": 391.890625,
+          "y": 269,
+          "width": 44,
+          "height": 44,
+          "top": 269,
+          "right": 435.890625,
+          "bottom": 313,
+          "left": 391.890625,
+          "hit": true,
+          "label": "Helling a"
+        },
+        {
+          "x": 435.890625,
+          "y": 269,
+          "width": 44,
+          "height": 44,
+          "top": 269,
+          "right": 479.890625,
+          "bottom": 313,
+          "left": 435.890625,
+          "hit": true,
+          "label": "a verhogen"
+        },
+        {
+          "x": 489.890625,
+          "y": 269,
+          "width": 44,
+          "height": 44,
+          "top": 269,
+          "right": 533.890625,
+          "bottom": 313,
+          "left": 489.890625,
+          "hit": true,
+          "label": "b verlagen"
+        },
+        {
+          "x": 533.890625,
+          "y": 269,
+          "width": 44,
+          "height": 44,
+          "top": 269,
+          "right": 577.890625,
+          "bottom": 313,
+          "left": 533.890625,
+          "hit": true,
+          "label": "Starthoogte b"
+        },
+        {
+          "x": 577.890625,
+          "y": 269,
+          "width": 44,
+          "height": 44,
+          "top": 269,
+          "right": 621.890625,
+          "bottom": 313,
+          "left": 577.890625,
+          "hit": true,
+          "label": "b verhogen"
+        },
+        {
+          "x": 733.1875,
+          "y": 257.90625,
+          "width": 100.8125,
+          "height": 48,
+          "top": 257.90625,
+          "right": 834,
+          "bottom": 305.90625,
+          "left": 733.1875,
+          "hit": true,
+          "label": "Uitvoeren →"
+        }
+      ],
+      "equation": {
+        "x": 180.28125,
+        "y": 268.90625,
+        "width": 145.609375,
+        "height": 26,
+        "top": 268.90625,
+        "right": 325.890625,
+        "bottom": 294.90625,
+        "left": 180.28125
+      },
+      "controls": {
+        "x": 335.890625,
+        "y": 249.8125,
+        "width": 287,
+        "height": 64.1875,
+        "top": 249.8125,
+        "right": 622.890625,
+        "bottom": 314,
+        "left": 335.890625
+      },
+      "stage": {
+        "x": 0,
+        "y": 0,
+        "width": 844,
+        "height": 241.8125,
+        "top": 0,
+        "right": 844,
+        "bottom": 241.8125,
+        "left": 0
+      },
+      "dock": {
+        "x": 0,
+        "y": 241.8125,
+        "width": 844,
+        "height": 80.1875,
+        "top": 241.8125,
+        "right": 844,
+        "bottom": 322,
+        "left": 0
+      }
+    },
+    {
+      "name": "os-844-focus",
+      "w": 844,
+      "h": 338,
+      "scroll": 844,
+      "targets": [
+        {
+          "x": 347.890625,
+          "y": 285,
+          "width": 44,
+          "height": 44,
+          "top": 285,
+          "right": 391.890625,
+          "bottom": 329,
+          "left": 347.890625,
+          "hit": true,
+          "label": "a verlagen"
+        },
+        {
+          "x": 391.890625,
+          "y": 285,
+          "width": 44,
+          "height": 44,
+          "top": 285,
+          "right": 435.890625,
+          "bottom": 329,
+          "left": 391.890625,
+          "hit": true,
+          "label": "Helling a"
+        },
+        {
+          "x": 435.890625,
+          "y": 285,
+          "width": 44,
+          "height": 44,
+          "top": 285,
+          "right": 479.890625,
+          "bottom": 329,
+          "left": 435.890625,
+          "hit": true,
+          "label": "a verhogen"
+        },
+        {
+          "x": 489.890625,
+          "y": 285,
+          "width": 44,
+          "height": 44,
+          "top": 285,
+          "right": 533.890625,
+          "bottom": 329,
+          "left": 489.890625,
+          "hit": true,
+          "label": "b verlagen"
+        },
+        {
+          "x": 533.890625,
+          "y": 285,
+          "width": 44,
+          "height": 44,
+          "top": 285,
+          "right": 577.890625,
+          "bottom": 329,
+          "left": 533.890625,
+          "hit": true,
+          "label": "Starthoogte b"
+        },
+        {
+          "x": 577.890625,
+          "y": 285,
+          "width": 44,
+          "height": 44,
+          "top": 285,
+          "right": 621.890625,
+          "bottom": 329,
+          "left": 577.890625,
+          "hit": true,
+          "label": "b verhogen"
+        },
+        {
+          "x": 733.1875,
+          "y": 273.90625,
+          "width": 100.8125,
+          "height": 48,
+          "top": 273.90625,
+          "right": 834,
+          "bottom": 321.90625,
+          "left": 733.1875,
+          "hit": true,
+          "label": "Uitvoeren →"
+        }
+      ],
+      "equation": {
+        "x": 180.28125,
+        "y": 284.90625,
+        "width": 145.609375,
+        "height": 26,
+        "top": 284.90625,
+        "right": 325.890625,
+        "bottom": 310.90625,
+        "left": 180.28125
+      },
+      "controls": {
+        "x": 335.890625,
+        "y": 265.8125,
+        "width": 287,
+        "height": 64.1875,
+        "top": 265.8125,
+        "right": 622.890625,
+        "bottom": 330,
+        "left": 335.890625
+      },
+      "stage": {
+        "x": 0,
+        "y": 0,
+        "width": 844,
+        "height": 257.8125,
+        "top": 0,
+        "right": 844,
+        "bottom": 257.8125,
+        "left": 0
+      },
+      "dock": {
+        "x": 0,
+        "y": 257.8125,
+        "width": 844,
+        "height": 80.1875,
+        "top": 257.8125,
+        "right": 844,
+        "bottom": 338,
+        "left": 0
+      }
+    },
+    {
+      "name": "os-640-expanded",
+      "w": 640,
+      "h": 234,
+      "scroll": 640,
+      "targets": [
+        {
+          "x": 245.890625,
+          "y": 181,
+          "width": 44,
+          "height": 44,
+          "top": 181,
+          "right": 289.890625,
+          "bottom": 225,
+          "left": 245.890625,
+          "hit": true,
+          "label": "a verlagen"
+        },
+        {
+          "x": 289.890625,
+          "y": 181,
+          "width": 44,
+          "height": 44,
+          "top": 181,
+          "right": 333.890625,
+          "bottom": 225,
+          "left": 289.890625,
+          "hit": true,
+          "label": "Helling a"
+        },
+        {
+          "x": 333.890625,
+          "y": 181,
+          "width": 44,
+          "height": 44,
+          "top": 181,
+          "right": 377.890625,
+          "bottom": 225,
+          "left": 333.890625,
+          "hit": true,
+          "label": "a verhogen"
+        },
+        {
+          "x": 387.890625,
+          "y": 181,
+          "width": 44,
+          "height": 44,
+          "top": 181,
+          "right": 431.890625,
+          "bottom": 225,
+          "left": 387.890625,
+          "hit": true,
+          "label": "b verlagen"
+        },
+        {
+          "x": 431.890625,
+          "y": 181,
+          "width": 44,
+          "height": 44,
+          "top": 181,
+          "right": 475.890625,
+          "bottom": 225,
+          "left": 431.890625,
+          "hit": true,
+          "label": "Starthoogte b"
+        },
+        {
+          "x": 475.890625,
+          "y": 181,
+          "width": 44,
+          "height": 44,
+          "top": 181,
+          "right": 519.890625,
+          "bottom": 225,
+          "left": 475.890625,
+          "hit": true,
+          "label": "b verhogen"
+        },
+        {
+          "x": 529.1875,
+          "y": 169.90625,
+          "width": 100.8125,
+          "height": 48,
+          "top": 169.90625,
+          "right": 630,
+          "bottom": 217.90625,
+          "left": 529.1875,
+          "hit": true,
+          "label": "Uitvoeren →"
+        }
+      ],
+      "equation": {
+        "x": 78.28125,
+        "y": 180.90625,
+        "width": 145.609375,
+        "height": 26,
+        "top": 180.90625,
+        "right": 223.890625,
+        "bottom": 206.90625,
+        "left": 78.28125
+      },
+      "controls": {
+        "x": 233.890625,
+        "y": 161.8125,
+        "width": 287,
+        "height": 64.1875,
+        "top": 161.8125,
+        "right": 520.890625,
+        "bottom": 226,
+        "left": 233.890625
+      },
+      "stage": {
+        "x": 0,
+        "y": 0,
+        "width": 640,
+        "height": 153.8125,
+        "top": 0,
+        "right": 640,
+        "bottom": 153.8125,
+        "left": 0
+      },
+      "dock": {
+        "x": 0,
+        "y": 153.8125,
+        "width": 640,
+        "height": 80.1875,
+        "top": 153.8125,
+        "right": 640,
+        "bottom": 234,
+        "left": 0
+      }
+    },
+    {
+      "name": "os-640-collapsed",
+      "w": 640,
+      "h": 292,
+      "scroll": 640,
+      "targets": [
+        {
+          "x": 245.890625,
+          "y": 239,
+          "width": 44,
+          "height": 44,
+          "top": 239,
+          "right": 289.890625,
+          "bottom": 283,
+          "left": 245.890625,
+          "hit": true,
+          "label": "a verlagen"
+        },
+        {
+          "x": 289.890625,
+          "y": 239,
+          "width": 44,
+          "height": 44,
+          "top": 239,
+          "right": 333.890625,
+          "bottom": 283,
+          "left": 289.890625,
+          "hit": true,
+          "label": "Helling a"
+        },
+        {
+          "x": 333.890625,
+          "y": 239,
+          "width": 44,
+          "height": 44,
+          "top": 239,
+          "right": 377.890625,
+          "bottom": 283,
+          "left": 333.890625,
+          "hit": true,
+          "label": "a verhogen"
+        },
+        {
+          "x": 387.890625,
+          "y": 239,
+          "width": 44,
+          "height": 44,
+          "top": 239,
+          "right": 431.890625,
+          "bottom": 283,
+          "left": 387.890625,
+          "hit": true,
+          "label": "b verlagen"
+        },
+        {
+          "x": 431.890625,
+          "y": 239,
+          "width": 44,
+          "height": 44,
+          "top": 239,
+          "right": 475.890625,
+          "bottom": 283,
+          "left": 431.890625,
+          "hit": true,
+          "label": "Starthoogte b"
+        },
+        {
+          "x": 475.890625,
+          "y": 239,
+          "width": 44,
+          "height": 44,
+          "top": 239,
+          "right": 519.890625,
+          "bottom": 283,
+          "left": 475.890625,
+          "hit": true,
+          "label": "b verhogen"
+        },
+        {
+          "x": 529.1875,
+          "y": 227.90625,
+          "width": 100.8125,
+          "height": 48,
+          "top": 227.90625,
+          "right": 630,
+          "bottom": 275.90625,
+          "left": 529.1875,
+          "hit": true,
+          "label": "Uitvoeren →"
+        }
+      ],
+      "equation": {
+        "x": 78.28125,
+        "y": 238.90625,
+        "width": 145.609375,
+        "height": 26,
+        "top": 238.90625,
+        "right": 223.890625,
+        "bottom": 264.90625,
+        "left": 78.28125
+      },
+      "controls": {
+        "x": 233.890625,
+        "y": 219.8125,
+        "width": 287,
+        "height": 64.1875,
+        "top": 219.8125,
+        "right": 520.890625,
+        "bottom": 284,
+        "left": 233.890625
+      },
+      "stage": {
+        "x": 0,
+        "y": 0,
+        "width": 640,
+        "height": 211.8125,
+        "top": 0,
+        "right": 640,
+        "bottom": 211.8125,
+        "left": 0
+      },
+      "dock": {
+        "x": 0,
+        "y": 211.8125,
+        "width": 640,
+        "height": 80.1875,
+        "top": 211.8125,
+        "right": 640,
+        "bottom": 292,
+        "left": 0
+      }
+    },
+    {
+      "name": "os-640-focus",
+      "w": 640,
+      "h": 308,
+      "scroll": 640,
+      "targets": [
+        {
+          "x": 245.890625,
+          "y": 255,
+          "width": 44,
+          "height": 44,
+          "top": 255,
+          "right": 289.890625,
+          "bottom": 299,
+          "left": 245.890625,
+          "hit": true,
+          "label": "a verlagen"
+        },
+        {
+          "x": 289.890625,
+          "y": 255,
+          "width": 44,
+          "height": 44,
+          "top": 255,
+          "right": 333.890625,
+          "bottom": 299,
+          "left": 289.890625,
+          "hit": true,
+          "label": "Helling a"
+        },
+        {
+          "x": 333.890625,
+          "y": 255,
+          "width": 44,
+          "height": 44,
+          "top": 255,
+          "right": 377.890625,
+          "bottom": 299,
+          "left": 333.890625,
+          "hit": true,
+          "label": "a verhogen"
+        },
+        {
+          "x": 387.890625,
+          "y": 255,
+          "width": 44,
+          "height": 44,
+          "top": 255,
+          "right": 431.890625,
+          "bottom": 299,
+          "left": 387.890625,
+          "hit": true,
+          "label": "b verlagen"
+        },
+        {
+          "x": 431.890625,
+          "y": 255,
+          "width": 44,
+          "height": 44,
+          "top": 255,
+          "right": 475.890625,
+          "bottom": 299,
+          "left": 431.890625,
+          "hit": true,
+          "label": "Starthoogte b"
+        },
+        {
+          "x": 475.890625,
+          "y": 255,
+          "width": 44,
+          "height": 44,
+          "top": 255,
+          "right": 519.890625,
+          "bottom": 299,
+          "left": 475.890625,
+          "hit": true,
+          "label": "b verhogen"
+        },
+        {
+          "x": 529.1875,
+          "y": 243.90625,
+          "width": 100.8125,
+          "height": 48,
+          "top": 243.90625,
+          "right": 630,
+          "bottom": 291.90625,
+          "left": 529.1875,
+          "hit": true,
+          "label": "Uitvoeren →"
+        }
+      ],
+      "equation": {
+        "x": 78.28125,
+        "y": 254.90625,
+        "width": 145.609375,
+        "height": 26,
+        "top": 254.90625,
+        "right": 223.890625,
+        "bottom": 280.90625,
+        "left": 78.28125
+      },
+      "controls": {
+        "x": 233.890625,
+        "y": 235.8125,
+        "width": 287,
+        "height": 64.1875,
+        "top": 235.8125,
+        "right": 520.890625,
+        "bottom": 300,
+        "left": 233.890625
+      },
+      "stage": {
+        "x": 0,
+        "y": 0,
+        "width": 640,
+        "height": 227.8125,
+        "top": 0,
+        "right": 640,
+        "bottom": 227.8125,
+        "left": 0
+      },
+      "dock": {
+        "x": 0,
+        "y": 227.8125,
+        "width": 640,
+        "height": 80.1875,
+        "top": 227.8125,
+        "right": 640,
+        "bottom": 308,
+        "left": 0
+      }
+    },
+    {
+      "name": "os-568-expanded",
+      "w": 568,
+      "h": 200,
+      "scroll": 568,
+      "targets": [
+        {
+          "x": 11,
+          "y": 147,
+          "width": 44,
+          "height": 44,
+          "top": 147,
+          "right": 55,
+          "bottom": 191,
+          "left": 11,
+          "hit": true,
+          "label": "a verlagen"
+        },
+        {
+          "x": 55,
+          "y": 147,
+          "width": 44,
+          "height": 44,
+          "top": 147,
+          "right": 99,
+          "bottom": 191,
+          "left": 55,
+          "hit": true,
+          "label": "Helling a"
+        },
+        {
+          "x": 99,
+          "y": 147,
+          "width": 44,
+          "height": 44,
+          "top": 147,
+          "right": 143,
+          "bottom": 191,
+          "left": 99,
+          "hit": true,
+          "label": "a verhogen"
+        },
+        {
+          "x": 153,
+          "y": 147,
+          "width": 44,
+          "height": 44,
+          "top": 147,
+          "right": 197,
+          "bottom": 191,
+          "left": 153,
+          "hit": true,
+          "label": "b verlagen"
+        },
+        {
+          "x": 197,
+          "y": 147,
+          "width": 44,
+          "height": 44,
+          "top": 147,
+          "right": 241,
+          "bottom": 191,
+          "left": 197,
+          "hit": true,
+          "label": "Starthoogte b"
+        },
+        {
+          "x": 241,
+          "y": 147,
+          "width": 44,
+          "height": 44,
+          "top": 147,
+          "right": 285,
+          "bottom": 191,
+          "left": 241,
+          "hit": true,
+          "label": "b verhogen"
+        },
+        {
+          "x": 457.1875,
+          "y": 135.90625,
+          "width": 100.8125,
+          "height": 48,
+          "top": 135.90625,
+          "right": 558,
+          "bottom": 183.90625,
+          "left": 457.1875,
+          "hit": true,
+          "label": "Uitvoeren →"
+        }
+      ],
+      "equation": {
+        "x": 423.578125,
+        "y": 91.8125,
+        "width": 134.421875,
+        "height": 24,
+        "top": 91.8125,
+        "right": 558,
+        "bottom": 115.8125,
+        "left": 423.578125
+      },
+      "controls": {
+        "x": 10,
+        "y": 127.8125,
+        "width": 401.578125,
+        "height": 64.1875,
+        "top": 127.8125,
+        "right": 411.578125,
+        "bottom": 192,
+        "left": 10
+      },
+      "stage": {
+        "x": 0,
+        "y": 0,
+        "width": 568,
+        "height": 77.8125,
+        "top": 0,
+        "right": 568,
+        "bottom": 77.8125,
+        "left": 0
+      },
+      "dock": {
+        "x": 0,
+        "y": 77.8125,
+        "width": 568,
+        "height": 122.1875,
+        "top": 77.8125,
+        "right": 568,
+        "bottom": 200,
+        "left": 0
+      }
+    },
+    {
+      "name": "os-568-collapsed",
+      "w": 568,
+      "h": 258,
+      "scroll": 568,
+      "targets": [
+        {
+          "x": 11,
+          "y": 205,
+          "width": 44,
+          "height": 44,
+          "top": 205,
+          "right": 55,
+          "bottom": 249,
+          "left": 11,
+          "hit": true,
+          "label": "a verlagen"
+        },
+        {
+          "x": 55,
+          "y": 205,
+          "width": 44,
+          "height": 44,
+          "top": 205,
+          "right": 99,
+          "bottom": 249,
+          "left": 55,
+          "hit": true,
+          "label": "Helling a"
+        },
+        {
+          "x": 99,
+          "y": 205,
+          "width": 44,
+          "height": 44,
+          "top": 205,
+          "right": 143,
+          "bottom": 249,
+          "left": 99,
+          "hit": true,
+          "label": "a verhogen"
+        },
+        {
+          "x": 153,
+          "y": 205,
+          "width": 44,
+          "height": 44,
+          "top": 205,
+          "right": 197,
+          "bottom": 249,
+          "left": 153,
+          "hit": true,
+          "label": "b verlagen"
+        },
+        {
+          "x": 197,
+          "y": 205,
+          "width": 44,
+          "height": 44,
+          "top": 205,
+          "right": 241,
+          "bottom": 249,
+          "left": 197,
+          "hit": true,
+          "label": "Starthoogte b"
+        },
+        {
+          "x": 241,
+          "y": 205,
+          "width": 44,
+          "height": 44,
+          "top": 205,
+          "right": 285,
+          "bottom": 249,
+          "left": 241,
+          "hit": true,
+          "label": "b verhogen"
+        },
+        {
+          "x": 457.1875,
+          "y": 193.90625,
+          "width": 100.8125,
+          "height": 48,
+          "top": 193.90625,
+          "right": 558,
+          "bottom": 241.90625,
+          "left": 457.1875,
+          "hit": true,
+          "label": "Uitvoeren →"
+        }
+      ],
+      "equation": {
+        "x": 423.578125,
+        "y": 149.8125,
+        "width": 134.421875,
+        "height": 24,
+        "top": 149.8125,
+        "right": 558,
+        "bottom": 173.8125,
+        "left": 423.578125
+      },
+      "controls": {
+        "x": 10,
+        "y": 185.8125,
+        "width": 401.578125,
+        "height": 64.1875,
+        "top": 185.8125,
+        "right": 411.578125,
+        "bottom": 250,
+        "left": 10
+      },
+      "stage": {
+        "x": 0,
+        "y": 0,
+        "width": 568,
+        "height": 135.8125,
+        "top": 0,
+        "right": 568,
+        "bottom": 135.8125,
+        "left": 0
+      },
+      "dock": {
+        "x": 0,
+        "y": 135.8125,
+        "width": 568,
+        "height": 122.1875,
+        "top": 135.8125,
+        "right": 568,
+        "bottom": 258,
+        "left": 0
+      }
+    },
+    {
+      "name": "os-568-focus",
+      "w": 568,
+      "h": 268,
+      "scroll": 568,
+      "targets": [
+        {
+          "x": 11,
+          "y": 215,
+          "width": 44,
+          "height": 44,
+          "top": 215,
+          "right": 55,
+          "bottom": 259,
+          "left": 11,
+          "hit": true,
+          "label": "a verlagen"
+        },
+        {
+          "x": 55,
+          "y": 215,
+          "width": 44,
+          "height": 44,
+          "top": 215,
+          "right": 99,
+          "bottom": 259,
+          "left": 55,
+          "hit": true,
+          "label": "Helling a"
+        },
+        {
+          "x": 99,
+          "y": 215,
+          "width": 44,
+          "height": 44,
+          "top": 215,
+          "right": 143,
+          "bottom": 259,
+          "left": 99,
+          "hit": true,
+          "label": "a verhogen"
+        },
+        {
+          "x": 153,
+          "y": 215,
+          "width": 44,
+          "height": 44,
+          "top": 215,
+          "right": 197,
+          "bottom": 259,
+          "left": 153,
+          "hit": true,
+          "label": "b verlagen"
+        },
+        {
+          "x": 197,
+          "y": 215,
+          "width": 44,
+          "height": 44,
+          "top": 215,
+          "right": 241,
+          "bottom": 259,
+          "left": 197,
+          "hit": true,
+          "label": "Starthoogte b"
+        },
+        {
+          "x": 241,
+          "y": 215,
+          "width": 44,
+          "height": 44,
+          "top": 215,
+          "right": 285,
+          "bottom": 259,
+          "left": 241,
+          "hit": true,
+          "label": "b verhogen"
+        },
+        {
+          "x": 457.1875,
+          "y": 203.90625,
+          "width": 100.8125,
+          "height": 48,
+          "top": 203.90625,
+          "right": 558,
+          "bottom": 251.90625,
+          "left": 457.1875,
+          "hit": true,
+          "label": "Uitvoeren →"
+        }
+      ],
+      "equation": {
+        "x": 423.578125,
+        "y": 159.8125,
+        "width": 134.421875,
+        "height": 24,
+        "top": 159.8125,
+        "right": 558,
+        "bottom": 183.8125,
+        "left": 423.578125
+      },
+      "controls": {
+        "x": 10,
+        "y": 195.8125,
+        "width": 401.578125,
+        "height": 64.1875,
+        "top": 195.8125,
+        "right": 411.578125,
+        "bottom": 260,
+        "left": 10
+      },
+      "stage": {
+        "x": 0,
+        "y": 0,
+        "width": 568,
+        "height": 145.8125,
+        "top": 0,
+        "right": 568,
+        "bottom": 145.8125,
+        "left": 0
+      },
+      "dock": {
+        "x": 0,
+        "y": 145.8125,
+        "width": 568,
+        "height": 122.1875,
+        "top": 145.8125,
+        "right": 568,
+        "bottom": 268,
+        "left": 0
+      }
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "passed": true
+}

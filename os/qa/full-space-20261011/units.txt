@@ -1,0 +1,42 @@
+✔ Closing a settled desktop fixture cancels pending rendering before jsdom destroys its document (787.013288ms)
+✔ The desktop starts with one app and Add; the catalog retains themes and distinct work forms (126.125464ms)
+✔ Back, Start, global menu and collapsing the platform row retain the exact native DOM and handlers (166.911103ms)
+✔ A second visit restores the explicit topbar preference and has a reachable restore control (53.620995ms)
+✔ Learner startup and direct launches reject class creation; teacher options use the trusted auth result (58.537293ms)
+✔ Saving is a desktop shortcut; closing is explicit; reopening a running online app keeps that mode (84.327876ms)
+✔ Account changes clear live apps and separate pins, shortcuts and stale progress responses (85.131646ms)
+✔ An unrecognized account can discover guest apps without fake learner progress or class controls (43.357508ms)
+✔ The laptop cache limit rejects a seventh app without discarding the six live screens (104.213941ms)
+✔ Vergelijkingen old systems links open the original independent Stelsels without changing either exercise (59.979283ms)
+✔ Algebra route at the six-window limit keeps the original answer instead of navigating its iframe (103.83586ms)
+✔ Each pilot keeps its own folder, filter and search when switching through the taskbar (136.496182ms)
+✔ Launching through Start gives the new app its theme while saved shortcuts return to My tasks (99.131202ms)
+✔ Start works from a native answer field and Escape returns focus without changing native keys or input (33.49118ms)
+✔ Resuming a pinned app retains its own return place and restores the native answer focus (63.111912ms)
+✔ Start and resume retain focus from a nested native workboard without intercepting ordinary answers (43.748208ms)
+✔ Actual atelier progress keeps its native unit and does not leak into another app (57.353564ms)
+✔ Native sign-in actions reach the central account panel and the bridge is removed on close (64.434202ms)
+✔ Guest live lesson sign-in captures the real native account handler and preserves the join screen (51.397975ms)
+✔ The pupil Learn entrance reaches the original code form and joins a class; teachers reach class setup (105.80293ms)
+✔ The actual powers workbench keeps its clickable answer, seed and native document through desktop navigation (402.808477ms)
+✔ Each bar folds independently; hidden taskbar is inert, current input and native handler survive, and account preferences remain separate (83.293026ms)
+✔ Folders and rankings have one resumable taskbar entry each; closing removes only the window and switching accounts clears their state (77.397708ms)
+✔ Historical shortcuts keep stored data; an old systems launch resolves to the original trainer (42.120428ms)
+✔ Native commands preserve the actual handler, current disabled state and live replacement nodes (16.215496ms)
+✔ Stelsels keeps exact method, select and undo nodes; disposal restores original attributes (10.694997ms)
+✔ Inactive Pythagoras screens do not leak their back actions or titles into the OS (11.857016ms)
+✔ Display and account/role actions remain centralized; game help and progress stay reachable (9.368118ms)
+✔ Every registered app and OS atelier has an explicit chrome adapter (8.612917ms)
+✔ Hidden native Pythagoras level selector remains operable through the shared menu (8.456148ms)
+✔ Desktop home is optional and remains inside the platform origin and path (128.617073ms)
+✔ Standalone live lesson roles and membership keep their existing behavior (30.997592ms)
+✔ Compact desktop title identifies the app even when native breadcrumbs show an exercise (47.910646ms)
+✔ OS has no redundant Live link after teacher/student login or lesson membership changes (31.637851ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3540.950231

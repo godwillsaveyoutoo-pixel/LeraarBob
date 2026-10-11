@@ -1713,6 +1713,7 @@ button{font:inherit;color:inherit;touch-action:manipulation}
     document.getElementById('signalHomeProgressBar').style.width=`${Math.min(100,count/total*100)}%`;
   }
   async function enterImmersive(){
+    if(window!==window.top)return;
     try{
       if(!document.fullscreenElement)await document.documentElement.requestFullscreen?.();
     }catch(_){}

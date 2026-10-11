@@ -78,7 +78,8 @@ function updateHud(){
   $('attempts').textContent=misses+' '+(misses===1?'misser':'missers');$('teamLabel').textContent=team;
   $('progress').replaceChildren();
   for(const [index,r] of rounds.entries()){const e=document.createElement('span');e.className='dot'+((groupMode?index<mastered.size:mastered.has(r.id))?' hit':(groupMode?index===mastered.size:attempt?.id===r.id)?' current':retry.includes(r.id)?' retry':'');$('progress').append(e)}
-  if(groupMode){$('reserve').textContent='Foutloos: '+mastered.size+' / 7';$('wave').textContent='GROEPSWEDSTRIJD · 7 OP RIJ'}
+  if(groupMode&&window.AxiomaGroups?.assessment){$('reserve').textContent=`${groupData.member.version} / ${groupData.assessment.count} bewaard`;$('wave').textContent='TOETSONDERDEEL';$('progress').replaceChildren();}
+  else if(groupMode){$('reserve').textContent='Foutloos: '+mastered.size+' / 7';$('wave').textContent='GROEPSWEDSTRIJD · 7 OP RIJ'}
 }
 function fractionChoice(value,den){return '<span class="choiceSign">'+(value<0?'−':'')+'</span>'+'<span class="arcade-fraction" aria-label="'+Math.abs(Math.round(value*den))+' gedeeld door '+den+'"><span>'+Math.abs(Math.round(value*den))+'</span><span>'+den+'</span></span>';}
 function renderChoices(r){
@@ -263,12 +264,13 @@ function updateGroup(d){
   const g=d.current;
   if(practice&&groupMode&&(!d.account||!groupActive(d)||!groupOwnTab(d)||g.status!=='waiting')){stopGame();state='groupwait';}
   if(!d.account){if(groupMode){stopGame();groupMode=false;state='lobby';$('lobby').hidden=false}renderGroupMenu();return}
+  if(AxiomaGroups.osEntry&&g?.os_mode==='classroom'&&d.account?.id===g.host_id){$('lobby').hidden=false;renderGroupMenu();return;}
   if(groupActive(d)&&groupOwnTab(d)){
     if(groupSessionId!==g.id){stopGame();rounds=legacyRounds;groupMode=true;groupSessionId=g.id;groupVersion=-1;groupRequest=null;state='groupwait';groupDismissed=null;$('groupRankSpeed').value=String(g.speed)}
     $('lobby').hidden=true;$('results').hidden=true;team=d.account.alias||'Leerkracht';duration=g.speed;
     if(g.status==='waiting'){
-      if(practiceRoom!==g.id){practiceRoom=g.id;groupPrompt=g.id+':waiting';practiceGroup();}if(practice){renderGroupMenu();return;}
-      if(groupPrompt!==g.id+':waiting'){groupPrompt=g.id+':waiting';if($('rankingDialog').open)$('rankingDialog').close();if(!$('groupDialog').open)$('groupDialog').showModal()}
+      if(!AxiomaGroups.osEntry&&practiceRoom!==g.id){practiceRoom=g.id;groupPrompt=g.id+':waiting';practiceGroup();}if(practice){renderGroupMenu();return;}
+      if(!AxiomaGroups.osEntry&&groupPrompt!==g.id+':waiting'){groupPrompt=g.id+':waiting';if($('rankingDialog').open)$('rankingDialog').close();if(!$('groupDialog').open)$('groupDialog').showModal()}
     }
     else if(state==='groupwait'&&d.connected){
       if(groupVersion<0){if($('rankingDialog').open)$('rankingDialog').close();if($('groupDialog').open)$('groupDialog').close()}
@@ -277,10 +279,10 @@ function updateGroup(d){
   }else if(groupMode&&g?.id===groupSessionId&&['finished','cancelled'].includes(g.status)){
     stopGame();state='groupdone';groupMode=false;
     $('lobby').hidden=false;
-    if(g.winner_id===d.account.id)trackAxiomaSeries();
+    if(!AxiomaGroups.assessment&&!AxiomaGroups.osEntry&&g.winner_id===d.account.id)trackAxiomaSeries();
     $('total').textContent=g.elapsed_ms?clockText(g.elapsed_ms):'—';
     if($('rankingDialog').open)$('rankingDialog').close();
-    if(g.id!==groupDismissed&&!$('groupDialog').open)$('groupDialog').showModal();
+    if(!AxiomaGroups.osEntry&&!AxiomaGroups.assessment&&g.id!==groupDismissed&&!$('groupDialog').open)$('groupDialog').showModal();
   }else if(groupMode&&d.member?.left_at){stopGame();groupMode=false;state='lobby';$('lobby').hidden=false}
   renderGroupMenu();
 }
@@ -301,7 +303,7 @@ function scheduleGroupRound(){
   beginAttempt();
   const remaining=Math.max(0,Date.parse(m.next_at)+g.speed*1000-groupNow());
   attempt.deadline=performance.now()+remaining;attempt.start=attempt.deadline-g.speed*1000;
-  $('status').textContent=`${m.streak} / 7 foutloos · een misser zet je teller op nul.`;
+  $('status').textContent=AxiomaGroups.assessment?`${m.version} / ${groupData.assessment.count} antwoorden bewaard`:`${m.streak} / 7 foutloos · een misser zet je teller op nul.`;
   cancelAnimationFrame(raf);raf=requestAnimationFrame(frame);
 }
 async function submitGroupAnswer(answer){
@@ -318,6 +320,7 @@ async function retryGroupAnswer(){
     if(!result||result.member?.last_event_id!==packet.eventId)throw Error('Antwoord wordt nog bevestigd.');
     groupRequest=null;
     if(result.current.status!=='running')return;
+    if(AxiomaGroups.assessment){if(attempt)attempt.resolved=true;busy=false;state='groupwait';$('status').textContent='Antwoord bewaard.';scheduleGroupRound();return;}
     const A=attempt;
     if(!A){state='groupwait';scheduleGroupRound();return}
     const correct=result.member.last_correct,now=performance.now(),future=targetAt(A,now+SHOT_MS);
@@ -391,5 +394,5 @@ if(window.AxiomaGroups)connectGroups();else window.addEventListener('axioma:grou
 
 initField();readHistory();updateHud();setTimer(speed);
 if(window.RechtenArcade){const locked=RechtenArcade.params.get('mode')==='class'||RechtenArcade.params.get('lockTempo')==='1';document.querySelectorAll('[data-speed]').forEach(b=>{b.disabled=locked;b.setAttribute('aria-pressed',String(Number(b.dataset.speed)===speed));});}
-window.AxiomaClay=Object.freeze({snapshot:()=>({state,practice:practice?practice.index+1:null,speed,barrelAngle,wantedAngle,origin:{x:500,y:310},target:attempt?targetAt(attempt,performance.now()):null,mastered:mastered.size,misses,shots})});
+window.AxiomaClay=Object.freeze({suspendTask(){if(!window.AxiomaGroups?.assessment)return;stopGame();groupSessionId=null;groupMode=false;state='groupwait';},snapshot:()=>({state,practice:practice?practice.index+1:null,speed,barrelAngle,wantedAngle,origin:{x:500,y:310},target:attempt?targetAt(attempt,performance.now()):null,mastered:mastered.size,misses,shots})});
 })();

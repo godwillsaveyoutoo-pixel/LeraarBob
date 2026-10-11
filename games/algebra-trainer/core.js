@@ -12,7 +12,7 @@ class Rat{
   constructor(n,d=1){
     if(!Number.isSafeInteger(n)||!Number.isSafeInteger(d)||d===0)throw new Error('Ongeldige breuk');
     if(d<0){n=-n;d=-d}
-    const g=gcd(n,d);this.n=n/g;this.d=d/g;
+    const g=gcd(n,d);this.n=n===0?0:n/g;this.d=d/g;
   }
   add(o){o=R(o);return new Rat(this.n*o.d+o.n*this.d,this.d*o.d)}
   sub(o){o=R(o);return new Rat(this.n*o.d-o.n*this.d,this.d*o.d)}

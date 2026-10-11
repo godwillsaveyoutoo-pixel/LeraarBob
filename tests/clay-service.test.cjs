@@ -5,7 +5,7 @@ const fs=require('node:fs');
 function service(){
  let account={id:'a',alias:'Leerling'},authListener,block=null;const calls=[];
  const client={rpc(name,args){calls.push({name,args});const result={sessions:[],current:null,member:null,members:[],server_time:new Date().toISOString()};const promise=block?new Promise(resolve=>block.push(()=>resolve({data:result}))):Promise.resolve({data:result});promise.abortSignal=()=>promise;return promise}};
- const context={URL,Date,Promise,AbortController,console,location:{pathname:'/games/rechten/kleiduiven/',assign:()=>{throw Error('Unexpected navigation')}},
+ const context={URL,URLSearchParams,Date,Promise,AbortController,console,location:{pathname:'/games/rechten/kleiduiven/',assign:()=>{throw Error('Unexpected navigation')}},
   document:{currentScript:{src:'https://school.example/shared/axioma-groups.js'},hidden:false,addEventListener:()=>{}},
   setTimeout:()=>1,clearTimeout:()=>{},CustomEvent:class{constructor(name,opts){this.type=name;this.detail=opts?.detail}},Event:class{},
   sessionStorage:{getItem:()=>null,setItem:()=>{}},addEventListener:()=>{},dispatchEvent:()=>{},

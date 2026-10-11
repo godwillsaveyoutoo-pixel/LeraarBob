@@ -1,0 +1,13 @@
+{
+  "os/edge-bars.js": "eb629ab16bd112360575963ce0d5b88cb49d2d271b6535b5aff08ab9cc2e6e86",
+  "os/desktop.js": "54629d9e30a2d7e0475235e8847be1958488ade1985b3816473b51c429eab92e",
+  "os/personal.css": "6dc0f2c2bdf146b940cacb5ca9d3cd7316b060e4f0c52bd7cd90257d5822f00d",
+  "os/index.html": "fab343329a77085b9a51bfe57fac70c36883d661018af7bc46f2d3e615514ba9",
+  "shared/leraarbob-topbar.js": "ba3918574c51f72f19e105e2aa460284055fc85f5eb1653c9ce24e33d9493ba2",
+  "tests/os-bar-gestures-browser.cjs": "11e918c3d0329e2a45bd49f5700005c2ef377cce48f6461eafb7b5834be2867c",
+  "tests/brandweer-controls-browser.cjs": "6b4f50691ff170eb46624d6ffe375bff5273396908824a7dd8765b385fa2257d",
+  "tests/personal-chrome-browser.cjs": "a8f889bd68ab56328a0f6e855370bc8b4a48ef58628365adb81b7c59b9a89858",
+  "tests/zeeslag-controls-browser.cjs": "09df58494fa5a7ba0852810cddd41cd5a74caf419482eb3f8b83447705115ed9",
+  "tests/stelsels-expert-substitution-browser.cjs": "eeae0c40124aabbcc70d140df8c5594997133ec580f69c92614a94c21545d63b",
+  "tests/algebra-os-browser.cjs": "0bdaac1b1feb6528d87bb57324c5b401568850bcf60cb1d78133b90aee169c4b"
+}

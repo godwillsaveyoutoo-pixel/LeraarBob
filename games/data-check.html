@@ -936,6 +936,7 @@ function closeLevels(){
   }else{mode='home';render()}
 }
 function enterImmersive(){
+  if(window!==window.top)return;
   try{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.().then(()=>screen.orientation?.lock?.('landscape')).catch(()=>{})}
   catch(_){}
 }

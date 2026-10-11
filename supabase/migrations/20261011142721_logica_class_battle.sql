@@ -1,0 +1,30 @@
+-- Keep the established teacher-owned lifecycle and isolate native server grading.
+begin;
+alter table axioma_private.vector_class_rooms drop constraint vector_class_rooms_game_check;
+alter table axioma_private.vector_class_rooms add constraint vector_class_rooms_game_check check(game in ('vectoren','rechten','wortelbouw','algebra','bewerkingen','logicawereld'));
+alter table axioma_private.vector_class_rooms drop constraint vector_class_rooms_seconds_check;
+alter table axioma_private.vector_class_rooms add constraint vector_class_rooms_seconds_check check(seconds in (30,60,90,120) or (game in ('algebra','logicawereld') and seconds=180));
+do $migration$ declare source text; begin
+ select pg_get_functiondef('axioma_private.vector_class_legacy(text,jsonb)'::regprocedure) into source;
+ if position('when ''algebra'' then' in source)=0 or position('game_name=''algebra''' in source)=0 then raise exception 'Onverwachte klasbattle-versie';end if;
+ source:=replace(source,'''vectoren'',''rechten'',''wortelbouw'',''algebra'',''bewerkingen''','''vectoren'',''rechten'',''wortelbouw'',''algebra'',''bewerkingen'',''logicawereld''');
+ source:=replace(source,'game_name=''algebra''','game_name in (''algebra'',''logicawereld'')');
+ source:=replace(source,'game_name in (''algebra'',''bewerkingen'')','game_name in (''algebra'',''bewerkingen'',''logicawereld'')');
+ source:=replace(source,'when ''algebra'' then','when ''logicawereld'' then coalesce(spec->>''skill'','''') in (''L01'',''L02'',''L03'',''L04'',''L05'',''L06'',''L07'',''L08'',''L09'',''L10'',''L11'',''L12'',''L13'',''L14'',''L15'',''L16'',''L17'',''L18'') when ''algebra'' then');
+ execute source;
+ select pg_get_functiondef('axioma_private.vector_class(text,jsonb)'::regprocedure) into source;
+ if position('game_id in (''rechten'',''vectoren'',''algebra'',''bewerkingen'')' in source)=0 then raise exception 'Onverwachte grading-versie';end if;
+ source:=replace(source,'game_id in (''rechten'',''vectoren'',''algebra'',''bewerkingen'')','game_id in (''rechten'',''vectoren'',''algebra'',''bewerkingen'',''logicawereld'')');
+ source:=replace(source,'game_id in (''vectoren'',''algebra'',''bewerkingen'')','game_id in (''vectoren'',''algebra'',''bewerkingen'',''logicawereld'')');
+ source:=replace(source,'game_id in (''algebra'',''bewerkingen'')','game_id in (''algebra'',''bewerkingen'',''logicawereld'')');
+ execute source;
+ select pg_get_functiondef('axioma_private.vector_class_worker(text,jsonb)'::regprocedure) into source;
+ source:=replace(source,'axioma_private.vector_class_worker','axioma_private.logica_class_worker');
+ source:=replace(source,'r.game<>''vectoren''','r.game<>''logicawereld''');execute source;
+end $migration$;
+revoke all on function axioma_private.logica_class_worker(text,jsonb) from public,anon,authenticated;
+grant execute on function axioma_private.logica_class_worker(text,jsonb) to service_role;
+create function public.axioma_logica_class_worker(p_action text,p_data jsonb) returns jsonb language sql security invoker set search_path='' as $$select axioma_private.logica_class_worker(p_action,p_data)$$;
+revoke all on function public.axioma_logica_class_worker(text,jsonb) from public,anon,authenticated;
+grant execute on function public.axioma_logica_class_worker(text,jsonb) to service_role;
+commit;

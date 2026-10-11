@@ -1,5 +1,5 @@
 // Native fetch keeps the worker dependency-free. All clocks and scores live in SQL.
-export function createHandler({url,anonKey,serviceKey,policy,fetcher=fetch}){
+export function createHandler({url,anonKey,serviceKey,policy,fetcher=fetch,rpcName='axioma_rechten_duo',worker='axioma_rechten_duo_worker'}){
  const headers={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'authorization, apikey, content-type, x-client-info','Access-Control-Allow-Methods':'POST, OPTIONS','Content-Type':'application/json','Cache-Control':'no-store'};
  const reply=(body,status=200)=>new Response(JSON.stringify(body),{status,headers});
  async function rpc(name,action,data,bearer,key){
@@ -18,13 +18,13 @@ export function createHandler({url,anonKey,serviceKey,policy,fetcher=fetch}){
    const auth=await fetcher(`${url}/auth/v1/user`,{headers:{apikey:anonKey,Authorization:bearer}});
    if(!auth.ok)return reply({error:'Log opnieuw in.'},401);
    const user=await auth.json();if(!user.id)return reply({error:'Log opnieuw in.'},401);
-   let state=await rpc('axioma_rechten_duo',body.action,body.data||{},bearer,anonKey);
+   let state=await rpc(rpcName,body.action,body.data||{},bearer,anonKey);
    if(state.id&&['waiting','resolving'].includes(state.phase)){
     const data={id:state.id,user_id:user.id};
-    const work=await rpc('axioma_rechten_duo_worker','work',data,`Bearer ${serviceKey}`,serviceKey);
-    if(work.phase==='prepare')await rpc('axioma_rechten_duo_worker','prepare',{...data,pool:policy.pool(work.a,work.b,work.world)},`Bearer ${serviceKey}`,serviceKey);
-    if(work.phase==='resolve')await rpc('axioma_rechten_duo_worker','resolve',{...data,round:work.round,a:policy.grade(work.task,work.a),b:policy.grade(work.task,work.b)},`Bearer ${serviceKey}`,serviceKey);
-    state=await rpc('axioma_rechten_duo','state',{id:state.id},bearer,anonKey);
+    const work=await rpc(worker,'work',data,`Bearer ${serviceKey}`,serviceKey);
+    if(work.phase==='prepare')await rpc(worker,'prepare',{...data,pool:policy.pool(work.a,work.b,work.world)},`Bearer ${serviceKey}`,serviceKey);
+    if(work.phase==='resolve')await rpc(worker,'resolve',{...data,round:work.round,a:policy.grade(work.task,work.a),b:policy.grade(work.task,work.b)},`Bearer ${serviceKey}`,serviceKey);
+    state=await rpc(rpcName,'state',{id:state.id},bearer,anonKey);
    }
    return reply(state);
   }catch(e){return reply({error:e instanceof SyntaxError?'Ongeldig verzoek.':e.message},400);}

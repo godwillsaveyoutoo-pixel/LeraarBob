@@ -1,0 +1,38 @@
+✔ group race starts together, resets the entire streak on a miss and finishes on seven correct answers (28.44432ms)
+✔ a timeout submits one miss and a remote winner stops the remaining animation and timers (8.279547ms)
+✔ standalone still runs and restart cancels its delayed countdown (8.180248ms)
+✔ mixed group advances to a new shared question after a miss and wins at seven consecutive correct answers (16.110374ms)
+✔ ranking keeps the selected tempo when an older request completes later and clears on logout (2.343279ms)
+✔ two untimed practice shots teach the controls without submitting or changing scores (13.442275ms)
+✔ waiting group offers practice and a remote start safely interrupts it (15.212795ms)
+✔ OS clay: private duo, group/class roles, original server questions, idempotent XP and teacher results (1925.614731ms)
+✔ Old clay URLs cannot expose private invitations or bypass the classroom spectator role (1484.430662ms)
+✔ group requests use the shared tab identity and send answers with a stable event id and revision (2.539589ms)
+✔ logout discards an in-flight group response and clears participant data (0.948959ms)
+✔ Klaslearn: identity, own drafts, retry, once-only XP, late join, teacher pacing, reports (1486.383729ms)
+✔ online duo: capacity, trusted battle answers, hidden correctness, server deadline, finish (1472.223231ms)
+✔ Duo Learn requires both own solutions and a separate discussion confirmation (1492.247942ms)
+✔ period reports include recorded solo evidence; other classes remain private (1450.892694ms)
+✔ a pupil hosting a duo cannot inspect the opponent answer during a battle (1445.070863ms)
+✔ a departed duo member cannot reclaim an occupied second seat (1441.565611ms)
+✔ central overview lists only owned or joined sessions and never leaks live grading (1397.072542ms)
+✔ Assignments: publication, fixed content, enrollment, native answers, resume, final submission, review and permissions (1495.601249ms)
+✔ Task retries, competing answers, drafts and invalid configuration cannot overwrite durable work (1466.456677ms)
+✔ new scientific questions work through the real SQL/Edge in all four online workforms and all three levels (1692.9862ms)
+✔ old clients cannot join, render, pace or answer v2 rooms, and rejection creates no member, attempt or XP (1444.762219ms)
+✔ an updated Edge on an unmigrated database safely creates and grades version 1 for a version 2 client (1393.81624ms)
+✔ migration preserves a live historical room, old cached RPC callers, saved learner evidence and catalog settings (1414.360311ms)
+✔ the generated Edge arithmetic reproduces both browser versions exactly (176.294843ms)
+✔ a partially updated Edge with an old arithmetic bundle cannot create or misgrade version 2 (1426.539716ms)
+✔ Cloud archive permissions, account binding, immutable snapshots and permanent deletion (1388.198603ms)
+✔ Archive history is bounded while existing documents remain readable and removable (1441.191645ms)
+✔ Two isolated devices restore exact questions and key; offline additions/deletions retry and never resurrect (1421.731448ms)
+✔ Account change during online request cannot attach the document to the next account (1496.924236ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 30233.73628

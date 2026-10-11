@@ -1,0 +1,8 @@
+{
+  "games/rechten/zeeslag/index.html": "9eb74723789f5804f888b90ecd1dba26375e79fb5a9b87345ff9225cf54cd8dc",
+  "games/rechten/zeeslag/zeeslag.js": "9e59b606b395a83713f951facb0bbb7620869efdfa6b21c6db7c5dd4aecc8aad",
+  "games/rechten/arcade/theme.css": "079becc53a616604c9cda152a665236ad52794cd2fbb4414ce38cb174e496d22",
+  "games/rechten/arcade/bridge.js": "7030d549bf49b9510b411548786ef1f85dfcfdae4f1f7a3fe0ea2008aa880eff",
+  "tests/zeeslag-controls-browser.cjs": "c74a25a3163abdc65f29c531edeaf292b37dcbc89a91ffe3b5bdaa1c6bf30db9",
+  ".github/workflows/catalog.yml": "5230e830caf1b3be118ac59059e5043cc753b0b4be332c7b103fe4f166447e8d"
+}

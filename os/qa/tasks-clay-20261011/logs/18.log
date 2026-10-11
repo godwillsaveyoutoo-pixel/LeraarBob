@@ -1,0 +1,8 @@
+PASS Original empty a/b controls: both handles avoid whole parameter groups, equation and execute action at 1366/1680/1198/640px
+PASS All eight street buildings at 1366/640px keep every window on the facade and exactly one target window
+PASS Equation has no buttons; keyboard arrows, Enter and Space change the native plan, including focus fallback at a bound
+PASS Positive/negative bounds, fractions and decimal levels, signed b, wheel and drag preserve the original value steps without executing a rescue
+PASS Minimize/resume keeps the same native frame, rescue and chosen coefficients
+PASS 1366/844/640/568px at 100%: equation separate, controls visible and >=44px; independent collapse/restore preserve input; edge handles do not cover answer controls
+PASS Native execution rescues the target with a negative decimal slope and intercept; explanation/next retain progress
+PASS Standalone formula works; collapse keeps input and the collapse preference survives reload

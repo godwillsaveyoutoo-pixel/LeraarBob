@@ -285,6 +285,7 @@ body.mode-plan .workspace{grid-template-rows:auto minmax(0,1fr) auto auto}body.m
     }
   }
   async function immersive(){
+    if(window!==window.top)return;
     const mobile=matchMedia('(pointer:coarse)').matches || innerHeight<500;
     if(!mobile)return;
     try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen?.();}catch{}

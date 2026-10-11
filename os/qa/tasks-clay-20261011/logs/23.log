@@ -1,0 +1,23 @@
+PASS Hellingrug actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload
+PASS Grenspas actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload
+PASS Formulewerf actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload
+PASS Signaalstad actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload
+PASS Vergelijkingen actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload
+PASS Stelsels actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload
+PASS Machten actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload
+PASS Vierkantswortels actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload
+PASS Wetenschappelijke notatie actual generation, automatic exact archive/key, idempotent save, native focus/minimize and OS reload
+PASS Thematic worksheet folders, saved folders, breadcrumb and all archive controls 1366 expanded
+PASS Thematic worksheet folders, saved folders, breadcrumb and all archive controls 1366 collapsed/restore
+PASS Thematic worksheet folders, saved folders, breadcrumb and all archive controls 390 expanded
+PASS Thematic worksheet folders, saved folders, breadcrumb and all archive controls 390 collapsed/restore
+PASS Worksheet OS collapsed preference survives full browser reload and restore
+PASS Actual complete JSON export, teacher/student/guest account isolation and native frame disposal
+PASS Confirmed deletion removes only the selected saved series
+PASS Actual Kopie terugzetten upload restores the exact generated question/key pair after deletion
+PASS Actual standalone HTML export contains both unchanged native documents and embedded styles
+PASS Untrusted postMessage payload cannot add an archived worksheet
+PASS Standalone and pending-account viewers clear old pages; in-flight export remains blocked and disabled after owner change
+PASS Blocked local storage produces visible failed-save and archive errors; native questions and print remain usable
+PASS Nine actual saved question/key documents print visibly and export to A4 PDF with original page content
+PASS worksheet browser: 22 interaction groups, 47 measured targets, 9 actual native generator captures

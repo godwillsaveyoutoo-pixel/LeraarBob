@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-11",
+  "commands": [
+    {
+      "command": "node --test --test-isolation=none tests/catalog.test.cjs tests/catalog-progress.test.cjs tests/desktop-model.test.cjs tests/logicawereld-logic.test.cjs tests/logicawereld-flow.test.cjs tests/logicawereld-integration.test.cjs tests/algebra-class.test.cjs",
+      "result": "57/57"
+    },
+    {
+      "command": "node --test --test-isolation=none tests/desktop-dom.test.cjs tests/topbar-desktop.test.cjs tests/class-activity-flow.test.cjs tests/logica-battle-database.test.cjs tests/rechten-online.test.cjs",
+      "result": "40/40"
+    },
+    {
+      "command": "node tests/algebra-class-database.cjs",
+      "result": "PASS"
+    },
+    {
+      "command": "node tests/algebra-systems-class-database.cjs",
+      "result": "PASS"
+    },
+    {
+      "command": "node tests/rechten-online-database.cjs",
+      "result": "PASS"
+    },
+    {
+      "command": "node tests/logica-battle-browser.cjs",
+      "result": "4/4 groups, screenshots"
+    },
+    {
+      "command": "node tests/logicawereld-os-browser.cjs",
+      "result": "7/7 groups, all 90 tasks"
+    },
+    {
+      "command": "node scripts/build-catalog.cjs --check",
+      "result": "PASS"
+    },
+    {
+      "command": "node tests/desktop-package-check.cjs",
+      "result": "PASS"
+    }
+  ],
+  "environment": {
+    "node": "24.18.1",
+    "browser": "Brave Chromium, headless",
+    "viewport": "1366x768 @ 100%; 390x844; native regression also 640x360 and 780x360",
+    "database": "PGlite 0.5.8, real migrations and Edge handlers",
+    "accounts": "synthetic teacher/alex/sam/outsider"
+  },
+  "production": "not deployed or authenticated",
+  "preview_links": "Teacher Logicawereld, pupil Duo Battle, teacher Vergelijkingen verified in Chromium at port 8797"
+}

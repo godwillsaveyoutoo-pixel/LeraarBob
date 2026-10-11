@@ -1329,7 +1329,7 @@ if(qa.get('qa')==='1'){
   const syncMenu=()=>{const active=!!menu?.classList.contains('open');body.classList.toggle('vf-menu-active',active);if(active)closeHud()};
   const menuObs=new MutationObserver(syncMenu);if(menu)menuObs.observe(menu,{attributes:true,attributeFilter:['class']});syncMenu();
 
-  const requestImmersive=async()=>{try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen?.()}catch(_){}try{await screen.orientation?.lock?.('landscape')}catch(_){}};
+  const requestImmersive=async()=>{if(window!==window.top)return;try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen?.()}catch(_){}try{await screen.orientation?.lock?.('landscape')}catch(_){}};
   const enterGame=async(openLevels=false)=>{
     body.classList.remove('vf-intro-open');body.classList.add('vf-immersive');intro.hidden=true;
     await requestImmersive();

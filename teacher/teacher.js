@@ -135,7 +135,7 @@ function csvCell(v){return '"'+String(v??'').replace(/^[=+\-@\t\r]/,"'$&").repla
 function renderShell(){
   const themes=[...new Set(games.filter(g=>g.teacher_visible&&(collection==='all'||featuredIds.includes(g.id))).map(g=>g.theme))].sort();
   $('app').innerHTML=`
-    <div class="collection-switch" role="group" aria-label="Spellen in het overzicht"><button type="button" data-collection="featured" aria-pressed="${collection==='featured'}">Actuele spellen</button><button type="button" data-collection="all" aria-pressed="${collection==='all'}">Alle spellen, ook reserve</button></div>
+    <p><a class="btn" href="../tasks/">Opdrachten en toetsen →</a></p><div class="collection-switch" role="group" aria-label="Spellen in het overzicht"><button type="button" data-collection="featured" aria-pressed="${collection==='featured'}">Actuele spellen</button><button type="button" data-collection="all" aria-pressed="${collection==='all'}">Alle spellen, ook reserve</button></div>
     <div class="toolbar">
       <label>Klas<select id="classFilter"><option value="">Alle klassen</option>${CLASSES.map(c=>`<option ${c===classFilter?'selected':''}>${c}</option>`).join('')}</select></label>
       <label class="wide">Zoek alias<input id="searchStudent" type="search" value="${esc(query)}" placeholder="Zoek een leerling"></label>
