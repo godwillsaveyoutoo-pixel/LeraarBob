@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{chromium}=require('playwright'),{start}=require('../scripts/serve-rechten-entry-preview.cjs'),{seed}=require('./helpers/battle-report-fixture.cjs');
 const out=process.env.BATTLE_REPORT_PROOF||'/tmp/lb-battle-report';fs.mkdirSync(out,{recursive:true});
-(async()=>{const s=await start({port:0}),rooms=await seed(s.fixture),browser=await chromium.launch({headless:true,executablePath:'/opt/brave.com/brave/brave',args:['--no-sandbox','--disable-dev-shm-usage']}),report={checks:[],errors:[],scope:'Synthetic accounts and seeded persisted terminal results, actual UI, PostgreSQL RPC and browser PDF downloads.'};let page;
+(async()=>{const s=await start({port:0}),rooms=await seed(s.fixture),browser=await chromium.launch({headless:true,executablePath:process.env.LB_CHROMIUM||(fs.existsSync('/opt/brave.com/brave/brave')?'/opt/brave.com/brave/brave':undefined),args:['--no-sandbox','--disable-dev-shm-usage']}),report={checks:[],errors:[],scope:'Synthetic accounts and seeded persisted terminal results, actual UI, PostgreSQL RPC and browser PDF downloads.'};let page;
 try{
  const context=await browser.newContext({viewport:{width:1366,height:768},deviceScaleFactor:1});await context.route('**/*',r=>new URL(r.request().url()).origin===s.base?r.continue():r.abort());page=await context.newPage();page.setDefaultTimeout(15000);page.on('pageerror',e=>report.errors.push(e.message));
  const paths={rechten:'rechten/rechtenwereld',vectoren:'vectoren',algebra:'algebra-trainer',wortelbouw:'wortelbouw_pro_v0.5.0/wortelbouw',bewerkingen:'bewerkingen-trainer',logicawereld:'logicawereld'};

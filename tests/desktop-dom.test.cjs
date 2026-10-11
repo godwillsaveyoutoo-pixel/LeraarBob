@@ -85,9 +85,14 @@ test('Learner startup and direct launches reject class creation; teacher options
   const f=await setup({account:{id:'learner-a',role:'student',alias:'Ada'}});t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;
   D.openModes('getallenwereld');assert([...f.$('modeOptions').querySelectorAll('[data-mode]')].every(n=>!['classroom','classlearn','teacher'].includes(n.dataset.mode)));
   assert.equal(D.openApp('getallenwereld','classlearn'),false);assert.equal(D.openApp('rechtenwereld','classroom'),false);assert.equal(D.state().openApps.length,0);
-  D.showView({kind:'live'});assert.equal(f.$('viewContent').querySelectorAll('.teacher-card').length,0);
+  D.showView({kind:'live'});assert.equal([...f.$('viewContent').querySelectorAll('button')].filter(b=>/^(Klasbattle starten|Klaslearn starten|Live les geven)$/.test(b.textContent)).length,0);
   f.emit({account:{id:'teacher-a',role:'teacher'}});await tick();D.openModes('getallenwereld');assert(f.$('modeOptions').querySelector('[data-mode=classlearn]'));
-  D.showView({kind:'live'});assert.equal(f.$('viewContent').querySelectorAll('.teacher-card').length,2);
+  D.showView({kind:'live'});
+  const hostButtons=[...f.$('viewContent').querySelectorAll('.live-app button')];
+  assert.equal(hostButtons.filter(b=>b.textContent==='Klasbattle starten').length,7);
+  assert.equal(hostButtons.filter(b=>b.textContent==='Klaslearn starten').length,1);
+  assert.equal(hostButtons.filter(b=>b.textContent==='Live les geven').length,1);
+  assert.equal(f.$('viewContent').querySelectorAll('.teacher-card').length,0,'The obsolete generic host cards are gone');
   assert.equal(D.openApp('getallenwereld','classlearn'),true);assert.equal(new URL(f.$('appFrames').querySelector('iframe').src).searchParams.get('audience'),'class');assert.equal(f.errors.length,0);
 });
 test('Saving is a desktop shortcut; closing is explicit; reopening a running online app keeps that mode',async t=>{
@@ -239,12 +244,16 @@ test('Guest live lesson sign-in captures the real native account handler and pre
   f.w.LeraarBobAccount.close();f.$('minimizeApp').click();f.$('runningApps').firstChild.click();assert.equal(frame.contentDocument.getElementById('joinCode'),code);assert.equal(code.value,'A1');
   doc.getElementById('joinForm').dispatchEvent(new win.Event('submit',{bubbles:true,cancelable:true}));assert.equal(submits,1);assert.deepEqual(f.errors.map(error=>error.message),[]);
 });
-test('The pupil Learn entrance reaches the original code form and joins a class; teachers reach class setup',async t=>{
+test('The central pupil code entrance joins the native Learn session; teachers reach class setup',async t=>{
   const account={id:'learner-a',role:'student',alias:'Ada'},f=await setup({account});t.after(()=>f.dom.window.close());const D=f.w.LeraarBobDesktop;
-  D.showView({kind:'live'});[...f.$('viewContent').querySelectorAll('button')].find(b=>b.textContent==='Learn-sessie').click();
+  D.showView({kind:'live'});[...f.$('viewContent').querySelectorAll('button')].find(b=>b.textContent==='Deelnemen met klascode').click();
+  assert.equal(f.$('personalDialog').open,true);assert.equal(f.$('personalDialogTitle').textContent,'Deelnemen met klascode');
+  const codeForm=f.$('personalDialog').querySelector('form');codeForm.elements.code.value='A1B2C3D4';
+  codeForm.dispatchEvent(new f.w.Event('submit',{bubbles:true,cancelable:true}));await tick();await tick();
+  assert.equal(f.$('personalDialog').open,false);
   const pupil=await nativeNumbers(f.$('appFrames').querySelector('iframe').src,account);t.after(()=>pupil.dom.window.close());
   assert.equal(pupil.w.NumbersSpace.snapshot().view,'join');assert.equal(pupil.w.document.querySelectorAll('[data-go]').length,0);assert(pupil.w.document.getElementById('joinSpace'));assert.equal(pupil.w.document.getElementById('createSpace'),null);
-  assert.equal(f.$('activeAppType').textContent,'Sessie');assert.equal(pupil.w.document.querySelector('[data-go=class-learn]'),null);
+  assert.equal(pupil.w.document.getElementById('sessionCode').value,'A1B2C3D4');assert.equal(pupil.w.document.querySelector('[data-go=class-learn]'),null);
   pupil.w.document.getElementById('sessionCode').value='A1B2C3D4';pupil.w.document.getElementById('joinSpace').dispatchEvent(new pupil.w.Event('submit',{bubbles:true,cancelable:true}));await tick();await tick();
   assert.equal(pupil.calls.find(c=>c.action==='join').data.code,'A1B2C3D4');assert.equal(pupil.calls.some(c=>c.action==='create'),false);assert.equal(pupil.w.NumbersSpace.snapshot().state.audience,'class');assert.equal(pupil.w.NumbersSpace.snapshot().view,'session');
   pupil.w.document.getElementById('sessionBack').click();assert.equal(pupil.w.NumbersSpace.snapshot().view,'join');assert.equal(pupil.w.document.querySelectorAll('[data-go]').length,0);assert.equal(new URL(pupil.w.location.href).searchParams.get('entry'),'join');
