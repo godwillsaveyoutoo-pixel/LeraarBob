@@ -11,6 +11,7 @@ async function createFixture(){
  await learn.db.exec(fs.readFileSync(path.join(root,'supabase/migrations/20261011070545_os_worksheet_cloud_archive.sql'),'utf8'));
  const tasks=await require('./os-tasks-db.cjs').install(classroom.db,classroom.ids);
  const clay=await require('./clay-os-db.cjs').install(classroom.db,classroom.ids);
+ const logicaClass=await require('./logica-battle-db.cjs').provider(classroom.db,classroom.ids,'class'),logicaDuo=await require('./logica-battle-db.cjs').provider(learn.db,learn.ids,'duo');
  let queue=Promise.resolve();const calls=[],gameProgress=new Map();
  function as(user,role,sql,args){const work=queue.catch(()=>{}).then(()=>learn.db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[learn.ids[user]||'']);await tx.exec('set local role '+role);return(await tx.query(sql,args)).rows[0]?.result;}));queue=work;return work;}
  const {createHandler}=await import('../../supabase/functions/rechten-learn/handler.js');
@@ -28,6 +29,9 @@ async function createFixture(){
    else if(provider==='axioma_os_tasks')data=await tasks.rpc(user,input.p_action,input.p_data);
    else if(provider==='task-activity')data=await tasks.activity(user,input.action,input.data);
    else if(provider==='numbers-session')data=await numbers.call(user,input.action,input.data||{});
+   else if(provider==='algebra-class')data=await logicaClass.algebraCall(user,input.action,input.data);
+   else if(provider==='logica-class')data=await logicaClass.call(user,input.action,input.data);
+   else if(provider==='logica-duo')data=await logicaDuo.call(user,input.action,input.data);
    else if(provider==='rechten-class')data=await classroom.battle(user,input.action,input.data);
    else if(provider==='axioma_social')data=await as(user,'authenticated','select public.axioma_social($1,$2,$3,$4,$5) result',[input.p_action,input.p_tab_id,input.p_target_id||null,input.p_invite_id||null,input.p_match_id||null]);
    else if(provider==='axioma_class_battle_hub')data=await classroom.db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[classroom.ids[user]]);await tx.exec('set local role authenticated');return(await tx.query('select public.axioma_class_battle_hub($1,$2) result',[input.p_action,JSON.stringify(input.p_data||{})])).rows[0].result;});

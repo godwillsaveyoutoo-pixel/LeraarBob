@@ -1732,7 +1732,7 @@
     "art": "logicawereld",
     "cover": "games/logicawereld/assets/regelstad-small.webp",
     "coverSmall": "games/logicawereld/assets/regelstad-small.webp",
-    "detail": "18 haltes · propositielogica · solo en duo op één toestel",
+    "detail": "18 haltes · propositielogica · solo, duo- en klasbattle",
     "subject": "Logica",
     "active": true,
     "featured": false,
@@ -1753,7 +1753,7 @@
       "modes": [
         {
           "id": "solo",
-          "title": "Solo Learn",
+          "title": "Solo oefenen",
           "participation": "solo",
           "purpose": "learn",
           "roles": [
@@ -1765,21 +1765,6 @@
           "providerId": "logicawereld",
           "topicParam": "stop",
           "devices": "Op je eigen tempo"
-        },
-        {
-          "id": "duo-local-learn",
-          "title": "Duo Learn · één toestel",
-          "participation": "duo",
-          "purpose": "learn",
-          "roles": [
-            "guest",
-            "student",
-            "teacher"
-          ],
-          "href": "games/logicawereld/?mode=duo-learn",
-          "providerId": "logicawereld",
-          "topicParam": "stop",
-          "devices": "Eén toestel"
         },
         {
           "id": "solo-battle",
@@ -1810,6 +1795,31 @@
           "providerId": "logicawereld",
           "topicParam": "stop",
           "devices": "Eén toestel"
+        },
+        {
+          "id": "online",
+          "title": "Duo Battle · elk een toestel",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "student"
+          ],
+          "href": "games/logicawereld/duo.html",
+          "providerId": "logica-duo",
+          "devices": "Elk een toestel"
+        },
+        {
+          "id": "classroom",
+          "title": "Klasbattle",
+          "participation": "group",
+          "purpose": "battle",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "href": "games/logicawereld/classroom.html",
+          "providerId": "logicawereld",
+          "devices": "Elk een toestel"
         }
       ],
       "worksheets": [
@@ -2086,8 +2096,8 @@
     },
     "quickModes": [
       "solo",
-      "duo-local-learn",
-      "local"
+      "online",
+      "classroom"
     ]
   }
 ]

@@ -1734,7 +1734,7 @@ window.AXIOMA_CATALOG = [
     "art": "logicawereld",
     "cover": "games/logicawereld/assets/regelstad-small.webp",
     "coverSmall": "games/logicawereld/assets/regelstad-small.webp",
-    "detail": "18 haltes · propositielogica · solo en duo op één toestel",
+    "detail": "18 haltes · propositielogica · solo, duo- en klasbattle",
     "subject": "Logica",
     "active": true,
     "featured": false,
@@ -1755,7 +1755,7 @@ window.AXIOMA_CATALOG = [
       "modes": [
         {
           "id": "solo",
-          "title": "Solo Learn",
+          "title": "Solo oefenen",
           "participation": "solo",
           "purpose": "learn",
           "roles": [
@@ -1767,21 +1767,6 @@ window.AXIOMA_CATALOG = [
           "providerId": "logicawereld",
           "topicParam": "stop",
           "devices": "Op je eigen tempo"
-        },
-        {
-          "id": "duo-local-learn",
-          "title": "Duo Learn · één toestel",
-          "participation": "duo",
-          "purpose": "learn",
-          "roles": [
-            "guest",
-            "student",
-            "teacher"
-          ],
-          "href": "games/logicawereld/?mode=duo-learn",
-          "providerId": "logicawereld",
-          "topicParam": "stop",
-          "devices": "Eén toestel"
         },
         {
           "id": "solo-battle",
@@ -1812,6 +1797,31 @@ window.AXIOMA_CATALOG = [
           "providerId": "logicawereld",
           "topicParam": "stop",
           "devices": "Eén toestel"
+        },
+        {
+          "id": "online",
+          "title": "Duo Battle · elk een toestel",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "student"
+          ],
+          "href": "games/logicawereld/duo.html",
+          "providerId": "logica-duo",
+          "devices": "Elk een toestel"
+        },
+        {
+          "id": "classroom",
+          "title": "Klasbattle",
+          "participation": "group",
+          "purpose": "battle",
+          "roles": [
+            "student",
+            "teacher"
+          ],
+          "href": "games/logicawereld/classroom.html",
+          "providerId": "logicawereld",
+          "devices": "Elk een toestel"
         }
       ],
       "worksheets": [
@@ -2088,8 +2098,8 @@ window.AXIOMA_CATALOG = [
     },
     "quickModes": [
       "solo",
-      "duo-local-learn",
-      "local"
+      "online",
+      "classroom"
     ]
   }
 ];

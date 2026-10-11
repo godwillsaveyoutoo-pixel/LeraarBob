@@ -29,7 +29,7 @@ jobs:
           npm install --no-save --package-lock=false --prefix "$RUNNER_TEMP/leraarbob-browser-tests" playwright@1.64.0 @electric-sql/pglite@0.5.8 jsdom@26.1.0 fake-indexeddb@6.2.4
           "$RUNNER_TEMP/leraarbob-browser-tests/node_modules/.bin/playwright" install --with-deps chromium
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" HOME_SCREENSHOTS="$RUNNER_TEMP/os-qa/home-entry" node tests/home-entry-browser.cjs
-          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs tests/worksheet-cloud.test.cjs tests/os-tasks.test.cjs tests/clay-os.test.cjs tests/clay-service.test.cjs tests/clay-game.test.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" node --test --test-isolation=none tests/numbers-session.test.cjs tests/scientific-session-version.test.cjs tests/worksheet-cloud.test.cjs tests/os-tasks.test.cjs tests/clay-os.test.cjs tests/clay-service.test.cjs tests/clay-game.test.cjs tests/logica-battle-database.test.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" TASKS_PROOF="$RUNNER_TEMP/os-qa/tasks" node tests/os-tasks-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CLAY_OS_PROOF="$RUNNER_TEMP/os-qa/clay" node tests/clay-os-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LB_SCREENSHOT_DIR="$RUNNER_TEMP/os-qa/personal" node tests/personal-os-browser.cjs
@@ -52,6 +52,7 @@ jobs:
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" ALGEBRA_OS_SCREENSHOTS="$RUNNER_TEMP/os-qa/algebra" node tests/algebra-os-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" CHROME_PROOF="$RUNNER_TEMP/os-qa/uniform-chrome" node tests/os-native-chrome-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" STELSELS_EXPERT_PROOF="$RUNNER_TEMP/os-qa/stelsels-expert" node tests/stelsels-expert-substitution-browser.cjs
+          NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LOGICA_BATTLE_PROOF="$RUNNER_TEMP/os-qa/logica-battles" node tests/logica-battle-browser.cjs
           NODE_PATH="$RUNNER_TEMP/leraarbob-browser-tests/node_modules" LOGICA_PROOF="$RUNNER_TEMP/os-qa/logica" node tests/logicawereld-os-browser.cjs
       - name: Screenshots en browserrapporten bewaren
         if: always()

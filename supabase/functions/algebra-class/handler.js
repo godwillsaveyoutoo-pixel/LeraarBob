@@ -1,5 +1,5 @@
 // Any authenticated participant can finish grading; the teacher tab is not required.
-export function createHandler({url,anonKey,serviceKey,policy,fetcher=fetch}){
+export function createHandler({url,anonKey,serviceKey,policy,fetcher=fetch,game='algebra',worker='axioma_algebra_class_worker'}){
  const headers={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'authorization, apikey, content-type, x-client-info','Access-Control-Allow-Methods':'POST, OPTIONS','Content-Type':'application/json','Cache-Control':'no-store'};
  const reply=(body,status=200)=>new Response(JSON.stringify(body),{status,headers});
  async function rpc(name,action,data,bearer,key){const r=await fetcher(`${url}/rest/v1/rpc/${name}`,{method:'POST',headers:{apikey:key,Authorization:bearer,'Content-Type':'application/json'},body:JSON.stringify({p_action:action,p_data:data})});const body=await r.json();if(!r.ok)throw Error(body.message||'De klasbattle is tijdelijk niet bereikbaar.');return body;}
@@ -13,12 +13,12 @@ export function createHandler({url,anonKey,serviceKey,policy,fetcher=fetch}){
    if(!['create','join','state','start','next','submit','end_round','close','leave'].includes(body.action))return reply({error:'Ongeldige klasactie.'},400);
    const auth=await fetcher(`${url}/auth/v1/user`,{headers:{apikey:anonKey,Authorization:bearer}});if(!auth.ok)return reply({error:'Log opnieuw in.'},401);
    const user=await auth.json();if(!user.id)return reply({error:'Log opnieuw in.'},401);
-   let state=await rpc('axioma_game_class',body.action,{...body.data,game:'algebra',...(body.action==='create'?{server_grading:true}:{})},bearer,anonKey);
+   let state=await rpc('axioma_game_class',body.action,{...body.data,game,...(body.action==='create'?{server_grading:true}:{})},bearer,anonKey);
    if(state.phase==='grading'){
     const data={id:state.id,user_id:user.id},trusted=`Bearer ${serviceKey}`;
-    const work=await rpc('axioma_algebra_class_worker','work',data,trusted,serviceKey);
-    if(work.phase==='grading')await rpc('axioma_algebra_class_worker','resolve',{...data,round:work.round,grades:work.submissions.map(s=>({user_id:s.user_id,correct:!s.skipped&&policy.grade(work.task,s.answer)}))},trusted,serviceKey);
-    state=await rpc('axioma_game_class','state',{id:state.id,game:'algebra'},bearer,anonKey);
+    const work=await rpc(worker,'work',data,trusted,serviceKey);
+    if(work.phase==='grading')await rpc(worker,'resolve',{...data,round:work.round,grades:work.submissions.map(s=>({user_id:s.user_id,correct:!s.skipped&&policy.grade(work.task,s.answer)}))},trusted,serviceKey);
+    state=await rpc('axioma_game_class','state',{id:state.id,game},bearer,anonKey);
    }
    delete state.submissions;return reply(state);
   }catch(e){return reply({error:e instanceof SyntaxError?'Ongeldig verzoek.':e.message},400);}

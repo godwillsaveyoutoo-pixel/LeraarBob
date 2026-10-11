@@ -4,16 +4,17 @@ Logicawereld v0.2 is aangesloten op de persoonlijke OS-pilot als trainer in **Lo
 
 ## Ingangen en bediening
 
-Voeg Logicawereld toe via **Toevoegen → Logica & puzzels**. De kaart biedt Solo, Samen op één toestel, Duo Battle en Oefenbladen. Solo Battle staat bij Meer opties. Een gekozen werkvorm opent de kaart om een halte te kiezen; vanuit een bestaande halte gaat de OS-werkvormkeuze rechtstreeks naar diezelfde halte. Elke werkvorm behoudt haar eigen geopende venster.
+Voeg Logicawereld toe via **Toevoegen → Logica & puzzels**. De kaart biedt Solo, online Duo Battle en Oefenbladen; leerkrachten zien Klasbattle. Solo Battle en de lokale bordbattle blijven onder de overige werkvormen. Samen leren wordt niet meer aangeboden. Elke werkvorm behoudt haar eigen geopende venster.
 
 | Ingang | Gedrag |
 | --- | --- |
 | `?mode=solo` | Kaart en vijf oorspronkelijke opdrachten per halte |
-| `?mode=duo-learn` | Samen leren op één toestel, met partnerbeoordeling |
+| `duo.html` | Klasgenoot op alias uitnodigen; accepteren en beiden klaarzetten vóór de eerste ronde |
+| `classroom.html` | Leerkracht kiest gebied/mix, rondes en tijd; leerlingen gebruiken de centrale klascode |
 | `?mode=solo-battle` | Acht vragen uit het gekozen gebied |
 | `?mode=local` | Tien beurten, twee spelers op één toestel |
 | `?stop=4&mode=solo` | Rechtstreeks naar halte 4, of dezelfde bewaarde ronde hervatten |
-| `?stop=halte-4&mode=duo-learn` | Dezelfde halte vanuit het centrale register |
+| `?mode=duo-learn` | Alleen historische compatibiliteit voor oude rondes; geen aangeboden OS-werkvorm |
 | `?stop=10&view=worksheet` | Compatibiliteitsroute naar de centrale oefenbladmaker |
 
 Binnen het OS bestaat één platformbalk. De eigen spelkop blijft verborgen in de DOM voor voortgang en navigatie. Leerroute, spelvoortgang en spelmenu staan in het OS-menu. Start, focusstand, terug, minimaliseren, bewaren en sluiten blijven OS-bediening. Zelfstandig gebruikt de app `shared/leraarbob-topbar.js`, inclusief account, volledig scherm, weergave en de bewaarde inklapkeuze. Smalle schermen gebruiken scrollbare inhoud in plaats van een verplicht draaivenster.
@@ -34,9 +35,13 @@ De opgaven komen uit de vaste bank; opnieuw genereren betekent geen onbeperkte n
 
 ## Grenzen en verdere implementatie
 
-Online Duo Learn, online Duo Battle, Klas Learn en Klas Battle hebben nog geen Logicawereld-provider. Ze staan daarom niet als startoptie in het OS. De brug accepteert alleen werkelijk geregistreerde sessiemodi en houdt leraarstart gescheiden van leerlingdeelname.
+Online Duo Battle en Klasbattle hebben nu eigen providers in de ontwikkelversie. De app hergebruikt de centrale uitnodigingen, rollen, klascode, timers, herkoppeling en ranglijst. Het geïsoleerde werkbord gebruikt dezelfde `app.js`, `logic.js` en `content.js`; het herschrijft de antwoordbediening niet. Serverbeoordeling gebruikt diezelfde oorspronkelijke validator. Een battle verandert de lokale solo-beheersing of XP niet.
 
-Voor de toekomstige samengestelde taken zijn de stabiele opdracht-ID's, leerdoelen, antwoordvormen, exacte controle en exporteerbare resultaten bruikbare bouwstenen. Een uitgegeven taakversie, centrale leerlinginzending, serverbeoordeling en leraarsrapport moeten nog worden aangesloten. De lokale oefenstatus is geen beveiligde toetsbeoordeling.
+Duo: vijf rondes, bij gelijke eindstand maximaal twee extra. Eén antwoord, maximaal drie minuten per ronde, één rondepunt voor het juiste snelste antwoord (300 ms gelijkheidsmarge). Klas: 3/5/10/20 rondes, 30–180 seconden, de bestaande 1.000 juistheidspunten plus maximaal 250 snelheidspunten. Een mix van alle achttien haltes stelt 20 rondes in zodat elke halte voorkomt. Uitnodigingen gebruiken de bestaande bezetheidscontrole: één reservering tegelijk. Rechtenwereld behoudt zijn bestaande regels en tijdslimieten.
+
+De productiebackend is nog niet gewijzigd. Voor uitrol zijn beide `20261011142721_logica_class_battle.sql` / `20261011142724_logica_duo_battle.sql` migraties en Edge Functions `logica-class` / `logica-duo` nodig, na hun bestaande afhankelijkheden. Bouw de gedeelde policy met `node scripts/build-logica-battle-worker.cjs`. Controleer vervolgens echte leerling- en leraaraccounts. Samen leren wordt voor Logicawereld niet aangesloten.
+
+Voor de toekomstige samengestelde taken zijn de stabiele opdracht-ID's, leerdoelen, antwoordvormen, exacte controle en exporteerbare resultaten bruikbare bouwstenen. Voor Logicawereld als onderdeel van een samengestelde toets moeten de taakadapter, uitgegeven taakversie, inzending en leraarsrapport nog worden aangesloten. Battlebeoordeling is al afzonderlijk beschikbaar. De lokale oefenstatus is geen beveiligde toetsbeoordeling.
 
 ## Verificatie
 
@@ -48,3 +53,5 @@ De bron komt uit `Logicawereld_Propositielogica_v0.2.zip`. Het meegeleverde inst
 - Catalogus, desktopbediening en centrale oefenbladopslag gebruiken tevens de bestaande regressietests.
 
 Het actuele browserresultaat en geselecteerde screenshots staan bij [de OS-controle](../../os/qa/logica/README.md). Productieaanmelding en cloudsynchronisatie zijn geen onderdeel van deze lokale proef.
+
+De nieuwe battlecontroles en schermen staan in [het battleverslag](../../os/qa/logica-battles-20261011/README.md).

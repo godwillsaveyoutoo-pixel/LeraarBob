@@ -1,16 +1,17 @@
 /* Durable server state, one native workboard. Never sends correctness or client timestamps. */
 (()=>{'use strict';
  const $=id=>document.getElementById(id),frame=$('board'),base=new URL('.',location.href);
- const names={hellingrug:'Hellingrug',grenspas:'Grenspas',formulewerf:'Formulewerf',signaalstad:'Signaalstad'};let lobbyData=null;
+ const config=window.LeraarBobDuoConfig||{},provider=config.provider||'rechten-duo';
+ const names=config.worlds||{hellingrug:'Hellingrug',grenspas:'Grenspas',formulewerf:'Formulewerf',signaalstad:'Signaalstad'};let lobbyData=null;
  let initialized=false,account=null,epoch=0,id=new URLSearchParams(location.search).get('match'),state=null,busy=false,busyAction='',timer,frameReady=false,sent='',clock={server:0,local:0},queuedAnswer=null;
  const tab=()=>window.AxiomaSocial?.state().tabId||sessionStorage.getItem('axioma-social-tab')||crypto.randomUUID();
  const button=(label,action)=>{const b=document.createElement('button');b.textContent=label;b.onclick=action;return b;};
- const queueKey=()=>`rechten-duo-answer:${account?.id}:${id}`;const saveQueue=()=>{try{if(queuedAnswer)localStorage.setItem(queueKey(),JSON.stringify(queuedAnswer));else localStorage.removeItem(queueKey());}catch{}};
+ const queueKey=()=>`${provider}-answer:${account?.id}:${id}`;const saveQueue=()=>{try{if(queuedAnswer)localStorage.setItem(queueKey(),JSON.stringify(queuedAnswer));else localStorage.removeItem(queueKey());}catch{}};
  const message=text=>{$('error').hidden=!text;$('error').textContent=text;};
  async function call(action,data={}){
   const turn=epoch;if(!account)return;if(busy){if(['state','lobby'].includes(action))return;await new Promise(r=>setTimeout(r,80));if(turn!==epoch)return;return call(action,data);}busy=true;busyAction=action;
   try{
-   const {data:result,error}=await AxiomaAuth.client().functions.invoke('rechten-duo',{body:{action,data:{...data,tab_id:tab(),...(id?{id}: {})}}});
+   const {data:result,error}=await AxiomaAuth.client().functions.invoke(provider,{body:{action,data:{...data,tab_id:tab(),...(id?{id}: {})}}});
    if(turn!==epoch)return;
    if(error){let detail;try{detail=await error.context?.json();}catch{}throw Error(detail?.error||'Verbinding verbroken. We proberen opnieuw; bevestigde antwoorden blijven bewaard.');}
    if(result?.error)throw Error(result.error);
@@ -22,10 +23,10 @@
  }
  let requestedWorld=new URLSearchParams(location.search).get('world');
  function renderLobby(data){
-  lobbyData=data;const selected=requestedWorld||$('duelWorld').value;requestedWorld=null;const worlds=data.worlds||[],signature=JSON.stringify(worlds);if($('duelWorld').dataset.worlds!==signature){$('duelWorld').dataset.worlds=signature;$('duelWorld').replaceChildren();for(const id of worlds)$('duelWorld').append(new Option(names[id]||id,id));if(!worlds.length)$('duelWorld').append(new Option('Nog geen afgeronde wereld',''));}if(worlds.includes(selected))$('duelWorld').value=selected;$('duelWorld').disabled=!worlds.length;
+  lobbyData=data;const selected=requestedWorld||$('duelWorld').value;requestedWorld=null;const worlds=data.worlds||[],signature=JSON.stringify(worlds);if($('duelWorld').dataset.worlds!==signature){$('duelWorld').dataset.worlds=signature;$('duelWorld').replaceChildren();for(const id of worlds)$('duelWorld').append(new Option(names[id]||id,id));if(!worlds.length)$('duelWorld').append(new Option(config.emptyWorld||'Nog geen afgeronde wereld',''));}if(worlds.includes(selected))$('duelWorld').value=selected;$('duelWorld').disabled=!worlds.length;
   $('soloFallback').hidden=false;$('lobby').hidden=false;$('match').hidden=true;$('login').hidden=account?.role==='student';
   const invitationsKey=JSON.stringify([account?.id,data.invitations||[]]);if($('invitations').dataset.rows!==invitationsKey){$('invitations').dataset.rows=invitationsKey;$('invitations').replaceChildren();
-  for(const inv of data.invitations||[]){const row=document.createElement('div');row.className='invitation';const text=document.createElement('p');const mine=inv.sender_id===account.id;text.textContent=mine?`Je hebt ${inv.recipient_alias} uitgedaagd.`:`${inv.sender_alias} daagt je uit voor ${names[inv.world]||'Rechtenwereld'}.`;row.append(text);
+  for(const inv of data.invitations||[]){const row=document.createElement('div');row.className='invitation';const text=document.createElement('p');const mine=inv.sender_id===account.id;text.textContent=mine?`Je hebt ${inv.recipient_alias} uitgedaagd.`:`${inv.sender_alias} daagt je uit voor ${names[inv.world]||config.title||'Rechtenwereld'}.`;row.append(text);
    const act=action=>{id=inv.id;call(action);};
    if(inv.status==='accepted')row.append(button('Battle hervatten',()=>act('state')));
    else if(mine)row.append(button('Intrekken',()=>act('cancel')));
@@ -35,7 +36,7 @@
   }
   const playersKey=JSON.stringify([account?.id,account?.role,$('duelWorld').value,data.worlds,data.players]);if($('players').dataset.rows!==playersKey){$('players').dataset.rows=playersKey;$('players').replaceChildren();
   for(const p of (data.players||[]).filter(p=>p.worlds?.includes($('duelWorld').value))){const row=document.createElement('div');row.className='person';const name=document.createElement('span');name.textContent=p.alias;row.append(name,button('Uitdagen',()=>call('invite',{target:p.id,world:$('duelWorld').value})));$('players').append(row);}
-  if(!$('players').children.length)$('players').textContent=account?.role==='student'?(data.worlds?.length?'Geen geschikte klasgenoot online voor deze wereld. Je kunt alleen verder leren.':'Rond eerst een wereld af en bewaar je voortgang in je account.'):'Meld je aan met je leerlingaccount om iemand uit te dagen.';
+  if(!$('players').children.length)$('players').textContent=account?.role==='student'?(data.worlds?.length?'Geen klasgenoot beschikbaar voor dit duel. Je kunt alvast solo oefenen.':'Rond eerst een wereld af en bewaar je voortgang in je account.'):'Meld je aan met je leerlingaccount om iemand uit te dagen.';
   }
  }
  const send=data=>frame.contentWindow?.postMessage(data,location.origin);
@@ -51,18 +52,18 @@
   const live=['countdown','playing','resolving','round_result'].includes(s.phase);
   frame.hidden=!live;frame.inert=s.phase!=='playing'||me.confirmed;
   const key=id+':'+s.round;
-  if(s.phase==='playing'&&frameReady&&sent!==key){sent=key;send({type:'vector-battle-question',match:id,index:s.round,...s.task});}
+  if(s.phase==='playing'&&frameReady&&sent!==key){sent=key;send({type:'vector-battle-question',match:id,index:s.round,...s.task,singleAttempt:true,learner:account.id});}
   if(me.confirmed||['resolving','round_result','finished'].includes(s.phase))send({type:'vector-battle-resolved',match:id,index:s.round,message:me.confirmed?'Bevestigd · wachten op de uitslag.':'Ronde afgelopen.'});
   const panel=$('roundPanel'),signature=JSON.stringify([s.phase,s.round,s.reason,s.winner,s.a.correct,s.b.correct,me.ready]);if(panel.dataset.state===signature){tick();return;}panel.dataset.state=signature;panel.replaceChildren();
   if(s.phase==='invite'){
-   const mine=s.a.id===account.id;panel.append(document.createTextNode(mine?`Wachten op ${s.b.alias}…`:`${s.a.alias} daagt je uit voor ${names[s.world]||'Rechtenwereld'}.`));
+   const mine=s.a.id===account.id;panel.append(document.createTextNode(mine?`Wachten op ${s.b.alias}…`:`${s.a.alias} daagt je uit voor ${names[s.world]||config.title||'Rechtenwereld'}.`));
    panel.append(button(mine?'Intrekken':'Accepteren',()=>call(mine?'cancel':'accept')));
    if(!mine)panel.append(button('Weigeren',()=>call('decline')));
-  }else if(s.phase==='waiting')panel.textContent=me.ready?'Wachten tot jullie allebei klaar zijn…':'Klaar? De opgaven komen uit jullie gezamenlijke leerpad.';
+  }else if(s.phase==='waiting')panel.textContent=me.ready?'Wachten tot jullie allebei klaar zijn…':config.readyText||'Klaar? De opgaven komen uit jullie gezamenlijke leerpad.';
   else if(s.phase==='countdown')panel.textContent='Maak je klaar…';
   else if(s.phase==='resolving')panel.textContent='Beide antwoorden worden nagekeken…';
   else if(['round_result','finished'].includes(s.phase)){
-   panel.textContent=s.reason==='no_common_skills'?'Rond eerst allebei de gekozen wereld af.':s.reason==='expired'?'Deze battle is verlopen.':s.reason==='left'?'De battle is gestopt.':['cancel','decline'].includes(s.reason)?'Uitnodiging afgesloten.':`${s.a.alias} ${s.a.correct?'✓':'✗'} · ${s.b.alias} ${s.b.correct?'✓':'✗'} · ${s.winner?(s.winner===s.a.id?s.a.alias:s.b.alias)+(s.phase==='finished'?' wint de match!':' +1'):'Geen rondepunt (gelijk of beide fout).'}`;
+   panel.textContent=s.reason==='no_common_skills'?(config.emptyWorld||'Rond eerst allebei de gekozen wereld af.'):s.reason==='expired'?'Deze battle is verlopen.':s.reason==='left'?'De battle is gestopt.':['cancel','decline'].includes(s.reason)?'Uitnodiging afgesloten.':`${s.a.alias} ${s.a.correct?'✓':'✗'} · ${s.b.alias} ${s.b.correct?'✓':'✗'} · ${s.winner?(s.winner===s.a.id?s.a.alias:s.b.alias)+(s.phase==='finished'?' wint de match!':' +1'):'Geen rondepunt (gelijk of beide fout).'}`;
   }
   tick();
  }

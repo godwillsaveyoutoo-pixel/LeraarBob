@@ -36,10 +36,10 @@
     for (const fn of listeners) { try { fn(state()); } catch (error) { console.error(error); } }
   }
   function state() { return { ...snapshot, account, connected, matchId, tabId, pending, note }; }
-  const invitationLabel = i => i.game==='rechten-learn'?'Samen leren in Rechtenwereld':i.game==='rechten-duo'?'een online duel in Rechtenwereld':'Rechten Zeeslag';
+  const invitationLabel = i => i.game==='logica-duo'?'een Duo Battle in Logicawereld':i.game==='rechten-learn'?'Samen leren in Rechtenwereld':i.game==='rechten-duo'?'een online duel in Rechtenwereld':'Rechten Zeeslag';
   function invitationURL(invite) {
     const learn=invite.game==='rechten-learn';
-    const url=new URL(learn?'games/rechten/rechtenwereld/learn.html':invite.game==='rechten-duo'?'games/rechten/rechtenwereld/online.html':gameURL,base);
+    const url=new URL(learn?'games/rechten/rechtenwereld/learn.html':invite.game==='rechten-duo'?'games/rechten/rechtenwereld/online.html':invite.game==='logica-duo'?'games/logicawereld/duo.html':gameURL,base);
     url.searchParams.set(learn?'session':'match',learn?invite.learn_room_id:invite.id);return url;
   }
   function rememberRoute(id) {
@@ -140,7 +140,7 @@
   async function act(action, args = {}) {
     if (pending || !account) return null;
     const invitation=snapshot.invitations.find(i=>i.id===args.p_invite_id);
-    if(['rechten-duo','rechten-learn'].includes(invitation?.game)){
+    if(['rechten-duo','rechten-learn','logica-duo'].includes(invitation?.game)){
       pending=true;note='';render();const version=epoch;
       try{
         const {data,error}=await AxiomaAuth.client().functions.invoke(invitation.game,{body:{action,data:{[invitation.game==='rechten-learn'?'invite':'id']:invitation.id,tab_id:tabId}}});

@@ -157,9 +157,9 @@ async function identity(next){
  const id=parameters.get('session')||read(storageKey());if(id&&parameters.get('create')==='1'){mountResume(async()=>{pending=read(pendingKey());await action('state',{id});},'Lopende battle hervatten');return;}if(id){try{const previous=await rpc('state',{id});if(inviteCode&&previous.code!==inviteCode)return;pending=read(pendingKey());accept(previous);}catch(e){notice('Je vorige sessie kon nog niet worden hervat. Je bewaarde inzending blijft behouden. '+errorText(e));}}
 }
 for(const world of Game.worlds)$('world').append(new Option(world.name,world.id));
-$('world').append(new Option('Mixed · meerdere werelden','mixed'));
+$('world').append(new Option(Game.id==='logicawereld'?'Mix · alle gebieden':'Mix · meerdere werelden','mixed'));
 function pool(){return $('world').value==='mixed'?Game.mixedSkills:(Game.worlds.find(w=>w.id===$('world').value)?.skills||Game.mixedSkills);}
-function updateSkills(){ $('skill').replaceChildren(new Option('Mix van dit onderdeel','mix'));for(const id of pool())$('skill').append(new Option(Game.skills.find(s=>s.id===id).label,id)); }
+function updateSkills(){ if(Game.coverEverySkill&&pool().length>Number($('rounds').value))$('rounds').value=String([3,5,10,20].find(n=>n>=pool().length));$('skill').replaceChildren(new Option($('world').value==='mixed'?'Mix van alle onderdelen':'Mix van dit onderdeel','mix'));for(const id of pool())$('skill').append(new Option(Game.skills.find(s=>s.id===id).label,id)); }
 // Presentation settings are separate from a live session and never award progress.
 const algebraSettings=Game.id==='algebra'&&!!$('classWorlds');
 const configKey=()=>`leraarbob-class-config:${Game.id}:${account?.id}`;
@@ -172,10 +172,11 @@ function saveClassConfig(){
 function summarizeClassConfig(){
  if(!algebraSettings)return;
  const chosen=[...document.querySelectorAll('[name=classType]:checked')].filter(e=>pool().includes(e.value));
- $('classSelectionSummary').textContent=$('world').value==='systems'?'Eenvoudige stelsels · hele getallen':chosen.length+' vraagvorm'+(chosen.length===1?'':'en');
+ $('classSelectionSummary').textContent=$('world').value==='systems'?'Eenvoudige stelsels · hele getallen':($('classPreset').value==='mix'?'Mix van alle levels · ':'')+chosen.length+' vraagvorm'+(chosen.length===1?'':'en');
 }
 function chooseClassPreset(id,save=true){
- const preset=Game.presets?.find(p=>p.id===id);if(!preset)return;
+ if(id==='custom'){$('classPreset').value=id;summarizeClassConfig();if(save)saveClassConfig();return;}
+ const preset=id==='mix'?{skills:pool()}:Game.presets?.find(p=>p.id===id);if(!preset)return;
  $('classPreset').value=id;const selected=new Set(preset.skills);
  document.querySelectorAll('[name=classType]').forEach(e=>e.checked=selected.has(e.value));
  if(selected.size>Number($('rounds').value))$('rounds').value=String([3,5,10,20].find(n=>n>=selected.size)||20);
@@ -223,7 +224,7 @@ function loadSimulation(){
 function buildDeck(){
  if(classFlow){const world=$('world').value,skill=$('skill').value;if(!(Game.worlds.some(w=>w.id===world)||world==='mixed')||!(skill==='mix'||pool().includes(skill)))throw Error('Kies een geldig onderwerp en een geldige vraagvorm.');}
  const selected=Game.multiSelect?[...document.querySelectorAll('[name=classType]:checked')].map(e=>e.value).filter(id=>!algebraSettings||pool().includes(id)):$('skill').value==='mix'?pool():[$('skill').value],count=Number($('rounds').value);
- if(!selected.length)throw Error('Kies minstens één vraagvorm.');if(Game.multiSelect&&selected.length>count)throw Error('Kies meer rondes of minder types, zodat elk gekozen type aan bod komt.');
+ if(!selected.length)throw Error('Kies minstens één vraagvorm.');if((Game.multiSelect||Game.coverEverySkill)&&selected.length>count)throw Error('Kies meer rondes of minder types, zodat elk gekozen type aan bod komt.');
  const seeds=crypto.getRandomValues(new Uint32Array(count));return Array.from({length:count},(_,i)=>({skill:selected[i%selected.length],seed:seeds[i],variant:i%4,level:Game.levelSelect&&$('classLevel')?Number($('classLevel').value):1,...(Game.multiSelect?{fractions:$('classFractions').checked,decimals:$('classDecimals').checked,negative:$('classNegative').checked}:{})}));
 }
 function mountResume(resume,label){
@@ -262,10 +263,12 @@ if(Game.multiSelect&&$('classTypes')){
 }
 if(algebraSettings){
  for(const world of Game.worlds){const b=document.createElement('button');b.type='button';b.dataset.classWorld=world.id;b.textContent=world.name;b.onclick=()=>chooseClassWorld(world.id);$('classWorlds').append(b);}
+ $('classPreset').append(new Option('Mix · alle levels','mix'));
  for(const preset of Game.presets||[])$('classPreset').append(new Option(preset.label,preset.id));
+ $('classPreset').append(new Option('Eigen selectie','custom'));
  $('classPreset').onchange=()=>chooseClassPreset($('classPreset').value);
  $('world').onchange=()=>chooseClassWorld($('world').value);
- $('hostForm').addEventListener('change',()=>{summarizeClassConfig();saveClassConfig();});
+ $('hostForm').addEventListener('change',event=>{if(event.target.name==='classType'){$('classPreset').value='custom';}summarizeClassConfig();saveClassConfig();});
  chooseClassWorld(parameters.get('world')==='systems'||parameters.get('topic')==='systems'?'systems':'equations',parameters.get('level'),false);
 }
 $('hostForm').onsubmit=e=>{e.preventDefault();try{if(new URLSearchParams(location.search).get('simulation')==='1'){beginSimulation().catch(error=>notice(errorText(error)));return;}action('create',{deck:buildDeck(),seconds:Number($('seconds').value)});}catch(error){notice(errorText(error));}};
@@ -276,7 +279,7 @@ $('start').onclick=()=>action('start');$('next').onclick=()=>action('next');$('r
 $('newSession').onclick=()=>{clearTimeout(pollTimer);if(simulator){simulationStore(null);simulator=null;document.body.classList.remove('class-simulation');$('classSimulationControls').hidden=true;if($('simulationEndRound'))$('simulationEndRound').hidden=true;}else{store(storageKey(),null);store(pendingKey(),null);}state=null;pending=null;frameKey='';const url=new URL(location.href);for(const key of ['session','code','join'])url.searchParams.delete(key);url.searchParams.set('create','1');history.replaceState(history.state,'',url);display('setup');};
 $('leaveSession').onclick=async()=>{try{await rpc('leave',{id:state.id});$('newSession').click();}catch(e){notice(errorText(e));}};
 $('closeSession').onclick=()=>$('stopDialog').showModal();$('cancelStop').onclick=()=>$('stopDialog').close();$('confirmStop').onclick=async()=>{await action('close');$('stopDialog').close();};
-$('copyLink').onclick=async()=>{let osEntry=false;try{osEntry=window.parent!==window&&!!window.parent.LeraarBobDesktop;}catch{}const url=osEntry?new URL('../../os/',moduleURL):new URL(classFlow?'../../../klasbattle/':location.href,location.href);url.search='';if(osEntry){if(Game.id==='rechten')url.searchParams.set('classCode',state.code);else{url.searchParams.set('joinApp',({algebra:'algebra-trainer',vectoren:'vectoren-trainer',wortelbouw:'wortelbouw',bewerkingen:'getallenwereld'})[Game.id]);url.searchParams.set('joinCode',state.code);}}else url.searchParams.set('code',state.code);try{await navigator.clipboard.writeText(url.href);notice('Deelnamelink gekopieerd.');}catch{notice(`Deel deze code met je klas: ${state.code}`);}};
+$('copyLink').onclick=async()=>{let osEntry=false;try{osEntry=window.parent!==window&&!!window.parent.LeraarBobDesktop;}catch{}const url=osEntry?new URL('../../os/',moduleURL):new URL(classFlow?'../../../klasbattle/':location.href,location.href);url.search='';if(osEntry){if(Game.id==='rechten')url.searchParams.set('classCode',state.code);else{url.searchParams.set('joinApp',({algebra:'algebra-trainer',vectoren:'vectoren-trainer',wortelbouw:'wortelbouw',bewerkingen:'getallenwereld',logicawereld:'logicawereld'})[Game.id]);url.searchParams.set('joinCode',state.code);}}else url.searchParams.set('code',state.code);try{await navigator.clipboard.writeText(url.href);notice('Deelnamelink gekopieerd.');}catch{notice(`Deel deze code met je klas: ${state.code}`);}};
 addEventListener('message',event=>{
  if(event.source!==frame.contentWindow||event.origin!==peerOrigin)return;const data=event.data;if(!data||typeof data!=='object')return;
  if(data.type==='vector-battle-ready'){frameReady=true;frameKey='';reviewKey='';renderBoard();return;}

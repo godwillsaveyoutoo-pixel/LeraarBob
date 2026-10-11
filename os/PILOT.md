@@ -6,7 +6,7 @@ Deze lijst bundelt alle gebruikersopmerkingen. Een onderdeel is pas afgewerkt wa
 
 **Vaste keuze na de Stelsels-correctie:** alleen `games/stelsels.html` is de Stelsels-app. De Algebra-module met zes Stelsels-levels is geen vervanging. Oude OS-spelkoppelingen openen de oorspronkelijke trainer; historische opslag en de afzonderlijke papiergenerator blijven intact. Oudere Algebra-verslagen hieronder mogen niet als bewijs voor de oorspronkelijke Stelsels worden gebruikt.
 
-Actuele herstelronde: [raam afronden, gedeeltelijk indienen en PDF met unitpunten](qa/task-submission-fixes-20261011/README.md). Vorige afwerkronde: [toetsopbouw en Kleiduif — controles en grenzen](qa/tasks-clay-20261011/README.md). Eerdere ronde: [OS-bediening](qa/checklist-20261011/README.md). [Inventaris van huidige werkvormen](APP-MODES.md).
+Actuele battle-aanvulling: [Vergelijkingen-mix en Logicawereld duo/klas](qa/logica-battles-20261011/README.md). Vorige herstelronde: [raam afronden, gedeeltelijk indienen en PDF met unitpunten](qa/task-submission-fixes-20261011/README.md). Vorige afwerkronde: [toetsopbouw en Kleiduif — controles en grenzen](qa/tasks-clay-20261011/README.md). Eerdere ronde: [OS-bediening](qa/checklist-20261011/README.md). [Inventaris van huidige werkvormen](APP-MODES.md).
 
 ### A. Betrouwbare basis en bediening
 
@@ -36,7 +36,9 @@ Actuele herstelronde: [raam afronden, gedeeltelijk indienen en PDF met unitpunte
 - [x] C4. Brandweer en oorspronkelijke Stelsels: echte, eenmalige XP-beloning toevoegen zonder fictieve omrekening van oude levels; Brandweer krijgt geen ranglijst.
 - [x] C5. Kleiduif-battleresultaten met eigen serveradministratie van XP, centrale OS-ranglijst en leraarsresultaten. Herhaalde antwoorden leveren geen tweede beloning; gewone voortgang blijft behouden. Lokaal bewezen, migratie nog uit te rollen. [Bewijs](qa/tasks-clay-20261011/README.md).
 - [ ] C6. Leraarklasuitnodiging zichtbaar op het bureaublad, leerling rechtstreeks naar juiste wachtkamer; rechten en rollen door backend afdwingen.
-- [ ] C7. [Huidige modi per app vastgelegd](APP-MODES.md); volledige providercontrole nog open; ontbrekende providers niet aanbieden als werkend. Logicawereld lokaal aangesloten; online duo en klas vragen afzonderlijke providers.
+- [ ] C7. [Huidige modi per app vastgelegd](APP-MODES.md); volledige providercontrole nog open; ontbrekende providers niet aanbieden als werkend. Logicawereld heeft nu lokaal gecontroleerde online Duo Battle en Klasbattle; productie-uitrol en echte accounts blijven open. Samen leren staat niet meer bij de startopties.
+
+- [x] C8. Vergelijkingen: zichtbare Mix van alle 17 eigen vraagvormen, 20 rondes, eigen selectie en herladen. Logicawereld: online aliasduel en leraarklasbattle met gebied/mix, oorspronkelijke antwoordbediening en serverbeoordeling. [Lokale SQL- en browsercontrole](qa/logica-battles-20261011/README.md); productie staat nog open.
 
 ### D. Oefenbladen en samengestelde toets
 

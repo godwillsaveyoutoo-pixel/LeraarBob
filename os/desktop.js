@@ -432,8 +432,15 @@
     if(authPending||!account||!['student','teacher'].includes(role()))return false;
     if(room.owner&&role()!=='teacher'||!room.owner&&role()!=='student')return false;
     if(room.game!=='rechten'){
-      const id=({bewerkingen:'getallenwereld',algebra:'algebra-trainer',vectoren:'vectoren-trainer',wortelbouw:'wortelbouw'})[room.game];
-      return id&&!room.owner?openClassJoin(id,{code:room.code,topicId,origin}):false;
+      const id=({bewerkingen:'getallenwereld',algebra:'algebra-trainer',vectoren:'vectoren-trainer',wortelbouw:'wortelbouw',logicawereld:'logicawereld'})[room.game];
+      if(!id)return false;
+      if(!room.owner)return openClassJoin(id,{code:room.code,topicId,origin});
+      if(room.game==='logicawereld'){
+        const existing=[...frames.values()].find(f=>f.owner===M.key(account)&&f.app.id===id&&f.classSessionId===room.id);if(existing)return openFrame(existing);
+        const href=M.destination(id,'classroom',{role:'teacher'}),url=new URL(href);url.searchParams.delete('create');url.searchParams.set('session',room.id);
+        return openFrame({key:id+'|classroom|session:'+room.id,app:M.app(id),mode:'classroom',personalClass:true,label:'Klasbattle',href:url.href,origin});
+      }
+      return false;
     }
     const url=new URL('games/rechten/rechtenwereld/classroom.html',base);
     url.searchParams.set('classFlow','1');url.searchParams.set('hub','1');url.searchParams.set('osEntry','1');url.searchParams.set('returnTo',new URL(home).pathname);
@@ -464,14 +471,14 @@
     }
     const key=`${id}|${mode}|${options.topicId||''}`;
     // A second click brings the same live DOM back instead of creating an exercise.
-    if(!openFrame({key,app:g,mode,label:M.modeLabel(m),href,context:options.topicId||'',origin:options.origin}))return false;
+    if(!openFrame({key,app:g,mode,personalClass:id==='logicawereld'&&mode==='classroom',label:M.modeLabel(m),href,context:options.topicId||'',origin:options.origin}))return false;
     prefs.recent=[{id,mode},...prefs.recent.filter(r=>r.id!==id||r.mode!==mode)].slice(0,10);persist();return true;
   }
   // All accepted invitations stay in the OS, with one retained native session.
   document.addEventListener('leraarbob:social-route',event=>{
     if(authPending||role()!=='student')return;
     const href=M.safeURL(event.detail?.href);if(!href)return;const url=new URL(href);
-    const routes=[['rechten-learn','games/rechten/rechtenwereld/learn.html','rechtenwereld','learn','session','LeraarBobLearn','openSession'],['rechten-duo','games/rechten/rechtenwereld/online.html','rechtenwereld','online','match','LeraarBobDuo','openMatch'],['naval','games/rechten/zeeslag/','rechten-zeeslag','online','match','LeraarBobNaval','openMatch']];
+    const routes=[['logica-duo','games/logicawereld/duo.html','logicawereld','online','match','LeraarBobDuo','openMatch'],['rechten-learn','games/rechten/rechtenwereld/learn.html','rechtenwereld','learn','session','LeraarBobLearn','openSession'],['rechten-duo','games/rechten/rechtenwereld/online.html','rechtenwereld','online','match','LeraarBobDuo','openMatch'],['naval','games/rechten/zeeslag/','rechten-zeeslag','online','match','LeraarBobNaval','openMatch']];
     const route=routes.find(r=>url.pathname===new URL(r[1],base).pathname&&(r[0]===event.detail.game||r[0]==='naval'&&(!event.detail.game||event.detail.game==='rechten-zeeslag'||event.detail.game==='naval')));
     if(!route)return;const [,path,appId,modeId,param,apiName,method]=route,room=url.searchParams.get(param);
     if(!/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(room||''))return;

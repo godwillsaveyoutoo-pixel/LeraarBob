@@ -12,7 +12,7 @@ Stelsels betekent uitsluitend `games/stelsels.html`: de oorspronkelijke trainer 
 | Gravity Maze | Solo | — | — |
 | Vergelijkingen | Solo | Klasbattle | Centrale maker |
 | Getallenwereld | Solo, Eigen reeks, Duo op één toestel, Samen leren, Duo online | Klasbattle, Borduitleg, Klas Learn | Centrale maker |
-| Logicawereld | Solo, Samen op één toestel, Solo battle, Duo op één toestel | — | Centrale maker |
+| Logicawereld | Solo, Solo battle, Duo op één toestel, Duo online | Klasbattle met gebied/mix | Centrale maker |
 | Rechtenarcade | Geen; oude verzamelpagina | — | — |
 | Functies & rechten | Solo | — | — |
 | Brandweer | Solo | — | — |
@@ -38,6 +38,6 @@ Leerlingen sluiten bij ondersteunde klasproviders aan via de centrale deelname-i
 - Rechtenarcade is nog een oude verzamelpagina zonder eigen startvorm; vervangen door de afzonderlijke spellen in Toevoegen.
 - Kleiduifschieten heeft directe solo-, duo-, groeps- en klasroutes. Volledige lokale partijen, serverbeloning en centrale ranglijst zijn gecontroleerd; de nieuwe migratie is nog niet op productie uitgerold. Samen leren (Duo Learn) is geen aangeboden werkvorm. Zie [toets- en Kleiduifcontrole](qa/tasks-clay-20261011/README.md).
 - Stelsels heeft geen online duo- of klasprovider; de oude Algebra-provider mag niet als vervanging worden aangeboden.
-- Logicawereld heeft lokale duo- en battlevormen. Online uitnodigingen en leraarklasactiviteiten vereisen een eigen provider.
+- Logicawereld: online Duo Battle en Klasbattle lokaal volledig aangesloten, met eigen serverbeoordeling en de bestaande uitnodigings-/klasbediening. Samen leren is op verzoek uit de keuzes gehaald. Productie-uitrol en echte accounts blijven open. [Bewijs](qa/logica-battles-20261011/README.md).
 - Getallen, Rechten, Zeeslag en Kleiduif gebruiken nog verschillende uitnodigingsafspraken. De gemeenschappelijke race- en bezetheidsafhandeling blijft open.
 - Voor solo-apps eerst bepalen of samen leren inhoudelijk zinvol is. Voeg geen knoppen toe voordat de provider en volledige deelnameflow bestaan.
