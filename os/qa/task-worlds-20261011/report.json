@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "Teacher creates a six-world assignment through the central editor, selects exact skills, expert substitution and students.",
+    "Getallenwereld: original controls, cloud draft restored in second browser, compact layouts and both OS bar states, real answer submitted.",
+    "Vergelijkingen: original controls, cloud draft restored in second browser, compact layouts and both OS bar states, real answer submitted.",
+    "Stelsels: original controls, cloud draft restored in second browser, compact layouts and both OS bar states, real answer submitted.",
+    "Vectormissie: original controls, cloud draft restored in second browser, compact layouts and both OS bar states, real answer submitted.",
+    "Logicawereld: original controls, cloud draft restored in second browser, compact layouts and both OS bar states, real answer submitted.",
+    "Wortelbouw: original controls, cloud draft restored in second browser, compact layouts and both OS bar states, real answer submitted.",
+    "Partial submission produces immutable 6/11 PDF; unattempted submission 0/11; all six original answers reopen for review and teacher feedback."
+  ],
+  "errors": [],
+  "missing": [],
+  "scope": "Real original exercise controls, synthetic teacher/student identities, local PostgreSQL and real grading handler, 100% zoom"
+}

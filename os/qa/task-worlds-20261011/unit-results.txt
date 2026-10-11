@@ -1,0 +1,15 @@
+✔ Assignments: publication, fixed content, enrollment, native answers, resume, final submission, review and permissions (2107.997281ms)
+✔ Task retries, competing answers, drafts and invalid configuration cannot overwrite durable work (1625.691085ms)
+✔ Guided glass evidence, duplicate lines, save retries and partial submission use one point per correct item (1560.92967ms)
+✔ A partly played series counts hits and native correct answers, never misses, late shots or unfinished drafts (1538.472133ms)
+✔ Task providers grade original mathematical content across all numeric, equation, logic and standalone system skills (44.074801ms)
+✔ Mixed assignments preserve drafts, original providers, roles, retries and partial PDF result snapshots (1679.450318ms)
+✔ Saved Stelsels work allows only native inert math markup, including historical snapshots (1.140362ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8635.747684

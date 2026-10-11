@@ -1,7 +1,7 @@
 /* Scores come from the immutable server result, including partial submissions. */
 (()=>{
 'use strict';
-const names={glass:'Glasraam',clay:'Kleiduifschieten',rights:'Rechtenwereld'};
+const names=Object.fromEntries(Object.entries(window.LeraarBobTaskCatalog).map(([id,p])=>[id,p.name]));
 async function pages(task,work){
  if(!work.result||!['submitted','reviewed'].includes(work.status))throw Error('Dien je opdracht eerst in om je puntenoverzicht te downloaden.');
  await document.fonts.ready;

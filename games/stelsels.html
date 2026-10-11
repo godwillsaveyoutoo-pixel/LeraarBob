@@ -727,6 +727,7 @@ body.is-dragging{user-select:none}
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="stelsels/exercises.js"></script>
 <script type="text/axioma-game">
 (()=>{
 'use strict';
@@ -771,38 +772,7 @@ class Q{
 }
 const q=v=>Q.from(v);
 
-const RAW_EXERCISES=[
- // BASIS
- {id:1,eq:[['2','1','5'],['1','2','4']]},
- {id:2,eq:[['-2','1','4'],['1','3','5']]},
- {id:3,eq:[['2','1','5'],['1','-2','5']]},
- {id:4,eq:[['-3','1','-5'],['1','4','6']]},
- {id:5,eq:[['1/2','1','2'],['1','-1','1']]},
-
- // METHODEBEWUSTE VARIATIE
- // combinatie: y valt onmiddellijk weg
- {id:6,eq:[['3','2','7'],['3','-2','-1']]},
- // substitutie: x staat meteen met coefficient 1
- {id:7,eq:[['1','-3','-5'],['2','1','4']]},
- // negatieve x-coefficient
- {id:8,eq:[['-1','1','4'],['2','1','1']]},
- // beide oplossingscoordinaten negatief
- {id:9,eq:[['1','1','-3'],['2','-1','-3']]},
- // combinatie vraagt twee verschillende factoren
- {id:10,eq:[['2','3','7'],['3','-2','4']]},
-
- // UITDAGING
- // breuken als oplossing
- {id:11,eq:[['2','1','2'],['1','-1','0']]},
- // breuk als coefficient
- {id:12,eq:[['2/3','-1','-1'],['1','1','6']]},
-
- // SPECIALE GEVALLEN — minder onmiddellijk herkenbaar
- // tweede vergelijking = -2 maal de eerste
- {id:13,eq:[['2','-1','3'],['-4','2','-6']]},
- // zelfde linkerlidverhouding, ander rechterlid: evenwijdig
- {id:14,eq:[['2','-1','3'],['-4','2','-8']]}
-];
+const RAW_EXERCISES=window.StelselsExercises;
 function analyzeSystem(eq){
   if(eq.length!==2)throw new Error('Een stelsel bevat exact twee vergelijkingen');
   eq.forEach((e,i)=>{if(e.x.zero()&&e.y.zero())throw new Error(`Vergelijking ${i+1} bevat geen variabele`)});
@@ -849,7 +819,7 @@ function showToast(msg,bad=false){toast.textContent=msg;toast.className='toast s
 
 /* ---------- reusable UI ---------- */
 function systemHTML(rows,{focus=null,locked=null}={}){return `<div class="system"><div class="brace">{</div><div class="eqs">${rows.map((r,i)=>`<div class="eq-row ${focus===i?'focus':''} ${locked===i?'locked':''}"><span class="lhs">${r.lhs}</span><span class="eq">=</span><span class="rhs">${r.rhs}</span></div>`).join('')}</div></div>`}
-function miniRows(rows){return `<div class="mini-system"><div class="mini-brace">{</div><div class="mini-eqs">${rows.map(r=>`<div class="mini-row"><span class="lhs">${mathText(r.lhs)}</span><span class="eq">=</span><span class="rhs">${mathText(r.rhs)}</span></div>`).join('')}</div></div>`}
+function miniRows(rows){return `<div class="mini-system"><div class="mini-brace">{</div><div class="mini-eqs">${rows.map(r=>`<div class="mini-row"><span class="lhs">${window.StelselsTaskDraft?.escape(mathText(r.lhs))??mathText(r.lhs)}</span><span class="eq">=</span><span class="rhs">${window.StelselsTaskDraft?.escape(mathText(r.rhs))??mathText(r.rhs)}</span></div>`).join('')}</div></div>`}
 function snapshotHTML(s){if(!s)return '';return s.type==='rows'?miniRows(s.rows):`<div>${s.text||''}</div>`}
 function stepNames(){
   if(studyMode==='expert'){
@@ -927,7 +897,7 @@ function render(){
     systemWrap.innerHTML='<div class="special-result">Deze oefening kan hier niet worden weergegeven.</div>';
     showToast(err.message||'Onverwachte fout',true)
   }
-  undoBtn.disabled=!history.length
+  undoBtn.disabled=!history.length;window.StelselsTaskBridge?.changed();
 }
 
 
@@ -1544,6 +1514,16 @@ function renderCombBackOrConclusion(){
 function renderCombPair(){
   if(state.elim.special){setInstruction('4 · oplossing','');systemWrap.innerHTML=`<div class="special-result">${info().solutionText}</div>`;return}
   const s=sol();setInstruction('4 · oplossing','Sleep de gevonden waarden naar het geordende paar.');systemWrap.innerHTML=systemHTML([{lhs:'x',rhs:`<span class="drag-source" id="cx">${qHTML(s.x)}</span>`},{lhs:'y',rhs:`<span class="drag-source" id="cy">${qHTML(s.y)}</span>`}]);auxArea.innerHTML=`<div class="pair-line"><span>(x,y) = (</span><span class="pair-slot ${state.pair.x!==null?'filled':''}" id="px">${state.pair.x!==null?qHTML(state.pair.x):'·'}</span><span>,</span><span class="pair-slot ${state.pair.y!==null?'filled':''}" id="py">${state.pair.y!==null?qHTML(state.pair.y):'·'}</span><span>)</span></div>`;const drop=(value,target)=>transition(()=>{if(target.id==='px')state.pair.x=value;else state.pair.y=value;if(state.pair.x!==null&&state.pair.y!==null&&state.pair.x.eq(s.x)&&state.pair.y.eq(s.y)){state.snapshots[4]={type:'text',text:`(x,y)=(${qPlain(s.x)},${qPlain(s.y)})`};state.solved=true;axiomaStelselsSolved()}});moveControl($('#cx'),qHTML(s.x),['#px','#py'],t=>drop(s.x,t));moveControl($('#cy'),qHTML(s.y),['#px','#py'],t=>drop(s.y,t))
+}
+
+/* Task mode exposes this original workspace; solo progress stays separate. */
+if(window.StelselsTaskIsolated){
+ window.StelselsTask=Object.freeze({
+  start(spec){exerciseIndex=RAW_EXERCISES.findIndex(e=>'system_'+e.id===spec.skill);if(exerciseIndex<0)throw Error('Onbekend stelsel.');method=spec.method==='choice'?'graphic':spec.method;studyMode=spec.studyMode||'expert';reset();const approach=document.getElementById('taskApproach');if(approach)approach.textContent=(spec.method==='choice'?'Kies je methode':{graphic:'Grafisch',substitution:'Substitutie',combination:'Combinatie'}[spec.method])+' · '+studyMode;document.querySelector('.method-tabs').hidden=spec.method!=='choice';exerciseSelect.disabled=true;$$('.method-tab').forEach(b=>b.disabled=spec.method!=='choice');$$('.study-mode-btn').forEach(b=>b.disabled=true);},
+  snapshot(){const s=state.solved&&info().kind==='point'?sol():null;return {method,studyMode,state:JSON.parse(JSON.stringify(state)),history:JSON.parse(JSON.stringify(history)),...(state.solved?{kind:info().kind,...(s?{x:qPlain(s.x),y:qPlain(s.y)}:{})}:{})};},
+  restore(d){if(!d?.state)return;d=StelselsTaskDraft.clean(d);const revive=v=>JSON.parse(JSON.stringify(v),(_,x)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).length===2&&Number.isInteger(x.n)&&Number.isInteger(x.d)?new Q(x.n,x.d):x);state=revive(d.state);history=revive(Array.isArray(d.history)?d.history.slice(-80):[]);if(['graphic','substitution','combination'].includes(d.method))method=d.method;if(['beginner','expert'].includes(d.studyMode))studyMode=d.studyMode;render();},
+  freeze(value){app.inert=value;}
+ });
 }
 
 /* ---------- events ---------- */

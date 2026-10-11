@@ -38,7 +38,7 @@ Glasraam en de live les gebruiken de platformnavigatie van het bureaublad. Hun o
 
 ## Grenzen
 
-Mijn taken bevat persoonlijke snelkoppelingen, geen door een leraar uitgedeelde opdrachten. Bewaren kopieert niet het volledige spelgeheugen. Minimaliseren pauzeert geen timer of online sessie. Na browserherladen geldt de eigen hervatfunctie van de app; onopgeslagen invoer in geheugen wordt niet door het bureaublad hersteld. Pins en bureaubladvoorkeuren worden per account op dit toestel bewaard. Spelvoortgang blijft de bestaande opslag gebruiken.
+Mijn taken bevat persoonlijke snelkoppelingen en de ingang Opdrachten en toetsen voor door een leraar uitgedeelde opdrachten. Bewaren kopieert niet het volledige spelgeheugen. Minimaliseren pauzeert geen timer of online sessie. Na browserherladen geldt de eigen hervatfunctie van de app; onopgeslagen invoer in geheugen wordt niet door het bureaublad hersteld. Pins en bureaubladvoorkeuren worden per account op dit toestel bewaard. Spelvoortgang blijft de bestaande opslag gebruiken.
 
 Alleen werkende providers worden aangeboden. Pythagoras krijgt geen verzonnen trainer, Battle of oefenbladgenerator. Productieauthenticatie en echte externe WebSocketverbindingen zijn nog niet met twee ingelogde testaccounts gecontroleerd.
 
@@ -128,4 +128,4 @@ Logicawereld v0.2 is toegevoegd als trainer in Logica & puzzels. De kaart heeft 
 
 ## Samengestelde opdrachten en Kleiduifschieten
 
-Start → Mijn taken → Opdrachten en toetsen opent de centrale toetsmaker. Een leerkracht combineert Glasraam, een vaste Kleiduifreeks en Rechtenwereldvragen, deelt de taak aan leerlingen uit en beoordeelt hun inzendingen. De oorspronkelijke werkborden blijven behouden. Kleiduifschieten heeft daarnaast aparte solo-, duo-, groeps- en klasroutes met centrale resultaten. [Uitgevoerde controles, screenshots en uitrolgrenzen](qa/tasks-clay-20261011/README.md). Deze toevoeging werkt in de lokale testpreview; de nieuwe databasefuncties en Edge-functie zijn nog niet op productie uitgerold.
+Start → Mijn taken → Opdrachten en toetsen opent de centrale toetsmaker. Een leerkracht combineert Glasraam, Kleiduifschieten, Rechtenwereld, Getallenwereld, Vergelijkingen, het oorspronkelijke Stelsels, Vectormissie, Logicawereld en Wortelbouw. Per onderdeel kiest de leraar onderwerpen, aantallen en beschikbare instellingen. Leerlingen gebruiken de oorspronkelijke antwoordbediening; tussenwerk en definitieve antwoorden worden apart bewaard. Een gedeeltelijke inzending levert ook een punten-PDF op. [Uitgevoerde controles en screenshots](qa/task-worlds-20261011/README.md), [aansluitcontract en uitrolvolgorde](../tasks/README.md).

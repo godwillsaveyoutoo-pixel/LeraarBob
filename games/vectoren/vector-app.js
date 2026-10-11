@@ -81,7 +81,7 @@ function returnToCurrent(){
  screen('play');updateUI(false);save();
 }
 $('previousQuestion').onclick=()=>reviewQuestion(reviewIndex===null?questionHistory.length-1:reviewIndex-1);
-function save(){try{const draft=snapshot();window.AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:'dark',draft,suspendedSeries,practiceDays,coachCollapsed:coachPreference}));window.AxiomaGame.report(Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').map(s=>s.id),Generator.skills.length);}catch{storageError()}}
+function save(){if(battle){battle.changed?.(structuredClone(answer));return;}try{const draft=snapshot();window.AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:'dark',draft,suspendedSeries,practiceDays,coachCollapsed:coachPreference}));window.AxiomaGame.report(Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').map(s=>s.id),Generator.skills.length);}catch{storageError()}}
 function screen(name){
  cancelGesture();closeMenu();if(name!=='play')flight.clear();document.body.dataset.screen=name;
  AxiomaPlatform.trainerScreen(({play:'play',helpScreen:'help',progressScreen:'progress'})[name]||'');
@@ -643,6 +643,7 @@ window.addEventListener('pagehide',save);
 window.AxiomaVectorTrainer=Object.freeze({inspect:()=>structuredClone({task,answer,intro,done,dirty,stage,free,session,progress,view,lessonStep}),project:p=>project(p)});
 if(battle){
  battle.connect({
+  sync(saved,readOnly){if(!saved||typeof saved!=='object')return;answer={strokes:Array.isArray(saved.strokes)?saved.strokes.slice(0,24).map(s=>M.stroke(s.start,s.end,s.role)):[],values:Array.isArray(saved.values)?saved.values.slice(0,2):['',''],point:saved.point||null,choice:Number.isInteger(saved.choice)?saved.choice:null};done=readOnly;cancelGesture();feedbackState=null;updateUI(false);},
   start(spec){document.body.classList.remove('class-review');document.body.classList.toggle('class-projector',!!spec.projector);task=Generator.generate(spec.skill,{seed:spec.seed,variant:spec.variant,level:1});free=true;session=null;intro=false;coachCollapsed=true;resetAnswer();screen('play');updateUI();},
   freeze(text){done=true;cancelGesture();feedbackState=battle.singleAttempt?null:{kind:'good',title:'Ronde afgelopen',text};updateUI(false);},
   review(){

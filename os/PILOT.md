@@ -50,7 +50,7 @@ Actuele aanvulling: [uniforme sessievensters en persoonlijke battle-PDF](qa/clas
 - [ ] D2. Bewaarde reeksen veilig tussen toestellen kunnen hervatten. Online archief en lokale cache geïmplementeerd en getest met twee geïsoleerde browsers en lokale SQL; migratie inmiddels uitgerold op productie. Exacte documenten, offline opnieuw proberen, verwijdermarkeringen en accountisolatie getest. Productieproef blijft open.
 - [x] D3. Centrale maker voor **Glasraam + Kleiduifschieten + tien Rechtenwereldvragen**, met instructies, aantallen, tempo en vraagtypes. Eén punt per geldige verschillende lijn, juist geraakt doel of juist antwoord. Bereikbaar via Start → Mijn taken → Opdrachten en toetsen. [Lokale end-to-endcontrole](qa/tasks-clay-20261011/README.md).
 - [x] D4. Leerlingtoewijzing, onveranderlijke uitgedeelde versie, opgeslagen ontwerp/antwoorden, ook gedeeltelijk definitief indienen, serverbeoordeling per item, onmiddellijk een leerling-PDF, nakijken en CSV-export. Andere leerlingen en client-scores worden geweigerd. Lokale SQL/Edge- en browserproeven inclusief het volledige Zonneroos-raam, gelijktijdig bewaren en een weggevallen bevestiging; productieaanmelding blijft E2. [Herstelbewijs](qa/task-submission-fixes-20261011/README.md).
-- [x] D5. Versie 1 van de onderdelenstructuur: 1–12 onderdelen in eigen volgorde, getypeerde configuratie en antwoordadministratie, originele engines via aparte koppelingen. Drie adapters werken; andere trainers aansluiten vereist hun eigen configuratie, renderer en servervalidator. [Uitbreidingsafspraak](qa/tasks-clay-20261011/README.md).
+- [x] D5. Versie 1 van de onderdelenstructuur: 1–12 onderdelen in eigen volgorde, getypeerde configuratie en antwoordadministratie, originele engines via aparte koppelingen. Negen adapters werken, inclusief de zes extra werelden en het oorspronkelijke Stelsels. Andere spellen aansluiten vereist hun eigen configuratie, renderer en servervalidator. [Uitbreidingsafspraak](qa/tasks-clay-20261011/README.md).
 
 ### E. Afronding en publicatie
 
@@ -229,7 +229,7 @@ Hashes vóór en na uitrol bevestigen behoud van alle 41 bestaande voortgangsrij
 - Twee daadwerkelijke ingelogde testaccounts gebruiken voor productieauthenticatie, cloudhervatting en externe live/WebSocketverbindingen. Er is geen bruikbare loginconfiguratie of actieve browsersessie beschikbaar gesteld.
 - Afzonderlijke bestaande fouten opvolgen: verouderde voortgangshash in de Rechten-regressietest, Signaalstad-oefenbladdekking en de Kleiduif-lobby op 320 × 568. Zij zijn ook op de oorspronkelijke main gereproduceerd. De vier OS-pilots en hun volledige klasruns slagen.
 
-Na acceptatie kunnen de overige bouwsels op dezelfde aansluiting aansluiten. Centrale door leraren uitgedeelde taken en nieuwe profiel-/werkvormfuncties zijn vervolgstappen.
+Na acceptatie kunnen de overige bouwsels op dezelfde aansluiting aansluiten. Centrale uitgedeelde taken ondersteunen negen onderdelen; verdere spellen vereisen hun eigen aansluiting.
 
 ## Zeeslag · formulebediening
 
@@ -293,3 +293,15 @@ De nieuwe `tests/stelsels-expert-substitution-browser.cjs` faalt op de oorspronk
 - [x] Ranglijst met echte lokale klasbattlepunten en leraarklaskeuze; vensters en privécontext worden gewist bij accountwisseling.
 
 [Rapporten en screenshots](qa/place-windows/README.md).
+
+## Uitbreiding taken met zes werelden — 11 oktober 2026
+
+- [x] Getallenwereld, Vergelijkingen, oorspronkelijk Stelsels, Vectormissie, Logicawereld en Wortelbouw als onderdelen toevoegen, ordenen en combineren.
+- [x] Onderwerpen mengen; voor Stelsels methode en beginner/expert vastleggen.
+- [x] Originele antwoordbediening, tussenwerk bewaren en hervatten op een tweede toestel, serverbeoordeling en resultaatbespreking.
+- [x] Gedeeltelijk indienen: zes juiste antwoorden op elf geplande vragen geeft 6/11; lege inzending geeft 0/11. PDF daadwerkelijk gedownload en visueel nagekeken.
+- [x] 1366 × 768, 390 × 844 en 640 × 360, beide OS-balkstanden, bereikbare antwoordacties.
+- [x] Bestaande Glasraam/Kleiduif/Rechtenwereld-toets en oorspronkelijk Stelsels expert blijven werken.
+- [ ] Dezelfde volledige ronde met echte productieaccounts: hier is geen gekoppelde ingelogde browser beschikbaar. De end-to-endproef gebruikt synthetische accounts en lokale PostgreSQL met de werkelijke beoordelingshandler.
+
+[Bewijs, screenshots en beperkingen](qa/task-worlds-20261011/README.md).

@@ -1636,16 +1636,17 @@ if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.Vect
 window.AxiomaGame={account:null,storage:{getItem:()=>null,setItem:()=>{}},report:()=>{}};
 window.AxiomaPlatform={trainerScreen:()=>{},bindTrainer:()=>{}};
 document.body.classList.add('battle-player');
-let hooks,round=null,cooldown=null;
+const taskMode=new URLSearchParams(location.search).get('mode')==='task';let hooks,round=null,cooldown=null,syncing=false,locked=true;
 // Local files have an opaque messaging origin even when location.origin says file://.
 const opaque=location.protocol==='file:'||location.origin==='null';
 const target=opaque?'*':location.origin,peerOrigin=opaque?'null':location.origin;
 const send=data=>parent.postMessage(data,target);
 window.VectorBattlePlayer={
- singleAttempt:new URLSearchParams(location.search).get('mode')==='class',
+ singleAttempt:taskMode||new URLSearchParams(location.search).get('mode')==='class',
  cooling:false,
  connect(api){hooks=api;send({type:'vector-battle-ready'});},
- submit(answer,skipped){if(round)send({type:'vector-battle-answer',match:round.match,index:round.index,answer,skipped});},
+ submit(answer,skipped){if(!round||locked)return;locked=true;send({type:'vector-battle-answer',match:round.match,index:round.index,answer,skipped});},
+ changed(answer){if(taskMode&&round&&!locked&&!syncing)send({type:'rechten-learn-draft',match:round.match,index:round.index,answer});},
  penalize(){
   this.cooling=true;let left=3;hooks.cooldown(left);clearInterval(cooldown);
   cooldown=setInterval(()=>{left--;if(left){hooks.cooldown(left);return;}clearInterval(cooldown);this.cooling=false;hooks.cooldown(0);},1000);
@@ -1657,11 +1658,12 @@ addEventListener('message',event=>{
  const data=event.data;if(!data||typeof data!=='object'||!hooks)return;
  if(data.type==='vector-battle-ping'){send({type:'vector-battle-ready'});return;}
  if(data.type==='vector-battle-question'&&typeof data.match==='string'&&Number.isInteger(data.index)&&data.index>=0&&VectorTrainerCore.TaskGenerator.skills.some(s=>s.id===data.skill)&&Number.isInteger(data.seed)&&Number.isInteger(data.variant)){
-  clearInterval(cooldown);window.VectorBattlePlayer.cooling=false;round={match:data.match,index:data.index};hooks.start(data);
+  clearInterval(cooldown);window.VectorBattlePlayer.cooling=false;if(taskMode&&round?.match===data.match&&round.index===data.index)return;round={match:data.match,index:data.index};locked=false;hooks.start(data);
+ }else if(taskMode&&data.type==='rechten-learn-sync'&&round&&data.match===round.match&&data.index===round.index){syncing=true;locked=!!data.readOnly;try{hooks.sync(data.answer,locked);}finally{syncing=false;}
  }else if(data.type==='vector-class-review'&&window.VectorBattlePlayer.singleAttempt&&round&&data.match===round.match&&data.index===round.index){
   hooks.review();
  }else if(data.type==='vector-battle-resolved'&&round&&data.match===round.match&&data.index===round.index){
-  clearInterval(cooldown);window.VectorBattlePlayer.cooling=false;hooks.freeze(String(data.message||'Ronde afgerond'));
+  clearInterval(cooldown);window.VectorBattlePlayer.cooling=false;locked=true;hooks.freeze(String(data.message||'Ronde afgerond'));
  }
 });
 })();
@@ -1812,7 +1814,7 @@ function returnToCurrent(){
  screen('play');updateUI(false);save();
 }
 $('previousQuestion').onclick=()=>reviewQuestion(reviewIndex===null?questionHistory.length-1:reviewIndex-1);
-function save(){try{const draft=snapshot();window.AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:'dark',draft,suspendedSeries,practiceDays,coachCollapsed:coachPreference}));window.AxiomaGame.report(Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').map(s=>s.id),Generator.skills.length);}catch{storageError()}}
+function save(){if(battle){battle.changed?.(structuredClone(answer));return;}try{const draft=snapshot();window.AxiomaGame.storage.setItem(KEY,JSON.stringify({progress,mode:'dark',draft,suspendedSeries,practiceDays,coachCollapsed:coachPreference}));window.AxiomaGame.report(Generator.skills.filter(s=>Scheduler.phase(progress,s.id)==='solid').map(s=>s.id),Generator.skills.length);}catch{storageError()}}
 function screen(name){
  cancelGesture();closeMenu();if(name!=='play')flight.clear();document.body.dataset.screen=name;
  AxiomaPlatform.trainerScreen(({play:'play',helpScreen:'help',progressScreen:'progress'})[name]||'');
@@ -2374,6 +2376,7 @@ window.addEventListener('pagehide',save);
 window.AxiomaVectorTrainer=Object.freeze({inspect:()=>structuredClone({task,answer,intro,done,dirty,stage,free,session,progress,view,lessonStep}),project:p=>project(p)});
 if(battle){
  battle.connect({
+  sync(saved,readOnly){if(!saved||typeof saved!=='object')return;answer={strokes:Array.isArray(saved.strokes)?saved.strokes.slice(0,24).map(s=>M.stroke(s.start,s.end,s.role)):[],values:Array.isArray(saved.values)?saved.values.slice(0,2):['',''],point:saved.point||null,choice:Number.isInteger(saved.choice)?saved.choice:null};done=readOnly;cancelGesture();feedbackState=null;updateUI(false);},
   start(spec){document.body.classList.remove('class-review');document.body.classList.toggle('class-projector',!!spec.projector);task=Generator.generate(spec.skill,{seed:spec.seed,variant:spec.variant,level:1});free=true;session=null;intro=false;coachCollapsed=true;resetAnswer();screen('play');updateUI();},
   freeze(text){done=true;cancelGesture();feedbackState=battle.singleAttempt?null:{kind:'good',title:'Ronde afgelopen',text};updateUI(false);},
   review(){
