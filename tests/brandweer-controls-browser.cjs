@@ -29,6 +29,22 @@ let browser, preview;
     const setting = param => frame.locator(`.value[data-param="${param}"]`);
     const arrow = (param, step) => frame.locator(`.paramArrow[data-param="${param}"][data-step="${step}"]`);
     const equation = () => frame.locator('.rescueEquation').getAttribute('aria-label');
+    // The original report showed the handle on the still-empty a control.
+    // Protect complete input groups and the equation, not just button centres.
+    for (const size of [{width:1366,height:768},{width:1680,height:900},{width:1198,height:700},{width:640,height:360}]) {
+      await page.setViewportSize(size);
+      await page.locator('leraarbob-topbar .collapse').click();await page.locator('#taskbarToggle').click();
+      await frame.evaluate(async()=>{for(let i=0;i<4;i++)await new Promise(requestAnimationFrame);});
+      for(const selector of ['#taskbarToggle','.lb-restore:not([hidden])']) {
+        const h=await page.locator(selector).boundingBox();
+        for(const target of await frame.locator('.rescueParameter,.rescueEquation,#executeBtn').all()) {
+          const t=await target.boundingBox();assert(!(h.x<t.x+t.width&&h.x+h.width>t.x&&h.y<t.y+t.height&&h.y+h.height>t.y),'Handle overlaps original empty formula group at '+size.width);
+        }
+      }
+      if(size.width===1680)await page.screenshot({path:path.join(out,'empty-formula-no-overlap.png')});
+      await page.locator('#taskbarToggle').click();await page.locator('.lb-restore:not([hidden])').click();
+    }
+    check('Original empty a/b controls: both handles avoid whole parameter groups, equation and execute action at 1366/1680/1198/640px');
     async function choose(param, wanted) {
       for (let i = 0; i < 25; i++) {
         const value = (await snapshot()).plan[param];

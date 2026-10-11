@@ -220,15 +220,16 @@
     const display=button(document.documentElement.dataset.mode==='dark'?'Lichte vensters':'Donkere vensters','',()=>{setSiteTheme(document.documentElement.dataset.mode!=='dark');renderLibrary();});setting('Weergave','Kies lichte of donkere bureaubladvensters.',display);
     const label=el('label'),motion=el('input');motion.type='checkbox';motion.checked=prefs.reducedMotion;motion.setAttribute('aria-label','Minder beweging');motion.onchange=()=>{prefs.reducedMotion=motion.checked;persist();applyPrefs();};label.append(motion);setting('Minder beweging','Laat mappen en apps zonder animaties openen.',label);
     setting('Vastgepinde apps','Zet Rechtenwereld terug als eerste wereld op je bureaublad.',button('Herstel pins','',()=>{prefs.pins=M.defaults.pins.slice();persist();renderHome();toast('Rechtenwereld staat terug op je bureaublad.');}));
-    setting('Onderbalk','Klap de taakbalk in met het handvat; hetzelfde handvat brengt hem terug.',button(prefs.bottomCollapsed?'Onderbalk tonen':'Onderbalk inklappen','',()=>{setBottomCollapsed(!prefs.bottomCollapsed);renderLibrary();}));
+    setting('Onderbalk','Klik op het lijntje of trek het naar de rand. Trek naar binnen om de balk terug te brengen.',button(document.body.classList.contains('os-bottom-collapsed')?'Onderbalk tonen':'Onderbalk inklappen','',()=>{setBottomCollapsed(!document.body.classList.contains('os-bottom-collapsed'));renderLibrary();}));
     setting('Bovenbalk','Toon of verberg de gedeelde platformbediening.',button(document.body.classList.contains('topbar-collapsed')?'Bovenbalk tonen':'Bovenbalk inklappen','',()=>{window.LeraarBobTopbar?.setCollapsed(!document.body.classList.contains('topbar-collapsed'),true);renderLibrary();}));
     const catalog=el('a','quiet-link catalog-link','Open eerdere startpagina');catalog.href=new URL('index.html?view=catalog',base).href;catalog.target='_blank';catalog.rel='noopener';
     setting('Eerdere startpagina','Bekijk de oude spellenpagina in een apart tabblad.',catalog);
     $('viewContent').append(list,el('p','section-note','Bureaubladvoorkeuren wijzigen je antwoorden, levels en spelvoortgang niet.'));
   }
   function applyPrefs(){document.body.dataset.wallpaper=prefs.wallpaper;document.body.dataset.reducedMotion=String(prefs.reducedMotion);syncBars();}
+  let temporaryBottomCollapsed=null;
   function syncBars(){
-    const folded=prefs.bottomCollapsed;
+    const folded=temporaryBottomCollapsed??prefs.bottomCollapsed;
     document.body.classList.toggle('os-bottom-collapsed',folded);
     $('taskbar').inert=folded;$('taskbar').setAttribute('aria-hidden',String(folded));
     const toggle=$('taskbarToggle'),label=folded?'Onderbalk uitklappen':'Onderbalk inklappen';
@@ -237,9 +238,12 @@
   }
   function setBottomCollapsed(value){
     rememberFocus(frames.get(activeKey));closeStart();if(windowActionsOpen())$('windowActions').hidePopover();
-    prefs.bottomCollapsed=!!value;persist();syncBars();$('taskbarToggle').focus({preventScroll:true});
+    if(window.LeraarBobEdgeBars?.fullscreenActive())temporaryBottomCollapsed=!!value;
+    else{temporaryBottomCollapsed=null;prefs.bottomCollapsed=!!value;persist();}
+    syncBars();$('taskbarToggle').focus({preventScroll:true});
   }
-  $('taskbarToggle').onclick=()=>setBottomCollapsed(!prefs.bottomCollapsed);
+  function resetBottomPresentation(){temporaryBottomCollapsed=null;syncBars();}
+  $('taskbarToggle').onclick=()=>setBottomCollapsed(!document.body.classList.contains('os-bottom-collapsed'));
   document.addEventListener('topbar:change',()=>window.LeraarBobEdgeBars?.refresh());
   function setSiteTheme(dark){
     const mode=dark?'dark':'light';document.documentElement.dataset.mode=mode;
@@ -727,7 +731,7 @@
   window.addEventListener('online',refreshProgress);
   window.addEventListener('leraarbob:worksheets-change',event=>{if(authPending||event.detail?.owner!==(account?.id?'account:'+account.id:'guest'))return;if(!activeKey&&['worksheets','worksheet-saved'].includes(view.kind))renderLibrary();else toast('Je map Mijn oefenbladen is bijgewerkt · op dit toestel.');});
   document.addEventListener('topbar:change',()=>{if(view.kind==='settings')renderLibrary();});
-  window.LeraarBobDesktop=Object.freeze({openApp,openModes,showView,openWorksheet,state:()=>({accountId:account?.id||null,role:role(),activeKey,view:{...view},openApps:[...frames.keys()],openWindows:[...libraryWindows].map(([key,entry])=>({key,view:{...entry.view}})),activeWindow:activeLibraryKey,pins:prefs.pins.slice(),savedCount:prefs.saved.length,progressState})});
+  window.LeraarBobDesktop=Object.freeze({openApp,openModes,showView,openWorksheet,setBottomCollapsed,resetBottomPresentation,state:()=>({accountId:account?.id||null,role:role(),activeKey,view:{...view},openApps:[...frames.keys()],openWindows:[...libraryWindows].map(([key,entry])=>({key,view:{...entry.view}})),activeWindow:activeLibraryKey,pins:prefs.pins.slice(),savedCount:prefs.saved.length,progressState})});
   prefs=M.read(safeStorage(),null);applyPrefs();showView(readRoute(),{route:false});renderHome();updateClock();setInterval(updateClock,30000);syncThemeControl();
   if(window.AxiomaAuth){window.AxiomaAuth.onChange(accountChanged);window.AxiomaAuth.ready().then(result=>{if(!resolved)accountChanged(result);}).catch(()=>{authPending=false;$('accountStatus').textContent='Gast · accountverbinding tijdelijk niet beschikbaar';});}
 })();

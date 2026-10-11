@@ -1,0 +1,761 @@
+{
+  "checks": [
+    "Populated desktop at five sizes × four bar states and after scrolling: zero reserved padding, content meets the actual screen edges, restoration remains reachable",
+    "Four sizes × four independent bar states: no replacement strip, both bars have zero height when folded, game gains space, unchanged native answer, handles >=44px and no overlap with answer actions",
+    "Keyboard and touch open/close handles; expanding either bar preserves the answer; cancel-close retains the same game",
+    "World breadcrumb and native game progress remain available through the expanded OS bar",
+    "Both explicit collapse choices survive reload; restore, minimize/resume and confirmed close remain available without a permanent escape bar"
+  ],
+  "measurements": [
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1314,
+      "y": 710,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 661,
+      "y": 724,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1314,
+      "y": 710,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 661,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 661,
+      "y": 724,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 661,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1024,
+        "height": 600
+      },
+      "x": 972,
+      "y": 542,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1024,
+        "height": 600
+      },
+      "x": 350,
+      "y": 556,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1024,
+        "height": 600
+      },
+      "x": 972,
+      "y": 542,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1024,
+        "height": 600
+      },
+      "x": 490,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1024,
+        "height": 600
+      },
+      "x": 965.046875,
+      "y": 556,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1024,
+        "height": 600
+      },
+      "x": 490,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 338,
+      "y": 789.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 173,
+      "y": 195.546875,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 338,
+      "y": 789.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 247.03125,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 181,
+      "y": 800,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 247.03125,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 588,
+      "y": 302,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 298,
+      "y": 176.546875,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 588,
+      "y": 302,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 298,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 298,
+      "y": 118.546875,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 298,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 268,
+      "y": 513.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 138,
+      "y": 213.546875,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 268,
+      "y": 513.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 247.03125,
+      "y": 69,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 138,
+      "y": 136.546875,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 247.03125,
+      "y": 69,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1246,
+      "y": 712.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1104,
+      "y": 712.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1314,
+      "y": 710,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1314,
+      "y": 710,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 661,
+      "y": 724,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 1314,
+      "y": 710,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 661,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 661,
+      "y": 724,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 661,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 270,
+      "y": 791.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 174,
+      "y": 791.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 338,
+      "y": 789.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 338,
+      "y": 789.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 173,
+      "y": 800,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 338,
+      "y": 789.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 173,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 173,
+      "y": 800,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "x": 173,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 520,
+      "y": 304.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 424,
+      "y": 304.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 588,
+      "y": 302,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 588,
+      "y": 302,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 428.359375,
+      "y": 316,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 588,
+      "y": 302,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 298,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 298,
+      "y": 316,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "x": 298,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#closeApp",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 200,
+      "y": 515.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#appBack",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 104,
+      "y": 515.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 268,
+      "y": 513.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 268,
+      "y": 513.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 259.125,
+      "y": 524,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 268,
+      "y": 513.5,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 138,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 138,
+      "y": 524,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "x": 138,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": "#taskbarToggle",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 661,
+      "y": 724,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "selector": ".lb-restore:not([hidden])",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "x": 661,
+      "y": 0,
+      "width": 44,
+      "height": 44
+    }
+  ],
+  "errors": [],
+  "scope": "Actual Chromium at 100% zoom; synthetic local account; original Rechtenwereld exercise and DOM"
+}

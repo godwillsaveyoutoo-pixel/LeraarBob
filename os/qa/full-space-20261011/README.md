@@ -1,5 +1,7 @@
 # Balken inklappen zonder overblijvende strook · 11 oktober 2026
 
+Aanvullend bewijs voor sleepbediening, centrale fullscreen en de gemelde overlap met Brandweers lege a-regelaar staat in [drag-bars-20261011](../drag-bars-20261011/README.md). De rapporten hieronder horen bij de eerdere versie vóór die aanvulling.
+
 De gebruiker meldde terecht dat inklappen nog een brede onderstrook liet staan. De vorige plaatsingscode reserveerde 44 px over de volle breedte zodra de schermrand bezet was. Die reservering bleef soms ook na verder scrollen bestaan. De eerdere test controleerde alleen dat de balk zelf 0 px hoog was en het spel groter werd; daarmee werd deze reststrook gemist.
 
 De fout is opnieuw gereproduceerd met de vorige JavaScript/CSS uit commit `7414776`, op een gevuld bureaublad van 1024 × 600: `padding-bottom: 44px`. [Voor](before-1024.png) en [na](after-1024.png) tonen dezelfde schermmaat. Online-aanwezigheid in deze lokale fixtures kan tussen screenshots veranderen.

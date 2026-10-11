@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "Four viewports × real mouse/touch: pull both bars outward to fold, inward to restore; one state change per drag, same native question and chosen answer",
+    "Wrong direction, horizontal movement, Escape cancellation and touch cancellation never toggle a bar or trigger a click underneath",
+    "Click/tap, Enter/Space-compatible buttons and directional arrow keys remain available with named 44px targets",
+    "One actual fullscreen action hides both bars without persisting temporary choices; pulling restores controls; button/browser exit restores each previous bar state and the answer",
+    "Rejected fullscreen leaves both bars usable and preserves the original preference/state",
+    "No duplicate hide-bars/new-tab control; explicit drag choices survive reload and both handles restore the desktop"
+  ],
+  "errors": [],
+  "scope": "Real mouse and Chromium touch input, native fullscreen events and local fixture accounts; no production writes."
+}

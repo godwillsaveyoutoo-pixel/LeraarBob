@@ -149,7 +149,8 @@ body[data-os-chrome=single] #runningApps{min-width:0;flex:1}
 body.os-bottom-collapsed{grid-template-rows:auto minmax(0,1fr) 0}
 body.os-bottom-collapsed #taskbar{height:0!important;min-height:0!important;padding-block:0!important;border:0!important;visibility:hidden;overflow:hidden}
 .os-edge-handle,.lb-restore.os-edge-handle{position:fixed;z-index:65;left:calc(50% - 22px);right:auto;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:8px;background:transparent;box-shadow:none;backdrop-filter:none;cursor:pointer;display:grid;place-items:center;color:#345851}
-.os-edge-handle::before{content:'';width:26px;height:5px;border-radius:9px;background:currentColor;box-shadow:0 0 0 2px #fffdf8c9,0 2px 5px #10253630}
+.os-edge-handle{touch-action:none;cursor:ns-resize}
+.os-edge-handle::before{content:'';width:26px;height:5px;border-radius:9px;background:currentColor;box-shadow:0 0 0 2px #fffdf8c9,0 2px 5px #10253630;transform:translateY(var(--os-grip-drag,0px))}
 .os-edge-handle>span,.lb-restore.os-edge-handle svg{display:none}
 .os-edge-handle:hover::before{box-shadow:0 0 0 3px #fffdf8,0 2px 6px #10253655}
 .os-edge-handle:focus-visible,.lb-restore.os-edge-handle:focus-visible{outline:2px solid #65866f;outline-offset:-2px}
