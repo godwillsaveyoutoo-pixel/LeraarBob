@@ -1,0 +1,1 @@
+window.LeraarBobDuoConfig={provider:'algebra-duo',title:'Vergelijkingen',worlds:Object.fromEntries([...AlgebraJourney.stops.map(s=>[s.id,s.title]),['mixed','Mix · alle onderdelen']]),emptyWorld:'Kies een onderdeel.',readyText:'Vijf rondes met dezelfde vergelijkingen. Jullie hebben elk drie minuten per ronde. Start zodra jullie allebei klaar zijn.'};

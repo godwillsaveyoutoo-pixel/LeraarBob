@@ -50,7 +50,7 @@
       for (const i of list) {
         const mine = i.sender_id === ctx.account.id, row = node('article', 'personal-invitation');
         const name = mine ? i.recipient_alias : i.sender_alias;
-        row.append(node('strong', '', `${mine ? 'Verstuurd aan' : 'Van'} ${name || 'een klasgenoot'}`), small(i.game === 'logica-duo' ? 'Logicawereld · Duo Battle' : i.game === 'rechten-learn' ? 'Rechtenwereld · Samen leren' : i.game === 'rechten-duo' ? 'Rechtenwereld · Duo Battle' : 'Rechten Zeeslag · Duo Battle'));
+        row.append(node('strong', '', `${mine ? 'Verstuurd aan' : 'Van'} ${name || 'een klasgenoot'}`), small(i.game === 'algebra-duo' ? 'Vergelijkingen · Duo Battle' : i.game === 'logica-duo' ? 'Logicawereld · Duo Battle' : i.game === 'rechten-learn' ? 'Rechtenwereld · Samen leren' : i.game === 'rechten-duo' ? 'Rechtenwereld · Duo Battle' : 'Rechten Zeeslag · Duo Battle'));
         const actions = node('div', 'personal-inline-actions');
         for (const [action, label] of mine ? [['cancel', 'Intrekken']] : [['accept', 'Deelnemen'], ['decline', 'Weigeren']]) {
           const b = button(label, () => answer(i.id, action), action === 'accept' ? 'personal-primary' : '');

@@ -1,0 +1,9 @@
+/* Shared paper, ink and feedback tokens; no progress or navigation state. */
+.learningWorld{--paper:#f4f1e8;--paper2:#ece8dd;--card:#fffdf7;--ink:#203c3b;--muted:#576e6a;--line:#cbd4c7;--line2:#dce2d7;--soft:#e4ecdf;--accent:#315e50;--active:#e4ecdf;--blue:#285d76;--blueSoft:#e3edf3;--green:#2d6850;--greenSoft:#e0eee3;--red:#973d34;--error:#973d34;--redSoft:#f9e8e2;--amber:#785719;--amberSoft:#f6edd4;--action:#315e50;--action-ink:#fffdf7;--shadow:0 8px 24px #203c3b08;--menu-ink:var(--ink);--menu-muted:var(--muted);--menu-paper:var(--paper);--menu-card:var(--card);--menu-line:var(--line);--menu-active:var(--active);background:var(--paper);color:var(--ink);font-family:system-ui,sans-serif;color-scheme:light}
+html[data-mode=dark] .learningWorld{--paper:#192b30;--paper2:#20383b;--card:#233d40;--ink:#f2f1e5;--muted:#b8cdc6;--line:#54716b;--line2:#3e5957;--soft:#304f48;--accent:#b6d9bf;--active:#344f44;--blue:#b5dbef;--blueSoft:#2a465b;--green:#b3dec1;--greenSoft:#264b3e;--red:#ffc2b3;--error:#ffc2b3;--redSoft:#52372f;--amber:#f2d492;--amberSoft:#494131;--action:#bed8bd;--action-ink:#193c31;--shadow:none;color-scheme:dark}
+.learningWorld :is(button,input,select){-webkit-text-fill-color:currentColor}
+.learningWorld :is(button,a,input,select):focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.learningWorld :is(button,input,select){min-height:44px;min-width:44px}
+.learningWorld button:disabled{opacity:.55}
+.learningWorld :is(h1,h2){font-family:Georgia,'Times New Roman',serif;letter-spacing:-.035em}
+.learningWorld .world-eyebrow{font:700 11px/1.4 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}

@@ -7,7 +7,7 @@
     const {app,mode,model,base,role,openMode,openWorksheets,openModes}=options, win=doc.defaultView;
     const path=new URL(doc.URL).pathname, at=s=>path===new URL(s,base).pathname;
     let kind='';
-    if(at('games/rechten/rechtenwereld/online.html')||at('games/logicawereld/duo.html'))kind='duel';
+    if(at('games/rechten/rechtenwereld/online.html')||at('games/logicawereld/duo.html')||at('games/algebra-trainer/duo.html'))kind='duel';
     else if(at('games/rechten/rechtenwereld/learn.html'))kind='learn';
     else if(doc.querySelector('#hostForm')&&doc.querySelector('#joinForm'))kind='class';
     else if(doc.querySelector('#battleForm'))kind='local';
@@ -32,7 +32,7 @@
     const join=kind==='numbers'?node('button','os-entry-join','Deelnemen met code'):null;if(join){join.type='button';join.dataset.entryJoin='';join.onclick=()=>win.NumbersSpace?.snapshot().view==='join'?win.NumbersSpace.showSetup():win.NumbersSpace?.showJoin();intro.append(join);}
     function state(){
       switch(kind){
-        case 'duel': {const phase=win.LeraarBobDuo?.snapshot().phase;return visible('#lobby')?['#lobby',app.id==='logicawereld'?'Kies een gebied of mix en nodig een klasgenoot uit. Jullie spelen elk op een eigen toestel.':'Kies een afgeronde wereld en nodig een klasgenoot uit. Jullie spelen vijf rondes op elk een eigen toestel.']:['invite','waiting'].includes(phase)?['#match','Jullie wachtkamer · start zodra jullie allebei klaar zijn.']:null;}
+        case 'duel': {const phase=win.LeraarBobDuo?.snapshot().phase;return visible('#lobby')?['#lobby',app.id==='algebra-trainer'?'Kies een onderdeel of mix en nodig een klasgenoot uit. Jullie spelen elk op een eigen toestel.':app.id==='logicawereld'?'Kies een gebied of mix en nodig een klasgenoot uit. Jullie spelen elk op een eigen toestel.':'Kies een afgeronde wereld en nodig een klasgenoot uit. Jullie spelen vijf rondes op elk een eigen toestel.']:['invite','waiting'].includes(phase)?['#match','Jullie wachtkamer · start zodra jullie allebei klaar zijn.']:null;}
         case 'learn': return visible('#learnSetup')?['#learnSetup','Kies jullie oefening. Leer daarna samen met twee of drie leerlingen.']:win.LeraarBobLearn?.snapshot().phase==='lobby'?['#learnSession','Nodig je klasgenoten uit. Start zodra jullie klaar zijn.']:null;
         case 'class': return visible('#setup')?['#setup',role==='teacher'?'Kies de oefening en maak een sessie. Je krijgt een klascode en beslist zelf wanneer je start.':'Voer de klascode in om mee te doen.']:visible('#login')?['#login','Meld je aan met je leraarBob-account om aan te sluiten.']:(visible('#lobby')||visible('#classFlowLobby'))?['#session','Deel de code met je klas. De leerkracht start de eerste ronde.']:null;
         case 'local': return visible('#setup')?['#setup','Kies jullie namen en oefening. Jullie spelen samen op één toestel.']:null;

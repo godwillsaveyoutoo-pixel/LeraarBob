@@ -467,7 +467,7 @@
     if(!mode){const existing=[...frames.values()].reverse().find(f=>f.app.id===id&&!f.mode.startsWith('worksheet:')&&(M.modes(id,role()).some(m=>m.id===f.mode)||f.personalClass&&f.owner===M.key(account)));if(existing)return openFrame(existing);mode='solo';}
     const m=M.modes(id,role(),options.topicId).find(m=>m.id===mode);
     if(!m){toast(['classroom','classlearn','teacher','live'].includes(mode)?'Een klas starten kan alleen met een leraarsaccount.':'Log in voor deze manier van spelen.');return false;}
-    let href=M.destination(id,mode,{role:role(),topicId:options.topicId,returnTo:new URL(home).pathname});if(href&&id==='algebra-trainer'&&mode==='classroom'&&options.level){const u=new URL(href);u.searchParams.set('level',options.level);href=u.href;}if(!href){toast('Deze ingang is niet beschikbaar.');return false;}
+    let href=M.destination(id,mode,{role:role(),topicId:options.topicId,returnTo:new URL(home).pathname});if(href&&id==='algebra-trainer'&&['classroom','online'].includes(mode)&&options.level){const u=new URL(href);u.searchParams.set(mode==='online'?'world':'level',options.level);href=u.href;}if(!href){toast('Deze ingang is niet beschikbaar.');return false;}
     if(id==='getallenwereld'&&mode!=='solo'&&options.setupHref&&M.safeURL(options.setupHref)){
       const setup=new URL(options.setupHref,base),url=new URL(href);for(const name of ['skills','lesson','scope','level','count','returnTo'])if(setup.searchParams.has(name))url.searchParams.set(name,setup.searchParams.get(name));href=url.href;
     }
@@ -480,7 +480,7 @@
   document.addEventListener('leraarbob:social-route',event=>{
     if(authPending||role()!=='student')return;
     const href=M.safeURL(event.detail?.href);if(!href)return;const url=new URL(href);
-    const routes=[['logica-duo','games/logicawereld/duo.html','logicawereld','online','match','LeraarBobDuo','openMatch'],['rechten-learn','games/rechten/rechtenwereld/learn.html','rechtenwereld','learn','session','LeraarBobLearn','openSession'],['rechten-duo','games/rechten/rechtenwereld/online.html','rechtenwereld','online','match','LeraarBobDuo','openMatch'],['naval','games/rechten/zeeslag/','rechten-zeeslag','online','match','LeraarBobNaval','openMatch']];
+    const routes=[['algebra-duo','games/algebra-trainer/duo.html','algebra-trainer','online','match','LeraarBobDuo','openMatch'],['logica-duo','games/logicawereld/duo.html','logicawereld','online','match','LeraarBobDuo','openMatch'],['rechten-learn','games/rechten/rechtenwereld/learn.html','rechtenwereld','learn','session','LeraarBobLearn','openSession'],['rechten-duo','games/rechten/rechtenwereld/online.html','rechtenwereld','online','match','LeraarBobDuo','openMatch'],['naval','games/rechten/zeeslag/','rechten-zeeslag','online','match','LeraarBobNaval','openMatch']];
     const route=routes.find(r=>url.pathname===new URL(r[1],base).pathname&&(r[0]===event.detail.game||r[0]==='naval'&&(!event.detail.game||event.detail.game==='rechten-zeeslag'||event.detail.game==='naval')));
     if(!route)return;const [,path,appId,modeId,param,apiName,method]=route,room=url.searchParams.get(param);
     if(!/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(room||''))return;

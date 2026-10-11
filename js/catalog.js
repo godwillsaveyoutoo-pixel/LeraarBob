@@ -1210,7 +1210,7 @@ window.AXIOMA_CATALOG = [
     "art": "algebra",
     "cover": "assets/covers/modern/algebra-trainer.webp",
     "coverSmall": "assets/covers/modern/algebra-trainer-small.webp",
-    "detail": "7 vergelijkingenlevels · beginner en expert · oefenbladen en XP",
+    "detail": "7 onderdelen · beginner en expert · Duo Battle, klasbattle en oefenbladen",
     "subject": "Algebra · vergelijkingen",
     "presentation": "algebra",
     "featured": true,
@@ -1241,6 +1241,18 @@ window.AXIOMA_CATALOG = [
           ],
           "href": "games/algebra-trainer/",
           "providerId": "algebra-trainer"
+        },
+        {
+          "id": "online",
+          "title": "Duo Battle · elk een toestel",
+          "participation": "duo",
+          "purpose": "battle",
+          "roles": [
+            "student"
+          ],
+          "href": "games/algebra-trainer/duo.html",
+          "providerId": "algebra-duo",
+          "devices": "Elk een toestel"
         },
         {
           "id": "classroom",
