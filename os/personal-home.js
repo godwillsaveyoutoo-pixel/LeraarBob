@@ -94,7 +94,6 @@
         const copy = node('span'); copy.append(node('strong', '', p.alias), node('small', '', p.status === 'playing' ? 'In een activiteit' : 'Online')); row.append(avatar, copy, node('span', `personal-presence ${p.status === 'playing' ? 'occupied' : ''}`)); return row;
       });
       if (players.length > 5) rows.push(small(`En ${players.length - 5} andere klasgenoten online.`));
-      rows.push(button('Samen leren in Rechtenwereld', () => ctx.openApp('rechtenwereld', 'learn'), 'personal-wide'));
       return rows;
     });
     renderInbox();
